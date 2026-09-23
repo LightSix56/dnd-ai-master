@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "standalone",
+  // На Vercel режим standalone не используется (он ломает NFT-трейсинг Vercel: next-server.js.nft.json)
+  ...(process.env.VERCEL ? {} : { output: "standalone" }),
   /* config options here */
   typescript: {
     ignoreBuildErrors: true,
