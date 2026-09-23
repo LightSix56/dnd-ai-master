@@ -1,0 +1,110 @@
+{
+  "id": "6170",
+  "slug": "6170-thwad-underbrew",
+  "name": "Твад Подпиво",
+  "nameEn": "Thwad Underbrew",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "щитовой дварф",
+  "alignment": "хаотично-злой, именной НИП",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Waterdeep: Dungeon of the Mad Mage",
+  "isNamed": true,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 143,
+    "hitDice": "22d8 + 44"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 15,
+    "con": 14,
+    "int": 10,
+    "wis": 14,
+    "cha": 12
+  },
+  "savingThrows": {
+    "str": 9,
+    "con": 9
+  },
+  "skills": {
+    "athletics": 9,
+    "perception": 6,
+    "intimidation": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Дварфийский"
+  ],
+  "traits": [
+    {
+      "name": "Дварфская устойчивость",
+      "description": "Твад совершает с преимуществом спасброски от яда."
+    },
+    {
+      "name": "Упорный (2/день)",
+      "description": "Твад может перебросить проваленный спасбросок."
+    },
+    {
+      "name": "Второе дыхание (Перезаряжается после короткого или продолжительного отдыха)",
+      "description": "Бонусным действием Твад может восстановить 20 хитов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Твад совершает три атаки молотом или коротким луком."
+    },
+    {
+      "name": "Молот",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 футов, одна цель. Попадание: Дробящий урон 12 (2к6 + 5), плюс дробящего урона 7 (2к6) если у Твада больше половины от общего числа хитов.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 5,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Короткий лук",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +6 к попаданию, дистанция 80/320 футов, одна цель. Попадание: Колющий урон 5 (1к6 + 2), плюс колющий урон 7 (2к6) если у Твада больше половины от общего числа хитов.",
+      "attackBonus": 6,
+      "range": {
+        "normal": 80,
+        "long": 320
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

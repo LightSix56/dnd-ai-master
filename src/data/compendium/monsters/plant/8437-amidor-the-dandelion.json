@@ -1,0 +1,103 @@
+{
+  "id": "8437",
+  "slug": "8437-amidor-the-dandelion",
+  "name": "Одуванчик Амидор",
+  "nameEn": "Amidor the Dandelion",
+  "size": "small",
+  "type": "plant",
+  "subtype": null,
+  "alignment": "нейтрально-доброе, именной НИП",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "The Wild Beyond The Witchlight: A Feywild Adventure",
+  "isNamed": true,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 28,
+    "hitDice": "8d6"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 6,
+    "dex": 15,
+    "con": 10,
+    "int": 13,
+    "wis": 12,
+    "cha": 17
+  },
+  "savingThrows": {
+    "str": 0,
+    "dex": 4,
+    "con": 2,
+    "wis": 3
+  },
+  "skills": {
+    "perception": 3,
+    "stealth": 4,
+    "persuasion": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "Общий",
+    "Сильван"
+  ],
+  "traits": [
+    {
+      "name": "Общающийся со зверями и растениями",
+      "description": "Амидор может общаться со Зверями и Растениями так, как если бы у него был с ними общий язык."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Рапира",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к8 + 2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Праща с семенем",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +4 к попаданию, дистанция 30/120 футов, одна цель. Попадание: 4 (1к4 + 2) дробящего урона.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 30,
+        "long": 120
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Парирование",
+      "type": "special",
+      "description": "Амидор добавляет 2 к КД против одной рукопашной атаки, которая должна попасть по нему. Для этого Амидор должен видеть атакующего, и должен использовать рукопашное оружие."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

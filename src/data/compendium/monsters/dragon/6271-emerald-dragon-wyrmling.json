@@ -1,0 +1,114 @@
+{
+  "id": "6271",
+  "slug": "6271-emerald-dragon-wyrmling",
+  "name": "Вирмлинг изумрудного дракона",
+  "nameEn": "Emerald Dragon Wyrmling",
+  "size": "medium",
+  "type": "dragon",
+  "subtype": "самоцветный",
+  "alignment": "законно-нейтральный",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 39,
+    "hitDice": "6d8 + 12"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 60,
+    "burrow": 20
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 12,
+    "con": 15,
+    "int": 14,
+    "wis": 12,
+    "cha": 14
+  },
+  "savingThrows": {
+    "dex": 3,
+    "con": 4,
+    "wis": 3,
+    "cha": 4
+  },
+  "skills": {
+    "perception": 5,
+    "arcana": 4,
+    "deception": 4,
+    "stealth": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "blindsight": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Драконий",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Прокладывание туннеля",
+      "description": "Дракон может копать сквозь сплошной камень со скоростью копания, уменьшенной вдвое, оставляя за собой туннель диаметром 10 фт."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 10 фт., одна цель. Попадание: 7 (1к10+2) колющего урона плюс 3 (1к6) урона психической энергией",
+      "attackBonus": 4,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний (Псионика)",
+      "type": "special",
+      "description": "Дракон накладывает одно из следующих заклинаний, не требуя компонентов заклинаний и используя Интеллект в качестве базовой характеристики (Сл спасброска от заклинания 12):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "малая иллюзия [minor illusion], волшебная рука [mage hand] (волшебная рука невидима);"
+    },
+    {
+      "name": "Дезориентирующее дыхание (перезарядка 5-6)",
+      "type": "breath",
+      "description": "Дракон выдыхает волну психического диссонанса 15-футовом конусом. Все существа в этой области должны совершить спасбросок Интеллекта Сл 12. В случае провала, существо получает 17 (5к6) урона психической энергией и до конца следующего хода, когда существо совершает бросок атаки или проверку характеристики, дополнительно бросает 1к4, вычитая его результат. В случае успеха существо получает половину урона без дополнительных эффектов.",
+      "damage": [
+        {
+          "dice": "5d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "INT",
+        "dc": 12,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

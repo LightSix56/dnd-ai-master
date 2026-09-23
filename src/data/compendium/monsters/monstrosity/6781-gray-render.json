@@ -1,0 +1,141 @@
+{
+  "id": "6781",
+  "slug": "6781-gray-render",
+  "name": "Серый рендер",
+  "nameEn": "Gray Render]Серый рендер  [Gray Render",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "обычно хаотично-нейтральныйБольшой? Монстр, хаотично-нейтральный",
+  "challengeRating": 12,
+  "xp": 8400,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 19,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 189,
+    "hitDice": "18d10 + 90"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 13,
+    "con": 20,
+    "int": 3,
+    "wis": 6,
+    "cha": 8
+  },
+  "savingThrows": {
+    "str": 8,
+    "con": 9
+  },
+  "skills": {
+    "perception": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Серый рендер совершает одну атаку Укусом и две атаки Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одна цель. Попадание: 17 (2к12 + 4) колющего урона. Если цель Среднего размера или меньше, она должна преуспеть в спасброске Силы Сл 16, иначе же будет сбита с ног.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d12",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 16,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 10 футов, одна цель. Попадание: 13 (2к8 + 4) рубящего урона, плюс 7 (2к6) дробящего урона, если цель сбита с ног.",
+      "attackBonus": 8,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Серый рендер совершает три атаки: одну Укусом и две Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к атаке, досягаемость 5 футов, одна цель. Попадание: 17 (2к12 + 4) колющего урона. Если цель Среднего размера или меньше, она должна преуспеть в спасброске Силы Сл 16, иначе же будет сбита с ног.",
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d12",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 16,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к атаке, досягаемость 10 футов, одна цель. Попадание: 13 (2к8 + 4) рубящего урона, плюс 7 (2к6) дробящего урона, если цель сбита с ног.",
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Кровавое неистовство",
+      "type": "special",
+      "description": "Когда серый рендер получает урон, он совершает одну атаку Когтями по случайному существу в пределах досягаемости, которое не является его хозяином."
+    },
+    {
+      "name": "Кровавое неистовство",
+      "type": "special",
+      "description": "Когда серый рендер получает урон, он совершает одну рукопашную атаку по случайному существу в пределах досягаемости, которое не является его хозяином."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

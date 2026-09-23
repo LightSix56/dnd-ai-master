@@ -1,0 +1,112 @@
+{
+  "id": "5657",
+  "slug": "5657-amethyst-dragon-wyrmling",
+  "name": "Вирмлинг аметистового дракона",
+  "nameEn": "Amethyst Dragon Wyrmling",
+  "size": "medium",
+  "type": "dragon",
+  "subtype": "самоцветный",
+  "alignment": "любое нейтральное мировоззрение",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 75,
+    "hitDice": "10d8 + 30"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 60,
+    "hover": true,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 10,
+    "con": 17,
+    "int": 16,
+    "wis": 13,
+    "cha": 17
+  },
+  "savingThrows": {
+    "dex": 2,
+    "con": 5,
+    "wis": 3,
+    "cha": 5
+  },
+  "skills": {
+    "perception": 5,
+    "arcana": 7,
+    "stealth": 2,
+    "persuasion": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "blindsight": 10,
+    "darkvision": 120
+  },
+  "languages": [
+    "Драконий",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Дракон может дышать как воздухом, так и водой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: Колющий урон 9 (1к10+4) плюс 4 (1к8) урона силовым полем.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний (Псионика)",
+      "type": "special",
+      "description": "Дракон накладывает одно из следующих заклинаний, не требующее компонентов заклинания и использующее Интеллект в качестве базовой характеристики (Сл спасброска от заклинания 13):"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "защита от зла и добра [protection from evil and good], Тензеров парящий диск [Tenser’s floating disk], невидимый слуга [unseen servant]."
+    },
+    {
+      "name": "Дыхание сингулярности (перезарядка 5–6)",
+      "type": "breath",
+      "description": "Дракон создает сияющий шарик сил гравитации во рту, после чего высвобождает энергию 15-футовым конусом. Все существа в этой области должны совершить спасбросок Силы Сл 13, получая урон силовым полем 22 (5к8) при провале, и их скорость становится равна 0 до начала следующего хода дракона. В случае успешного спасброска, существо получает вдвое меньше урона, и его скорость не уменьшается.",
+      "recharge": "5-6",
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 15
+      },
+      "save": {
+        "ability": "STR",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

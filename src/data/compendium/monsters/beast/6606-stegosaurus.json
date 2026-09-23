@@ -1,0 +1,78 @@
+{
+  "id": "6606",
+  "slug": "6606-stegosaurus",
+  "name": "Стегозавр",
+  "nameEn": "Stegosaurus]Стегозавр [Stegosaurus",
+  "size": "huge",
+  "type": "beast",
+  "subtype": "динозавр",
+  "alignment": "без мировоззренияОгромный? Зверь, без мировоззрения",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 76,
+    "hitDice": "8d12 + 24"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 9,
+    "con": 17,
+    "int": 2,
+    "wis": 11,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Хвост",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 10 футов, одна цель. Попадание: 26 (6к6 + 5) колющего урона.",
+      "attackBonus": 7,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "6d6",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Хвост",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 10 футов, одна цель. Попадание: 26 (6к6 + 5) колющего урона.",
+      "attackBonus": 7,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "6d6",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

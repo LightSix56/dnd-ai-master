@@ -1,0 +1,88 @@
+{
+  "id": "11859",
+  "slug": "11859-flying-horror",
+  "name": "Летающий ужас",
+  "nameEn": "Flying Horror",
+  "size": "medium",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "нейтрально-злая",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 49,
+    "hitDice": "9d8 + 9"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 60
+  },
+  "abilities": {
+    "str": 9,
+    "dex": 20,
+    "con": 12,
+    "int": 2,
+    "wis": 15,
+    "cha": 16
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [
+    "radiant"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 120
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Безумие страха",
+      "description": "Ужас совершает с преимуществом броски атаки против испуганных существ."
+    },
+    {
+      "name": "Чувствительность к солнечному свету",
+      "description": "Находясь на солнце, ужас совершает с помехой броски атаки и проверки Мудрости (Восприятие), полагающиеся на зрение."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: 8 (1к6 + 5) рубящего урона плюс 14 (4к6) урона психической энергией.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Пугающий визг (перезарядка 5–6)",
+      "type": "special",
+      "description": "Ужас визжит. Каждое существо в пределах 30 футов от него, которое может его слышать, должно преуспеть в спасброске Мудрости Сл 13, иначе оно будет испугано им на 1 минуту. Испуганное существо может повторять спасбросок в конце каждого своего хода, оканчивая эффект на себе в случае успеха. Если спасбросок существа успешен или эффект для него закончился, существо становится невосприимчивым к Пугающему визгу ужаса на следующие 24 часа.",
+      "recharge": "5-6",
+      "save": {
+        "ability": "CHA",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

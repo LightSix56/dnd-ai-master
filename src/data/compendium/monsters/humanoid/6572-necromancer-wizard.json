@@ -1,0 +1,132 @@
+{
+  "id": "6572",
+  "slug": "6572-necromancer-wizard",
+  "name": "Волшебник школы Некромантии",
+  "nameEn": "Necromancer Wizard]Некромант [Necromancer",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любая раса",
+  "alignment": "любое мировоззрениеСредний? Гуманоид (любая раса), любое мировоззрение",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "15 с доспехами мага"
+  },
+  "hitPoints": {
+    "average": 110,
+    "hitDice": "20d8 + 20"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 9,
+    "dex": 14,
+    "con": 12,
+    "int": 17,
+    "wis": 12,
+    "cha": 11
+  },
+  "savingThrows": {
+    "int": 7,
+    "wis": 5
+  },
+  "skills": {
+    "history": 7,
+    "arcana": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [
+    "любые четыре языка"
+  ],
+  "traits": [
+    {
+      "name": "Использование заклинаний",
+      "description": "Некромант является заклинателем 12-го уровня. Его базовой характеристикой является Интеллект (Сл спасброска от заклинания 15, +7 к попаданию атаками заклинаниями). У него подготовлены следующие заклинания волшебника:"
+    },
+    {
+      "name": "Заклинание Некромантии 1-го уровня или выше",
+      "description": "е."
+    },
+    {
+      "name": "Мрачная жатва (1/ход)",
+      "description": "Когда Некромант убивает существо, не являющееся ни нежитью, ни конструктом, заклинанием 1-го уровня или выше, Некромант восстанавливает хиты равные удвоенному уровню заклинания или утроенному уровню заклинания, если это заклинание Некромантии."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Некромант совершает три атаки Магической вспышкой."
+    },
+    {
+      "name": "Магическая вспышка",
+      "type": "melee_attack",
+      "description": "Рукопашная или Дальнобойная атака заклинанием: +7 к попаданию, досягаемость 5 футов или дистанция 120 футов, одна цель. Попадание: 25 (4к10 + 3) урона некротической энергией.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Некромант накладывает одно из следующих заклинаний, используя Интеллект в качестве базовой характеристики (Сл спасброска от заклинаний 15):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "пляшущие огоньки [dancing lights], волшебная рука [mage hand], фокусы [prestidigitation];"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "проклятие [bestow curse], переносящая дверь [dimension door], доспехи мага [mage armor], паутина [web];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "круг смерти [circle of death]."
+    },
+    {
+      "name": "Иссушающее касание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака заклинанием: +7 к попаданию, досягаемость 5 футов, одно существо. Попадание: урон некротической энергией 5 (2к4).",
+      "attackBonus": 7,
+      "reachFt": 5
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Мрачная жатва (1/ход)",
+      "type": "special",
+      "description": "Когда некромант убивает существо с помощью урона некротической энергией, некромант восстанавливает 9 (2к8) хитов."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 12,
+    "spellAttackBonus": 7,
+    "ability": "INT"
+  }
+}

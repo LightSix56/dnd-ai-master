@@ -1,0 +1,81 @@
+{
+  "id": "6199",
+  "slug": "6199-sing-along",
+  "name": "Поющие вместе",
+  "nameEn": "Sing-Along",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "полурослик",
+  "alignment": "законно-добрый",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Waterdeep: Dungeon of the Mad Mage",
+  "isNamed": false,
+  "armorClass": {
+    "value": 10
+  },
+  "hitPoints": {
+    "average": 4,
+    "hitDice": "1d8"
+  },
+  "speed": {
+    "walk": 25
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 10,
+    "con": 10,
+    "int": 10,
+    "wis": 10,
+    "cha": 14
+  },
+  "savingThrows": {},
+  "skills": {
+    "performance": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий",
+    "Полуросликов"
+  ],
+  "traits": [
+    {
+      "name": "Храбрый",
+      "description": "Полурослик совершает с преимуществом спасброски от испуга."
+    },
+    {
+      "name": "Проворство полуросликов",
+      "description": "Полурослик может проходить сквозь пространство, занятое существами, чей размер больше его."
+    },
+    {
+      "name": "Устойчивость коренастых",
+      "description": "Полурослик совершает с преимуществом спасброски от яда."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Дубина",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 футов, одна цель. Попадание: Дробящий урон 2 (1к4).",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 0,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

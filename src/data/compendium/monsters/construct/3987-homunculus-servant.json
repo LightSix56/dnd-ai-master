@@ -1,0 +1,79 @@
+{
+  "id": "3987",
+  "slug": "3987-homunculus-servant",
+  "name": "Слуга-гомункул",
+  "nameEn": "Homunculus servant",
+  "size": "tiny",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Tasha's Cauldron of Everything",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 1,
+    "hitDice": "1d8"
+  },
+  "speed": {
+    "walk": 20,
+    "fly": 30
+  },
+  "abilities": {
+    "str": 4,
+    "dex": 15,
+    "con": 12,
+    "int": 10,
+    "wis": 10,
+    "cha": 7
+  },
+  "savingThrows": {
+    "dex": 2
+  },
+  "skills": {
+    "perception": 0,
+    "stealth": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "понимает языки",
+    "на которых вы говорите"
+  ],
+  "traits": [
+    {
+      "name": "Увёртливость",
+      "description": "Если гомункул попадает под действие эффекта, позволяющего совершить спасбросок Ловкости, чтобы получить только половину урона, он вместо этого не получает урон, если преуспеет в спасброске, и получит лишь половину урона, если провалит спасбросок. Он не может использовать эту особенность, если недееспособен."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Силовой удар",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: ваш модификатор броска атаки заклинанием для попадания, досягаемость 30 футов, одна видимая цель. Попадание: 1к4 + БМ урона силовым полем.",
+      "reachFt": 30
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Канал магии",
+      "type": "special",
+      "description": "Гомункул позволяет наложить через него заклинание с дистанцией «касание». Для этого он должен быть в пределах 120 футов от вас."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

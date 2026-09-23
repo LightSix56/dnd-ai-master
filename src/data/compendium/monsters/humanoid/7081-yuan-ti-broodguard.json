@@ -1,0 +1,142 @@
+{
+  "id": "7081",
+  "slug": "7081-yuan-ti-broodguard",
+  "name": "Юань-ти страж выводка",
+  "nameEn": "Yuan-ti Broodguard]Юань-ти страж выводка [Yuan-ti broodguard",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "юань-ти",
+  "alignment": "обычно нейтрально-злойСредний? Гуманоид (юань-ти), нейтрально-злой",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 45,
+    "hitDice": "7d8 + 14"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 14,
+    "con": 14,
+    "int": 6,
+    "wis": 11,
+    "cha": 4
+  },
+  "savingThrows": {
+    "str": 4,
+    "dex": 4,
+    "wis": 2
+  },
+  "skills": {
+    "perception": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Бездны",
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Безрассудство",
+      "description": "В начале своего хода страж выводка может получить преимущество на все броски рукопашных атак оружием, которые он совершает во время этого хода, но броски атаки по нему так же получают преимущество до начала его следующего хода."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Страж выводка имеет преимущество на спасброски против очарования и магия не может его парализовать."
+    },
+    {
+      "name": "Безрассудство",
+      "description": "В начале своего хода страж выводка может получить преимущество на все броски на попадание рукопашными атаками оружием во время этого хода, но атаки на попадание по нему получают преимущество до начала его следующего хода."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Страж выводка совершает одну атаку Укусом и две атаки Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к8 + 2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 5 (1к6 + 2) рубящего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Страж выводка совершает три атаки: одну укусом и две когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к8 + 2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 5 (1к6 + 2) рубящего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

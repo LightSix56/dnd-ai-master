@@ -1,0 +1,104 @@
+{
+  "id": "8419",
+  "slug": "8419-strongheart",
+  "name": "Сильное сердце",
+  "nameEn": "Strongheart",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "Человек, Паладин",
+  "alignment": "Паладин), законно-добрый, именной НИП",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "The Wild Beyond The Witchlight: A Feywild Adventure",
+  "isNamed": true,
+  "armorClass": {
+    "value": 20,
+    "type": "латы, щит"
+  },
+  "hitPoints": {
+    "average": 55,
+    "hitDice": "10d8 + 10"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 12,
+    "con": 13,
+    "int": 12,
+    "wis": 13,
+    "cha": 17
+  },
+  "savingThrows": {
+    "wis": 3,
+    "cha": 5
+  },
+  "skills": {
+    "insight": 3,
+    "persuasion": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [
+    "Общий",
+    "Дварфийский"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Сильное сердце делает три атаки Сталью."
+    },
+    {
+      "name": "Сталь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 8 (1к8 + 4) рубящего урона или 9 (1к10 + 4) рубящего урона при использовании двумя руками. Единожды в каждом из своих ходов Сильное сердце также может заставить клинок сиять святым светом. Если он это делает, цель будет ослеплена до начала следующего хода Сильного сердца.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Возрождение (перезаряжается при следующем рассвете)",
+      "type": "special",
+      "description": "Держа в руках Сталь, Сильное сердце может наложить заклинание возрождение [revivify]."
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Сильное сердце накладывает одно из следующих заклинаний, используя Харизму в качестве базовой характеристики (Сл спасброска от заклинаний 13):"
+    },
+    {
+      "name": "3/день каждое",
+      "type": "special",
+      "description": "приказ [command], обнаружение зла и добра [detect evil and good], защита от зла и добра [protection from evil and good];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "малое восстановление [lesser restoration], снятие проклятья [remove curse], область истины [zone of truth]."
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Защита другого",
+      "type": "special",
+      "description": "Когда существо, которое видит Сильное сердце, атакует другое существо, находящееся в пределах 5 футов от него, Сильное сердце может использовать свою реакцию, чтобы наложить на это бросок атаки помеху, при условии, что у него есть щит."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

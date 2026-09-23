@@ -1,0 +1,88 @@
+{
+  "id": "7877",
+  "slug": "7877-xot",
+  "name": "Зот",
+  "nameEn": "Xot",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "любое мировоззрение, именной НИП",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Critical Role: Call of the Netherdeep",
+  "isNamed": true,
+  "armorClass": {
+    "value": 16,
+    "type": "кираса"
+  },
+  "hitPoints": {
+    "average": 67,
+    "hitDice": "9d8 + 27"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 14,
+    "con": 16,
+    "int": 14,
+    "wis": 14,
+    "cha": 12
+  },
+  "savingThrows": {
+    "str": 5,
+    "int": 4
+  },
+  "skills": {
+    "athletics": 4,
+    "history": 4,
+    "arcana": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий",
+    "Великаний"
+  ],
+  "traits": [
+    {
+      "name": "Эксперт по осаде",
+      "description": "Зот наносит двойной урон объектам и сооружениям."
+    },
+    {
+      "name": "Мощное телосложение",
+      "description": "Зот считается на один размер больше когда определяется её грузоподъемность и вес, который она может толкать, тянуть и поднимать с земли."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Зот совершает три атаки Громовым боевым молотом."
+    },
+    {
+      "name": "Громовой боевой молот",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к10 + 2) урона звуком.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

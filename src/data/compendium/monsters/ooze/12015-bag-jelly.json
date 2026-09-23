@@ -1,0 +1,75 @@
+{
+  "id": "12015",
+  "slug": "12015-bag-jelly",
+  "name": "Сумочный студень",
+  "nameEn": "Bag jelly",
+  "size": "medium",
+  "type": "ooze",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Bigby Presents: Glory of the Giants",
+  "isNamed": false,
+  "armorClass": {
+    "value": 8
+  },
+  "hitPoints": {
+    "average": 42,
+    "hitDice": "5d8 + 20"
+  },
+  "speed": {
+    "walk": 10,
+    "climb": 10
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 6,
+    "con": 19,
+    "int": 2,
+    "wis": 7,
+    "cha": 2
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "blindsight": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Аморфный",
+      "description": "Сумочный студень может перемещаться сквозь пространство шириной в 1 дюйм без протискивания."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Студень из сумки совершает две атаки Ложноножками."
+    },
+    {
+      "name": "Ложноножка",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: 8 (2к6 + 1) урона кислотой. Если целью является существо Среднего размера или меньше, оно схвачено (Сл высвобождения 15). Проверки для высвобождения из этого захвата совершаются с помехой.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 1,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

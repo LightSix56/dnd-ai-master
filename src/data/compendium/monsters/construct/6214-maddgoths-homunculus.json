@@ -1,0 +1,87 @@
+{
+  "id": "6214",
+  "slug": "6214-maddgoths-homunculus",
+  "name": "Гомункул Мэдгота",
+  "nameEn": "Maddgoth's Homunculus",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "нейтральный, именной НИП",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Waterdeep: Dungeon of the Mad Mage",
+  "isNamed": true,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 55,
+    "hitDice": "10d10"
+  },
+  "speed": {
+    "walk": 20,
+    "fly": 40
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 15,
+    "con": 11,
+    "int": 10,
+    "wis": 10,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Бездны",
+    "Гномий",
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "- понимает языки своего создателя, но не говорит."
+    },
+    {
+      "name": "Телепатическая связь",
+      "description": "Если гомункул и его хозяин находятся на одном плане существования, гомункул может магическим образом передавать все, что ощущает, своему хозяину, и они могут общаться между собой телепатически."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одно существо. Попадание: 9 (2к6 + 2) колющего урона, и цель должна преуспеть в спасброске Телосложения Сл 10, иначе станет отравленной на 1 минуту. Если спасбросок провален на 5 или больше единиц, цель вместо этого становится отравленной на 5 (1к10) минут, и пока отравлена таким образом, она лишена сознания.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 10,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

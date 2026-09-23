@@ -1,0 +1,92 @@
+{
+  "id": "17310",
+  "slug": "17310-precognitive-mage",
+  "name": "Маг предсказатель",
+  "nameEn": "Precognitive Mage",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любая раса",
+  "alignment": "законно-нейтральный",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11,
+    "type": "14 с доспехом мага"
+  },
+  "hitPoints": {
+    "average": 63,
+    "hitDice": "14d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 9,
+    "dex": 13,
+    "con": 10,
+    "int": 18,
+    "wis": 13,
+    "cha": 11
+  },
+  "savingThrows": {
+    "int": 6,
+    "wis": 3
+  },
+  "skills": {
+    "perception": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "truesight": 120
+  },
+  "languages": [
+    "Общий плюс один другой язык"
+  ],
+  "traits": [
+    {
+      "name": "Врожденное колдовство",
+      "description": "Базовой характеристикой заклинаний мага является Интеллект (Сл спасброска от заклинания 14). Он может использовать следующие заклинания, без материальных компонентов:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Боевой посох",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +1 к попаданию, досягаемость 5 фт., одна цель. Попадание: 2 (1к6 − 1) дробящего урона или 3 (1к8 − 1) дробящего урона, если используется двумя руками.",
+      "attackBonus": 1,
+      "reachFt": 5
+    },
+    {
+      "name": "Взгляд на временной поток (перезарядка 5–6)",
+      "type": "special",
+      "description": "Маг нацеливается на одно существо в пределах 120 футов от себя, которое он может видеть. Цель получает 18 (4к8) урона психической энергией и должна преуспеть в спасброске Интеллекта Сл 14, иначе станет ошеломлённой до конца своего следующего хода.",
+      "damage": [
+        {
+          "dice": "4d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "INT",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "ability": "INT"
+  }
+}

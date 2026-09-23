@@ -1,0 +1,82 @@
+{
+  "id": "5824",
+  "slug": "5824-animated-drow-statue",
+  "name": "Оживлённая статуя дроу",
+  "nameEn": "Animated Drow Statue",
+  "size": "medium",
+  "type": "elemental",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Out of the Abyss",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 33,
+    "hitDice": "6d8 + 6"
+  },
+  "speed": {
+    "walk": 25
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 11,
+    "con": 13,
+    "int": 1,
+    "wis": 3,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 6,
+    "blindsight": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Восприимчивость к антимагии",
+      "description": "Статуя недееспособена, пока находится в пределах области преграды магии [antimagic field]. Став целью рассеивания магии [dispel magic], статуя должна преуспеть в спасброске Телосложения Сл спасброска заклинателя, иначе потеряет сознание на 1 минуту."
+    },
+    {
+      "name": "Обманчивая внешность",
+      "description": "Пока статуя остается без движения, она неотличима от обычной статуи."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Статуя совершает две рукопашные атаки."
+    },
+    {
+      "name": "Размашистый удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: Дробящий урон 5 (1к6 + 2).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

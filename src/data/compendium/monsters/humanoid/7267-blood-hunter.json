@@ -1,0 +1,116 @@
+{
+  "id": "7267",
+  "slug": "7267-blood-hunter",
+  "name": "Кровавый охотник",
+  "nameEn": "Blood Hunter",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любая раса",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Explorer's Guide to Wildemount",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "полулаты"
+  },
+  "hitPoints": {
+    "average": 65,
+    "hitDice": "10d8 + 20"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 12,
+    "con": 15,
+    "int": 9,
+    "wis": 16,
+    "cha": 11
+  },
+  "savingThrows": {
+    "str": 7,
+    "wis": 6
+  },
+  "skills": {
+    "acrobatics": 4,
+    "perception": 6,
+    "insight": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 60
+  },
+  "languages": [
+    "один любой язык (обычно Общий)"
+  ],
+  "traits": [
+    {
+      "name": "Связывающее кровавое проклятие (1/день)",
+      "description": "Бонусным действием кровавый охотник нацеливается на одно существо, которое он может видеть в пределах 30 футов. Цель должна преуспеть в спасброске Силы Сл 14, иначе её скорость уменьшается до 0 и она не может использовать реакцию. Цель может повторять спасбросок в конце каждого своего хода, оканчивая на себя эффект в случае успеха."
+    },
+    {
+      "name": "Кровавое бешенство",
+      "description": "Кровавый охотник совершает с преимуществом броски рукопашных атак по существам, у которых хиты ниже максимума."
+    },
+    {
+      "name": "Врождённое колдовство (1/день)",
+      "description": "Кровавый охотник может накладывать сглаз [hex]. Его базовой характеристикой является Интеллект."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Кровавый охотник совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Кровавый охотник дважды атакует оружием."
+    },
+    {
+      "name": "Двуручный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: 11 (2к6 + 4) рубящего урона плюс 3 (1к6) урона огнём.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Тяжелый арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +4 к попаданию, дистанция 100/400 футов, одна цель. Попадание: 6 (1к10 + 1) колющего урона.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 100,
+        "long": 400
+      },
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

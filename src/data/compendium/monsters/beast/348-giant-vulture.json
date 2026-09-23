@@ -1,0 +1,97 @@
+{
+  "id": "348",
+  "slug": "348-giant-vulture",
+  "name": "Гигантский гриф",
+  "nameEn": "Giant vulture",
+  "size": "large",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "нейтрально-злой",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 10
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "3d10 + 6"
+  },
+  "speed": {
+    "walk": 10,
+    "fly": 60
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 10,
+    "con": 15,
+    "int": 6,
+    "wis": 12,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "Понимает Общий",
+    "но не говорит на нём"
+  ],
+  "traits": [
+    {
+      "name": "Острое зрение и тонкий нюх",
+      "description": "Гриф совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на зрение или обоняние."
+    },
+    {
+      "name": "Тактика стаи",
+      "description": "Гриф совершает с преимуществом броски атаки по существу, если в пределах 5 футов от этого существа находится как минимум один дееспособный союзник грифа."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Гриф совершает две атаки: одну клювом, и одну когтями."
+    },
+    {
+      "name": "Клюв",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (2к4 + 2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 9 (2к6 + 2) рубящего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

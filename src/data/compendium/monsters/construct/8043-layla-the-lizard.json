@@ -1,0 +1,83 @@
+{
+  "id": "8043",
+  "slug": "8043-layla-the-lizard",
+  "name": "Ящерица Лейла",
+  "nameEn": "Layla the Lizard",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "хаотично-злой, именной НИП",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "The Lost Dungeon of Rickedness: Big Rick Energy",
+  "isNamed": true,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "5d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 15,
+    "con": 10,
+    "int": 7,
+    "wis": 10,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 футов, одно существо. Попадание: 9 (2к6 + 2) колющего урона.",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (2к4 + 2) рубящего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

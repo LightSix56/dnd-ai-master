@@ -1,0 +1,83 @@
+{
+  "id": "7444",
+  "slug": "7444-sken-zabriss",
+  "name": "Скен Забрисс",
+  "nameEn": "Sken Zabriss",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "голиаф",
+  "alignment": "законно-злой, именной НИП",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Explorer's Guide to Wildemount",
+  "isNamed": true,
+  "armorClass": {
+    "value": 16,
+    "type": "кираса, щит"
+  },
+  "hitPoints": {
+    "average": 45,
+    "hitDice": "7d8 + 14"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 11,
+    "con": 15,
+    "int": 13,
+    "wis": 10,
+    "cha": 12
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий",
+    "Великаний",
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Мощное телосложение",
+      "description": "Скен считается на один размер больше когда определяется её грузоподъемность и вес, который она может толкать, тянуть и поднимать с земли."
+    },
+    {
+      "name": "Особое снаряжение",
+      "description": "Скен носит кольцо затуманивания [ring of obscuring]. С его помощью она может накладывать заклинание туманное облако [fog cloud], нацеленным на себе, три раза в день. Облако существует 1 минуту (концентрация не требуется)."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Длинный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 7 (1к8 + 3) рубящего урона, или 8 (1к10 + 3) рубящего урона при атаке двумя руками.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Выносливость камня (перезаряжается после корот",
+      "type": "special",
+      "description": "кого или продолжительного отдыха). Когда Скен получает урон, она может снизить его на 8 (1к12 + 2)."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

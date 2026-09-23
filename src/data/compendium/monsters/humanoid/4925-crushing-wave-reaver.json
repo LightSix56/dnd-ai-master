@@ -1,0 +1,83 @@
+{
+  "id": "4925",
+  "slug": "4925-crushing-wave-reaver",
+  "name": "Разбойник Сокрушительной Волны",
+  "nameEn": "Crushing Wave Reaver",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "нейтрально-злой",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Princes of the Apocalypse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "щит"
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "4d8 + 4"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 14,
+    "con": 13,
+    "int": 10,
+    "wis": 11,
+    "cha": 8
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 4,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Меч с акульими зубами",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: рубящий урон 6 (1к8 + 2), или рубящий урон 7 (1к10 + 2), если используется двумя руками. Разбойник дополнительно бросает одну кость урона оружием, если попал этой атакой по цели, которая не носит доспехов.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Метательное копьё",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +4 к попаданию, досягаемость 5 фт. или досягаемость 30/120 фт., одна цель. Попадание: колющий урон 5 (1к6 + 2).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

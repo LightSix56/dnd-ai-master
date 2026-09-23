@@ -1,0 +1,76 @@
+{
+  "id": "8368",
+  "slug": "8368-giant-snail",
+  "name": "Гигантская улитка",
+  "nameEn": "Giant Snail",
+  "size": "large",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "The Wild Beyond The Witchlight: A Feywild Adventure",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "4d10"
+  },
+  "speed": {
+    "walk": 10,
+    "climb": 10
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 3,
+    "con": 11,
+    "int": 3,
+    "wis": 10,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Чувствительность к соли",
+      "description": "Если улитка начинает свой ход в соприкосновении с фунтом или более соли, она получает 1к4 урона некротической энергией. Если действием обсыпать солью улитку, она сразу получит 1к4 урона некротической энергией и ещё 1к4 урона некротической энергией в начале своего следующего хода, если не спрячется в своей раковине."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Размашистый удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 5 (1к6 + 2) дробящего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Защитная раковина",
+      "type": "special",
+      "description": "Улитка прячется в раковину, получая +4 КД до тех пор, пока не вылезет. Она может вылезти из раковины в свой ход бонусным действием."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

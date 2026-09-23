@@ -1,0 +1,67 @@
+{
+  "id": "20482",
+  "slug": "20482-reflection-guardian",
+  "name": "Страж отражений",
+  "nameEn": "Reflection Guardian",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Adventurers League",
+  "isNamed": false,
+  "armorClass": {
+    "value": 5,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "5d8"
+  },
+  "speed": {
+    "walk": 0
+  },
+  "abilities": {
+    "str": 1,
+    "dex": 1,
+    "con": 10,
+    "int": 14,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Восприимчивость к антимагии",
+      "description": "Страж отражений недееспособен, пока находится в пределах области преграды магии [antimagic field]. Став целью рассеивания магии [dispel magic], доспех должен преуспеть в спасброске Телосложения против Сл спасброска заклинателя, иначе потеряет сознание на 1 минуту."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Базовой характеристикой стража отражений является Интеллект (Сл спасброска от заклинания 12). Cтраж отражений может накладывать следующие заклинания, не нуждаясь ни в каких компонентах:"
+    },
+    {
+      "name": "Обманчивая внешность",
+      "description": "Пока страж отражений остаётся без движения, он неотличим от обычного зеркала."
+    }
+  ],
+  "actions": [],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

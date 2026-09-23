@@ -1,0 +1,105 @@
+{
+  "id": "17338",
+  "slug": "17338-faerie-pathlighter",
+  "name": "Фея-следопыт",
+  "nameEn": "Faerie Pathlighter",
+  "size": "medium",
+  "type": "fey",
+  "subtype": null,
+  "alignment": "хаотично-нейтральная",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Monstrous Compendium Vol. Four: Eldraine Creatures",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 31,
+    "hitDice": "7d8"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 30,
+    "hover": true
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 14,
+    "con": 12,
+    "int": 13,
+    "wis": 17,
+    "cha": 18
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 5,
+    "survival": 5,
+    "insight": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15
+  },
+  "languages": [
+    "Общий",
+    "Сильван"
+  ],
+  "traits": [
+    {
+      "name": "Фейское свечение. Фея излучает тусклый с",
+      "description": "вет в радиусе 15 футов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Фея совершает две атаки Сияющим ударом."
+    },
+    {
+      "name": "Сияющий удар",
+      "type": "melee_attack",
+      "description": "Дальнобойная или рукопашная атака заклинанием: +6 к попаданию, досягаемость 5 фт. или дистанция 30 фт., одна цель. Попадание: 7 (2к6) урона излучением, и если цель — существо, оно должно преуспеть в спасброске Ловкости Сл 14, иначе будет окутано светом до конца следующего хода феи. Пока существо окутано светом, броски атаки по нему совершаются с преимуществом, и существо не может получить выгоду от состояния невидимости.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "range": {
+        "normal": 30
+      },
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Фея может наложить одно из следующих заклинаний, которые не требуют материальных компонентов и использующих Харизму в качестве базовой характеристики для заклинания:"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "пляшущие огоньки [dancing lights], обнаружение магии [detect magic], фокусы [prestidigitation];"
+    },
+    {
+      "name": "1/день",
+      "type": "special",
+      "description": "поиск существа [locate creature]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

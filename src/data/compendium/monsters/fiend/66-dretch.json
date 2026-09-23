@@ -1,0 +1,100 @@
+{
+  "id": "66",
+  "slug": "66-dretch",
+  "name": "Дретч",
+  "nameEn": "Dretch",
+  "size": "small",
+  "type": "fiend",
+  "subtype": "демон",
+  "alignment": "хаотично-злое",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 18,
+    "hitDice": "4d6 + 4"
+  },
+  "speed": {
+    "walk": 20
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 11,
+    "con": 12,
+    "int": 5,
+    "wis": 8,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 9,
+    "darkvision": 60
+  },
+  "languages": [
+    "Бездны",
+    "Телепатия 60 фт. (работает только с существами",
+    "понимающими язык Бездны)"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дретч совершает две атаки: одну укусом, и одну когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 3 (1к6).",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 5 (2к4).",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Зловонное облако (1/день)",
+      "type": "special",
+      "description": "От дретча исходит облако отвратительного зеленого газа с радиусом 10 футов. Этот газ огибает углы, и его пространство является слабо заслонённой местностью. Облако существует 1 минуту, или пока сильный ветер его не развеет. Все существа, начинающие ход в этой области, должны преуспеть в спасброске Телосложения Сл 11, иначе станут отравленными до начала своего следующего хода. Будучи отравленной таким образом, цель может в свой ход совершать либо действие, либо бонусное действие, но не то и другое, и не может совершать реакции.",
+      "save": {
+        "ability": "CON",
+        "dc": 11,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

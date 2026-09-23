@@ -1,0 +1,60 @@
+{
+  "id": "156",
+  "slug": "156-shrieker",
+  "name": "Визгун",
+  "nameEn": "Shrieker",
+  "size": "medium",
+  "type": "plant",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 5
+  },
+  "hitPoints": {
+    "average": 13,
+    "hitDice": "3d8"
+  },
+  "speed": {
+    "walk": 0
+  },
+  "abilities": {
+    "str": 1,
+    "dex": 1,
+    "con": 10,
+    "int": 1,
+    "wis": 3,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 6,
+    "blindsight": 30
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Обманчивая внешность",
+      "description": "Пока визгун остаётся без движения, он неотличим от обычного гриба."
+    }
+  ],
+  "actions": [],
+  "reactions": [
+    {
+      "name": "Визг",
+      "type": "special",
+      "description": "Если в пределах 30 футов от визгуна появляется яркий свет или существо, визгун испускает визг, слышимый на расстоянии 300 футов. Визгун продолжает кричать, пока не пройдёт 1к4 раунда после того, как источник беспокойства окажется за пределами его восприятия."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

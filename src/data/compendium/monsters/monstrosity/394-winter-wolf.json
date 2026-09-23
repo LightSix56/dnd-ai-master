@@ -1,0 +1,106 @@
+{
+  "id": "394",
+  "slug": "394-winter-wolf",
+  "name": "Полярный волк",
+  "nameEn": "Winter wolf",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "нейтрально-злой",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 75,
+    "hitDice": "10d10 + 20"
+  },
+  "speed": {
+    "walk": 50
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 13,
+    "con": 14,
+    "int": 7,
+    "wis": 12,
+    "cha": 8
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 5,
+    "stealth": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "cold"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15
+  },
+  "languages": [
+    "Общий",
+    "Великаний",
+    "Язык Полярных волков"
+  ],
+  "traits": [
+    {
+      "name": "Острый слух и тонкий нюх",
+      "description": "Волк совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на слух и обоняние."
+    },
+    {
+      "name": "Тактика стаи",
+      "description": "Волк совершает с преимуществом броски атаки по существу, если в пределах 5 футов от этого существа находится как минимум один дееспособный союзник волка."
+    },
+    {
+      "name": "Снежный камуфляж",
+      "description": "Волк совершает с преимуществом проверки Ловкости (Скрытность), когда пытается спрятаться на заснеженной местности."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 11 (2к6 + 4). Если цель — существо, она должна преуспеть в спасброске Силы Сл 14, иначе будет сбита с ног.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Холодное дыхание (перезарядка 5–6)",
+      "type": "breath",
+      "description": "Волк выдыхает ледяной ветер 15-футовым конусом. Все существа в этой области должны совершить спасбросок Ловкости Сл 12, получая урон холодом 18 (4к8) при провале, или половину этого урона при успехе.",
+      "recharge": "5-6",
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 15
+      },
+      "save": {
+        "ability": "DEX",
+        "dc": 12,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

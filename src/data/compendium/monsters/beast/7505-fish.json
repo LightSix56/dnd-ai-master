@@ -1,0 +1,55 @@
+{
+  "id": "7505",
+  "slug": "7505-fish",
+  "name": "Рыба",
+  "nameEn": "Fish",
+  "size": "tiny",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Ghosts of Saltmarsh",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 1,
+    "hitDice": "1d4 - 1"
+  },
+  "speed": {
+    "walk": 0,
+    "swim": 40
+  },
+  "abilities": {
+    "str": 2,
+    "dex": 16,
+    "con": 9,
+    "int": 1,
+    "wis": 7,
+    "cha": 2
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Подводное дыхание",
+      "description": "Рыба может дышать только под водой."
+    }
+  ],
+  "actions": [],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

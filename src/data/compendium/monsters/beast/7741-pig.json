@@ -1,0 +1,58 @@
+{
+  "id": "7741",
+  "slug": "7741-pig",
+  "name": "Свинья",
+  "nameEn": "Pig",
+  "size": "medium",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Storm King's Thunder",
+  "isNamed": false,
+  "armorClass": {
+    "value": 10,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 5,
+    "hitDice": "1d8 + 1"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 11,
+    "con": 12,
+    "int": 2,
+    "wis": 9,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 9
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Бонус мастерства +2",
+      "description": "Бонус мастерства +2"
+    },
+    {
+      "name": "Местность обитания лес, луг, холмы",
+      "description": "Местность обитания лес, луг, холмы"
+    }
+  ],
+  "actions": [],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

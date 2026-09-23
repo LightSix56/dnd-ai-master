@@ -1,0 +1,106 @@
+{
+  "id": "8852",
+  "slug": "8852-neogi-pirate",
+  "name": "Неоги-пират",
+  "nameEn": "Neogi Pirate",
+  "size": "small",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "обычно законно-злая",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "кираса"
+  },
+  "hitPoints": {
+    "average": 33,
+    "hitDice": "6d6 + 12"
+  },
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 6,
+    "dex": 15,
+    "con": 14,
+    "int": 13,
+    "wis": 12,
+    "cha": 15
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Глубинная речь",
+    "Подземный"
+  ],
+  "traits": [
+    {
+      "name": "Ментальная стойкость",
+      "description": "Неоги совершает с преимуществом спасброски от очарования и испуга, его невозможно магически усыпить."
+    },
+    {
+      "name": "Паучье лазание",
+      "description": "Неоги может лазать по сложным поверхностям, включая потолки, без совершения проверок характеристик."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Неоги совершает одну атаку Укусом и две атаки Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 6 (1к6 + 3) колющего урона плюс 14 (4к6) урона ядом. Цель должна преуспеть в спасброске Телосложения Сл 12, иначе станет отравленной на 1 минуту. Цель может повторять спасбросок в конце каждого своего хода, оканчивая на себе этот эффект при успехе.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 12,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 6 (1к6 + 3) рубящего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

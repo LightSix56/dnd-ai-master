@@ -1,0 +1,82 @@
+{
+  "id": "13130",
+  "slug": "13130-sunfly",
+  "name": "Солнцекрыл",
+  "nameEn": "Sunfly",
+  "size": "tiny",
+  "type": "celestial",
+  "subtype": null,
+  "alignment": "хаотично-добрый",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Planescape: Adventures in the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 2,
+    "hitDice": "1d4"
+  },
+  "speed": {
+    "walk": 10,
+    "fly": 40
+  },
+  "abilities": {
+    "str": 4,
+    "dex": 17,
+    "con": 10,
+    "int": 4,
+    "wis": 10,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "понимает Небесный",
+    "но не говорит"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Жало",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 2 (1к4) колющего урона. Кроме того, если солнцекрыл находится во Внешних землях, она вводит в цель токсин, действие которого определяется местоположением солнцекрыла:",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Верхний план",
+      "type": "special",
+      "description": "Цель начинает излучать яркий свет в радиусе 5 футов до конца своего следующего хода."
+    },
+    {
+      "name": "Нейтральный план",
+      "type": "special",
+      "description": "Если цель концентрируется на заклинании или подобном эффекте, она с помехой совершает спасбросок Телосложения для поддержания своей концентрации."
+    },
+    {
+      "name": "Нижний план",
+      "type": "special",
+      "description": "Скорость цели снижается на 5 футов до конца её следующего хода."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

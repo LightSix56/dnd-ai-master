@@ -1,0 +1,76 @@
+{
+  "id": "12499",
+  "slug": "12499-encephalon-gemmule",
+  "name": "Геммул энцефалона",
+  "nameEn": "Encephalon Gemmule",
+  "size": "tiny",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Phandelver and Below: The Shattered Obelisk",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14
+  },
+  "hitPoints": {
+    "average": 54,
+    "hitDice": "12d4 + 24"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 1,
+    "dex": 18,
+    "con": 14,
+    "int": 5,
+    "wis": 12,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "blindsight": 30
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Потомство энцефалона",
+      "description": "Геммула созревает в скопление энцефалона [encephalon cluster], если её не убить в течение 30 (4к12 + 4) дней после её создания."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Геммула совершает с преимуществом спасброски от заклинаний и других магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Психический удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 16 (3к10) психического урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 0,
+          "type": "psychic"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

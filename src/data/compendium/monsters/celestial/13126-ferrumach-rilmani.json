@@ -1,0 +1,120 @@
+{
+  "id": "13126",
+  "slug": "13126-ferrumach-rilmani",
+  "name": "Рилмани феррумах",
+  "nameEn": "Ferrumach Rilmani",
+  "size": "medium",
+  "type": "celestial",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Planescape: Adventures in the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 136,
+    "hitDice": "16d8 + 64"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 14,
+    "con": 18,
+    "int": 15,
+    "wis": 14,
+    "cha": 10
+  },
+  "savingThrows": {
+    "str": 8,
+    "con": 8
+  },
+  "skills": {
+    "athletics": 8,
+    "perception": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "truesight": 120
+  },
+  "languages": [
+    "любые два языка",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Заостренные углы",
+      "description": "Существо получает 10 (3к6) рубящего урона, если начинает свой ход будучи схваченным или держа феррумаха в захвате."
+    },
+    {
+      "name": "Пронзающий разбег",
+      "description": "Если феррумах переместится как минимум на 20 футов по прямой к существу Большого размера или меньше, останавливаясь в пределах 5 футов от него, оно должно преуспеть в спасброске Силы Сл 16, иначе будет схвачено (Сл высвобождения 18) и получит 10 (3к6) колющего урона."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Феррумах совершает три атаки Острой конечностью или Снарядом."
+    },
+    {
+      "name": "Острая конечность",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 10 футов, одна цель. Попадание: 9 (1к10 + 4) рубящего урона плюс 11 (2к10) урона психической энергией.",
+      "attackBonus": 8,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Снаряд",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +8 к попаданию, дистанция 20/60 футов, одна цель. Попадание: 7 (1к6 + 4) колющего урона плюс 11 (2к10) урона психической энергией.",
+      "attackBonus": 8,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Феррумах накладывает одно из следующих заклинаний, не нуждаясь в материальных компонентах, используя Интеллект в качестве базовой характеристики (Сл спасброска заклинания 14):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "обнаружение магии [detect magic]"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "рассеивание магии [dispel magic], град [ice storm]"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

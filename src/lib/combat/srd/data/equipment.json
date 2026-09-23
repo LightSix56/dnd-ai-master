@@ -1,0 +1,825 @@
+[
+  {
+    "id": "wep_1",
+    "name": "Дубинка",
+    "nameEn": "Club",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d4",
+        "mod": 0,
+        "type": "bludgeoning"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": false,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Simple",
+    "cost": "1 sp",
+    "weight": 2,
+    "description": "Дубинка (Club) — Simple оружие. Урон: 1d4 bludgeoning."
+  },
+  {
+    "id": "wep_2",
+    "name": "Кинжал",
+    "nameEn": "Dagger",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d4",
+        "mod": 0,
+        "type": "piercing"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": true,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Simple",
+    "cost": "2 gp",
+    "weight": 1,
+    "description": "Кинжал (Dagger) — Simple оружие. Урон: 1d4 piercing."
+  },
+  {
+    "id": "wep_3",
+    "name": "Палица",
+    "nameEn": "Greatclub",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d8",
+        "mod": 0,
+        "type": "bludgeoning"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": false,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Simple",
+    "cost": "2 sp",
+    "weight": 10,
+    "description": "Палица (Greatclub) — Simple оружие. Урон: 1d8 bludgeoning."
+  },
+  {
+    "id": "wep_4",
+    "name": "Ручной топор",
+    "nameEn": "Handaxe",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d6",
+        "mod": 0,
+        "type": "slashing"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": false,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Simple",
+    "cost": "5 gp",
+    "weight": 2,
+    "description": "Ручной топор (Handaxe) — Simple оружие. Урон: 1d6 slashing."
+  },
+  {
+    "id": "wep_5",
+    "name": "Метательное копье",
+    "nameEn": "Javelin",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d6",
+        "mod": 0,
+        "type": "piercing"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": false,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Simple",
+    "cost": "5 sp",
+    "weight": 2,
+    "description": "Метательное копье (Javelin) — Simple оружие. Урон: 1d6 piercing."
+  },
+  {
+    "id": "wep_6",
+    "name": "Light hammer",
+    "nameEn": "Light hammer",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d4",
+        "mod": 0,
+        "type": "bludgeoning"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": false,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Simple",
+    "cost": "2 gp",
+    "weight": 2,
+    "description": "Light hammer (Light hammer) — Simple оружие. Урон: 1d4 bludgeoning."
+  },
+  {
+    "id": "wep_7",
+    "name": "Булава",
+    "nameEn": "Mace",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d6",
+        "mod": 0,
+        "type": "bludgeoning"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": false,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Simple",
+    "cost": "5 gp",
+    "weight": 4,
+    "description": "Булава (Mace) — Simple оружие. Урон: 1d6 bludgeoning."
+  },
+  {
+    "id": "wep_8",
+    "name": "Боевой посох",
+    "nameEn": "Quarterstaff",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d6",
+        "mod": 0,
+        "type": "bludgeoning"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": false,
+    "versatile": true,
+    "actionCost": "action",
+    "category": "Simple",
+    "cost": "2 sp",
+    "weight": 4,
+    "description": "Боевой посох (Quarterstaff) — Simple оружие. Урон: 1d6 bludgeoning."
+  },
+  {
+    "id": "wep_9",
+    "name": "Серп",
+    "nameEn": "Sickle",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d4",
+        "mod": 0,
+        "type": "slashing"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": false,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Simple",
+    "cost": "1 gp",
+    "weight": 2,
+    "description": "Серп (Sickle) — Simple оружие. Урон: 1d4 slashing."
+  },
+  {
+    "id": "wep_10",
+    "name": "Копье",
+    "nameEn": "Spear",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d4",
+        "mod": 0,
+        "type": "piercing"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": false,
+    "versatile": true,
+    "actionCost": "action",
+    "category": "Simple",
+    "cost": "1 gp",
+    "weight": 3,
+    "description": "Копье (Spear) — Simple оружие. Урон: 1d4 piercing."
+  },
+  {
+    "id": "wep_11",
+    "name": "Легкий арбалет",
+    "nameEn": "Crossbow, light",
+    "kind": "ranged",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d8",
+        "mod": 0,
+        "type": "piercing"
+      }
+    ],
+    "rangeNormal": 80,
+    "rangeLong": 320,
+    "finesse": false,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Simple",
+    "cost": "25 gp",
+    "weight": 5,
+    "description": "Легкий арбалет (Crossbow, light) — Simple оружие. Урон: 1d8 piercing."
+  },
+  {
+    "id": "wep_12",
+    "name": "Дротик",
+    "nameEn": "Dart",
+    "kind": "ranged",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d4",
+        "mod": 0,
+        "type": "piercing"
+      }
+    ],
+    "rangeNormal": 20,
+    "rangeLong": 60,
+    "finesse": true,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Simple",
+    "cost": "5 cp",
+    "weight": 0.25,
+    "description": "Дротик (Dart) — Simple оружие. Урон: 1d4 piercing."
+  },
+  {
+    "id": "wep_13",
+    "name": "Короткий лук",
+    "nameEn": "Shortbow",
+    "kind": "ranged",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d6",
+        "mod": 0,
+        "type": "piercing"
+      }
+    ],
+    "rangeNormal": 80,
+    "rangeLong": 320,
+    "finesse": false,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Simple",
+    "cost": "25 gp",
+    "weight": 2,
+    "description": "Короткий лук (Shortbow) — Simple оружие. Урон: 1d6 piercing."
+  },
+  {
+    "id": "wep_14",
+    "name": "Праща",
+    "nameEn": "Sling",
+    "kind": "ranged",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d4",
+        "mod": 0,
+        "type": "bludgeoning"
+      }
+    ],
+    "rangeNormal": 30,
+    "rangeLong": 120,
+    "finesse": false,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Simple",
+    "cost": "1 sp",
+    "weight": 0,
+    "description": "Праща (Sling) — Simple оружие. Урон: 1d4 bludgeoning."
+  },
+  {
+    "id": "wep_15",
+    "name": "Боевой топор",
+    "nameEn": "Battleaxe",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d8",
+        "mod": 0,
+        "type": "slashing"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": false,
+    "versatile": true,
+    "actionCost": "action",
+    "category": "Martial",
+    "cost": "10 gp",
+    "weight": 4,
+    "description": "Боевой топор (Battleaxe) — Martial оружие. Урон: 1d8 slashing."
+  },
+  {
+    "id": "wep_16",
+    "name": "Цеп",
+    "nameEn": "Flail",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d8",
+        "mod": 0,
+        "type": "bludgeoning"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": false,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Martial",
+    "cost": "10 gp",
+    "weight": 2,
+    "description": "Цеп (Flail) — Martial оружие. Урон: 1d8 bludgeoning."
+  },
+  {
+    "id": "wep_17",
+    "name": "Глефа",
+    "nameEn": "Glaive",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d10",
+        "mod": 0,
+        "type": "slashing"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": false,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Martial",
+    "cost": "20 gp",
+    "weight": 6,
+    "description": "Глефа (Glaive) — Martial оружие. Урон: 1d10 slashing."
+  },
+  {
+    "id": "wep_18",
+    "name": "Двуручный топор",
+    "nameEn": "Greataxe",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d12",
+        "mod": 0,
+        "type": "slashing"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": false,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Martial",
+    "cost": "30 gp",
+    "weight": 7,
+    "description": "Двуручный топор (Greataxe) — Martial оружие. Урон: 1d12 slashing."
+  },
+  {
+    "id": "wep_19",
+    "name": "Двуручный меч",
+    "nameEn": "Greatsword",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "2d6",
+        "mod": 0,
+        "type": "slashing"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": false,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Martial",
+    "cost": "50 gp",
+    "weight": 6,
+    "description": "Двуручный меч (Greatsword) — Martial оружие. Урон: 2d6 slashing."
+  },
+  {
+    "id": "wep_20",
+    "name": "Алебарда",
+    "nameEn": "Halberd",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d10",
+        "mod": 0,
+        "type": "slashing"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": false,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Martial",
+    "cost": "20 gp",
+    "weight": 6,
+    "description": "Алебарда (Halberd) — Martial оружие. Урон: 1d10 slashing."
+  },
+  {
+    "id": "wep_21",
+    "name": "Длинное копье (Лэнс)",
+    "nameEn": "Lance",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d12",
+        "mod": 0,
+        "type": "piercing"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": false,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Martial",
+    "cost": "10 gp",
+    "weight": 6,
+    "description": "Длинное копье (Лэнс) (Lance) — Martial оружие. Урон: 1d12 piercing."
+  },
+  {
+    "id": "wep_22",
+    "name": "Длинный меч",
+    "nameEn": "Longsword",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d8",
+        "mod": 0,
+        "type": "slashing"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": false,
+    "versatile": true,
+    "actionCost": "action",
+    "category": "Martial",
+    "cost": "15 gp",
+    "weight": 3,
+    "description": "Длинный меч (Longsword) — Martial оружие. Урон: 1d8 slashing."
+  },
+  {
+    "id": "wep_23",
+    "name": "Молот",
+    "nameEn": "Maul",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "2d6",
+        "mod": 0,
+        "type": "bludgeoning"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": false,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Martial",
+    "cost": "10 gp",
+    "weight": 10,
+    "description": "Молот (Maul) — Martial оружие. Урон: 2d6 bludgeoning."
+  },
+  {
+    "id": "wep_24",
+    "name": "Моргенштерн",
+    "nameEn": "Morningstar",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d8",
+        "mod": 0,
+        "type": "piercing"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": false,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Martial",
+    "cost": "15 gp",
+    "weight": 4,
+    "description": "Моргенштерн (Morningstar) — Martial оружие. Урон: 1d8 piercing."
+  },
+  {
+    "id": "wep_25",
+    "name": "Пика",
+    "nameEn": "Pike",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d10",
+        "mod": 0,
+        "type": "piercing"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": false,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Martial",
+    "cost": "5 gp",
+    "weight": 18,
+    "description": "Пика (Pike) — Martial оружие. Урон: 1d10 piercing."
+  },
+  {
+    "id": "wep_26",
+    "name": "Рапира",
+    "nameEn": "Rapier",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d8",
+        "mod": 0,
+        "type": "piercing"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": true,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Martial",
+    "cost": "25 gp",
+    "weight": 2,
+    "description": "Рапира (Rapier) — Martial оружие. Урон: 1d8 piercing."
+  },
+  {
+    "id": "wep_27",
+    "name": "Скимитар",
+    "nameEn": "Scimitar",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d6",
+        "mod": 0,
+        "type": "slashing"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": true,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Martial",
+    "cost": "25 gp",
+    "weight": 3,
+    "description": "Скимитар (Scimitar) — Martial оружие. Урон: 1d6 slashing."
+  },
+  {
+    "id": "wep_28",
+    "name": "Короткий меч",
+    "nameEn": "Shortsword",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d6",
+        "mod": 0,
+        "type": "piercing"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": true,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Martial",
+    "cost": "10 gp",
+    "weight": 2,
+    "description": "Короткий меч (Shortsword) — Martial оружие. Урон: 1d6 piercing."
+  },
+  {
+    "id": "wep_29",
+    "name": "Трезубец",
+    "nameEn": "Trident",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d6",
+        "mod": 0,
+        "type": "slashing"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": false,
+    "versatile": true,
+    "actionCost": "action",
+    "category": "Martial",
+    "cost": "5 gp",
+    "weight": 4,
+    "description": "Трезубец (Trident) — Martial оружие. Урон: 1d6 slashing."
+  },
+  {
+    "id": "wep_30",
+    "name": "War pick",
+    "nameEn": "War pick",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d8",
+        "mod": 0,
+        "type": "piercing"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": false,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Martial",
+    "cost": "5 gp",
+    "weight": 2,
+    "description": "War pick (War pick) — Martial оружие. Урон: 1d8 piercing."
+  },
+  {
+    "id": "wep_31",
+    "name": "Боевой молот",
+    "nameEn": "Warhammer",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d8",
+        "mod": 0,
+        "type": "bludgeoning"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": false,
+    "versatile": true,
+    "actionCost": "action",
+    "category": "Martial",
+    "cost": "15 gp",
+    "weight": 2,
+    "description": "Боевой молот (Warhammer) — Martial оружие. Урон: 1d8 bludgeoning."
+  },
+  {
+    "id": "wep_32",
+    "name": "Кнут",
+    "nameEn": "Whip",
+    "kind": "melee",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d4",
+        "mod": 0,
+        "type": "slashing"
+      }
+    ],
+    "rangeNormal": 5,
+    "finesse": true,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Martial",
+    "cost": "2 gp",
+    "weight": 3,
+    "description": "Кнут (Whip) — Martial оружие. Урон: 1d4 slashing."
+  },
+  {
+    "id": "wep_33",
+    "name": "Духовая трубка",
+    "nameEn": "Blowgun",
+    "kind": "ranged",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d1",
+        "mod": 0,
+        "type": "piercing"
+      }
+    ],
+    "rangeNormal": 25,
+    "rangeLong": 100,
+    "finesse": false,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Martial",
+    "cost": "10 gp",
+    "weight": 1,
+    "description": "Духовая трубка (Blowgun) — Martial оружие. Урон: 1d1 piercing."
+  },
+  {
+    "id": "wep_34",
+    "name": "Ручной арбалет",
+    "nameEn": "Crossbow, hand",
+    "kind": "ranged",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d6",
+        "mod": 0,
+        "type": "piercing"
+      }
+    ],
+    "rangeNormal": 30,
+    "rangeLong": 120,
+    "finesse": false,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Martial",
+    "cost": "75 gp",
+    "weight": 3,
+    "description": "Ручной арбалет (Crossbow, hand) — Martial оружие. Урон: 1d6 piercing."
+  },
+  {
+    "id": "wep_35",
+    "name": "Тяжелый арбалет",
+    "nameEn": "Crossbow, heavy",
+    "kind": "ranged",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d10",
+        "mod": 0,
+        "type": "piercing"
+      }
+    ],
+    "rangeNormal": 100,
+    "rangeLong": 400,
+    "finesse": false,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Martial",
+    "cost": "50 gp",
+    "weight": 18,
+    "description": "Тяжелый арбалет (Crossbow, heavy) — Martial оружие. Урон: 1d10 piercing."
+  },
+  {
+    "id": "wep_36",
+    "name": "Длинный лук",
+    "nameEn": "Longbow",
+    "kind": "ranged",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d8",
+        "mod": 0,
+        "type": "piercing"
+      }
+    ],
+    "rangeNormal": 150,
+    "rangeLong": 600,
+    "finesse": false,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Martial",
+    "cost": "50 gp",
+    "weight": 2,
+    "description": "Длинный лук (Longbow) — Martial оружие. Урон: 1d8 piercing."
+  },
+  {
+    "id": "wep_37",
+    "name": "Сеть",
+    "nameEn": "Net",
+    "kind": "ranged",
+    "attackBonus": 0,
+    "damage": [
+      {
+        "dice": "1d0",
+        "mod": 0,
+        "type": "slashing"
+      }
+    ],
+    "rangeNormal": 5,
+    "rangeLong": 15,
+    "finesse": false,
+    "versatile": false,
+    "actionCost": "action",
+    "category": "Martial",
+    "cost": "1 gp",
+    "weight": 3,
+    "description": "Сеть (Net) — Martial оружие. Урон: 1d0 slashing."
+  }
+]

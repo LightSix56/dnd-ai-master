@@ -1,0 +1,83 @@
+{
+  "id": "6426",
+  "slug": "6426-clonk",
+  "name": "Клонк",
+  "nameEn": "Clonk",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "кенку",
+  "alignment": "хаотично-нейтральный, именной НИП",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Baldur's Gate: Descent Into Avernus",
+  "isNamed": true,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 13,
+    "hitDice": "3d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 16,
+    "con": 10,
+    "int": 11,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 2,
+    "deception": 4,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий",
+    "Ауран"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Понимает Ауран и Общий, но говорит только с помощью особенности Подражание."
+    },
+    {
+      "name": "Мастер устраивать засады",
+      "description": "В первом раунде сражения кенку совершает с преимуществом броски атаки по всем существам, которых он застал врасплох."
+    },
+    {
+      "name": "Подражание",
+      "description": "Кенку может подражать любым звукам, которые он уже слышал, включая голоса. Существо, слышащее эти звуки, может понять, что это подражание, если совершит успешную проверку Мудрости (Проницательность) Сл 14."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Адский",
+      "type": "melee_attack",
+      "description": "боевой молот. Рукопашная атака оружием: +2 к попаданию, досягаемость 5 футов, одна цель. Попадание: 4 (1к8) дробящего урона или 5 (1к10) дробящего урона, если используется двумя руками.",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 0,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

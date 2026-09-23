@@ -1,0 +1,120 @@
+{
+  "id": "7547",
+  "slug": "7547-sahuagin-coral-smasher",
+  "name": "Сахуагин коралловый крушитель",
+  "nameEn": "Sahuagin Coral Smasher",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "сахуагин",
+  "alignment": "законно-злой",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Ghosts of Saltmarsh",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 33,
+    "hitDice": "6d8 + 6"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 40
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 12,
+    "con": 12,
+    "int": 12,
+    "wis": 13,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "darkvision": 120
+  },
+  "languages": [
+    "Сахуагинский"
+  ],
+  "traits": [
+    {
+      "name": "Кровавое бешенство",
+      "description": "Сахуагин совершает с преимуществом броски рукопашных атак по существам, у которых хиты ниже максимума."
+    },
+    {
+      "name": "Ограниченная амфибийность",
+      "description": "Сахуагин может дышать и воздухом и под водой, но чтобы не задохнуться, ему нужно погружаться в воду хотя бы раз каждые 4 часа."
+    },
+    {
+      "name": "Акулья телепатия",
+      "description": "Сахуагин может магическим образом командовать всеми акулами, находящимися в пределах 120 футов от него, при помощи ограниченной телепатии."
+    },
+    {
+      "name": "Осадное чудовище",
+      "description": "Сахуагин наносит двойной урон объектам и сооружениям."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Сахуагин совершает две атаки Боевым молотом или одну атаку Укусом и одну атаку Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 5 (1к4 + 3) колющего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 5 (1к4 + 3) рубящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Боевой молот",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к8 + 3) дробящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

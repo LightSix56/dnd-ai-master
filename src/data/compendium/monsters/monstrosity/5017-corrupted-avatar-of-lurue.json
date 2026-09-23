@@ -1,0 +1,102 @@
+{
+  "id": "5017",
+  "slug": "5017-corrupted-avatar-of-lurue",
+  "name": "Осквернённый аватар Лару",
+  "nameEn": "Corrupted Avatar of Lurue",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Candlekeep Mysteries",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 90,
+    "hitDice": "12d10 + 24"
+  },
+  "speed": {
+    "walk": 50,
+    "fly": 50,
+    "hover": true
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 14,
+    "con": 15,
+    "int": 11,
+    "wis": 17,
+    "cha": 16
+  },
+  "savingThrows": {
+    "int": 3,
+    "wis": 6,
+    "cha": 6
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "darkvision": 60
+  },
+  "languages": [
+    "Небесный",
+    "Сильван",
+    "Эльфийский",
+    "Телепатия 60 фт."
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Аватар совершает две атаки: одну копытами и одну рогом."
+    },
+    {
+      "name": "Копыта",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 фт., одна цель. Попадание: 32 (8к6 + 4) урона некротической энергией.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "8d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Рог",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 фт., одна цель. Попадание: 32 (8к6 + 4) урона некротической энергией. Если цель - гуманоид, она должна преуспеть в спасброске Мудрости Сл 13, иначе превратится в волка под контролем аватара. Это преобразование длится 1 час, или пока хиты цели не снизятся до 0 или она не умрёт. Игровая характеристика цели заменяется на характеристики волка, но он сохраняет свои хиты. Цель ограничена в действиях, которые она может совершать в своей волчьей формы, и она не может говорить, накладывать заклинания или выполнять какие-либо другие действия, требующие рук или речи. Снаряжение цели объединяется с новой формой, и она не может активировать, использовать, владеть или иным образом извлекать выгоду из своего снаряжения.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "8d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CHA",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

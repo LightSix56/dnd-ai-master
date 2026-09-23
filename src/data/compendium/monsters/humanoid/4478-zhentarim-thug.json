@@ -1,0 +1,91 @@
+{
+  "id": "4478",
+  "slug": "4478-zhentarim-thug",
+  "name": "Головорез Жентарима",
+  "nameEn": "Zhentarim Thug",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "нейтральный",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Out of the Abyss",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11,
+    "type": "кожаная броня"
+  },
+  "hitPoints": {
+    "average": 32,
+    "hitDice": "5d8 + 10"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 11,
+    "con": 14,
+    "int": 10,
+    "wis": 10,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "intimidation": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Тактика стаи",
+      "description": "Головорез имеет преимущество на броске атаки против существа, если хотя бы один из союзников головореза находится в пределах 5 футов от существа и союзник не выведен из строя."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Головорез совершает две рукопашные атаки."
+    },
+    {
+      "name": "Булава",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: Дробящий урон 5 (1к6 + 2).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Тяжелый арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +2 к попаданию, дальность 100/400 фт., Одна цель. Попадание: Колющий урон 5 (1к10).",
+      "attackBonus": 2,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

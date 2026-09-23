@@ -1,0 +1,128 @@
+{
+  "id": "7686",
+  "slug": "7686-clockwork-horror",
+  "name": "Механический ужас",
+  "nameEn": "Clockwork Horror",
+  "size": "small",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "законно-злой",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Monstrous Compendium Vol 1: Spelljammer Creatures",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 60,
+    "hitDice": "8d6 + 32"
+  },
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 14,
+    "con": 18,
+    "int": 13,
+    "wis": 14,
+    "cha": 10
+  },
+  "savingThrows": {
+    "str": 4,
+    "wis": 4
+  },
+  "skills": {
+    "perception": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 120
+  },
+  "languages": [
+    "Зиксвет",
+    "Три-кринский"
+  ],
+  "traits": [
+    {
+      "name": "Отключение",
+      "description": "Если ужас становится целью заклинания рассеивание магии [dispel magic], он должен преуспеть в спасброске Телосложения против Сл спасброска от заклинаний, иначе отключится на 1 минуту или до тех пор, пока не получит какой-либо урон."
+    },
+    {
+      "name": "Необычная природа",
+      "description": "Ужас не нуждается в воздухе, питье, еде и сне."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Ужас совершает одну атаку Укусом и две атаки Циркулярными пилами или совершает две атаки Электрическим разрядом."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 6 (1к8 + 2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Циркулярная пила",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 4 (1к4 + 2) рубящего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Электрический разряд",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +4 к попаданию, дистанция 120 фт., одна цель. Попадание: 7 (1к10 + 2) урона электричеством.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Подключение к магическому рулю",
+      "type": "special",
+      "description": "Ужас подключается к магическому рулю корабля, который может видеть пределах 5 футов, и мгновенно настраивается на него. Если другое существо уже настроено на руль, то его настройка прекращается в момент настройки ужаса. Ужасу не нужно быть заклинателем, чтобы использовать руль. Бонусным действием ужас может отсоединиться от руля и прекратить настройку на него."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

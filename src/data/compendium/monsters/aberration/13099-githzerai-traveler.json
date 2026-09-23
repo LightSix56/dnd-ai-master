@@ -1,0 +1,100 @@
+{
+  "id": "13099",
+  "slug": "13099-githzerai-traveler",
+  "name": "Гитцерай путешественник",
+  "nameEn": "Githzerai Traveler",
+  "size": "medium",
+  "type": "aberration",
+  "subtype": "гит",
+  "alignment": "без мировоззрения",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Planescape: Adventures in the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "псионическая защита"
+  },
+  "hitPoints": {
+    "average": 44,
+    "hitDice": "8d8 + 8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 15,
+    "con": 12,
+    "int": 14,
+    "wis": 16,
+    "cha": 10
+  },
+  "savingThrows": {
+    "str": 3,
+    "dex": 4,
+    "int": 4,
+    "wis": 5
+  },
+  "skills": {
+    "perception": 5,
+    "survival": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15
+  },
+  "languages": [
+    "Общий",
+    "Гитский"
+  ],
+  "traits": [
+    {
+      "name": "Психическая защита",
+      "description": "Пока гитцерай не носит броню и не носит щит, к его КД добавляется модификатор Мудрости."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Гитцерай совершает три Безоружные атаки."
+    },
+    {
+      "name": "Безоружная атака",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к8 + 2) дробящего урона плюс 4 (1к8) урона психической энергией.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний (Псионика)",
+      "type": "special",
+      "description": "Гитцерай накладывает одно из следующих заклинаний, используя Мудрость в качестве базовой характеристики и без использования материальных компонентов (Сл спасброска от заклинаний 13):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "волшебная рука [mage hand] (рука невидима);"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "прыжок [jump], уход в иной мир [plane shift] (только на себя), телекинез [telekinesis];"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

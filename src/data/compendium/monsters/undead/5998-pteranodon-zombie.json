@@ -1,0 +1,68 @@
+{
+  "id": "5998",
+  "slug": "5998-pteranodon-zombie",
+  "name": "Птеранодон зомби",
+  "nameEn": "Pteranodon Zombie",
+  "size": "medium",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Adventurers League",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 26,
+    "hitDice": "4d8 + 8"
+  },
+  "speed": {
+    "walk": 10,
+    "fly": 50
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 10,
+    "con": 15,
+    "int": 1,
+    "wis": 5,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 7,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 6 (2к4 + 1).",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

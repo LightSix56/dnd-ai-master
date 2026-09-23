@@ -1,0 +1,53 @@
+{
+  "id": "7740",
+  "slug": "7740-sheep",
+  "name": "Овца",
+  "nameEn": "Sheep",
+  "size": "small",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Storm King's Thunder",
+  "isNamed": false,
+  "armorClass": {
+    "value": 10
+  },
+  "hitPoints": {
+    "average": 3,
+    "hitDice": "1d6"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 10,
+    "con": 11,
+    "int": 2,
+    "wis": 10,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Устойчивый",
+      "description": "Овца совершает с преимуществом спасброски Силы и Ловкости против эффектов, сбивающих её с ног."
+    }
+  ],
+  "actions": [],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

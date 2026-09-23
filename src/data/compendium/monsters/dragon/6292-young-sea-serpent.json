@@ -1,0 +1,138 @@
+{
+  "id": "6292",
+  "slug": "6292-young-sea-serpent",
+  "name": "Молодой морской змей",
+  "nameEn": "Young Sea Serpent",
+  "size": "huge",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 123,
+    "hitDice": "13d12 + 39"
+  },
+  "speed": {
+    "walk": 10,
+    "swim": 40
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 12,
+    "con": 17,
+    "int": 11,
+    "wis": 13,
+    "cha": 10
+  },
+  "savingThrows": {
+    "str": 7,
+    "con": 6
+  },
+  "skills": {
+    "perception": 4,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "cold"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 120
+  },
+  "languages": [
+    "Общий",
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Осадный монстр",
+      "description": "Морской змей наносит двойной урон объектам и сооружениям."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Морской змей совершает одну атаку Укусом и одну атаку Сжиманием или Хвостом."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 10 фт., одна цель. Попадание: 15 (2к10+4) колющего урона плюс 5 (1к10) урона холодом.",
+      "attackBonus": 7,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Сжимание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 20 фт., одна цель. Попадание: 22 (4к8+4) дробящего урона и цель схвачена (Сл высвобождения 15). Пока захват не закончится, цель опутана, и морской змей не может схватить другую цель.",
+      "attackBonus": 7,
+      "reachFt": 20,
+      "damage": [
+        {
+          "dice": "4d8",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Хвост",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 15 фт., одна цель. Попадание: 9 (1к10+4) дробящего урона и если цель - существо, оно должно преуспеть в спасброске Силы Сл 15, иначе будет отброшено на расстояние до 30 фт. от морского змея и сбито с ног.",
+      "attackBonus": 7,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Холодное дыхание (перезарядка 5-6)",
+      "type": "breath",
+      "description": "Морской змей выдыхает 30-футовый конус холода. Каждое существо в этой области должно совершить спасбросок Телосложения Сл 14, получая 38 (7к10) урона холодом в случае провала или половину этого урона в случае успеха.",
+      "damage": [
+        {
+          "dice": "7d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "CON",
+        "dc": 14,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

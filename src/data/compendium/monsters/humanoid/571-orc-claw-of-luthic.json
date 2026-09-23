@@ -1,0 +1,91 @@
+{
+  "id": "571",
+  "slug": "571-orc-claw-of-luthic",
+  "name": "Орк коготь Лутик",
+  "nameEn": "Orc claw of Luthic",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "орк",
+  "alignment": "хаотично-злой",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Volo's guide to monsters",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "шкурный доспех"
+  },
+  "hitPoints": {
+    "average": 45,
+    "hitDice": "6d8 + 18"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 15,
+    "con": 16,
+    "int": 10,
+    "wis": 15,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "survival": 4,
+    "intimidation": 2,
+    "medicine": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Орочий"
+  ],
+  "traits": [
+    {
+      "name": "Агрессия",
+      "description": "Бонусным действием орк может переместиться на расстояние не больше своей скорости к враждебному существу, которое может видеть."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Орк является заклинателем 5-го уровня. Его базовой характеристикой является Мудрость (Сл спасброска от заклинаний 12, +4 к попаданию заклинаниями). У орка подготовлены следующие заклинания жреца:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Орк совершает две атаки когтями или четыре атаки когтями, если у него осталось меньше половины хитов."
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к6 + 2) рубящего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 5,
+    "ability": "WIS"
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "id": "162",
+  "slug": "162-efreeti",
+  "name": "Ифрит",
+  "nameEn": "Efreeti",
+  "size": "large",
+  "type": "elemental",
+  "subtype": null,
+  "alignment": "законно-злой",
+  "challengeRating": 11,
+  "xp": 7200,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 200,
+    "hitDice": "16d10 + 112"
+  },
+  "speed": {
+    "walk": 40,
+    "fly": 60
+  },
+  "abilities": {
+    "str": 22,
+    "dex": 12,
+    "con": 24,
+    "int": 16,
+    "wis": 15,
+    "cha": 16
+  },
+  "savingThrows": {
+    "int": 7,
+    "wis": 6,
+    "cha": 7
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 120
+  },
+  "languages": [
+    "Игнан"
+  ],
+  "traits": [
+    {
+      "name": "Элементальная гибель",
+      "description": "Если ифрит умирает, его тело распадается во вспышке огня и клубах дыма, оставляя только снаряжение, которое ифрит носил и нёс."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Базовой характеристикой ифрита является Харизма (Сл спасброска от заклинания 15, +7 к попаданию атаками заклинаниями). Он может накладывать следующие заклинания, не нуждаясь в материальных компонентах:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Ифрит совершает две атаки скимитаром, либо два раза использует Метание пламени."
+    },
+    {
+      "name": "Скимитар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +10 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 13 (2к6 + 6) плюс урон огнём 7 (2к6).",
+      "attackBonus": 10,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 6,
+          "type": "плюс"
+        }
+      ]
+    },
+    {
+      "name": "Метание пламени",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +7 к попаданию, дистанция 120 футов, одна цель. Попадание: Урон огнём 17 (5к6).",
+      "attackBonus": 7,
+      "range": {
+        "normal": 120
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

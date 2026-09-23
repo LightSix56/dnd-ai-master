@@ -1,0 +1,84 @@
+{
+  "id": "8507",
+  "slug": "8507-gildha-duhn",
+  "name": "Гильда Дун",
+  "nameEn": "Gildha Duhn",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "Полуорк",
+  "alignment": "любое мировоззрение, именной НИП",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Acquisition Incorporated",
+  "isNamed": true,
+  "armorClass": {
+    "value": 10
+  },
+  "hitPoints": {
+    "average": 9,
+    "hitDice": "2d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 10,
+    "con": 10,
+    "int": 10,
+    "wis": 14,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "medicine": 4,
+    "religion": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий",
+    "Орочий"
+  ],
+  "traits": [
+    {
+      "name": "Непоколебимая стойкость",
+      "description": "Если хиты Гильда опускаются до нуля, но при этом он не убит, его хиты вместо этого опускаются до 1. Он не можете использовать это умение снова, пока не закончит продолжительный отдых."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Гильда является заклинателем 1-го уровня. Его базовой характеристикой является Мудрость (Сл спасброска от заклинания 12, +4 к попаданию атаками заклинаниями). У него приготовлены следующие заклинания жреца:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Дубина",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 футов, одна цель. Попадание: 2 (1к4) дробящего урона.",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 0,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 1,
+    "spellAttackBonus": 4,
+    "ability": "WIS"
+  }
+}

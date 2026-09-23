@@ -1,0 +1,107 @@
+{
+  "id": "7208",
+  "slug": "7208-triton-shorestalker",
+  "name": "Тритон, береговой охотник",
+  "nameEn": "Triton Shorestalker",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "тритон",
+  "alignment": "нейтрально-злой",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Mythic Odysseys of Theros",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 32,
+    "hitDice": "5d8 + 10"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 10
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 16,
+    "con": 14,
+    "int": 10,
+    "wis": 15,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4,
+    "nature": 4,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Первичный"
+  ],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Тритон может дышать на воздухе и под водой."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Базовой характеристикой тритона является Мудрость (Сл спасброска от заклинания 12). Он может накладывать следующие заклинания, не нуждаясь в материальных компонентах:"
+    },
+    {
+      "name": "Ловкий побег",
+      "description": "Тритон может в каждом своем ходу бонусным действием совершать действие Засада или Отход."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Тритон совершает две атаки коротким мечом с ежовыми шипами."
+    },
+    {
+      "name": "Короткий меч с ежовыми шипами",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к6 + 3) колющего урона плюс 10 (3к6) урона ядом. Если урон уменьшает хиты существа до 0, то оно стабилизируется, но становится отравленным в течение 1 часа, даже после восстановления хитов. Пока существо отравлено данным образом оно парализовано.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Отравленный шип. Дальнобойная атака оруж",
+      "type": "special",
+      "description": "ием: +5 к попаданию, дистанция 30/60 футов, одна цель. Попадание: 5 (1к4 + 3) колющего урона плюс 10 (3к6) урона ядом.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 30,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

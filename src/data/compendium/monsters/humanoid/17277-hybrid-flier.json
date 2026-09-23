@@ -1,0 +1,93 @@
+{
+  "id": "17277",
+  "slug": "17277-hybrid-flier",
+  "name": "Летающий гибрид",
+  "nameEn": "Hybrid Flier",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "гибрид Симиков",
+  "alignment": "нейтрально-добрый",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 39,
+    "hitDice": "6d8 + 12"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 40
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 16,
+    "con": 14,
+    "int": 11,
+    "wis": 10,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий",
+    "плюс один язык"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Гибрид совершает две атаки Метательным копьём. Он может заменить одну атаку на Плевок кислотой."
+    },
+    {
+      "name": "Метательное копьё",
+      "type": "melee_attack",
+      "description": "Дальнобойная или рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт. или дистанция 30/120 фт., одна цель. Попадание: 6 (1к6 + 3) колющего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "range": {
+        "normal": 30,
+        "long": 120
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Плевок кислотой",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +5 к попаданию, дистанция 20/60 фт., одна цель. Попадание: 10 (4к4) урона кислотой.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "4d4",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

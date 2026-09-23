@@ -1,0 +1,82 @@
+{
+  "id": "6176",
+  "slug": "6176-giant-two-headed-rat",
+  "name": "Гигантская двухголовая крыса",
+  "nameEn": "Giant two-headed rat",
+  "size": "medium",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "нейтрально-злой",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Waterdeep: Dungeon of the Mad Mage",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 39,
+    "hitDice": "6d8 + 12"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 14,
+    "con": 14,
+    "int": 3,
+    "wis": 13,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 5,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "darkvision": 120
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Двуглавость",
+      "description": "Крыса совершает с преимуществом проверки Мудрости (Восприятие), а также спасброски от глухоты, испуга, лишения сознания, ослепления, очарования и ошеломления."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Крыса совершает две атаки укусом."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 5 (1к6 + 2) колющего урона. Если цель — существо, она должна преуспеть в спасброске Телосложения Сл 12 от болезни, иначе станет отравленной, пока не вылечится от болезни. За каждые прошедшие 24 часа существо должно повторить этот спасбросок, уменьшая максимум хитов на 5 (1к10) при провале. Это уменьшение длится до тех пор, пока болезнь не будет вылечена. Существо умирает, если болезнь уменьшает максимум хитов до 0.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 12,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

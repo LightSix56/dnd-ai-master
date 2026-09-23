@@ -1,0 +1,108 @@
+{
+  "id": "266",
+  "slug": "266-pseudodragon",
+  "name": "Псевдодракон",
+  "nameEn": "Pseudodragon",
+  "size": "tiny",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "нейтрально-добрый",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Player's Handbook",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 7,
+    "hitDice": "2d4 + 2"
+  },
+  "speed": {
+    "walk": 15,
+    "fly": 60
+  },
+  "abilities": {
+    "str": 6,
+    "dex": 15,
+    "con": 13,
+    "int": 10,
+    "wis": 12,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "blindsight": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "понимает Драконий и Общий",
+    "но не говорит"
+  ],
+  "traits": [
+    {
+      "name": "Острые чувства",
+      "description": "Псевдодракон совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на зрение, слух и обоняние."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Псевдодракон совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Ограниченная телепатия",
+      "description": "Псевдодракон может магическим образом передавать простые мысли, эмоции и образы любому существу в пределах 100 футов, понимающему любой язык."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 4 (1к4 + 2).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Жало",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одно существо. Попадание: Колющий урон 4 (1к4 + 2), и цель должна преуспеть в спасброске Телосложения Сл 11, иначе станет отравленной на 1 час. Если спасбросок провален на 5 или больше единиц, цель теряет сознание на этот же период, либо пока не получит урон, либо пока другое существо не разбудит её действием.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 11,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

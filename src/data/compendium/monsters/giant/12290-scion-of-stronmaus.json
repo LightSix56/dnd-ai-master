@@ -1,0 +1,139 @@
+{
+  "id": "12290",
+  "slug": "12290-scion-of-stronmaus",
+  "name": "Отпрыск Стронмауса",
+  "nameEn": "Scion of Stronmaus",
+  "size": "gargantuan",
+  "type": "giant",
+  "subtype": "Титан",
+  "alignment": "обычно хаотично-добрый",
+  "challengeRating": 27,
+  "xp": 105000,
+  "source": "Bigby Presents: Glory of the Giants",
+  "isNamed": false,
+  "armorClass": {
+    "value": 20,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 656,
+    "hitDice": "32d20 + 320"
+  },
+  "speed": {
+    "walk": 60,
+    "fly": 80,
+    "hover": true,
+    "swim": 80
+  },
+  "abilities": {
+    "str": 30,
+    "dex": 20,
+    "con": 30,
+    "int": 26,
+    "wis": 28,
+    "cha": 24
+  },
+  "savingThrows": {
+    "dex": 13,
+    "int": 16
+  },
+  "skills": {
+    "perception": 17,
+    "history": 16,
+    "arcana": 16
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "thunder"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 27,
+    "truesight": 120
+  },
+  "languages": [
+    "Великаний",
+    "Первичный"
+  ],
+  "traits": [
+    {
+      "name": "Пролёт",
+      "description": "Отпрыск не провоцирует атаку, когда она вылетает за пределы досягаемости врага."
+    },
+    {
+      "name": "Легендарное сопротивление (6/день)",
+      "description": "Если отпрыск проваливает спасбросок, он может вместо этого сделать спасбросок успешным."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Отпрыск совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Осадный монстр",
+      "description": "Отпрыск наносит двойной урон объектам и сооружениям."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Отпрыск совершает одну атаку используя Меч молний или Град, а так же две атаки Размашистым ударом."
+    },
+    {
+      "name": "Меч молний",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: + 18 к попаданию, досягаемость 30 футов, одна цель. Попадание: 36 (4к12 + 10) урона силовым полем плюс 22 (4к10) урона электричеством.",
+      "reachFt": 30,
+      "damage": [
+        {
+          "dice": "4d12",
+          "mod": 10,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Град",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +18 к попаданию, дистанция 120/480 футов, одна цель. Попадание: 32 (4к10 + 10) дробящего урона плюс 18 (4к8) урона холодом, и цель должна преуспеть в спасброске Силы Сл 26, иначе упадёт ничком.",
+      "attackBonus": 18,
+      "range": {
+        "normal": 120,
+        "long": 480
+      },
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 10,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 26,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Размашистый удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: + 18 к попаданию, досягаемость 20 футов, одна цель. Попадание: 36 (4к12 + 10) урона силовым полем.",
+      "reachFt": 20,
+      "damage": [
+        {
+          "dice": "4d12",
+          "mod": 10,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

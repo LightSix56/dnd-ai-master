@@ -1,0 +1,80 @@
+{
+  "id": "5848",
+  "slug": "5848-male-steeder",
+  "name": "Самец стидера",
+  "nameEn": "Male steeder",
+  "size": "medium",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Out of the Abyss",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 13,
+    "hitDice": "2d8 + 4"
+  },
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 12,
+    "con": 14,
+    "int": 2,
+    "wis": 10,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 120
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к8 + 2) колющего урона цель должна совершить спасбросок Телосложения Сл 12, получая урон кислотой 4 (1к8) при провале или половину этого урона при успехе..",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 12,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Липкие лапы (перезаряжается, когда стидер не удержи",
+      "type": "melee_attack",
+      "description": "вает ни одного существа). Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель – существо Маленького или Крохотного размера. Попадание: Цель прилипает к лапе стидера и становится схваченной до тех пор, пока не освободится (Сл высвобождения 12). Стидер может удерживать только одно существо за раз.",
+      "attackBonus": 4,
+      "reachFt": 5
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,92 @@
+{
+  "id": "7782",
+  "slug": "7782-othovir",
+  "name": "Отовир",
+  "nameEn": "Othovir",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек иллусканец",
+  "alignment": "законно-нейтральный, именной НИП",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Storm King's Thunder",
+  "isNamed": true,
+  "armorClass": {
+    "value": 10,
+    "type": "13 с доспехами мага"
+  },
+  "hitPoints": {
+    "average": 16,
+    "hitDice": "3d8 + 3"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 10,
+    "con": 13,
+    "int": 12,
+    "wis": 14,
+    "cha": 16
+  },
+  "savingThrows": {},
+  "skills": {
+    "deception": 5,
+    "insight": 4,
+    "persuasion": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий",
+    "Эльфийский"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Рапира",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 фт., одна цель. Попадание: 4 (1к8) колющего урона.",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Отовир накладывает одно из следующих заклинаний используя в качестве базовой характеристики Харизму (Сл спасброска от заклинания 13; +5 к броску атаки заклинанием). Он обладает следующими заготовленными заклинаниями чародея:"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "огненный снаряд [fire bolt] (1к10 урона огнём), фокусы [prestidigitation];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "доспехи мага [mage armor], волна грома [thunderwave], ведьмин снаряд [witch bolt]."
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Парирование",
+      "type": "special",
+      "description": "Отовир добавляет 2 к своему КД против одной рукопашной атаки оружием, которая должна попасть по нему. Для этого Отовир должен видеть атакующего и держать в руке рукопашное оружие."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

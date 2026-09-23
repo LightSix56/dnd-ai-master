@@ -1,0 +1,115 @@
+{
+  "id": "8716",
+  "slug": "8716-braxat",
+  "name": "Браксат",
+  "nameEn": "Braxat",
+  "size": "huge",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "обычно нейтральный",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "природный доспех, крепость интеллекта"
+  },
+  "hitPoints": {
+    "average": 162,
+    "hitDice": "13d12 + 78"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 26,
+    "dex": 8,
+    "con": 22,
+    "int": 14,
+    "wis": 13,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "acid",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Великаний"
+  ],
+  "traits": [
+    {
+      "name": "Крепость интеллекта",
+      "description": "Браксат добавляет к своему КД модификатор Интеллекта."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Браксат совершает две атаки Палицей."
+    },
+    {
+      "name": "Палица",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +12 к попаданию, досягаемость 10 футов, одна цель. Попадание: 21 (3к8 + 8) дробящего урона.",
+      "attackBonus": 12,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 8,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Кислотное дыхание (перезарядка 6)",
+      "type": "breath",
+      "description": "Браксат выдыхает 15-футовый конус кислоты. Каждое существо в конусе должно совершить спасбросок Телосложения Сл 18, получая 26 (4к12) урона кислотой в случае провала или половину этого урона в случае успеха.",
+      "damage": [
+        {
+          "dice": "4d12",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "6",
+      "save": {
+        "ability": "CON",
+        "dc": 18,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Использование заклинаний (псионика)",
+      "type": "special",
+      "description": "Базовой характеристикой браксата является Интеллект (Сл спасброска от заклинаний 14). Он может накладывать следующие заклинания, не нуждаясь ни в каких в компонентах:"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "принуждение [compulsion], ужас [fear]"
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Псионический щит (3/день)",
+      "type": "special",
+      "description": "Когда по браксату попадают броском атаки или заклинанием волшебная стрела [magic missile], исходящим из источника, который он может видеть, браксат может создать вокруг себя невидимый барьер магической силы, который существует до начала его следующего хода. Этот барьер даёт браксату бонус +5 к КД, в том числе против срабатывающей атаки, и предотвращает попадание заклинанием волшебная стрела [magic missile]."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

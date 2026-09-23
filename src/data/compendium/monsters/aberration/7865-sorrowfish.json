@@ -1,0 +1,69 @@
+{
+  "id": "7865",
+  "slug": "7865-sorrowfish",
+  "name": "Рыба-печаль",
+  "nameEn": "Sorrowfish",
+  "size": "tiny",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Critical Role: Call of the Netherdeep",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 1,
+    "hitDice": "1d4 - 1"
+  },
+  "speed": {
+    "walk": 0,
+    "swim": 40
+  },
+  "abilities": {
+    "str": 2,
+    "dex": 16,
+    "con": 9,
+    "int": 1,
+    "wis": 7,
+    "cha": 2
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Кровавое бешенство",
+      "description": "Рыба-печаль совершает с преимуществом броски рукопашных атак по существам, у которых хиты ниже максимума."
+    },
+    {
+      "name": "Подводное дыхание",
+      "description": "Рыба-печаль может дышать только под водой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 1.",
+      "attackBonus": 5,
+      "reachFt": 5
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

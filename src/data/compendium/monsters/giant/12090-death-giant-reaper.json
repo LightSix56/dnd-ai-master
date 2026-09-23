@@ -1,0 +1,100 @@
+{
+  "id": "12090",
+  "slug": "12090-death-giant-reaper",
+  "name": "Жнец великан смерти",
+  "nameEn": "Death Giant Reaper",
+  "size": "huge",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "любое мировоззрение",
+  "challengeRating": 12,
+  "xp": 8400,
+  "source": "Bigby Presents: Glory of the Giants",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 172,
+    "hitDice": "15d12 + 75"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 27,
+    "dex": 14,
+    "con": 20,
+    "int": 18,
+    "wis": 16,
+    "cha": 16
+  },
+  "savingThrows": {
+    "con": 9,
+    "int": 8,
+    "wis": 7,
+    "cha": 7
+  },
+  "skills": {
+    "perception": 7,
+    "history": 8,
+    "arcana": 8,
+    "stealth": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "necrotic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17,
+    "darkvision": 120
+  },
+  "languages": [
+    "Великаний"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Великан совершает две атаки Косой или Снарядом души."
+    },
+    {
+      "name": "Коса",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +12 к попаданию, досягаемость 15 футов, одна цель. Попадание: 21 (3к8 + 8) рубящего урон плюс 11 (2к10) урона некротической энергией.",
+      "attackBonus": 12,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 8,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Снаряд души",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +8 к попаданию, дистанция 120 футов, одно существо. Попадание: 26 (4к10 + 4) урона некротической энергией. Если цель испугана, то великан получает временные хиты, равные нанесенному урону.",
+      "attackBonus": 8,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

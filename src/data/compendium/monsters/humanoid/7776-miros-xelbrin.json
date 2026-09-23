@@ -1,0 +1,99 @@
+{
+  "id": "7776",
+  "slug": "7776-miros-xelbrin",
+  "name": "Мирош Кселбрин",
+  "nameEn": "Miros Xelbrin",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек домарец",
+  "alignment": "нейтрально-добрый, именной НИП",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Storm King's Thunder",
+  "isNamed": true,
+  "armorClass": {
+    "value": 10
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "4d8 + 4"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 10,
+    "con": 15,
+    "int": 11,
+    "wis": 12,
+    "cha": 14
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3,
+    "intimidation": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Медвежий хват",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 5 (1к4+3) дробящий урон и цель становится схваченной (Сл высвобождения 13) и получает 5 (1к4+3) дробящего урона в начале каждого хода Мироша, пока тот удерживает цель. Мирош не может атаковать пока борется.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Дубинка",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 фт., одна цель. Попадание: 5 (1к4+3) дробящего урона.",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Тяжёлый арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +2 к попаданию, дистанция 100/400 фт., одна цель. Попадание: 5 (1к10) колющего урона. Мирош носит с собой 10 болтов для арбалета.",
+      "attackBonus": 2,
+      "range": {
+        "normal": 100,
+        "long": 400
+      },
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

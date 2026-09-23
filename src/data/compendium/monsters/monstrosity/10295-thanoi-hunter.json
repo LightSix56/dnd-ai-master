@@ -1,0 +1,107 @@
+{
+  "id": "10295",
+  "slug": "10295-thanoi-hunter",
+  "name": "Таной охотник",
+  "nameEn": "Thanoi Hunter",
+  "size": "medium",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "любое мировоззрение",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Monstrous Compendium Vol 2: Dragonlance Creatures",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "Шкурный доспех"
+  },
+  "hitPoints": {
+    "average": 32,
+    "hitDice": "5d8 + 10"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 14,
+    "con": 15,
+    "int": 12,
+    "wis": 16,
+    "cha": 11
+  },
+  "savingThrows": {
+    "str": 6,
+    "con": 4
+  },
+  "skills": {
+    "athletics": 6,
+    "perception": 5,
+    "survival": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "cold"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15
+  },
+  "languages": [
+    "Общий",
+    "Акван"
+  ],
+  "traits": [
+    {
+      "name": "Задержка дыхания",
+      "description": "Охотник может задерживать дыхание на 10 минут."
+    },
+    {
+      "name": "Тактика стаи",
+      "description": "Охотник совершает с преимуществом броски атаки по существу, если в пределах 5 футов от этого существа находится как минимум один дееспособный союзник охотника"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Охотник совершает одну атаку костяным гарпуном и одну атаку бивнем."
+    },
+    {
+      "name": "Костяной гарпун",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +6 к попаданию, дальность 10 футов или дистанция 20/60 футов, одна цель. Попадание: 8 (1d8 + 4) колющего урона. Попадание или промах: гарпун возвращается в руку охотника.",
+      "attackBonus": 6,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Бивень",
+      "type": "melee_attack",
+      "description": "Рукопашная Атака оружием: +6 к попаданию, дальность 5 футов, одна цель. Попадание: 6 (1d4 + 4) колющего урона.",
+      "attackBonus": 6,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

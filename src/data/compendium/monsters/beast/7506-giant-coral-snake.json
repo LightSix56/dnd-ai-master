@@ -1,0 +1,70 @@
+{
+  "id": "7506",
+  "slug": "7506-giant-coral-snake",
+  "name": "Гигантская коралловая змея",
+  "nameEn": "Giant Coral Snake",
+  "size": "large",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Ghosts of Saltmarsh",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 90,
+    "hitDice": "12d10 + 24"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 16,
+    "con": 14,
+    "int": 2,
+    "wis": 10,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "blindsight": 10
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 8 (2к4 + 3) колющего урона, и цель должна совершить спасбросок Телосложения Сл 12, иначе станет ошеломлённой до конца своего следующего хода. При провале цель начинает галлюцинировать и страдает кратковременным безумием. Эффект длится 10 минут.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 12,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

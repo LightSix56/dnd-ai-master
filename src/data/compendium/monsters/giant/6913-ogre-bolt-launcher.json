@@ -1,0 +1,116 @@
+{
+  "id": "6913",
+  "slug": "6913-ogre-bolt-launcher",
+  "name": "Огр болтомёт",
+  "nameEn": "Ogre Bolt Launcher]Огр болтомёт [Ogre Bolt Launcher",
+  "size": "large",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "обычно хаотично-злойБольшой? Великан, хаотично-злой",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "шкурный доспех"
+  },
+  "hitPoints": {
+    "average": 59,
+    "hitDice": "7d10 + 21"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 12,
+    "con": 16,
+    "int": 5,
+    "wis": 7,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Великаний"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Кулак",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: 9 (2к4 + 4) дробящего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Болтомёт",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +3 к попаданию, дистанция 120/480 фт., одна цель. Попадание: 17 (3к10 + 1) колющего урона.",
+      "attackBonus": 3,
+      "range": {
+        "normal": 120,
+        "long": 480
+      },
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Кулак",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: 9 (2к4 + 4) дробящего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Болтомёт",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +3 к попаданию, дистанция 120/480 фт., одна цель. Попадание: 17 (3к10 + 1) колющего урона.",
+      "attackBonus": 3,
+      "range": {
+        "normal": 120,
+        "long": 480
+      },
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

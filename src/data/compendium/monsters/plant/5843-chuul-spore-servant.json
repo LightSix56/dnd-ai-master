@@ -1,0 +1,72 @@
+{
+  "id": "5843",
+  "slug": "5843-chuul-spore-servant",
+  "name": "Чууль споровый слуга",
+  "nameEn": "Chuul Spore Servant",
+  "size": "large",
+  "type": "plant",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Out of the Abyss",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 93,
+    "hitDice": "11d10 + 33"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 10,
+    "con": 16,
+    "int": 2,
+    "wis": 6,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "blindsight": 30
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Споровый слуга совершает две атаки клешнями."
+    },
+    {
+      "name": "Клешни",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягае- мость 10 фт., одна цель. Попадание: Дробящий урон 11 (2к6+4). Цель будет схвачена (Сл высвобождения 14) в том случае, если она является существом Большого или менее размера, и при этом споровый слуга не держит двух других существ.",
+      "attackBonus": 6,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

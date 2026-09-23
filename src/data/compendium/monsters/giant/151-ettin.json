@@ -1,0 +1,98 @@
+{
+  "id": "151",
+  "slug": "151-ettin",
+  "name": "Эттин",
+  "nameEn": "Ettin",
+  "size": "large",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "хаотично-злой",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 85,
+    "hitDice": "10d10 + 30"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 21,
+    "dex": 8,
+    "con": 17,
+    "int": 6,
+    "wis": 10,
+    "cha": 8
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 60
+  },
+  "languages": [
+    "Великаний",
+    "Орочий"
+  ],
+  "traits": [
+    {
+      "name": "Две головы",
+      "description": "Эттин совершает с преимуществом проверки Мудрости (Восприятие), а также спасброски от глухоты, испуга, лишения сознания, ослепления, очарования и ошеломления."
+    },
+    {
+      "name": "Неусыпный",
+      "description": "Когда одна голова эттина спит, другая бодрствует."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Эттин совершает две атаки: одну боевым топором и одну моргенштерном."
+    },
+    {
+      "name": "Боевой топор",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 14 (2к8 + 5).",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Моргенштерн",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 14 (2к8 + 5).",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

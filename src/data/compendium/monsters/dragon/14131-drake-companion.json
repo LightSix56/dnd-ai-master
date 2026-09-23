@@ -1,0 +1,73 @@
+{
+  "id": "14131",
+  "slug": "14131-drake-companion",
+  "name": "Дрейк-компаньон",
+  "nameEn": "Drake Companion",
+  "size": "large",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14
+  },
+  "hitPoints": {
+    "average": 5,
+    "hitDice": "1d8"
+  },
+  "speed": {
+    "walk": 40,
+    "fly": 40
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 12,
+    "con": 15,
+    "int": 8,
+    "wis": 14,
+    "cha": 8
+  },
+  "savingThrows": {
+    "dex": 1,
+    "wis": 2
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Сущность дракона",
+      "description": "Когда вы призываете дрейка, выберите тип урона: кислота, огонь, холод, электричество или яд. Выбор определяет иммунитет к урону дрейка, вид урона особенности «Усиленные удары» и вид дополнительного урона Укуса, также определяет сопротивление, которое получаете вы."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 + БМ к попаданию, досягаемость 5 футов, одна цель. Попадание: 1к6 + БМ колющего урона + 2к6 того вида урона, который был выбран для особенности «Сущность дракона».",
+      "reachFt": 5
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Усиленные удары",
+      "type": "special",
+      "description": "Когда другое видимое существо в пределах 30 футов от дрейка, попадает атакой оружием, дрейк усиливает эту атаку своей сущностью, из-за чего атака дополнительно наносит 1к6 урона того вида, который был выбран для особенности «Сущность дракона»."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,143 @@
+{
+  "id": "9259",
+  "slug": "9259-hastain",
+  "name": "Хастейн",
+  "nameEn": "Hastain",
+  "size": "medium",
+  "type": "celestial",
+  "subtype": null,
+  "alignment": "хаотично-злой, именной НИП",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": true,
+  "armorClass": {
+    "value": 19,
+    "type": "сияние"
+  },
+  "hitPoints": {
+    "average": 82,
+    "hitDice": "15d8 + 15"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 15,
+    "con": 12,
+    "int": 19,
+    "wis": 16,
+    "cha": 24
+  },
+  "savingThrows": {
+    "dex": 5,
+    "con": 4,
+    "wis": 6,
+    "cha": 10
+  },
+  "skills": {
+    "performance": 10,
+    "history": 7,
+    "arcana": 7,
+    "persuasion": 10
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "Общий",
+    "Глубинная речь",
+    "Драконий",
+    "Небесный"
+  ],
+  "traits": [
+    {
+      "name": "Сияние",
+      "description": "К КД Хастейна добавляется его модификатор Харизмы."
+    },
+    {
+      "name": "Задержка дыхания",
+      "description": "Хастейн может задержать дыхание на 1 час."
+    },
+    {
+      "name": "Особое снаряжение",
+      "description": "Хастейн носит таларит [talarith]."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Хастейн совершает две атаки Трезубцем."
+    },
+    {
+      "name": "Трезубец",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +7 к попаданию, досягаемость 5 фт. или дистанция 20/60 фт., одна цель. Попадание: 7 (1к6 + 4) колющего урона, или 8 (1к8 + 4) колющего урона, если используется двумя руками, плюс 3 (1к6) урона силовым полем, если Хастейн носит таларит [talarith].",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Цветной снаряд",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +10 к попаданию, дистанция 90 фт., одна цель. Попадание: 22 (5к8) урона вида, который Хастейн выбирает из следующего списка: холод, огонь, электричество и излучение.",
+      "attackBonus": 10,
+      "range": {
+        "normal": 90
+      },
+      "damage": [
+        {
+          "dice": "5d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний (псионика)",
+      "type": "special",
+      "description": "Базовой характеристикой Хастейна является Харизма (Сл спасброска от заклинаний 18). Он может накладывать следующие заклинания, не нуждаясь ни в каких компонентах:"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "волшебная рука [mage hand], свет [light], фокусы [prestidigitation];"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "воображаемая сила [phantasmal force], переносящая дверь [dimension door];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "множественное внушение [mass suggestion], послание [sending]."
+    },
+    {
+      "name": "Призыв голема (перезаряжается после короткого или продолжительного отдыха)",
+      "type": "special",
+      "description": "Используя свой таларит [talarith], Хастейн призывает голема-копию себя. Дубликат подчиняется командам Хастейна и использует такую же статистику, за исключением того, что он является конструктом, без мировоззрения, у которого нет собственного таларита. Дубликат совершает свой ход сразу после Хастейна. Он исчезает спустя 1 час или когда его хиты опускаются до 0."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,117 @@
+{
+  "id": "5184",
+  "slug": "5184-walking-statue-of-waterdeep",
+  "name": "Ходящая статуя Глубоководья",
+  "nameEn": "Walking Statue of Waterdeep",
+  "size": "gargantuan",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 18,
+  "xp": 20000,
+  "source": "Waterdeep: Dragon Heist",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 314,
+    "hitDice": "17d20 + 136"
+  },
+  "speed": {
+    "walk": 60
+  },
+  "abilities": {
+    "str": 30,
+    "dex": 8,
+    "con": 27,
+    "int": 1,
+    "wis": 10,
+    "cha": 1
+  },
+  "savingThrows": {
+    "con": 14
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "bludgeoning",
+    "piercing",
+    "slashing",
+    "fire",
+    "cold",
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "truesight": 120
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Осадное чудовище",
+      "description": "Ходящая статуя Глубоководья наносит двойное повреждение объектам и строениям."
+    },
+    {
+      "name": "Неизменяемая форма",
+      "description": "Ходящая статуя Глубоководья обладает невосприимчивостью ко всем заклинаниям и эффектам, изменяющим его форму."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Ходящая статуя Глубоководья совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Падение колосса",
+      "description": "Когда хиты статуи снижаются до 0, она разваливается и уничтожается. Каждое существо на земле, находящееся в 30 футах от разрушающейся статуи должно совершить спасбросок Ловкости Сл 22, получая 22 (4к10) дробящего урона в случае провала и половину этого урона в случае успеха."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Статуя совершает две рукопашные атаки."
+    },
+    {
+      "name": "Удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +16 к попаданию, досягаемость 5 футов, одна цель. Попадание: 29 (3к12 +10) дробящего урона.",
+      "attackBonus": 16,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d12",
+          "mod": 10,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Метание камня",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +16 к попаданию, дистанция 200/800 футов, одна цель. Попадание: 43 (6к10 +10) дробящего урона.",
+      "attackBonus": 16,
+      "range": {
+        "normal": 200,
+        "long": 800
+      },
+      "damage": [
+        {
+          "dice": "6d10",
+          "mod": 10,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

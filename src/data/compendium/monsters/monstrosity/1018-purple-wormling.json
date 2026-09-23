@@ -1,0 +1,104 @@
+{
+  "id": "1018",
+  "slug": "1018-purple-wormling",
+  "name": "Детёныш лилового червя",
+  "nameEn": "Purple Wormling",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Storm King's Thunder",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 42,
+    "hitDice": "5d10 + 15"
+  },
+  "speed": {
+    "walk": 20
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 7,
+    "con": 16,
+    "int": 1,
+    "wis": 6,
+    "cha": 2
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "blindsight": 30,
+    "tremorsense": 30
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Детёныш проводит две атаки: одну своим укусом и одну - жалом."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к8+3) колющий урон и если целью было существо Маленького размера или меньше, оно должно преуспеть в спасброске Ловкости Сл 13 или будет проглочено детёнышем червя. Проглоченное существо ослеплено и опутано, у него полное укрытие против атак и прочих эффектов извне детёныша червя и получает урон кислотой 3 (1к6) в начале каждого хода детёныша червя.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Если детёныш червя получает 10 или более",
+      "type": "special",
+      "description": "урона за один ход от существа внутри него, детёныш червя должен преуспеть в спасброске Телосложения Сл 21 в конце этого хода или изрыгнуть всех проглоченных существ, которые падают сбитые с ног в клетке в 10 футах от детёныша червя. Если детёныш умирает, проглоченное существо более не опутано им и может сбежать из трупа использовав 5 футов передвижения, чтобы выползти (оставаясь в состоянии сбит с ног).",
+      "save": {
+        "ability": "CON",
+        "dc": 21,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Хвостовое жало",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, дальность 5 футов, одно существо. Попадание: 5 (1к4+3) колющего урона и цель должна преуспеть в спасброске Телосложения Сл 13. При провале цель получает 10 (3к6) урона ядом и только половину этого урона при успешном спасброске.",
+      "attackBonus": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 13,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

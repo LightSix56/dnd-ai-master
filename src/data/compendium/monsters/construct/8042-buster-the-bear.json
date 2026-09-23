@@ -1,0 +1,78 @@
+{
+  "id": "8042",
+  "slug": "8042-buster-the-bear",
+  "name": "Мишка Бастер",
+  "nameEn": "Buster the Bear",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "хаотично-злой, именной НИП",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "The Lost Dungeon of Rickedness: Big Rick Energy",
+  "isNamed": true,
+  "armorClass": {
+    "value": 16,
+    "type": "шкурный доспех, щит"
+  },
+  "hitPoints": {
+    "average": 27,
+    "hitDice": "5d8 + 5"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 14,
+    "con": 13,
+    "int": 8,
+    "wis": 11,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {
+    "survival": 2,
+    "stealth": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Внезапная атака",
+      "description": "Если багбир застаёт врасплох существо и попадает по нему атакой в первом раунде сражения, цель получает от атаки дополнительный урон 7 (2к6)."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Ударное банджо",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к8 + 2) дробящего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

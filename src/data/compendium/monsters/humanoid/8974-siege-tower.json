@@ -1,0 +1,56 @@
+{
+  "id": "8974",
+  "slug": "8974-siege-tower",
+  "name": "Осадная башня",
+  "nameEn": "Siege tower",
+  "size": "large",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Dungeon Master's Guide",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15
+  },
+  "hitPoints": {
+    "average": 200,
+    "hitDice": "1d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 10,
+    "con": 10,
+    "int": 10,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Существа Среднего или меньшего размера м",
+      "description": "огут с помощью осадной башни переходить на стены высотой до 40 футов. Находящееся в башне существо обладает полным укрытием от атак извне башни."
+    }
+  ],
+  "actions": [],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

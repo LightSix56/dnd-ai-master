@@ -1,0 +1,97 @@
+{
+  "id": "7476",
+  "slug": "7476-phoenix-anvil",
+  "name": "Феникс Наковальня",
+  "nameEn": "Phoenix Anvil",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "законно-нейтральный, именной НИП",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Acquisition Incorporated",
+  "isNamed": true,
+  "armorClass": {
+    "value": 18,
+    "type": "кольчужная рубаха, щит"
+  },
+  "hitPoints": {
+    "average": 27,
+    "hitDice": "5d8 + 5"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 10,
+    "con": 12,
+    "int": 13,
+    "wis": 16,
+    "cha": 13
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 5,
+    "performance": 3,
+    "religion": 3,
+    "persuasion": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "Общий",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Божественное проявление (1/день)",
+      "description": "Бонусным действием Феникс заставляет свой щит вспыхнуть божественным светом. Каждое выбранное им существо в пределах 30 футов от него должно совершить спасбросок Мудрости Сл 13, иначе станет ослепленным на 1 минуту. Существо может повторять спасбросок в конце каждого своего хода, оканчивая на себе эффект в случае успеха."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Феникс является заклинателем 4-го уровня. Его базовой характеристикой является Мудрость (Сл спасброска от заклинания 13, +5 к попаданию атаками заклинаниями). У него подготовлены следующие заклинания жреца:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Феникс совершает две рукопашные атаки."
+    },
+    {
+      "name": "Боевой молот",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к8 + 2) дробящего урон и цель должна преуспеть в спасброске Силы Сл 12, иначе будеь отброшена на 5 футов.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 12,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 4,
+    "spellAttackBonus": 5,
+    "ability": "WIS"
+  }
+}

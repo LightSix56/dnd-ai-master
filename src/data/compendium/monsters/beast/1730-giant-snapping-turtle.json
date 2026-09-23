@@ -1,0 +1,75 @@
+{
+  "id": "1730",
+  "slug": "1730-giant-snapping-turtle",
+  "name": "Гигантская щёлкающая черепаха",
+  "nameEn": "Giant snapping turtle",
+  "size": "large",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Tomb of Annihilation",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех (12 пока лежит ничком"
+  },
+  "hitPoints": {
+    "average": 75,
+    "hitDice": "10d10 + 20"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 40
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 10,
+    "con": 14,
+    "int": 2,
+    "wis": 12,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Черепаха может дышать и воздухом и под водой."
+    },
+    {
+      "name": "Стойкий",
+      "description": "Всякий раз, когда эффект должен сбить с ног черепаху, она может сделать спасбросок Телосложения Сл 10, чтобы избежать падения. Сбитая с ног черепаха перевёрнута. Чтобы встать, она должна, в свой ход, преуспеть в проверке Ловкости Сл 10, а затем использовать все своё движение."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 18 (4к6 + 4) рубящего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "4d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

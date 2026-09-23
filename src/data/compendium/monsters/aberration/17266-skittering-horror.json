@@ -1,0 +1,109 @@
+{
+  "id": "17266",
+  "slug": "17266-skittering-horror",
+  "name": "Скользящий ужас",
+  "nameEn": "Skittering Horror",
+  "size": "huge",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "нейтрально-злая",
+  "challengeRating": 15,
+  "xp": 13000,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 228,
+    "hitDice": "24d12 + 72"
+  },
+  "speed": {
+    "walk": 40,
+    "climb": 40
+  },
+  "abilities": {
+    "str": 22,
+    "dex": 16,
+    "con": 17,
+    "int": 2,
+    "wis": 14,
+    "cha": 18
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 7,
+    "stealth": 8
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [
+    "radiant"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17,
+    "darkvision": 120
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Паучье лазание",
+      "description": "Ужас может карабкаться по сложным поверхностям, в том числе вверх ногами по потолку, без необходимости делать проверку характеристик."
+    },
+    {
+      "name": "Чувствительность к солнечному свету",
+      "description": "Находясь на солнечном свету, ужас совершает с помехой броски атаки и проверки Мудрости (Восприятие), полагающиеся на зрение."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Ужас может использовать свое Сводящее с ума присутствие и совершать три атаки: одну Укусом и две Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +11 к попаданию, досягаемость 10 фт., одна цель. Попадание: 28 (4к10 + 6) колющего урона.",
+      "attackBonus": 11,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 6,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +11 к попаданию, досягаемость 10 фт., одна цель. Попадание: 24 (4к8 + 6) рубящего урона.",
+      "attackBonus": 11,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "4d8",
+          "mod": 6,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Сводящее с ума присутствие",
+      "type": "special",
+      "description": "Ужас нацеливается на одно существо, которое он может видеть в пределах 30 футов от себя. Если цель может видеть или слышать ужаса, она должна совершить спасбросок Мудрости Сл 17. При провале спасброска цель становится парализованной до конца своего следующего хода. Если спасбросок существа успешен, оно становится невосприимчивым к Сводящему с ума присутствию ужаса на следующие 24 часа.",
+      "save": {
+        "ability": "CHA",
+        "dc": 17,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

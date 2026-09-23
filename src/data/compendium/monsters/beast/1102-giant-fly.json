@@ -1,0 +1,50 @@
+{
+  "id": "1102",
+  "slug": "1102-giant-fly",
+  "name": "Гигантская муха",
+  "nameEn": "Giant Fly",
+  "size": "large",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Dungeon Master's Guide",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11
+  },
+  "hitPoints": {
+    "average": 19,
+    "hitDice": "3d10 + 3"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 60
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 13,
+    "con": 13,
+    "int": 2,
+    "wis": 10,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

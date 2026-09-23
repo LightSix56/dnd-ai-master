@@ -1,0 +1,62 @@
+{
+  "id": "380",
+  "slug": "380-frog",
+  "name": "Лягушка",
+  "nameEn": "Frog",
+  "size": "tiny",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Player's Handbook",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11
+  },
+  "hitPoints": {
+    "average": 1,
+    "hitDice": "1d4 - 1"
+  },
+  "speed": {
+    "walk": 20,
+    "swim": 20
+  },
+  "abilities": {
+    "str": 1,
+    "dex": 13,
+    "con": 8,
+    "int": 1,
+    "wis": 8,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 1,
+    "stealth": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 30
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Лягушка может дышать и воздухом и под водой."
+    },
+    {
+      "name": "Прыжок с места",
+      "description": "Лягушка совершает прыжки в длину на расстояние до 10 футов и прыжки в высоту на расстояние до 5 футов, хоть с разбегом, хоть без него."
+    }
+  ],
+  "actions": [],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

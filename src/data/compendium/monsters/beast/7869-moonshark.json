@@ -1,0 +1,81 @@
+{
+  "id": "7869",
+  "slug": "7869-moonshark",
+  "name": "Лунная акула",
+  "nameEn": "Moonshark",
+  "size": "huge",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Critical Role: Call of the Netherdeep",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 126,
+    "hitDice": "11d12 + 55"
+  },
+  "speed": {
+    "walk": 0,
+    "swim": 50
+  },
+  "abilities": {
+    "str": 23,
+    "dex": 11,
+    "con": 21,
+    "int": 1,
+    "wis": 10,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "blindsight": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Кровавое бешенство",
+      "description": "Акула совершает с преимуществом броски рукопашных атак по существам, у которых хиты ниже максимума."
+    },
+    {
+      "name": "Подводное дыхание",
+      "description": "Акула может дышать только под водой."
+    },
+    {
+      "name": "Серебряное копье",
+      "description": "Персонаж находящийся в пределах 5 футов от акулы может действием попытаться вынуть копье из шкуры, преуспев в проверке Силы Сл 13 (Атлетика). Пока копье вонзено в акулу, акула светится серебристым светом, излучая яркий свет в пределах 10 футов и тусклый свет еще на 10 футов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 футов, одна цель. Попадание: 22 (3к10 + 6) колющего урона. Если акула промахивается, она может использовать бонусное действие, чтобы переместиться на 25 футов. Это перемещение не провоцирует атак.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 6,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

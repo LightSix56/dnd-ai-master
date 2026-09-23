@@ -1,0 +1,105 @@
+{
+  "id": "12132",
+  "slug": "12132-frost-giant-of-evil-water",
+  "name": "Ледяной великан Злой воды",
+  "nameEn": "Frost Giant of Evil Water",
+  "size": "huge",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "обычно нейтрально-злой",
+  "challengeRating": 11,
+  "xp": 7200,
+  "source": "Bigby Presents: Glory of the Giants",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "чешуйчатый доспех"
+  },
+  "hitPoints": {
+    "average": 172,
+    "hitDice": "15d12 + 75"
+  },
+  "speed": {
+    "walk": 40,
+    "swim": 40
+  },
+  "abilities": {
+    "str": 23,
+    "dex": 16,
+    "con": 21,
+    "int": 9,
+    "wis": 14,
+    "cha": 12
+  },
+  "savingThrows": {
+    "dex": 7,
+    "con": 9,
+    "wis": 6
+  },
+  "skills": {
+    "athletics": 10,
+    "perception": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "cold"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16
+  },
+  "languages": [
+    "Общий",
+    "Акван",
+    "Великаний"
+  ],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Великан может дышать и воздухом и под водой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Великан совершает две атаки Боевым топором и одну атаку Гарпуном."
+    },
+    {
+      "name": "Боевой топор",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +10 к попаданию, досягаемость 10 футов, одна цель. Попадание: 19 (3к8 + 6) рубящего урона или 22 (3к10 + 6) рубящего урона при использовании двумя руками, плюс 7 (2к6) урона холодом.",
+      "attackBonus": 10,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 6,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Гарпун",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +7 к попаданию, дистанция 50/200 футов, одно существо. Попадание: 14 (2к10 + 3) колющего урона, и цель становится схваченной (Сл высвобождения 16). Пока цель схвачена таким образом, её скорость не уменьшается, но она не может отойти от великана. Цель получает 5 (1к10) рубящего урона, если она вырывается из захвата или если она пытается и у неё не получается. Великан может держать в захвате своим гарпуном только одну цель за раз.",
+      "attackBonus": 7,
+      "range": {
+        "normal": 50,
+        "long": 200
+      },
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

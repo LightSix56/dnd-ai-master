@@ -1,0 +1,70 @@
+{
+  "id": "56",
+  "slug": "56-cockatrice",
+  "name": "Куролиск",
+  "nameEn": "Cockatrice",
+  "size": "small",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11
+  },
+  "hitPoints": {
+    "average": 27,
+    "hitDice": "6d6 + 6"
+  },
+  "speed": {
+    "walk": 20,
+    "fly": 40
+  },
+  "abilities": {
+    "str": 6,
+    "dex": 12,
+    "con": 12,
+    "int": 2,
+    "wis": 13,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одно существо. Попадание: Колющий урон 3 (1к4 + 1), и цель должна преуспеть в спасброске Телосложения Сл 11, чтобы не превратиться магическим образом в камень. При провале существо начинает превращаться в камень и становится опутанным. Оно должно повторить этот спасбросок в конце своего следующего хода. При успехе эффект заканчивается. При провале существо становится окаменевшим на 24 часа.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 11,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

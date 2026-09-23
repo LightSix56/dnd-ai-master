@@ -1,0 +1,80 @@
+{
+  "id": "3141",
+  "slug": "3141-celestial-spirit",
+  "name": "Дух небожителя",
+  "nameEn": "Celestial spirit",
+  "size": "large",
+  "type": "celestial",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Tasha's Cauldron of Everything",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11
+  },
+  "hitPoints": {
+    "average": 40,
+    "hitDice": "1d8"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 40
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 14,
+    "con": 16,
+    "int": 10,
+    "wis": 14,
+    "cha": 16
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Небесный",
+    "понимает языки",
+    "на которых вы говорите"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Небожитель совершает количество атак, равное половине уровня ячейки, использованной для призыва (с округлением в меньшую сторону)."
+    },
+    {
+      "name": "Сияющий лук (только мститель)",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: ваш модификатор броска атаки заклинанием к попаданию, дистанция 150/600 фт., одна цель. Попадание: 2к6 + 2 + уровень ячейки урона излучением.",
+      "range": {
+        "normal": 150,
+        "long": 600
+      }
+    },
+    {
+      "name": "Сияющая булава (только защитник)",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: ваш модификатор броска атаки заклинанием к попаданию, досягаемость 5 фт., одна цель. Попадание: 1к10 + 3 + уровень ячейки урона излучением, и небожитель может выбрать себя или другое видимое им существо в пределах 10 футов от цели. Выбранное существо получает 1к10 временных хитов.",
+      "reachFt": 5
+    },
+    {
+      "name": "Целебное касание (1/день)",
+      "type": "special",
+      "description": "Небожитель касается другого существа. Цель магически восстанавливает хиты, равные 2к8 + уровень ячейки."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

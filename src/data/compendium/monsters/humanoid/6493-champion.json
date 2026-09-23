@@ -1,0 +1,144 @@
+{
+  "id": "6493",
+  "slug": "6493-champion",
+  "name": "Чемпион",
+  "nameEn": "Champion]Чемпион [Champion",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любая раса",
+  "alignment": "любое мировоззрениеСредний? Гуманоид (любая раса), любое мировоззрение",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 143,
+    "hitDice": "22d8 + 44"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 15,
+    "con": 14,
+    "int": 10,
+    "wis": 14,
+    "cha": 12
+  },
+  "savingThrows": {
+    "str": 9,
+    "con": 6
+  },
+  "skills": {
+    "athletics": 9,
+    "perception": 6,
+    "intimidation": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16
+  },
+  "languages": [
+    "Любой один язык (обычно Общий)"
+  ],
+  "traits": [
+    {
+      "name": "Упорный (2/день)",
+      "description": "Чемпион может перебросить проваленный спасбросок."
+    },
+    {
+      "name": "Упорный (2/день)",
+      "description": "Чемпион может перебросить проваленный спасбросок."
+    },
+    {
+      "name": "Второе дыхание (Перезаряжается после короткого или продолжительного отдыха)",
+      "description": "Бонусным действием чемпион может восстановить 20 хитов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Чемпион совершает три атаки Двуручным мечом или Коротким луком."
+    },
+    {
+      "name": "Двуручный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 футов, одна цель. Попадание: 12 (2к6 + 5) рубящего урона, плюс 7 (2к6) рубящего урона, если у чемпиона больше половины от общего числа хитов.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Короткий лук",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +6 к попаданию, дистанция 80/320 футов, одна цель. Попадание: 5 (1к6 + 2) колющего урона, плюс 7 (2к6) колющего урона, если у чемпиона больше половины от общего числа хитов.",
+      "attackBonus": 6,
+      "range": {
+        "normal": 80,
+        "long": 320
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Чемпион совершает три атаки двуручным мечом или коротким луком."
+    },
+    {
+      "name": "Двуручный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 12 (2к6 + 5), плюс рубящий урон 7 (2к6) если у чемпиона больше половины от общего числа хитов.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Короткий лук",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +6 к попаданию, дистанция 80/320 футов, одна цель. Попадание: Колющий урон 5 (1к6 + 2), плюс колющий урон 7 (2к6) если у чемпиона больше половины от общего числа хитов.",
+      "attackBonus": 6,
+      "range": {
+        "normal": 80,
+        "long": 320
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

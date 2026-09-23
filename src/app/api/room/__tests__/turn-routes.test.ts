@@ -1,0 +1,264 @@
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { GET as getTurn, POST as submitTurnAction } from "../[code]/turn/route";
+import { POST as resolveTurnPost } from "../[code]/turn/resolve/route";
+
+vi.mock("@/lib/supabase/client", () => {
+  return {
+    getAuthUserFromRequest: vi.fn(),
+    getSupabaseAdminClient: vi.fn(),
+    getSupabaseServerClient: vi.fn(),
+  };
+});
+
+vi.mock("@/lib/room/room-service", () => {
+  return {
+    RoomService: vi.fn().mockImplementation(() => ({
+      getRoomByCode: vi.fn(),
+      getActiveTurn: vi.fn(),
+      submitPlayerAction: vi.fn(),
+      resolveRoomTurn: vi.fn(),
+    })),
+  };
+});
+
+import { getAuthUserFromRequest } from "@/lib/supabase/client";
+import { RoomService } from "@/lib/room/room-service";
+
+describe("Room Turn API Routes (Phase 4)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  describe("GET /api/room/[code]/turn", () => {
+    it("returns 404 if room not found", async () => {
+      const mockService = {
+        getRoomByCode: vi.fn().mockResolvedValue(null),
+      };
+      vi.mocked(RoomService).mockImplementation(function () {
+        return mockService as any;
+      });
+
+      const req = new Request("http://localhost/api/room/DRAGON-1/turn");
+      const res = await getTurn(req, { params: Promise.resolve({ code: "DRAGON-1" }) });
+
+      expect(res.status).toBe(404);
+    });
+
+    it("returns active turn for room", async () => {
+      const mockTurn = {
+        id: "turn-1",
+        roomId: "room-1",
+        roundNumber: 1,
+        status: "waiting",
+        playerInputs: {},
+      };
+      const mockService = {
+        getRoomByCode: vi.fn().mockResolvedValue({ id: "room-1", code: "DRAGON-1" }),
+        getActiveTurn: vi.fn().mockResolvedValue(mockTurn),
+      };
+      vi.mocked(RoomService).mockImplementation(function () {
+        return mockService as any;
+      });
+
+      const req = new Request("http://localhost/api/room/DRAGON-1/turn");
+      const res = await getTurn(req, { params: Promise.resolve({ code: "DRAGON-1" }) });
+
+      expect(res.status).toBe(200);
+      const json = await res.json();
+      expect(json.turn.id).toBe("turn-1");
+      expect(json.turn.roundNumber).toBe(1);
+    });
+  });
+
+  describe("POST /api/room/[code]/turn", () => {
+    it("returns 401 if unauthenticated", async () => {
+      vi.mocked(getAuthUserFromRequest).mockResolvedValueOnce({
+        user: null,
+        error: "Unauthorized",
+      });
+
+      const req = new Request("http://localhost/api/room/DRAGON-1/turn", {
+        method: "POST",
+        body: JSON.stringify({ actionText: "Атакую мечом" }),
+      });
+      const res = await submitTurnAction(req, { params: Promise.resolve({ code: "DRAGON-1" }) });
+
+      expect(res.status).toBe(401);
+    });
+
+    it("returns 400 if actionText is missing", async () => {
+      vi.mocked(getAuthUserFromRequest).mockResolvedValueOnce({
+        user: { id: "user-1" } as any,
+        error: null,
+      });
+
+      const req = new Request("http://localhost/api/room/DRAGON-1/turn", {
+        method: "POST",
+        body: JSON.stringify({ actionText: "   " }),
+      });
+      const res = await submitTurnAction(req, { params: Promise.resolve({ code: "DRAGON-1" }) });
+
+      expect(res.status).toBe(400);
+      const json = await res.json();
+      expect(json.error.toLowerCase()).toContain("действие");
+    });
+
+    it("returns 403 if user is not in room participants", async () => {
+      vi.mocked(getAuthUserFromRequest).mockResolvedValueOnce({
+        user: { id: "user-unknown" } as any,
+        error: null,
+      });
+
+      const mockService = {
+        getRoomByCode: vi.fn().mockResolvedValue({
+          id: "room-1",
+          code: "DRAGON-1",
+          participants: [{ userId: "user-1" }],
+        }),
+      };
+      vi.mocked(RoomService).mockImplementation(function () {
+        return mockService as any;
+      });
+
+      const req = new Request("http://localhost/api/room/DRAGON-1/turn", {
+        method: "POST",
+        body: JSON.stringify({ actionText: "Атакую мечом" }),
+      });
+      const res = await submitTurnAction(req, { params: Promise.resolve({ code: "DRAGON-1" }) });
+
+      expect(res.status).toBe(403);
+    });
+
+    it("submits action and returns updated turn", async () => {
+      vi.mocked(getAuthUserFromRequest).mockResolvedValueOnce({
+        user: { id: "user-1" } as any,
+        error: null,
+      });
+
+      const mockTurn = {
+        id: "turn-1",
+        roomId: "room-1",
+        roundNumber: 1,
+        status: "waiting",
+        playerInputs: {
+          "user-1": {
+            userId: "user-1",
+            characterName: "Торин",
+            actionText: "Атакую мечом",
+            submittedAt: 12345,
+          },
+        },
+      };
+
+      const mockService = {
+        getRoomByCode: vi.fn().mockResolvedValue({
+          id: "room-1",
+          code: "DRAGON-1",
+          participants: [
+            {
+              userId: "user-1",
+              characterSnapshot: { name: "Торин", className: "Воин" },
+            },
+          ],
+        }),
+        submitPlayerAction: vi.fn().mockResolvedValue(mockTurn),
+      };
+      vi.mocked(RoomService).mockImplementation(function () {
+        return mockService as any;
+      });
+
+      const req = new Request("http://localhost/api/room/DRAGON-1/turn", {
+        method: "POST",
+        body: JSON.stringify({ actionText: "Атакую мечом" }),
+      });
+      const res = await submitTurnAction(req, { params: Promise.resolve({ code: "DRAGON-1" }) });
+
+      expect(res.status).toBe(200);
+      const json = await res.json();
+      expect(json.turn.playerInputs["user-1"].characterName).toBe("Торин");
+    });
+  });
+
+  describe("POST /api/room/[code]/turn/resolve", () => {
+    it("returns 403 if caller is not the host", async () => {
+      vi.mocked(getAuthUserFromRequest).mockResolvedValueOnce({
+        user: { id: "user-2" } as any,
+        error: null,
+      });
+
+      const mockService = {
+        getRoomByCode: vi.fn().mockResolvedValue({
+          id: "room-1",
+          code: "DRAGON-1",
+          hostUserId: "user-1",
+        }),
+      };
+      vi.mocked(RoomService).mockImplementation(function () {
+        return mockService as any;
+      });
+
+      const req = new Request("http://localhost/api/room/DRAGON-1/turn/resolve", {
+        method: "POST",
+        body: JSON.stringify({}),
+      });
+      const res = await resolveTurnPost(req, { params: Promise.resolve({ code: "DRAGON-1" }) });
+
+      expect(res.status).toBe(403);
+    });
+
+    it("resolves turn with DM narrative and advances to next round", async () => {
+      vi.mocked(getAuthUserFromRequest).mockResolvedValueOnce({
+        user: { id: "user-1" } as any,
+        error: null,
+      });
+
+      const mockCompleted = {
+        id: "turn-1",
+        roundNumber: 1,
+        status: "completed",
+        dmResponse: "Удар сотрясает своды пещеры.",
+      };
+      const mockNext = {
+        id: "turn-2",
+        roundNumber: 2,
+        status: "waiting",
+        playerInputs: {},
+      };
+
+      const mockService = {
+        getRoomByCode: vi.fn().mockResolvedValue({
+          id: "room-1",
+          code: "DRAGON-1",
+          hostUserId: "user-1",
+        }),
+        getActiveTurn: vi.fn().mockResolvedValue({
+          id: "turn-1",
+          roundNumber: 1,
+          playerInputs: {
+            "user-1": { userId: "user-1", characterName: "Торин", actionText: "Бью" },
+          },
+        }),
+        resolveRoomTurn: vi.fn().mockResolvedValue({
+          completedTurn: mockCompleted,
+          nextTurn: mockNext,
+        }),
+      };
+      vi.mocked(RoomService).mockImplementation(function () {
+        return mockService as any;
+      });
+
+      const req = new Request("http://localhost/api/room/DRAGON-1/turn/resolve", {
+        method: "POST",
+        body: JSON.stringify({
+          dmResponse: "Удар сотрясает своды пещеры.",
+        }),
+      });
+      const res = await resolveTurnPost(req, { params: Promise.resolve({ code: "DRAGON-1" }) });
+
+      expect(res.status).toBe(200);
+      const json = await res.json();
+      expect(json.completedTurn.status).toBe("completed");
+      expect(json.nextTurn.roundNumber).toBe(2);
+    });
+  });
+});

@@ -1,0 +1,104 @@
+{
+  "id": "6865",
+  "slug": "6865-gremishka",
+  "name": "Гремишка",
+  "nameEn": "Gremishka",
+  "size": "tiny",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "Van Richten's Guide to Ravenloft",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 10,
+    "hitDice": "4d4"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 6,
+    "dex": 14,
+    "con": 10,
+    "int": 12,
+    "wis": 11,
+    "cha": 4
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 30
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Понимает Общий, но не может говорить."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 3 (1к4 + 2) колющего урона и 3 (1к6) урона силовым полем.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Аллергия на магию (1/день)",
+      "type": "special",
+      "description": "Сразу после того, как существо в радиусе 30 фт. от гремишки накладывает заклинание, гремишка может спонтанно отреагировать на магию. Бросьте к6, чтобы определить эффект:"
+    },
+    {
+      "name": "1–2",
+      "type": "special",
+      "description": "Гремишка излучает магическую энергию. Каждое существо в радиусе 30 футов от гремишки должно преуспеть в спасброске Телосложения Сл 10, иначе получит 3 (1к6) урона силовым полем.",
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 10,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "3–4",
+      "type": "special",
+      "description": "Гремишка наполняется магической энергией и восстанавливает 3 (1к6) хита."
+    },
+    {
+      "name": "5–6",
+      "type": "special",
+      "description": "Гремишка взрывается и умирает, и один рой гремишек [swarm of Gremishkas] мгновенно появляется в месте, где этот гремишка умер. Рой использует инициативу гремишки."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

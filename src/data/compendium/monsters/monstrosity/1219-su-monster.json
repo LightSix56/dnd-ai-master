@@ -1,0 +1,104 @@
+{
+  "id": "1219",
+  "slug": "1219-su-monster",
+  "name": "Су-монстр",
+  "nameEn": "Su-monster",
+  "size": "medium",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "хаотично-злой",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Tomb of Annihilation",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 27,
+    "hitDice": "5d8 + 5"
+  },
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 15,
+    "con": 12,
+    "int": 9,
+    "wis": 13,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 6,
+    "perception": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Су-монстр совершает две атаки: одну укусом и одну когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 4 (1к4 + 2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (2к4 + 2) рубящего урона, или 12 (4к4 + 2) рубящего урона, если су-монстр висит на хвосте, и все четыре его лапы свободны.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Психическое сдавливание (перезарядка 5–6)",
+      "type": "special",
+      "description": "Су-монстр нацеливается на одно существо, которое он может видеть в пределах 30 футов от себя. Цель должна совершить спасбросок Мудрости Сл 11, получая 17 (5к6) урона психической энергией и ошеломлено на 1 минуту, при провале. Ошеломлённая цель может повторять этот спасбросок в конце каждого своего хода, оканчивая эффект на себе при успехе.",
+      "damage": [
+        {
+          "dice": "5d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "CHA",
+        "dc": 11,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

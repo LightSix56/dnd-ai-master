@@ -1,0 +1,159 @@
+{
+  "id": "17335",
+  "slug": "17335-dunbarrow-witch",
+  "name": "Ведьма Данбарроу",
+  "nameEn": "Dunbarrow Witch",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "нейтрально-злой",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Monstrous Compendium Vol. Four: Eldraine Creatures",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "15 с доспехом мага"
+  },
+  "hitPoints": {
+    "average": 72,
+    "hitDice": "16d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 14,
+    "con": 11,
+    "int": 16,
+    "wis": 15,
+    "cha": 20
+  },
+  "savingThrows": {
+    "wis": 5,
+    "cha": 6
+  },
+  "skills": {
+    "arcana": 6,
+    "nature": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий",
+    "плюс один любой язык",
+    "Сильван"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Ведьма совершает две атаки Ядовитым кинжалом. Она может заменить одну из этих атак Использованием заклинаний."
+    },
+    {
+      "name": "Ядовитый кинжал",
+      "type": "melee_attack",
+      "description": "Дальнобойная или рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт. или дистанция 20/60 фт., одна цель. Попадание: 4 (1к4 + 2) колющего урона плюс 21 (6к6) урона ядом.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Превращающая смесь (1/день)",
+      "type": "special",
+      "description": "Ведьма швыряет склянку с жидкостью в точку на расстоянии до 20 футов от себя, которая разбивается, выпуская облако магического дыма, заполняющее сферу радиусом 10 футов. Каждое существо в этой области должно преуспеть в спасброске Мудрости Сл 16, иначе превратится в существо, будто оказалось под действием заклинания превращение [polymorph], трансформируясь в одну из следующих форм (бросьте 1к4):",
+      "save": {
+        "ability": "CHA",
+        "dc": 16,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "1 — летучая мышь [bat];",
+      "type": "special",
+      "description": ""
+    },
+    {
+      "name": "2 — лягушка [frog];",
+      "type": "special",
+      "description": ""
+    },
+    {
+      "name": "3 — ящерица [lizard];",
+      "type": "special",
+      "description": ""
+    },
+    {
+      "name": "4 — крыса [rat]",
+      "type": "special",
+      "description": ""
+    },
+    {
+      "name": "Эта трансформация длится 1 час или до те",
+      "type": "special",
+      "description": "х пор, пока хиты существа в новой форме не упадут до 0."
+    },
+    {
+      "name": "Разбитые осколки",
+      "type": "special",
+      "description": "Ведьма нацеливается на точку, которую видит в пределах 30 футов от себя. Воздух в этой точке волшебным образом превращается в зеркало, а затем разбивается разлетаясь осколками 15-футовым конусом, исходящим из этой точки. Каждое существо в этой области должно совершить спасбросок Ловкости Сл 16, получая 25 (10к4) урона силовым полем при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "10d4",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 15
+      },
+      "save": {
+        "ability": "DEX",
+        "dc": 16,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Ведьма может накладывать следующие заклинания, используя Харизму в качестве базовой характеристики для заклинания (Сл спасброска заклинания 16):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "доспехи мага [mage armor] (только на себя), фокусы [prestidigitation];"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "почтовое животное [animal messenger], очарование личности [charm person], жуткий смех Таши [tasha's hideous laughter];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "проклятие [bestow curse], рассеивание магии [dispel magic]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

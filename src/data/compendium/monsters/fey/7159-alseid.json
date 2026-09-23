@@ -1,0 +1,89 @@
+{
+  "id": "7159",
+  "slug": "7159-alseid",
+  "name": "Альсеида",
+  "nameEn": "Alseid",
+  "size": "medium",
+  "type": "fey",
+  "subtype": null,
+  "alignment": "хаотично-добрая",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Mythic Odysseys of Theros",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "4d8 + 4"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 10,
+    "con": 12,
+    "int": 13,
+    "wis": 14,
+    "cha": 18
+  },
+  "savingThrows": {},
+  "skills": {
+    "persuasion": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий",
+    "Сильван"
+  ],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Альсеида совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Спрячься у всех на виду",
+      "description": "Альсеида совершает с преимуществом проверки Ловкости (Скрытность), направленные на то, чтобы спрятаться, пока она находится в лугах."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Базовой характеристикой альсеиды является Харизма (Сл спасброска от заклинания 14). Альсеида может накладывать следующие заклинания, не нуждаясь в материальных компонентах:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Альсеида совершает две атаки Сияющим прикосновением."
+    },
+    {
+      "name": "Сияющее прикосновение",
+      "type": "melee_attack",
+      "description": "Рукопашная атака заклинанием: +6 к попаданию, досягаемость 5 футов., одна цель. Попадание: 9 (1к10 + 4) урона излучением.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

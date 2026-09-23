@@ -1,0 +1,96 @@
+{
+  "id": "435",
+  "slug": "435-minotaur",
+  "name": "Минотавр",
+  "nameEn": "Minotaur",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "хаотично-злой",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 76,
+    "hitDice": "9d10 + 27"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 11,
+    "con": 16,
+    "int": 6,
+    "wis": 16,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17,
+    "darkvision": 60
+  },
+  "languages": [
+    "Бездны"
+  ],
+  "traits": [
+    {
+      "name": "Атака в броске",
+      "description": "Если минотавр переместится как минимум на 10 футов по прямой к цели, а затем в том же ходу попадёт по ней атакой бодания, цель получает от атаки дополнительный колющий урон 9 (2к8). Если цель — существо, она должна преуспеть в спасброске Силы Сл 14, иначе будет оттолкнута на расстояние до 10 футов и сбита с ног."
+    },
+    {
+      "name": "Запоминание пути",
+      "description": "Минотавр может с лёгкостью вспомнить любой пройденный путь."
+    },
+    {
+      "name": "Безрассудство",
+      "description": "В начале своего хода минотавр может решить, что в этом ходу все рукопашные атаки оружием будет совершать с преимуществом, но в этом случае до начала его следующего хода все броски атаки по нему тоже будут совершаться с преимуществом."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Секира",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 17 (2к12 + 4).",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d12",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Бодание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 13 (2к8 + 4).",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,89 @@
+{
+  "id": "5760",
+  "slug": "5760-giant-walrus",
+  "name": "Гигантский морж",
+  "nameEn": "Giant Walrus",
+  "size": "huge",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Icewind Dale: Rime of the Frostmaiden",
+  "isNamed": false,
+  "armorClass": {
+    "value": 9
+  },
+  "hitPoints": {
+    "average": 85,
+    "hitDice": "9d12 + 27"
+  },
+  "speed": {
+    "walk": 20,
+    "swim": 40
+  },
+  "abilities": {
+    "str": 22,
+    "dex": 9,
+    "con": 16,
+    "int": 3,
+    "wis": 11,
+    "cha": 4
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Задержка дыхания",
+      "description": "Морж может задержать дыхание на 30 минут."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Морж совершает две атаки: одну Шлепком и одну Клыками."
+    },
+    {
+      "name": "Шлепок телом",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одна цель. Попадание: 15 (2к8 + 6) дробящего урона.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 6,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Клыки",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одна цель. Попадание: 16 (3к6 + 6) колющего урона.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 6,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

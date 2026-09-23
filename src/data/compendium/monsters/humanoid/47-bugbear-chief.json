@@ -1,0 +1,108 @@
+{
+  "id": "47",
+  "slug": "47-bugbear-chief",
+  "name": "Вождь багбиров",
+  "nameEn": "Bugbear chief",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "гоблиноид",
+  "alignment": "хаотично-злой",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "кольчужная рубаха, щит"
+  },
+  "hitPoints": {
+    "average": 65,
+    "hitDice": "10d8 + 20"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 14,
+    "con": 14,
+    "int": 11,
+    "wis": 12,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "survival": 3,
+    "intimidation": 2,
+    "stealth": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Гоблинский"
+  ],
+  "traits": [
+    {
+      "name": "Жестокость",
+      "description": "Рукопашное оружие причиняет одну дополнительную кость своего урона, когда багбир попадает им (уже включено в атаку)."
+    },
+    {
+      "name": "Сердце Хруггека",
+      "description": "Багбир совершает с преимуществом спасброски от испуга, отравления, очарования, ошеломления, паралича и сна."
+    },
+    {
+      "name": "Внезапная атака",
+      "description": "Если багбир застает врасплох существо и попадает по нему атакой в первом раунде сражения, цель получает от атаки дополнительный урон 7 (2к6)."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Багбир совершает две рукопашные атаки."
+    },
+    {
+      "name": "Моргенштерн",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 12 (2к8 + 3).",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Метательное копье",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +5 к попаданию, досягаемость 5 футов или дистанция 30/120 футов, одна цель. Попадание: Колющий урон 10 (2к6 + 3) от рукопашной атаки или колющий урон 6 (1к6 + 3) от дальнобойной атаки.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "range": {
+        "normal": 30,
+        "long": 120
+      },
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

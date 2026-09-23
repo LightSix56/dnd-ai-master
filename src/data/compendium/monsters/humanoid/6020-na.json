@@ -1,0 +1,51 @@
+{
+  "id": "6020",
+  "slug": "6020-na",
+  "name": "На",
+  "nameEn": "Na",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любая раса",
+  "alignment": "любое мировоззрение, именной НИП",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Tomb of Annihilation",
+  "isNamed": true,
+  "armorClass": {
+    "value": 10
+  },
+  "hitPoints": {
+    "average": 3,
+    "hitDice": "1d8 - 1"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 10,
+    "con": 10,
+    "int": 10,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий",
+    "Ауран"
+  ],
+  "traits": [],
+  "actions": [],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

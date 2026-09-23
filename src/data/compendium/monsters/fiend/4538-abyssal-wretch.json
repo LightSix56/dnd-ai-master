@@ -1,0 +1,68 @@
+{
+  "id": "4538",
+  "slug": "4538-abyssal-wretch",
+  "name": "Тварь Бездны",
+  "nameEn": "Abyssal Wretch",
+  "size": "medium",
+  "type": "fiend",
+  "subtype": "демон",
+  "alignment": "хаотично-злое",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Mordenkainen's Tome of Foes",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11
+  },
+  "hitPoints": {
+    "average": 18,
+    "hitDice": "4d8"
+  },
+  "speed": {
+    "walk": 20
+  },
+  "abilities": {
+    "str": 9,
+    "dex": 12,
+    "con": 11,
+    "int": 5,
+    "wis": 8,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 9,
+    "darkvision": 120
+  },
+  "languages": [
+    "Понимает язык Бездны но не говорит"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: 5 (1к8 + 1) рубящего урона.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 1,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

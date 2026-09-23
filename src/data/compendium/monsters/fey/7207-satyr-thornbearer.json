@@ -1,0 +1,122 @@
+{
+  "id": "7207",
+  "slug": "7207-satyr-thornbearer",
+  "name": "Сатир шипоносец",
+  "nameEn": "Satyr Thornbearer",
+  "size": "medium",
+  "type": "fey",
+  "subtype": null,
+  "alignment": "хаотично-нейтральная",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Mythic Odysseys of Theros",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "кожаный доспех"
+  },
+  "hitPoints": {
+    "average": 38,
+    "hitDice": "7d8 + 7"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 18,
+    "con": 12,
+    "int": 11,
+    "wis": 13,
+    "cha": 14
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 5,
+    "performance": 6,
+    "stealth": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15
+  },
+  "languages": [
+    "Общий",
+    "Сильван"
+  ],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Сатир совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Бессонный гуляка",
+      "description": "Сатира нельзя усыпить с помощью магии."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Сатир совершает три атаки тараном или коротким луком."
+    },
+    {
+      "name": "Таран",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 фт., одна цель. Попадание: 6 (2к4 + 1) дробящего урона.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 1,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Короткий лук",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +6 к попаданию, дистанция 80/320 фт., одна цель. Попадание: 7 (1к6 + 4) колющего урона.",
+      "attackBonus": 6,
+      "range": {
+        "normal": 80,
+        "long": 320
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Град стрел (перезаряжается после короткого или продолжительного отдыха)",
+      "type": "special",
+      "description": "Сатир выпускает стрелу, которая магически превращается в 30-футовый конус заполненный стрелами. Каждое существо в этой области должно совершить спасбросок Ловкости Сл 14, получая 17 (5к6) колющего урона при провале или половину урона при успехе.",
+      "damage": [
+        {
+          "dice": "5d6",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 14,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

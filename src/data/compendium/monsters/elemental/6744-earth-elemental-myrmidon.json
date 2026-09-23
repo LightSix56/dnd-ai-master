@@ -1,0 +1,142 @@
+{
+  "id": "6744",
+  "slug": "6744-earth-elemental-myrmidon",
+  "name": "Земляной элементальный мирмидон",
+  "nameEn": "Earth Elemental Myrmidon]Земляной элементальный мирмидон [Earth Elemental Myrmidon",
+  "size": "medium",
+  "type": "elemental",
+  "subtype": null,
+  "alignment": "обычно нейтральныйСредний? Элементаль, нейтральный",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 127,
+    "hitDice": "17d8 + 51"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 10,
+    "con": 17,
+    "int": 8,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Терран"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Терран и один язык по выбору создателя."
+    },
+    {
+      "name": "Языки",
+      "description": "Терран и один язык по выбору создателя"
+    },
+    {
+      "name": "Магическое оружие",
+      "description": "Атаки оружием мирмидона являются магическими."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Мирмидон совершает две атаки Кувалдой."
+    },
+    {
+      "name": "Кувалда",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 фт., одна цель. Попадание: 11 (2к6 + 4) урона силовым полем.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Громовой удар (перезарядка 6)",
+      "type": "special",
+      "description": "Мирмидон совершает одну атаку Кувалдой. В случае попадания цель дополнительно получает 22 (4к10) урона звуком и должна преуспеть в спасброске Силы Сл 14, иначе станет сбитой с ног.",
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "6",
+      "save": {
+        "ability": "STR",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Мирмидон совершает две атаки кувалдой."
+    },
+    {
+      "name": "Кувалда",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 фт., одна цель. Попадание: 11 (2к6 + 4) дробящего урона.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Громовой удар (перезарядка 6)",
+      "type": "special",
+      "description": "Мирмидон совершает одну атаку Кувалдой. В случае попадания цель получает дополнительно 16 (3к10) урона звуком и должна преуспеть в спасброске Силы Сл 14. В случае провала цель сбивается с ног.",
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "6",
+      "save": {
+        "ability": "STR",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

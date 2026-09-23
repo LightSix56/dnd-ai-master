@@ -1,0 +1,112 @@
+{
+  "id": "8420",
+  "slug": "8420-zargash",
+  "name": "Заргаш",
+  "nameEn": "Zargash",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "Человек, Жрец",
+  "alignment": "Жрец), хаотично-злой, именной НИП",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "The Wild Beyond The Witchlight: A Feywild Adventure",
+  "isNamed": true,
+  "armorClass": {
+    "value": 13,
+    "type": "кольчужная рубаха"
+  },
+  "hitPoints": {
+    "average": 45,
+    "hitDice": "7d8 + 14"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 10,
+    "con": 14,
+    "int": 12,
+    "wis": 16,
+    "cha": 15
+  },
+  "savingThrows": {
+    "wis": 5,
+    "cha": 4
+  },
+  "skills": {
+    "deception": 6,
+    "insight": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Особо снаряжение",
+      "description": "Заргаш носит амулет в форме летучей мыши, который обладает свойствами кольца падения пёрышком [ring of feather falling]."
+    },
+    {
+      "name": "Цепляйтесь за жизнь (перезаряжается после продолжительного отдыха)",
+      "description": "В первый раз, когда Заргаш опустились до нуля, её хиты вместо этого опускаются до 1."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Боевой молот",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к8 + 2) дробящего урона или 7 (1к10 + 2) дробящего урона при использовании двумя руками.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Смертоносный луч",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинаниями: +5 к попаданию, дистанция 60 футов, одно существо. Попадание: 25 (4к10 + 3) урона некротической энергией.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 60
+      },
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Заргаш накладывает одно из следующих заклинаний, используя Мудрость в качестве базовой характеристики (Сл спасброска от заклинаний 13):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "свет [light], чудотворство [thaumaturgy];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "приказ [command], газообразная форма [gaseous form], удержание личности [hold person], тишина [silence], разговор с мёртвыми [speak with dead]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,83 @@
+{
+  "id": "383",
+  "slug": "383-blink-dog",
+  "name": "Мерцающий пёс",
+  "nameEn": "Blink dog",
+  "size": "medium",
+  "type": "fey",
+  "subtype": "фея",
+  "alignment": "законно-добрая",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "4d8 + 4"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 17,
+    "con": 12,
+    "int": 10,
+    "wis": 13,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "Сильван",
+    "Язык Мерцающих псов"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "- понимает Сильван, но не говорит на нем."
+    },
+    {
+      "name": "Острый слух и тонкий нюх",
+      "description": "Пес совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на слух и обоняние."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 4 (1к6 + 1).",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Телепортация (перезарядка 4–6)",
+      "type": "special",
+      "description": "Пес магическим образом телепортируется вместе со всем несомым и носимым снаряжением, на расстояние до 40 футов в свободное пространство, которое он видит. До или после телепортации пес может совершить одну атаку укусом."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,123 @@
+{
+  "id": "13038",
+  "slug": "13038-hound-archon",
+  "name": "Архонт-гончая",
+  "nameEn": "Hound Archon",
+  "size": "medium",
+  "type": "celestial",
+  "subtype": null,
+  "alignment": "законно-добрый",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Planescape: Adventures in the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 65,
+    "hitDice": "10d8 + 20"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 12,
+    "con": 15,
+    "int": 11,
+    "wis": 14,
+    "cha": 15
+  },
+  "savingThrows": {
+    "int": 2,
+    "wis": 4
+  },
+  "skills": {
+    "perception": 6,
+    "insight": 4,
+    "stealth": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 120
+  },
+  "languages": [
+    "Все"
+  ],
+  "traits": [
+    {
+      "name": "Аура угрозы",
+      "description": "Пока архонт дееспособен, каждое существо по выбору архонта, начинающее свой ход в пределах 20 футов от него, должно совершить спасбросок Мудрости Сл 12. В случае провала существо становится испуганным до начала своего следующего хода. При успешном спасброске существо становится невосприимчивым к Ауре угрозы всех архонтов на 24 часа."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Архонт совершает две атаки Укусом. Он может заменить одну из атак атакой Сияющим клинком."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к6 + 4) колющего урона . Если цель — существо Большого или меньше размера, она должна преуспеть в спасброске Силы Сл 14, иначе она будет сбита с ног.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Сияющий клинок (только в истинной форме)",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 11 (2к6 + 4) урона излучением.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Архонт накладывает одно из следующих заклинаний, не нуждаясь в материальных компонентах, используя Харизму в качестве базовой характеристики:"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "обнаружение зла и добра [detect evil and good]"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "подмога [aid], вечный огонь [continual flame]"
+    },
+    {
+      "name": "Телепорт",
+      "type": "special",
+      "description": "Архонт телепортируется вместе со всем снаряжением, которое он носит или несёт, в незанятое пространство, которое он видит в пределах 120 футов от себя."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

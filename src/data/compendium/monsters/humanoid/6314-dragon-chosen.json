@@ -1,0 +1,103 @@
+{
+  "id": "6314",
+  "slug": "6314-dragon-chosen",
+  "name": "Избранный драконом",
+  "nameEn": "Dragon Chosen",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "любое мировоззрение",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 45,
+    "hitDice": "7d8 + 14"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 18,
+    "con": 14,
+    "int": 10,
+    "wis": 13,
+    "cha": 14
+  },
+  "savingThrows": {
+    "str": 6,
+    "dex": 6,
+    "con": 4
+  },
+  "skills": {
+    "athletics": 6,
+    "perception": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "Общий",
+    "Драконий"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Избранный совершает одну атаку Ручным топором и две атаки Коротким мечом."
+    },
+    {
+      "name": "Ручной топор",
+      "type": "melee_attack",
+      "description": "Рукопашная или Дальнобойная атака оружием: +6 к попаданию, досягаемость 5 фт. или дистанция 20/60 фт., одна цель. Попадание: 7 (1к6+4) рубящего урона. Попадание или Промах: Ручной топор магическим образом возвращается в руку избранного после совершения дальнобойной атаки.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: 7 (1к6+4) колющего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Язвительный упрёк",
+      "type": "special",
+      "description": "Сразу после того, как избранный получит урон от существа в пределах 5 фт. от него, он может совершить по нему атаку коротким мечом с преимуществом."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

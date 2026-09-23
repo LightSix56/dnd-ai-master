@@ -1,0 +1,110 @@
+{
+  "id": "7485",
+  "slug": "7485-deep-crow",
+  "name": "Глубинный ворон",
+  "nameEn": "Deep Crow",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Acquisition Incorporated",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 133,
+    "hitDice": "14d10 + 56"
+  },
+  "speed": {
+    "walk": 20,
+    "fly": 80
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 16,
+    "con": 18,
+    "int": 8,
+    "wis": 15,
+    "cha": 14
+  },
+  "savingThrows": {
+    "con": 8,
+    "wis": 6
+  },
+  "skills": {
+    "perception": 6,
+    "stealth": 11
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "blindsight": 30,
+    "darkvision": 120
+  },
+  "languages": [
+    "Язык Глубинных воронов"
+  ],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Глубинный ворон совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Скрытность в тенях",
+      "description": "Находясь в тусклом освещении или во тьме, глубинный ворон может совершить действие Засада бонусным действием."
+    },
+    {
+      "name": "Чувствительность к солнечному свету",
+      "description": "Находясь на солнечном свете, глубинный ворон совершает броски атаки и проверки Мудрости (Восприятие), которые зависят от зрения, с помехой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Глубинный ворон совершает три атаки: одну своими Мандибулами и две Когтями."
+    },
+    {
+      "name": "Мандибулы",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 10 футов, одна цель. Попадание: 16 (2к10 + 5) колющего урона, и цель схвачена (Сл высвобождения 17). Пока этот захват не закончится, цель опутана, и глубинный ворон не может использовать свои мандибулы против другой цели.",
+      "attackBonus": 9,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 футов, одна цель. Попадание: 12 (2к6 + 5) рубящего урона.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "id": "13206",
+  "slug": "13206-mercykiller-bloodhound",
+  "name": "Ищейка Убийц милосердия",
+  "nameEn": "Mercykiller Bloodhound",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Planescape: Adventures in the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 120,
+    "hitDice": "16d8 + 48"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 12,
+    "con": 16,
+    "int": 12,
+    "wis": 15,
+    "cha": 8
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 8,
+    "survival": 8
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 18
+  },
+  "languages": [
+    "Общий плюс один язык"
+  ],
+  "traits": [
+    {
+      "name": "Ощущение портала",
+      "description": "Ищейка может ощущать присутствие порталов в пределах 30 футов, включая неактивные порталы, и инстинктивно знает место назначения каждого из них."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Ищейка совершает три атаки Перчаткой с когтями."
+    },
+    {
+      "name": "Перчатка с когтями",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к8 + 3) рубящего урона плюс 10 (3к6) урона некротической энергией.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

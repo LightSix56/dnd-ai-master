@@ -1,0 +1,87 @@
+{
+  "id": "8033",
+  "slug": "8033-demogorgon",
+  "name": "Демогоргон",
+  "nameEn": "Demogorgon",
+  "size": "medium",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения, именной НИП",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Hunt for the Thessalhydra",
+  "isNamed": true,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 60,
+    "hitDice": "8d8 + 24"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 12,
+    "con": 16,
+    "int": 3,
+    "wis": 12,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "blindsight": 60
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Демогоргон совершает три атаки: одну Укусом и две Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к8 + 3) колющего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 12 (2к8 + 3) рубящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

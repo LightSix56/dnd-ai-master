@@ -1,0 +1,106 @@
+{
+  "id": "10598",
+  "slug": "10598-skeletal-knight",
+  "name": "Рыцарь-скелет",
+  "nameEn": "Skeletal Knight",
+  "size": "medium",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "законно-злая",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Dragonlance: Shadow of the Dragon Queen",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 112,
+    "hitDice": "15d8 + 45"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 10,
+    "con": 16,
+    "int": 13,
+    "wis": 14,
+    "cha": 10
+  },
+  "savingThrows": {
+    "con": 6,
+    "wis": 5
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "понимает все языки",
+    "известные при жизни",
+    "но не говорит"
+  ],
+  "traits": [
+    {
+      "name": "Стойкость нежити",
+      "description": "Если урон опускает хиты рыцаря-скелета до 0, он совершает спасбросок Телосложения Сл 5 + полученный урон, если только это не был дробящий урон или урон от критического попадания. При успехе хиты рыцаря-скелета опускаются до 1."
+    },
+    {
+      "name": "Необычная природа",
+      "description": "Рыцарь скелет не нуждается в воздухе, еде, питье и сне."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Рыцарь-скелет совершает три атаки Обессиливающим клинком или Метательным топором в любом сочетании."
+    },
+    {
+      "name": "Обессиливающий клинок",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 фт., одна цель. Попадание: 15 (3к6 + 5) урона некротического энергией, и если цель — существо, оно не может восстанавливать хиты до начала следующего хода рыцаря-скелета.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Метательный топор",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +8 к попаданию, досягаемость 5 фт. или дистанция 20/60 фт, одна цель. Попадание: 14 (2к8 + 5) рубящего урона.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

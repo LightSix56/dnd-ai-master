@@ -1,0 +1,101 @@
+{
+  "id": "7030",
+  "slug": "7030-star-spawn-grue",
+  "name": "Чудище звёздных порождений",
+  "nameEn": "Star Spawn Grue]Чудище звёздных порождений [Star Spawn Grue",
+  "size": "small",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "обычно хаотично-злаяМаленькая? Аберрация, хаотично-злая",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11
+  },
+  "hitPoints": {
+    "average": 17,
+    "hitDice": "5d6"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 6,
+    "dex": 13,
+    "con": 10,
+    "int": 9,
+    "wis": 11,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Глубинная речь"
+  ],
+  "traits": [
+    {
+      "name": "Аура безумия",
+      "description": "Существа в пределах 20 футов от чудища, которые не являются аберрациями, совершают с помехой спасброски и броски атаки против существ, отличных от чудища звёздных порождений."
+    },
+    {
+      "name": "Аура безумия",
+      "description": "Существа в пределах 20 фт. от чудища, которые не являются аберрациями, совершают с помехой спасброски и броски атаки против существ, отличных от чудища звёздных порождений."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Сбивающий с толку укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 фт., одна цель. Попадание: 6 (2к4 + 1) колющего урона, и цель должна преуспеть в спасброске Мудрости Сл 10, иначе против него будут совершаться с преимуществом броски атаки до начала следующего хода чудища.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CHA",
+        "dc": 10,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Сбивающий с толку укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 фт., одна цель. Попадание: 6 (2к4 + 1) колющего урона, и цель должна преуспеть в спасброске Мудрости Сл 10, иначе против него будут совершаться с преимуществом броски атаки до начала следующего хода чудища.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CHA",
+        "dc": 10,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

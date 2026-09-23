@@ -1,0 +1,73 @@
+{
+  "id": "7175",
+  "slug": "7175-winged-bull",
+  "name": "Крылатый бык",
+  "nameEn": "Winged Bull",
+  "size": "large",
+  "type": "celestial",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Mythic Odysseys of Theros",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 95,
+    "hitDice": "10d10 + 40"
+  },
+  "speed": {
+    "walk": 60,
+    "fly": 60
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 14,
+    "con": 18,
+    "int": 6,
+    "wis": 10,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "- понимает Небесный, но не говорит."
+    },
+    {
+      "name": "Атака в броске",
+      "description": "Если бык переместится как минимум на 20 фт. по прямой к цели, а затем в том же ходу попадет по ней Боданием, цель дополнительно получает от атаки 19 (3к12) колющего урона."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Бодание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 фт., одна цель. Попадание: 18 (2к12 + 5) колющего урона.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d12",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

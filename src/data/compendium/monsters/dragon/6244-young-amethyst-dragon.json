@@ -1,0 +1,132 @@
+{
+  "id": "6244",
+  "slug": "6244-young-amethyst-dragon",
+  "name": "Молодой аметистовый дракон",
+  "nameEn": "Young Amethyst Dragon",
+  "size": "large",
+  "type": "dragon",
+  "subtype": "самоцветный",
+  "alignment": "любое нейтральное мировоззрение",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 168,
+    "hitDice": "16d10 + 80"
+  },
+  "speed": {
+    "walk": 40,
+    "fly": 80,
+    "hover": true,
+    "swim": 40
+  },
+  "abilities": {
+    "str": 21,
+    "dex": 12,
+    "con": 21,
+    "int": 18,
+    "wis": 15,
+    "cha": 19
+  },
+  "savingThrows": {
+    "dex": 5,
+    "con": 9,
+    "wis": 6,
+    "cha": 8
+  },
+  "skills": {
+    "perception": 10,
+    "arcana": 12,
+    "stealth": 5,
+    "persuasion": 8
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 20,
+    "blindsight": 30,
+    "darkvision": 120
+  },
+  "languages": [
+    "Общий",
+    "Драконий",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Дракон может дышать как воздухом, так и водой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дракон совершает одну атаку Укусом и две Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 10 фт., одна цель. Попадание: 16 (2к10+5) колющего урона плюс 4 (1к8) урона силовым полем.",
+      "attackBonus": 9,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 фт., одна цель. Попадание: 9 (1к8+5) рубящего урона.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний (Псионика)",
+      "type": "special",
+      "description": "Дракон накладывает одно из следующих заклинаний, не требующее компонентов заклинания и использующее Интеллект в качестве базовой характеристики (Сл спасброска от заклинания 16):"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "мерцание [blink], рассеивание магии [dispel magic], защита от зла и добра [protection from evil and good], послание [sending]."
+    },
+    {
+      "name": "Дыхание сингулярности (перезарядка 5–6)",
+      "type": "breath",
+      "description": "Дракон создает сияющий шарик сил гравитации во рту, после чего высвобождает энергию 30-футовым конусом. Все существа в этой области должны совершить спасбросок Силы Сл 17, получая урон силовым полем 36 (8к8) при провале, и их скорость становится равна 0 до начала следующего хода дракона. В случае успешного спасброска, существо получает вдвое меньше урона, и его скорость не уменьшается.",
+      "recharge": "5-6",
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 30
+      },
+      "save": {
+        "ability": "STR",
+        "dc": 17,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

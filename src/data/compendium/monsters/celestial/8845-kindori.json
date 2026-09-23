@@ -1,0 +1,72 @@
+{
+  "id": "8845",
+  "slug": "8845-kindori",
+  "name": "Киндори",
+  "nameEn": "Kindori",
+  "size": "gargantuan",
+  "type": "celestial",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 202,
+    "hitDice": "15d20 + 45"
+  },
+  "speed": {
+    "walk": 0,
+    "fly": 60,
+    "hover": true
+  },
+  "abilities": {
+    "str": 25,
+    "dex": 7,
+    "con": 17,
+    "int": 6,
+    "wis": 14,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 120
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Необычная природа",
+      "description": "Киндори не нуждается в еде, питье и сне."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Хвост",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +10 к попаданию, досягаемость 5 фт., одна цель. Попадание: 23 (3к10 + 7) дробящего урона.",
+      "attackBonus": 10,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 7,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

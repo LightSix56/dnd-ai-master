@@ -1,0 +1,103 @@
+{
+  "id": "13136",
+  "slug": "13136-time-dragon-wyrmling",
+  "name": "Вирмлинг дракона времени",
+  "nameEn": "Time Dragon Wyrmling",
+  "size": "medium",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Planescape: Adventures in the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 75,
+    "hitDice": "10d8 + 30"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 60,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 10,
+    "con": 17,
+    "int": 17,
+    "wis": 13,
+    "cha": 17
+  },
+  "savingThrows": {
+    "dex": 3,
+    "con": 6,
+    "wis": 4,
+    "cha": 6
+  },
+  "skills": {
+    "perception": 7,
+    "history": 9,
+    "arcana": 6,
+    "stealth": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17,
+    "blindsight": 10,
+    "darkvision": 120
+  },
+  "languages": [
+    "Драконий (плюс любые два языка)"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дракон совершает три атаки Раздиранием."
+    },
+    {
+      "name": "Раздирание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 10 фт., одна цель. Попадание: 7 (1к6 + 4) рубящего урона плюс 3 (1к6) урона силовым полем.",
+      "attackBonus": 7,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Дыхание времени (перезарядка 5-6)",
+      "type": "breath",
+      "description": "Дракон выдыхает волну мерцающего света в виде 15-футового конуса. Немагические предметы и растительность в этой области, которые никто не несёт и не носит, обращаются в пыль. Каждое существо в этой области должно совершить спасбросок Телосложения Сл 14 . При провале существо получает 27 (6к8) урона силовым полем и магически ослабляется, поскольку оно рассинхронизируется с текущим потоком времени. Пока существо находится в этом состоянии, броски атаки по нему совершаются с преимуществом, а другие существа получают сопротивление ко всему наносимому им урону. При успехе существо получает только половину этого урона. Ослабленное существо может повторять спасбросок в конце каждого своего хода, оканчивая на себе действие данного эффекта в случае успеха.",
+      "damage": [
+        {
+          "dice": "6d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "CON",
+        "dc": 14,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

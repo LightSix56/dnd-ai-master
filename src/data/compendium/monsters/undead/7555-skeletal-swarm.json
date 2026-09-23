@@ -1,0 +1,78 @@
+{
+  "id": "7555",
+  "slug": "7555-skeletal-swarm",
+  "name": "Рой скелетов",
+  "nameEn": "Skeletal Swarm",
+  "size": "large",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "законно-злая",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Ghosts of Saltmarsh",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "обломки доспеха"
+  },
+  "hitPoints": {
+    "average": 60,
+    "hitDice": "8d10 + 16"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 14,
+    "con": 15,
+    "int": 6,
+    "wis": 8,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [
+    "bludgeoning"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 9,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Оглушительный стук",
+      "description": "Существа становятся глухими, находясь в пространстве роя."
+    },
+    {
+      "name": "Рой",
+      "description": "Рой может занимать пространство другого существа, и наоборот, и рой может перемещаться через любой проход, достаточный для Маленького гуманоида. Рой не может восстанавливать хиты и получать временные хиты."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 0 футов, одна цель в пространстве роя. Попадание: 11 (2к8 + 2) рубящего урона или 6 (1к8 + 2) рубящего урона, если у роя половина хитов или меньше.",
+      "attackBonus": 4,
+      "reachFt": 0,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,85 @@
+{
+  "id": "252",
+  "slug": "252-nightmare",
+  "name": "Кошмар",
+  "nameEn": "Nightmare",
+  "size": "large",
+  "type": "fiend",
+  "subtype": null,
+  "alignment": "нейтрально-злое",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 68,
+    "hitDice": "8d10 + 24"
+  },
+  "speed": {
+    "walk": 60,
+    "fly": 90
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 15,
+    "con": 16,
+    "int": 10,
+    "wis": 13,
+    "cha": 15
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [
+    "понимает Инфернальный",
+    "Общий и язык Бездны",
+    "но не говорит"
+  ],
+  "traits": [
+    {
+      "name": "Дарование сопротивления огню",
+      "description": "Кошмар может предоставить сопротивление урону огнём всем, кто на нем едет."
+    },
+    {
+      "name": "Свечение",
+      "description": "Кошмар испускает яркий свет в радиусе 10 футов и тусклый свет в пределах ещё 10 футов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Копыта",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: Дробящий урон 13 (2к8 + 4) плюс урон огнём 7 (2к6).",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "плюс"
+        }
+      ]
+    },
+    {
+      "name": "Эфирный шаг",
+      "type": "special",
+      "description": "Кошмар, а также до трех согласных существ в пределах 5 футов от него, магическим образом переходят на Эфирный План с Материального Плана, или наоборот."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

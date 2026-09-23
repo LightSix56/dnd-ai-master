@@ -1,0 +1,93 @@
+{
+  "id": "13626",
+  "slug": "13626-blindheim",
+  "name": "Блайндхейм",
+  "nameEn": "Blindheim",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "хаотично-нейтральный",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Mordenkainen's Fiendish Folio Vol 1",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 26,
+    "hitDice": "4d8 + 8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 16,
+    "con": 15,
+    "int": 8,
+    "wis": 10,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 3,
+    "perception": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Глубинная речь"
+  ],
+  "traits": [
+    {
+      "name": "Сияющие глаза",
+      "description": "Когда его глаза открыты, блайндхейм излучает яркий свет в 60-футовом конусе, и тусклый свет на дополнительные 60 футов. Он выбирает направление данного конуса в конце каждого своего хода. Все существа, которые могут видеть блайндхейма, получают помеху при бросках атаки, пока находятся в конусе яркого света и в пределах 15 футов от блайндхейма. Существа с особенностью Чувствительность к солнцу, способные видеть блайндхейма, совершают броски атаки с помехой в любом месте в пределах конуса яркого света."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, дистанция 5 фт., одна цель. Попадание: 5 (1к6+2) колющего урона.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 5
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Сияющий заряд",
+      "type": "special",
+      "description": "Сияющая энергия извергается из глаз блайндхейма в 15-футовом конусе. Каждое существо в этой области должно преуспеть в спасброске Телосложения Сл 12, иначе получит 7 (2к6) урона излучением и будет ослеплено до конца следующего хода блайндхейма. Существа с особенностью Чувствительность к солнцу совершают данный спасбросок с помехой.",
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 12,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

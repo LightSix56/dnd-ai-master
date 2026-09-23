@@ -1,0 +1,91 @@
+{
+  "id": "12097",
+  "slug": "12097-echo-of-demogorgon",
+  "name": "Отголосок Демогоргона",
+  "nameEn": "Echo of Demogorgon",
+  "size": "large",
+  "type": "fiend",
+  "subtype": "Демон",
+  "alignment": "обычно хаотично-злое",
+  "challengeRating": 6,
+  "xp": 2300,
+  "source": "Bigby Presents: Glory of the Giants",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 85,
+    "hitDice": "10d10 + 30"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 22,
+    "dex": 10,
+    "con": 17,
+    "int": 10,
+    "wis": 12,
+    "cha": 14
+  },
+  "savingThrows": {
+    "str": 9,
+    "cha": 5
+  },
+  "skills": {
+    "perception": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17,
+    "darkvision": 60
+  },
+  "languages": [
+    "Бездны",
+    "Великаний",
+    "Орочий"
+  ],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Отголосок Демогоргона совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Неусыпный",
+      "description": "Когда одна голова отголоска спит, другая бодрствует."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Отголосок Демогоргона совершает две атаки Щупальцем."
+    },
+    {
+      "name": "Щупальце",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 10 футов, одна цель. Попадание: 12 (2к6 + 6) дробящего урона плюс 9 (2к8) урона некротической энергией.",
+      "attackBonus": 9,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 6,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

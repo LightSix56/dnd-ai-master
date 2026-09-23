@@ -1,0 +1,107 @@
+{
+  "id": "6434",
+  "slug": "6434-torogar-steelfist",
+  "name": "Торогар Стальной Кулак",
+  "nameEn": "Torogar Steelfist",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "законно-злой, именной НИП",
+  "challengeRating": 11,
+  "xp": 7200,
+  "source": "Baldur's Gate: Descent Into Avernus",
+  "isNamed": true,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 168,
+    "hitDice": "16d10 + 80"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 25,
+    "dex": 17,
+    "con": 20,
+    "int": 8,
+    "wis": 9,
+    "cha": 16
+  },
+  "savingThrows": {
+    "str": 11,
+    "con": 9
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 9,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Бездны"
+  ],
+  "traits": [
+    {
+      "name": "Особое снаряжение",
+      "description": "Торогар носит перчатки пламенной ярости [gauntlets of Flaming Fury] и пояс силы огненного великана [belt of giant strength]. Без пояса его Сила равна 21. У него также есть монета души [soul Coin]."
+    },
+    {
+      "name": "Кровавый натиск",
+      "description": "Сразу после использования действия Рывок, Торогар может совершить одну рукопашную атаку рогами."
+    },
+    {
+      "name": "Запоминание пути",
+      "description": "Минотавр может с лёгкостью вспомнить любой пройдённый путь."
+    },
+    {
+      "name": "Ярость (перезарядка после короткого или продолжительного отдыха)",
+      "description": "Бонусным действием Торогар может впасть в ярость на 1 минуту. Ярость прекращается досрочно, если Торогар теряет сознание или если его ход кончается, а он не атаковал враждебное существо и не получал урона со своего прошлого хода. Во время ярости Торогар получает следующие преимущества:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Торогар совершает три атаки: две скимитарами и одну рогами."
+    },
+    {
+      "name": "Скимитар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +11 к попаданию, досягаемость 5 футов, одна цель. Попадание: 14 (2к6 + 7) рубящего урона или 17 (2к6 + 10) рубящего урона в ярости плюс 3 (1к6) урона огнём от перчаток пламенной ярости.",
+      "attackBonus": 11,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 7,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Рога",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +11 к попаданию, досягаемость 5 футов, одна цель. Попадание: 16 (2к8 + 7) колющего урона или 19 (2к8 +10) колющего урона в ярости.",
+      "attackBonus": 11,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 7,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

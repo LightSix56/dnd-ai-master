@@ -1,0 +1,102 @@
+{
+  "id": "13709",
+  "slug": "13709-needle-lord",
+  "name": "Лорд игл",
+  "nameEn": "Needle Lord",
+  "size": "large",
+  "type": "plant",
+  "subtype": null,
+  "alignment": "хаотично-злое",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Mordenkainen's Fiendish Folio Vol 1",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 45,
+    "hitDice": "6d10 + 12"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 10,
+    "con": 14,
+    "int": 11,
+    "wis": 15,
+    "cha": 12
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 6,
+    "perception": 4,
+    "stealth": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "blindsight": 30
+  },
+  "languages": [
+    "Сильван"
+  ],
+  "traits": [
+    {
+      "name": "Колючая защита",
+      "description": "Каждый раз, когда существо совершает рукопашную атаку против Лорда игл, оно получает 2 колющего урона. Существо может совершить атаку с помехой по своему желанию, чтобы избежать этого урона."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Лорд игл совершает две атаки Загребущей лозой."
+    },
+    {
+      "name": "Залп игл",
+      "type": "special",
+      "description": "Лорд игл совершает 1к6 атак Иглой, но не может атаковать одно и то же существо больше двух раз."
+    },
+    {
+      "name": "Загребущая лоза",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 10 футов, одна цель. Попадание: Цель получает 11 (2к6 + 4) колющего урона и становится схваченной (Сл высвобождения 14). Пока цель схвачена, она получает 11 колющего урона в начале каждого своего хода. У Лорда игл две Загребущие лозы, каждая из которых может схватить только одно существо.",
+      "attackBonus": 6,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Игла",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +2 к попаданию, дистанция 60 футов, одна цель. Попадание: 2 (1к4) колющего урона.",
+      "attackBonus": 2,
+      "range": {
+        "normal": 60
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

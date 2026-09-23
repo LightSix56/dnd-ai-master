@@ -1,0 +1,82 @@
+{
+  "id": "17329",
+  "slug": "17329-loading-rig",
+  "name": "Грузоподъёмный механизм",
+  "nameEn": "Loading Rig",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 39,
+    "hitDice": "6d10 + 6"
+  },
+  "speed": {
+    "walk": 25
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 11,
+    "con": 13,
+    "int": 1,
+    "wis": 3,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 6,
+    "blindsight": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Восприимчивость к антимагии",
+      "description": "Механизм недееспособен, пока находится в пределах области преграды магии [antimagic field]. Став целью рассеивания магии [dispel magic], механизм должен преуспеть в спасброске Телосложения Сл спасброска заклинателя, иначе потеряет сознание на 1 минуту."
+    },
+    {
+      "name": "Неустойчивый",
+      "description": "Если механизм получает урон, он должен преуспеть в спасброске Телосложения Сл 10, иначе станет недееспособным со скоростью 0 до тех пор, пока существо действием не активирует его успешной проверкой Интеллекта (Магия) Сл 10."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Доспех совершает две рукопашные атаки."
+    },
+    {
+      "name": "Размашистый удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к6 + 4) дробящего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

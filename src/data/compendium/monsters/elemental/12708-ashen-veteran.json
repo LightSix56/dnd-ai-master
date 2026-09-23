@@ -1,0 +1,108 @@
+{
+  "id": "12708",
+  "slug": "12708-ashen-veteran",
+  "name": "Пепельный ветеран",
+  "nameEn": "Ashen Veteran",
+  "size": "medium",
+  "type": "elemental",
+  "subtype": null,
+  "alignment": "законно-злой",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Keys from the Golden Vault",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "нагрудный доспех"
+  },
+  "hitPoints": {
+    "average": 58,
+    "hitDice": "9d8 + 18"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 13,
+    "con": 14,
+    "int": 10,
+    "wis": 11,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 5,
+    "perception": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Любой 1 (обычно Общий)"
+  ],
+  "traits": [
+    {
+      "name": "Пепельное существо",
+      "description": "Когда хиты ветерана падают до 0, он превращается в груду пепла, а все снаряжение, которое он нёс или носил, падает на землю."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Ветеран совершает две атаки Длинным мечом. Он также может атаковать Коротким мечом, если он находится у него в руке."
+    },
+    {
+      "name": "Длинный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к8 + 3) рубящего урона или 8 (1к10 + 3) рубящего урона при использовании двумя руками.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к6 + 3) колющего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Тяжелый арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +3 к попаданию, дальность 100/400 футов, одна цель. Попадание: 6 (1к10 + 1) колющего урона.",
+      "attackBonus": 3,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

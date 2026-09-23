@@ -1,0 +1,69 @@
+{
+  "id": "14172",
+  "slug": "14172-greed-mote",
+  "name": "Семя жадности",
+  "nameEn": "Greed mote",
+  "size": "medium",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Adventurers League",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 13,
+    "hitDice": "3d8"
+  },
+  "speed": {
+    "walk": 10,
+    "fly": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 14,
+    "con": 10,
+    "int": 10,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Жало",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 5 (1к6+2) колющего урона, и цель должна совершить спасбросок Телосложения Сл 11, получая 10 (3к6) урона ядом при провале или половину этого урона при успехе. Если яд снижает хиты цели до 0, то цель стабилизирована, но отравлена на 1 час даже после восстановления хитов, и парализована, пока под воздействием яда.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 11,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

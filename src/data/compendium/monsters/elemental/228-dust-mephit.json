@@ -1,0 +1,99 @@
+{
+  "id": "228",
+  "slug": "228-dust-mephit",
+  "name": "Пылевой мефит",
+  "nameEn": "Dust mephit",
+  "size": "small",
+  "type": "elemental",
+  "subtype": null,
+  "alignment": "нейтрально-злой",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 17,
+    "hitDice": "5d6"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 30
+  },
+  "abilities": {
+    "str": 5,
+    "dex": 14,
+    "con": 10,
+    "int": 9,
+    "wis": 11,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 2,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [
+    "fire"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Ауран",
+    "Терран"
+  ],
+  "traits": [
+    {
+      "name": "Предсмертная вспышка",
+      "description": "Когда мефит умирает, он разлетается во все стороны пылью. Все существа в пределах 5 футов от него должны преуспеть в спасброске Телосложения Сл 10, иначе станут ослепленными на 1 минуту. Ослепленное существо может повторять спасбросок в каждом своем ходу, оканчивая эффект на себе при успехе."
+    },
+    {
+      "name": "Врождённое колдовство (1/день)",
+      "description": "Мефит может накладывать усыпление [sleep], не нуждаясь в материальных компонентах. Его базовой характеристикой является Харизма."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одно существо. Попадание: Рубящий урон 4 (1к4 + 2).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Ослепляющее дыхание (перезарядка 6)",
+      "type": "breath",
+      "description": "Мефит выдыхает ослепляющую пыль 15-футовым конусом. Все существа в этой области должны преуспеть в спасброске Ловкости Сл 10, иначе станут ослепленными на 1 минуту. Существо может повторять этот спасбросок в конце каждого своего хода, оканчивая эффект на себе при успехе.",
+      "recharge": "6",
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 15
+      },
+      "save": {
+        "ability": "DEX",
+        "dc": 10,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

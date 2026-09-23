@@ -1,0 +1,77 @@
+{
+  "id": "8041",
+  "slug": "8041-billy-beaver",
+  "name": "Билли Бобёр",
+  "nameEn": "Billy Beaver",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения, именной НИП",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "The Lost Dungeon of Rickedness: Big Rick Energy",
+  "isNamed": true,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 34,
+    "hitDice": "7d10 - 4"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 12,
+    "con": 17,
+    "int": 3,
+    "wis": 12,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Острое зрение и тонкий нюх",
+      "description": "Билли совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на зрение или нюх."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Клюв",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: 10 (1к10 + 5) колющего урона.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

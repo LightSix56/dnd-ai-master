@@ -1,0 +1,127 @@
+{
+  "id": "7163",
+  "slug": "7163-oread",
+  "name": "Ореада",
+  "nameEn": "Oread",
+  "size": "medium",
+  "type": "fey",
+  "subtype": null,
+  "alignment": "хаотично-злая",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Mythic Odysseys of Theros",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 49,
+    "hitDice": "9d8 + 9"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 14,
+    "con": 12,
+    "int": 11,
+    "wis": 13,
+    "cha": 18
+  },
+  "savingThrows": {},
+  "skills": {
+    "acrobatics": 4,
+    "athletics": 4,
+    "performance": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire",
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [
+    "Общий",
+    "Сильван"
+  ],
+  "traits": [
+    {
+      "name": "Невидимая в огне",
+      "description": "Ореада невидима, пока полностью окутана огнём."
+    },
+    {
+      "name": "Врожденное колдовство",
+      "description": "Базовой характеристикой ореады является Харизма (Сл спасброска от заклинания 14, +6 к попаданию атакой заклинанием). Она может накладывать следующие заклинания, не нуждаясь в материальных компонентах:"
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Ореада совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Ореда дважды атакует своим Огненным прикосновением или Огненным снарядом."
+    },
+    {
+      "name": "Огненное прикосновение",
+      "type": "melee_attack",
+      "description": "Рукопашная атака заклинанием: +6 к попаданию, досягаемость 5 футов., одна цель. Попадание: 9 (1к10 + 4) урона огнём.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Огненный снаряд (Заговор)",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +6 к попаданию, досягаемость 120 футов., одно существо. Попадание: 5 (1к10) урона огнём.",
+      "attackBonus": 6,
+      "reachFt": 120,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Адское возмездие (заклинание 2-го уровня; 1/день)",
+      "type": "special",
+      "description": "Когда ореада получает урон от существа в 60 фт от себя и которого ореада, видит, существо, нанесшее урон ореаде, должно совершить спасбросок Ловкости Сл 14, получив 16 (3к10) урона огнём при провале или вдвое меньше урона при успехе.",
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

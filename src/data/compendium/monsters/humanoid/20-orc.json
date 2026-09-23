@@ -1,0 +1,92 @@
+{
+  "id": "20",
+  "slug": "20-orc",
+  "name": "Орк",
+  "nameEn": "Orc",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "орк",
+  "alignment": "хаотично-злой",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "шкурный доспех"
+  },
+  "hitPoints": {
+    "average": 15,
+    "hitDice": "2d8 + 6"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 12,
+    "con": 16,
+    "int": 7,
+    "wis": 11,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "intimidation": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Орочий"
+  ],
+  "traits": [
+    {
+      "name": "Агрессивный",
+      "description": "Орк может бонусным действием переместиться на расстояние вплоть до показателя своей скорости по направлению к враждебному существу, которое он может видеть."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Секира",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 9 (1к12 + 3).",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d12",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Метательное копье",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +5 к попаданию, досягаемость 5 футов или дистанция 30 футов/120 футов, одна цель. Попадание: Колющий урон 6 (1к6 + 3).",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "range": {
+        "normal": 30
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

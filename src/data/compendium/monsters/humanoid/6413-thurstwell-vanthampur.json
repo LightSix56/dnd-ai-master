@@ -1,0 +1,89 @@
+{
+  "id": "6413",
+  "slug": "6413-thurstwell-vanthampur",
+  "name": "Тёрствелл Вантампур",
+  "nameEn": "Thurstwell Vanthampur",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "законно-злой, именной НИП",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "Baldur's Gate: Descent Into Avernus",
+  "isNamed": true,
+  "armorClass": {
+    "value": 9
+  },
+  "hitPoints": {
+    "average": 5,
+    "hitDice": "2d8 - 4"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 7,
+    "dex": 8,
+    "con": 6,
+    "int": 15,
+    "wis": 17,
+    "cha": 12
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 5,
+    "deception": 3,
+    "insight": 5,
+    "religion": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15
+  },
+  "languages": [
+    "Общий",
+    "Инфернальный",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Тёмная преданность",
+      "description": "Тёрствелл совершает с преимуществом спасброски от очарования и испуга."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Тёрствелл является заклинателем 2-го уровня. Его базовой характеристикой является Мудрость (Сл спасброска от заклинания 13). У Тёрствелла подготовлены следующие заклинания жреца:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Священное пламя (заговор)",
+      "type": "special",
+      "description": "Похожее на огонь сияние нисходит на существо, которое Тёрствелл видит в пределах 60 футов. Цель должна преуспеть в спасброске Ловкости Сл 13, иначе она получает 4 (1к8) урона излучением. Для этого спасброска цель не получает преимуществ от укрытия.",
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 2,
+    "ability": "WIS"
+  }
+}

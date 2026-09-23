@@ -1,0 +1,142 @@
+{
+  "id": "12098",
+  "slug": "12098-ettin-ceremorph",
+  "name": "Эттин-цереморф",
+  "nameEn": "Ettin Ceremorph",
+  "size": "large",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "обычно законно-злая",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Bigby Presents: Glory of the Giants",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 104,
+    "hitDice": "11d10 + 44"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 14,
+    "con": 18,
+    "int": 18,
+    "wis": 15,
+    "cha": 14
+  },
+  "savingThrows": {
+    "int": 7,
+    "wis": 5
+  },
+  "skills": {
+    "perception": 8
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 18,
+    "darkvision": 120
+  },
+  "languages": [
+    "Великаний",
+    "Глубинная речь",
+    "Подземный",
+    "Телепатия 60 фт."
+  ],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Цереморф совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Эттин-цереморф совершает одну атаку Размашистым ударом и одну атаку Щупальцами. Эттин-цереморф может заменить одну из атак атакой Психическим разрядом, если он доступен."
+    },
+    {
+      "name": "Размашистый удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 10 футов, одна цель. Попадание: 22 (4к8 + 4) дробящего урона.",
+      "attackBonus": 7,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "4d8",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Щупальца",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 10 футов, одно существо. Попадание: 15 (2к10 + 4) урона психической энергией. Если цель Большого размера или меньше, она становится схваченной (Сл высвобождения 14) и должна преуспеть в спасброске Интеллекта Сл 15, иначе станет ошеломленной, пока не перестанет быть схваченной.",
+      "attackBonus": 7,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "INT",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Извлечение мозга",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, один недееспособный гуманоид, схваченный эттином-цереморфом. Попадание: Цель получает 55 (10к10) колющего урона. Если этот урон уменьшает хиты цели до 0, эттин-цереморф убивает цель, извлекая и пожирая её мозг.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "10d10",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Психический снаряд (3/день)",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +8 к попаданию, дистанция 120 футов, одно существо. Попадание: 17 (2к10 +4) урона психической энергией и цель должна преуспеть в спасброске Интеллекта Сл 15, иначе станет ошеломлённой до конца своего следующего хода.",
+      "attackBonus": 8,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "INT",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

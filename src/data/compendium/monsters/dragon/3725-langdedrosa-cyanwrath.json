@@ -1,0 +1,119 @@
+{
+  "id": "3725",
+  "slug": "3725-langdedrosa-cyanwrath",
+  "name": "Лангдедроса Цианврас",
+  "nameEn": "Langdedrosa Cyanwrath",
+  "size": "medium",
+  "type": "dragon",
+  "subtype": "полудракон",
+  "alignment": "законно-злой, именной НИП",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Hoard of the Dragon Queen",
+  "isNamed": true,
+  "armorClass": {
+    "value": 17,
+    "type": "наборной доспех"
+  },
+  "hitPoints": {
+    "average": 57,
+    "hitDice": "6d12 + 18"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 13,
+    "con": 16,
+    "int": 10,
+    "wis": 14,
+    "cha": 12
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 6,
+    "perception": 2,
+    "intimidation": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "blindsight": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Всплеск действий (Перезарядка после Короткого или Продолжительного отдыха)",
+      "description": "В свой ход, Лангдедроса может совершить одно дополнительное действие."
+    },
+    {
+      "name": "Улучшенные критические попадания",
+      "description": "Оружие Лангдедросы критически попадает при результате броска кубика «19» или «20»."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Лангдедроса совершает две атаки, либо двуручным мечом, либо копьём."
+    },
+    {
+      "name": "Двуручный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 11 (2к6+4) рубящего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Копьё",
+      "type": "melee_attack",
+      "description": "Рукопашная или Дальнобойная атака оружием: +6 к попаданию, досягаемость 5 футов или дистанция 20 / 60 футов, одна цель. Попадание: 7 (1к6+4) колющего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Дыхание молнией (Перезарядка 5-6)",
+      "type": "breath",
+      "description": "Лангдедроса выдыхает молнию в форме линии, 30 футов длинной и 5 футов шириной. Каждое существо на этой линии должно преуспеть в спасброске Ловкости Сл 13. При неудаче оно получает 22 (4к10) урона электричеством, а при успехе - половину этого урона.",
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "DEX",
+        "dc": 13,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

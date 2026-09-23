@@ -1,0 +1,150 @@
+{
+  "id": "6539",
+  "slug": "6539-clockwork-bronze-scout",
+  "name": "Заводной бронзовый скаут",
+  "nameEn": "Clockwork Bronze Scout]Заводной бронзовый скаут [Clockwork Bronze Scout",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззренияСредний? Конструкт, без мировоззрения",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 36,
+    "hitDice": "8d8"
+  },
+  "speed": {
+    "walk": 30,
+    "burrow": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 16,
+    "con": 11,
+    "int": 3,
+    "wis": 14,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 6,
+    "stealth": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Понимает один языка своего создателя, но не говорит"
+    },
+    {
+      "name": "Земляная броня",
+      "description": "Бронзовый скаут не провоцирует атак когда закапывается."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Бронзовый скаут совершает с преимуществом спасброски против заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Необычная природа",
+      "description": "Бронзовый скаут не нуждается в воздухе, питье, еде и сне."
+    },
+    {
+      "name": "Искусственная природа",
+      "description": "Заводные механизмы не нуждаются в воздухе, еде, питье, или сне."
+    },
+    {
+      "name": "Земляная броня",
+      "description": "Бронзовый скаут не провоцирует атак, когда закапывается."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Бронзовый скаут совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 5 (1к4 + 3) колющего урона плюс 3 (1к6) урона электричеством.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Электрический разряд (Перезарядка после короткого или продолжительного отдыха)",
+      "type": "special",
+      "description": "Каждое существо стоящее на земле в 15 футов от бронзового скаута должно преуспеть в спасброске Ловкости Сл 13, получая 14 (4к6) урона электричеством при провале, или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "4d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 13,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 5 (1к4 + 3) колющего урона плюс 3 (1к6) урона электричеством.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Электрический разряд (перезарядка после короткого или продолжительного отдыха)",
+      "type": "special",
+      "description": "Каждое существо, стоящее на земле в 15 футах от бронзового скаута должно преуспеть в спасброске Ловкости Сл 13, получая 14 (4к6) урона электричеством при провале, или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "4d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 13,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

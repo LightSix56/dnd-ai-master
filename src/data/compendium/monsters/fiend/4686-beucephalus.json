@@ -1,0 +1,86 @@
+{
+  "id": "4686",
+  "slug": "4686-beucephalus",
+  "name": "Буцефал",
+  "nameEn": "Beucephalus",
+  "size": "large",
+  "type": "fiend",
+  "subtype": null,
+  "alignment": "нейтрально-злое, именной НИП",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Curse of Strahd",
+  "isNamed": true,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 104,
+    "hitDice": "8d10 + 60"
+  },
+  "speed": {
+    "walk": 60,
+    "fly": 90
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 15,
+    "con": 16,
+    "int": 10,
+    "wis": 13,
+    "cha": 15
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [
+    "Общий",
+    "Бездны",
+    "Инфернальный (понимает",
+    "но не говорит)"
+  ],
+  "traits": [
+    {
+      "name": "Дарование сопротивления огню",
+      "description": "Буцефал может предоставить сопротивление урону огнём всем, кто на нем едет."
+    },
+    {
+      "name": "Свечение",
+      "description": "Буцефал испускает яркий свет в радиусе 10 футов и тусклый свет в пределах ещё 10 футов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Копыта",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 13 (2к8 + 4) дробящего урона плюс 7 (2к6) урона огнём.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Эфирный шаг",
+      "type": "special",
+      "description": "Буцефал, а также до трех согласных существ в пределах 5 футов от него, магическим образом переходят на Эфирный План с Материального Плана, или наоборот."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,64 @@
+{
+  "id": "374",
+  "slug": "374-weasel",
+  "name": "Куница",
+  "nameEn": "Weasel",
+  "size": "tiny",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 1,
+    "hitDice": "1d4 - 1"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 3,
+    "dex": 16,
+    "con": 8,
+    "int": 2,
+    "wis": 12,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Острый слух и тонкий нюх",
+      "description": "Куница совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на слух и обоняние."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 1.",
+      "attackBonus": 5,
+      "reachFt": 5
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

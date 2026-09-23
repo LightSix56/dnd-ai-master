@@ -1,0 +1,107 @@
+{
+  "id": "6003",
+  "slug": "6003-titanosaurus-zombie",
+  "name": "Титанозавр зомби",
+  "nameEn": "Titanosaurus Zombie",
+  "size": "gargantuan",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Adventurers League",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 201,
+    "hitDice": "13d20 + 65"
+  },
+  "speed": {
+    "walk": 20
+  },
+  "abilities": {
+    "str": 30,
+    "dex": 3,
+    "con": 20,
+    "int": 1,
+    "wis": 5,
+    "cha": 4
+  },
+  "savingThrows": {
+    "con": 8
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 7,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Топот",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +13 к попаданию, досягаемость 20 фт., одна цель. Попадание: 40 (6к10 + 7) дробящего урона, и цель должна успешно пройти спасбросок Силы Сл 16 или оказаться сбитой с ног.",
+      "attackBonus": 13,
+      "reachFt": 20,
+      "damage": [
+        {
+          "dice": "6d10",
+          "mod": 7,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 16,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Хвост",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +13 к попаданию, досягаемость 20 фт., одна цель. Попадание: 45 (7к10 + 7) дробящего урона.",
+      "attackBonus": 13,
+      "reachFt": 20,
+      "damage": [
+        {
+          "dice": "7d10",
+          "mod": 7,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": {
+    "actionsPerRound": 3,
+    "options": [
+      {
+        "name": "Бросок плоти",
+        "cost": 1,
+        "description": "Титанозавр зомби выбирает одно Среднее или меньшее существо в пределах 10 футов от себя, которое он может видеть. Это существо должно преуспеть в спасброске Ловкости Сл 10 или будет опутано в куске плоти титанозавра зомби, которая отделилась от его тела. Существо может повторить спасбросок в конце своего хода, оканчивая эффект при успехе."
+      },
+      {
+        "name": "Ядовитый газ (2 действия)",
+        "cost": 1,
+        "description": "Титанозавр зомби выдыхает ядовитый газ 30-футовым конусом. Все существа в этой области должны совершить спасбросок Телосложения Сл 16, или станут отравлены на 1 минуту. Существа, отравленные таким образом, могут повторить спасбросок в конце своего хода, оканчивая эффект при успехе."
+      },
+      {
+        "name": "Взмах хвостом (3 действия)",
+        "cost": 1,
+        "description": "Титанозавр совершает атаку хвостом, с помехой, против каждого существа в 20-футовом конусе."
+      }
+    ]
+  },
+  "lairActions": [],
+  "spellcasting": null
+}

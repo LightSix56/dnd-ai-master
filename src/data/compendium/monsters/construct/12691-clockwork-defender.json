@@ -1,0 +1,82 @@
+{
+  "id": "12691",
+  "slug": "12691-clockwork-defender",
+  "name": "Заводной защитник",
+  "nameEn": "Clockwork Defender",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Keys from the Golden Vault",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 42,
+    "hitDice": "5d8 + 20"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 15,
+    "con": 18,
+    "int": 3,
+    "wis": 14,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 6,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16
+  },
+  "languages": [
+    "Понимает языки своего создателя",
+    "но не может говорить"
+  ],
+  "traits": [
+    {
+      "name": "Необычная природа",
+      "description": "Защитнику не нужен воздух, еда, питье или сон."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Электрифицированный укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к8 + 3) колющего урона плюс 7 (2к6) урона электричеством. Если цель — существо, она должна преуспеть в спасброске Силы Сл 13, иначе будет схвачена (Сл высвобождения 13). Существо, схваченное защитником, снова получает урон в начале каждого хода защитника. Защитник может схватить таким образом только одно существо за раз и защитник не может совершать атаки Электрифицированным укусом во время захвата.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,69 @@
+{
+  "id": "8391",
+  "slug": "8391-paper-bird",
+  "name": "Бумажная птица",
+  "nameEn": "Paper Bird",
+  "size": "tiny",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "The Wild Beyond The Witchlight: A Feywild Adventure",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 1,
+    "hitDice": "1d4 - 1"
+  },
+  "speed": {
+    "walk": 10,
+    "fly": 60
+  },
+  "abilities": {
+    "str": 5,
+    "dex": 16,
+    "con": 8,
+    "int": 2,
+    "wis": 14,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [
+    "fire"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Острое зрение",
+      "description": "Бумажная птица совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на зрение."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Острые края",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 1 рубящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

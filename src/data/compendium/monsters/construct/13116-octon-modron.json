@@ -1,0 +1,120 @@
+{
+  "id": "13116",
+  "slug": "13116-octon-modron",
+  "name": "Модрон октон",
+  "nameEn": "Octon Modron",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "законно-нейтральный",
+  "challengeRating": 11,
+  "xp": 7200,
+  "source": "Planescape: Adventures in the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 187,
+    "hitDice": "22d10 + 66"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 30,
+    "hover": true,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 14,
+    "con": 17,
+    "int": 17,
+    "wis": 16,
+    "cha": 14
+  },
+  "savingThrows": {
+    "int": 7,
+    "wis": 7
+  },
+  "skills": {
+    "perception": 11
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 21,
+    "truesight": 120
+  },
+  "languages": [
+    "Модронский",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Косное сознание",
+      "description": "Октона нельзя заставить действовать так, как противоречит его природе или инструкциям."
+    },
+    {
+      "name": "Распад",
+      "description": "Если октон умирает, его тело рассыпается в пыль, оставляя лишь оружие и то, что он нёс."
+    },
+    {
+      "name": "Боевая готовность",
+      "description": "Октон с преимуществом совершает броски инициативы."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Октон совершает три атаки Щупальцами."
+    },
+    {
+      "name": "Щупальце",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 10 футов, одна цель. Попадание: 14 (3к6 + 4) колющего урона плюс 9 (2к8) урона электричеством.",
+      "attackBonus": 8,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Вихрь щупалец (перезарядка 5-6)",
+      "type": "multiattack",
+      "description": "Октон быстро вытягивает и раскручивает свои щупальца вокруг себя. Каждое существо в пределе 20 футов от октона должно преуспеть в спасброске Силы Сл 16, иначе будет притянуто на расстояние до 10 футов по прямой к октону. После чего октон совершает две атаки Щупальцами по каждому существу находящемуся в пределах 10 футов.",
+      "recharge": "5-6",
+      "save": {
+        "ability": "STR",
+        "dc": 16,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Октон накладывает одно из следующих заклинаний, не нуждаясь в материальных компонентах, используя Интеллект в качестве базовой характеристики (Сл спасброска заклинания 15):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "обнаружение магии [detect magic], рассеивание магии [dispel magic], починка [mending] (действием)"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "уход в иной мир [plane shift] (только на себя), защита от зла и добра [protection from evil and good]"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

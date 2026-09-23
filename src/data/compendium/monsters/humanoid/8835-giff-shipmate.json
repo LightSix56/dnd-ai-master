@@ -1,0 +1,114 @@
+{
+  "id": "8835",
+  "slug": "8835-giff-shipmate",
+  "name": "Гифф-сослуживец",
+  "nameEn": "Giff Shipmate",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "любое мировоззрение",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 75,
+    "hitDice": "10d8 + 30"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 14,
+    "con": 17,
+    "int": 11,
+    "wis": 12,
+    "cha": 12
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Знатоки огнестрельного оружия",
+      "description": "Знание оружия позволяет гиффу игнорировать свойство «перезарядка» любого огнестрельного оружия."
+    },
+    {
+      "name": "Так держать!",
+      "description": "Находясь на палубе корабля гифф совершает с преимущество проверки характеристик и спасброски против эффектов, которые могут сбить его с ног или столкнуть за борт."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Гифф совершает две атаки Длинным мечом или Мушкетом."
+    },
+    {
+      "name": "Длинный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: 8 (1к8 + 4) рубящий урон или 9 (1к10 + 4) рубящий урон, если используется двумя руками.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Мушкет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +4 к попаданию, дистанция 40/120 фт., одна цель. Попадание: 8 (1к12 + 2) колющего урона.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 40,
+        "long": 120
+      },
+      "damage": [
+        {
+          "dice": "1d12",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Силовая граната",
+      "type": "special",
+      "description": "Гифф бросает гранату на расстояние до 60 футов, и та взрывается сферой радиусом 20 футов. Все существа в этой области должны совершить спасбросок Ловкости Сл 15, получая 17 (5к6) урона силовым полем при провале, или половину этого урона при успехе. После того как гифф бросит гранату, бросьте к6. Если выпадет «4» или меньше, у гиффа больше не остаётся гранат для броска.",
+      "damage": [
+        {
+          "dice": "5d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 15,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,104 @@
+{
+  "id": "8011",
+  "slug": "8011-falcon-the-hunter",
+  "name": "Сокол Охотник",
+  "nameEn": "Falcon the Hunter",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "нейтрально-добрый, именной НИП",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Essentials Kit: Dragon of Icespire peak",
+  "isNamed": true,
+  "armorClass": {
+    "value": 14,
+    "type": "проклёпанный доспех"
+  },
+  "hitPoints": {
+    "average": 112,
+    "hitDice": "15d8 + 45"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 15,
+    "con": 16,
+    "int": 11,
+    "wis": 16,
+    "cha": 15
+  },
+  "savingThrows": {
+    "dex": 4,
+    "wis": 5
+  },
+  "skills": {
+    "athletics": 4,
+    "perception": 7,
+    "survival": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Лучник",
+      "description": "Когда Сокол попадает в цель при стрельбе из длинного или короткого лука, то наносит одну дополнительную кость урона (уже учтено в атаке длинным луком)."
+    },
+    {
+      "name": "Снайпер",
+      "description": "Дальнобойные атаки Сокола игнорируют укрытия на половину и три четверти."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Сокол совершает три рукопашные атаки или две дальнобойные атаки."
+    },
+    {
+      "name": "Длинный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 6 (1к8 + 2) рубящего урона или 7 (1к10 + 2) рубящего урона при атаке двумя руками.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Длинный лук",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +4 к попаданию, дистанция 150/600 фт., одна цель. Попадание: 11 (2к8 + 2) колющего урона.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 150,
+        "long": 600
+      },
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

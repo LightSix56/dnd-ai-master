@@ -1,0 +1,97 @@
+{
+  "id": "3655",
+  "slug": "3655-hurricane",
+  "name": "Ураган",
+  "nameEn": "Hurricane",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "законно-злой",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Princes of the Apocalypse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14
+  },
+  "hitPoints": {
+    "average": 33,
+    "hitDice": "6d8 + 6"
+  },
+  "speed": {
+    "walk": 45
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 16,
+    "con": 13,
+    "int": 10,
+    "wis": 12,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "acrobatics": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [
+    "Общий",
+    "Ауран"
+  ],
+  "traits": [
+    {
+      "name": "Использование заклинаний",
+      "description": "Ураган является заклинателем 3-го уровня. Его базовой характеристикой является Мудрость (Сл спасброска от заклинаний 11, +3 к атакам заклинаниями). Он знает следующие заклинания чародея:"
+    },
+    {
+      "name": "Защита без доспехов",
+      "description": "Пока ураган не носит ни доспехи, ни щит, в его КД включается модификатор Мудрости (уже учтено)."
+    },
+    {
+      "name": "Движение без доспехов",
+      "description": "Пока ураган не носит ни доспехи, ни щит, его скорость ходьбы увеличивается на 15 футов (уже учтено)."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Ураган совершает две рукопашные атаки."
+    },
+    {
+      "name": "Безоружный удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: дробящий урон 6 (1к6 + 3).",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Отражение снарядов",
+      "type": "special",
+      "description": "Когда по урагану совершается атака из дальнобойного оружия, он уменьшает урон от этой атаки на 1к10 + 9. Если урон уменьшен до 0, то ураган может поймать снаряд, если этот снаряд достаточно мал, чтобы его держать в одной руке, и если у урагана свободна, по крайней мере, одна рука."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 3,
+    "ability": "WIS"
+  }
+}

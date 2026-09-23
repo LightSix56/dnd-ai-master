@@ -1,0 +1,67 @@
+{
+  "id": "5989",
+  "slug": "5989-hadrosaurus-zombie",
+  "name": "Гадрозавр зомби",
+  "nameEn": "Hadrosaurus Zombie",
+  "size": "large",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Adventurers League",
+  "isNamed": false,
+  "armorClass": {
+    "value": 9,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 30,
+    "hitDice": "4d10 + 8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 7,
+    "con": 15,
+    "int": 1,
+    "wis": 6,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Хвост",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к10 + 2) дробящего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,83 @@
+{
+  "id": "17224",
+  "slug": "17224-horrid-plant",
+  "name": "Мерзкая поросль",
+  "nameEn": "Horrid Plant",
+  "size": "large",
+  "type": "plant",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Quest from the Infinite Staircase",
+  "isNamed": false,
+  "armorClass": {
+    "value": 6
+  },
+  "hitPoints": {
+    "average": 42,
+    "hitDice": "5d10 + 15"
+  },
+  "speed": {
+    "walk": 5
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 3,
+    "con": 17,
+    "int": 1,
+    "wis": 10,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "blindsight": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Разновидности мерзкой поросли",
+      "description": "Мерзкая поросль относится к одной из следующих разновидностей (выберите или бросьте 1к6). От его вида зависят некоторые особенности этого блока характеристик."
+    },
+    {
+      "name": "Обманчивая внешность",
+      "description": "Если мерзкая поросль неподвижна к началу боя, то она совершает бросок Инициативы с преимуществом. Более того, если существо не видело перемещений или действий мерзкой поросли, то это существо должно преуспеть в проверке Интеллекта (Расследование) Сл 18, чтобы понять, что она живая."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Мерзкая поросль совершает две атаки Усиками."
+    },
+    {
+      "name": "Усик",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 30 фт., одна цель. Попадание: 7 (2к6) дробящего урона. Если цель — существо Огромного размера или меньшего, то оно схвачено (Сл высвобождения 14), и мерзкая поросль может подтянуть цель на вплоть до 25 футов ближе к себе.",
+      "attackBonus": 6,
+      "reachFt": 30,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 0,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Будучи схваченной подобным образом, цель",
+      "type": "special",
+      "description": "также опутана, а мерзкая поросль не может использовать этот усик на другой цели. У мерзкой поросли есть два усика."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

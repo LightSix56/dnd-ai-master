@@ -1,0 +1,99 @@
+{
+  "id": "17314",
+  "slug": "17314-rakdos-performer-fire-eater",
+  "name": "Ракдос-исполнитель, пожиратель огня",
+  "nameEn": "Rakdos Performer, Fire Eater",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любая раса",
+  "alignment": "хаотично-злой",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "4d8 + 4"
+  },
+  "speed": {
+    "walk": 40,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 17,
+    "con": 12,
+    "int": 10,
+    "wis": 8,
+    "cha": 15
+  },
+  "savingThrows": {
+    "dex": 5,
+    "cha": 4
+  },
+  "skills": {
+    "acrobatics": 7,
+    "performance": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 9
+  },
+  "languages": [
+    "один любой язык (обычно Общий)"
+  ],
+  "traits": [
+    {
+      "name": "Шустрый",
+      "description": "Исполнитель в свой ход может выполнять действие Отход бонусным действием."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Пожиратель огня совершает две атаки Цепью с лезвиями."
+    },
+    {
+      "name": "Цепь с лезвиями",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 10 фт., одна цель. Попадание: 6 (1к6 + 3) рубящего урона.",
+      "attackBonus": 5,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Извержение пламени (перезарядка 4–6)",
+      "type": "breath",
+      "description": "Пожиратель огня выдыхает пламя. Каждое существо в 15-футовом конусе должно совершить спасбросок Ловкости Сл 13, получая 9 (2к8) урона огнём при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 13,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

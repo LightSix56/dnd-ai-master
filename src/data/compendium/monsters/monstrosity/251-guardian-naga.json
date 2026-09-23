@@ -1,0 +1,111 @@
+{
+  "id": "251",
+  "slug": "251-guardian-naga",
+  "name": "Охранная нага",
+  "nameEn": "Guardian naga",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "законно-добрый",
+  "challengeRating": 10,
+  "xp": 5900,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 127,
+    "hitDice": "15d10 + 45"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 18,
+    "con": 16,
+    "int": 16,
+    "wis": 19,
+    "cha": 18
+  },
+  "savingThrows": {
+    "dex": 8,
+    "con": 7,
+    "int": 7,
+    "wis": 8,
+    "cha": 8
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Небесный"
+  ],
+  "traits": [
+    {
+      "name": "Восстановление",
+      "description": "Если нага умирает, она возвращается к жизни через 1к6 дней и восстанавливает все хиты. Только заклинание исполнение желаний [wish] может прекратить действие этой особенности."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Нага является заклинателем 11-го уровня. Ее базовой характеристикой является Мудрость (Сл спасброска от заклинания 16, +8 к попаданию атаками заклинаниями), и ей для накладывания заклинаний нужны только вербальные компоненты. У неё подготовлены следующие заклинания жреца:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 10 футов, одно существо. Попадание: Колющий урон 8 (1к8 + 4), и цель должна совершить спасбросок Телосложения Сл 15, получая урон ядом 45 (10к8) при провале, или половину этого урона при успехе.",
+      "attackBonus": 8,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 15,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Плевок ядом",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +8 к попаданию, дистанция 15/30 футов, одно существо. Попадание: Цель должна совершить спасбросок Телосложения Сл 15, получая урон ядом 45 (10к8) при провале, или половину этого урона при успехе.",
+      "attackBonus": 8,
+      "range": {
+        "normal": 15,
+        "long": 30
+      },
+      "save": {
+        "ability": "CON",
+        "dc": 15,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 11,
+    "spellAttackBonus": 8,
+    "ability": "WIS"
+  }
+}

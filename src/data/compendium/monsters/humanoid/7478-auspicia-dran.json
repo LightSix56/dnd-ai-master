@@ -1,0 +1,97 @@
+{
+  "id": "7478",
+  "slug": "7478-auspicia-dran",
+  "name": "Ауспиция Дран",
+  "nameEn": "Auspicia Dran",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "полуэльфийка",
+  "alignment": "нейтрально-добрый, именной НИП",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Acquisition Incorporated",
+  "isNamed": true,
+  "armorClass": {
+    "value": 15,
+    "type": "кольчуга"
+  },
+  "hitPoints": {
+    "average": 52,
+    "hitDice": "8d8 + 16"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 14,
+    "con": 14,
+    "int": 15,
+    "wis": 12,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 5,
+    "perception": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "Общий",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Врождённое колдовство (Псионика)",
+      "description": "Способность к заклинаниям Ауспиции основана на Интеллекте. Ауспиция может накладывать следующие заклинание без использования материальных компонентов:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Ауспиция совершает две атаки."
+    },
+    {
+      "name": "Длинный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к8 + 3) рубящего урона или 8 (1к10 + 3) рубящего урона, если используется двумя руками.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Легкий арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +4 к попаданию, дистанция 80/320 футов, одна цель. Попадание: 6 (1к8 + 2) колющего урона.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 80,
+        "long": 320
+      },
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

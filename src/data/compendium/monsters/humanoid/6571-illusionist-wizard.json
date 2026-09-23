@@ -1,0 +1,121 @@
+{
+  "id": "6571",
+  "slug": "6571-illusionist-wizard",
+  "name": "Волшебник школы Иллюзии",
+  "nameEn": "Illusionist Wizard]Иллюзионист [Illusionist",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любая раса",
+  "alignment": "любое мировоззрениеСредний? Гуманоид (любая раса), любое мировоззрение",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "15 с доспехами мага"
+  },
+  "hitPoints": {
+    "average": 44,
+    "hitDice": "8d8 + 8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 9,
+    "dex": 14,
+    "con": 13,
+    "int": 16,
+    "wis": 11,
+    "cha": 12
+  },
+  "savingThrows": {
+    "int": 5,
+    "wis": 2
+  },
+  "skills": {
+    "history": 5,
+    "arcana": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "любые четыре языка"
+  ],
+  "traits": [
+    {
+      "name": "Использование заклинаний",
+      "description": "Иллюзионист является заклинателем 7-го уровня. Его базовой характеристикой является Интеллект (Сл спасброска от заклинания 13, +5 к попаданию атаками заклинаниями). У него подготовлены следующие заклинания волшебника:"
+    },
+    {
+      "name": "*Заклинание Иллюзии уровня 1 или выше",
+      "description": ""
+    },
+    {
+      "name": "Смещение (Перезаряжается после накладывания Иллюзионистом заклинания Иллюзии уровня 1 или выше)",
+      "description": "Бонусным действием иллюзионист создает иллюзию, из–за которой иллюзионист кажется находящимся в нескольких дюймах в стороне от его настоящего положения, заставляя любое существо с помехой совершать броски атак по иллюзионисту. Эффект прекращается, если иллюзионист наносит урон, становится недееспособным или его скорость становится 0."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Иллюзионист совершает две атаки Магической вспышкой."
+    },
+    {
+      "name": "Магическая вспышка",
+      "type": "melee_attack",
+      "description": "Рукопашная или Дальнобойная атака заклинанием: +5 к попаданию, досягаемость 5 футов или дистанция 120 футов, одна цель. Попадание: 14 (2к10 + 3) урона психической энергией.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Иллюзионист накладывает одно из следующих заклинаний, используя Интеллект в качестве базовой характеристики (Сл спасброска от заклинаний 13):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "пляшущие огоньки [dancing lights], волшебная рука [mage hand], малая иллюзия [minor illusion];"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "маскировка [disguise self], невидимость [invisibility], доспехи мага [mage armor], образ [major image], воображаемая сила [phantasmal force], призрачный скакун [phantom steed]."
+    },
+    {
+      "name": "Боевой посох",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +1 к попаданию, досягаемость 5 футов, одна цель. Попадание: Дробящий урон 2 (1к6 – 1) или дробящий урон 3 (1к8–1) если используется двумя руками.",
+      "attackBonus": 1,
+      "reachFt": 5
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 7,
+    "spellAttackBonus": 5,
+    "ability": "INT"
+  }
+}

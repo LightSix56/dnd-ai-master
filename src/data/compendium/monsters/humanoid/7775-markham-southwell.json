@@ -1,0 +1,91 @@
+{
+  "id": "7775",
+  "slug": "7775-markham-southwell",
+  "name": "Маркхэм Саутвелл",
+  "nameEn": "Markham Southwell",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек тёрами",
+  "alignment": "законно-добрый, именной НИП",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Storm King's Thunder",
+  "isNamed": true,
+  "armorClass": {
+    "value": 17,
+    "type": "наборный доспех"
+  },
+  "hitPoints": {
+    "average": 58,
+    "hitDice": "9d8 + 18"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 13,
+    "con": 14,
+    "int": 11,
+    "wis": 16,
+    "cha": 14
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 5,
+    "survival": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Маркхэм совершает две рукопашных атаки."
+    },
+    {
+      "name": "Длинный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одно существо. Попадание: 6 (1к8+2) рубящий урон или 7 (1к10+2), если использовать меч двумя руками.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Тяжёлый арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +3 к попаданию, дистанция 100/400 фт., одна цель. Попадание: 6 (1к10+1) колющий урон. Маркхэм носит с собой 10 болтов для арбалета.",
+      "attackBonus": 3,
+      "range": {
+        "normal": 100,
+        "long": 400
+      },
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

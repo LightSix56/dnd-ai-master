@@ -1,0 +1,50 @@
+{
+  "id": "4679",
+  "slug": "4679-arabelle",
+  "name": "Арабэлль",
+  "nameEn": "Arabelle",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любая раса",
+  "alignment": "любое мировоззрение, именной НИП",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Curse of Strahd",
+  "isNamed": true,
+  "armorClass": {
+    "value": 10
+  },
+  "hitPoints": {
+    "average": 2,
+    "hitDice": "1d8 - 2"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 10,
+    "con": 10,
+    "int": 10,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [],
+  "actions": [],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

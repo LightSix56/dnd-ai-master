@@ -1,0 +1,117 @@
+{
+  "id": "485",
+  "slug": "485-neronvain",
+  "name": "Носящий пурпур Неронвейн",
+  "nameEn": "Neronvain",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "эльф",
+  "alignment": "нейтрально-злой, именной НИП",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "The Rise of Tiamat",
+  "isNamed": true,
+  "armorClass": {
+    "value": 17
+  },
+  "hitPoints": {
+    "average": 117,
+    "hitDice": "18d8 + 36"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 8,
+    "dex": 17,
+    "con": 15,
+    "int": 16,
+    "wis": 13,
+    "cha": 18
+  },
+  "savingThrows": {
+    "con": 6,
+    "wis": 5
+  },
+  "skills": {
+    "perception": 5,
+    "arcana": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Драконий",
+    "Инфернальный",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Драконье величие",
+      "description": "Неронвейн добавляет свой модификатор Харизмы к КД (включено в статистику)."
+    },
+    {
+      "name": "Наследие фей",
+      "description": "Неронвейна невозможно магически усыпить."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Неронвейн совершает две атаки, либо своим коротким мечём, либо мистической стрелой."
+    },
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к6+3) колющего урона плюс 13 (3к8) урона ядом.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Мистическая стрела",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +7 к попаданию, дистанция 120 футов, одна цель. Попадание: 11 (2к10) урона силовым полем плюс 9 (2к8) урона ядом.",
+      "attackBonus": 7,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Ядовитое облако (2 / день)",
+      "type": "special",
+      "description": "Ядовитый газ заполняет сферу радиусом 20-футов с центром в точке в пределах 50 футов от Неронвейна, которую он может видеть. Газ распространяется за углы и держится до начала следующего хода Неронвейна. Каждое существо, начинающее свой ход в сфере газа должно преуспеть в спасброске Телосложения Сл 16 или стать отравленным на 1 минуту. Существо может повторять спасбросок в конце каждого своего хода, при успехе снимая с себя этот эффект.",
+      "save": {
+        "ability": "CON",
+        "dc": 16,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

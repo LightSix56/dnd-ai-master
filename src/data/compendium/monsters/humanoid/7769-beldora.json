@@ -1,0 +1,97 @@
+{
+  "id": "7769",
+  "slug": "7769-beldora",
+  "name": "Белдора",
+  "nameEn": "Beldora",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек иллюсканец",
+  "alignment": "хаотично-добрый, именной НИП",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Storm King's Thunder",
+  "isNamed": true,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 18,
+    "hitDice": "4d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 14,
+    "con": 10,
+    "int": 16,
+    "wis": 12,
+    "cha": 16
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3,
+    "deception": 5,
+    "insight": 3,
+    "investigation": 5,
+    "persuasion": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "Общий",
+    "Дварфийский",
+    "Драконий",
+    "Полуросликов"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 5 (1к6+2) колющий урон.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Ручной арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +4 к попаданию, дистанция 30/120 фт., одна цель. Попадание: 5 (1к6+2) колющий урон. Белдора носит с собой 10 болтов для арбалета.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 30,
+        "long": 120
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "В укрытие",
+      "type": "special",
+      "description": "Белдора добавляет 2 к её КД против одной дальнобойной атаки, которая должна попасть по ней. Чтобы иметь такую возможность, Белдора должна видеть атакующего и не должна быть схвачена или опутана."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

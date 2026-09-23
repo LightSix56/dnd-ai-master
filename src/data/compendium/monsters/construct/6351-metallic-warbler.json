@@ -1,0 +1,95 @@
+{
+  "id": "6351",
+  "slug": "6351-metallic-warbler",
+  "name": "Металлическая славка",
+  "nameEn": "Metallic Warbler",
+  "size": "tiny",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "нейтрально-добрый",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 14,
+    "hitDice": "4d4 + 4"
+  },
+  "speed": {
+    "walk": 40,
+    "fly": 60
+  },
+  "abilities": {
+    "str": 4,
+    "dex": 15,
+    "con": 12,
+    "int": 9,
+    "wis": 10,
+    "cha": 12
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Понимает Драконий и Общий, но не говорит."
+    },
+    {
+      "name": "Неизменяемая форма",
+      "description": "Славка обладает иммунитетом ко всем заклинаниям и эффектам, изменяющим его форму."
+    },
+    {
+      "name": "Телепатическая связь",
+      "description": "Пока славка находится на том же плане существования, что и её хозяин, она может магически передавать своему хозяину то, что чувствует, и они могут общаться друг с другом телепатически."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 4 (1к4+2) рубящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Успокаивающий туман (перезарядка 5-6)",
+      "type": "special",
+      "description": "Славка выпускает успокаивающий газ в сферу радиусом 5 фт., с центром на себе. Каждое существо в этой области должно преуспеть в спасброске Харизмы Сл 11, иначе станет очарованно славкой на 1 минуту. Пока существо очаровано таким образом, оно недееспособно и имеет скорость 0.",
+      "recharge": "5-6",
+      "save": {
+        "ability": "CHA",
+        "dc": 11,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

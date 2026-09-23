@@ -1,0 +1,88 @@
+{
+  "id": "17232",
+  "slug": "17232-worker-robot",
+  "name": "Рабочий робот",
+  "nameEn": "Worker Robot",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Quest from the Infinite Staircase",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 75,
+    "hitDice": "10d8 + 30"
+  },
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 9,
+    "con": 16,
+    "int": 10,
+    "wis": 12,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 9
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "cold",
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий плюс языки на которых говорит его создатель"
+  ],
+  "traits": [
+    {
+      "name": "Перегрузка электричеством",
+      "description": "Когда робот получает урон электричеством, он должен преуспеть в спасброске Телосложения Сл 10, иначе станет ошеломленным до начала своего следующего хода."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Робот совершает две атаки Погрузочным щупальцем."
+    },
+    {
+      "name": "Погрузочное щупальце",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 10 фт., одна цель. Попадание: 9 (1к8 + 5) дробящего урона. Если цель — существо Среднего размера или меньшего, то оно становится схваченным (Сл высвобождения 15). У робота есть два погрузочных щупальца, каждое из которых может держать в захвате по одной цели за раз.",
+      "attackBonus": 7,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 5,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Притягивающий луч",
+      "type": "special",
+      "description": "Робот накладывает заклинание телекинез [telekinesis], нацеливаясь только на недееспособное существо или объект. Роботу не требуется компоненты для накладывания этого заклинания и он использует Мудрость в качестве базовой характеристики для этого заклинания."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,76 @@
+{
+  "id": "17415",
+  "slug": "17415-thorn-slinger",
+  "name": "Колючий пращник",
+  "nameEn": "Thorn Slinger",
+  "size": "large",
+  "type": "plant",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Tales from the Yawning Portal",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11
+  },
+  "hitPoints": {
+    "average": 32,
+    "hitDice": "5d10 + 5"
+  },
+  "speed": {
+    "walk": 10
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 12,
+    "con": 12,
+    "int": 1,
+    "wis": 10,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "blindsight": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Клейкие цветы",
+      "description": "Колючий пращник приклеивается ко всему, что его касается. Существо Среднего размера или меньше, к которому приклеился колючий пращник, становится схваченным им (Сл высвобождения 11). Проверки характеристик для высвобождения из этого захвата совершаются с помехой. В начале каждого хода колючего пращника, всё схваченное им получает 3 (1к6) урона кислотой."
+    },
+    {
+      "name": "Обманчивая внешность",
+      "description": "Пока колючий пращник неподвижен, он неотличим от обычного куста."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Колючки",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +3 к попаданию, досягаемость 5 фт или дистанция 30 фт, одна цель. Попадание: 8 (2к6 + 1) колющего урона.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "range": {
+        "normal": 30
+      },
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

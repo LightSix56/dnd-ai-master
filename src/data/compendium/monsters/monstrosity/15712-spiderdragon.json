@@ -1,0 +1,129 @@
+{
+  "id": "15712",
+  "slug": "15712-spiderdragon",
+  "name": "Паукодракон",
+  "nameEn": "Spiderdragon",
+  "size": "huge",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "обычно хаотично-злой",
+  "challengeRating": 11,
+  "xp": 7200,
+  "source": "Vecna: Eve of Ruin",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 152,
+    "hitDice": "16d12 + 48"
+  },
+  "speed": {
+    "walk": 50,
+    "climb": 60
+  },
+  "abilities": {
+    "str": 21,
+    "dex": 18,
+    "con": 16,
+    "int": 7,
+    "wis": 14,
+    "cha": 18
+  },
+  "savingThrows": {
+    "str": 9,
+    "dex": 8
+  },
+  "skills": {
+    "perception": 6,
+    "intimidation": 8
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 90
+  },
+  "languages": [
+    "Бездны",
+    "Драконий",
+    "Подземный"
+  ],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Паукодракон совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Паучье лазанье",
+      "description": "Паукодракон может лазать по сложным поверхностям, включая потолки, без совершения проверок характеристик."
+    },
+    {
+      "name": "Хождение по паутине",
+      "description": "Паукодракон игнорирует ограничения перемещения, вызванные паутиной."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Паукодракон совершает атаку Укусом и две атаки Когтем."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 10 футов, одно существо. Попадание: 10 (1к10 + 5) колющего урона плюс 13 (2к12) урона ядом.",
+      "attackBonus": 9,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 футов, одно существо. Попадание: 12 (2к6 +5) рубящего урона.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Паучье дыхание (перезарядка 5-6)",
+      "type": "breath",
+      "description": "Паукодракон выдыхает ядовитых паукообразных в 30-футовом конусе. Все существа в этой области должны совершить спасбросок Ловкости Сл 15, получая 33 (6к10) колющего урона и 33 (6к10) урона ядом при провале или только половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "6d10",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "DEX",
+        "dc": 15,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

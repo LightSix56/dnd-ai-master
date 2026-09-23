@@ -1,0 +1,109 @@
+{
+  "id": "6254",
+  "slug": "6254-crystal-dragon-wyrmling",
+  "name": "Вирмлинг кристаллического дракона",
+  "nameEn": "Crystal Dragon Wyrmling",
+  "size": "medium",
+  "type": "dragon",
+  "subtype": "самоцветный",
+  "alignment": "хаотично-нейтральный",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 32,
+    "hitDice": "5d8 + 10"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 60,
+    "burrow": 15,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 12,
+    "con": 14,
+    "int": 14,
+    "wis": 13,
+    "cha": 15
+  },
+  "savingThrows": {
+    "dex": 3,
+    "con": 4,
+    "wis": 3,
+    "cha": 4
+  },
+  "skills": {
+    "perception": 5,
+    "survival": 3,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "blindsight": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Драконий",
+    "Телепатия 120 фт."
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 10 фт., одна цель. Попадание: 7 (1к10+2) колющего урона плюс 2 (1к4) урона излучением.",
+      "attackBonus": 4,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний (Псионика)",
+      "type": "special",
+      "description": "Дракон накладывает одно из следующих заклинаний, не требующее компонентов заклинания и использующее Интеллект в качестве базовой характеристики:"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "пляшущие огоньки [dancing lights], указание [guidance];"
+    },
+    {
+      "name": "Мерцающее дыхание (Перезарядка 5-6)",
+      "type": "breath",
+      "description": "Дракон выдыхает ярко сияющую вспышку в 15-футовом конусе. Все существа в этой области должно совершить Спасбросок Телосложения Сл 12, получая 18 (4к8) урона излучением при провале спасброска или половину урона при успешном. После чего дракон получает 5 временных хитов, поглощая часть энергии излучения.",
+      "damage": [
+        {
+          "dice": "4d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "CON",
+        "dc": 12,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

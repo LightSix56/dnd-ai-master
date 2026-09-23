@@ -1,0 +1,304 @@
+// Prisma schema for AI D&D Master
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Игровая кампания (одна активная за раз, но можно несколько)
+model Campaign {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  setting     String   @default("Forgotten Realms")
+  tone        String   @default("heroic") // heroic, dark, gritty, humorous, epic
+  isActive    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Новые параметры (опциональные)
+  difficulty  String   @default("normal") // easy, normal, hard, brutal
+  language    String   @default("ru") // ru, en
+  dmStyle     String   @default("balanced") // narrative, tactical, roleplay, balanced
+  ruleStrictness String @default("standard") // loose, standard, strict
+  startingLevel Int    @default(1)
+  worldDescription String? // кастомное описание мира
+  customDmNotes String? // заметки для мастера
+  pvpEnabled  Boolean  @default(false)
+  restFrequency String @default("standard") // frequent, standard, rare
+  partyTies   String   @default("tight_knit") // tight_knit, strangers, mercenaries, friends
+
+  // Сюжетная арка: диапазон уровней кампании и заранее сгенерированная история
+  levelFrom     Int     @default(1)
+  levelTo       Int     @default(5)
+  storyArc      String? // JSON сюжетной арки (см. StoryArc в lib/ai/story-arc.ts)
+  arcStatus     String  @default("none") // none, generating, ready, failed
+  arcProgress   String? // JSON прогресса генерации: этап, готовые акты, ошибка
+  arcModel      String? // модель, которой сгенерирована арка
+  arcCurrentAct Int     @default(0) // индекс акта, на котором сейчас игрок
+
+  characters    Character[]
+  events        GameEvent[]
+  memories      Memory[]
+  chatMessages  ChatMessage[]
+  summaries     Summary[]
+  combats       Combat[]
+}
+
+// Персонаж — игрок или NPC
+model Character {
+  id          String   @id @default(cuid())
+  campaignId  String
+  campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  name        String
+  type        String   @default("npc") // player, npc, enemy, companion
+  race        String?
+  class       String?
+  subclass    String?
+  level       Int      @default(1)
+  experiencePoints Int @default(0)
+  background  String?
+
+  // Способности (stats)
+  str Int @default(10)
+  dex Int @default(10)
+  con Int @default(10)
+  int Int @default(10)
+  wis Int @default(10)
+  cha Int @default(10)
+
+  // Состояние
+  hpCurrent Int @default(10)
+  hpMax     Int @default(10)
+  hpTemp    Int @default(0)
+  ac        Int @default(10)
+  speed     Int @default(30)
+  profBonus Int @default(2)
+
+  // Прочее
+  inventory    String? // JSON-строка массива предметов
+  spells       String? // JSON-строка массива заклинаний
+  appearance   String?
+  personality  String?
+  bonds        String?
+  flaws        String?
+  isAlive      Boolean  @default(true)
+  location     String?
+  inScene      Boolean  @default(true) // Присутствует ли в текущей сцене/комнате в контакте с игроком
+  relation     Int      @default(0) // отношение к игроку: -100..+100
+  notes        String? // свободные заметки мастера
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([campaignId])
+  @@index([type])
+}
+
+// Событие в игре — что произошло, где, когда
+model GameEvent {
+  id          String   @id @default(cuid())
+  campaignId  String
+  campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  type        String // dice_roll, combat, social, exploration, story, npc_action, rest, level_up, death
+  description String
+  location    String?
+  participants String? // JSON-строка с id персонажей
+  result      String?
+  turn        Int      @default(0) // порядковый номер хода
+  isImportant Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@index([campaignId])
+  @@index([turn])
+}
+
+// Долгосрочная память — ключевые факты, которые AI должен помнить всегда
+model Memory {
+  id          String   @id @default(cuid())
+  campaignId  String
+  campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  category    String // character, location, quest, world, item, relationship, prophecy
+  subject     String // о ком/о чём эта память
+  content     String
+  importance  Int      @default(5) // 1-10
+  isArchived  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([campaignId, category])
+  @@index([campaignId, importance])
+}
+
+// Сообщение чата — весь лог диалога
+model ChatMessage {
+  id          String   @id @default(cuid())
+  campaignId  String
+  campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  role        String // user, assistant, system
+  content     String
+  toolCalls   String? // JSON tool calls
+  toolResults String? // JSON tool results
+  turn        Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  @@index([campaignId, turn])
+}
+
+// Суммаризация — сжатие старых событий для долгой памяти
+model Summary {
+  id          String   @id @default(cuid())
+  campaignId  String
+  campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  content     String
+  fromTurn    Int
+  toTurn      Int
+  createdAt   DateTime @default(now())
+
+  @@index([campaignId])
+}
+
+// Тактический бой D&D 5e
+model Combat {
+  id          String   @id @default(cuid())
+  campaignId  String?
+  campaign    Campaign? @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  name        String   @default("Бой")
+  status      String   @default("active") // active, paused, ended
+  round       Int      @default(1)
+  currentTurnIndex Int @default(0)
+  turnOrder   String   @default("[]")
+  gridWidth   Int      @default(20)
+  gridHeight  Int      @default(15)
+  cellSize    Int      @default(40)
+  backgroundUrl String?
+  log         String   @default("[]")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  combatants  Combatant[]
+  mapElements MapElement[]
+
+  @@index([campaignId])
+}
+
+model Combatant {
+  id          String   @id @default(cuid())
+  combatId    String
+  combat      Combat   @relation(fields: [combatId], references: [id], onDelete: Cascade)
+  characterId String?  // Ссылка на Character в кампании, если это персонаж игрока/NPC
+
+  name        String
+  type        String   // player, npc, enemy, companion
+  color       String   @default("#6b7280")
+  x           Int
+  y           Int
+  hpCurrent   Int      @default(10)
+  hpMax       Int      @default(10)
+  hpTemp      Int      @default(0)
+  ac          Int      @default(10)
+  speed       Int      @default(30)
+  initiative  Int      @default(0)
+  initiativeTiebreak Int @default(0)
+  dexMod      Int      @default(0)
+  conditions  String   @default("[]")
+  isHidden    Boolean  @default(false)
+  hasActed    Boolean  @default(false)
+
+  // Класс и уровень
+  className   String   @default("")
+  level       Int      @default(1)
+  size        String   @default("medium")
+
+  // Ресурсы за ход
+  movementUsed Int     @default(0)
+  actionUsed   Boolean  @default(false)
+  bonusActionUsed Boolean @default(false)
+  reactionUsed Boolean  @default(false)
+  attacksPerAction Int  @default(1)
+  attacksMadeThisAction Int @default(0)
+  extraActions Int      @default(0)
+
+  // Действия
+  hotbar      String   @default("[]")
+  attacks     String   @default("[]")
+  spells      String   @default("{}")
+  abilities   String   @default("[]")
+  concentration String?
+  wildShape   String?
+  facing      String   @default("E")
+  saves       String   @default("{}")
+  abilityMods String   @default("{}")
+  profBonus   Int      @default(2)
+  isAIControlled Boolean @default(false)
+  potions     String   @default("[]")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([combatId])
+}
+
+model MapElement {
+  id          String   @id @default(cuid())
+  combatId    String
+  combat      Combat   @relation(fields: [combatId], references: [id], onDelete: Cascade)
+
+  type        String   // wall, door, window, obstacle, cover, difficult
+  x           Int
+  y           Int
+  width       Int      @default(1)
+  height      Int      @default(1)
+  properties  String   @default("{}")
+  createdAt   DateTime @default(now())
+
+  @@index([combatId])
+}
+
+// Глобальная библиотека D&D 5e
+model AttackLibrary {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  kind        String   @default("melee") // melee, ranged
+  attackBonus Int      @default(0)
+  damage      String   @default("[]")
+  rangeNormal Int      @default(5)
+  rangeLong   Int?
+  finesse     Boolean  @default(false)
+  actionCost  String   @default("action")
+  description String   @default("")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SpellLibrary {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  level       Int
+  school      String?
+  parameters  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model AbilityLibrary {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  source      String?
+  className   String   @default("")
+  minLevel    Int      @default(1)
+  category    String   @default("utility") // damage, utility
+  parameters  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

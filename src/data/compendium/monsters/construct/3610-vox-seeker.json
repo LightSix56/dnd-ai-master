@@ -1,0 +1,78 @@
+{
+  "id": "3610",
+  "slug": "3610-vox-seeker",
+  "name": "Искатель голоса",
+  "nameEn": "Vox seeker",
+  "size": "tiny",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "Explorer's Guide to Wildemount",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 7,
+    "hitDice": "2d4 + 2"
+  },
+  "speed": {
+    "walk": 20,
+    "climb": 20
+  },
+  "abilities": {
+    "str": 2,
+    "dex": 10,
+    "con": 12,
+    "int": 1,
+    "wis": 10,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "blindsight": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Паучье лазанье",
+      "description": "Искатель голоса может лазать по сложным поверхностям, включая потолки, без совершения проверок характеристик."
+    },
+    {
+      "name": "Голосовое наведение",
+      "description": "Искатель голоса должен двигаться в направлении и атаковать источник ближайшего голоса в пределах 60 футов от него, исключая все другие цели, до тех пор, пока он остается в рабочем состоянии."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Щипок",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 футов, одна цель. Попадание: 2 (1к4 + 1) колющего урона и 3 урона электричеством.",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

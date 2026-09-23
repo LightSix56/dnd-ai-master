@@ -1,0 +1,92 @@
+{
+  "id": "8369",
+  "slug": "8369-swarm-of-campestris",
+  "name": "Рой полевиков",
+  "nameEn": "Swarm of Campestris",
+  "size": "small",
+  "type": "plant",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "The Wild Beyond The Witchlight: A Feywild Adventure",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 27,
+    "hitDice": "6d8"
+  },
+  "speed": {
+    "walk": 5
+  },
+  "abilities": {
+    "str": 3,
+    "dex": 7,
+    "con": 10,
+    "int": 4,
+    "wis": 10,
+    "cha": 8
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "tremorsense": 30
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Понимает Общий, но говорит только с помощью особенности Подражание."
+    },
+    {
+      "name": "Подражание",
+      "description": "Каждый полевик в рое может подражать любому голосу или мелодии, которую он уже слышал, но назальным фальцетом."
+    },
+    {
+      "name": "Рой",
+      "description": "Рой может занимать пространство другого существа, и наоборот, и рой может перемещаться через любой проход, достаточный для одного полевика. Рой не может восстанавливать хиты и получать временные хиты."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Удар головами",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +0 к попаданию, досягаемость 5 фт., одна цель. Попадание: 10 (4к4) дробящего урона, или 5 (2к4) дробящего урона, если у роя половина хитов или меньше.",
+      "attackBonus": 0,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "4d4",
+          "mod": 0,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Споры (1/день)",
+      "type": "special",
+      "description": "Рой испускает споры в 20-футовом радиусе вокруг себя. Эти споры могут огибать углы, и не оказывают эффекта на конструктов, элементалей, растений или нежить. Каждое существо в этой области должно совершить спасбросок Мудрости Сл 10. При провале существо становится недееспособным и его скорость уменьшается наполовину, оба эффекта длятся 1 минуту. Существо может повторять спасбросок в конце каждого своего хода, завершая эффекты на себе в случае успеха.",
+      "save": {
+        "ability": "CHA",
+        "dc": 10,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

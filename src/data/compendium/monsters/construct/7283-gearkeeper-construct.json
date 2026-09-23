@@ -1,0 +1,125 @@
+{
+  "id": "7283",
+  "slug": "7283-gearkeeper-construct",
+  "name": "Конструкт хранитель снаряжения",
+  "nameEn": "Gearkeeper Construct",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 10,
+  "xp": 5900,
+  "source": "Explorer's Guide to Wildemount",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 161,
+    "hitDice": "17d10 + 68"
+  },
+  "speed": {
+    "walk": 60
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 16,
+    "con": 18,
+    "int": 3,
+    "wis": 11,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire",
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "blindsight": 120
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "- понимает языки своего создателя, но не говорит."
+    },
+    {
+      "name": "Неизменяемая форма",
+      "description": "Хранитель снаряжения обладает иммунитетом ко всем заклинаниям и эффектам, изменяющим его форму."
+    },
+    {
+      "name": "Быстрое перемещение",
+      "description": "Провоцированные атаки по хранителю снаряжения совершаются с помехой."
+    },
+    {
+      "name": "Вращающиеся лезвия",
+      "description": "Любое существо, которое начинает свой ход в пределах 5 футов от хранителя снаряжения, получает 4 (1к8) рубящего урона."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Хранитель снаряжения совершает две атаки Наручным клинком или одну атаку Наручным клинком и одну атаку Метателем копий."
+    },
+    {
+      "name": "Наручный клинок",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 футов, одна цель. Попадание: 18 (3к8 + 5) рубящего урона.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Метатель копий",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +9 к попаданию, дистанция 90 футов, одна цель. Попадание: 12 (2к6 + 5) колющего урона, и цель падает ничком.",
+      "attackBonus": 9,
+      "range": {
+        "normal": 90
+      },
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Взрыв шрапнели (Перезарядка 6)",
+      "type": "special",
+      "description": "Хранитель снаряжения выпускает струю зазубренного металла в 30-футовом конусе. Каждое существо в этой области должно совершить спасбросок Ловкости Сл 15, получая 21 (6к6) колющего урона при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "6d6",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ],
+      "recharge": "6",
+      "save": {
+        "ability": "DEX",
+        "dc": 15,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

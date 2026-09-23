@@ -1,0 +1,97 @@
+{
+  "id": "54",
+  "slug": "54-chuul",
+  "name": "Чууль",
+  "nameEn": "Chuul",
+  "size": "large",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "хаотично-злая",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 93,
+    "hitDice": "11d10 + 33"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 10,
+    "con": 16,
+    "int": 5,
+    "wis": 11,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 60
+  },
+  "languages": [
+    "понимает Глубинную речь",
+    "но не говорит"
+  ],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Чууль может дышать и воздухом и под водой."
+    },
+    {
+      "name": "Чувство магии",
+      "description": "Чууль чувствует магию в пределах 120 футов. Во всем остальном эта особенность действует как заклинание обнаружение магии, но не имеет магической природы."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Чууль совершает две атаки клешнями. Если чууль держит в захвате существо, он может также один раз использовать щупальца."
+    },
+    {
+      "name": "Клешня",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 10 футов, одна цель. Попадание: Дробящий урон 11 (2к6 + 4). Цель становится схваченной (Сл высвобождения 14), если у неё размер не больше Большого, и чууль держит в захвате не более двух существ.",
+      "attackBonus": 6,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Щупальца",
+      "type": "special",
+      "description": "Одно существо, схваченное чуулем, должно преуспеть в спасброске Телосложения Сл 13, иначе станет отравленной на 1 минуту. Пока цель отравлена, она парализована. Цель может повторять этот спасбросок в конце каждого своего хода, оканчивая эффект на себе при успехе.",
+      "save": {
+        "ability": "CON",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

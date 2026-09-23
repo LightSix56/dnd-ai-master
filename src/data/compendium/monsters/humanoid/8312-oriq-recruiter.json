@@ -1,0 +1,116 @@
+{
+  "id": "8312",
+  "slug": "8312-oriq-recruiter",
+  "name": "Вербовщик Орика",
+  "nameEn": "Oriq Recruiter",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "Колдун",
+  "alignment": "законно-злой",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Strixhaven: A Curriculum of Chaos",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "ненаправленная защита"
+  },
+  "hitPoints": {
+    "average": 55,
+    "hitDice": "10d8 + 10"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 14,
+    "con": 12,
+    "int": 17,
+    "wis": 15,
+    "cha": 18
+  },
+  "savingThrows": {
+    "int": 5,
+    "wis": 4,
+    "cha": 6
+  },
+  "skills": {
+    "arcana": 5,
+    "deception": 8,
+    "insight": 4,
+    "persuasion": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Знает Общий и ещё два языка."
+    },
+    {
+      "name": "Ненаправленная защита",
+      "description": "Пока вербовщик не носит ни доспехи, ни щит, к КД прибавляется его модификатор Харизмы."
+    },
+    {
+      "name": "Маска Орика",
+      "description": "Вербовщик носит маску Орика. Пока вербовщик носит эту маску, он не может стать целью магии прорицания или обнаружен с помощью магических сенсоров прорицания, и он добавляет удвоенный бонус мастерства к своим проверками Харизмы (Обман) (бонус уже включён)."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Вербовщик совершает две атаки Психическим ножом. Он может наложить заклинание вместо одной из атак."
+    },
+    {
+      "name": "Психический нож",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака заклинанием: +6 к попаданию, досягаемость 5 футов или дистанция 30 футов, одно существо. Попадание: 21 (5к6 + 4) урона психической энергией.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "range": {
+        "normal": 30
+      },
+      "damage": [
+        {
+          "dice": "5d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Вербовщик накладывает одно из следующих заклинаний, используя Харизму в качестве базовой характеристики (Сл спасброска от заклинаний 14):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "маскировка [disguise self], безмолвный образ [silent image];"
+    },
+    {
+      "name": "2/день",
+      "type": "special",
+      "description": "очарование личности [charm person];"
+    },
+    {
+      "name": "1/день",
+      "type": "special",
+      "description": "внушение [suggestion]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

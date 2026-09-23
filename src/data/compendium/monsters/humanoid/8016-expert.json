@@ -1,0 +1,119 @@
+{
+  "id": "8016",
+  "slug": "8016-expert",
+  "name": "Эксперт",
+  "nameEn": "Expert",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "1-й уровень",
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Essentials Kit: Dragon of Icespire peak",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "проклепанный кожаный доспех"
+  },
+  "hitPoints": {
+    "average": 11,
+    "hitDice": "2d8 + 2"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 15,
+    "con": 12,
+    "int": 13,
+    "wis": 10,
+    "cha": 14
+  },
+  "savingThrows": {
+    "dex": 4
+  },
+  "skills": {
+    "acrobatics": 4,
+    "performance": 4,
+    "sleight_of_hand": 4,
+    "stealth": 4,
+    "persuasion": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий",
+    "и ещё один язык"
+  ],
+  "traits": [
+    {
+      "name": "Помощник",
+      "description": "Эксперт может совершить действие Помощь бонусным действием."
+    },
+    {
+      "name": "Инструменты",
+      "description": "Эксперт владеет воровскими инструментами и музыкальным инструментом."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 5 (1к6 + 2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Кинжал",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +4 к попаданию, досягаемость 5 фт. или дистанция 20/60 фт., одна цель. Попадание: 4 (1к4 + 2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Короткий лук",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +4 к попаданию, дистанция 80/320 фт., одна цель. Попадание: 6 (1к8 + 2) колющего урона.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 80,
+        "long": 320
+      },
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

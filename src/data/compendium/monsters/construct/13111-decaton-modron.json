@@ -1,0 +1,126 @@
+{
+  "id": "13111",
+  "slug": "13111-decaton-modron",
+  "name": "Модрон декатон",
+  "nameEn": "Decaton Modron",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "законно-нейтральный",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Planescape: Adventures in the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 144,
+    "hitDice": "17d10 + 51"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 30,
+    "hover": true
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 12,
+    "con": 16,
+    "int": 15,
+    "wis": 15,
+    "cha": 11
+  },
+  "savingThrows": {
+    "int": 5,
+    "wis": 5
+  },
+  "skills": {
+    "perception": 8
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 18,
+    "truesight": 120
+  },
+  "languages": [
+    "Модронский",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Косное сознание",
+      "description": "Декатона нельзя заставить действовать так, как противоречит его природе или инструкциям."
+    },
+    {
+      "name": "Распад",
+      "description": "Если декатон умирает, его тело рассыпается в пыль, оставляя лишь оружие и то, что он нёс."
+    },
+    {
+      "name": "Боевая готовность",
+      "description": "Декатон с преимуществом совершает броски инициативы."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Декатон совершает три атаки Щупальцем."
+    },
+    {
+      "name": "Щупальце",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 10 футов, одна цель. Попадание: 15 (2к10 + 4) колющего урона, и если цель - существо Среднего размера или меньше, оно становится схваченным (Сл высвобождения 14). Пока захват не окончится, декатон не сможет использовать это щупальце против других целей. У декатона десять щупалец, каждое из которых может держать в захвате одну цель.",
+      "attackBonus": 7,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Электрические лучи (перезарядка 6)",
+      "type": "special",
+      "description": "Декатон выпускает шквал молний из своих глаз. Каждое существо в пределах 30 футов от декатона должно совершить спасбросок Ловкости Сл 13, получая 38 (7к10) урона электричеством при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "7d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "6",
+      "save": {
+        "ability": "DEX",
+        "dc": 13,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Декатон накладывает одно из следующих заклинаний, не нуждаясь в материальных компонентах, используя Интеллект в качестве базовой характеристики (Сл спасброска заклинания 13):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "обнаружение магии [detect magic], рассеивание магии [dispel magic], починка [mending] (действием)"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "уход в иной мир [plane shift] (только на себя), защита от зла и добра [protection from evil and good]"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

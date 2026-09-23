@@ -1,0 +1,63 @@
+{
+  "id": "8388",
+  "slug": "8388-displacer-beast-kitten",
+  "name": "Детёныш ускользающего зверя",
+  "nameEn": "Displacer Beast Kitten",
+  "size": "small",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "The Wild Beyond The Witchlight: A Feywild Adventure",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 9,
+    "hitDice": "2d6 + 2"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 13,
+    "con": 12,
+    "int": 4,
+    "wis": 10,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Ускользание",
+      "description": "Детёныш ускользающего зверя проецирует магическую иллюзию, из-за которой кажется, что он находится немного в стороне, и броски атаки по нему совершаются с помехой. Если по нему попадает атака, эта особенность перестаёт действовать до конца его следующего хода. Эта особенность также перестаёт действовать когда детёныш ускользающего зверя недееспособен или когда его скорость равна 0."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Щупальце",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: 2 дробящего урона плюс 2 колющего урона.",
+      "attackBonus": 3,
+      "reachFt": 5
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

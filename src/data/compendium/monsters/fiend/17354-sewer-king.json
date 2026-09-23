@@ -1,0 +1,88 @@
+{
+  "id": "17354",
+  "slug": "17354-sewer-king",
+  "name": "Король канализации",
+  "nameEn": "Sewer King",
+  "size": "medium",
+  "type": "fiend",
+  "subtype": null,
+  "alignment": "законно-злое",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Monstrous Compendium Vol. Four: Eldraine Creatures",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 52,
+    "hitDice": "8d8 + 16"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 13,
+    "con": 14,
+    "int": 8,
+    "wis": 12,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 5,
+    "stealth": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "darkvision": 120
+  },
+  "languages": [
+    "Инфернальный",
+    "Телепатия 30 фт."
+  ],
+  "traits": [
+    {
+      "name": "Звериная речь",
+      "description": "Король канализации может понимать и устно общаться с любым Зверем."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Протухший укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: 8 (1к8 + 4) колющего урона плюс 7 (2к6) урона кислотой. Если цель — существо, она должна преуспеть в спасброске Телосложения Сл 12, иначе станет отравленной до начала следующего хода короля канализации.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 12,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Призыв роя (1/день)",
+      "type": "special",
+      "description": "Король канализации бормочет и призывает на помощь рой крыс [swarm of rats]. Рой появляется в незанятом видимом королю пространстве в пределах 30 футов от него. Рой действует как союзник короля и подчиняется его приказам, и начинает свой ход сразу после короля. Рой остается до тех пор, пока король не умрет или пока король канализации не распустит его Действием."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

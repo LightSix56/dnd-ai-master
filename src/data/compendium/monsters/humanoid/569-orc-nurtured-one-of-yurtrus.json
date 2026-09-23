@@ -1,0 +1,85 @@
+{
+  "id": "569",
+  "slug": "569-orc-nurtured-one-of-yurtrus",
+  "name": "Орк вскормленный Юртруса",
+  "nameEn": "Orc nurtured one of Yurtrus",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "орк",
+  "alignment": "хаотично-злой",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Volo's guide to monsters",
+  "isNamed": false,
+  "armorClass": {
+    "value": 9
+  },
+  "hitPoints": {
+    "average": 30,
+    "hitDice": "4d8 + 12"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 8,
+    "con": 16,
+    "int": 7,
+    "wis": 11,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Орочий"
+  ],
+  "traits": [
+    {
+      "name": "Агрессия",
+      "description": "Бонусным действием орк может переместиться на расстояние не больше своей скорости к враждебному существу, которое может видеть."
+    },
+    {
+      "name": "Носитель заразы",
+      "description": "Когда хиты орка уменьшаются до 0, он взрывается и любое существо не далее 10 футов от него должно пройти спасбросок Телосложения Сл 13. При провале существо получается 14 (4к6) урона ядом и становится отравленным. При успехе существо получает половину этого урона и не отравлено. Существо, отравленное этим эффектом, может повторять спасбросок в конце каждого хода и окончить этот эффект на себе при успехе. Отравленное этим эффектом существо не может восстановить хиты."
+    },
+    {
+      "name": "Вскормленный Юртруса",
+      "description": "Орк имеет преимущество на спасброски от яда и болезней."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 4 (1к4 + 2) рубящего урона плюс 2 (1к4) урона некротической энергией.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Извращенная месть",
+      "type": "special",
+      "description": "Орк уменьшает свои хиты до 0 и активирует способность Носитель заразы."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

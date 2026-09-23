@@ -1,0 +1,101 @@
+{
+  "id": "4983",
+  "slug": "4983-living-lightning-bolt",
+  "name": "Ожившая молния",
+  "nameEn": "Living Lightning Bolt",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Eberron: Rising from the Last War",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 57,
+    "hitDice": "6d10 + 24"
+  },
+  "speed": {
+    "walk": 25,
+    "fly": 25
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 15,
+    "con": 18,
+    "int": 3,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Аморфность",
+      "description": "Живое заклинание может перемещаться в пространстве в один дюйм шириной, не протискиваясь."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Живое заклинание имеет преимущества на спасброски от заклинаний."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Живое заклинание совершает два магических удара."
+    },
+    {
+      "name": "Магический удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака заклинанием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: 21 (5к6+4) урона электричеством.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "5d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Имитация заклинания (Перезарядка 5-6)",
+      "type": "special",
+      "description": "Живое заклинание формирует линию длиной 100 футов и шириной 5 футов, вылетающую в выбранном вами направлении. Все существа в линии должны совершить спасбросок Ловкости Сл 15. При провале существо получает 28 (8к6) урона электричеством, или половину урона при успехе.",
+      "damage": [
+        {
+          "dice": "8d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "DEX",
+        "dc": 15,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

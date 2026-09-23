@@ -1,0 +1,68 @@
+{
+  "id": "5980",
+  "slug": "5980-archelon-zombie",
+  "name": "Архелон зомби",
+  "nameEn": "Archelon Zombie",
+  "size": "large",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Adventurers League",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 26,
+    "hitDice": "4d8 + 8"
+  },
+  "speed": {
+    "walk": 10,
+    "swim": 20
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 6,
+    "con": 14,
+    "int": 1,
+    "wis": 8,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 9,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 12 (2к8 + 3) колющего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,96 @@
+{
+  "id": "282",
+  "slug": "282-scarecrow",
+  "name": "Пугало",
+  "nameEn": "Scarecrow",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "хаотично-злой",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11
+  },
+  "hitPoints": {
+    "average": 36,
+    "hitDice": "8d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 13,
+    "con": 11,
+    "int": 10,
+    "wis": 10,
+    "cha": 13
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [
+    "fire"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "понимает языки своего создателя",
+    "но не говорит."
+  ],
+  "traits": [
+    {
+      "name": "Обманчивая внешность",
+      "description": "Пока пугало остается без движения, оно неотличимо от обычного, неоживленного пугала."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Пугало совершает две атаки когтем."
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 6 (2к4 + 1). Если цель — существо, она должна преуспеть в спасброске Мудрости Сл 11, иначе станет испуганной до конца следующего хода пугала.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 1,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CHA",
+        "dc": 11,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Ужасающий взор",
+      "type": "special",
+      "description": "Пугало нацеливается на одно существо, которое видит в пределах 30 футов от себя. Если цель видит пугало, она должна преуспеть в спасброске Мудрости Сл 11, иначе станет магическим образом испуганной до конца следующего хода пугала. Пока цель испугана, она также парализована.",
+      "save": {
+        "ability": "CHA",
+        "dc": 11,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

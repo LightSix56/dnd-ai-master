@@ -1,0 +1,123 @@
+{
+  "id": "8068",
+  "slug": "8068-lorehold-pledgemage",
+  "name": "Маг клятвы с Лорхолда",
+  "nameEn": "Lorehold Pledgemage",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "Волшебник",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Strixhaven: A Curriculum of Chaos",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "16 с доспехом мага"
+  },
+  "hitPoints": {
+    "average": 60,
+    "hitDice": "11d8 + 11"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 16,
+    "con": 13,
+    "int": 17,
+    "wis": 12,
+    "cha": 11
+  },
+  "savingThrows": {
+    "con": 3,
+    "int": 5
+  },
+  "skills": {
+    "history": 7,
+    "insight": 3,
+    "investigation": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [
+    "Общий",
+    "и два любых языка"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Маг клятвы совершает две атаки Ударом свитком."
+    },
+    {
+      "name": "Удар свитком",
+      "type": "melee_attack",
+      "description": "Рукопашная атака заклинанием: +5 к попаданию, досягаемость 30 футов, одна цель. Попадание: 8 (1к10 + 3) дробящего урона плюс 9 (2к8) урона звуком.",
+      "attackBonus": 5,
+      "reachFt": 30,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Свести к воспоминаниям (перезарядка 5–6)",
+      "type": "special",
+      "description": "Грохочущая золотистая энергия извергается вокруг существа, которое маг клятвы может видеть в пределах 90 футов. Существо должно совершить спасбросок Телосложения Сл 13, получая 44 (8к10) урона звуком при провале или половину этого урона при успехе. Конструкты совершают спасбросок с помехой.",
+      "damage": [
+        {
+          "dice": "8d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "CON",
+        "dc": 13,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Маг клятвы накладывает одно из следующих заклинаний, используя Интеллект в качестве базовой характеристики (Сл спасброска от заклинаний 13):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "указание [guidance], свет [light];"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "понимание языков [comprehend languages], поиск предмета [locate object];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "разговор с мёртвыми [speak with dead], изменение формы камня [stone shape], доспехи мага [mage armor]."
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Мудрость прошлого (2/день)",
+      "type": "special",
+      "description": "Когда другое существо в пределах 60 футов от мага клятвы промахивается по цели броском атаки, маг клятвы волшебным образом позволяет атакующему повторить бросок атаки. Он должен использовать новый результат."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

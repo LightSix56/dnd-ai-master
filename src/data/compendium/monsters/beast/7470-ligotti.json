@@ -1,0 +1,65 @@
+{
+  "id": "7470",
+  "slug": "7470-ligotti",
+  "name": "Лиготти",
+  "nameEn": "Ligotti",
+  "size": "tiny",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения, именной НИП",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "Acquisition Incorporated",
+  "isNamed": true,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 2,
+    "hitDice": "1d4"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 2,
+    "dex": 16,
+    "con": 11,
+    "int": 12,
+    "wis": 10,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "blindsight": 10
+  },
+  "languages": [
+    "Телепатия 30 фт."
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 1, и цель должна совершить спасбросок Телосложения Сл 10, получая урон ядом 5 (2к4) при провале, или половину этого урона при успехе.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "save": {
+        "ability": "CON",
+        "dc": 10,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

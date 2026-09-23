@@ -1,0 +1,84 @@
+{
+  "id": "8545",
+  "slug": "8545-white-jade-emperor",
+  "name": "Белый Нефритовый император",
+  "nameEn": "White Jade Emperor",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "Дварф",
+  "alignment": "законно-нейтральный, именной НИП",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "Journeys through the Radiant Citadel",
+  "isNamed": true,
+  "armorClass": {
+    "value": 15,
+    "type": "кираса"
+  },
+  "hitPoints": {
+    "average": 9,
+    "hitDice": "2d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 12,
+    "con": 11,
+    "int": 12,
+    "wis": 14,
+    "cha": 16
+  },
+  "savingThrows": {},
+  "skills": {
+    "deception": 5,
+    "insight": 4,
+    "persuasion": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Знает Дварфийский и два любых языка."
+    },
+    {
+      "name": "Дварфская устойчивость",
+      "description": "Нефритовый император совершает с преимуществом спасброски от яда."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Рапира",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: 5 (1к8 + 1) колющего урона.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Парирование",
+      "type": "special",
+      "description": "Нефритовый император добавляет 2 к КД против одной рукопашной атаки, которая должна попасть по нему. Для этого Нефритовый император должен видеть атакующего, и должен использовать рукопашное оружие."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

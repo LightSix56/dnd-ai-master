@@ -1,0 +1,87 @@
+{
+  "id": "17272",
+  "slug": "17272-kraul-warrior",
+  "name": "Воитель краулов",
+  "nameEn": "Kraul Warrior",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "краул",
+  "alignment": "нейтрально-злой",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 27,
+    "hitDice": "5d8 + 5"
+  },
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 12,
+    "con": 13,
+    "int": 10,
+    "wis": 11,
+    "cha": 8
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 60
+  },
+  "languages": [
+    "Краул",
+    "понимает Общий",
+    "но не говорит на нём"
+  ],
+  "traits": [
+    {
+      "name": "Коллективный разум",
+      "description": "Краул обладает иммунитетом к состояниям очарованный и испуганный, если находится на расстоянии до 30 футов от другого краула."
+    },
+    {
+      "name": "Тактика стаи",
+      "description": "Краул совершает атаку против существа с преимуществом если хотя бы один из союзников краула находится в пределах 5 футов от существа и союзник дееспособен."
+    },
+    {
+      "name": "Паучье лазание",
+      "description": "Краул может карабкаться по сложным поверхностям, в том числе вверх ногами по потолку, без необходимости совершать проверки характеристик."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Копьё",
+      "type": "melee_attack",
+      "description": "Дальнобойная или рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт. или дистанция 20/60 фт., одна цель. Попадание: 5 (1к6 + 2) колющего урона или 6 (1к8 + 2) колющего урона, если используется двумя руками для рукопашной атаки.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

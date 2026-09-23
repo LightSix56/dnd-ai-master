@@ -1,0 +1,74 @@
+{
+  "id": "17365",
+  "slug": "17365-killmoulis",
+  "name": "Кильмулис",
+  "nameEn": "Killmoulis",
+  "size": "tiny",
+  "type": "fey",
+  "subtype": null,
+  "alignment": "нейтральная",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Mordenkainen's Fiendish Folio Vol 1",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14
+  },
+  "hitPoints": {
+    "average": 7,
+    "hitDice": "2d4 + 2"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 4,
+    "dex": 19,
+    "con": 13,
+    "int": 12,
+    "wis": 14,
+    "cha": 13
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4,
+    "history": 3,
+    "stealth": 8
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 30
+  },
+  "languages": [
+    "Общий",
+    "Сильван",
+    "Телепатия 60 фт."
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: −1 к попаданию, досягаемость 5 фт., одна цель. Попадание: 1 (1) дробящего урона.",
+      "reachFt": 5
+    },
+    {
+      "name": "Благословение обильной щедрости (1/день)",
+      "type": "special",
+      "description": "Кильмулис выбирает до 8 видимых существ, находящихся в пределах 100 футов. В следующий раз, когда они закончат продолжительный отдых, они восстановят все Кости Хитов и получат 10 временных хитов."
+    },
+    {
+      "name": "Проклятие дурного гостепреимства (1/день)",
+      "type": "special",
+      "description": "Кильмулис выбирает до 8 видимых существ, находящихся в пределах 100 футов. В следующий раз, когда они закончат продолжительный отдых, они не восстановят Кости Хитов."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

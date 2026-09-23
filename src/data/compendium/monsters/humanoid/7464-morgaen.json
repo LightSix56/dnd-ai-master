@@ -1,0 +1,122 @@
+{
+  "id": "7464",
+  "slug": "7464-morgaen",
+  "name": "Моургаэн",
+  "nameEn": "Môrgæn",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "эльф",
+  "alignment": "хаотично-нейтральный, именной НИП",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Acquisition Incorporated",
+  "isNamed": true,
+  "armorClass": {
+    "value": 16,
+    "type": "проклёпанный доспех"
+  },
+  "hitPoints": {
+    "average": 66,
+    "hitDice": "12d8 + 12"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 18,
+    "con": 12,
+    "int": 12,
+    "wis": 14,
+    "cha": 10
+  },
+  "savingThrows": {
+    "str": 3,
+    "dex": 6
+  },
+  "skills": {
+    "athletics": 3,
+    "perception": 4,
+    "survival": 4,
+    "nature": 3,
+    "insight": 4,
+    "stealth": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Великаний",
+    "Гоблинский",
+    "Дварфийский",
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Наследие фей",
+      "description": "Моургаэн совершает с преимуществом спасброски от очарования, и магия не может её усыпить."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Способность к заклинаниям Моургаэн основана на Интеллекте. Моургаэн может накладывать следующие заклинание без использования материальных компонентов:"
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Моургаэн является заклинателем 9-го уровня. Её базовой характеристикой является Мудрость (Сл спасброска от заклинания 12, +4 к попаданию атаками заклинаниями). У неё подготовлены следующие заклинания следопыта:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Моургаэн совершает три атаки Скимитаром или Длинным луком."
+    },
+    {
+      "name": "Скимитар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к6 + 4) рубящего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Длинный лук",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +6 к попаданию, дистанция 150/600 футов, одна цель. Попадание: 8 (1к8 + 4) колющего урона.",
+      "attackBonus": 6,
+      "range": {
+        "normal": 150,
+        "long": 600
+      },
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 9,
+    "spellAttackBonus": 4,
+    "ability": "WIS"
+  }
+}

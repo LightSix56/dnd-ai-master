@@ -1,0 +1,78 @@
+{
+  "id": "8973",
+  "slug": "8973-mangonel",
+  "name": "Мангонель",
+  "nameEn": "Mangonel",
+  "size": "large",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Dungeon Master's Guide",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15
+  },
+  "hitPoints": {
+    "average": 100,
+    "hitDice": "1d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 10,
+    "con": 10,
+    "int": 10,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Мангонель это разновидность онагра, мечу",
+      "description": "щая тяжёлые снаряды по высокой дуге. Эти снаряды могут попадать по целям, находящимся за укрытием. Прежде чем совершить выстрел, мангонель нужно зарядить и навести на цель. Требуется два действия для зарядки, два действия для нацеливания и одно действие для выстрела."
+    },
+    {
+      "name": "Обычно мангонель мечет тяжёлые камни, но",
+      "description": "может метать и другие снаряды, с другими эффектами."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Камень из мангонели",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +5 к попаданию, дистанция 200/800 фт. (не может атаковать цели в пределах 60 футов), одна цель. Попадание: 27 (5к10) дробящего урона.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 200,
+        "long": 800
+      },
+      "damage": [
+        {
+          "dice": "5d10",
+          "mod": 0,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,85 @@
+{
+  "id": "46",
+  "slug": "46-vine-blight",
+  "name": "Вьющаяся зараза",
+  "nameEn": "Vine blight",
+  "size": "medium",
+  "type": "plant",
+  "subtype": null,
+  "alignment": "нейтрально-злое",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 26,
+    "hitDice": "4d8 + 8"
+  },
+  "speed": {
+    "walk": 10
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 8,
+    "con": 14,
+    "int": 5,
+    "wis": 10,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {
+    "stealth": 1
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "blindsight": 60
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Обманчивая внешность",
+      "description": "Пока зараза остается без движения, она неотличима от клубка лиан."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Сжимание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 10 футов, одна цель. Попадание: Дробящий урон 9 (2к6 + 2), и если размер цели не больше Большого, она становится схваченной (Сл высвобождения 12). Пока цель схвачена, она опутана, и зараза не может сжимать другую цель.",
+      "attackBonus": 4,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Опутывающие растения (перезарядка 5–6)",
+      "type": "special",
+      "description": "Цепкие корни и плети вырастают в 15-футовом радиусе вокруг заразы, засыхая через 1 минуту. В течение этого времени эта область является труднопроходимой местностью для существ, не являющихся растениями. Кроме того, все существа на выбор заразы, находящиеся в этой местности, когда растения только появляются, должны преуспеть в спасброске Силы Сл 12, иначе станут опутанными. Любое существо может действием совершить проверку Силы Сл 12, освобождая себя или другое опутанное существо при успехе.",
+      "recharge": "5-6",
+      "save": {
+        "ability": "STR",
+        "dc": 12,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

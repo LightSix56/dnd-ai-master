@@ -1,0 +1,88 @@
+{
+  "id": "12552",
+  "slug": "12552-goblin-psi-brawler",
+  "name": "Гоблин пси-драчун",
+  "nameEn": "Goblin Psi Brawler",
+  "size": "small",
+  "type": "aberration",
+  "subtype": "Гоблиноид",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Phandelver and Below: The Shattered Obelisk",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "проклёпанный кожаный доспех"
+  },
+  "hitPoints": {
+    "average": 31,
+    "hitDice": "7d6 + 7"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 9,
+    "dex": 17,
+    "con": 12,
+    "int": 16,
+    "wis": 15,
+    "cha": 10
+  },
+  "savingThrows": {
+    "int": 5,
+    "wis": 4
+  },
+  "skills": {
+    "stealth": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Гоблинский",
+    "Телепатия 30 фт."
+  ],
+  "traits": [
+    {
+      "name": "Ментальный взрыв",
+      "description": "Когда гоблин умирает, его сдерживаемая ментальная энергия взрывается психическим взрывом. Каждое существо в пределах 5 футов от него должно преуспеть в спасброске Интеллекта Сл 13, иначе получит 5 (2к4) урона психической энергией."
+    },
+    {
+      "name": "Ментальная стойкость",
+      "description": "Гоблин совершает с преимуществом спасброски против эффектов, которые могут его очаровывать или испугать."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Гоблин совершает два Безоружных удара."
+    },
+    {
+      "name": "Безоружный удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 5 (1к4 + 3) дробящего урона плюс урона 3 (1к6) психической энергией.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

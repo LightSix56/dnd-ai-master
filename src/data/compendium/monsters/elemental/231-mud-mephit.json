@@ -1,0 +1,93 @@
+{
+  "id": "231",
+  "slug": "231-mud-mephit",
+  "name": "Грязевой мефит",
+  "nameEn": "Mud mephit",
+  "size": "small",
+  "type": "elemental",
+  "subtype": null,
+  "alignment": "нейтрально-злой",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11
+  },
+  "hitPoints": {
+    "average": 27,
+    "hitDice": "6d6 + 6"
+  },
+  "speed": {
+    "walk": 20,
+    "fly": 20,
+    "swim": 20
+  },
+  "abilities": {
+    "str": 8,
+    "dex": 12,
+    "con": 12,
+    "int": 9,
+    "wis": 11,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {
+    "stealth": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Акван",
+    "Терран"
+  ],
+  "traits": [
+    {
+      "name": "Предсмертная вспышка",
+      "description": "Когда мефит умирает, он разлетается во все стороны липкой грязью. Все существа с размером не больше Среднего в пределах 5 футов от него должны преуспеть в спасброске Ловкости Сл 11, иначе станут опутанными до конца своего следующего хода."
+    },
+    {
+      "name": "Обманчивая внешность",
+      "description": "Пока мефит остаётся без движения, он неотличим от обычной кучи грязи."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Кулаки",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одно существо. Попадание: Дробящий урон 4 (1к6+1).",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 1,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Грязевое дыхание (перезарядка 6)",
+      "type": "breath",
+      "description": "Мефит изрыгает липкую грязь на одно существо, находящееся в пределах 5 футов от него. Если размер цели не больше Среднего, она должна преуспеть в спасброске Ловкости Сл 11, иначе станет опутанной на 1 минуту. Существо может повторять этот спасбросок в конце каждого своего хода, оканчивая эффект на себе при успехе.",
+      "recharge": "6",
+      "save": {
+        "ability": "DEX",
+        "dc": 11,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

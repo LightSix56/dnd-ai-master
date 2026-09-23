@@ -1,0 +1,95 @@
+{
+  "id": "7483",
+  "slug": "7483-clockwork-dragon",
+  "name": "Заводной дракон",
+  "nameEn": "Clockwork Dragon",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Acquisition Incorporated",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "4d8 + 4"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 60
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 10,
+    "con": 12,
+    "int": 10,
+    "wis": 11,
+    "cha": 13
+  },
+  "savingThrows": {},
+  "skills": {
+    "acrobatics": 2,
+    "perception": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "blindsight": 60,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Обманчивая внешность",
+      "description": "Пока заводной дракон остается без движения, он неотличим от металлической статуи."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к10 + 2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Огненное дыхание",
+      "type": "breath",
+      "description": "Дракон выдыхает огонь 15-футовым конусом. Все существа в этой области должны совершить спасбросок Ловкости Сл 11, получая урон огнём 14 (4к6) при провале, или половину этого урона при успехе.",
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 15
+      },
+      "save": {
+        "ability": "DEX",
+        "dc": 11,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

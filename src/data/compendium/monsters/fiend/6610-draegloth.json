@@ -1,0 +1,157 @@
+{
+  "id": "6610",
+  "slug": "6610-draegloth",
+  "name": "Дрэглот",
+  "nameEn": "Draegloth]Дрэглот [Draegloth",
+  "size": "large",
+  "type": "fiend",
+  "subtype": "демон",
+  "alignment": "обычно хаотично-злоеБольшое? Исчадие (демон), хаотично-злое",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 123,
+    "hitDice": "13d10 + 52"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 15,
+    "con": 18,
+    "int": 13,
+    "wis": 11,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "darkvision": 120
+  },
+  "languages": [
+    "Бездны",
+    "Подземный",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Наследие фей",
+      "description": "Дрэглот получает преимущество на спасброски против очарования и не может быть магически усыплён."
+    },
+    {
+      "name": "Наследие фей",
+      "description": "Дрэглот получает преимущество на спасброски против очарования и не может быть магически усыплён."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Способность дрэглота к заклинаниям основана на Харизме (Сл спасброска от заклинаний 11). Дрэглот может накладывать следующие заклинания без использования материальных компонентов:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дрэглот совершает одну атаку Укусом и две атаки Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одно существо. Попадание: 16 (2к10+ 5) колющего урона.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 10 футов, одна цель. Попадание: 16 (2к10+ 5) рубящего урона.",
+      "attackBonus": 8,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Дрэглот накладывает одно из следующих заклинаний, без использования материальных компонентов с используя Харизму в качестве базовой характеристики (Сл спасброска от заклинаний 11):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "пляшущие огоньки [dancing lights], тьма [darkness];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "смятение [confusion], огонь фей [faerie fire]."
+    },
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дрэглот совершает три атаки: одну укусом и две когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одно существо. Попадание: 16 (2к10+ 5) колющего урона.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 10 футов, одна цель. Попадание: 16 (2к10+ 5) рубящего урона.",
+      "attackBonus": 8,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "id": "12092",
+  "slug": "12092-aerosaur",
+  "name": "Аэрозавр",
+  "nameEn": "Aerosaur",
+  "size": "gargantuan",
+  "type": "monstrosity",
+  "subtype": "Динозавр",
+  "alignment": "без мировоззрения",
+  "challengeRating": 10,
+  "xp": 5900,
+  "source": "Bigby Presents: Glory of the Giants",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 155,
+    "hitDice": "10d20 + 50"
+  },
+  "speed": {
+    "walk": 20,
+    "fly": 120
+  },
+  "abilities": {
+    "str": 26,
+    "dex": 10,
+    "con": 21,
+    "int": 3,
+    "wis": 10,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Аэрозавр совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Аэрозавр совершает одну атаку Укусом и одну атаку Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +12 к попаданию, досягаемость 10 футов, одна цель. Попадание: 27 (3к12 + 8) колющего урона. Если целью является существо Огромного размера или меньше, оно становится схваченным (Сл высвобождения 18). Пока цель схвачена, она так же опутана, и аэрозавр не может Укусить другую цель.",
+      "attackBonus": 12,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d12",
+          "mod": 8,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +12 к попаданию, досягаемость 10 футов, одна цель. Попадание: 24 (3к10 + 8) рубящего урона.",
+      "attackBonus": 12,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 8,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Шквал от крыльев (перезарядка 5-6)",
+      "type": "special",
+      "description": "Аэрозавр хлопает крыльями, создавая взрывы оглушительной силы. Каждое существо в переделах 10 футов от аэрозавра должно совершить спасбросок Силы Сл 20. В случае провала существо получает 38 (7к10) урона звуком, отбрасывается на расстояние до 30 футов по горизонтали от аэрозавра и падает ничком. В случае успеха существо получает половину этого урона и отбрасывается от аэрозавра на расстояние до 15 футов по горизонтали.",
+      "damage": [
+        {
+          "dice": "7d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "STR",
+        "dc": 20,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "id": "17278",
+  "slug": "17278-hybrid-brute",
+  "name": "Гибрид-громила",
+  "nameEn": "Hybrid Brute",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "гибрид Симиков",
+  "alignment": "нейтрально-добрый",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 52,
+    "hitDice": "8d8 + 16"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 11,
+    "con": 15,
+    "int": 8,
+    "wis": 11,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий",
+    "плюс один язык"
+  ],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Гибрид может дышать воздухом и под водой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Гибрид совершает две атаки Когтем."
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: 7 (1к6 + 4) рубящего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

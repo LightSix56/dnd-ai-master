@@ -1,0 +1,117 @@
+{
+  "id": "13125",
+  "slug": "13125-cuprilach-rilmani",
+  "name": "Рилмани куприлах",
+  "nameEn": "Cuprilach Rilmani",
+  "size": "medium",
+  "type": "celestial",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 12,
+  "xp": 8400,
+  "source": "Planescape: Adventures in the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 202,
+    "hitDice": "27d8 + 81"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 20,
+    "con": 16,
+    "int": 16,
+    "wis": 15,
+    "cha": 14
+  },
+  "savingThrows": {
+    "dex": 9,
+    "cha": 6
+  },
+  "skills": {
+    "perception": 6,
+    "stealth": 13
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "truesight": 120
+  },
+  "languages": [
+    "любые четыре языка",
+    "Телепатия 120 фт."
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Куприлах совершает три атаки Отполированным клинком или Снарядом."
+    },
+    {
+      "name": "Отполированный клинок",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 футов, одна цель. Попадание: 8 (1к6 + 5) колющего урона плюс 13 (2к12) урона психической энергией.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Снаряд",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +9 к попаданию, дистанция 20/60 футов, одна цель. Попадание: 7 (1к4 + 5) колющего урона плюс 13 (2к12) урона психической энергией.",
+      "attackBonus": 9,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Куприлах накладывает одно из следующих заклинаний, не нуждаясь в материальных компонентах, используя Интеллект в качестве базовой характеристики (Сл спасброска заклинания 15):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "обнаружение магии [detect magic], маскировка [disguise self]"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "смена обличья [alter self], туманное облако [fog cloud], тишина [silence]"
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Невероятное уклонение",
+      "type": "special",
+      "description": "Куприлах уменьшает вдвое урон от попавшей по нему атаки. Он должен видеть нападавшего."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

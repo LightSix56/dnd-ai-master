@@ -1,0 +1,95 @@
+{
+  "id": "110",
+  "slug": "110-red-dragon-wyrmling",
+  "name": "Вирмлинг красного дракона",
+  "nameEn": "Red dragon wyrmling",
+  "size": "medium",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "хаотично-злой",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 75,
+    "hitDice": "10d8 + 30"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 60,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 10,
+    "con": 17,
+    "int": 12,
+    "wis": 11,
+    "cha": 15
+  },
+  "savingThrows": {
+    "dex": 2,
+    "con": 5,
+    "wis": 2,
+    "cha": 4
+  },
+  "skills": {
+    "perception": 4,
+    "stealth": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "blindsight": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Драконий"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 9 (1к10 + 4) плюс урон огнём 3 (1к6).",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 4,
+          "type": "плюс"
+        }
+      ]
+    },
+    {
+      "name": "Огненное дыхание (перезарядка 5–6)",
+      "type": "breath",
+      "description": "Дракон выдыхает огонь 15-футовым конусом. Все существа в этой области должны совершить спасбросок Ловкости Сл 13, получая урон огнём 24 (7к6) при провале, или половину этого урона при успехе.",
+      "recharge": "5-6",
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 15
+      },
+      "save": {
+        "ability": "DEX",
+        "dc": 13,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,111 @@
+{
+  "id": "3641",
+  "slug": "3641-skitterwidget",
+  "name": "Шустроштука",
+  "nameEn": "Skitterwidget",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Candlekeep Mysteries",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 85,
+    "hitDice": "10d8 + 40"
+  },
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 14,
+    "con": 18,
+    "int": 3,
+    "wis": 10,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Язык Шустроштук."
+    },
+    {
+      "name": "Поглощение электричества",
+      "description": "Каждый раз, когда шустроштука должна получить урон электричеством, она не получает урон, и вместо этого восстанавливает число хитов, равное причиняемому урону электричеством."
+    },
+    {
+      "name": "Необычная природа",
+      "description": "Шустроштуке не нужен воздух, еда, питье и сон."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Шустроштука совершает две атаки: одну укусом и одну хвостом."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием:+6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 10 (2к6 + 3) колющего урона. Если цель существо, то оно становится схваченным шустроштукой (Сл высвобождения 13).",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Хвост",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к6 + 3) колющего урона плюс 10 (3к6) урона электричеством и если цель существо, то оно должно преуспеть в спасброске Телосложения Сл 15, иначе станет ошеломлённой до конца своего следующего хода.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Хороший родитель",
+      "type": "special",
+      "description": "Шустроштука накладывает помеху на один бросок атаки, совершаемый против маленького шустрика, которого он может видеть в пределах 5 футов от себя."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

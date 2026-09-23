@@ -1,0 +1,123 @@
+{
+  "id": "17234",
+  "slug": "17234-sion",
+  "name": "Сион",
+  "nameEn": "Sion",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек, чародей",
+  "alignment": "чародей), нейтрально-злой, именной НИП",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Quest from the Infinite Staircase",
+  "isNamed": true,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 49,
+    "hitDice": "9d8 + 9"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 14,
+    "con": 13,
+    "int": 12,
+    "wis": 14,
+    "cha": 16
+  },
+  "savingThrows": {
+    "con": 3,
+    "cha": 5
+  },
+  "skills": {
+    "perception": 4,
+    "arcana": 3,
+    "stealth": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 120
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Сион совершает с преимуществом спасброски от заклинаний и прочих магических эффектов, пока находится в области тусклого света или темноты."
+    },
+    {
+      "name": "Теневой взор",
+      "description": "Магическая тьма не мешает темному зрению Сиона."
+    },
+    {
+      "name": "Теневая гибель",
+      "description": "Если Сион умирает, его тело сплавляется с тенью, оставляя после себя только снаряжение, которое он носил и нес."
+    },
+    {
+      "name": "Слабость на солнечном свете",
+      "description": "Под солнечным светом Сион совершает с помехой броски атаки, проверки характеристик и спасброски."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Сион совершает две атаки Теневым мечом, после чего применяет Теневой захват или Использование заклинаний."
+    },
+    {
+      "name": "Теневой меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 14 (2к10 + 3) урона некротической энергией.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Теневой захват",
+      "type": "special",
+      "description": "Сион выбирает целью видимое им в пределах 60 футов существо. Цель должна совершить спасбросок Харизмы Сл 13. При провале цель становится схваченной (Сл высвобождения 13) из-за того, что ее собственная тень сдавливает ее. Тень возвращается в норму сразу после того, как цель освобождается из захвата.",
+      "save": {
+        "ability": "CHA",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Сион накладывает одно из следующих заклинаний, используя Харизму в качестве базовой характеристики (Сл спасброска 13):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "волшебная рука [mage hand], малая иллюзия [minor illusion]"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "тьма [darkness], отражения [mirror image], тишина [silence]"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "id": "126",
+  "slug": "126-copper-dragon-wyrmling",
+  "name": "Вирмлинг медного дракона",
+  "nameEn": "Copper dragon wyrmling",
+  "size": "medium",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "хаотично-добрый",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "4d8 + 4"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 60,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 12,
+    "con": 13,
+    "int": 14,
+    "wis": 11,
+    "cha": 13
+  },
+  "savingThrows": {
+    "dex": 3,
+    "con": 3,
+    "wis": 2,
+    "cha": 3
+  },
+  "skills": {
+    "perception": 4,
+    "stealth": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "acid"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "blindsight": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Драконий"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 7 (1к10 + 2).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Оружие дыхания (перезарядка 5–6)",
+      "type": "special",
+      "description": "Дракон использует один из следующих видов оружия дыхания.",
+      "recharge": "5-6"
+    },
+    {
+      "name": "Кислотное дыхание",
+      "type": "breath",
+      "description": "Дракон выдыхает кислоту 20-футовой линией шириной 5 футов. Все существа в этой линии должны совершить спасбросок Ловкости Сл 11, получая урон кислотой 18 (4к8) при провале, или половину этого урона при успехе.",
+      "recharge": "5-6",
+      "save": {
+        "ability": "DEX",
+        "dc": 11,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Замедляющее дыхание",
+      "type": "breath",
+      "description": "Дракон выдыхает газ 15-футовым конусом. Все существа в этой области должны преуспеть в спасброске Телосложения Сл 11. При провале существо не может использовать реакции, его скорость уменьшается вдвое, и оно не может совершать более одной атаки в ход. Кроме того, существо может в свой ход совершать либо действие, либо бонусное действие, но не то и другое. Эти эффекты длятся 1 минуту. Существо может повторять этот спасбросок в конце каждого своего хода, оканчивая эффект на себе при успехе.",
+      "recharge": "5-6",
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 15
+      },
+      "save": {
+        "ability": "CON",
+        "dc": 11,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

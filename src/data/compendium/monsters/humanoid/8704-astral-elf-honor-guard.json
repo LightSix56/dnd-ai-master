@@ -1,0 +1,103 @@
+{
+  "id": "8704",
+  "slug": "8704-astral-elf-honor-guard",
+  "name": "Астральный эльф почетный караульный",
+  "nameEn": "Astral Elf Honor Guard",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "любое мировоззрение",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "полулаты"
+  },
+  "hitPoints": {
+    "average": 93,
+    "hitDice": "17d8 + 17"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 15,
+    "con": 12,
+    "int": 17,
+    "wis": 16,
+    "cha": 16
+  },
+  "savingThrows": {
+    "wis": 6,
+    "cha": 6
+  },
+  "skills": {
+    "perception": 6,
+    "survival": 6,
+    "intimidation": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Небесный",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Наследие фей",
+      "description": "Эльф с преимуществом совершает спасброски от состояния очарованный, и его невозможно магически усыпить."
+    },
+    {
+      "name": "Необычная природа",
+      "description": "Эльф не нуждается во сне."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Эльф совершает две атаки Длинным мечом или Лучом излучения."
+    },
+    {
+      "name": "Длинный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 11 (2к8 + 2) рубящего урона или 13 (2к10 + 2) рубящего урона, если используется двумя руками, плюс 10 (3к6) урона излучением.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Луч излучения",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +6 к попаданию, дальность 120 футов, одна цель. Попадание: 22 (4к10) урона излучением.",
+      "attackBonus": 6,
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,103 @@
+{
+  "id": "8058",
+  "slug": "8058-cogwork-archivist",
+  "name": "Механический архивариус",
+  "nameEn": "Cogwork Archivist",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "законно-нейтральный",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Strixhaven: A Curriculum of Chaos",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 90,
+    "hitDice": "12d10 + 24"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 10,
+    "con": 15,
+    "int": 17,
+    "wis": 11,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 2,
+    "history": 5,
+    "arcana": 5,
+    "nature": 5,
+    "religion": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Все"
+  ],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Архивариус совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Архивариус совершает две атаки Хватательными конечностями."
+    },
+    {
+      "name": "Хватательная конечность",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 15 футов, одна цель. Попадание: 13 (2к8 + 4) дробящего урона и цель схвачена (Сл высвобождения 14). Архивариус может одновременно держать схваченными не более двух целей.",
+      "attackBonus": 6,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Архивариус накладывает одно из следующих заклинаний, используя Интеллект в качестве базовой характеристики и без использования материальных компонентов:"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "пляшущие огоньки [dancing lights], фокусы [prestidigitation];"
+    },
+    {
+      "name": "2/день",
+      "type": "special",
+      "description": "тишина [silence]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

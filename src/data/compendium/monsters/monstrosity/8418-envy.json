@@ -1,0 +1,104 @@
+{
+  "id": "8418",
+  "slug": "8418-envy",
+  "name": "Зависть",
+  "nameEn": "Envy",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения, именной НИП",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "The Wild Beyond The Witchlight: A Feywild Adventure",
+  "isNamed": true,
+  "armorClass": {
+    "value": 19,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 114,
+    "hitDice": "12d10 + 48"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 11,
+    "con": 18,
+    "int": 2,
+    "wis": 12,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Сильван"
+  ],
+  "traits": [
+    {
+      "name": "Растаптывающий рывок",
+      "description": "Если Зависть переместится как минимум на 20 футов по прямой к существу, а затем в том же ходу попадет по нему атакой укусом, эта цель должна преуспеть в спасброске Силы Сл 16, иначе будет сбита с ног. Если цель сбита с ног, Зависть может бонусным действием совершить по ней ещё одну атаку укусом."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одна цель. Попадание: 18 (2d12 + 5) колющего урона.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d12",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одна цель. Попадание: 16 (2d10 + 5) дробящего урона.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 5,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Окаменяющее дыхание (перезарядка 5–6)",
+      "type": "breath",
+      "description": "Зависть выдыхает окаменяющий газ 30-футовым конусом. Все существа в этой области должны преуспеть в спасброске Телосложения Сл 13. При провале цель начинает превращаться в камень и становится опутанной. Опутанная цель должна повторить спасбросок в конце своего следующего хода. При успехе эффект на этой цели оканчивается. При провале цель становится окаменевшей, пока не будет вылечена заклинанием высшее восстановление [greater restoration] или подобной магией.",
+      "recharge": "5-6",
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 30
+      },
+      "save": {
+        "ability": "CON",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

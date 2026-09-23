@@ -1,0 +1,74 @@
+{
+  "id": "12705",
+  "slug": "12705-ashen-warhorse",
+  "name": "Пепельный боевой конь",
+  "nameEn": "Ashen Warhorse",
+  "size": "large",
+  "type": "elemental",
+  "subtype": null,
+  "alignment": "законно-злой",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Keys from the Golden Vault",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11
+  },
+  "hitPoints": {
+    "average": 19,
+    "hitDice": "3d10 + 3"
+  },
+  "speed": {
+    "walk": 60
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 12,
+    "con": 13,
+    "int": 2,
+    "wis": 12,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Пепельное существо",
+      "description": "Когда хиты коня уменьшаются до 0, он превращается в груду пепла, а все снаряжение, которое он нёс или носил, падает на землю."
+    },
+    {
+      "name": "Растаптывающий рывок",
+      "description": "Если конь переместится как минимум на 20 футов по прямой к существу, а затем в том же ходу попадёт по нему атакой копытами, эта цель должна преуспеть в спасброске Силы Сл 14, иначе будет сбита с ног. Если цель сбита с ног, конь может бонусным действием совершить по ней ещё одну атаку Копытами."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Копыта",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: 11 (2к6 + 4) дробящего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

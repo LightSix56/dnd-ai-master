@@ -1,0 +1,94 @@
+{
+  "id": "51",
+  "slug": "51-carrion-crawler",
+  "name": "Ползающий падальщик",
+  "nameEn": "Carrion crawler",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 51,
+    "hitDice": "6d10 + 18"
+  },
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 13,
+    "con": 16,
+    "int": 1,
+    "wis": 12,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Тонкий нюх",
+      "description": "Ползающий падальщик совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на обоняние."
+    },
+    {
+      "name": "Паучье лазание",
+      "description": "Ползающий падальщик может лазать по сложным поверхностям, включая потолки, без совершения проверок характеристик."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Ползающий падальщик совершает две атаки: одну щупальцами, и одну укусом."
+    },
+    {
+      "name": "Щупальца",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 10 футов, одно существо. Попадание: Урон ядом 4 (1к4 + 2), и цель должна преуспеть в спасброске Телосложения Сл 13, иначе станет отравленной на 1 минуту. Пока цель отравлена, она парализована. Цель может повторять этот спасбросок в конце каждого своего хода, оканчивая отравление на себе при успехе.",
+      "attackBonus": 8,
+      "reachFt": 10,
+      "save": {
+        "ability": "CON",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 7 (2к4 + 2).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

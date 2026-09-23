@@ -1,0 +1,112 @@
+{
+  "id": "6276",
+  "slug": "6276-moonstone-dragon-wyrmling",
+  "name": "Вирмлинг луннокаменного дракона",
+  "nameEn": "Moonstone Dragon Wyrmling",
+  "size": "medium",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 39,
+    "hitDice": "6d8 + 12"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 60
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 14,
+    "con": 14,
+    "int": 16,
+    "wis": 14,
+    "cha": 17
+  },
+  "savingThrows": {
+    "int": 5,
+    "wis": 4,
+    "cha": 5
+  },
+  "skills": {
+    "perception": 4,
+    "stealth": 4,
+    "persuasion": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "blindsight": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Драконий"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 12 (2к8+4) колющего урона плюс 3 (1к6) урона излучением.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Оружия дыхания (перезарядка 5-6)",
+      "type": "special",
+      "description": "Дракон использует один из следующих видов оружия дыхания:",
+      "recharge": "5-6"
+    },
+    {
+      "name": "Дыхание снов",
+      "type": "breath",
+      "description": "Дракон выдыхает туман в 90-футовом конусе. Каждое существо в этой области должно преуспеть в спасброске Телосложения Сл 12, иначе теряет сознание на 10 минут. Этот эффект заканчивается для существа, если оно получает урон или кто-то использует действие, чтобы его разбудить.",
+      "recharge": "5-6",
+      "save": {
+        "ability": "CON",
+        "dc": 12,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Дыхание лунного света",
+      "type": "breath",
+      "description": "Дракон выдыхает луч лунного света линией длиной 30 фт. и шириной 5 фт.. Каждое существо в этой области должно совершить спасбросок Ловкости Сл 12, в случае провала получая 14 (4к6) урона излучением или половину урона при успехе.",
+      "damage": [
+        {
+          "dice": "4d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "DEX",
+        "dc": 12,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

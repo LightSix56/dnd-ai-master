@@ -1,0 +1,58 @@
+{
+  "id": "6229",
+  "slug": "6229-halaster-puppet",
+  "name": "Кукла Халастера",
+  "nameEn": "Halaster Puppet",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "нейтральный, именной НИП",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Waterdeep: Dungeon of the Mad Mage",
+  "isNamed": true,
+  "armorClass": {
+    "value": 10
+  },
+  "hitPoints": {
+    "average": 8,
+    "hitDice": "3d4 + 1"
+  },
+  "speed": {
+    "walk": 20
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 10,
+    "con": 10,
+    "int": 10,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Восприимчивость к антимагии",
+      "description": "Если на куклу будет наложено с заклинание рассеивание магии [dispel magic] (Сл 15), то она разваливается на части."
+    }
+  ],
+  "actions": [],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

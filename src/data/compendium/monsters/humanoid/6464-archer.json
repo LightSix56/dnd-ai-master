@@ -1,0 +1,138 @@
+{
+  "id": "6464",
+  "slug": "6464-archer",
+  "name": "Лучник",
+  "nameEn": "Archer]Лучник [Archer",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любая раса",
+  "alignment": "любое мировоззрениеСредний? Гуманоид (любая раса), любое мировоззрение",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "клепанный кожаный доспех"
+  },
+  "hitPoints": {
+    "average": 75,
+    "hitDice": "10d8 + 30"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 18,
+    "con": 16,
+    "int": 11,
+    "wis": 13,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "acrobatics": 6,
+    "perception": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Любой один язык (обычно Общий)."
+    },
+    {
+      "name": "Языки",
+      "description": "Любой один язык (обычно Общий)."
+    },
+    {
+      "name": "Глаз лучника (3/день)",
+      "description": "Бонусным действием лучник может добавить 1к10 к его следующему броску атаки или урона длинным луком или коротким луком."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Лучник совершает две атаки Коротким мечом или Длинным луком."
+    },
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к6 + 4) колющего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Длинный лук",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +6 к попаданию, дистанция 150/600 футов, одна цель. Попадание: 8 (1к8 + 4) колющего урона.",
+      "attackBonus": 6,
+      "range": {
+        "normal": 150,
+        "long": 600
+      },
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Лучник совершает две атаки длинным луком."
+    },
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 7 (1к6 + 4).",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Длинный лук",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +6 к попаданию, дистанция 150/600 футов, одна цель. Попадание: Колющий урон 8 (1к8 + 4).",
+      "attackBonus": 6,
+      "range": {
+        "normal": 150,
+        "long": 600
+      },
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

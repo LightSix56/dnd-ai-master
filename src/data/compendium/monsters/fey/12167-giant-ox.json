@@ -1,0 +1,77 @@
+{
+  "id": "12167",
+  "slug": "12167-giant-ox",
+  "name": "Гигантский вол",
+  "nameEn": "Giant Ox",
+  "size": "huge",
+  "type": "fey",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Bigby Presents: Glory of the Giants",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 105,
+    "hitDice": "10d12 + 40"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 22,
+    "dex": 10,
+    "con": 19,
+    "int": 4,
+    "wis": 11,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "понимает Великаний и Сильван",
+    "но не говорит"
+  ],
+  "traits": [
+    {
+      "name": "Вьючное животно",
+      "description": "е. Вол считается на один размер больше при определении его грузоподъемности."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Бодание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 10 футов, одна цель. Попадание: 13 (2к6 + 6) колющего урона. Если вол переместится как минимум на 20 футов по прямой к цели, то перед попаданием по ней атаки, цель дополнительно получает 7 (2к6) колющего урона и должна преуспеть в спасброске Силы Сл 16, иначе упадёт ничком.",
+      "attackBonus": 8,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 6,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 16,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

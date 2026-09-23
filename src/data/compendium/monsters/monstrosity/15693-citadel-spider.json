@@ -1,0 +1,112 @@
+{
+  "id": "15693",
+  "slug": "15693-citadel-spider",
+  "name": "Осадный паук",
+  "nameEn": "Citadel Spider",
+  "size": "gargantuan",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "обычно нейтрально-злой",
+  "challengeRating": 18,
+  "xp": 20000,
+  "source": "Vecna: Eve of Ruin",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 360,
+    "hitDice": "20d20 + 150"
+  },
+  "speed": {
+    "walk": 50,
+    "climb": 50
+  },
+  "abilities": {
+    "str": 26,
+    "dex": 10,
+    "con": 21,
+    "int": 6,
+    "wis": 12,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "blindsight": 120,
+    "darkvision": 120
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Легендарное сопротивление (3/день)",
+      "description": "Если паук проваливает спасбросок, он может вместо этого сделать спасбросок успешным."
+    },
+    {
+      "name": "Паучье лазание",
+      "description": "Паук может лазать по сложным поверхностям, включая потолки, без совершения проверок характеристик."
+    },
+    {
+      "name": "Хождение по паутине",
+      "description": "Паук игнорирует ограничения перемещения, вызванные паутиной."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Паук совершает две атаки Укусом. Он может заменить любую из этих атак использованием Паутинной бомбы."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +14 к попаданию, досягаемость 20 футов, одна цель. Попадание: 19 (2к10 + 8) колющего урона плюс 7 (2к6) урона ядом.",
+      "attackBonus": 14,
+      "reachFt": 20,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 8,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Паутинная бомба",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +14 к попаданию, дистанция 300 футов/600 футов, одна цель. Попадание: 24 (3к10 + 8) дробящего урона, также цель и все существа в пределах 10 футов от неё должны преуспеть в спасброске Ловкости Сл 19, иначе получат 10 (3к6) урона кислотой и станут опутанными до начала следующего хода паука.",
+      "attackBonus": 14,
+      "range": {
+        "normal": 300
+      },
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 8,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 19,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Поглощение удара",
+      "type": "special",
+      "description": "В ответ на попадание по пауку атакой, его панцирь поглощает часть удара, снижая получаемый урон на 11 (2к10)."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

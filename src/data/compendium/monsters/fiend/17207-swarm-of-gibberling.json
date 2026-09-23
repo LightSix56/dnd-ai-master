@@ -1,0 +1,80 @@
+{
+  "id": "17207",
+  "slug": "17207-swarm-of-gibberling",
+  "name": "Рой бормотунов",
+  "nameEn": "Swarm of Gibberling",
+  "size": "large",
+  "type": "fiend",
+  "subtype": "демон",
+  "alignment": "хаотично-злое",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Quest from the Infinite Staircase",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 38,
+    "hitDice": "7d10"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 14,
+    "con": 11,
+    "int": 5,
+    "wis": 7,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "darkvision": 120
+  },
+  "languages": [
+    "Язык Бормотунов"
+  ],
+  "traits": [
+    {
+      "name": "Боязнь огня",
+      "description": "Если бормотун получает урон огнем, то он совершает броски атаки и проверки характеристик с помехой до конца своего следующего хода."
+    },
+    {
+      "name": "Непрерывное бормотание",
+      "description": "Все не являющиеся бормотунами и не оглохшие существа в пределах 60 футов от бормотуна совершают спасброски Телосложения для поддержания концентрации на заклинаниях и схожих эффектах с помехой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Рой совершает две атаки Скрипящими зубами."
+    },
+    {
+      "name": "Скрипящие зубы",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 0 фт., одна цель в пространстве роя. Попадание: 14 (4к4 + 4) колющего урона, либо 9 (2к4 + 4) колющего урона, если у роя осталась половина или менее хитов.",
+      "attackBonus": 6,
+      "reachFt": 0,
+      "damage": [
+        {
+          "dice": "4d4",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

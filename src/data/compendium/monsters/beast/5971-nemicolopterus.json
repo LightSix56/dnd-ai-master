@@ -1,0 +1,60 @@
+{
+  "id": "5971",
+  "slug": "5971-nemicolopterus",
+  "name": "Немиколоптер",
+  "nameEn": "Nemicolopterus",
+  "size": "tiny",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Adventurers League",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 1,
+    "hitDice": "1d4 - 1"
+  },
+  "speed": {
+    "walk": 5,
+    "fly": 50
+  },
+  "abilities": {
+    "str": 2,
+    "dex": 14,
+    "con": 8,
+    "int": 2,
+    "wis": 13,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 1 колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 5
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

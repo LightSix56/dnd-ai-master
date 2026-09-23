@@ -1,0 +1,79 @@
+{
+  "id": "17318",
+  "slug": "17318-soldier",
+  "name": "Солдат",
+  "nameEn": "Soldier",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любая раса",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "кольчуга, щит"
+  },
+  "hitPoints": {
+    "average": 16,
+    "hitDice": "3d8 + 3"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 12,
+    "con": 12,
+    "int": 10,
+    "wis": 11,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 3,
+    "perception": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "один любой язык (обычно Общий)"
+  ],
+  "traits": [
+    {
+      "name": "Строевая подготовка",
+      "description": "Солдат совершает с преимуществом спасброски от состояний очарованный, испуганный, схваченный или опутанный, пока он находится в пределах 5 футов хотя бы от одного союзника."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Солдат совершает две рукопашные атаки."
+    },
+    {
+      "name": "Длинный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 фт., одна цель. Попадание: 6 (1к8 + 2) рубящего урона или 7 (1к10 + 2) рубящего урона при использовании двумя руками.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

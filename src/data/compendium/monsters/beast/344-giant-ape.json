@@ -1,0 +1,89 @@
+{
+  "id": "344",
+  "slug": "344-giant-ape",
+  "name": "Гигантская человекообразная обезьяна",
+  "nameEn": "Giant ape",
+  "size": "huge",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 157,
+    "hitDice": "15d12 + 60"
+  },
+  "speed": {
+    "walk": 40,
+    "climb": 40
+  },
+  "abilities": {
+    "str": 23,
+    "dex": 14,
+    "con": 18,
+    "int": 7,
+    "wis": 12,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 9,
+    "perception": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Обезьяна совершает две атаки кулаком."
+    },
+    {
+      "name": "Кулак",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 10 футов, одна цель. Попадание: 22 (3к10 + 6) дробящего урона.",
+      "attackBonus": 9,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 6,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Камень",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +9 к попаданию, дистанция 50/100 футов, одна цель. Попадание: 30 (7к6 + 6) дробящего урона.",
+      "attackBonus": 9,
+      "range": {
+        "normal": 50,
+        "long": 100
+      },
+      "damage": [
+        {
+          "dice": "7d6",
+          "mod": 6,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

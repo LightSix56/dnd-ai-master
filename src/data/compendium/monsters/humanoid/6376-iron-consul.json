@@ -1,0 +1,90 @@
+{
+  "id": "6376",
+  "slug": "6376-iron-consul",
+  "name": "Железный консул",
+  "nameEn": "Iron Consul",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "законно-злой",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Baldur's Gate: Descent Into Avernus",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "кольчуга"
+  },
+  "hitPoints": {
+    "average": 45,
+    "hitDice": "6d8 + 18"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 11,
+    "con": 16,
+    "int": 12,
+    "wis": 15,
+    "cha": 16
+  },
+  "savingThrows": {
+    "wis": 4
+  },
+  "skills": {
+    "perception": 4,
+    "intimidation": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Тактическая дисциплина",
+      "description": "Консул совершает с преимуществом все проверки характеристик и спасброски, совершаемые во время боя."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Консул совершает одну атаку копьём и может использовать Командирский голос."
+    },
+    {
+      "name": "Копьё",
+      "type": "melee_attack",
+      "description": "Рукопашная или Дальнобойная атака: +5 к попаданию, досягаемость 5 футов или дистанция 20/60 футов, одна цель. Попадание: 6 (1к6 + 3) колющего урона или 7(1к8 + 3) колющего урона, если используется двумя руками для совершения рукопашной атаки.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Командирский голос",
+      "type": "special",
+      "description": "Железный консул выбирает до двух союзников в пределах 90 футов, которые могут слышать его приказы. Каждый из них может немедленно использовать реакцию, чтобы совершить одну рукопашную атаку."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

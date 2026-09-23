@@ -1,0 +1,75 @@
+{
+  "id": "5899",
+  "slug": "5899-lords-alliance-guard",
+  "name": "Страж Альянса Лордов",
+  "nameEn": "Lords' Alliance Guard",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "дварф",
+  "alignment": "хаотично-добрый",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Out of the Abyss",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "кольчужная рубаха, щит"
+  },
+  "hitPoints": {
+    "average": 11,
+    "hitDice": "2d8 + 2"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 12,
+    "con": 12,
+    "int": 10,
+    "wis": 11,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Дварфийский"
+  ],
+  "traits": [
+    {
+      "name": "Дварфийская устойчивость",
+      "description": "Страж обладает преимуществом на спасброски против яда."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Алебарда",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 10 фт., одна цель. Попадание: 7 (1к10 + 2) рубящего урона.",
+      "attackBonus": 4,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

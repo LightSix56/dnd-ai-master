@@ -1,0 +1,105 @@
+{
+  "id": "7690",
+  "slug": "7690-goon-balloon",
+  "name": "Шарик-кошмарик",
+  "nameEn": "Goon Balloon",
+  "size": "medium",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "хаотично-злая",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "Monstrous Compendium Vol 1: Spelljammer Creatures",
+  "isNamed": false,
+  "armorClass": {
+    "value": 10
+  },
+  "hitPoints": {
+    "average": 6,
+    "hitDice": "1d8 + 2"
+  },
+  "speed": {
+    "walk": 20,
+    "climb": 20
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 11,
+    "con": 14,
+    "int": 11,
+    "wis": 14,
+    "cha": 4
+  },
+  "savingThrows": {
+    "con": 4,
+    "wis": 4
+  },
+  "skills": {
+    "perception": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [
+    "piercing"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 60
+  },
+  "languages": [
+    "Глубинная речь"
+  ],
+  "traits": [
+    {
+      "name": "Лопание",
+      "description": "Шарик лопается, если его хиты снижаются до 0, выпуская ядовитый газ сферой радиусом 10 футов с центром на себе. Существа в этой области должны преуспеть в спасброске Телосложения Сл 12, иначе станут отравленными на 1 минуту. Отравленное существо может повторять спасбросок в конце каждого своего хода, оканчивая на себе эффект в случае успеха."
+    },
+    {
+      "name": "Необычная природа",
+      "description": "Шарик не нуждается в воздухе, питье и еде."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Шарик-кошмарик совершает две атаки Когтями."
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 фт., одна цель. Попадание: 3 (1к6) рубящего урона.",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Сверкающий глаз",
+      "type": "special",
+      "description": "Волшебный калейдоскопический свет исходит от одного из глаз шарика, когда тот нацеливается на существо, которое он может видеть в пределах 30 футов. Цель должна совершить спасбросок Мудрости Сл 12, получая 6 (1к12) урона психической энергией при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "1d12",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CHA",
+        "dc": 12,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

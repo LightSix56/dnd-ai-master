@@ -1,0 +1,86 @@
+{
+  "id": "253",
+  "slug": "253-half-ogre-ogrillon",
+  "name": "Полуогр (Огриллон)",
+  "nameEn": "Half-Ogre (Ogrillon)",
+  "size": "large",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "любое хаотичное мировоззрение",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "шкурный доспех"
+  },
+  "hitPoints": {
+    "average": 30,
+    "hitDice": "4d10 + 8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 10,
+    "con": 14,
+    "int": 7,
+    "wis": 9,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 9,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Великаний"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Боевой топор",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 12 (2к8 + 3), или рубящий урон 14 (2к10 + 3), если используется двумя руками.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Метательное копье",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +5 к попаданию, досягаемость 5 футов или дистанция 30/120 футов, одна цель. Попадание: Колющий урон 10 (2к6 + 3).",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "range": {
+        "normal": 30,
+        "long": 120
+      },
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,115 @@
+{
+  "id": "12115",
+  "slug": "12115-firbolg-primeval-warden",
+  "name": "Фирболг-первобытный страж",
+  "nameEn": "Firbolg Primeval Warden",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "Друид",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Bigby Presents: Glory of the Giants",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "шкурный доспех, щит"
+  },
+  "hitPoints": {
+    "average": 65,
+    "hitDice": "10d8 + 20"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 14,
+    "con": 14,
+    "int": 12,
+    "wis": 16,
+    "cha": 11
+  },
+  "savingThrows": {
+    "int": 3,
+    "wis": 5
+  },
+  "skills": {
+    "perception": 7,
+    "medicine": 5,
+    "nature": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17
+  },
+  "languages": [
+    "Общий",
+    "Великаний",
+    "Друидический"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Фирболг совершает две атаки Копьём или Длинным огненным копьём."
+    },
+    {
+      "name": "Копьё",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +5 к попаданию, досягаемость 5 фт. или дистанция 20/60 футов, одна цель. Попадание: 6 (1к6 + 3) колющего урона плюс 9 (2к8) урона огнём.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Длинное огненное копьё",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +5 к попаданию, дистанция 120 футов, одно существо. Попадание: 14 (2к10 + 3) урона огнём.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинания",
+      "type": "special",
+      "description": "Фирболг накладывает одно из следующих заклинаний, используя Мудрость в качестве базовой характеристики (Сл спасброска от заклинания 13):"
+    },
+    {
+      "name": "Неограниченно: опутывание [entangle], ра",
+      "type": "special",
+      "description": "зговор с животными [speak with animals], разговор с растениями [speak with plants];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "общение с природой [commune with nature] (накладывается действием), обнаружение магии [detect magic], маскировка [disguise self]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

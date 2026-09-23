@@ -1,0 +1,93 @@
+{
+  "id": "17210",
+  "slug": "17210-vegepygmy-thorny-hunter",
+  "name": "Вегепигмей колючка-охотник",
+  "nameEn": "Vegepygmy Thorny Hunter",
+  "size": "medium",
+  "type": "plant",
+  "subtype": null,
+  "alignment": "нейтральное",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Quest from the Infinite Staircase",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 27,
+    "hitDice": "5d8 + 5"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 14,
+    "con": 13,
+    "int": 2,
+    "wis": 10,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4,
+    "survival": 4,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 60
+  },
+  "languages": [
+    "Язык Вегепигмеев"
+  ],
+  "traits": [
+    {
+      "name": "Тактика стаи",
+      "description": "Вегепигмей совершает с преимуществом броски атаки по существу, если в пределах 5 футов от этого существа находится как минимум один дееспособный союзник вегепигмея."
+    },
+    {
+      "name": "Растительный камуфляж",
+      "description": "Вегепигмей совершает проверки Ловкости (Скрытность) с преимуществом, если он находится в любой достаточно укрытой растительностью местности."
+    },
+    {
+      "name": "Регенерация",
+      "description": "Вегепигмей восстанавливает 5 хитов в начале своего хода. Если он получает урон холодом, огнем или некротической энергией, то эта особенность не работает в начале следующего хода вегепигмея. Он умирает только если начинает ход с 0 хитов и не может регенерировать."
+    },
+    {
+      "name": "Шипастое тело",
+      "description": "В начале каждого своего хода вегепигмей наносит 2 (1к4) колющего урона всем схватившим его существам."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 11 (2к8 + 2) колющего урона. Если цель является существом, то она должна преуспеть в спасброске Силы Сл 12, иначе будет сбита с ног.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 12,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

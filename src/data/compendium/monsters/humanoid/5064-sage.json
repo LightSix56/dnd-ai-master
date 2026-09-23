@@ -1,0 +1,101 @@
+{
+  "id": "5064",
+  "slug": "5064-sage",
+  "name": "Мудрец",
+  "nameEn": "Sage",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любая раса",
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Candlekeep Mysteries",
+  "isNamed": false,
+  "armorClass": {
+    "value": 10,
+    "type": "13 с доспехом мага"
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "5d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 8,
+    "dex": 10,
+    "con": 10,
+    "int": 18,
+    "wis": 15,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "history": 8,
+    "arcana": 8,
+    "medicine": 6,
+    "nature": 8,
+    "insight": 4,
+    "investigation": 8,
+    "religion": 8
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий",
+    "Любой 1"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Электрошок (заговор)",
+      "type": "melee_attack",
+      "description": "Рукопашная атака заклинанием: +6 к попаданию (с преимуществом, если цель носит доспехи из металла), досягаемость 5 фт., одно существо. Попадание: 9 (2к8) урона электричеством, и цель не может использовать реакции до начала своего следующего хода.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Мудрец может наложить одно из следующих заклинаний, используя Интеллект в качестве базовой характеристики (Сл спасброска 14, +6 к атакам заклинаниями):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "свет [light], волшебная рука [mage hand], починка [mending]"
+    },
+    {
+      "name": "3/день каждое",
+      "type": "special",
+      "description": "понимание языков [comprehend languages], обнаружение магии [detect magic], опознание [identify]"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "рассеивание магии [dispel magic], левитация [levitate], поиск предмета [locate object], видение невидимого [see invisibility], послание [sending], языки [tongues], невидимый слуга [unseen servant]"
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Щит (заклинание 1-го уровня; 3/день)",
+      "type": "special",
+      "description": "Когда по великому мудрецу попадают атакой или становится целью заклинания волшебная стрела, его окружает защитный невидимый барьер магической силы. До начала своего следующего хода великий мудрец имеет бонус +5 к КД, в том числе против атаки вызвавшей его активацию, а так же не получает урона от заклинания волшебная стрела."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

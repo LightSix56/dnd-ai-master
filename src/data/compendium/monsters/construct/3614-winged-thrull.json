@@ -1,0 +1,95 @@
+{
+  "id": "3614",
+  "slug": "3614-winged-thrull",
+  "name": "Крылатый трулл",
+  "nameEn": "Winged thrull",
+  "size": "small",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 31,
+    "hitDice": "7d6 + 7"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 30
+  },
+  "abilities": {
+    "str": 9,
+    "dex": 15,
+    "con": 12,
+    "int": 8,
+    "wis": 9,
+    "cha": 8
+  },
+  "savingThrows": {
+    "dex": 4
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 9,
+    "darkvision": 60
+  },
+  "languages": [
+    "Понимает Общий",
+    "но не говорит"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одно существо. Попадание: Рубящий урон 7 (2к4 + 2).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Камень",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +4 к попаданию, дистанция 20/60 футов, одно существо. Попадание: Дробящий урон 5 (1к6 + 2).",
+      "attackBonus": 4,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Самопожертвование",
+      "type": "special",
+      "description": "Когда по существу в пределах 5 футов от трулла попадают атакой, трулл меняется местами с этим существом и принимает удар за него."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

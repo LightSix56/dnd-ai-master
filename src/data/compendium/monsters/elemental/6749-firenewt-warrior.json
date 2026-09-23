@@ -1,0 +1,136 @@
+{
+  "id": "6749",
+  "slug": "6749-firenewt-warrior",
+  "name": "Огненный тритон воин",
+  "nameEn": "Firenewt warrior]Огненный тритон воин [Firenewt warrior",
+  "size": "medium",
+  "type": "elemental",
+  "subtype": "огненный тритон",
+  "alignment": "обычно нейтрально-злойСредний? Гуманоид (огненный тритон), нейтрально-злой",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "щит"
+  },
+  "hitPoints": {
+    "average": 27,
+    "hitDice": "5d8 + 5"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 13,
+    "con": 12,
+    "int": 7,
+    "wis": 11,
+    "cha": 8
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Драконий",
+    "Игнан"
+  ],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Огненный тритон может дышать и на воздухе и в воде."
+    },
+    {
+      "name": "Амфибия",
+      "description": "Огненный тритон может дышать и на воздухе и в воде."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Огненный тритон совершает две атаки Скимитаром."
+    },
+    {
+      "name": "Скимитар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: 4 (1к6 + 1) рубящего урона.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 1,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Огненный плевок (Перезаряжается после короткого или продолжительного отдыха)",
+      "type": "special",
+      "description": "Огненный тритон плюет огнём в существо не далее 10 футов от себя. Существо должно совершить спасбросок Ловкости Сл 11 иначе получит 9 (2к8) урона огнём при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 11,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Огненный тритон совершает две атаки своим скимитаром."
+    },
+    {
+      "name": "Скимитар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: 4 (1к6 + 1) рубящего урона.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 1,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Огненный плевок (Перезаряжается после короткого или продолжительного отдыха)",
+      "type": "special",
+      "description": "Огненный тритон плюет огнём в существо не далее 10 футов от себя. Существо должно пройти спасбросок Ловкости Сл 11 и получить 9 (2к8) урона огнём при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 11,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

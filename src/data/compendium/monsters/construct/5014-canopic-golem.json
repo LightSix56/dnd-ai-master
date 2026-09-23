@@ -1,0 +1,110 @@
+{
+  "id": "5014",
+  "slug": "5014-canopic-golem",
+  "name": "Канопа голем",
+  "nameEn": "Canopic Golem",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 13,
+  "xp": 10000,
+  "source": "Candlekeep Mysteries",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 252,
+    "hitDice": "24d10 + 120"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 10,
+    "con": 20,
+    "int": 7,
+    "wis": 11,
+    "cha": 1
+  },
+  "savingThrows": {
+    "int": 3,
+    "wis": 6,
+    "cha": 0
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 120
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Ограниченный иммунитет к магии",
+      "description": "Голем не может быть поражен или обнаружен заклинаниями 7-го уровня или ниже, если он этого не хочет. Голем совершает с преимуществом спасброски против всех остальных заклинаний и магических эффектов."
+    },
+    {
+      "name": "Неестественная природа",
+      "description": "Голем не нуждается в воздухе, еде, питье и сне."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Голем совершает две атаки."
+    },
+    {
+      "name": "Удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +10 к попаданию, досягаемость 5 фт., одна цель. Попадание: 27 (4к10 + 5) урона силовым полем.",
+      "attackBonus": 10,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Кристаллический дротик",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +10 к попаданию, дистанция 120 фт., одна цель. Попадание: 14 (2к8 + 5) урона силовым полем.",
+      "attackBonus": 10,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Отражение заклинаний",
+      "type": "special",
+      "description": "Если заклинание нацеленное в голема промахивается мимо него, то голем может выбрать другое существо в пределах 120 футов от него, которое он способен видеть. Заклинание попадает в выбранное существо вместо голема."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

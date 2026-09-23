@@ -1,0 +1,115 @@
+{
+  "id": "7760",
+  "slug": "7760-count-thullen",
+  "name": "Граф Туллен",
+  "nameEn": "Count Thullen",
+  "size": "huge",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "нейтрально-добрый, именной НИП",
+  "challengeRating": 10,
+  "xp": 5900,
+  "source": "Storm King's Thunder",
+  "isNamed": true,
+  "armorClass": {
+    "value": 14,
+    "type": "16 с дубовой кожей"
+  },
+  "hitPoints": {
+    "average": 200,
+    "hitDice": "16d12 + 96"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 27,
+    "dex": 10,
+    "con": 22,
+    "int": 18,
+    "wis": 16,
+    "cha": 16
+  },
+  "savingThrows": {
+    "con": 10,
+    "wis": 7,
+    "cha": 7
+  },
+  "skills": {
+    "perception": 7,
+    "insight": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17
+  },
+  "languages": [
+    "Общий",
+    "Великаний",
+    "Друидический"
+  ],
+  "traits": [
+    {
+      "name": "Тонкий нюх",
+      "description": "Великан совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на обоняние."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Базовой характеристикой великана является Харизма (Сл спасброска от заклинания 15; +7 к попаданию атаками заклинаниями). Он может накладывать следующие заклинания, не нуждаясь в материальных компонентах:"
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Туллен — заклинатель 9-го уровня. Его базовой характеристикой является Мудрость (Сл спасброска от заклинания 15; +7 к попаданию атаками заклинаниями). У него подготовлены следующие подготовленные заклинания друида:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Великан совершает две атаки моргенштерном."
+    },
+    {
+      "name": "Моргенштерн",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +12 к попаданию, досягаемость 10 футов, одна цель. Попадание: Колющий урон 21 (3к8 + 8).",
+      "attackBonus": 12,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 8,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Камень",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +12 к попаданию, дистанция 60/240 футов, одна цель. Попадание: Дробящий урон 30 (4к10 + 8).",
+      "attackBonus": 12,
+      "range": {
+        "normal": 60,
+        "long": 240
+      },
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 8,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "spellAttackBonus": 7,
+    "ability": "WIS"
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "id": "17376",
+  "slug": "17376-monastery-of-the-distressed-body-monk",
+  "name": "Монах монастыря Страдающего тела",
+  "nameEn": "Monastery of the Distressed Body Monk",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любая раса",
+  "alignment": "нейтральный",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "Lost Laboratory of Kwalish",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "кожаный доспех"
+  },
+  "hitPoints": {
+    "average": 9,
+    "hitDice": "2d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 12,
+    "con": 10,
+    "int": 10,
+    "wis": 11,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "deception": 2,
+    "religion": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Тёмная преданность",
+      "description": "Монах совершает с преимуществом спасброски от очарования и испуга."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Скимитар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: 4 (1к6 + 1) рубящего урона.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 1,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Гвизарма",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 10 футов, одна цель. Попадание: 4 (1к6 + 1) колющего урона. Если цель — существо Среднего размера или меньше, оно становится схваченным (Сл высвобождения 10). Пока цель схвачена, монах не может использовать свою гвизарму против другой цели.",
+      "attackBonus": 3,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

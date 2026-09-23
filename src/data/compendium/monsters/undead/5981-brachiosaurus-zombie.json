@@ -1,0 +1,88 @@
+{
+  "id": "5981",
+  "slug": "5981-brachiosaurus-zombie",
+  "name": "Брахиозавр зомби",
+  "nameEn": "Brachiosaurus Zombie",
+  "size": "gargantuan",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 6,
+  "xp": 2300,
+  "source": "Adventurers League",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 145,
+    "hitDice": "10d20 + 40"
+  },
+  "speed": {
+    "walk": 20
+  },
+  "abilities": {
+    "str": 24,
+    "dex": 8,
+    "con": 19,
+    "int": 2,
+    "wis": 10,
+    "cha": 7
+  },
+  "savingThrows": {
+    "con": 7
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Топот",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 20 фт., одна цель. Попадание: 34 (5к10 + 7) дробящего урона, и цель должна успешно пройти спасбросок Силы Сл 15 или оказаться сбитой с ног.",
+      "attackBonus": 8,
+      "reachFt": 20,
+      "damage": [
+        {
+          "dice": "5d10",
+          "mod": 7,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Хвост",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +10 к попаданию, досягаемость 20 фт., одна цель. Попадание: 40 (6к10 + 7) дробящего урон.",
+      "attackBonus": 10,
+      "reachFt": 20,
+      "damage": [
+        {
+          "dice": "6d10",
+          "mod": 7,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

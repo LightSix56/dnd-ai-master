@@ -1,0 +1,79 @@
+{
+  "id": "94",
+  "slug": "94-displacer-beast",
+  "name": "Ускользающий зверь",
+  "nameEn": "Displacer beast",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "законно-злой",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 85,
+    "hitDice": "10d10 + 30"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 15,
+    "con": 16,
+    "int": 6,
+    "wis": 12,
+    "cha": 8
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Избегание",
+      "description": "Если ускользающий зверь подвергается эффекту, позволяющему совершить спасбросок, чтобы получить только половину урона, он вообще не получает урон, если преуспеет, и получает лишь половину урона при провале."
+    },
+    {
+      "name": "Ускользание",
+      "description": "Ускользающий зверь проецирует магическую иллюзию, из-за которой кажется, что он находится немного в стороне, и броски атаки по нему совершаются с помехой. Если по нему попадает атака, эта особенность перестаёт действовать до конца его следующего хода. Эта особенность также перестаёт действовать когда ускользающий зверь недееспособен или когда его скорость равна 0."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Ускользающий зверь совершает две атаки щупальцами."
+    },
+    {
+      "name": "Щупальце",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 10 футов, одна цель. Попадание: Дробящий урон 7 (1к6 + 4) плюс колющий урон 3 (1к6).",
+      "attackBonus": 6,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

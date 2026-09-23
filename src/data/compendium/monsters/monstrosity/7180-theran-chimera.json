@@ -1,0 +1,133 @@
+{
+  "id": "7180",
+  "slug": "7180-theran-chimera",
+  "name": "Теросская химера",
+  "nameEn": "Theran Chimera",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Mythic Odysseys of Theros",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 95,
+    "hitDice": "10d10 + 40"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 60
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 13,
+    "con": 19,
+    "int": 3,
+    "wis": 14,
+    "cha": 10
+  },
+  "savingThrows": {
+    "con": 7,
+    "wis": 5
+  },
+  "skills": {
+    "perception": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "darkvision": 60
+  },
+  "languages": [
+    "Понимает Драконий",
+    "но не может говорить"
+  ],
+  "traits": [
+    {
+      "name": "Отражение заклинаний",
+      "description": "Химера совершает с преимуществом спасброски против любого заклинания, которое нацелено только на ней (а не на область). Если спасбросок химеры успешен и заклинание имеет 4-й уровень или ниже, заклинание не оказывает никакого эффекта на химеру и вместо этого нацеливается на заклинателя."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Химера совершает три атаки: одну Когтями, одну Головой и одну Хвостом. Когда доступно её Оружие дыхания, она может использовать его вместо атаки Головы или Когтями."
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: 13 (2к8 + 4) рубящего урона.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Голова",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: 10 (1к12 + 4) колющего урона.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d12",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Хвост",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 10 футов, одна цель. Попадание: 11 (2к6 + 4) дробящего урона.",
+      "attackBonus": 7,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Оружие дыхания (Перезарядка 5-6)",
+      "type": "breath",
+      "description": "Химера выдыхает огонь 15-футового конусом. Каждое существо в этой области должно совершить спасбросок Ловкости Сл 15, получая 32 (5к12) урона огнём при провале или пололвину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "5d12",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "DEX",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

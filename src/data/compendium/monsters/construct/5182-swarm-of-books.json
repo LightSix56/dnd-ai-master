@@ -1,0 +1,71 @@
+{
+  "id": "5182",
+  "slug": "5182-swarm-of-books",
+  "name": "Рой книг",
+  "nameEn": "Swarm of Books",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "любое мировоззрение",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Waterdeep: Dragon Heist",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "5d8"
+  },
+  "speed": {
+    "walk": 0,
+    "fly": 30,
+    "hover": true
+  },
+  "abilities": {
+    "str": 5,
+    "dex": 15,
+    "con": 10,
+    "int": 2,
+    "wis": 12,
+    "cha": 4
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "blindsight": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Рой",
+      "description": "Рой может занимать пространство другого существа, и наоборот, и рой может перемещаться через любой проход, достаточный для Крохотных книг. Рой не может восстанавливать хиты и получать временные хиты."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 0 фт., одна цель в пространстве роя. Попадание: 5 (2к4) дробящего урон или 2 (1к4) дробящего урона, если у роя половина хитов или меньше.",
+      "attackBonus": 4,
+      "reachFt": 0,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 0,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

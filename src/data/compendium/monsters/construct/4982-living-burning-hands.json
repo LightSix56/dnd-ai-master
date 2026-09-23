@@ -1,0 +1,98 @@
+{
+  "id": "4982",
+  "slug": "4982-living-burning-hands",
+  "name": "Ожившие огненные ладони",
+  "nameEn": "Living Burning Hands",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Eberron: Rising from the Last War",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 15,
+    "hitDice": "2d8 + 6"
+  },
+  "speed": {
+    "walk": 25,
+    "fly": 25
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 12,
+    "con": 16,
+    "int": 3,
+    "wis": 6,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Аморфность",
+      "description": "Живое заклинание может перемещаться в пространстве в один дюйм шириной, не протискиваясь."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Живое заклинание имеет преимущества на спасброски от заклинаний."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Магический удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака заклинанием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к6+3) урона огнём.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Имитация заклинания (Перезарядка 5-6)",
+      "type": "special",
+      "description": "Живое заклинание испускает тонкие языки пламени в 15-футовом конусе. Все существа в этой области должны совершить спасбросок Ловкости Сл 13,получая 10 (3к6) урона огнём в случае провала и половину этого урона в случае успеха.",
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "DEX",
+        "dc": 13,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

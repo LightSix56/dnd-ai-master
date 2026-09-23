@@ -1,0 +1,100 @@
+{
+  "id": "6016",
+  "slug": "6016-girallon-zombie",
+  "name": "Гираллон зомби",
+  "nameEn": "Girallon Zombie",
+  "size": "large",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Tomb of Annihilation",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 59,
+    "hitDice": "7d10 + 21"
+  },
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 12,
+    "con": 16,
+    "int": 3,
+    "wis": 7,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Агрессия",
+      "description": "Бонусным действием гираллон может переместиться на расстояние до своей скорости к враждебному существу, которое он может видеть."
+    },
+    {
+      "name": "Стойкость нежити",
+      "description": "Если урон опускает хиты зомби до 0, он совершает спасбросок Телосложения Сл 5 + полученный урон, если только это не был урон излучением или урон от критического попадания. При успехе хиты зомби опускаются до 1."
+    },
+    {
+      "name": "Природа нежити",
+      "description": "Зомби не нужен воздух, еда, питье и сон."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Гираллон совершает пять атак: одну укусом и четыре когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одно существо. Попадание: 7 (1к6 + 4) колющего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 10 футов, одна цель. Попадание: 6 (1к4 + 4) рубящего урона.",
+      "attackBonus": 6,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

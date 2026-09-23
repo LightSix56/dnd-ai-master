@@ -1,0 +1,91 @@
+{
+  "id": "8701",
+  "slug": "8701-aartuk-weedling",
+  "name": "Аартук травянник",
+  "nameEn": "Aartuk weedling",
+  "size": "medium",
+  "type": "plant",
+  "subtype": null,
+  "alignment": "обычно законно-злое",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 38,
+    "hitDice": "7d8 + 7"
+  },
+  "speed": {
+    "walk": 20,
+    "climb": 20
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 12,
+    "con": 13,
+    "int": 10,
+    "wis": 13,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 60
+  },
+  "languages": [
+    "Язык Аартуков"
+  ],
+  "traits": [
+    {
+      "name": "Паучье лазание",
+      "description": "Аартук может карабкаться по сложным поверхностям, в том числе вверх ногами по потолку, без необходимости совершать проверки характеристик."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Аартук совершает или две атаки Ветвями, или две атаки Гранулами света, или по одной каждой каждой из них."
+    },
+    {
+      "name": "Ветвь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 10 фт., одна цель. Попадание: 9 (2к6 + 2) дробящего урона.",
+      "attackBonus": 4,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Гранула света",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +3 к попаданию, дальность 60 футов, одна цель. Попадание: 8 (3к4+1) урона излучением.",
+      "attackBonus": 3,
+      "damage": [
+        {
+          "dice": "3d4",
+          "mod": 1,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

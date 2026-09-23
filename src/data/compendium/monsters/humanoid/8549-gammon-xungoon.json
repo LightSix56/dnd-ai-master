@@ -1,0 +1,76 @@
+{
+  "id": "8549",
+  "slug": "8549-gammon-xungoon",
+  "name": "Гаммон Зангун",
+  "nameEn": "Gammon Xungoon",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "Кобольд",
+  "alignment": "хаотично-добрый, именной НИП",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Journeys through the Radiant Citadel",
+  "isNamed": true,
+  "armorClass": {
+    "value": 10
+  },
+  "hitPoints": {
+    "average": 4,
+    "hitDice": "1d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 10,
+    "con": 10,
+    "int": 10,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Чувствительность к солнечному свету",
+      "description": "Находясь на солнечном свету, кобольд совершает с помехой броски атаки, а также проверки Мудрости (Восприятие), полагающиеся на зрение."
+    },
+    {
+      "name": "Тактика стаи",
+      "description": "Кобольд совершает с преимуществом броски атаки по существу, если в пределах 5 футов от этого существа находится как минимум один дееспособный союзник кобольда."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Дубина",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 футов, одна цель. Попадание: Дробящий урон 2 (1к4).",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 0,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

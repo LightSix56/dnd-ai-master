@@ -1,0 +1,108 @@
+{
+  "id": "5294",
+  "slug": "5294-tashlyn-yafeera",
+  "name": "Ташлин Яфира",
+  "nameEn": "Tashlyn Yafeera",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "нейтральный, именной НИП",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Waterdeep: Dragon Heist",
+  "isNamed": true,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 149,
+    "hitDice": "23d8 + 46"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 15,
+    "con": 14,
+    "int": 10,
+    "wis": 14,
+    "cha": 12
+  },
+  "savingThrows": {
+    "str": 8,
+    "con": 6
+  },
+  "skills": {
+    "athletics": 8,
+    "perception": 6,
+    "intimidation": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Второе дыхание (перезарядка после короткого или продолжительного отдыха)",
+      "description": "Бонусным действием Ташлин может восстановить 20 хитов."
+    },
+    {
+      "name": "Упорный (2/день)",
+      "description": "Ташлин может перебросить проваленный спасбросок, и обязана использовать новый результат"
+    },
+    {
+      "name": "Дополнительный урон",
+      "description": "Если у Ташлина остаётся больше половины её хитов, он дополнительно наносит 7 (2к6) урона при каждом попадании."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Ташлин совершает три атаки Двуручным мечом или Коротким луком."
+    },
+    {
+      "name": "Двуручный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одна цель. Попадание: 11 (2к6 + 5) рубящего урона.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Короткий лук",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +6 к попаданию, дистанция 80/320 футов, одна цель. Попадание: 5 (1к6 + 2) колющего урона.",
+      "attackBonus": 6,
+      "range": {
+        "normal": 80,
+        "long": 320
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

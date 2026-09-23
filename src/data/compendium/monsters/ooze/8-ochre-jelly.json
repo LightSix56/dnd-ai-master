@@ -1,0 +1,82 @@
+{
+  "id": "8",
+  "slug": "8-ochre-jelly",
+  "name": "Золотистый студень",
+  "nameEn": "Ochre jelly",
+  "size": "large",
+  "type": "ooze",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 8
+  },
+  "hitPoints": {
+    "average": 45,
+    "hitDice": "6d10 + 12"
+  },
+  "speed": {
+    "walk": 10,
+    "climb": 10
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 6,
+    "con": 14,
+    "int": 2,
+    "wis": 6,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "slashing"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "blindsight": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Аморфный",
+      "description": "Студень может, не протискиваясь, перемещаться через узкое пространство шириной вплоть до 1 дюйма."
+    },
+    {
+      "name": "Паучье лазание",
+      "description": "Студень может лазать по сложным поверхностям, в том числе по потолкам, без каких-либо проверок характеристик."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Ложноножка",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: Дробящий урон 9 (2к6 + 2) плюс урон кислотой 3 (1к6).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 2,
+          "type": "плюс"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Разделение",
+      "type": "special",
+      "description": "Когда студень Среднего или большего размера получает урон электричеством или рубящий урон, он делится на два новых студня, если у него есть, по крайней мере, 10 хитов. Каждый новый студень получает количество хитов, равное половине первоначального (округляя в меньшую сторону). Новые студни на один размер меньше первоначального."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

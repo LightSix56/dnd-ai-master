@@ -1,0 +1,112 @@
+{
+  "id": "8838",
+  "slug": "8838-githyanki-buccaneer",
+  "name": "Гитъянки-буканьер",
+  "nameEn": "Githyanki Buccaneer",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "гит",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "кираса"
+  },
+  "hitPoints": {
+    "average": 58,
+    "hitDice": "9d8 + 18"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 14,
+    "con": 14,
+    "int": 16,
+    "wis": 13,
+    "cha": 13
+  },
+  "savingThrows": {
+    "con": 4,
+    "int": 5,
+    "wis": 3
+  },
+  "skills": {
+    "athletics": 5,
+    "perception": 3,
+    "survival": 3,
+    "deception": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "Общий",
+    "Гитский"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Гитъянки совершает две атаки Двуручным мечом или Телекинетическим снарядом."
+    },
+    {
+      "name": "Двуручный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 10 (2к6 + 3) рубящего урона плюс 3 (1к6) урона психической энергией.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Телекинетический снаряд",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +5 к попаданию, дистанция 60 фт., одна цель. Попадание: 13 (3к6 + 3) урона силовым полем.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 60
+      },
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний (псионика)",
+      "type": "special",
+      "description": "Базовой характеристикой гитъянки является Интеллект (Сл спасброска от заклинаний 13). Он может накладывать следующие заклинания, не нуждаясь в компонентах:"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "волшебная рука [mage hand] (рука невидима), свет [light];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "телекинез [telekinesis], уход в иной мир [plane shift]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

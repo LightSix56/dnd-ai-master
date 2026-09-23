@@ -1,0 +1,104 @@
+{
+  "id": "8773",
+  "slug": "8773-lunar-dragon-wyrmling",
+  "name": "Вирмлинг лунного дракона",
+  "nameEn": "Lunar Dragon Wyrmling",
+  "size": "medium",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "обычно нейтрально-злой",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 37,
+    "hitDice": "5d8 + 15"
+  },
+  "speed": {
+    "walk": 40,
+    "fly": 40,
+    "burrow": 10
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 12,
+    "con": 16,
+    "int": 6,
+    "wis": 10,
+    "cha": 9
+  },
+  "savingThrows": {
+    "con": 5,
+    "wis": 2
+  },
+  "skills": {
+    "perception": 4,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "cold"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 240
+  },
+  "languages": [
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Прокладывание туннеля",
+      "description": "Дракон может копать сквозь сплошной камень со скоростью копания, уменьшенной вдвое, оставляя за собой туннель диаметром 5 фт."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 5 (1к6+2) колющего урона плюс 3 (1к6) урона холодом.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Холодное дыхание (перезарядка 5–6)",
+      "type": "breath",
+      "description": "Дракон выдыхает волну ледяного воздуха 15-футовым конусом. Каждое существо в области конуса области должно совершить спасбросок Телосложения Сл 13. При провале существо получает 13 (3к8) урона холодом и его скорость уменьшается до 0, до конца его следующего хода. В случае успеха существо получает половину этого урона и его скорость не уменьшается.",
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 15
+      },
+      "save": {
+        "ability": "CON",
+        "dc": 13,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

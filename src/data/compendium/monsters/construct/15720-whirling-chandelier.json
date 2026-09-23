@@ -1,0 +1,124 @@
+{
+  "id": "15720",
+  "slug": "15720-whirling-chandelier",
+  "name": "Люстра вращения",
+  "nameEn": "Whirling Chandelier",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Vecna: Eve of Ruin",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 105,
+    "hitDice": "14d10 + 28"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 30,
+    "hover": true
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 15,
+    "con": 15,
+    "int": 3,
+    "wis": 5,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 7,
+    "blindsight": 60
+  },
+  "languages": [
+    "понимает общий",
+    "но не говорит"
+  ],
+  "traits": [
+    {
+      "name": "Обманчивая внешность",
+      "description": "Если люстра вращения не движется в начале боя, то она имеет преимущество на бросок инициативы. Более того, если существо не видело движений или действий люстры, это существо должно преуспеть в проверке Интеллекта (Расследование) Сл 18, чтобы понять, что она живая."
+    },
+    {
+      "name": "Пламенная аура",
+      "description": "Любое существо, которое начинает свой ход в пределах 5 футов от люстры, получает 7 (2к6) урона огнём."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Люстра совершает три атаки Цепью или Лампой, или любой их комбинацией."
+    },
+    {
+      "name": "Цепь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 15 футов, одна цель. Попадание: 13 (2к8 + 4) дробящего урона, и цель должна преуспеть в спасброске Силы Сл 15, иначе он подтягивается в незанятое пространство в пределах 5 футов от люстры.",
+      "attackBonus": 7,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Лампа",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: 9 (2к4 + 4) дробящего урона плюс 13 (3к8) урона огнём.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Пылающий вихрь (перезарядка 5-6)",
+      "type": "special",
+      "description": "Все существа в пределах 20 футов от люстры, не имеющие полного укрытия, должны преуспеть в спасброске Телосложения Сл 14, иначе получая 36 (8к8) урона огнём и становясь ослепленными до начала следующего хода люстры.",
+      "damage": [
+        {
+          "dice": "8d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "CON",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

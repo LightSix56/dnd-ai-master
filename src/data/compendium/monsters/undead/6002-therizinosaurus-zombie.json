@@ -1,0 +1,77 @@
+{
+  "id": "6002",
+  "slug": "6002-therizinosaurus-zombie",
+  "name": "Теризинозавр зомби",
+  "nameEn": "Therizinosaurus Zombie",
+  "size": "huge",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Adventurers League",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 104,
+    "hitDice": "11d12 + 33"
+  },
+  "speed": {
+    "walk": 20
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 7,
+    "con": 17,
+    "int": 2,
+    "wis": 7,
+    "cha": 4
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Теризинозавр совершает две атаки когтями."
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 фт., одна цель. Попадание: 17 (3к8 + 4) рубящего урона. Если цель – существо, она должна преуспеть в спасброске Телосложения Сл 14 или будет парализована на 1 минуту. Существо может повторить спасбросок в конце своего хода, оканчивая на себе эффект при успехе.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

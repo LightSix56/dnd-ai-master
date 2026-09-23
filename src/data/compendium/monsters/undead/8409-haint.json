@@ -1,0 +1,95 @@
+{
+  "id": "8409",
+  "slug": "8409-haint",
+  "name": "Хэйнт",
+  "nameEn": "Haint",
+  "size": "medium",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "обычно нейтральная",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Journeys through the Radiant Citadel",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 75,
+    "hitDice": "10d8 + 30"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 30,
+    "hover": true
+  },
+  "abilities": {
+    "str": 7,
+    "dex": 15,
+    "con": 17,
+    "int": 10,
+    "wis": 13,
+    "cha": 17
+  },
+  "savingThrows": {},
+  "skills": {
+    "deception": 6,
+    "stealth": 8
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "cold",
+    "poison",
+    "necrotic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 60
+  },
+  "languages": [
+    "все",
+    "известные при жизни"
+  ],
+  "traits": [
+    {
+      "name": "Бестелесное перемещение",
+      "description": "Хэйнт может перемещаться сквозь других существ и предметы, как если бы они были труднопроходимой местностью. Оно получает урон силовым полем 5 (1к10), если оканчивает ход внутри предмета."
+    },
+    {
+      "name": "Натура нежити",
+      "description": "Хэйнту не нужен воздух, еда, питьё и сон."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Хэйнт совершает две атаки Скорбным прикосновением."
+    },
+    {
+      "name": "Скорбное прикосновение",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 21 (4к8 + 3) урона психической энергией.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "4d8",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Смена формы",
+      "type": "special",
+      "description": "Хэйнт волшебным образом принимает облик гуманоида, которым он был в жизни, сохраняя при этом свою игровую статистику. Он возвращается в истинный облик если его хиты уменьшаются до 0 или использует действие для его завершения."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

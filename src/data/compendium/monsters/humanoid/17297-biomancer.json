@@ -1,0 +1,92 @@
+{
+  "id": "17297",
+  "slug": "17297-biomancer",
+  "name": "Биомант",
+  "nameEn": "Biomancer",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любая раса",
+  "alignment": "нейтрально-добрый",
+  "challengeRating": 10,
+  "xp": 5900,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "наборный доспех"
+  },
+  "hitPoints": {
+    "average": 110,
+    "hitDice": "17d8 + 34"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 15,
+    "con": 14,
+    "int": 20,
+    "wis": 14,
+    "cha": 15
+  },
+  "savingThrows": {
+    "int": 9,
+    "wis": 6
+  },
+  "skills": {
+    "arcana": 9,
+    "nature": 9
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий",
+    "плюс один любой язык"
+  ],
+  "traits": [
+    {
+      "name": "Поддерживающее присутствие",
+      "description": "Биомант магическим образом излучает живительную энергию. Любой союзник биоманта, начавший ход в 30 футах от биоманта, восстанавливает 5 (1к10) хитов."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Биомант совершает с преимуществом спасброски от заклинаний и других магических эффектов."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Биомант — заклинатель Симиков 16-го уровня. Его базовая характеристика заклинаний — Интеллект (Сл спасброска 17, +9 к попаданию атаками заклинаниями). У него подготовлены следующие заклинания волшебника:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Скимитар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: 5 (1к6 + 2) рубящего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "spellSaveDC": 17,
+    "spellAttackBonus": 9,
+    "ability": "INT"
+  }
+}

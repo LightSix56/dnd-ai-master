@@ -1,0 +1,273 @@
+{
+  "id": "5775",
+  "slug": "5775-knucklehead-trout",
+  "name": "Комментарии",
+  "nameEn": "Комментарии",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 10
+  },
+  "hitPoints": {
+    "average": 10,
+    "hitDice": "1d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 10,
+    "con": 10,
+    "int": 10,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Boosty Discord",
+      "description": "Boosty Discord"
+    },
+    {
+      "name": "Справочники Классы Расы и происхождения",
+      "description": "Справочники Классы Расы и происхождения Предыстории Черты Заклинания Бестиарий Магические предметы"
+    },
+    {
+      "name": "Классы",
+      "description": "Классы"
+    },
+    {
+      "name": "Расы и происхождения",
+      "description": "Расы и происхождения"
+    },
+    {
+      "name": "Предыстории",
+      "description": "Предыстории"
+    },
+    {
+      "name": "Черты",
+      "description": "Черты"
+    },
+    {
+      "name": "Заклинания",
+      "description": "Заклинания"
+    },
+    {
+      "name": "Бестиарий",
+      "description": "Бестиарий"
+    },
+    {
+      "name": "Магические предметы",
+      "description": "Магические предметы"
+    },
+    {
+      "name": "Новичку Как начать играть в D&D Использо",
+      "description": "Новичку Как начать играть в D&D Использование характеристик Основные формулы Готовые персонажи Часто задаваемые вопросы"
+    },
+    {
+      "name": "Как начать играть в D&D",
+      "description": "Как начать играть в D&D"
+    },
+    {
+      "name": "Использование характеристик",
+      "description": "Использование характеристик"
+    },
+    {
+      "name": "Основные формулы",
+      "description": "Основные формулы"
+    },
+    {
+      "name": "Готовые персонажи",
+      "description": "Готовые персонажи"
+    },
+    {
+      "name": "Часто задаваемые вопросы",
+      "description": "Часто задаваемые вопросы"
+    },
+    {
+      "name": "Статьи Бестиарий Инвентарь Игровые механ",
+      "description": "Статьи Бестиарий Инвентарь Игровые механики Lore Homebrew Новости сайта Сообщество"
+    },
+    {
+      "name": "Бестиарий",
+      "description": "Бестиарий"
+    },
+    {
+      "name": "Инвентарь",
+      "description": "Инвентарь"
+    },
+    {
+      "name": "Игровые механики",
+      "description": "Игровые механики"
+    },
+    {
+      "name": "Lore",
+      "description": "Lore"
+    },
+    {
+      "name": "Homebrew",
+      "description": "Homebrew"
+    },
+    {
+      "name": "Новости сайта",
+      "description": "Новости сайта"
+    },
+    {
+      "name": "Сообщество",
+      "description": "Сообщество"
+    },
+    {
+      "name": ".ya-page_js_yes .ya-site-form_inited_no",
+      "description": ".ya-page_js_yes .ya-site-form_inited_no { display: none } #ya-site-form0 .ya-site-form__search-input { padding: 0 } (function (w, d, c) { var s = d.createElement('script'), h = d.getElementsByTagName('script')[0], e = d.documentElement; if ((' ' + e.className + ' ').indexOf(' ya-page_js_yes ') === -1) { e.className += ' ya-page_js_yes'; } s.type = 'text/javascript'; s.async = true; s.charset = 'utf-8'; s.src = (d.location.protocol === 'https:' ? 'https:' : 'http:') + '//site.yandex.net/v2.0/js/all.js'; h.parentNode.insertBefore(s, h); (w[c] || (w[c] = [])).push(function () { Ya.Site.Form.init() }) })(window, document, 'yandex_site_callbacks');"
+    },
+    {
+      "name": "Инструменты Закуп характеристик Генерато",
+      "description": "Инструменты Закуп характеристик Генератор добычи Сложность боя Мне повезёт"
+    },
+    {
+      "name": "Закуп характеристик",
+      "description": "Закуп характеристик"
+    },
+    {
+      "name": "Генератор добычи",
+      "description": "Генератор добычи"
+    },
+    {
+      "name": "Сложность боя",
+      "description": "Сложность боя"
+    },
+    {
+      "name": "Мне повезёт",
+      "description": "Мне повезёт"
+    },
+    {
+      "name": "Пользователь Комментарии Настройки Регис",
+      "description": "Пользователь Комментарии Настройки Регистрация"
+    },
+    {
+      "name": "Комментарии",
+      "description": "Комментарии"
+    },
+    {
+      "name": "Настройки",
+      "description": "Настройки"
+    },
+    {
+      "name": "Регистрация",
+      "description": "Регистрация"
+    },
+    {
+      "name": "Партнёры Новости сообществаDungeons_ruDungeonmaster",
+      "description": "ruДостать КубыСытый ЛисТорговец СказкамиВеликое ПутешествиеWishPortSeven diceМоре ЛесDnD MultiverseMAGELLAN GEEKLoreМФЦ и КлеркиИнсомнум D&DLivingRoomStudioRandom Rules"
+    },
+    {
+      "name": "Новости сообщества",
+      "description": "Новости сообщества"
+    },
+    {
+      "name": "Dungeons_ru",
+      "description": "Dungeons_ru"
+    },
+    {
+      "name": "Dungeonmaster",
+      "description": "ru"
+    },
+    {
+      "name": "Достать Кубы",
+      "description": "Достать Кубы"
+    },
+    {
+      "name": "Сытый Лис",
+      "description": "Сытый Лис"
+    },
+    {
+      "name": "Торговец Сказками",
+      "description": "Торговец Сказками"
+    },
+    {
+      "name": "Великое Путешествие",
+      "description": "Великое Путешествие"
+    },
+    {
+      "name": "WishPort",
+      "description": "WishPort"
+    },
+    {
+      "name": "Seven dice",
+      "description": "Seven dice"
+    },
+    {
+      "name": "Море Лес",
+      "description": "Море Лес"
+    },
+    {
+      "name": "DnD Multiverse",
+      "description": "DnD Multiverse"
+    },
+    {
+      "name": "MAGELLAN GEEK",
+      "description": "MAGELLAN GEEK"
+    },
+    {
+      "name": "Lore",
+      "description": "Lore"
+    },
+    {
+      "name": "МФЦ и Клерки",
+      "description": "МФЦ и Клерки"
+    },
+    {
+      "name": "Инсомнум D&D",
+      "description": "Инсомнум D&D"
+    },
+    {
+      "name": "LivingRoomStudio",
+      "description": "LivingRoomStudio"
+    },
+    {
+      "name": "Random Rules",
+      "description": "Random Rules"
+    },
+    {
+      "name": "Разное Контакты Помощь сайту",
+      "description": "Разное Контакты Помощь сайту"
+    },
+    {
+      "name": "Контакты",
+      "description": "Контакты"
+    },
+    {
+      "name": "Помощь сайту",
+      "description": "Помощь сайту"
+    },
+    {
+      "name": "Официальные",
+      "description": "Официальные"
+    },
+    {
+      "name": "Homebrew",
+      "description": "Homebrew"
+    }
+  ],
+  "actions": [],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

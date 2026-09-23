@@ -1,0 +1,69 @@
+{
+  "id": "265",
+  "slug": "265-pixie",
+  "name": "Пикси",
+  "nameEn": "Pixie",
+  "size": "tiny",
+  "type": "fey",
+  "subtype": "фея",
+  "alignment": "нейтрально-добрая",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15
+  },
+  "hitPoints": {
+    "average": 1,
+    "hitDice": "1d4 - 1"
+  },
+  "speed": {
+    "walk": 10,
+    "fly": 30
+  },
+  "abilities": {
+    "str": 2,
+    "dex": 20,
+    "con": 8,
+    "int": 10,
+    "wis": 14,
+    "cha": 15
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4,
+    "stealth": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14
+  },
+  "languages": [
+    "Сильван"
+  ],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Пикси совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Базовой характеристикой пикси является Харизма (Сл спасброска от заклинания 12). Он может накладывать следующие заклинания, используя вместо всех компонентов пыльцу пикси:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Превосходная невидимость",
+      "type": "special",
+      "description": "Пикси магическим образом становится невидимым, пока не окончится концентрация (как при концентрации на заклинании). Все снаряжение, которое пикси несет или носит, становится невидимым вместе с ним."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

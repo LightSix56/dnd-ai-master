@@ -1,0 +1,108 @@
+{
+  "id": "7206",
+  "slug": "7206-satyr-reveler",
+  "name": "Сатир гуляка",
+  "nameEn": "Satyr Reveler",
+  "size": "medium",
+  "type": "fey",
+  "subtype": null,
+  "alignment": "хаотично-нейтральная",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Mythic Odysseys of Theros",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 33,
+    "hitDice": "6d8 + 6"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 16,
+    "con": 13,
+    "int": 12,
+    "wis": 10,
+    "cha": 16
+  },
+  "savingThrows": {},
+  "skills": {
+    "acrobatics": 5,
+    "performance": 7,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий",
+    "Сильван"
+  ],
+  "traits": [
+    {
+      "name": "Захватывающее представление",
+      "description": "Сатир выступает минимум 1 минуту, он выбирает до четырех гуманоидов в пределах 60 футов от себя, которые наблюдали или слушали все представление. Каждый из них должен преуспеть в спасброске Мудрости Сл 13 или стать очарованным. Будучи очарованной таким образом, цель боготворит сатира и будет принимать участие в празднествах сатира. Очарованное состояние заканчивается для существа через 1 час, если оно получает какой-либо урон, если сатир атакует цель или если цель становится свидетелем нападения сатира или повреждения любого из союзников цели."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Сатир совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Бессонный гуляка",
+      "description": "Сатира нельзя усыпить с помощью магии."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Сатир совершает две атаки Тараном или Коротким луком."
+    },
+    {
+      "name": "Таран",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 фт., одна цель. Попадание: 6 (2к4 + 1) дробящего урона.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 1,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Короткий лук",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +5 к попаданию, дистанция 80/320 фт., одна цель. Попадание: 6 (1к6 + 3) колющего урона.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 80,
+        "long": 320
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

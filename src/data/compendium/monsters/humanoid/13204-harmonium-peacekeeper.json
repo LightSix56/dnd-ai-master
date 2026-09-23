@@ -1,0 +1,73 @@
+{
+  "id": "13204",
+  "slug": "13204-harmonium-peacekeeper",
+  "name": "Миротворец Гармониума",
+  "nameEn": "Harmonium Peacekeeper",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Planescape: Adventures in the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 45,
+    "hitDice": "7d8 + 14"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 10,
+    "con": 14,
+    "int": 12,
+    "wis": 14,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14
+  },
+  "languages": [
+    "Общий плюс один язык"
+  ],
+  "traits": [
+    {
+      "name": "Тактика стаи",
+      "description": "Миротворец совершает с преимуществом броски атаки по существу, если как минимум один союзник миротворца находится в пределах 5 футов от этого существа, и этот союзник дееспособен."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Электризованный ловец людей",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 8 (1к10 + 3) колющего урона плюс 4 (1к8) урона электричеством. Если целью является существо Большого размера или меньше, она становится схваченной (Сл высвобождения 13). Пока захват не окончится, цель опутана и не может телепортироваться, а миротворец не может совершать атаки Электрифицированным ловцом людей, и цель получает 8 (1к10 + 3) урона электричеством в начале каждого своего хода.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

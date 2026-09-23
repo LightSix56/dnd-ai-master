@@ -1,0 +1,95 @@
+{
+  "id": "6290",
+  "slug": "6290-dragon-turtle-wyrmling",
+  "name": "Вирмлинг дракочерепахи",
+  "nameEn": "Dragon Turtle Wyrmling",
+  "size": "large",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 90,
+    "hitDice": "12d10 + 24"
+  },
+  "speed": {
+    "walk": 20,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 10,
+    "con": 15,
+    "int": 8,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {
+    "dex": 2,
+    "con": 4,
+    "wis": 2
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 120
+  },
+  "languages": [
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Дракочерепаха может дышать как воздухом, так и водой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 10 фт., одна цель. Попадание: 11 (1к12+3) колющего урона.",
+      "attackBonus": 5,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d12",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Паровое дыхание (перезарядка 5-6)",
+      "type": "breath",
+      "description": "Дракочерепаха выдыхает пар в 15-футовом конусе. Все существа в этой области должны совершить спасбросок Телосложения Сл 12, при провале получая 17 (5к6) урона огнём или половину этого урона при успехе. Нахождение под водой не даёт сопротивления к этому урону.",
+      "damage": [
+        {
+          "dice": "5d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "CON",
+        "dc": 12,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

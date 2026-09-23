@@ -1,0 +1,130 @@
+{
+  "id": "10402",
+  "slug": "10402-doric",
+  "name": "Дорик",
+  "nameEn": "Doric",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "друид",
+  "alignment": "нейтрально-добрый, именной НИП",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Honor among Thieves",
+  "isNamed": true,
+  "armorClass": {
+    "value": 14,
+    "type": "кожаный доспех"
+  },
+  "hitPoints": {
+    "average": 104,
+    "hitDice": "16d8 + 32"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 16,
+    "con": 14,
+    "int": 16,
+    "wis": 19,
+    "cha": 10
+  },
+  "savingThrows": {
+    "int": 6,
+    "wis": 7
+  },
+  "skills": {
+    "perception": 7,
+    "survival": 7,
+    "nature": 6,
+    "insight": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Друидический",
+    "Инфернальный",
+    "Сильван",
+    "Эльфийский"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дорик совершает две атаки сформированным когтем или две атаки пращой. Она может заменить одну из этих атак использованием заклинаний."
+    },
+    {
+      "name": "Сформированный коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака заклинанием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: 8 (1к8+4) рубящего урона.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Праща",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +6 к попаданию, дистанция 30/120, одна цель. Попадание: 8 (2к4+3) дробящего урона.",
+      "attackBonus": 6,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Дорик накладывает одно из следующих заклинаний, используя Мудрость в качестве базовой характеристики (Сл спасброска от заклинания 15):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "животные чувства [beast sense], почтовое животное [animal messenger], разговор с животными [speak with animals]"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "волна грома [thunderwave], лечение ран [cure wounds], огонь фей [faerie fire], опутывание [entangle]"
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Пламенное возмездие (3/день)",
+      "type": "special",
+      "description": "Когда Дорик получает урон от существа, находящегося в пределах 60 футов от неё и видимого ею, она может заставить волшебное пламя охватить его. Существо должно совершить спасбросок Ловкости Сл 15. Оно получает 16 (3к10) урона огнём при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 15,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

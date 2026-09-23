@@ -1,0 +1,101 @@
+{
+  "id": "7862",
+  "slug": "7862-scholarly-agent",
+  "name": "Научный агент",
+  "nameEn": "Scholarly Agent",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "Волшебник",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Critical Role: Call of the Netherdeep",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11,
+    "type": "14 с доспехом мага"
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "4d8 + 4"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 12,
+    "con": 12,
+    "int": 16,
+    "wis": 12,
+    "cha": 10
+  },
+  "savingThrows": {
+    "int": 5
+  },
+  "skills": {
+    "history": 5,
+    "arcana": 5,
+    "investigation": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Знает Общий и ещё один язык."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Разряд магии",
+      "type": "melee_attack",
+      "description": "Рукопашная или Дальнобойная атака заклинанием: +5 к попаданию, досягаемость 5 футов или дистанция 30 футов, одна цель. Попадание: 14 (2к10 + 3) урона электричеством. Если целью является существо, оно не может использовать реакции до начала своего следующего хода.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "range": {
+        "normal": 30
+      },
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Агент может накладывать следующие заклинания, используя Интеллект в качестве базовой характеристики:"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "пляшущие огоньки [dancing lights], волшебная рука [mage hand];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "понимание языков [comprehend languages], опознание [identify] (накладывается действием), доспехи мага [mage armor]."
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Защитный символ",
+      "type": "special",
+      "description": "Агент добавляет 2 к своему КД против одной атаки, которая попала бы по нему. Для этого агент должен видеть атакующего и иметь свободную руку."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

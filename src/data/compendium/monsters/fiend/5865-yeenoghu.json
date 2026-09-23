@@ -1,0 +1,150 @@
+{
+  "id": "5865",
+  "slug": "5865-yeenoghu",
+  "name": "Йеногу",
+  "nameEn": "Yeenoghu",
+  "size": "huge",
+  "type": "fiend",
+  "subtype": "демон",
+  "alignment": "хаотично-злое, именной НИП",
+  "challengeRating": 24,
+  "xp": 62000,
+  "source": "Out of the Abyss",
+  "isNamed": true,
+  "armorClass": {
+    "value": 22,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 348,
+    "hitDice": "24d12 + 192"
+  },
+  "speed": {
+    "walk": 50
+  },
+  "abilities": {
+    "str": 29,
+    "dex": 16,
+    "con": 23,
+    "int": 15,
+    "wis": 24,
+    "cha": 15
+  },
+  "savingThrows": {
+    "dex": 10,
+    "con": 15,
+    "wis": 14
+  },
+  "skills": {
+    "perception": 14,
+    "intimidation": 9
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "bludgeoning",
+    "piercing",
+    "slashing",
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 24,
+    "truesight": 120
+  },
+  "languages": [
+    "Все",
+    "Телепатия 120 фт."
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Йеногу совершает три атаки цепом. Если атака поражает цель, он может создать дополнительный эффект по своему выбору или случайным образом (каждый эффект может быть использован только единожды за одну Мультиатаку):"
+    },
+    {
+      "name": "1",
+      "type": "special",
+      "description": "Атака наносит дополнительный 13 (2к12) дробящего урона.",
+      "damage": [
+        {
+          "dice": "2d12",
+          "mod": 0,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "2",
+      "type": "special",
+      "description": "Цель должна пройти спасбросок Телосложения Сл 17 или будет парализована до начала следующего хода Йеногу.",
+      "save": {
+        "ability": "CON",
+        "dc": 17,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "3",
+      "type": "special",
+      "description": "Цель должна совершить успешный спасбросок Мудрости Сл 17 или станет жертвой эффекта заклинания смятение [confusion] до начала следующего хода Йеногу.",
+      "save": {
+        "ability": "CHA",
+        "dc": 17,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Цеп",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +16 к попаданию, досягаемость 15 фт., одна цель. Попадание: 22 (2к12+9) дробящего урона.",
+      "attackBonus": 16,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "2d12",
+          "mod": 9,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +16 к попаданию, досягаемость 10 фт., одна цель. Попадание: 31 (4к10+9) колющего урона.",
+      "attackBonus": 16,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 9,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": {
+    "actionsPerRound": 3,
+    "options": [
+      {
+        "name": "Наступление",
+        "cost": 1,
+        "description": "Йеногу совершает перемещение со своей скоростью."
+      },
+      {
+        "name": "Удар наотмашь",
+        "cost": 1,
+        "description": "Йеногу совершает атаку цепом. Если атака успешна, цель должна совершить успешный спасбросок Силы Сл 24 или будет отброшена на 15 футов по прямой линии от Йеногу. Если спасбросок провален на 5 или более, цель падает ничком."
+      },
+      {
+        "name": "Дикость (стоит 2-х действий)",
+        "cost": 1,
+        "description": "Йеногу совершает атаку укусом против каждого существа, находящегося на расстоянии 10 футов от него."
+      }
+    ]
+  },
+  "lairActions": [],
+  "spellcasting": null
+}

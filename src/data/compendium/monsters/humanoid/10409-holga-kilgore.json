@@ -1,0 +1,108 @@
+{
+  "id": "10409",
+  "slug": "10409-holga-kilgore",
+  "name": "Хольга Килгор",
+  "nameEn": "Holga Kilgore",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "хаотично-добрый, именной НИП",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Honor among Thieves",
+  "isNamed": true,
+  "armorClass": {
+    "value": 15,
+    "type": "Защита без доспехов"
+  },
+  "hitPoints": {
+    "average": 120,
+    "hitDice": "16d8 + 48"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 14,
+    "con": 16,
+    "int": 11,
+    "wis": 16,
+    "cha": 13
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 7,
+    "survival": 6,
+    "intimidation": 4,
+    "nature": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "Общий",
+    "Полуросликов"
+  ],
+  "traits": [
+    {
+      "name": "Безрассудство",
+      "description": "В начале своего хода Хольга может решить, что в этом ходу все рукопашные атаки оружием будет совершать с преимуществом, но в этом случае до начала её следующего хода все броски атаки по ней тоже будут совершаться с преимуществом."
+    },
+    {
+      "name": "Особое снаряжение",
+      "description": "У Хольги есть тёмнометаллическая секира – магическое оружие, дающее ей сопротивление урону электричеством, пока она его держит."
+    },
+    {
+      "name": "Защита без доспехов",
+      "description": "Пока Хольга не носит доспехов, её Класс Доспеха включает её модификатор Телосложения."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Хольга совершает три атаки Тёмнометаллической секирой или Импровизированным оружием в любой комбинации."
+    },
+    {
+      "name": "Тёмнометаллическая секира",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: 10 (1к12 + 4) рубящего урона.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d12",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Импровизированное оружие",
+      "type": "melee_attack",
+      "description": "Рукопашная или Дальнобойная атака оружием: +7 к попаданию, досягаемость 5 футов или дистанция 20/60 футов, одна цель. Попадание: 7 (1к6 + 4) дробящего урона.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

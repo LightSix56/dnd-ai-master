@@ -1,0 +1,92 @@
+{
+  "id": "12557",
+  "slug": "12557-ruxithid-the-chosen",
+  "name": "Рукситид Избранный",
+  "nameEn": "Ruxithid the Chosen",
+  "size": "medium",
+  "type": "aberration",
+  "subtype": "Гоблиноид",
+  "alignment": "нейтрально-злая, именной НИП",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Phandelver and Below: The Shattered Obelisk",
+  "isNamed": true,
+  "armorClass": {
+    "value": 15,
+    "type": "кольчужная рубаха"
+  },
+  "hitPoints": {
+    "average": 88,
+    "hitDice": "16d8 + 16"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 30,
+    "hover": true
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 19,
+    "con": 12,
+    "int": 18,
+    "wis": 15,
+    "cha": 12
+  },
+  "savingThrows": {
+    "int": 7,
+    "wis": 5
+  },
+  "skills": {
+    "perception": 5,
+    "insight": 5,
+    "stealth": 10
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Гоблинский",
+    "Телепатия 60 фт."
+  ],
+  "traits": [
+    {
+      "name": "Легендарное сопротивление (2/день)",
+      "description": "Если Рукситид проваливает спасбросок, он может вместо этого сделать спасбросок успешным."
+    },
+    {
+      "name": "Ментальная стойкость",
+      "description": "Рукситид совершает с преимуществом спасброски против эффектов, которые могут его очаровать или испугать."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака. Рукситид совершает две атак",
+      "type": "multiattack",
+      "description": "и Пси-Заряженным скимитаром."
+    },
+    {
+      "name": "Пси-заряженный скимитар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: 11 (2к6 + 4) рубящего урона плюс 7 (2к6) психического урона.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,112 @@
+{
+  "id": "15700",
+  "slug": "15700-hazvongel",
+  "name": "Хазвонгел",
+  "nameEn": "Hazvongel",
+  "size": "huge",
+  "type": "fiend",
+  "subtype": "Демон",
+  "alignment": "обычно хаотично-злое",
+  "challengeRating": 14,
+  "xp": 11500,
+  "source": "Vecna: Eve of Ruin",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 237,
+    "hitDice": "25d12 + 75"
+  },
+  "speed": {
+    "walk": 20,
+    "fly": 60
+  },
+  "abilities": {
+    "str": 21,
+    "dex": 20,
+    "con": 16,
+    "int": 12,
+    "wis": 15,
+    "cha": 11
+  },
+  "savingThrows": {
+    "con": 8,
+    "wis": 7
+  },
+  "skills": {
+    "perception": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17,
+    "blindsight": 60,
+    "darkvision": 120
+  },
+  "languages": [
+    "Бездны",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Хазвонгел совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Хазвонгел совершает три атаки Когтями."
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +10 к попаданию, досягаемость 15 футов, одна цель. Попадание: 18 (3к8 + 5) колющего урона.",
+      "attackBonus": 10,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Кровавый шквал (перезарядка 5-6)",
+      "type": "special",
+      "description": "Хазвонгел разбрызгивает кровь 90-футовым конусом. Все существа в этой области должны совершить спасбросок Ловкости Сл 18, получая 27 (6к8) урона некротической энергией при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "6d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 90
+      },
+      "save": {
+        "ability": "DEX",
+        "dc": 18,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

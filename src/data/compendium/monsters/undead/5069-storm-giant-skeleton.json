@@ -1,0 +1,111 @@
+{
+  "id": "5069",
+  "slug": "5069-storm-giant-skeleton",
+  "name": "Скелет штормового великана",
+  "nameEn": "Storm Giant Skeleton",
+  "size": "huge",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 16,
+  "xp": 15000,
+  "source": "Candlekeep Mysteries",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "обломки доспеха"
+  },
+  "hitPoints": {
+    "average": 204,
+    "hitDice": "24d12 + 48"
+  },
+  "speed": {
+    "walk": 50
+  },
+  "abilities": {
+    "str": 29,
+    "dex": 14,
+    "con": 15,
+    "int": 3,
+    "wis": 8,
+    "cha": 1
+  },
+  "savingThrows": {
+    "str": 14,
+    "con": 7
+  },
+  "skills": {
+    "perception": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "thunder",
+    "poison"
+  ],
+  "damageVulnerabilities": [
+    "bludgeoning"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Скелет великана совершает две атаки своим двуручным мечом или метает два камня."
+    },
+    {
+      "name": "Двуручный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +14 к попаданию, досягаемость 10 фт., одна цель. Попадание: 30 (6к6 + 9) рубящего урона плюс 18 (4к8) урона некротической энергией.",
+      "attackBonus": 14,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "6d6",
+          "mod": 9,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Камень",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +14 к попаданию, досягаемость 60/240 фт., одна цель. Попадание: 35 (4к12 + 9) дробящего урона.",
+      "attackBonus": 14,
+      "damage": [
+        {
+          "dice": "4d12",
+          "mod": 9,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Удар молнии (Перезарядка 5-6)",
+      "type": "special",
+      "description": "Великан метает магическую молнию в точку, которую может видеть в радиусе 500 футов от себя. Каждое существо в пределах 10 футов от этой точки должно совершить спасбросок Ловкости Сл 15, в случае провала получая 54 (12к8) урона электричеством или половину урона в случае успеха.",
+      "damage": [
+        {
+          "dice": "12d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "DEX",
+        "dc": 15,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

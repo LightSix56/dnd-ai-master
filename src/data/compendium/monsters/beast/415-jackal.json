@@ -1,0 +1,67 @@
+{
+  "id": "415",
+  "slug": "415-jackal",
+  "name": "Шакал",
+  "nameEn": "Jackal",
+  "size": "small",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 3,
+    "hitDice": "1d6"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 8,
+    "dex": 15,
+    "con": 11,
+    "int": 3,
+    "wis": 12,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Острый слух и тонкий нюх",
+      "description": "Шакал совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на слух и обоняние."
+    },
+    {
+      "name": "Тактика стаи",
+      "description": "Шакал совершает с преимуществом броски атаки по существу, если в пределах 5 футов от этого существа находится как минимум один дееспособный союзник шакала."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +1 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 1 (1к4 − 1).",
+      "attackBonus": 1,
+      "reachFt": 5
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

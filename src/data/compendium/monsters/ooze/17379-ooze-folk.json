@@ -1,0 +1,93 @@
+{
+  "id": "17379",
+  "slug": "17379-ooze-folk",
+  "name": "Слизелюд",
+  "nameEn": "Ooze-folk",
+  "size": "medium",
+  "type": "ooze",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Lost Laboratory of Kwalish",
+  "isNamed": false,
+  "armorClass": {
+    "value": 10,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 19,
+    "hitDice": "2d8 + 10"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 3,
+    "con": 20,
+    "int": 1,
+    "wis": 6,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "blindsight": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Прозрачный",
+      "description": "Даже если слизелюд находится рядом, требуется проверка Мудрости (Восприятие) Сл 12, чтобы обнаружить слизь, которая не перемещается и не атакует. Существо, пытающееся войти в пространство слизи, не зная о её присутствии, захватывается ею врасплох."
+    },
+    {
+      "name": "Хрупкие кости",
+      "description": "За каждые 5 единиц полученного урона скорость перемещения слизелюда снижается на 5 футов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Слизелюд совершает одну атаку Стеклянным мечом и одну атаку Ложноножкой."
+    },
+    {
+      "name": "Стеклянный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к8 + 2) рубящего урона. Если при броске атаки Стеклянным мечом выпадает \"1\", он разбивается и больше не может быть использован.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Ложноножка",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одно существо. Попадание: 5 (1к6 + 2) урона кислотой.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,82 @@
+{
+  "id": "6447",
+  "slug": "6447-harkina-hunt",
+  "name": "Харкина Хант",
+  "nameEn": "Harkina Hunt",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "любое мировоззрение, именной НИП",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Baldur's Gate: Descent Into Avernus",
+  "isNamed": true,
+  "armorClass": {
+    "value": 10
+  },
+  "hitPoints": {
+    "average": 4,
+    "hitDice": "1d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 10,
+    "con": 10,
+    "int": 10,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Дубина",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 футов, одна цель. Попадание: Дробящий урон 2 (1к4).",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 0,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Длинный лук",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +2 к попаданию, дистанция 150/600 футов, одна цель. Попадание: Колющий урон 4 (1к8).",
+      "attackBonus": 2,
+      "range": {
+        "normal": 150,
+        "long": 600
+      },
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,76 @@
+{
+  "id": "6122",
+  "slug": "6122-animated-stove",
+  "name": "Оживлённая печь",
+  "nameEn": "Animated Stove",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Waterdeep: Dungeon of the Mad Mage",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17
+  },
+  "hitPoints": {
+    "average": 50,
+    "hitDice": "10d10 - 5"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 10,
+    "con": 10,
+    "int": 3,
+    "wis": 3,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 6,
+    "blindsight": 30
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: 11 (2к8 + 2) дробящего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Огненная отрыжка (Перезарядка 4-6)",
+      "type": "special",
+      "description": "Печь изрыгает из себя 15-футовый конус огня. Каждое существо в этой области должно совершить спасбросок Сл 10 Ловкости, получая 22 (4к10) урона огнём в случае провала и половину этого урона в случае успеха.",
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

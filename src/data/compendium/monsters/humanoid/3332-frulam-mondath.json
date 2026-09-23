@@ -1,0 +1,90 @@
+{
+  "id": "3332",
+  "slug": "3332-frulam-mondath",
+  "name": "Фрулам Мондат",
+  "nameEn": "Frulam Mondath",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "законно-злой, именной НИП",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Hoard of the Dragon Queen",
+  "isNamed": true,
+  "armorClass": {
+    "value": 16,
+    "type": "кольчуга"
+  },
+  "hitPoints": {
+    "average": 44,
+    "hitDice": "8d8 + 8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 10,
+    "con": 13,
+    "int": 11,
+    "wis": 18,
+    "cha": 15
+  },
+  "savingThrows": {
+    "wis": 6,
+    "cha": 4
+  },
+  "skills": {
+    "history": 2,
+    "deception": 4,
+    "religion": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14
+  },
+  "languages": [
+    "Общий",
+    "Драконий",
+    "Инфернальный"
+  ],
+  "traits": [
+    {
+      "name": "Использование заклинаний",
+      "description": "Фрулам является заклинателем 5 уровня. Её базовой характеристикой является Мудрость (Сл спасброска от заклинаний 14, +6 к попаданию атаками заклинаниями). У Фрулам подготовлены следующие заклинания жреца:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Фрулам совершает две атаки алебардой."
+    },
+    {
+      "name": "Алебарда",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: + 5 к попаданию, досягаемость 10 футов, одна цель. Попадание: 7 (1к10 + 2) рубящего урона.",
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 5,
+    "spellAttackBonus": 6,
+    "ability": "WIS"
+  }
+}

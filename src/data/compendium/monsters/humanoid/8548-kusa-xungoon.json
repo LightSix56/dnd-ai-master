@@ -1,0 +1,90 @@
+{
+  "id": "8548",
+  "slug": "8548-kusa-xungoon",
+  "name": "Куса Сюнгун",
+  "nameEn": "Kusa Xungoon",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "Кобольд",
+  "alignment": "законно-добрый, именной НИП",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "Journeys through the Radiant Citadel",
+  "isNamed": true,
+  "armorClass": {
+    "value": 15,
+    "type": "кираса"
+  },
+  "hitPoints": {
+    "average": 9,
+    "hitDice": "2d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 12,
+    "con": 11,
+    "int": 12,
+    "wis": 14,
+    "cha": 16
+  },
+  "savingThrows": {},
+  "skills": {
+    "deception": 5,
+    "insight": 4,
+    "persuasion": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Знает Драконий и два любых языка."
+    },
+    {
+      "name": "Чувствительность к солнечному свету",
+      "description": "Находясь на солнечном свету, кобольд совершает с помехой броски атаки, а также проверки Мудрости (Восприятие), полагающиеся на зрение."
+    },
+    {
+      "name": "Тактика стаи",
+      "description": "Кобольд совершает с преимуществом броски атаки по существу, если в пределах 5 футов от этого существа находится как минимум один дееспособный союзник кобольда."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Рапира",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: 5 (1к8 + 1) колющего урона.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Парирование",
+      "type": "special",
+      "description": "Куса добавляет 2 к КД против одной рукопашной атаки, которая должна попасть по нему. Для этого Куса должен видеть атакующего, и должен использовать рукопашное оружие."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

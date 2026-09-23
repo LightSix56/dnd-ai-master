@@ -1,0 +1,103 @@
+{
+  "id": "5667",
+  "slug": "5667-xvart-speaker",
+  "name": "Ксварт спикер",
+  "nameEn": "Xvart speaker",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "ксварт",
+  "alignment": "хаотично-злой",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "Volo's guide to monsters",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "кожаный доспех"
+  },
+  "hitPoints": {
+    "average": 7,
+    "hitDice": "2d6"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 8,
+    "dex": 14,
+    "con": 10,
+    "int": 13,
+    "wis": 7,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "darkvision": 30
+  },
+  "languages": [
+    "Бездны"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Дополнительно знает любой один язык (обычно Общий или Гоблинский)."
+    },
+    {
+      "name": "Низкое коварство",
+      "description": "Ксварт может совершать действие Отход бонусным действием каждый ход."
+    },
+    {
+      "name": "Стайная опора",
+      "description": "Ксварт имеет преимущество на проверки Силы (Атлетика), сделанные для толчка существа, если по крайней мере один союзник ксварта находится в 5 футах от цели и дееспособен."
+    },
+    {
+      "name": "Язык Раксиворта",
+      "description": "Ксварт может общаться с обычными летучими мышами и крысами, а также с гигантскими летучими мышами и гигантскими крысами."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 5 (1к6 + 2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Праща",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +4 к попаданию, дистанция 30/120 футов, одна цель. Попадание: 4 (1к4 + 2) дробящего урона.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 30,
+        "long": 120
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

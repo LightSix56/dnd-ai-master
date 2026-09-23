@@ -1,0 +1,58 @@
+{
+  "id": "5803",
+  "slug": "5803-chimeric-hare",
+  "name": "Заяц химера",
+  "nameEn": "Chimeric Hare",
+  "size": "tiny",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Icewind Dale: Rime of the Frostmaiden",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 1,
+    "hitDice": "1d4 - 1"
+  },
+  "speed": {
+    "walk": 20,
+    "fly": 30,
+    "burrow": 5
+  },
+  "abilities": {
+    "str": 1,
+    "dex": 17,
+    "con": 9,
+    "int": 2,
+    "wis": 11,
+    "cha": 4
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 2,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Побег",
+      "description": "Заяц может на каждом своём ходу бонусным действием совершать действия Засада, Отход или Рывок."
+    }
+  ],
+  "actions": [],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

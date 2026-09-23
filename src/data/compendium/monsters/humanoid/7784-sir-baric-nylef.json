@@ -1,0 +1,93 @@
+{
+  "id": "7784",
+  "slug": "7784-sir-baric-nylef",
+  "name": "Сэр Барик Нилеф",
+  "nameEn": "Sir Baric Nylef",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек иллусканец",
+  "alignment": "законно-добрый, именной НИП",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Storm King's Thunder",
+  "isNamed": true,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 52,
+    "hitDice": "8d8 + 16"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 11,
+    "con": 14,
+    "int": 11,
+    "wis": 15,
+    "cha": 15
+  },
+  "savingThrows": {},
+  "skills": {
+    "survival": 4,
+    "medicine": 4,
+    "insight": 4,
+    "investigation": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Храбрость",
+      "description": "Барик получает преимущество на спасброски против того, чтобы стать испуганным."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Молот",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: 11 (2к6+4) дробящего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Тяжёлый арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +2 к попаданию, дистанция 100/400 фт., одна цель. Попадание: 5 (1к10) колющего урона. Барик носит с собой 10 болтов для арбалета.",
+      "attackBonus": 2,
+      "range": {
+        "normal": 100,
+        "long": 400
+      },
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

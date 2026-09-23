@@ -1,0 +1,69 @@
+{
+  "id": "4312",
+  "slug": "4312-beast-of-the-sea",
+  "name": "Морской зверь",
+  "nameEn": "Beast of the Sea",
+  "size": "medium",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Tasha's Cauldron of Everything",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 5,
+    "hitDice": "1d8"
+  },
+  "speed": {
+    "walk": 5,
+    "swim": 60
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 14,
+    "con": 15,
+    "int": 8,
+    "wis": 14,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "понимает языки",
+    "на которых вы говорите"
+  ],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Зверь может дышать и воздухом, и под водой."
+    },
+    {
+      "name": "Первичная связь",
+      "description": "Вы можете добавить свой бонус мастерства к любой проверке характеристик или спасброску, которые совершает зверь."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Опутывающий удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: ваш модификатор броска атаки заклинанием к попаданию, досягаемость 5 футов, одна цель. Попадание: 1к6 + 2 + БМ колющего или дробящего урона (по вашему выбору), и цель схвачена (Сл высвобождения равна Сл спасброска ваших заклинаний). Пока этот захват не окончится, зверь не сможет использовать эту атаку по другой цели.",
+      "reachFt": 5
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,118 @@
+{
+  "id": "13210",
+  "slug": "13210-transcendent-order-conduit",
+  "name": "Проводник Совершенного ордена",
+  "nameEn": "Transcendent Order Conduit",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Planescape: Adventures in the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "защита без доспехов"
+  },
+  "hitPoints": {
+    "average": 97,
+    "hitDice": "15d8 + 30"
+  },
+  "speed": {
+    "walk": 50
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 19,
+    "con": 14,
+    "int": 10,
+    "wis": 18,
+    "cha": 12
+  },
+  "savingThrows": {
+    "wis": 7,
+    "cha": 4
+  },
+  "skills": {
+    "acrobatics": 7,
+    "perception": 7,
+    "performance": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17
+  },
+  "languages": [
+    "Общий плюс один язык"
+  ],
+  "traits": [
+    {
+      "name": "Инстинктивные рефлексы",
+      "description": "Проводник с преимуществом совершает броски инициативы, и он не может иметь помеху на броски атаки."
+    },
+    {
+      "name": "Защита без доспехов",
+      "description": "Пока проводник не носит ни доспехи, ни щит, к КД прибавляется его модификатор Мудрости."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Проводник совершает три Безоружных удара."
+    },
+    {
+      "name": "Безоружный удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: 11 (2к6 + 4) дробящего урона. Один раз в ход, проводник может выбрать один из следующих дополнительных эффектов (выберите один или бросьте к4):",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "1–2: Выведение из строя",
+      "type": "special",
+      "description": "Цель должна преуспеть в спасброске Телосложения Сл 15, иначе станет недееспособной до конца следующего хода проводника.",
+      "save": {
+        "ability": "CON",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "3–4: Толчок",
+      "type": "special",
+      "description": "Цель отбрасывается от проводника на расстояние до 10 футов по горизонтали."
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Проводник может совершать до трёх реакци",
+      "type": "special",
+      "description": "й в раунд, но только одну в ход."
+    },
+    {
+      "name": "Отражение снарядов",
+      "type": "special",
+      "description": "В ответ на попадание по нему атакой дальнобойным оружием, проводник отражает снаряд. Урон от этой атаки уменьшается на 1к10."
+    },
+    {
+      "name": "Не здесь",
+      "type": "special",
+      "description": "Когда проводник должен совершить спасбросок, он может переместиться на половину своей скорости, не провоцируя атак. Если его новое положение выводит его за пределы досягаемости или иным образом делает невозможным попадание под действие эффекта, проводник полностью избегает эффекта."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

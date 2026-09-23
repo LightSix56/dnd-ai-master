@@ -1,0 +1,139 @@
+{
+  "id": "6270",
+  "slug": "6270-young-emerald-dragon",
+  "name": "Молодой изумрудный дракон",
+  "nameEn": "Young Emerald Dragon",
+  "size": "large",
+  "type": "dragon",
+  "subtype": "самоцветный",
+  "alignment": "законно-нейтральный",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 142,
+    "hitDice": "15d10 + 60"
+  },
+  "speed": {
+    "walk": 40,
+    "fly": 60,
+    "burrow": 30
+  },
+  "abilities": {
+    "str": 21,
+    "dex": 12,
+    "con": 19,
+    "int": 16,
+    "wis": 14,
+    "cha": 16
+  },
+  "savingThrows": {
+    "dex": 4,
+    "con": 7,
+    "wis": 5,
+    "cha": 6
+  },
+  "skills": {
+    "perception": 8,
+    "arcana": 6,
+    "deception": 6,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 18,
+    "blindsight": 30,
+    "darkvision": 120
+  },
+  "languages": [
+    "Общий",
+    "Драконий",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Прокладывание туннеля",
+      "description": "Дракон может копать сквозь сплошной камень со скоростью копания, уменьшенной вдвое, оставляя за собой туннель диаметром 10 фт."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дракон совершает одну атаку Укусом и две Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 10 фт., одна цель. Попадание: 16 (2к10+5) колющего урона плюс 3 (1к6) урона психической энергией",
+      "attackBonus": 8,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 фт., одна цель. Попадание: 8 (1к6+5) рубящего урона.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний (Псионика)",
+      "type": "special",
+      "description": "Дракон накладывает одно из следующих заклинаний, не требуя компонентов заклинаний и используя Интеллект в качестве базовой характеристики (Сл спасброска от заклианния 14):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "малая иллюзия [minor illusion], волшебная рука [mage hand] (волшебная рука невидима);"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "невидимость [invisibility], обнаружение мыслей [detect thoughts], безмолвный образ [silent image]."
+    },
+    {
+      "name": "Дезориентирующее дыхание (перезарядка 5-6)",
+      "type": "breath",
+      "description": "Дракон выдыхает волну психического диссонанса 30-футовом конусом. Все существа в этой области должны совершить спасбросок Интеллекта Сл 15. В случае провала, существо получает 31(9к6) урона психической энергией и до конца следующего хода, когда существо совершает бросок атаки или проверку характеристики, дополнительно бросает 1к6, вычитая его результат. В случае успеха существо получает половину урона без дополнительных эффектов.",
+      "damage": [
+        {
+          "dice": "9d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "INT",
+        "dc": 15,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

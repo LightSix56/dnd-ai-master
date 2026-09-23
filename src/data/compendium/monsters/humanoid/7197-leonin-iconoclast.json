@@ -1,0 +1,112 @@
+{
+  "id": "7197",
+  "slug": "7197-leonin-iconoclast",
+  "name": "Леонинский безбожник",
+  "nameEn": "Leonin Iconoclast",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "Леонин",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Mythic Odysseys of Theros",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "защита без доспехов"
+  },
+  "hitPoints": {
+    "average": 67,
+    "hitDice": "9d8 + 27"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 18,
+    "con": 16,
+    "int": 13,
+    "wis": 17,
+    "cha": 10
+  },
+  "savingThrows": {
+    "dex": 7,
+    "wis": 6
+  },
+  "skills": {
+    "survival": 6,
+    "intimidation": 3,
+    "arcana": 4,
+    "insight": 6,
+    "religion": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Леонинский"
+  ],
+  "traits": [
+    {
+      "name": "Увёртливость",
+      "description": "Если безбожник подвергается действию эффекта, позволяющего совершить спасбросок Ловкости, чтобы получить только половину урона, безбожник вместо этого не получает урон, если преуспеет в спасброске, и получит лишь половину урона, если провалит спасбросок."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Базовой характеристикой безбожника является Мудрость (Сл спасброска от заклинания 14). Безбожник может накладывать следующие заклинания, не нуждаясь в материальных компонентах:"
+    },
+    {
+      "name": "Защита без доспехов",
+      "description": "Пока безбожник не носит ни доспехи, ни щит, к его КД прибавляется его модификатор Мудрости."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Леонинец совершает три атаки оружием."
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: 11 (2к6 + 4) рубящего урона плюс 7 (2к6) урона силовым полем.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Дротик",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +7 к попаданию, дистанция 20/60 футов, одна цель. Попадание: 6 (1к4 + 4) колющего урона.",
+      "attackBonus": 7,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

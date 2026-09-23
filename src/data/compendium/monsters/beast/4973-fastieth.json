@@ -1,0 +1,69 @@
+{
+  "id": "4973",
+  "slug": "4973-fastieth",
+  "name": "Шустрик",
+  "nameEn": "Fastieth",
+  "size": "medium",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Eberron: Rising from the Last War",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 9,
+    "hitDice": "2d8"
+  },
+  "speed": {
+    "walk": 50
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 18,
+    "con": 10,
+    "int": 4,
+    "wis": 11,
+    "cha": 4
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Стремительность (Перезарядка 5-6)",
+      "description": "Шустрик может предпринять действие Уклонение в качестве бонусного действия."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: Колющий урон 8 (1к8 + 4).",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

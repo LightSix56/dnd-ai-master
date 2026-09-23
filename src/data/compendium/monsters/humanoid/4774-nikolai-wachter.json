@@ -1,0 +1,79 @@
+{
+  "id": "4774",
+  "slug": "4774-nikolai-wachter",
+  "name": "Николай Вахтер",
+  "nameEn": "Nikolai Wachter",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "законно-нейтральный, именной НИП",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "Curse of Strahd",
+  "isNamed": true,
+  "armorClass": {
+    "value": 15,
+    "type": "кираса"
+  },
+  "hitPoints": {
+    "average": 9,
+    "hitDice": "2d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 12,
+    "con": 11,
+    "int": 12,
+    "wis": 14,
+    "cha": 16
+  },
+  "savingThrows": {},
+  "skills": {
+    "deception": 5,
+    "insight": 4,
+    "persuasion": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Два любых языка."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Рапира",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 5 (1к8 + 1).",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Парирование",
+      "type": "special",
+      "description": "Николай добавляет 2 к КД против одной рукопашной атаки, которая должна попасть по нему. Для этого Николай должен видеть атакующего, и должен использовать рукопашное оружие."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

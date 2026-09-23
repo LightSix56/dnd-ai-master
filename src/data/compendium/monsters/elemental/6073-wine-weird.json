@@ -1,0 +1,82 @@
+{
+  "id": "6073",
+  "slug": "6073-wine-weird",
+  "name": "Винная аномалия",
+  "nameEn": "Wine Weird",
+  "size": "large",
+  "type": "elemental",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Tomb of Annihilation",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 58,
+    "hitDice": "9d10 + 9"
+  },
+  "speed": {
+    "walk": 0,
+    "swim": 60
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 16,
+    "con": 13,
+    "int": 11,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "blindsight": 30
+  },
+  "languages": [
+    "Акван"
+  ],
+  "traits": [
+    {
+      "name": "Языки —",
+      "description": "понимает Акван, но не говорит."
+    },
+    {
+      "name": "Невидимость в воде",
+      "description": "Винная аномалия невидима, если полностью погружена в воду."
+    },
+    {
+      "name": "Привязка к воде",
+      "description": "Винная аномалия умирает, если покидает воду, к которой привязана, или если эта вода уничтожается."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Сжимание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 10 футов, одно существо. Попадание: Дробящий урон 13 (3к6 + 3). Если размер цели не больше Среднего, она становится схваченной (Сл высвобождения 13) и подтягивается на 5 футов к винная аномалии. Пока цель схвачена, она опутана, винная аномалия пытается её утопить, и аномалия не может сжимать другую цель.",
+      "attackBonus": 5,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

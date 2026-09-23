@@ -1,0 +1,94 @@
+{
+  "id": "17282",
+  "slug": "17282-skyjek-roc",
+  "name": "Скайек Рух",
+  "nameEn": "Skyjek Roc",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "кираса"
+  },
+  "hitPoints": {
+    "average": 37,
+    "hitDice": "5d10 + 10"
+  },
+  "speed": {
+    "walk": 20,
+    "fly": 90
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 13,
+    "con": 14,
+    "int": 3,
+    "wis": 10,
+    "cha": 8
+  },
+  "savingThrows": {
+    "dex": 3,
+    "wis": 2
+  },
+  "skills": {
+    "perception": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Острый взгляд",
+      "description": "Рух совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на зрение."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Рух совершает две атаки: одну Клювом и одну Когтями."
+    },
+    {
+      "name": "Клюв",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 фт., одна цель. Попадание: 9 (1к8 + 5) колющего урона.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 фт., одна цель. Попадание: 10 (2к4 + 5) рубящего урона.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

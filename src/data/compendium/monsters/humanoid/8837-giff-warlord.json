@@ -1,0 +1,122 @@
+{
+  "id": "8837",
+  "slug": "8837-giff-warlord",
+  "name": "Гифф-военачальник",
+  "nameEn": "Giff Warlord",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "любое мировоззрение",
+  "challengeRating": 10,
+  "xp": 5900,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "полулаты"
+  },
+  "hitPoints": {
+    "average": 178,
+    "hitDice": "21d8 + 84"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 22,
+    "dex": 15,
+    "con": 18,
+    "int": 14,
+    "wis": 14,
+    "cha": 18
+  },
+  "savingThrows": {
+    "str": 10,
+    "dex": 6,
+    "con": 8,
+    "wis": 6
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Знатоки огнестрельного оружия",
+      "description": "Знание оружия позволяет гиффу игнорировать свойство «перезарядка» любого огнестрельного оружия."
+    },
+    {
+      "name": "Легендарное сопротивление (2/день)",
+      "description": "Если гифф проваливает спасбросок, он может вместо этого сделать его успешным."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Гифф совершает две атаки Моргенштерном."
+    },
+    {
+      "name": "Моргенштерн",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +10 к попаданию, досягаемость 5 фт., одна цель. Попадание: 14 (2к8 + 5) колющего урона.",
+      "attackBonus": 10,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Двуствольный мушкет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +6 к попаданию, дистанция 40/120 фт., одна цель. Попадание: 28 (4к12 + 2) колющего урона.",
+      "attackBonus": 6,
+      "range": {
+        "normal": 40,
+        "long": 120
+      },
+      "damage": [
+        {
+          "dice": "4d12",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": {
+    "actionsPerRound": 3,
+    "options": [
+      {
+        "name": "Перемещение",
+        "cost": 1,
+        "description": "Гифф перемещается на расстояние, не превышающее его скорость, не провоцируя атаки."
+      },
+      {
+        "name": "Боевой клич",
+        "cost": 1,
+        "description": "Гифф оканчивает состояние испуганный на себе и любых других существах по своему выбору, которых он может видеть в пределах 30 футов."
+      },
+      {
+        "name": "Излюбленное оружие (стоит 2 действия)",
+        "cost": 2,
+        "description": "Гифф совершает две атаки Моргенштерном или одну Двуствольным мушкетом."
+      }
+    ]
+  },
+  "lairActions": [],
+  "spellcasting": null
+}

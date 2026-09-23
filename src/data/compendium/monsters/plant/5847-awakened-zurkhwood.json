@@ -1,0 +1,76 @@
+{
+  "id": "5847",
+  "slug": "5847-awakened-zurkhwood",
+  "name": "Пробудившийся зархвуд",
+  "nameEn": "Awakened Zurkhwood",
+  "size": "huge",
+  "type": "plant",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Out of the Abyss",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 59,
+    "hitDice": "7d12 + 14"
+  },
+  "speed": {
+    "walk": 20
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 6,
+    "con": 15,
+    "int": 10,
+    "wis": 10,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [
+    "fire"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 120
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "- один язык, известный создателю (Если пробудившийся зархвуд был создан властителем миконидов, то он не может разговаривать)."
+    },
+    {
+      "name": "Обманчивая внешность",
+      "description": "Пока зархвуд остается без движения, он неотличим от обычного зархвуда."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Размашистый удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 10 футов, одна цель. Попадание: Дробящий урон 14 (3к6 + 4).",
+      "attackBonus": 6,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

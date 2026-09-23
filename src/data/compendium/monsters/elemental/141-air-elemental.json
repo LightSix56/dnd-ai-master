@@ -1,0 +1,102 @@
+{
+  "id": "141",
+  "slug": "141-air-elemental",
+  "name": "Воздушный элементаль",
+  "nameEn": "Air Elemental",
+  "size": "large",
+  "type": "elemental",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15
+  },
+  "hitPoints": {
+    "average": 90,
+    "hitDice": "12d10 + 24"
+  },
+  "speed": {
+    "walk": 0,
+    "fly": 90,
+    "hover": true
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 20,
+    "con": 14,
+    "int": 6,
+    "wis": 10,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Ауран"
+  ],
+  "traits": [
+    {
+      "name": "Воздушное тело",
+      "description": "Элементаль может входить в пространство враждебных существ и останавливаться там. Он может перемещаться сквозь пространство шириной в 1 дюйм без протискивания."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Элементаль совершает два Размашистых удара."
+    },
+    {
+      "name": "Размашистый удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одна цель. Попадание: 14 (2к8 + 5) дробящего урона.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 5,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Вихрь (перезарядка 4–6)",
+      "type": "special",
+      "description": "Все существа в пространстве Элементаля должны совершить спасбросок Силы Сл 13. При провале цель получает 15 (3к8 + 2) дробящего урона и отбрасывается на расстояние 20 футов от Элементаля в случайном направлении, после чего падает ничком. Если отброшенная цель ударяется о предмет, такой как стена или пол, цель получает 3 (1к6) дробящего урона за каждые 10 футов перемещения. Если цель отброшена в другое существо, это существо должно преуспеть в спасброске Ловкости Сл 13, иначе получит такой же урон и упадет ничком.",
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Если исходный спасбросок был успешным, ц",
+      "type": "special",
+      "description": "ель получает половину дробящего урона, не отбрасывается и не падает ничком."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

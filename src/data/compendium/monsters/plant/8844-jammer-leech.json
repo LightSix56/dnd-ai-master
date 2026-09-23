@@ -1,0 +1,92 @@
+{
+  "id": "8844",
+  "slug": "8844-jammer-leech",
+  "name": "Корабельная пиявка",
+  "nameEn": "Jammer Leech",
+  "size": "tiny",
+  "type": "plant",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 27,
+    "hitDice": "5d4 + 15"
+  },
+  "speed": {
+    "walk": 10
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 1,
+    "con": 16,
+    "int": 1,
+    "wis": 10,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 30
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Перегрузка рулевого",
+      "description": "Если хиты пиявки опускаются до 0, пока она прицеплена к кораблю с магическим рулем [spelljamming helm], существо настроенное на штурвал должно совершить спасбросок Телосложения Сл 13. При провале, существо получает 10 (4к4) урона психической энергией и становится недееспособным на 1 минуту. При успехе, существо получает половину этого урона и становится недееспособным до конца своего следующего хода."
+    },
+    {
+      "name": "Необычная природа",
+      "description": "Пиявка не нуждается в воздухе и сне."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Шипастое щупальце",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 фт., одна цель. Попадание: 2 (1к4) колющего урона.",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Магическая разрядка (1/день)",
+      "type": "special",
+      "description": "Когда пиявка получает урон, она может выпустить из своего глаза снаряд магической энергии, выбрав в качестве цели одно существо, которое она может видеть, в пределах 30 футов. Цель должна преуспеть в спасброске Ловкости Сл 13, иначе получит 10 (3к6) урона силовым полем и станет ошеломлённой до конца своего следующего хода.",
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

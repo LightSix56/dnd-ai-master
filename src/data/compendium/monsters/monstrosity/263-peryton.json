@@ -1,0 +1,102 @@
+{
+  "id": "263",
+  "slug": "263-peryton",
+  "name": "Перитон",
+  "nameEn": "Peryton",
+  "size": "medium",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "хаотично-злой",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 33,
+    "hitDice": "6d8 + 6"
+  },
+  "speed": {
+    "walk": 20,
+    "fly": 60
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 12,
+    "con": 13,
+    "int": 9,
+    "wis": 12,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15
+  },
+  "languages": [
+    "понимает Общий и Эльфийский",
+    "но не говорит"
+  ],
+  "traits": [
+    {
+      "name": "Пикирующая атака",
+      "description": "Если перитон летит и пикирует как минимум на 30 футов по прямой к цели, а затем попадает по ней рукопашной атакой оружием, атака причиняет цели дополнительный урон 9 (2к8)."
+    },
+    {
+      "name": "Облет",
+      "description": "Перитон не провоцирует атаки, когда вылетает из досягаемости врага."
+    },
+    {
+      "name": "Острое зрение и тонкий нюх",
+      "description": "Перитон совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на зрение или обоняние."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Перитон совершает одну атаку боданием, и одну атаку когтем."
+    },
+    {
+      "name": "Бодание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 7 (1к8 + 3).",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 8 (2к4 + 3).",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

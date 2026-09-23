@@ -1,0 +1,85 @@
+{
+  "id": "8895",
+  "slug": "8895-meenlock",
+  "name": "Минлок",
+  "nameEn": "Meenlock",
+  "size": "small",
+  "type": "fey",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Candlekeep Mysteries",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 31,
+    "hitDice": "7d6 + 7"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 7,
+    "dex": 15,
+    "con": 12,
+    "int": 11,
+    "wis": 10,
+    "cha": 8
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4,
+    "survival": 2,
+    "stealth": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 120
+  },
+  "languages": [
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Аура страха",
+      "description": "Любой зверь или гуманоид, который начинает свой ход не далее 10 футов от минлока, должен успешно пройти спасбросок Мудрости Сл 11, иначе станет испуган до начала своего следующего хода."
+    },
+    {
+      "name": "Чувствительность к солнечному свету",
+      "description": "Будучи на ярком свету, минлок совершает броски атаки и проверки Мудрости (Восприятие), основанные на зрении, с помехой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (2к4 + 2) рубящего урона, и цель — существо, то должна преуспеть в спасброске Телосложения Сл 11, иначе станет парализованной на 1 минуту. Цель может повторять спасбросок в конце каждого своего хода, оканчивая эффект при успехе.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 11,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

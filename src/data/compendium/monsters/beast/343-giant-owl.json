@@ -1,0 +1,82 @@
+{
+  "id": "343",
+  "slug": "343-giant-owl",
+  "name": "Гигантская сова",
+  "nameEn": "Giant owl",
+  "size": "large",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 19,
+    "hitDice": "3d10 + 3"
+  },
+  "speed": {
+    "walk": 5,
+    "fly": 60
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 15,
+    "con": 12,
+    "int": 8,
+    "wis": 13,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 5,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "darkvision": 120
+  },
+  "languages": [
+    "Язык Гигантских сов",
+    "понимает Общий",
+    "Сильван и Эльфийский",
+    "но не говорит на них"
+  ],
+  "traits": [
+    {
+      "name": "Облет",
+      "description": "Сова не провоцирует атаки, когда вылетает из досягаемости врага."
+    },
+    {
+      "name": "Острые зрение и слух",
+      "description": "Сова совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на слух или зрение."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: 8 (2к6 + 1) рубящего урона.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 1,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,107 @@
+{
+  "id": "3656",
+  "slug": "3656-thurl-merosska",
+  "name": "Тёрл Мерросска",
+  "nameEn": "Thurl Merosska",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "законно-злой, именной НИП",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Princes of the Apocalypse",
+  "isNamed": true,
+  "armorClass": {
+    "value": 16,
+    "type": "кираса"
+  },
+  "hitPoints": {
+    "average": 70,
+    "hitDice": "11d8 + 21"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 14,
+    "con": 14,
+    "int": 11,
+    "wis": 10,
+    "cha": 15
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 5,
+    "deception": 4,
+    "persuasion": 4,
+    "уход_за_животными": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий",
+    "Ауран"
+  ],
+  "traits": [
+    {
+      "name": "Использование заклинаний",
+      "description": "Тёрл является заклинателем 5-го уровня. Его базовой характеристикой является Харизма (Сл спасброска от заклинаний 12, +4 к атакам заклинаниями). Тёрл знает следующие заклинания чародея:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Тёрл совершает две рукопашные атаки."
+    },
+    {
+      "name": "Двуручный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: рубящий урон 10 (2к6 + 3).",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Длинное копьё",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 10 футов, одна цель. Попадание: колющий урон 9 (1к12 + 3).",
+      "attackBonus": 5,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d12",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Парирование",
+      "type": "special",
+      "description": "Тёрл добавляет 2 к своему КД против одной рукопашной атаки, которая должна была попасть по нему. Чтобы использовать парирование, Тёрл должен видеть атакующего и держать в руках рукопашное оружие."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 5,
+    "ability": "CHA"
+  }
+}

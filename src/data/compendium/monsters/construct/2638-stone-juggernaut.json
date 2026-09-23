@@ -1,0 +1,92 @@
+{
+  "id": "2638",
+  "slug": "2638-stone-juggernaut",
+  "name": "Каменный джаггернаут",
+  "nameEn": "Stone Juggernaut",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 12,
+  "xp": 8400,
+  "source": "Tomb of Annihilation",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "Природный доспех"
+  },
+  "hitPoints": {
+    "average": 157,
+    "hitDice": "15d10 + 75"
+  },
+  "speed": {
+    "walk": 50
+  },
+  "abilities": {
+    "str": 22,
+    "dex": 1,
+    "con": 21,
+    "int": 2,
+    "wis": 11,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "bludgeoning",
+    "piercing",
+    "slashing",
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "blindsight": 120
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Разрушительный перекат",
+      "description": "Джаггернаут может перемещаться по пространству существа лежащего ничком. Существо, через чьё пространство первый раз за ход проходит джаггернаут, должно совершить спасбросок Ловкости Сл 17, получив 55 (10к10) дробящего урона при неудачном спасброске или половину этого урона при успехе."
+    },
+    {
+      "name": "Неизменяемая форма",
+      "description": "Джаггернаут невосприимчив к любому заклинанию или эффекту, который изменил бы его форму."
+    },
+    {
+      "name": "Регенерация",
+      "description": "Пока у джаггернаута остаётся хотя бы 1 хит, он магическим образом восстанавливает все свои хиты на рассвете. Джаггернаут уничтожается и не регенерирует если его хиты опускаются до 0."
+    },
+    {
+      "name": "Осадный монстр",
+      "description": "Джаггернаут наносит двойной урон объектам и постройкам."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +10 к попаданию, досягаемость 5 футов, одна цель. Попадание: 25 (3к12 + 6) дробящего урона. Если целью атаки является Большое или меньшее существо, то оно должно пройти спасбросок Силы Сл 17 или будет сбито с ног.",
+      "attackBonus": 10,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d12",
+          "mod": 6,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 17,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

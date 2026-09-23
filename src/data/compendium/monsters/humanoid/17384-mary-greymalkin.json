@@ -1,0 +1,107 @@
+{
+  "id": "17384",
+  "slug": "17384-mary-greymalkin",
+  "name": "Мэри Греймалкин",
+  "nameEn": "Mary Greymalkin",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "эладрин",
+  "alignment": "нейтральный, именной НИП",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Lost Laboratory of Kwalish",
+  "isNamed": true,
+  "armorClass": {
+    "value": 14,
+    "type": "наручи защиты, кольцо защиты"
+  },
+  "hitPoints": {
+    "average": 45,
+    "hitDice": "7d8 + 14"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 12,
+    "con": 10,
+    "int": 14,
+    "wis": 14,
+    "cha": 15
+  },
+  "savingThrows": {
+    "str": 1,
+    "dex": 2,
+    "con": 1,
+    "int": 3,
+    "wis": 5,
+    "cha": 5
+  },
+  "skills": {
+    "arcana": 4,
+    "medicine": 4,
+    "nature": 4,
+    "religion": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Бездны",
+    "Инфернальный",
+    "Небесный",
+    "Сильван",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Особое снаряжение",
+      "description": "Мэри носит наручи защиты [bracers of defense] и кольцо защиты [ring of protection], а так же владеет колодой некоторых вещей [deck of Several Things]."
+    },
+    {
+      "name": "Фейское присутствие (перезаряжается после короткого отдыха)",
+      "description": "Мэри может заставить каждое существо в пределах 10 футов от нее преуспеть в спасброске Мудрости Сл 12, иначе оно станет очарованным или испуганным ею (по выбору Мэри) до конца её следующего хода."
+    },
+    {
+      "name": "Наследие фей",
+      "description": "Мэри совершает с преимуществом спасброски от очарования, и магия не может её усыпить."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Мэри является заклинателем 5-го уровня. Её базовой характеристикой является Харизма (Сл спасброска от заклинания 12, +4 к попаданию атаками заклинаниями). Она восстанавливает ячейки заклинаний после окончания короткого или продолжительно отдыха. Она знает следующие заклинания колдуна:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Боевой посох",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 футов, одна цель. Попадание: 3 (1к6) дробящего урона.",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 0,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 5,
+    "spellAttackBonus": 4,
+    "ability": "CHA"
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "id": "7777",
+  "slug": "7777-naxene-drathkala",
+  "name": "Наксин Драткала",
+  "nameEn": "Naxene Drathkala",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек тёрами",
+  "alignment": "нейтрально-добрый, именной НИП",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Storm King's Thunder",
+  "isNamed": true,
+  "armorClass": {
+    "value": 10,
+    "type": "13 с доспехом мага"
+  },
+  "hitPoints": {
+    "average": 27,
+    "hitDice": "6d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 8,
+    "dex": 11,
+    "con": 11,
+    "int": 17,
+    "wis": 12,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "history": 5,
+    "arcana": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [
+    "Общий",
+    "Дварфийский",
+    "Драконий",
+    "Эльфийский"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Посох",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +1 к попаданию, досягаемость 5 фт., одна цель. Попадание: 2 (1к6-1) дробящего урона или 3 (1к8-1) дробящего урона, если использовать посох двумя руками.",
+      "attackBonus": 1,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": -1,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Наксин является заклинателем 6 уровня. Её способность заклинателя основана на Интеллекте (Сл спасброска от заклинания 13; +5 к броску на попадание). Она обладает следующими заготовленными заклинаниями волшебника:"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "огненный снаряд [fire bolt] (1к10 урона огнём), свет [light], волшебная рука [mage hand];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "доспехи мага [mage armor], волшебная стрела [magic missile], внушение [suggestion]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

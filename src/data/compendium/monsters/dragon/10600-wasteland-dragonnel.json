@@ -1,0 +1,98 @@
+{
+  "id": "10600",
+  "slug": "10600-wasteland-dragonnel",
+  "name": "Пустошная драконнель",
+  "nameEn": "Wasteland Dragonnel",
+  "size": "large",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "хаотично-добрый",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Dragonlance: Shadow of the Dragon Queen",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 65,
+    "hitDice": "10d10 + 10"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 60
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 16,
+    "con": 12,
+    "int": 8,
+    "wis": 13,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "blindsight": 30,
+    "darkvision": 120
+  },
+  "languages": [
+    "Общий",
+    "Драконий (понимает",
+    "но не может говорить)"
+  ],
+  "traits": [
+    {
+      "name": "Облёт",
+      "description": "Драконнель не провоцирует атаки, когда вылетает из досягаемости врага."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Драконнель совершает две атаки Разрыванием."
+    },
+    {
+      "name": "Разрывание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 10 (2к6 + 3) рубящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Плевок кислотой",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +5 к попаданию, дистанция 60 фт., одна цель. Попадание: 20 (5к6 + 3) урона кислотой.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 60
+      },
+      "damage": [
+        {
+          "dice": "5d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

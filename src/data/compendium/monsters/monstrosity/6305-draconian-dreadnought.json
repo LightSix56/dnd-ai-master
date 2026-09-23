@@ -1,0 +1,107 @@
+{
+  "id": "6305",
+  "slug": "6305-draconian-dreadnought",
+  "name": "Драконид дредноут",
+  "nameEn": "Draconian Dreadnought",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "любое мировоззрение",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 57,
+    "hitDice": "6d10 + 24"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 60
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 10,
+    "con": 18,
+    "int": 10,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {
+    "str": 6,
+    "wis": 2
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Предсмертные муки",
+      "description": "Когда хиты драконида уменьшаются до 0, он вспыхивает пламенем и превращается в пепел. Каждое существо пределах 10 фт. от драконида, должно преуспеть в спасброске Ловкости Сл 13, иначе получит 10 (3к6) урона огнём."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Драконид совершает две атаки Зазубренным мечом и одну атаку Хвостом."
+    },
+    {
+      "name": "Зазубренный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: 13 (2к8+4) рубящего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Хвост",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: 8 (1к8+4) дробящего урона. Если целью является существо Большого размера или меньшее, оно должно преуспеть в спасброске Силы Сл 14, иначе станет сбитым с ног.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Кража облика",
+      "type": "special",
+      "description": "После того, как драконид убьет Гуманоида Среднего размера или меньше, драконид может волшебным образом трансформироваться, чтобы выглядеть и чувствовать себя как это существо, сохраняя при этом свои характеристики (кроме своего размера). Эта трансформация длится до тех пор, пока драконид не умрет или не использует действие, чтобы окончить её."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

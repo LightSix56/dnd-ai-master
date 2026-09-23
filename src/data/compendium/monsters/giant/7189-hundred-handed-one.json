@@ -1,0 +1,115 @@
+{
+  "id": "7189",
+  "slug": "7189-hundred-handed-one",
+  "name": "Сторукий",
+  "nameEn": "Hundred-Handed One",
+  "size": "huge",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "законно-нейтральный",
+  "challengeRating": 15,
+  "xp": 13000,
+  "source": "Mythic Odysseys of Theros",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 243,
+    "hitDice": "18d12 + 126"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 26,
+    "dex": 15,
+    "con": 25,
+    "int": 14,
+    "wis": 16,
+    "cha": 16
+  },
+  "savingThrows": {
+    "con": 12,
+    "wis": 8
+  },
+  "skills": {
+    "perception": 8,
+    "intimidation": 8
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 18,
+    "darkvision": 120
+  },
+  "languages": [
+    "Великаний"
+  ],
+  "traits": [
+    {
+      "name": "Быстро реагирующий",
+      "description": "Великан может совершать одну реакцию за каждый ход в бою."
+    },
+    {
+      "name": "Бдительный",
+      "description": "Великан не может быть застан врасплох."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Великан совершает четыре атаки Длинным мечом или две атаки Камнем."
+    },
+    {
+      "name": "Длинный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +13 к попаданию, досягаемость 15 футов, одна цель. Попадание: 21 (3к8 + 8) рубящего урона.",
+      "attackBonus": 13,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 8,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Камень",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +13 к попаданию, дистанция 60/240 футов, одна цель. Попадание: 30 (4к10 + 8) дробящего урона. Если целью является существо, оно должно преуспеть в спасброске Силы Сл 21, иначе упадёт ничком.",
+      "attackBonus": 13,
+      "range": {
+        "normal": 60,
+        "long": 240
+      },
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 8,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 21,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Парирование",
+      "type": "special",
+      "description": "Великан добавляет 5 к КД против одной рукопашной атаки, которая должна попасть по нему. Для этого великан должен видеть атакующего, и должен использовать рукопашное оружие."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

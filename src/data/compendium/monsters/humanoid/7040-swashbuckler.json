@@ -1,0 +1,149 @@
+{
+  "id": "7040",
+  "slug": "7040-swashbuckler",
+  "name": "Сорвиголова",
+  "nameEn": "Swashbuckler]Сорвиголова [Swashbuckler",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любая раса",
+  "alignment": "любое мировоззрениеСредний? Гуманоид (любая раса), любое мировоззрение",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "кожаный доспех, элегантная защита"
+  },
+  "hitPoints": {
+    "average": 66,
+    "hitDice": "12d8 + 12"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 18,
+    "con": 12,
+    "int": 14,
+    "wis": 11,
+    "cha": 15
+  },
+  "savingThrows": {},
+  "skills": {
+    "acrobatics": 8,
+    "athletics": 5,
+    "persuasion": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Любой один язык, обычно Общий."
+    },
+    {
+      "name": "Элегантная защита",
+      "description": "Пока сорвиголова облачён в лёгкий доспех или не носит доспех и не носит щит, к КД добавляется модификатор Харизмы."
+    },
+    {
+      "name": "Языки",
+      "description": "Любой один язык, обычно Общий."
+    },
+    {
+      "name": "Проворный",
+      "description": "Сорвиголова может каждый ход бонусным действием совершать Рывок или Отход."
+    },
+    {
+      "name": "Элегантная защита",
+      "description": "Пока сорвиголова носит лёгкую броню или не носит броню и не носит щит, к КД добавляется модификатор Харизмы."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Сорвиголова совершает одну атаку Кинжалом и две атаки Рапирой."
+    },
+    {
+      "name": "Кинжал",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +6 к попаданию, досягаемость 5 футов или дистанция 20/60 футов, одна цель. Попадание: 6 (1к4 + 4) колющего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Рапира",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 8 (1к8 + 4) колющего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Сорвиголова совершает три атаки: одну кинжалом и две рапирой."
+    },
+    {
+      "name": "Кинжал",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +6 к попаданию, досягаемость 5 футов или дистанция 20/60 футов, одна цель. Попадание: Колющий урон 6 (1к4 + 4).",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Рапира",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 8 (1к8 + 4).",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,108 @@
+{
+  "id": "5606",
+  "slug": "5606-uthgardt-shaman",
+  "name": "Утгардский шаман",
+  "nameEn": "Uthgardt shaman",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "нейтрально-злой",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Storm King's Thunder",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "шкурная броня"
+  },
+  "hitPoints": {
+    "average": 38,
+    "hitDice": "7d8 + 7"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 12,
+    "con": 13,
+    "int": 10,
+    "wis": 15,
+    "cha": 12
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4,
+    "survival": 6,
+    "medicine": 4,
+    "nature": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14
+  },
+  "languages": [
+    "Общий",
+    "Бохти"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Копьё",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +4 к попадению, досягаемость 5 фт. или дистанция 20/60 фт., одна цель. Попадание: 5 (1к6+2) колющего урона или 6 (1к8+2), если используется двумя руками для рукопашной атаки.",
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Короткий лук",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +3 к попаданию, дистанция 80/320 фт., одна цель. Попадание: 4 (1к6+1) колющего урона.",
+      "attackBonus": 3,
+      "range": {
+        "normal": 80,
+        "long": 320
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний (требуется священный набор)",
+      "type": "special",
+      "description": "Шаман накладывает одно из следующих заклинаний, Мудрость является его базовой характеристикой (Сл спасброска от заклинаний 12; +4 к попаданию заклинаниями):",
+      "attackBonus": 4
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "пляшущие огоньки [dancing lights], волшебная рука [mage hand], сообщение [message], чудотворство [thaumaturgy]"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "гадание [augury] (накладывается 1-м действием), проклятие [bestow curse], завеса стрел [cordon of arrows], обнаружение магии [detect magic], разговор с мёртвыми [speak with dead], духовные стражи [spirit guardians]"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

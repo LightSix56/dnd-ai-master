@@ -1,0 +1,62 @@
+{
+  "id": "4673",
+  "slug": "4673-piccolo",
+  "name": "Пикколо",
+  "nameEn": "Piccolo",
+  "size": "small",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения, именной НИП",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Curse of Strahd",
+  "isNamed": true,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 3,
+    "hitDice": "1d6"
+  },
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 8,
+    "dex": 14,
+    "con": 11,
+    "int": 4,
+    "wis": 12,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Тактика стаи",
+      "description": "Пикколо совершает с преимуществом броски атаки по существу, если в пределах 5 футов от этого существа находится как минимум один дееспособный союзник Пикколо."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +1 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 1 (1к4 − 1).",
+      "attackBonus": 1,
+      "reachFt": 5
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

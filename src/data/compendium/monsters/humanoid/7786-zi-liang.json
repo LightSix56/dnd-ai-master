@@ -1,0 +1,100 @@
+{
+  "id": "7786",
+  "slug": "7786-zi-liang",
+  "name": "Цзи Лиань",
+  "nameEn": "Zi Liang",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек из Шу",
+  "alignment": "хаотично-добрый, именной НИП",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Storm King's Thunder",
+  "isNamed": true,
+  "armorClass": {
+    "value": 15,
+    "type": "защита без доспехов"
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "5d8"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 15,
+    "con": 11,
+    "int": 14,
+    "wis": 16,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "acrobatics": 4,
+    "athletics": 3,
+    "perception": 5,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15
+  },
+  "languages": [
+    "Общий",
+    "Гоблинский",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Защита без доспехов",
+      "description": "Если Цзи не носит ни доспех, ни щит, к её КД добавляется модификатор Мудрости."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Цзи совершает две рукопашных атаки."
+    },
+    {
+      "name": "Боевой посох",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 фт., одна цель. Попадание: 4 (1к6 + 1) дробящего урона или 5 (1к8 + 1) дробящего урона, если использовать посох двумя руками.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 1,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Праща",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +4 к попаданию, дистанция 30/120 фт., одна цель. Попадание: 4 (1к4 + 2) дробящего урона. Цзи носит с собой двенадцать камней для пращи.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 30,
+        "long": 120
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

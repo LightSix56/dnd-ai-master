@@ -1,0 +1,94 @@
+{
+  "id": "7692",
+  "slug": "7692-puppeteer-parasite",
+  "name": "Паразит-кукловод",
+  "nameEn": "Puppeteer Parasite",
+  "size": "tiny",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "нейтрально-злая",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Monstrous Compendium Vol 1: Spelljammer Creatures",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 71,
+    "hitDice": "11d4 + 44"
+  },
+  "speed": {
+    "walk": 10,
+    "fly": 30,
+    "hover": true
+  },
+  "abilities": {
+    "str": 2,
+    "dex": 15,
+    "con": 18,
+    "int": 16,
+    "wis": 10,
+    "cha": 3
+  },
+  "savingThrows": {
+    "dex": 4,
+    "con": 6,
+    "wis": 2
+  },
+  "skills": {
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [
+    "radiant"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "blindsight": 60
+  },
+  "languages": [
+    "Телепатия 30 фт."
+  ],
+  "traits": [
+    {
+      "name": "Необычная природа",
+      "description": "Паразит-кукловод не нуждается в воздухе и сне"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Прицепка",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одно существо. Попадание: 12 (3к6 + 2) урона некротической энергией и паразит прикрепляется к цели. Пока паразит прикреплен к существу, он больше не может совершать Прицепку. Он может открепиться от цели, потратив 5 футов перемещения. Действием существо, в пределах досягаемости которого находится паразит, может попытаться открепить его, преуспев в проверке Силы Сл 14.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Истребление жизни",
+      "type": "special",
+      "description": "Паразит наносит 12 (3к6 + 2) урона некротической энергией существу, к которому он прикреплён, если оно не является Конструктом или Нежитью. Паразит восстанавливает количество хитов равное нанесённому урону.",
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

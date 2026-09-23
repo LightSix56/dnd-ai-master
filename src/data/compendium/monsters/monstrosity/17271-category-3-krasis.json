@@ -1,0 +1,107 @@
+{
+  "id": "17271",
+  "slug": "17271-category-3-krasis",
+  "name": "Красис 3-й категории",
+  "nameEn": "Category 3 Krasis",
+  "size": "huge",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 16,
+  "xp": 15000,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 287,
+    "hitDice": "25d12 + 125"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 23,
+    "dex": 12,
+    "con": 21,
+    "int": 2,
+    "wis": 13,
+    "cha": 8
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Красис может дышать воздухом и водой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Красис совершает три атаки: одну Укусом, одну Когтями и одну Хвостом."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +11 к попаданию, досягаемость 10 фт., одно существо. Попадание: 27 (6к6 + 6) колющего урона.",
+      "attackBonus": 11,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "6d6",
+          "mod": 6,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +11 к попаданию, досягаемость 10 фт., одна цель. Попадание: 22 (3к10 + 6) рубящего урона.",
+      "attackBonus": 11,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 6,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Хвост",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +11 к попаданию, досягаемость 15 фт., одна цель. Попадание: 33 (6к8 + 6) дробящего урона. Если цель — существо, она должна преуспеть в спасброске Силы Сл 19, иначе будет сбита с ног.",
+      "attackBonus": 11,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "6d8",
+          "mod": 6,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 19,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

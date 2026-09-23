@@ -1,0 +1,116 @@
+{
+  "id": "8315",
+  "slug": "8315-prismari-professor-of-expression",
+  "name": "Профессор экспрессии Призмари",
+  "nameEn": "Prismari Professor of Expression",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "Чародей",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Strixhaven: A Curriculum of Chaos",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "16 с доспехами мага"
+  },
+  "hitPoints": {
+    "average": 97,
+    "hitDice": "15d8 + 30"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 16,
+    "con": 15,
+    "int": 15,
+    "wis": 13,
+    "cha": 19
+  },
+  "savingThrows": {
+    "dex": 6,
+    "int": 5,
+    "wis": 4,
+    "cha": 7
+  },
+  "skills": {
+    "acrobatics": 6,
+    "athletics": 5,
+    "perception": 4,
+    "performance": 10,
+    "arcana": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14
+  },
+  "languages": [
+    "Общий",
+    "и ещё четыре любых языка"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Профессор совершает три атаки Пепельным ударом."
+    },
+    {
+      "name": "Пепельный удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака заклинанием: +7 к попаданию, досягаемость 15 футов, одна цель. Попадание: 13 (2к8 + 4) урона огнём.",
+      "attackBonus": 7,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Взмах молнией (Перезарядка 6)",
+      "type": "special",
+      "description": "Профессор выпускает дуги магической молнии в двух существ, которых он может видеть в пределах 60 футов. Каждая цель должна совершить спасбросок Ловкости Сл 15, получая 35 (10к6) урона электричеством при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "10d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "6",
+      "save": {
+        "ability": "DEX",
+        "dc": 15,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Профессор накладывает одно из следующих заклинаний, используя Харизму в качестве базовой характеристики (Сл спасброска от заклинаний 15):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "малая иллюзия [minor illusion];"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "туманное облако [fog cloud], порыв ветра [gust of wind], доспехи мага [mage armor]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,145 @@
+{
+  "id": "7063",
+  "slug": "7063-war-priest",
+  "name": "Боевой священник",
+  "nameEn": "War priest]Боевой священник [War priest",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "жрец",
+  "alignment": "любое мировоззрениеСредний? Гуманоид (любая раса), любое мировоззрение",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 117,
+    "hitDice": "18d8 + 36"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 10,
+    "con": 14,
+    "int": 11,
+    "wis": 17,
+    "cha": 13
+  },
+  "savingThrows": {
+    "con": 6,
+    "wis": 7
+  },
+  "skills": {
+    "intimidation": 5,
+    "religion": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "любые два языка"
+  ],
+  "traits": [
+    {
+      "name": "Использование заклинаний",
+      "description": "Священник является заклинателем 9-го уровня. Его базовой характеристикой является Мудрость (Сл спасброска от заклинания 15, +7 к попаданию атаками заклинаниями). У него подготовлены следующие заклинания жреца:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Боевой священник совершает две атаки Молотом и использует Священный огонь."
+    },
+    {
+      "name": "Молот",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: 10 (2к6 + 3) дробящего урона плюс 10 (3к6) урона излучением.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Священный огонь",
+      "type": "special",
+      "description": "Боевой священник нацеливается на одно видимое существо, находящееся в пределах 60 футов. Цель должна совершить спасбросок Мудрости Сл 15. При провале цель получает 12 (2к8 + 3) урона излучением и становится ослеплённой до начала следующего хода боевого священника. В случае успеха цель получает половину этого урона и не ослепляется.",
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CHA",
+        "dc": 15,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Боевой священник накладывает одно из следующих заклинаний, используя Мудрость в качестве базовой характеристики (Сл спасброска от заклинаний 15):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "свет [light], уход за умирающим [spare the dying], чудотворство [thaumaturgy];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "изгнание [banishment], приказ [command], рассеивание магии [dispel magic], небесный огонь [flame strike], страж веры [guardian of faith], удержание личности [hold person], малое восстановление [lesser restoration], возрождение [revivify]."
+    },
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Священник совершает две рукопашные атаки."
+    },
+    {
+      "name": "Молот",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: Дробящий урон 10 (2к6 + 3).",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Направленный удар (Перезаряжается после короткого или продолжительного отдыха)",
+      "type": "special",
+      "description": "Священник получает бонус +10 к броску атаки совершаемому им или другим существом в пределах 30 футов от него. Священник может сделать этот выбор после того, как бросок сделан, но прежде, чем выяснится попала атака или нет."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 9,
+    "spellAttackBonus": 7,
+    "ability": "WIS"
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "id": "6338",
+  "slug": "6338-dragonnel",
+  "name": "Драконнель",
+  "nameEn": "Dragonnel",
+  "size": "large",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 58,
+    "hitDice": "9d10 + 9"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 60
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 15,
+    "con": 12,
+    "int": 8,
+    "wis": 13,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "blindsight": 30,
+    "darkvision": 120
+  },
+  "languages": [
+    "Понимает Драконий и Общий",
+    "но не говорит."
+  ],
+  "traits": [
+    {
+      "name": "Пролёт",
+      "description": "Драконнель не провоцирует атаку, когда он вылетает за пределы досягаемости врага."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Драконнель совершает две атаки Разрывом."
+    },
+    {
+      "name": "Разрыв",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 10 (2к6+3) рубящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

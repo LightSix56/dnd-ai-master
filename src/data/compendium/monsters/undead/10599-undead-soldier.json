@@ -1,0 +1,118 @@
+{
+  "id": "10599",
+  "slug": "10599-undead-soldier",
+  "name": "Солдат-нежить",
+  "nameEn": "Undead Soldier",
+  "size": "medium",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "нейтрально-злая",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Dragonlance: Shadow of the Dragon Queen",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 45,
+    "hitDice": "6d8 + 18"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 14,
+    "con": 16,
+    "int": 10,
+    "wis": 13,
+    "cha": 15
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "darkvision": 60
+  },
+  "languages": [
+    "все известные при жизни"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Солдат совершает две атаки Длинным мечом или две атаки Длинным луком. Он может заменить одну из атак Длинным мечом Вытягиванием жизни."
+    },
+    {
+      "name": "Вытягивание жизни",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 5 (1к6 + 2) колющего урона. Цель должна преуспеть в спасброске Телосложения Сл 13, иначе максимум её хитов уменьшится на количество, равное полученному урону. Это уменьшение длится до тех пор, пока существо не окончит продолжительный отдых. Цель умирает, если этот эффект уменьшает максимум её хитов до 0.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Гуманоид, убитый этой атакой, восстаёт ч",
+      "type": "special",
+      "description": "ерез 24 часа в качестве зомби [zombie] под контролем солдата, если этого гуманоида не воскресят, или его тело не уничтожат. У солдата может быть не более двенадцати зомби под контролем одновременно."
+    },
+    {
+      "name": "Длинный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 6 (1к8 + 2) рубящего урона или 7 (1к10 + 2) рубящего урона, если используется двумя руками.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Длинный лук",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +4 к попаданию, дистанция 150/600 фт., одна цель. Попадание: 6 (1к8 + 2) колющего урона.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 150,
+        "long": 600
+      },
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,77 @@
+{
+  "id": "6352",
+  "slug": "6352-swarm-of-hoard-scarabs",
+  "name": "Рой сокровищных скарабеев",
+  "nameEn": "Swarm of Hoard Scarabs",
+  "size": "medium",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 31,
+    "hitDice": "7d8"
+  },
+  "speed": {
+    "walk": 20,
+    "fly": 20,
+    "burrow": 20
+  },
+  "abilities": {
+    "str": 6,
+    "dex": 16,
+    "con": 11,
+    "int": 3,
+    "wis": 8,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 9,
+    "darkvision": 60,
+    "tremorsense": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Обманчивая внешность",
+      "description": "Если скарабей неподвижен в начале боя, он имеет преимущество в броске инициативы. Более того, если существо не наблюдало за движением или действием скарабея, это существо должно преуспеть в проверке Анализа Сл 18, чтобы определить, что скарабей является одушевленным."
+    },
+    {
+      "name": "Рой",
+      "description": "Рой может занимать пространство другого существа, и наоборот, и рой может перемещаться через любой проход, достаточный для Крошечного скарабея. Рой не может восстанавливать хиты и получать временные хиты."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Множество укусов",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 0 футов, одно существо в пространстве роя. Попадание: 13 (3к6+3) колющего урона или 6 (1к6+3) колющего урона, если рой имеет половину хитов или меньше и если целью является существо, оно получает помеху на броски атаки до начала своего следующего хода.",
+      "attackBonus": 5,
+      "reachFt": 0,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,79 @@
+{
+  "id": "5346",
+  "slug": "5346-obliteros",
+  "name": "Облитерос",
+  "nameEn": "Obliteros",
+  "size": "huge",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "хаотично-злой",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Waterdeep: Dragon Heist",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 126,
+    "hitDice": "11d12 + 55"
+  },
+  "speed": {
+    "walk": 0,
+    "swim": 50
+  },
+  "abilities": {
+    "str": 23,
+    "dex": 11,
+    "con": 21,
+    "int": 10,
+    "wis": 10,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "blindsight": 60
+  },
+  "languages": [
+    "Акван"
+  ],
+  "traits": [
+    {
+      "name": "Кровавое бешенство",
+      "description": "Облитерос совершает с преимуществом броски рукопашных атак по существам, у которых хиты ниже максимума."
+    },
+    {
+      "name": "Подводное дыхание",
+      "description": "Облитерос может дышать только под водой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 22 (3к10 + 6).",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 6,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

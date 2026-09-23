@@ -1,0 +1,104 @@
+{
+  "id": "6349",
+  "slug": "6349-liondrake",
+  "name": "Драколев",
+  "nameEn": "Liondrake",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 119,
+    "hitDice": "14d10 + 42"
+  },
+  "speed": {
+    "walk": 40,
+    "fly": 60
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 15,
+    "con": 17,
+    "int": 6,
+    "wis": 12,
+    "cha": 12
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17,
+    "darkvision": 60
+  },
+  "languages": [
+    "Драконий"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Драколев совершает одну атаку Укусом и две атаки Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 фт., одна цель. Попадание: 15 (2к10+4) колющего урона. Если целью является существо Среднего размера или меньше, оно должно преуспеть в спасброске Силы Сл 15, иначе станет сбитым с ног.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 фт., одна цель. Попадание: 11 (2к6+4) рубящего урона.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Леденящий кровь рёв (перезарядка 4-6)",
+      "type": "special",
+      "description": "Драколев издает ужасающий рев, слышимый на расстоянии 300 фт.. Все существа в пределах 30 фт. от дракольва, которые могут слышать его рев, должны преуспеть в спасброске Мудрости Сл 14, иначе станут испуганными дракольвом на 1 минуту. Существо, которое проваливает спасбросок на 5 или более, также становится парализованным на тоже время. Существо может повторять спасбросок в конце каждого своего хода, оканчивая на себе эффект в случае успеха. Если спасбросок цели успешен или эффект для неё оканчивается, цель становится невосприимчива к леденящему кровь рёву этого дракольва в течение следующих 24 часов.",
+      "save": {
+        "ability": "CHA",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

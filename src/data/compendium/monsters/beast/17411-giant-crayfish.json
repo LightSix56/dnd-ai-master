@@ -1,0 +1,78 @@
+{
+  "id": "17411",
+  "slug": "17411-giant-crayfish",
+  "name": "Гигантский рак",
+  "nameEn": "Giant crayfish",
+  "size": "large",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Tales from the Yawning Portal",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 45,
+    "hitDice": "7d10 + 7"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 13,
+    "con": 13,
+    "int": 1,
+    "wis": 9,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {
+    "stealth": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 9,
+    "blindsight": 30
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Гигантский рак может дышать и воздухом, и под водой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Гигантский рак совершает две атаки Клешнёй."
+    },
+    {
+      "name": "Клешня",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт, одна цель. Попадание: 7 (1к10 + 2) дробящего урона и цель становится схваченной (Сл высвобождения 12). У рака есть две клешни, каждая из которых может схватить одну цель.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

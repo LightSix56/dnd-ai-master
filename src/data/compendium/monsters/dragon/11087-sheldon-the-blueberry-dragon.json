@@ -1,0 +1,69 @@
+{
+  "id": "11087",
+  "slug": "11087-sheldon-the-blueberry-dragon",
+  "name": "Черничный дракон Шелдон",
+  "nameEn": "Sheldon the Blueberry Dragon",
+  "size": "large",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "нейтрально-добрый, именной НИП",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Misplaced Monsters: Volume One",
+  "isNamed": true,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 142,
+    "hitDice": "15d10 + 60"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 60
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 13,
+    "con": 18,
+    "int": 17,
+    "wis": 14,
+    "cha": 16
+  },
+  "savingThrows": {
+    "dex": 4,
+    "con": 7,
+    "int": 6
+  },
+  "skills": {
+    "acrobatics": 7,
+    "athletics": 7,
+    "performance": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "blindsight": 30,
+    "darkvision": 120
+  },
+  "languages": [
+    "Общий",
+    "Драконий",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Обитатель космоса",
+      "description": "Шелдон может нормально дышать в вакууме."
+    }
+  ],
+  "actions": [],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

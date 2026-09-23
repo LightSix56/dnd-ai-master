@@ -1,0 +1,101 @@
+{
+  "id": "17222",
+  "slug": "17222-champion-of-usamigaras",
+  "name": "Чемпион Усамигараса",
+  "nameEn": "Champion of Usamigaras",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "хаотично-нейтральный",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Quest from the Infinite Staircase",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "15 с доспехом мага"
+  },
+  "hitPoints": {
+    "average": 33,
+    "hitDice": "6d8 + 6"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 14,
+    "con": 12,
+    "int": 17,
+    "wis": 14,
+    "cha": 15
+  },
+  "savingThrows": {
+    "int": 5,
+    "cha": 4
+  },
+  "skills": {
+    "sleight_of_hand": 4,
+    "arcana": 5,
+    "deception": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Чемпион совершает две атаки Магической вспышкой, либо одну атаку Магической вспышкой и применяет Использование заклинаний."
+    },
+    {
+      "name": "Магическая вспышка",
+      "type": "melee_attack",
+      "description": "Дальнобойная или рукопашная атака заклинанием: +5 к попаданию, досягаемость 5 фт. или дистанция 120 фт., одна цель. Попадание: 8 (1к10 + 3) урона силовым полем.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Использование заклинаний. Чемпион накладывает одно из следующих заклинаний, используя Интеллект в качестве базовой характеристики (Сл спасброска 13):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "свет [light], доспехи мага [mage armor] (только на себя), малая иллюзия [minor illusion]"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "очарование личности [charm person], маскировка [disguise self], безмолвный образ [silent image]"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "корона безумия [crown of madness], дребезги [shatter]"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

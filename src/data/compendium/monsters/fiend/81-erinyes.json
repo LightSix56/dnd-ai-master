@@ -1,0 +1,122 @@
+{
+  "id": "81",
+  "slug": "81-erinyes",
+  "name": "Эриния",
+  "nameEn": "Erinyes",
+  "size": "medium",
+  "type": "fiend",
+  "subtype": "дьявол",
+  "alignment": "законно-злое",
+  "challengeRating": 12,
+  "xp": 8400,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 153,
+    "hitDice": "18d8 + 72"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 60
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 16,
+    "con": 18,
+    "int": 14,
+    "wis": 14,
+    "cha": 18
+  },
+  "savingThrows": {
+    "dex": 7,
+    "con": 8,
+    "wis": 6,
+    "cha": 8
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire",
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "truesight": 120
+  },
+  "languages": [
+    "Инфернальный",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Адское оружие",
+      "description": "Атаки оружием эринии являются магическими, и причиняют при попадании дополнительный урон ядом 13 (3к8) (уже учтён в атаках)."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Эриния совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Эриния совершает три атаки."
+    },
+    {
+      "name": "Длинный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 8 (1к8 + 4) или рубящий урон 9 (1к10 + 4), если используется двумя руками, плюс урон ядом 13 (3к8).",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Длинный лук",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +7 к попаданию, дистанция 150/600 футов, одна цель. Попадание: Колющий урон 7 (1к8 + 3) плюс урон ядом 13 (3к8), и цель должна преуспеть в спасброске Телосложения Сл 14, иначе станет отравленной. Яд действует до тех пор, пока не будет устранен заклинанием малое восстановление [lesser restoration] или подобной магией.",
+      "attackBonus": 7,
+      "range": {
+        "normal": 150,
+        "long": 600
+      },
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "плюс"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Парирование",
+      "type": "special",
+      "description": "Эриния добавляет 4 к КД против одной рукопашной атаки, которая должна попасть по ней. Для этого эриния должна видеть атакующего, и должна использовать рукопашное оружие."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

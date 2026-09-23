@@ -1,0 +1,93 @@
+{
+  "id": "7562",
+  "slug": "7562-kysh",
+  "name": "Киш",
+  "nameEn": "Kysh",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "тритон",
+  "alignment": "законно-добрый, именной НИП",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Ghosts of Saltmarsh",
+  "isNamed": true,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 27,
+    "hitDice": "5d8 + 5"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 16,
+    "con": 12,
+    "int": 10,
+    "wis": 13,
+    "cha": 14
+  },
+  "savingThrows": {},
+  "skills": {
+    "survival": 3,
+    "persuasion": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Первичный"
+  ],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Киш может дышать на воздухе и под водой."
+    },
+    {
+      "name": "Посланник моря",
+      "description": "Киш может передавать простые идеи животным, которые могут дышать под водой. Они могут понимать значение его слов, хотя у вас нет никакой специальной способности понять их в ответ."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Базовой характеристикой Киша является Харизма (Сл спасброска от заклинания 12, +4 к попаданию атаками заклинаниями). Он может накладывать следующие заклинания, не нуждаясь в материальных компонентах:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Тритон совершает две рукопашные атаки Копьём."
+    },
+    {
+      "name": "Копьё",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +4 к попаданию, досягаемость 5 футов или дистанция 20/60 футов, одна цель. Попадание: 5 (1к6 + 2) колющего урона или 6 (1к8 + 2) колющего урона, если используется двумя рукам для рукопашной атаки.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

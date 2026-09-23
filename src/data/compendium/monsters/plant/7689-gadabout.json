@@ -1,0 +1,88 @@
+{
+  "id": "7689",
+  "slug": "7689-gadabout",
+  "name": "Бродяга",
+  "nameEn": "Gadabout",
+  "size": "medium",
+  "type": "plant",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "Monstrous Compendium Vol 1: Spelljammer Creatures",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 11,
+    "hitDice": "2d8 + 2"
+  },
+  "speed": {
+    "walk": 10,
+    "fly": 60,
+    "hover": true
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 10,
+    "con": 14,
+    "int": 1,
+    "wis": 6,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [
+    "fire"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "blindsight": 10
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Воздушная оболочка",
+      "description": "Если у бродяги есть хотя бы 1 хит, он может производить вокруг себя воздушную оболочку, находясь в вакууме. Эта воздушная оболочка может неограниченно долго поддерживать бродягу и еще одно существо в его пространстве."
+    },
+    {
+      "name": "Необычная природа",
+      "description": "Бродяга не нуждается в еде и сне."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Бродяга совершает две атаки Ветвями."
+    },
+    {
+      "name": "Ветвь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 фт., одна цель. Попадание: 3 (1к4 + 1) рубящего урона.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 1,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Оплетание",
+      "type": "special",
+      "description": "Бродяга входит в пространство согласного существа Среднего или Маленького размера в пределах 5 футов и аккуратно оплетает цель своими побегами. Цель становится схваченной (Сл высвобождения 0). Любая попытка цели избежать захвата приводит к тому, что реакцией бродяга перемещается в ближайшее свободное пространство. Схваченная цель определяет, куда передвигается бродяга во время своего хода, и двигается вместе с ним, куда бы он не направился."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

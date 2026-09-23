@@ -1,0 +1,141 @@
+{
+  "id": "6746",
+  "slug": "6746-water-elemental-myrmidon",
+  "name": "Водный элементальный мирмидон",
+  "nameEn": "Water Elemental Myrmidon]Водный элементальный мирмидон [Water Elemental Myrmidon",
+  "size": "medium",
+  "type": "elemental",
+  "subtype": null,
+  "alignment": "обычно нейтральныйСредний? Элементаль, нейтральный",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 127,
+    "hitDice": "17d8 + 51"
+  },
+  "speed": {
+    "walk": 40,
+    "swim": 40
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 14,
+    "con": 15,
+    "int": 8,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Акван"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Акван и один язык по выбору его создателя"
+    },
+    {
+      "name": "Языки",
+      "description": "Акван и один язык по выбору его создателя"
+    },
+    {
+      "name": "Магическое оружие",
+      "description": "Атаки оружием мирмидона являются магическими."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Мирмидон совершает три атаки Трезубцем."
+    },
+    {
+      "name": "Трезубец",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +7 к попаданию, досягаемость 5 фт. или дистанция 20/60 фт., одна цель. Попадание: 7 (1к6 + 4) урона силовым полем, или 8 (1к8 + 4) урона силовым полем, если используется двумя руками.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Замораживающие удары (перезарядка 6)",
+      "type": "special",
+      "description": "Мирмидон использует Мультиатаку. Каждая успешная атака наносит дополнительно 5 (1к10) урона холодом. Скорость цели, поражённой одной или несколькими этими атаками, уменьшается на 10 фт. до конца следующего хода мирмидона.",
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "6"
+    },
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Мирмидон совершает три атаки трезубцем."
+    },
+    {
+      "name": "Трезубец",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +7 к попаданию, досягаемость 5 фт. или дистанция 20/60 фт., одна цель. Попадание: 7 (1к6 + 4) колющего урона, или 8 (1к8 + 4) колющего урона, если используется двумя руками.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Замораживающие удары (перезарядка 6)",
+      "type": "special",
+      "description": "Мирмидон использует Мультиатаку. Каждая успешная атака наносит дополнительно 5 (1к10) урона холодом. Скорость цели, поражённой одной или несколькими этими атаками, уменьшается на 10 фт. до конца следующего хода мирмидона.",
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "6"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

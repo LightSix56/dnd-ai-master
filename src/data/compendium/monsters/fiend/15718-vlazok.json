@@ -1,0 +1,101 @@
+{
+  "id": "15718",
+  "slug": "15718-vlazok",
+  "name": "Влазок",
+  "nameEn": "Vlazok",
+  "size": "large",
+  "type": "fiend",
+  "subtype": "Демон",
+  "alignment": "обычно хаотично-злое",
+  "challengeRating": 11,
+  "xp": 7200,
+  "source": "Vecna: Eve of Ruin",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 136,
+    "hitDice": "16d10 + 48"
+  },
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 21,
+    "dex": 18,
+    "con": 16,
+    "int": 6,
+    "wis": 9,
+    "cha": 9
+  },
+  "savingThrows": {
+    "str": 9,
+    "con": 7
+  },
+  "skills": {
+    "perception": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "darkvision": 120
+  },
+  "languages": [
+    "Бездны",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Всевидящий. Влазок не может быть застигн",
+      "description": "ут врасплох."
+    },
+    {
+      "name": "Кровавое бешенство",
+      "description": "Влазок совершает с преимуществом броски рукопашных атак по существам, у которых хиты ниже максимума."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Влазок совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Паучье лазанье",
+      "description": "Влазок может лазать по сложным поверхностям, включая потолки, без совершения проверок характеристик."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Влазок совершает две атаки Боданием."
+    },
+    {
+      "name": "Бодание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 футов, одна цель. Попадание: 23 (4к8 + 5) колющего урона. Если цель — существо Большого размера или меньше, то она сбивается с ног.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "4d8",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

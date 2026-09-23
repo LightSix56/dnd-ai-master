@@ -1,0 +1,119 @@
+{
+  "id": "7266",
+  "slug": "7266-aeorian-reverser",
+  "name": "Эорский обратитель",
+  "nameEn": "Aeorian Reverser",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "нейтрально-злой",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Explorer's Guide to Wildemount",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 133,
+    "hitDice": "14d10 + 56"
+  },
+  "speed": {
+    "walk": 40,
+    "climb": 40
+  },
+  "abilities": {
+    "str": 21,
+    "dex": 16,
+    "con": 18,
+    "int": 6,
+    "wis": 14,
+    "cha": 8
+  },
+  "savingThrows": {
+    "wis": 6,
+    "cha": 2
+  },
+  "skills": {
+    "perception": 5,
+    "survival": 5,
+    "stealth": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "necrotic",
+    "radiant"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "darkvision": 120
+  },
+  "languages": [
+    "понимает Драконий",
+    "но не говорит на нём"
+  ],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Обратитель совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Обратитель совершает три атаки: одну Укусом и две Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одно существо. Попадание: 11 (1к12 + 5) колющего урона плюс 6 (1к12) урона силовым полем.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d12",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одна цель. Попадание: 8 (1к6 + 5) рубящего урона плюс 7 (2к6) урона силовым полем.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Разворот",
+      "type": "special",
+      "description": "Когда существо, которое обратитель может видеть в пределах 30 футов, восстанавливает хиты, обратитель уменьшает количество восстановленных хитов до 0, и обратитель наносит существу 13 (3к8) урона силовым полем.",
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

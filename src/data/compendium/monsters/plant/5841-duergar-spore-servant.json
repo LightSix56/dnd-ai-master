@@ -1,0 +1,65 @@
+{
+  "id": "5841",
+  "slug": "5841-duergar-spore-servant",
+  "name": "Дуэргар споровый слуга",
+  "nameEn": "Duergar Spore Servant",
+  "size": "medium",
+  "type": "plant",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Out of the Abyss",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "чешуйчатая броня, щит"
+  },
+  "hitPoints": {
+    "average": 26,
+    "hitDice": "4d8 + 8"
+  },
+  "speed": {
+    "walk": 15
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 11,
+    "con": 14,
+    "int": 2,
+    "wis": 6,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "blindsight": 30
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Боевая кирка",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 6 (1к8 + 2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

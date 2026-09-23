@@ -1,0 +1,85 @@
+{
+  "id": "5918",
+  "slug": "5918-juvenile-hook-horror",
+  "name": "Юный крюкастый ужас",
+  "nameEn": "Juvenile Hook Horror",
+  "size": "medium",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Out of the Abyss",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 39,
+    "hitDice": "6d8 + 12"
+  },
+  "speed": {
+    "walk": 20,
+    "climb": 20
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 10,
+    "con": 15,
+    "int": 6,
+    "wis": 12,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "blindsight": 60,
+    "darkvision": 120
+  },
+  "languages": [
+    "Язык Крюкастых ужасов"
+  ],
+  "traits": [
+    {
+      "name": "Эхолокация",
+      "description": "Крюкастый ужас не может использовать слепое зрение, будучи оглохшим."
+    },
+    {
+      "name": "Острый слух",
+      "description": "Крюкастый ужас совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на слух."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Крюкастый ужас совершает две атаки крюками."
+    },
+    {
+      "name": "Крюк",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 5 (1к6 + 2).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

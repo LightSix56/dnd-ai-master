@@ -1,0 +1,108 @@
+{
+  "id": "12549",
+  "slug": "12549-humanoid-mutate",
+  "name": "Мутирующий Гуманоид",
+  "nameEn": "Humanoid Mutate",
+  "size": "medium",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "любое мировоззрение",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Phandelver and Below: The Shattered Obelisk",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14
+  },
+  "hitPoints": {
+    "average": 65,
+    "hitDice": "10d8 + 20"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 30
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 18,
+    "con": 14,
+    "int": 11,
+    "wis": 13,
+    "cha": 15
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3,
+    "stealth": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "darkvision": 120
+  },
+  "languages": [
+    "Общий",
+    "Телепатия 60 фт."
+  ],
+  "traits": [
+    {
+      "name": "Чувствительность к свету",
+      "description": "Находясь на солнечном свету, мутировавший совершает с помехой броски атаки."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Мутировавший совершает два Безоружных удара или Кошмарных взрыва."
+    },
+    {
+      "name": "Безоружный удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к6 + 4) дробящего урона плюс 10 (3к6) урона психической энергией.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Кошмарный взрыв",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +6 к попаданию, дистанция 60 футов, одно существо. Попадание: 7 (2к6) урона психической энергией и цель должна преуспеть в спасброске Мудрости Сл 12, иначе она будет испугана до начала следующего хода мутировавшего.",
+      "attackBonus": 6,
+      "range": {
+        "normal": 60
+      },
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CHA",
+        "dc": 12,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Оборонительный полет",
+      "type": "special",
+      "description": "Сразу после получения урона мутирующий летит на свою скорость. Это движение не провоцирует атак."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

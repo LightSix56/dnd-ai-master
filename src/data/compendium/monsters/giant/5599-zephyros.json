@@ -1,0 +1,126 @@
+{
+  "id": "5599",
+  "slug": "5599-zephyros",
+  "name": "Зефирос",
+  "nameEn": "Zephyros",
+  "size": "huge",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "нейтрально-добрый, именной НИП",
+  "challengeRating": 13,
+  "xp": 10000,
+  "source": "Storm King's Thunder",
+  "isNamed": true,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 200,
+    "hitDice": "16d12 + 96"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 27,
+    "dex": 10,
+    "con": 22,
+    "int": 18,
+    "wis": 16,
+    "cha": 16
+  },
+  "savingThrows": {
+    "con": 10,
+    "wis": 7,
+    "cha": 7
+  },
+  "skills": {
+    "perception": 7,
+    "insight": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17
+  },
+  "languages": [
+    "Общий",
+    "Великаний"
+  ],
+  "traits": [
+    {
+      "name": "Тонкий нюх",
+      "description": "Зефирос совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на обоняние."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Базовой характеристикой Зефироса является Харизма (Сл спасброска от заклинания 15; +7 к попаданию атаками заклинаниями). Он может накладывать следующие заклинания, не нуждаясь в материальных компонентах:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Зефирос совершает две атаки посохом магов [staff of magi]."
+    },
+    {
+      "name": "Посох магов",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +15 к попаданию, досягаемость 10 футов, одна цель. Попадание: 21 (3к6 + 10) дробящего урона или 23 (3к8+10) при ударе двумя руками. Эта атака считается магической.",
+      "attackBonus": 15,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 10,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Камень",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +12 к попаданию, дистанция 60/240 футов, одна цель. Попадание: 30 (4к10 + 8) дробящего урона.",
+      "attackBonus": 12,
+      "range": {
+        "normal": 60,
+        "long": 240
+      },
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 8,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Зефирос накладывает одно из следующий заклинаний, не нуждаясь в никаких материальных компонентах, и Интеллект является для них базовой характеристикой Зефироса (Сл спасброска от заклинания 17; +11 к попаданию атаками заклинаниями):",
+      "attackBonus": 11
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "сообщение [message], фокусы [prestidigitation], луч холода [ray of frost]"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "порыв ветра [gust of wind], левитация [levitate], волшебная стрела [magic missile]"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "конус холода [cone of cold], связь с иным миром [contact other plane] (накладывается за 1 действие), высшая невидимость [greater invisibility], множественное внушение [mass suggestion], необнаружимость [nondetection], Отилюков упругий шар [Otiluke’s resilient sphere], защита от энергии [protection from energy], языки [tongues]"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

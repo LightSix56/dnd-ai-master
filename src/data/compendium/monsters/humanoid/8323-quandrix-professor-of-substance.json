@@ -1,0 +1,106 @@
+{
+  "id": "8323",
+  "slug": "8323-quandrix-professor-of-substance",
+  "name": "Профессор сущности Квандрикса",
+  "nameEn": "Quandrix Professor of Substance",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "Волшебник",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Strixhaven: A Curriculum of Chaos",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "15 с доспехом мага"
+  },
+  "hitPoints": {
+    "average": 104,
+    "hitDice": "16d8 + 32"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 14,
+    "con": 14,
+    "int": 19,
+    "wis": 14,
+    "cha": 13
+  },
+  "savingThrows": {
+    "con": 5,
+    "int": 7,
+    "wis": 5,
+    "cha": 4
+  },
+  "skills": {
+    "perception": 5,
+    "arcana": 10,
+    "nature": 7,
+    "investigation": 10
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15
+  },
+  "languages": [
+    "Общий",
+    "и ещё четыре любых языка"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Профессор совершает две атаки Пространственным клинком."
+    },
+    {
+      "name": "Пространственный клинок",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака заклинанием: +7 к попаданию (цель не получает преимуществ от укрытий меньше, чем полное укрытие), досягаемость 5 футов или дистанция 120 футов, одна цель. Попадание: 13 (2к8 + 4) урона силовым полем или 22 (4к8 + 4) урона силовым полем, если профессор Большого размера или больше, профессор может оттолкнуть цель на расстояние до 10 футов в горизонтальном направлении.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Профессор накладывает одно из следующих заклинаний, используя Интеллект в качестве базовой характеристики (Сл спасброска от заклинаний 15):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "указание [guidance], волшебная рука [mage hand], починка [mending] (накладывается действием);"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "сотворение [creation] (накладывается действием), переносящая дверь [dimension door], доспехи мага [mage armor], рост растений [plant growth], превращение [polymorph]."
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Уклончивый перенос (2/день)",
+      "type": "special",
+      "description": "Когда по профессору попадают броском атаки, он может увеличить свой КД на 3 против этой атаки, что потенциально может привести к её промаху. После чего профессор может телепортироваться вместе с любым снаряжением, которое он носит или несет, на расстояние до 30 футов в свободное пространство, которое он может видеть."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

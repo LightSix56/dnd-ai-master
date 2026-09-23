@@ -1,0 +1,124 @@
+{
+  "id": "13097",
+  "slug": "13097-githzerai-futurist",
+  "name": "Гитцерай футурист",
+  "nameEn": "Githzerai Futurist",
+  "size": "medium",
+  "type": "aberration",
+  "subtype": "гит",
+  "alignment": "без мировоззрения",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Planescape: Adventures in the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "псионическая защита"
+  },
+  "hitPoints": {
+    "average": 149,
+    "hitDice": "23d8 + 46"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 17,
+    "con": 15,
+    "int": 17,
+    "wis": 17,
+    "cha": 13
+  },
+  "savingThrows": {
+    "str": 6,
+    "dex": 7,
+    "int": 7,
+    "wis": 7
+  },
+  "skills": {
+    "perception": 7,
+    "arcana": 7,
+    "insight": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17,
+    "truesight": 30
+  },
+  "languages": [
+    "Общий",
+    "Гитский"
+  ],
+  "traits": [
+    {
+      "name": "Психическая защита",
+      "description": "Пока гитцерай не носит броню и не носит щит, к его КД добавляется модификатор Мудрости."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Гитцерай совершает три Безоружные атаки или Псионическим снарядом."
+    },
+    {
+      "name": "Безоружная атака",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: 12 (2к8 + 3) дробящего урона плюс 11 (2к10) урона психической энергией.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Псионический снаряд",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +7 к попаданию, дистанция 60 футов, одна цель. Попадание: 21 (4к8 + 3) урона психической энергией.",
+      "attackBonus": 7,
+      "range": {
+        "normal": 60
+      },
+      "damage": [
+        {
+          "dice": "4d8",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний (Псионика)",
+      "type": "special",
+      "description": "Гитцерай накладывает одно из следующих заклинаний, используя Мудрость в качестве базовой характеристики и без использования материальных компонентов (Сл спасброска от заклинаний 15):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "рассеивание магии [dispel magic], левитация [levitate] (только на себя), волшебная рука [mage hand] (рука невидима), видение невидимого [see invisibility];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "уход в иной мир [plane shift] (только на себя), наблюдение [scrying] (действием), замедление [slow], телекинез [telekinesis];"
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Понимание будущего (3/день)",
+      "type": "special",
+      "description": "Когда гитцерай или существо, которое он может видеть, совершает бросок атаки, спасбросок или проверку характеристик, гитцерай может дать этому броску преимущество или помеху."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

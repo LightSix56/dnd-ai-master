@@ -1,0 +1,78 @@
+{
+  "id": "12690",
+  "slug": "12690-clockwork-observer",
+  "name": "Заводной наблюдатель",
+  "nameEn": "Clockwork Observer",
+  "size": "tiny",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Keys from the Golden Vault",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 7,
+    "hitDice": "2d4 + 2"
+  },
+  "speed": {
+    "walk": 0,
+    "fly": 30,
+    "hover": true
+  },
+  "abilities": {
+    "str": 1,
+    "dex": 16,
+    "con": 13,
+    "int": 3,
+    "wis": 15,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "blindsight": 60
+  },
+  "languages": [
+    "Понимает языки своего создателя",
+    "но не может говорить"
+  ],
+  "traits": [
+    {
+      "name": "Облет",
+      "description": "Наблюдатель не провоцирует атаки, когда он вылетает за пределы досягаемости врага."
+    },
+    {
+      "name": "Телепатическая связь",
+      "description": "Пока наблюдатель находится в пределах 1 мили от своего создателя, он магическим образом может передать то, что видит, своему создателю, и они могут общаться телепатически."
+    },
+    {
+      "name": "Необычная природа",
+      "description": "Наблюдателю не нужен воздух, еда, питье или сон."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Визг",
+      "type": "special",
+      "description": "Наблюдатель издаёт механический визг до начала своего следующего хода или до тех пор, пока его хиты не упадут до 0. Этот крик можно услышать в радиусе 300 футов."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

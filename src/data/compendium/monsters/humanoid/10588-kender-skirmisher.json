@@ -1,0 +1,85 @@
+{
+  "id": "10588",
+  "slug": "10588-kender-skirmisher",
+  "name": "Кендер-застрельщик",
+  "nameEn": "Kender Skirmisher",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Dragonlance: Shadow of the Dragon Queen",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "кожаный доспех"
+  },
+  "hitPoints": {
+    "average": 14,
+    "hitDice": "4d6"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 8,
+    "dex": 16,
+    "con": 10,
+    "int": 12,
+    "wis": 8,
+    "cha": 14
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3,
+    "sleight_of_hand": 7,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "Общий",
+    "Наречие кендеров"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Хупак",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +5 к попаданию, досягаемость 5 фт. или дистанция 40/160 фт., одна цель. Попадание: 6 (1к6 + 3) колющего урона или 5 (1к4 + 3) дробящего урона, если кендер использует рогатку хупака для совершения дальнобойной атаки.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "range": {
+        "normal": 40,
+        "long": 160
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Насмешка",
+      "type": "special",
+      "description": "Кендер обрушивает поток оскорблений на существо, которое он может видеть в пределах 60 футов. Если цель может слышать кендера, она должна преуспеть в спасброске Мудрости Сл 12, иначе будет совершать с помехой броски атаки до конца своего следующего хода.",
+      "save": {
+        "ability": "CHA",
+        "dc": 12,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

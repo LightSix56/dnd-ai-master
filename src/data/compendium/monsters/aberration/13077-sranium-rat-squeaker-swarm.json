@@ -1,0 +1,94 @@
+{
+  "id": "13077",
+  "slug": "13077-sranium-rat-squeaker-swarm",
+  "name": "Стая черепных крыс пискуний",
+  "nameEn": "Сranium rat squeaker swarm",
+  "size": "medium",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "законно-злая",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Planescape: Adventures in the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 76,
+    "hitDice": "17d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 9,
+    "dex": 14,
+    "con": 10,
+    "int": 15,
+    "wis": 11,
+    "cha": 14
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 30
+  },
+  "languages": [
+    "Телепатия 30 фт."
+  ],
+  "traits": [
+    {
+      "name": "Псионический",
+      "description": "посланник. Рой может использовать своё заклинание послание [sending], чтобы нацелиться на какое-либо знакомое существо, находящееся в телепатическом контакте с роем."
+    },
+    {
+      "name": "Стая",
+      "description": "Стая может находиться в одной клетке с другим существом и наоборот и может проходить через любой проём, где пройдёт Крошечная крыса. Стая не может восстанавливать хиты или получать временные."
+    },
+    {
+      "name": "Телепатический покров",
+      "description": "Стая имеет иммунитет к любому эффекту, который может почувствовать её эмоции или прочесть её мысли, а так же ко всем заклинаниям прорицания."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укусы",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 0 футов, одна цель в том же месте, что и стая. Попадание: 14 (4к6) колющего урона, или 7 (2к6) колющего урона, если у стаи половина хитов или меньше, плюс 22 (5к8) урона психической энергией.",
+      "attackBonus": 5,
+      "reachFt": 0,
+      "damage": [
+        {
+          "dice": "4d6",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний (Псионика)",
+      "type": "special",
+      "description": "Пока у стаи остается больше половины хитов, она может накладывать следующие заклинания, не используя компоненты и используя Интеллект в качестве базовой характеристики. (Сл спасброска от заклинаний 13):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "приказ [command], обнаружение мыслей [detect thoughts], послание [sending]."
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "смятение [confusion], подчинение чудовища [dominate monster]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

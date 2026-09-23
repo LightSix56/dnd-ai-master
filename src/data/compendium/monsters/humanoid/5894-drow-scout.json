@@ -1,0 +1,112 @@
+{
+  "id": "5894",
+  "slug": "5894-drow-scout",
+  "name": "Разведчик дроу",
+  "nameEn": "Drow Scout",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "эльф",
+  "alignment": "нейтрально-злой",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Out of the Abyss",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "кожаный доспех"
+  },
+  "hitPoints": {
+    "average": 16,
+    "hitDice": "3d8 + 3"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 14,
+    "con": 12,
+    "int": 11,
+    "wis": 13,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 5,
+    "survival": 5,
+    "nature": 4,
+    "stealth": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "darkvision": 120
+  },
+  "languages": [
+    "Подземный",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Острые зрение и слух",
+      "description": "Дроу совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на зрение или слух."
+    },
+    {
+      "name": "Наследие фей",
+      "description": "Дроу совершает с преимуществом спасброски от очарования, и магия не может его усыпить."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Базовой характеристикой дроу является Харизма (Сл спасброска от заклинания 10). Он может накладывать следующие заклинания, не нуждаясь в материальных компонентах:"
+    },
+    {
+      "name": "Чувствительность к солнечному свету",
+      "description": "Находясь на солнечном свету, дроу совершает с помехой броски атаки, а также проверки Мудрости (Восприятие), полагающиеся на зрение"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дроу совершает две рукопашные атаки или две дальнобойные атаки."
+    },
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 5 (1к6 + 2).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Длинный лук",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +4 к попаданию, дистанция 150/600 футов, одна цель. Попадание: Колющий урон 6 (1к8 + 2).",
+      "attackBonus": 4,
+      "range": {
+        "normal": 150,
+        "long": 600
+      },
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

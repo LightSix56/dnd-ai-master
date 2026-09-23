@@ -1,0 +1,91 @@
+{
+  "id": "7552",
+  "slug": "7552-shell-shark",
+  "name": "Панцирная акула",
+  "nameEn": "Shell Shark",
+  "size": "medium",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Ghosts of Saltmarsh",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "панцирный доспех"
+  },
+  "hitPoints": {
+    "average": 32,
+    "hitDice": "5d8 + 10"
+  },
+  "speed": {
+    "walk": 0,
+    "swim": 40
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 12,
+    "con": 14,
+    "int": 3,
+    "wis": 10,
+    "cha": 7
+  },
+  "savingThrows": {
+    "str": 6
+  },
+  "skills": {
+    "athletics": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 120
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Кровавое бешенство",
+      "description": "Акула совершает с преимуществом броски рукопашных атак по существам, у которых хиты ниже максимума."
+    },
+    {
+      "name": "Подводное дыхание",
+      "description": "Акула может дышать только под водой."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Акула совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Акула совершает две атаки Укусом."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 13 (2к10 + 2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

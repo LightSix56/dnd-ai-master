@@ -1,0 +1,87 @@
+{
+  "id": "7514",
+  "slug": "7514-koalinth",
+  "name": "Коалинт",
+  "nameEn": "Koalinth",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "гоблиноид",
+  "alignment": "законно-злой",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Ghosts of Saltmarsh",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "кольчуга"
+  },
+  "hitPoints": {
+    "average": 16,
+    "hitDice": "3d8 + 3"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 20
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 11,
+    "con": 12,
+    "int": 11,
+    "wis": 10,
+    "cha": 11
+  },
+  "savingThrows": {
+    "dex": 2
+  },
+  "skills": {
+    "athletics": 3,
+    "perception": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Гоблинский"
+  ],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Коалинт может дышать и воздухом и под водой."
+    },
+    {
+      "name": "Воинское превосходство",
+      "description": "Один раз в ход коалинт может причинить дополнительный урон 7 (2к6) существу, по которому он попал атакой оружием, если это существо находится в пределах 5 футов от дееспособного союзника коалинта."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Трезубец",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +3 к попаданию, досягаемость 5 футов или дистанция 20/60 футов, одна цель. Попадание: 4 (1к6 + 1) колющего урона или 5 (1к8 + 1) колющего урона, если используется двумя руками для рукопашной атаки.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

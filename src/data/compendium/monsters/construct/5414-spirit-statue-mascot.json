@@ -1,0 +1,81 @@
+{
+  "id": "5414",
+  "slug": "5414-spirit-statue-mascot",
+  "name": "Талисман–статуя духа",
+  "nameEn": "Spirit Statue Mascot",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "любое мировоззрение",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Strixhaven: A Curriculum of Chaos",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 26,
+    "hitDice": "4d8 + 8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 9,
+    "con": 15,
+    "int": 12,
+    "wis": 13,
+    "cha": 8
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3,
+    "history": 5,
+    "arcana": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "Любые языки",
+    "которые статуя знала при жизни."
+  ],
+  "traits": [
+    {
+      "name": "Предсмертная вспышка",
+      "description": "Когда хиты статуи духа опускаются до 0, статуя разрушается, а дух возвращается в мир мёртвых во вспышке призрачно-белого пламени. Все существа в пределах 5 футов от него должны преуспеть в спасброске Телосложения Сл 12, в случае провала получая 3 (1к6) урона излучением."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одно существо. Попадание: Дробящий урон 5 (1к6 + 2).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Совет из прошлого (2/день)",
+      "type": "special",
+      "description": "Статуя духа касается одного существа. Единожды в течение следующих 10 минут это существо может бросить к4 и добавить выпавшее число к одной проверке характеристики по своему выбору, сразу после броска к20."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

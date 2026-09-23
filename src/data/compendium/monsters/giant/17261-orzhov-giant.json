@@ -1,0 +1,99 @@
+{
+  "id": "17261",
+  "slug": "17261-orzhov-giant",
+  "name": "Великан Орзов",
+  "nameEn": "Orzhov Giant",
+  "size": "large",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "законно-злой",
+  "challengeRating": 6,
+  "xp": 2300,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 84,
+    "hitDice": "8d10 + 40"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 23,
+    "dex": 13,
+    "con": 21,
+    "int": 12,
+    "wis": 13,
+    "cha": 8
+  },
+  "savingThrows": {
+    "dex": 4,
+    "con": 8,
+    "wis": 4
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Великаний"
+  ],
+  "traits": [
+    {
+      "name": "Фокус",
+      "description": "Бонусным действием великан может выбрать целью видимое существо, в пределах 30 футов от себя, и сделать это существо своим фокусом. Цель остается в фокусе великана в течение 1 минуты или до тех пор, пока хиты цели или великана не опустятся до 0. Когда великан совершает бросок атаки против существа с своим фокусом, он добавляет к4 к своему броску атаки. Если великан атакует другую цель, пока у него есть фокус, он вычитает к4 из своего броска атаки"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Великан совершает две атаки Секирой."
+    },
+    {
+      "name": "Секира",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 10 фт., одна цель. Попадание: 25 (3к12 + 6) рубящего урона. Если великан Орзов совершает критическое попадание, он бросает кость урона трижды, а не дважды.",
+      "attackBonus": 9,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d12",
+          "mod": 6,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Камень",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +9 к попаданию, дистанция 60/240 фт., одна цель. Попадание: 28 (4к10 + 6) дробящего урона.",
+      "attackBonus": 9,
+      "range": {
+        "normal": 60,
+        "long": 240
+      },
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 6,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

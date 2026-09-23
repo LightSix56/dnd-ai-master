@@ -1,0 +1,98 @@
+{
+  "id": "13102",
+  "slug": "13102-musteval-guardinal",
+  "name": "Гардинал мюстеваль",
+  "nameEn": "Musteval Guardinal",
+  "size": "small",
+  "type": "celestial",
+  "subtype": null,
+  "alignment": "нейтрально-добрый",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Planescape: Adventures in the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 38,
+    "hitDice": "11d6"
+  },
+  "speed": {
+    "walk": 35
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 16,
+    "con": 11,
+    "int": 14,
+    "wis": 15,
+    "cha": 14
+  },
+  "savingThrows": {
+    "dex": 5,
+    "cha": 4
+  },
+  "skills": {
+    "perception": 6,
+    "stealth": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16
+  },
+  "languages": [
+    "Общий",
+    "Небесный"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Мюстеваль совершает две атаки Костяным клинком."
+    },
+    {
+      "name": "Костяной клинок",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к6+3) рубящего урона плюс 3 (1к6) урона излучением.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Мюстеваль накладывает одно из следующих заклинаний, не нуждаясь в материальных компонентах, используя Харизму в качестве базовой характеристики:"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "пляшущие огоньки [dancing lights]"
+    },
+    {
+      "name": "1/день",
+      "type": "special",
+      "description": "маскировка [disguise self], невидимость [invisibility]"
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Перебежка в ходе стычки",
+      "type": "special",
+      "description": "Когда существо заканчивает свой ход в пределах 5 футов от мустеваля, мустеваль может переместиться на половину своей скорости. Это перемещение не провоцирует атак."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

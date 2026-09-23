@@ -1,0 +1,108 @@
+{
+  "id": "13248",
+  "slug": "13248-initiate-of-the-comet",
+  "name": "Посвящённый в Комету",
+  "nameEn": "Initiate of the Comet",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "колдун",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "The Book of Many Things",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 75,
+    "hitDice": "10d8 + 30"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 14,
+    "con": 16,
+    "int": 11,
+    "wis": 13,
+    "cha": 17
+  },
+  "savingThrows": {
+    "wis": 3,
+    "cha": 5
+  },
+  "skills": {
+    "arcana": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [
+    "Общий",
+    "плюс любой один язык"
+  ],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Посвящённый совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Посвящённый совершает две атаки Удар кометы."
+    },
+    {
+      "name": "Удар кометы",
+      "type": "melee_attack",
+      "description": "Рукопашная или Дальнобойная атака заклинанием: +5 к попаданию, досягаемость 5 футов или дистанция 120 футов, одна цель. Попадание: 14 (2к10 + 3) урона силовым полем.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Посвящённый накладывает одно из следующих заклинаний, не нуждаясь в материальных компонентах, используя Харизму в качестве базовой характеристики (Сл спасброска заклинания 13):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "волшебная рука [mage hand], чудотворство [thaumaturgy]"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "переносящая дверь [dimension door], предсказание [divination], речь златоуста [enthrall]"
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Момент предвидения (1/день)",
+      "type": "special",
+      "description": "При попадании броском атаки посвящённый может заставить атакующего перебросить кость и использовать новый результат, что может привести к промаху атаки."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

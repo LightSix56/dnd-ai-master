@@ -1,0 +1,77 @@
+{
+  "id": "12558",
+  "slug": "12558-dwarf-skeleton",
+  "name": "Скелет дварфа",
+  "nameEn": "Dwarf skeleton",
+  "size": "medium",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "законно-злая",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Phandelver and Below: The Shattered Obelisk",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "кольчуга"
+  },
+  "hitPoints": {
+    "average": 26,
+    "hitDice": "4d8 + 8"
+  },
+  "speed": {
+    "walk": 25
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 10,
+    "con": 15,
+    "int": 6,
+    "wis": 8,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [
+    "bludgeoning"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 9,
+    "darkvision": 60
+  },
+  "languages": [
+    "понимает Дварфийский",
+    "но не может говорить"
+  ],
+  "traits": [
+    {
+      "name": "Уверенный",
+      "description": "Скелет совершает с преимуществом спасброски Силы и Ловкости против сбивания с ног."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Боевой топор",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к8 + 3) рубящего урона или 8 (1к10 + 3) рубящего урона, если используется двумя руками.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

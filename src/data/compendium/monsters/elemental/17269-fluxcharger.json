@@ -1,0 +1,101 @@
+{
+  "id": "17269",
+  "slug": "17269-fluxcharger",
+  "name": "Потоконагнетатель",
+  "nameEn": "Fluxcharger",
+  "size": "large",
+  "type": "elemental",
+  "subtype": null,
+  "alignment": "хаотично-нейтральный",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 60,
+    "hitDice": "8d10 + 16"
+  },
+  "speed": {
+    "walk": 0,
+    "fly": 60
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 18,
+    "con": 15,
+    "int": 6,
+    "wis": 10,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Усиление электричества",
+      "description": "Всякий раз, когда заклинание, наносящее урон электричеством, включает в своей области одного или несколько потоконагнетателей, заклинание дополнительно наносит 9 (2к8) урона электричеством."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Потоконагнетатель совершает две атаки Ударом или дважды использует Дуговой разряд."
+    },
+    {
+      "name": "Удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 10 фт., одна цель. Попадание: 13 (2к8 + 4) дробящего урона плюс 10 (3к6) урона огнём.",
+      "attackBonus": 7,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Дуговой разряд",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +7 к попаданию, дистанция 30 фт., одна цель. Попадание: 16 (3к10) урона электричеством, и молния прыгает от цели к одному видимому существу по выбору потоконагнетателя в пределах 30 футов от цели. Это второе существо должно преуспеть в спасброске Ловкости Сл 15, иначе получит 13 (3к8) урона электричеством. Попадание или промах: Потоконагнетатель получает 5 (1к10) урона силовым полем после совершения этой атаки.",
+      "attackBonus": 7,
+      "range": {
+        "normal": 30
+      },
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

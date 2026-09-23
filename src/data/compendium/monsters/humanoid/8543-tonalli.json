@@ -1,0 +1,94 @@
+{
+  "id": "8543",
+  "slug": "8543-tonalli",
+  "name": "Тоналли",
+  "nameEn": "Tonalli",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "Дварф",
+  "alignment": "законно-нейтральный, именной НИП",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Journeys through the Radiant Citadel",
+  "isNamed": true,
+  "armorClass": {
+    "value": 13,
+    "type": "кольчужная рубаха"
+  },
+  "hitPoints": {
+    "average": 27,
+    "hitDice": "5d8 + 5"
+  },
+  "speed": {
+    "walk": 25
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 10,
+    "con": 12,
+    "int": 13,
+    "wis": 16,
+    "cha": 13
+  },
+  "savingThrows": {},
+  "skills": {
+    "medicine": 7,
+    "religion": 5,
+    "persuasion": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "darkvision": 60
+  },
+  "languages": [
+    "Дварфийский"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Тоналли знает до 2-х любых языков и Дварфийский."
+    },
+    {
+      "name": "Дварфская устойчивость",
+      "description": "Тоналли совершает с преимуществом спасброски от яда."
+    },
+    {
+      "name": "Божественная слава",
+      "description": "Тоналли может бонусным действием потратить одну ячейку заклинания, чтобы его рукопашные атаки оружием магическим образом причиняли цели при попадании дополнительный урон излучением 10 (3к6). Это преимущество длится до конца текущего хода. Если Тоналли потратит ячейку 2-го уровня или выше, дополнительный урон увеличивается на 1к6 за каждый уровень выше 1-го."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Тоналли является заклинателем 5-го уровня. Его базовой характеристикой является Мудрость (Сл спасброска от заклинания 13, +5 к попаданию атаками заклинаниями). У него подготовлены следующие заклинания жреца:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Булава",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 футов, одна цель. Попадание: 3 (1к6) дробящего урона.",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 0,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 5,
+    "spellAttackBonus": 5,
+    "ability": "WIS"
+  }
+}

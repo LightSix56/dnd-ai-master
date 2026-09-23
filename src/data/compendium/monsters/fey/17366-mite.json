@@ -1,0 +1,87 @@
+{
+  "id": "17366",
+  "slug": "17366-mite",
+  "name": "Зудень",
+  "nameEn": "Mite",
+  "size": "small",
+  "type": "fey",
+  "subtype": null,
+  "alignment": "законно-злая",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Mordenkainen's Fiendish Folio Vol 1",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 7,
+    "hitDice": "2d6"
+  },
+  "speed": {
+    "walk": 30,
+    "burrow": 10,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 7,
+    "dex": 14,
+    "con": 11,
+    "int": 10,
+    "wis": 8,
+    "cha": 13
+  },
+  "savingThrows": {},
+  "skills": {
+    "deception": 3,
+    "stealth": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 9,
+    "darkvision": 60
+  },
+  "languages": [
+    "Подземный",
+    "Сильван"
+  ],
+  "traits": [
+    {
+      "name": "Вредительское присутствие",
+      "description": "Все существа, не являющиеся Феями, которых Зудень видит в пределах 30 футов, получают помеху к на проверки и спасброски Ловкости."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Кинжал",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +4 к попаданию, досягаемость 5 фт. или дистанция 20/60 фт., одна цель. Попадание: 4 (1к4 + 2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Проклятье кипящей крови (перезарядка 6)",
+      "type": "special",
+      "description": "Зудень на 1 минуту проклинает существо, видимое им в пределах 60 футов. Если Зудень скрыт, использование этой способности не выдаёт его позицию. Пока существо проклято, оно вычитает к6 из всех бросков атаки, проверок характеристик и спасбросков. В любой ход, пока существо страдает от эффекта проклятья, оно может реакцией атаковать союзника, игнорируя эффект проклятья для этой атаки. После этого существо игнорирует эффект проклятья до конца своего хода.",
+      "recharge": "6"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

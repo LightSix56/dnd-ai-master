@@ -1,0 +1,102 @@
+{
+  "id": "6899",
+  "slug": "6899-inquisitor-of-the-sword",
+  "name": "Инквизитор меча",
+  "nameEn": "Inquisitor of the Sword",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Van Richten's Guide to Ravenloft",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "кираса"
+  },
+  "hitPoints": {
+    "average": 91,
+    "hitDice": "14d8 + 28"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 14,
+    "con": 14,
+    "int": 15,
+    "wis": 18,
+    "cha": 16
+  },
+  "savingThrows": {
+    "int": 5,
+    "wis": 7,
+    "cha": 6
+  },
+  "skills": {
+    "acrobatics": 5,
+    "athletics": 4,
+    "perception": 7,
+    "insight": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17,
+    "truesight": 30
+  },
+  "languages": [
+    "любые два языка",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Контроль метаболизма",
+      "description": "В начале каждого своего хода инквизитор восстанавливает 10 хитов и может окончить одно состояние на себе, при условии, что у инквизитора есть по крайней мере 1 хит."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Инквизитор дважды атакует своим длинным серебряным мечом. После того, как он попадает или промахивается атакой, инквизитор может телепортироваться на расстояние до 30 футов в свободное пространство, которое он может видеть."
+    },
+    {
+      "name": "Длинный серебряный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 фт., одна цель. Попадание: 8 (1к8 + 4) рубящего урона или 9 (1к10 + 4) рубящего урона при использовании двумя руками, и 18 (4к8) урона силовым полем.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Врожденное колдовство (псионика)",
+      "type": "special",
+      "description": "Инквизитор накладывает одно из следующих заклинаний, не нуждаясь ни в каких компонентах. Его базовой характеристикой является Мудрость (Сл спасброска 15):"
+    },
+    {
+      "name": "По желанию",
+      "type": "special",
+      "description": "обнаружение магии [detect magic], обнаружение мыслей [detect thoughts], послание [sending], рассеивание магии [dispel magic]"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "высшая невидимость [greater invisibility], переносящая дверь [dimension door], полёт [fly]"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

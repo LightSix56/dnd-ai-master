@@ -1,0 +1,125 @@
+{
+  "id": "8883",
+  "slug": "8883-thri-kreen-mystic",
+  "name": "Три-крин мистик",
+  "nameEn": "Thri-kreen Mystic",
+  "size": "medium",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "любое мировоззрение",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 99,
+    "hitDice": "18d8 + 18"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 15,
+    "con": 13,
+    "int": 12,
+    "wis": 16,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 6,
+    "survival": 6,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 60
+  },
+  "languages": [
+    "Три-кринский",
+    "Телепатия 60 фт."
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Три-крин совершает две атаки Гиткой или четыре Психическим снарядом."
+    },
+    {
+      "name": "Гитка",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 10 (2к8 + 1) рубящего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 1,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Психический снаряд",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +6 к попаданию, дистанция 60 фт., одно существо. Попадание: 6 (1к6 + 3) урона психической энергией.",
+      "attackBonus": 6,
+      "range": {
+        "normal": 60
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Вытягивание жизненной энергии (перезаряжается после короткого или продолжительного отдыха)",
+      "type": "special",
+      "description": "Три-крин выбирает в качестве цели одно существо, которое он может видеть в пределах 30 футов. Цель должна совершить спасбросок Телосложения Сл 14, получая 32 (5к12) урона некротической энергией при провале или половину этого урона при успехе. Три-крин восстанавливает хиты равные нанесённому урону.",
+      "damage": [
+        {
+          "dice": "5d12",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 14,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Использование заклинаний (псионика)",
+      "type": "special",
+      "description": "Базовой характеристикой три-крина является Мудрость. Он может накладывать следующие заклинания, не нуждаясь ни в каких компонентах:"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "левитация [levitate] (только на себя), волшебная рука [mage hand] (рука невидима);"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "свобода перемещения [freedom of movement] (только на себя), невидимость [invisibility] (только на себя)."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

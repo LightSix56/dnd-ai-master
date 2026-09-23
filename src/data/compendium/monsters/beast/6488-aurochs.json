@@ -1,0 +1,88 @@
+{
+  "id": "6488",
+  "slug": "6488-aurochs",
+  "name": "Тур",
+  "nameEn": "Aurochs]Тур [Aurochs",
+  "size": "large",
+  "type": "beast",
+  "subtype": "крупный рогатый скот",
+  "alignment": "без мировоззренияБольшой? Зверь, без мировоззрения",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 38,
+    "hitDice": "4d10 + 16"
+  },
+  "speed": {
+    "walk": 50
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 10,
+    "con": 19,
+    "int": 2,
+    "wis": 12,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Атака в броске",
+      "description": "Если тур переместится как минимум на 20 футов по прямой к цели, а затем в том же ходу попадёт по ней атакой бодания, цель получает от атаки дополнительный колющий урон 9 (2к8). Если цель — существо, она должна преуспеть в спасброске Силы Сл 15, иначе будет сбита с ног."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Бодание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: 14 (2к8 + 5) колющего урона. Если тур переместится как минимум на 20 футов по прямой к цели, а затем в том же ходу попадёт по ней атакой бодания, цель дополнительно получает 9 (2к8) колющего урона. Если цель — существо, она должна преуспеть в спасброске Силы Сл 15, иначе будет сбита с ног.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Бодание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 14 (2к8 + 5).",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

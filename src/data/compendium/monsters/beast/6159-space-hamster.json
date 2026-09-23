@@ -1,0 +1,54 @@
+{
+  "id": "6159",
+  "slug": "6159-space-hamster",
+  "name": "Космический хомяк",
+  "nameEn": "Space Hamster",
+  "size": "tiny",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Waterdeep: Dungeon of the Mad Mage",
+  "isNamed": false,
+  "armorClass": {
+    "value": 10
+  },
+  "hitPoints": {
+    "average": 1,
+    "hitDice": "1d4 - 1"
+  },
+  "speed": {
+    "walk": 20
+  },
+  "abilities": {
+    "str": 2,
+    "dex": 11,
+    "con": 9,
+    "int": 2,
+    "wis": 10,
+    "cha": 4
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 30
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Тонкий нюх",
+      "description": "Космический хомяк совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на обоняние."
+    }
+  ],
+  "actions": [],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

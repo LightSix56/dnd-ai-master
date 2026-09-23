@@ -1,0 +1,103 @@
+{
+  "id": "3654",
+  "slug": "3654-feathergale-knight",
+  "name": "Рыцарь Бури Перьев",
+  "nameEn": "Feathergale Knight",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "законно-злой",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Princes of the Apocalypse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "чешуйчатый доспех"
+  },
+  "hitPoints": {
+    "average": 33,
+    "hitDice": "6d8 + 6"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 14,
+    "con": 12,
+    "int": 11,
+    "wis": 10,
+    "cha": 14
+  },
+  "savingThrows": {},
+  "skills": {
+    "history": 2,
+    "уход_за_животными": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий",
+    "Ауран"
+  ],
+  "traits": [
+    {
+      "name": "Использование заклинаний",
+      "description": "Рыцарь является заклинателем 1-го уровня. Его базовой характеристикой является Харизма (Сл спасброска от заклинаний 12, +4 к атакам заклинаниями). Он знает следующие заклинания чародея :"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Рыцарь совершает две рукопашные атаки."
+    },
+    {
+      "name": "Длинный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: рубящий урон 6 (1к8 + 2), либо рубящий урон 7 (1к10 + 2) при использовании оружия двумя руками.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Копьё",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +4 к попаданию, досягаемость 5 футов, или дистанция 20/60 футов, одна цель. Попадание: колющий урон 5 (1к6 + 2), либо колющий урон 6 (1к8 + 2) при использовании оружия двумя руками в рукопашной атаке.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 1,
+    "ability": "CHA"
+  }
+}

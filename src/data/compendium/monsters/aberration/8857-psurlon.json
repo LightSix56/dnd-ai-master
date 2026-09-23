@@ -1,0 +1,124 @@
+{
+  "id": "8857",
+  "slug": "8857-psurlon",
+  "name": "Псурлон",
+  "nameEn": "Psurlon",
+  "size": "medium",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "обычно законно-злая",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "доспех мага"
+  },
+  "hitPoints": {
+    "average": 45,
+    "hitDice": "7d8 + 14"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 14,
+    "con": 14,
+    "int": 17,
+    "wis": 11,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "blindsight": 120
+  },
+  "languages": [
+    "Глубинная речь",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Аберрантный разум",
+      "description": "Невозможно магическим образом прочитать мысли псурлона или усыпить его."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Псурлон совершает одну атаку Укусом и две атаки Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одно существо. Попадание: 6 (1к8 + 2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 4 (1к4 + 2) рубящего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Психическое сокрушение",
+      "type": "special",
+      "description": "Псурлон выбирает в качестве цели одно существо, которое он может видеть в пределах 120 футов. Цель должна совершить спасбросок Мудрости Сл 13, получая 14 (2к10 + 3) урона психической энергией при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CHA",
+        "dc": 13,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Использование заклинаний (псионика)",
+      "type": "special",
+      "description": "Базовой характеристикой псурлона является Интеллект (Сл спасброска от заклинаний 13). Он может накладывать следующие заклинания, не нуждаясь ни в каких компонентах:"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "доспехи мага [mage armor] (только на себя), маскировка [disguise self];"
+    },
+    {
+      "name": "1/день",
+      "type": "special",
+      "description": "внушение [suggestion]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,94 @@
+{
+  "id": "356",
+  "slug": "356-giant-eagle",
+  "name": "Гигантский орёл",
+  "nameEn": "Giant eagle",
+  "size": "large",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "нейтрально-добрый",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Player's Handbook",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 26,
+    "hitDice": "4d10 + 4"
+  },
+  "speed": {
+    "walk": 10,
+    "fly": 80
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 17,
+    "con": 13,
+    "int": 8,
+    "wis": 14,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14
+  },
+  "languages": [
+    "Язык Гигантских орлов",
+    "понимает Ауран и Общий",
+    "но не говорит на них"
+  ],
+  "traits": [
+    {
+      "name": "Острое зрение",
+      "description": "Орёл совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на зрение."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Орёл совершает две атаки: одну Клювом и одну Когтями."
+    },
+    {
+      "name": "Клюв",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к6 + 3) колющего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 10 (2к6 + 3) рубящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

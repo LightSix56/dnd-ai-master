@@ -1,0 +1,83 @@
+{
+  "id": "3653",
+  "slug": "3653-howling-hatred-initiate",
+  "name": "Послушник Воющей Ненависти",
+  "nameEn": "Howling Hatred Initiate",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "нейтрально-злой",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "Princes of the Apocalypse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "кожанный"
+  },
+  "hitPoints": {
+    "average": 9,
+    "hitDice": "2d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 15,
+    "con": 10,
+    "int": 10,
+    "wis": 9,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "deception": 2,
+    "religion": 2,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 9
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Попутный ветер (перезаряжается после короткого или длинного отдыха)",
+      "description": "Бонусным действием послушник получает преимущество при следующем своём броске дальнобойной атаки до конца своего следующего хода."
+    },
+    {
+      "name": "Задержка дыхания",
+      "description": "Послушник может задерживать дыхание до 30 минут."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Кинжал",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +4 к попаданию, досягаемость 5 футов или дистанция 20/60 футов, одна цель. Попадание: колющий урон 4 (1к4 + 2).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

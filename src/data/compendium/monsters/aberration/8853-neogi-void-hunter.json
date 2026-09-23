@@ -1,0 +1,143 @@
+{
+  "id": "8853",
+  "slug": "8853-neogi-void-hunter",
+  "name": "Неоги охотник пустоты",
+  "nameEn": "Neogi Void Hunter",
+  "size": "medium",
+  "type": "aberration",
+  "subtype": "колдун",
+  "alignment": "обычно законно-злая",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 58,
+    "hitDice": "9d8 + 18"
+  },
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 6,
+    "dex": 16,
+    "con": 14,
+    "int": 16,
+    "wis": 12,
+    "cha": 18
+  },
+  "savingThrows": {
+    "wis": 3,
+    "cha": 6
+  },
+  "skills": {
+    "perception": 3,
+    "intimidation": 6,
+    "arcana": 5,
+    "deception": 6,
+    "persuasion": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "darkvision": 120
+  },
+  "languages": [
+    "Общий",
+    "Глубинная речь",
+    "Подземный",
+    "Телепатия 30 фт."
+  ],
+  "traits": [
+    {
+      "name": "Дьявольское зрение",
+      "description": "Магическая тьма не мешает тёмному зрению неоги."
+    },
+    {
+      "name": "Ментальная стойкость",
+      "description": "Неоги совершает с преимуществом спасброски от очарования и испуга, его невозможно магически усыпить."
+    },
+    {
+      "name": "Паучье лазание",
+      "description": "Неоги может лазать по сложным поверхностям, включая потолки, без совершения проверок характеристик."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Неоги совершает одну атаку Укусом и две атаки Когтями, или две атаки Мистическим зарядом."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 7 (1к6 + 3) колющего урона плюс 14 (4к6) урона ядом. Цель должна преуспеть в спасброске Телосложения Сл 12, иначе станет отравленной на 1 минуту. Цель может повторять спасбросок в конце каждого своего хода, оканчивая эффект на себе в случае успеха.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 12,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 7 (1к8 + 3) колющего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Мистический заряд",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +6 к попаданию, дистанция 120 фт., одно существо. Попадание: 20 (3к10 + 4) урона силовым полем.",
+      "attackBonus": 6,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Базовой характеристикой неоги является Харизма. Он может накладывать следующие заклинания:"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "невидимость [invisibility], переносящая дверь [dimension door]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,95 @@
+{
+  "id": "4606",
+  "slug": "4606-drow-noble",
+  "name": "Дворянин дроу",
+  "nameEn": "Drow Noble",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "эльф",
+  "alignment": "нейтрально-злой",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "Out of the Abyss",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "кираса"
+  },
+  "hitPoints": {
+    "average": 9,
+    "hitDice": "2d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 12,
+    "con": 11,
+    "int": 12,
+    "wis": 14,
+    "cha": 16
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4,
+    "deception": 5,
+    "insight": 4,
+    "persuasion": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 120
+  },
+  "languages": [
+    "Знает Эльфийский и ещё 2 языка на выбор."
+  ],
+  "traits": [
+    {
+      "name": "Наследие фей",
+      "description": "Дворянин дроу совершает с преимуществом спасброски от очарования и его нельзя магически усыпить."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Базовой характеристикой для врождённых заклинаний дворянина дроу является Харизма (Сл спасброска от заклинания 13). Он может накладывать следующие заклинания, не нуждаясь в материальных компонентах:"
+    },
+    {
+      "name": "Чувствительность к солнечному свету",
+      "description": "Находясь на солнечном свете, дворянин дроу совершает броски атаки с помехой, а также в проверках Мудрости (Восприятия), которые зависят от зрения."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Рапира",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 фт., Одна цель. Попадание: колющий урон 5 (1d8 + 1).",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Парирование",
+      "type": "special",
+      "description": "Дворянин дроу добавляет 2 к своему КД против одной попавшей по нему рукопашной атаки. Для этого дворянин дроу должен видеть нападающего и держать рукопашное оружие."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "ability": "CHA"
+  }
+}

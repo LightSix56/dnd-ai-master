@@ -1,0 +1,93 @@
+{
+  "id": "7780",
+  "slug": "7780-augrek-brighthelm",
+  "name": "Огрек Брайтхелм",
+  "nameEn": "Augrek Brighthelm",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "щитовая дварфийка",
+  "alignment": "законно-добрый, именной НИП",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Storm King's Thunder",
+  "isNamed": true,
+  "armorClass": {
+    "value": 15,
+    "type": "кольчужная рубаха, щит"
+  },
+  "hitPoints": {
+    "average": 13,
+    "hitDice": "2d8 + 4"
+  },
+  "speed": {
+    "walk": 25
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 11,
+    "con": 15,
+    "int": 10,
+    "wis": 11,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 4,
+    "perception": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Дварфийский"
+  ],
+  "traits": [
+    {
+      "name": "Дварфская устойчивость",
+      "description": "Огрек совершает с преимуществом спасброски от яда."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Боевой молот",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одно существо. Попадание: 6 (1к8+2) дробящего урона или 7 (1к10+2) дробящего урона, если использовать молот двумя руками.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Тяжёлый арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +2 к попаданию, дистанция 100/400 фт., одна цель. Попадание: 5 (1к10) колющего урона. Огрик носит с собой 10 болтов для арбалета.",
+      "attackBonus": 2,
+      "range": {
+        "normal": 100,
+        "long": 400
+      },
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

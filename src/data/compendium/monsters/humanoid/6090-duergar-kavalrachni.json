@@ -1,0 +1,90 @@
+{
+  "id": "6090",
+  "slug": "6090-duergar-kavalrachni",
+  "name": "Дуэргар кавалрахни",
+  "nameEn": "Duergar Kavalrachni",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "дварф",
+  "alignment": "законно-злой",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Out of the Abyss",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "чешуйчатый доспех, щит"
+  },
+  "hitPoints": {
+    "average": 26,
+    "hitDice": "4d8 + 8"
+  },
+  "speed": {
+    "walk": 25
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 11,
+    "con": 14,
+    "int": 11,
+    "wis": 10,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 120
+  },
+  "languages": [
+    "Дварфийский",
+    "Подземный"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Боевая кирка",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к8+2) колющего урона, плюс 5 (2к4) урона ядом.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Тяжёлый арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +4 к попаданию, дистанция 100/400 футов, одна цель. Попадание: 5 (1к10) колющего урона.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 100,
+        "long": 400
+      },
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Общая невидимость (перезарядка после короткого или",
+      "type": "special",
+      "description": "продолжительного отдыха). Дуэргар магическим образом становится невидимым в течение 1 часа или пока он не атакует, наложит заклинание, или потеряет концентрацию (как если бы концентрировался на заклинании). Любое снаряжение, одетое или носимое дуэргаром, становится невидимым вместе с ним. Если невидимый дуэргар сидит верхом на самке стидера, стидер тоже становится невидимым. Невидимость на стидере прекращается, как только он атакует."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

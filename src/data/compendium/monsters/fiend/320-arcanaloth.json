@@ -1,0 +1,115 @@
+{
+  "id": "320",
+  "slug": "320-arcanaloth",
+  "name": "Арканалот",
+  "nameEn": "Arcanaloth",
+  "size": "medium",
+  "type": "fiend",
+  "subtype": "юголот",
+  "alignment": "нейтрально-злое",
+  "challengeRating": 12,
+  "xp": 8400,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 104,
+    "hitDice": "16d8 + 32"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 30
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 12,
+    "con": 14,
+    "int": 20,
+    "wis": 16,
+    "cha": 17
+  },
+  "savingThrows": {
+    "dex": 5,
+    "int": 9,
+    "wis": 7,
+    "cha": 7
+  },
+  "skills": {
+    "perception": 7,
+    "arcana": 13,
+    "deception": 9,
+    "insight": 9
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "acid",
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17,
+    "truesight": 120
+  },
+  "languages": [
+    "Все",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Врождённое колдовство",
+      "description": "Базовой характеристикой для врождённого колдовства арканалота является Харизма (Сл спасброска от заклинания 15). Он может накладывать следующие заклинания, не нуждаясь в материальных компонентах:"
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Арканалот совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Магическое оружие",
+      "description": "Атаки оружием арканалота являются магическими."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Арканалот является заклинателем 16 уровня. Его базовой характеристикой является Интеллект (Сл спасброска от заклинания 17, +9 к попаданию атаками заклинаниями). У него подготовлены следующие заклинания волшебника:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: 8 (2к4 + 3) рубящего урона. Цель должна совершить спасбросок Телосложения Сл 14, получая 10 (3к6) урона ядом при провале, или половину этого урона при успехе.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 14,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Телепортация",
+      "type": "special",
+      "description": "Арканалот магическим образом телепортируется вместе со всем несомым и носимым снаряжением на расстояние до 60 футов в свободное пространство, которое он видит."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 16,
+    "spellAttackBonus": 9,
+    "ability": "INT"
+  }
+}

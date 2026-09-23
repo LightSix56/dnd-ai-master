@@ -1,0 +1,90 @@
+{
+  "id": "5789",
+  "slug": "5789-awakened-white-moose",
+  "name": "Пробуждённый белый лось",
+  "nameEn": "Awakened White Moose",
+  "size": "large",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "нейтрально-злой",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Icewind Dale: Rime of the Frostmaiden",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 68,
+    "hitDice": "8d10 + 24"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 11,
+    "con": 16,
+    "int": 10,
+    "wis": 12,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [
+    "Друидический"
+  ],
+  "traits": [
+    {
+      "name": "Атака в броске",
+      "description": "Если лось переместится как минимум на 20 футов по прямой к цели, а затем в том же ходу попадет по ней атакой рогами, цель получает от атаки дополнительно 9 (2к8) дробящего урон. Если цель — существо, она должна преуспеть в спасброске Силы Сл 14, иначе будет сбита с ног."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Белый лось совершает две атаки: одну Рогами и одну Копытами."
+    },
+    {
+      "name": "Рога",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 13 (2к8 + 4) колющего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Копыта",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 9 (2к4 + 4) дробящего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

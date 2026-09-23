@@ -1,0 +1,106 @@
+{
+  "id": "6709",
+  "slug": "6709-male-steeder",
+  "name": "Самец стидера",
+  "nameEn": "Male Steeder]Самец стидера [Male steeder",
+  "size": "medium",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззренияСредний? Монстр, без мировоззрения",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 13,
+    "hitDice": "2d8 + 4"
+  },
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 12,
+    "con": 14,
+    "int": 2,
+    "wis": 10,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 120
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Паучье лазание",
+      "description": "Самец стидера может лазать по сложным поверхностям, включая потолки, без совершения проверок характеристик."
+    },
+    {
+      "name": "Невероятный скачок",
+      "description": "Расстояние прыжка стидера утраивается. Каждый фут передвижения, затраченный на прыжок, даёт 3 фута дальности прыжка."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к8 + 3) колющего урона плюс 4 (1к8) урона ядом.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Липкие лапы",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одно существо c размером не больше маленького. Попадание: Цель прилипает к лапе стидера и схвачена до тех пор, пока не освободится (Сл высвобождения 12). Стидер может удерживать только одно существо за раз.",
+      "attackBonus": 4,
+      "reachFt": 5
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к8 + 2) колющего урона плюс 4 (1к8) урона ядом.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Липкие лапы",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель – существо Среднего или меньшего размера. Попадание: Цель прилипает к лапе стидера и становится схваченной до тех пор, пока не освободится (Сл высвобождения 12). Стидер может удерживать только одно существо за раз.",
+      "attackBonus": 4,
+      "reachFt": 5
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

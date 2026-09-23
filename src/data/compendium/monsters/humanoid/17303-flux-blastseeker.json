@@ -1,0 +1,87 @@
+{
+  "id": "17303",
+  "slug": "17303-flux-blastseeker",
+  "name": "Поточный взрывоискатель",
+  "nameEn": "Flux Blastseeker",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любая раса",
+  "alignment": "хаотично-нейтральный",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "15 с доспехом мага"
+  },
+  "hitPoints": {
+    "average": 55,
+    "hitDice": "10d8 + 10"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 15,
+    "con": 12,
+    "int": 20,
+    "wis": 9,
+    "cha": 14
+  },
+  "savingThrows": {
+    "dex": 5,
+    "int": 8
+  },
+  "skills": {
+    "perception": 2,
+    "arcana": 8
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий",
+    "плюс один другой язык"
+  ],
+  "traits": [
+    {
+      "name": "Облачность с изгибом потока (перезарядка 5–6)",
+      "description": "Взрывоискатель может создать дополнительный эффект сразу после произнесения заклинания. Бросьте 1к6, чтобы определить эффект:"
+    },
+    {
+      "name": "Врожденное колдовство",
+      "description": "Базовой характеристикой взрывоискателя является Интеллект (Сл спасброска от заклинаний 16, +8 к попаданию атаками заклинаниями). Он может накладывать следующие заклинания, не требуя никаких компонентов, кроме своего снаряжения Иззетов, которое не работает для других:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Боевой посох",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 фт., одна цель. Попадание: 3 (1к6) дробящего урона или 4 (1к8) дробящего урона, если используется двумя руками.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 0,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "spellAttackBonus": 8,
+    "ability": "INT"
+  }
+}

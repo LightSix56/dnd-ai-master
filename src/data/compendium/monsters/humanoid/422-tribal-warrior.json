@@ -1,0 +1,77 @@
+{
+  "id": "422",
+  "slug": "422-tribal-warrior",
+  "name": "Воитель племени",
+  "nameEn": "Tribal warrior",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любая раса",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "шкурный доспех"
+  },
+  "hitPoints": {
+    "average": 11,
+    "hitDice": "2d8 + 2"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 11,
+    "con": 12,
+    "int": 8,
+    "wis": 11,
+    "cha": 8
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Один любой язык."
+    },
+    {
+      "name": "Тактика стаи",
+      "description": "Воитель совершает с преимуществом броски атаки по существу, если в пределах 5 футов от этого существа находится как минимум один дееспособный союзник воителя."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Копье",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +3 к попаданию, досягаемость 5 футов или дистанция 20/60 футов, одна цель. Попадание: 4 (1к6 + 1) колющего урона или 5 (1к8 + 1) колющего урона, если используется двумя руками для совершения рукопашной атаки.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

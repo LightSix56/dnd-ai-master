@@ -1,0 +1,93 @@
+{
+  "id": "17276",
+  "slug": "17276-nivix-cyclops",
+  "name": "Циклоп Нивикса",
+  "nameEn": "Nivix Cyclops",
+  "size": "large",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "полулаты"
+  },
+  "hitPoints": {
+    "average": 115,
+    "hitDice": "10d10 + 60"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 24,
+    "dex": 9,
+    "con": 22,
+    "int": 7,
+    "wis": 10,
+    "cha": 9
+  },
+  "savingThrows": {
+    "str": 9,
+    "wis": 3
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Великаний"
+  ],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Циклоп совершает с преимуществом спасброски от заклинаний и других магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Циклоп совершает две атаки Ударом."
+    },
+    {
+      "name": "Удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +10 к попаданию, досягаемость 10 фт., одна цель. Попадание: 23 (3к10 + 7) дробящего урона.",
+      "attackBonus": 10,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 7,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Придание сил заклинанием",
+      "type": "special",
+      "description": "Сразу же после того, как существо наложит заклинание 1-го уровня или выше в пределах 120 футов от циклопа, циклоп может переместиться на расстояние, вдвое превышающую его скорость, не провоцируя атак. После чего он может совершить одну атаку Ударом по выбранной им цели."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "id": "5055",
+  "slug": "5055-master-sage",
+  "name": "Старший мудрец",
+  "nameEn": "Master Sage",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любая раса",
+  "alignment": "без мировоззрения",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Candlekeep Mysteries",
+  "isNamed": false,
+  "armorClass": {
+    "value": 10,
+    "type": "13 с доспехом мага"
+  },
+  "hitPoints": {
+    "average": 54,
+    "hitDice": "12d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 8,
+    "dex": 10,
+    "con": 10,
+    "int": 20,
+    "wis": 18,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "history": 11,
+    "arcana": 11,
+    "medicine": 10,
+    "nature": 11,
+    "insight": 7,
+    "investigation": 11,
+    "religion": 11
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14
+  },
+  "languages": [
+    "Общий",
+    "Любой 5"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Электрошок (заговор)",
+      "type": "melee_attack",
+      "description": "Рукопашная атака заклинанием: +8 к попаданию (с преимуществом, если цель носит доспехи из металла), досягаемость 5 фт., одно существо. Попадание: 13 (3к8) урона электричеством, и цель не может использовать реакции до начала своего следующего хода.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Огненный шар (заклинание 3-го уровня; 3/день)",
+      "type": "special",
+      "description": "Старший мудрец создаёт огненный взрыв в точке, которую он может видеть в пределах 150 футов от себя. Все существа в пределах сферы с радиусом 20 фт. с центром в этой точке должны совершить спасбросок Ловкости Сл 14, получая 28 (8к6) урона огнём в случае провала и половину этого урона в случае успеха. Огонь огибает углы и воспламеняет горючие предметы, которые никто не несет и не носит.",
+      "damage": [
+        {
+          "dice": "8d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 14,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Старший мудрец может наложить одно из следующих заклинаний, используя Интеллект в качестве базовой характеристики (Сл спасброска от заклинания 14, +6 к атакам заклинаниями):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "свет [light], волшебная рука [mage hand], починка [mending], фокусы [prestidigitation]"
+    },
+    {
+      "name": "3/день каждое",
+      "type": "special",
+      "description": "понимание языков [comprehend languages], обнаружение магии [detect magic], рассеивание магии [dispel magic], опознание [identify], левитация [levitate], поиск предмета [locate object], Тензеров парящий диск [Tenser’s Floating Disk], невидимый слуга [unseen servant]"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "изгнание [banishment], связь с иным миром [contact other plane], Дромиджево появление [Drawmij’s instant summons], знание легенд [legend lore], поиск существа [locate creature], планарные узы [planar binding], превращение [polymorph], защита от зла и добра [protection from evil and good], наблюдение [scrying], послание [sending], истинное зрение [true seeing]"
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Щит (Заклинание 1-го уровня; 3/день)",
+      "type": "special",
+      "description": "Когда по старшему мудрецу попадают атакой или становится целью заклинания волшебная стрела, его окружает защитный невидимый барьер магической силы. До начала своего следующего хода старший мудрец имеет бонус +5 к КД, в том числе против атаки вызвавшей его активацию, а так же не получает урона от заклинания волшебная стрела."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

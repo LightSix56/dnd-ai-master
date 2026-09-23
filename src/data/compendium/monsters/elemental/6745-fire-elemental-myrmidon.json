@@ -1,0 +1,142 @@
+{
+  "id": "6745",
+  "slug": "6745-fire-elemental-myrmidon",
+  "name": "Огненный элементальный мирмидон",
+  "nameEn": "Fire Elemental Myrmidon]Огненный элементальный мирмидон [Fire Elemental Myrmidon",
+  "size": "medium",
+  "type": "elemental",
+  "subtype": null,
+  "alignment": "обычно нейтральныйСредний? Элементаль, нейтральный",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 123,
+    "hitDice": "19d8 + 38"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 18,
+    "con": 15,
+    "int": 9,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire",
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Игнан",
+    "один язык по выбору создателя"
+  ],
+  "traits": [
+    {
+      "name": "Свечение",
+      "description": "Мирмидон испускает яркий свет в радиусе 20 футов и тусклый свет в пределах ещё 40 футов."
+    },
+    {
+      "name": "Уязвимость к воде",
+      "description": "За каждые 5 футов, которые мирмидон перемещается в 1 или более футе воды, он получает 2 (1к4) урона холодом."
+    },
+    {
+      "name": "Магическое оружие",
+      "description": "Атаки оружием мирмидона являются магическими."
+    },
+    {
+      "name": "Свечение",
+      "description": "Мирмидон испускает яркий свет в радиусе 20 футов и тусклый свет в пределах ещё 40 футов."
+    },
+    {
+      "name": "Уязвимость к воде",
+      "description": "За каждые 5 футов, которые мирмидон перемещает в 1 или более футе воды, он получает 2 (1к4) урона холодом."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Мирмидон совершает три атаки Скимитаром."
+    },
+    {
+      "name": "Скимитар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 фт., одна цель. Попадание: 7 (1к6 + 4) урона силовым полем.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Воспламеняющий удар (перезарядка 6)",
+      "type": "special",
+      "description": "Мирмидон использует Мультиатаку. Каждая успешная атака причиняет дополнительные 7 (2к6) урона огнём.",
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "6"
+    },
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Мирмидон совершает три атаки скимитаром."
+    },
+    {
+      "name": "Скимитар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 фт., одна цель. Попадание: 7 (1к6 + 4) рубящего урона.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Воспламеняющий удар (перезарядка 6)",
+      "type": "special",
+      "description": "Мирмидон использует Мультиатаку. Каждая успешная атака причиняет дополнительные 5 (1к10) огненного урона.",
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 0,
+          "type": "fire"
+        }
+      ],
+      "recharge": "6"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

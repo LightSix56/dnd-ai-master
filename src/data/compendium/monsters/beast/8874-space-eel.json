@@ -1,0 +1,94 @@
+{
+  "id": "8874",
+  "slug": "8874-space-eel",
+  "name": "Космический угорь",
+  "nameEn": "Space Eel",
+  "size": "small",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14
+  },
+  "hitPoints": {
+    "average": 7,
+    "hitDice": "2d6"
+  },
+  "speed": {
+    "walk": 10,
+    "fly": 30
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 18,
+    "con": 11,
+    "int": 1,
+    "wis": 10,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Необычная природа",
+      "description": "Угорь не нуждается в воздухе."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Если угорь не прицеплен к существу, он совершает одну атаку Укусом и одну атаку Хвостовым шипом."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 фт., одно существо. Попадание: 4 (1к6 + 1) колющего урона, и угорь прицепляется к цели. Пока угорь прицеплен, он не может атаковать укусом. Вместо этого, цель получает 4 (1к6 + 1) колющего урона в начале каждого хода угря. Угорь может отцепиться бонусным действием. Существо, в том числе и цель, могут действием отцепиться от угря.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Хвостовой шип",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 фт., одно существо. Попадание: 3 (1к4 + 1) колющего урона, и цель должна преуспеть в спасброске Телосложения Сл 10, иначе станет отравленной на 1 минуту. Пока это отравление действует, цель также парализована. Цель может повторять спасбросок в конце каждого своего хода, оканчивая эффект на себе в случае успеха.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 10,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

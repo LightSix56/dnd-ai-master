@@ -1,0 +1,114 @@
+{
+  "id": "7211",
+  "slug": "7211-typhon",
+  "name": "Тифон",
+  "nameEn": "Typhon",
+  "size": "huge",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "хаотично-злой",
+  "challengeRating": 15,
+  "xp": 13000,
+  "source": "Mythic Odysseys of Theros",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 195,
+    "hitDice": "17d12 + 85"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 24,
+    "dex": 10,
+    "con": 20,
+    "int": 7,
+    "wis": 12,
+    "cha": 13
+  },
+  "savingThrows": {
+    "con": 10
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "acid",
+    "necrotic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 120
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Тонкий нюх",
+      "description": "Тифон совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на обоняние."
+    },
+    {
+      "name": "Регенерация",
+      "description": "Тифон восстанавливает 20 хитов в начале своего хода. Если тифон получает урон излучением, то эта особенность не действует в начале его следующего хода. Тифон умирает только если начинает ход с 0 хитов и не может регенерировать."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Тифон совершает три атаки: одну Шквалом укусов, одну Сжиманием, и одну своей Пастью."
+    },
+    {
+      "name": "Шквал укусов",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +12 к попаданию, досягаемость 10 футов, одна цель. Попадание: 35 (8к6 + 7) колющего урона.",
+      "attackBonus": 12,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "8d6",
+          "mod": 7,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Сжимание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +12 к попаданию, досягаемость 15 футов, одно существо Большого размера или меньше. Попадание: 17 (3к6 + 7) дробящего урона, и цель становится схвачена (Сл высвобождения 19). Пока этот захват не окончится, цель так же опутана и получает 17 (3к6 + 7) дробящего урона в начале каждого своего хода. Одновременно тифон может держать в захвате до двух существ.",
+      "attackBonus": 12,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 7,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Пасть",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +12 к попаданию, досягаемость 10 футов, одна цель. Попадание: 26 (3к12 + 7) колющего урона плюс 19 (3к12) урона кислотой.",
+      "attackBonus": 12,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d12",
+          "mod": 7,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

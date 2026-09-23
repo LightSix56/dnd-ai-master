@@ -1,0 +1,96 @@
+{
+  "id": "8402",
+  "slug": "8402-aurumvorax",
+  "name": "Златожор",
+  "nameEn": "Aurumvorax",
+  "size": "small",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Journeys through the Radiant Citadel",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 36,
+    "hitDice": "8d6 + 8"
+  },
+  "speed": {
+    "walk": 30,
+    "burrow": 20
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 13,
+    "con": 12,
+    "int": 3,
+    "wis": 12,
+    "cha": 6
+  },
+  "savingThrows": {
+    "str": 4,
+    "con": 3
+  },
+  "skills": {
+    "perception": 3,
+    "stealth": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Прокладывание туннеля",
+      "description": "Златожор может копать сквозь сплошной камень со скоростью копания, уменьшенной вдвое, оставляя за собой туннель диаметром 5 футов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Златожор совершает одну атаку Укусом и две атаки Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к8 + 2) колющего урона. Если целью является существо, носящее доспех любого типа, златожор восстанавливает 4 (1к6 + 1) хита.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 5 (1к6 + 2) рубящего урона. Если целью является существо Среднего размера или меньше, оно становится схваченным (Сл высвобождения 12). Пока этот захват не закончится, златожор не может использовать свою атаку Когтями против другой цели, а когда он перемещается, он может тащить за собой захваченное существо, при этом скорость златожора не уменьшается вдвое.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,93 @@
+{
+  "id": "17412",
+  "slug": "17412-giant-lightning-eel",
+  "name": "Гигантский электрический угорь",
+  "nameEn": "Giant lightning eel",
+  "size": "large",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Tales from the Yawning Portal",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 42,
+    "hitDice": "5d10 + 15"
+  },
+  "speed": {
+    "walk": 5,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 17,
+    "con": 16,
+    "int": 2,
+    "wis": 12,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "blindsight": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Подводное дыхание",
+      "description": "Угорь может дышать только под водой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Угорь совершает две атаки Укусом."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт, одна цель. Попадание: 10 (2к6 + 3) колющего урона плюс 4 (1к8) урона электричеством.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Удар электричеством (перезарядка 5–6)",
+      "type": "special",
+      "description": "Одно существо, которого коснулся угорь в пределах 5 футов вне воды, или все существа в пределах 15 футов в водоёме должны совершить спасбросок Телосложения Сл 12. При провале цель получает 13 (3к8) урона электричеством. Получив этот урон, она становится ошеломлённой до конца следующего хода угря. При успехе, цель получает половину этого урона и не становится ошеломлённой.",
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "CON",
+        "dc": 12,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

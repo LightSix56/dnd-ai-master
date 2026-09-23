@@ -1,0 +1,123 @@
+{
+  "id": "7795",
+  "slug": "7795-dermot-wurder-tier-3",
+  "name": "Дермот Вурдер (3-го уровня)",
+  "nameEn": "Dermot Wurder (Tier 3)",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "Жрец, Гоблин, Гоблиноид",
+  "alignment": "Гоблин, Гоблиноид), законно-добрый, именной НИП",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Critical Role: Call of the Netherdeep",
+  "isNamed": true,
+  "armorClass": {
+    "value": 20,
+    "type": "латы, щит"
+  },
+  "hitPoints": {
+    "average": 93,
+    "hitDice": "17d6 + 34"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 12,
+    "con": 14,
+    "int": 10,
+    "wis": 20,
+    "cha": 10
+  },
+  "savingThrows": {
+    "wis": 8,
+    "cha": 3
+  },
+  "skills": {
+    "survival": 8,
+    "medicine": 8,
+    "religion": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Гоблинский",
+    "Орочий"
+  ],
+  "traits": [
+    {
+      "name": "Особое снаряжение",
+      "description": "Дермот носит доспех моряка [mariner’s armor] и орудует руидиевым боевым молотом. Если Дермот выбрасывает 1 при броске атаки, совершаемой с помощью этого оружия, он должен совершить спасбросок Харизмы Сл 20, при провале получая 1 степень истощения."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дермот совершает одну атаку Боевым молотом и одну атаку Палящим гневом."
+    },
+    {
+      "name": "Руидиевый боевой молот",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: 8 (1к8 + 4) дробящего урона или 9 (1к10 + 4) дробящего урона, если держит оружие двумя руками, плюс 7 (2к6) урона психической энергией.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Палящий гнев",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +8 к попаданию, дистанция 60 футов, одно существо. Попадание: 22 (5к8) урона излучением и цель ослеплена до конца своего следующего хода.",
+      "attackBonus": 8,
+      "range": {
+        "normal": 60
+      },
+      "damage": [
+        {
+          "dice": "5d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Дермот может наложить одно из следующих заклинаний, используя Мудрость в качестве базовой характеристики (Сл спасброска от заклинания 16):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "указание [guidance], свет [light], уход за умирающим [spare the dying];"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "благословение [bless] (вариант 3-го уровня), лечение ран [cure wounds] (вариант 3-го уровня);"
+    },
+    {
+      "name": "1/день",
+      "type": "special",
+      "description": "возрождение [revivify]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

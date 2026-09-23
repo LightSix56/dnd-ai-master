@@ -1,0 +1,100 @@
+{
+  "id": "12168",
+  "slug": "12168-giant-ram",
+  "name": "Гигантский баран",
+  "nameEn": "Giant Ram",
+  "size": "large",
+  "type": "fey",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Bigby Presents: Glory of the Giants",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 28,
+    "hitDice": "3d10 + 12"
+  },
+  "speed": {
+    "walk": 50
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 12,
+    "con": 18,
+    "int": 3,
+    "wis": 14,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Баран совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Таран",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 9 (2к4 + 4) дробящего урона плюс 3 (1к6) урона силовым полем. Если перед атакой баран переместится как минимум на 20 футов по прямой к цели, то цель должна преуспеть в спасброске Силы Сл 14, иначе упадёт ничком.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Силовой снаряд",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +4 к попаданию, дистанция 30 футов, одна цель. Попадание: 7 (2к6) урона силовым полем.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 30
+      },
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Поглощающая шерсть (перезарядка 6)",
+      "type": "special",
+      "description": "Сразу после того, как баран преуспеет в спасброске против заклинания или по нему промахнутся атакой заклинанием, баран может совершить одну атаку Силовым снарядом.",
+      "recharge": "6"
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

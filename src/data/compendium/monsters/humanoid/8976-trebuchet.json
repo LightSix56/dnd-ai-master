@@ -1,0 +1,78 @@
+{
+  "id": "8976",
+  "slug": "8976-trebuchet",
+  "name": "Требушет",
+  "nameEn": "Trebuchet",
+  "size": "huge",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Dungeon Master's Guide",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15
+  },
+  "hitPoints": {
+    "average": 150,
+    "hitDice": "1d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 10,
+    "con": 10,
+    "int": 10,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Требушет это мощный онагр, мечущий тяжёл",
+      "description": "ые снаряды по высокой дуге, и может попадать по целям за укрытиями. Прежде чем совершить выстрел, требушет нужно зарядить и навести на цель. Требуется два действия для зарядки, два действия для нацеливания и одно действие для выстрела."
+    },
+    {
+      "name": "Обычно требушет мечет тяжёлые камни, но",
+      "description": "может метать и другие снаряды, такие как бочки с маслом или нечистотами, с другими эффектами."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Камень из требушета",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +5 к попаданию, дистанция 300/1200 фт. (не может атаковать цели в пределах 60 футов), одна цель. Попадание: 44 (8к10) дробящего урона.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 300,
+        "long": 1200
+      },
+      "damage": [
+        {
+          "dice": "8d10",
+          "mod": 0,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

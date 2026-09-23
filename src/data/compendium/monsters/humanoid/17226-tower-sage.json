@@ -1,0 +1,105 @@
+{
+  "id": "17226",
+  "slug": "17226-tower-sage",
+  "name": "Мудрец башни",
+  "nameEn": "Tower Sage",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "любое мировоззрение",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Quest from the Infinite Staircase",
+  "isNamed": false,
+  "armorClass": {
+    "value": 10,
+    "type": "13 с доспехом мага"
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "5d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 10,
+    "con": 10,
+    "int": 16,
+    "wis": 14,
+    "cha": 16
+  },
+  "savingThrows": {},
+  "skills": {
+    "history": 5,
+    "arcana": 5,
+    "insight": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий",
+    "плюс любые три языка"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Мудрец башни совершает две атаки Магической вспышкой, а также использует Звездное сияние, если доступно."
+    },
+    {
+      "name": "Магическая вспышка",
+      "type": "melee_attack",
+      "description": "Дальнобойная или рукопашная атака заклинанием: +5 к попаданию, досягаемость 5 фт. или дистанция 120 фт., одна цель. Попадание: 8 (1к10 + 3) урона излучением.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Звездное сияние (перезарядка 5–6)",
+      "type": "special",
+      "description": "Ошеломляющий свет вырывается из кончиков пальцев мудреца башни в 15-футовом конусе. Все существа в этой области должны преуспеть в спасброске Телосложения Сл 13, иначе становясь ослепленными до конца следующего хода мудреца башни.",
+      "recharge": "5-6",
+      "save": {
+        "ability": "CON",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Мудрец башни накладывает одно из следующих заклинаний, используя Интеллект в качестве базовой характеристики (Сл спасброска 13):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "пляшущие огоньки [dancing lights], волшебная рука [mage hand], фокусы [prestidigitation]"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "волшебный замок [arcane lock], огненные ладони [burning hands], понимание языков [comprehend languages], обнаружение магии [detect magic], левитация [levitate], доспехи мага [mage armor]"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,107 @@
+{
+  "id": "17417",
+  "slug": "17417-siren",
+  "name": "Сирена",
+  "nameEn": "Siren",
+  "size": "medium",
+  "type": "fey",
+  "subtype": null,
+  "alignment": "хаотично-добрая",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Tales from the Yawning Portal",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14
+  },
+  "hitPoints": {
+    "average": 38,
+    "hitDice": "7d8 + 7"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 18,
+    "con": 12,
+    "int": 13,
+    "wis": 14,
+    "cha": 16
+  },
+  "savingThrows": {},
+  "skills": {
+    "survival": 4,
+    "medicine": 4,
+    "nature": 3,
+    "stealth": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Сильван",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Сирена может дышать и воздухом, и под водой."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Базовой характеристикой сирены является Харизма (Сл спасброска от заклинаний 13). Она может накладывать следующие заклинания, не нуждаясь в материальных компонентах:"
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Сирена совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт, одна цель. Попадание: 7 (1к6 + 4) колющего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Приводящее в оцепенение касание",
+      "type": "special",
+      "description": "Сирена касается одного видимого ей существа в пределах 5 футов. Существо должно преуспеть в спасброске Интеллекта Сл 13, иначе получает 13 (3к6 + 3) урона психической энергией и становится ошеломлённым до начала следующего хода сирены.",
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "INT",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

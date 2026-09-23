@@ -1,0 +1,126 @@
+{
+  "id": "8840",
+  "slug": "8840-githyanki-xenomancer",
+  "name": "Гитъянки-ксеномант",
+  "nameEn": "Githyanki Xenomancer",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "гит, друид",
+  "alignment": "друид), любое мировоззрение",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14
+  },
+  "hitPoints": {
+    "average": 157,
+    "hitDice": "21d8 + 63"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 18,
+    "con": 17,
+    "int": 15,
+    "wis": 18,
+    "cha": 13
+  },
+  "savingThrows": {
+    "dex": 8,
+    "con": 7,
+    "wis": 8
+  },
+  "skills": {
+    "perception": 8,
+    "survival": 8,
+    "nature": 6,
+    "уход_за_животными": 8
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 18
+  },
+  "languages": [
+    "Гитский"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Знает Гитский и любые другие четыре языка."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Гитъянки совершает три атаки Посохом или Телекинетическим снарядом, или любой их комбинацией."
+    },
+    {
+      "name": "Посох",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: 5 (1к6 + 2) дробящего урона, или 6 (1к8 + 2) дробящего урона, если используется двумя руками, плюс 14 (4к6) урона психической энергией.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Телекинетический снаряд",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +8 к попаданию, дистанция 60 фт., одна цель. Попадание: 20 (3к10 + 4) урона силовым полем.",
+      "attackBonus": 8,
+      "range": {
+        "normal": 60
+      },
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний (псионика)",
+      "type": "special",
+      "description": "Базовой характеристикой гитъянки является Мудрость (Сл спасброска от заклинаний 16). Он может накладывать следующие заклинания, не нуждаясь ни в каких компонентах:"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "волшебная рука [mage hand] (рука невидима), искусство друидов [druidcraft], свет [light];"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "бесследное передвижение [pass without trace] (только на себя), невидимость [invisibility] (только на себя);"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "подчинение чудовища [dominate monster], телекинез [telekinesis], узилище [forcecage], уход в иной мир [plane shift]."
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Парирование",
+      "type": "special",
+      "description": "Гитъянки добавляет 3 к КД против одной рукопашной атаки, которая должна попасть по нему. Для этого он должен видеть атакующего, и должен использовать рукопашное оружие."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

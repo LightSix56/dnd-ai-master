@@ -1,0 +1,97 @@
+{
+  "id": "13",
+  "slug": "13-bugbear",
+  "name": "Багбир",
+  "nameEn": "Bugbear",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "гоблиноид",
+  "alignment": "хаотично-злой",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "шкурный доспех, щит"
+  },
+  "hitPoints": {
+    "average": 27,
+    "hitDice": "5d8 + 5"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 14,
+    "con": 13,
+    "int": 8,
+    "wis": 11,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {
+    "survival": 2,
+    "stealth": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Гоблинский"
+  ],
+  "traits": [
+    {
+      "name": "Жестокость",
+      "description": "Когда багбир попадает атакой рукопашным оружием, атака причиняет цели одну дополнительную кость урона оружия (учтено ниже)."
+    },
+    {
+      "name": "Внезапная атака",
+      "description": "Если багбир застаёт врасплох существо и попадает по нему атакой в первом раунде сражения, цель дополнительно получает от атаки 7 (2к6) урона."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Моргенштерн",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 11 (2к8 + 2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Метательное копье",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +4 к попаданию, досягаемость 5 футов или дистанция 30 футов/120 футов, одна цель. Попадание: 5 (1к6 + 2) колющего урона от дальнобойной атаки или 9 (2к6 + 2) колющего урона от рукопашной атаки.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "range": {
+        "normal": 30
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

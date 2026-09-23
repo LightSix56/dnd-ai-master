@@ -1,0 +1,106 @@
+{
+  "id": "6059",
+  "slug": "6059-nepartak",
+  "name": "Непартак",
+  "nameEn": "Nepartak",
+  "size": "tiny",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "нейтрально-злая, именной НИП",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Tomb of Annihilation",
+  "isNamed": true,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 40,
+    "hitDice": "9d4 + 18"
+  },
+  "speed": {
+    "walk": 0,
+    "fly": 40,
+    "hover": true
+  },
+  "abilities": {
+    "str": 1,
+    "dex": 17,
+    "con": 14,
+    "int": 16,
+    "wis": 10,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 2,
+    "arcana": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire",
+    "cold",
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Телепатия 30 фт."
+  ],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Непартак совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Восстановление",
+      "description": "Если Непартак уничтожен, он восстанавливает все свои хиты через 1 час, если его останки не сбрызнут святой водой или на них не наложат рассеивание магии или снятие проклятья."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Непартак является заклинателем 5-го уровня. Его базовой характеристикой является Интеллект (Сл спасброска от заклинания 13, +5 к попаданию атаками заклинаниями). Для накладывания заклинаний ему не требуются ни соматические, ни материальные компоненты. У него подготовлены следующие заклинания волшебника:"
+    },
+    {
+      "name": "Природа нежити",
+      "description": "Непартаку не нужен воздух, еда, питьё и сон."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Непартак дважды использует Огненный луч."
+    },
+    {
+      "name": "Огненный луч",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +5 к попаданию, дистанция 30 футов, одна цель. Попадание: 10 (3к6) урона огнём.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 30
+      },
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 5,
+    "spellAttackBonus": 5,
+    "ability": "INT"
+  }
+}

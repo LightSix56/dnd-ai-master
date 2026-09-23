@@ -1,0 +1,113 @@
+{
+  "id": "13124",
+  "slug": "13124-aurumach-rilmani",
+  "name": "Рилмани аурумах",
+  "nameEn": "Aurumach Rilmani",
+  "size": "large",
+  "type": "celestial",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 17,
+  "xp": 18000,
+  "source": "Planescape: Adventures in the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 285,
+    "hitDice": "30d10 + 120"
+  },
+  "speed": {
+    "walk": 0,
+    "fly": 40,
+    "hover": true
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 21,
+    "con": 18,
+    "int": 21,
+    "wis": 18,
+    "cha": 16
+  },
+  "savingThrows": {
+    "dex": 11,
+    "int": 11
+  },
+  "skills": {
+    "perception": 10,
+    "history": 11,
+    "arcana": 11
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 20,
+    "truesight": 120
+  },
+  "languages": [
+    "Все",
+    "Телепатия 120 фт."
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Аурумах совершает три атаки Явленным клинком или Сияющим лучом."
+    },
+    {
+      "name": "Явленный клинок",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +11 к попаданию, досягаемость 10 футов, одна цель. Попадание: 23 (4к8 + 5) урона силовым полем.",
+      "attackBonus": 11,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "4d8",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Сияющий луч",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +11 к попаданию, дистанция 120 футов, одна цель. Попадание: 24 (3к12 + 5) урона силовым полем.",
+      "attackBonus": 11,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "3d12",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Аурумах накладывает одно из следующих заклинаний, не нуждаясь в материальных компонентах, используя Интеллект в качестве базовой характеристики (Сл спасброска заклинания 19):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "обнаружение магии [detect magic], обнаружение мыслей [detect thoughts]"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "полёт [fly], обет [geas] (действием), замедление [slow], внушение [suggestion]"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

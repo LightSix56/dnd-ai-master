@@ -1,0 +1,129 @@
+{
+  "id": "7870",
+  "slug": "7870-verin-thelyss",
+  "name": "Верин Телисс",
+  "nameEn": "Verin Thelyss",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "Дроу, Эльф",
+  "alignment": "Эльф), законно-добрый, именной НИП",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Critical Role: Call of the Netherdeep",
+  "isNamed": true,
+  "armorClass": {
+    "value": 17,
+    "type": "полулаты"
+  },
+  "hitPoints": {
+    "average": 84,
+    "hitDice": "13d8 + 26"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 15,
+    "con": 14,
+    "int": 13,
+    "wis": 14,
+    "cha": 16
+  },
+  "savingThrows": {
+    "str": 7,
+    "con": 5,
+    "wis": 5
+  },
+  "skills": {
+    "athletics": 7,
+    "perception": 5,
+    "history": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "darkvision": 120
+  },
+  "languages": [
+    "Общий",
+    "Подземный",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Наследие фей",
+      "description": "Верин совершает с преимуществом спасброски от очарования, и магия не может его усыпить."
+    },
+    {
+      "name": "Чувствительность к солнечному свету",
+      "description": "Находясь на солнечном свету, Верин совершает с помехой броски атаки, а также проверки Мудрости (Восприятие), полагающиеся на зрение."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Верин совершает три атаки Глефой."
+    },
+    {
+      "name": "Глефа",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 10 футов, одна цель. Попадание: 9 (1к10 + 4) рубящего урона.",
+      "attackBonus": 7,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Ручной арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +7 к попаданию, дистанция 30/120 футов, одна цель. Попадание: 5 (1к6 + 2) колющего урона плюс 22 (4к10) урона ядом.",
+      "attackBonus": 7,
+      "range": {
+        "normal": 30,
+        "long": 120
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Верин может накладывать следующие заклинания, используя Харизму в качестве базовой характеристики (Сл спасброска от заклинания 14):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "пляшущие огоньки [dancing lights];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "огонь фей [faerie fire], тьма [darkness], левитация [levitate] (только на себя)."
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Парирование",
+      "type": "special",
+      "description": "Верин добавляет 3 к своему КД против одной рукопашной атаки, которая поразит его. Для этого Верин должен видеть нападающего и держать рукопашное оружие."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

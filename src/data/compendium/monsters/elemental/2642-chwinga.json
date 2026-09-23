@@ -1,0 +1,64 @@
+{
+  "id": "2642",
+  "slug": "2642-chwinga",
+  "name": "Чвинга",
+  "nameEn": "Chwinga",
+  "size": "tiny",
+  "type": "elemental",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Candlekeep Mysteries",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15
+  },
+  "hitPoints": {
+    "average": 5,
+    "hitDice": "2d4"
+  },
+  "speed": {
+    "walk": 20,
+    "swim": 20,
+    "climb": 20
+  },
+  "abilities": {
+    "str": 1,
+    "dex": 20,
+    "con": 10,
+    "int": 14,
+    "wis": 16,
+    "cha": 16
+  },
+  "savingThrows": {},
+  "skills": {
+    "acrobatics": 7,
+    "perception": 7,
+    "stealth": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17,
+    "blindsight": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Увёртливость",
+      "description": "Если чвинга подвергается действию эффекта, позволяющего совершить спасбросок Ловкости, чтобы получить только половину урона, чвинга вместо этого не получает урон, если преуспеет в спасброске, и получит лишь половину урона, если провалит спасбросок."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Базовой характеристикой чвинги является Мудрость. Он может неограниченно накладывать следующие заклинания, не нуждаясь в материальных или вербальных компонентах: искусство друидов [druidcraft], указание [guidance], бесследное передвижение [pass without trace], сопротивление [resistance]."
+    }
+  ],
+  "actions": [],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

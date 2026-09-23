@@ -1,0 +1,98 @@
+{
+  "id": "8020",
+  "slug": "8020-statue-of-talos",
+  "name": "Статуя Талоса",
+  "nameEn": "Statue of Talos",
+  "size": "large",
+  "type": "elemental",
+  "subtype": null,
+  "alignment": "хаотично-злой",
+  "challengeRating": 10,
+  "xp": 5900,
+  "source": "Essentials Kit: Storm Lord's Wrath",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 147,
+    "hitDice": "14d10 + 70"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 60
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 11,
+    "con": 20,
+    "int": 6,
+    "wis": 11,
+    "cha": 9
+  },
+  "savingThrows": {
+    "wis": 4
+  },
+  "skills": {
+    "perception": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 60
+  },
+  "languages": [
+    "Терран"
+  ],
+  "traits": [
+    {
+      "name": "Обманчивая внешность",
+      "description": "Пока статуя остается неподвижной, она неотличима от обычной статуи."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Статуя совершает пять атак: одну Ударом головой и четыре Молниевыми клинками."
+    },
+    {
+      "name": "Удар головой",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 фт., одна цель. Попадание: 11 (2к6 + 4) колющего урона.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Молниевые клинки",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 фт., одна цель. Попадание: 9 (2к4 + 4) рубящего урона.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,81 @@
+{
+  "id": "8390",
+  "slug": "8390-glass-pegasus",
+  "name": "Стеклянный пегас",
+  "nameEn": "Glass Pegasus",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "хаотично-добрый",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "The Wild Beyond The Witchlight: A Feywild Adventure",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "при оживлении, иначе 13"
+  },
+  "hitPoints": {
+    "average": 59,
+    "hitDice": "7d10 + 21"
+  },
+  "speed": {
+    "walk": 60,
+    "fly": 90
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 15,
+    "con": 16,
+    "int": 10,
+    "wis": 15,
+    "cha": 13
+  },
+  "savingThrows": {
+    "dex": 4,
+    "wis": 4,
+    "cha": 3
+  },
+  "skills": {
+    "perception": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16
+  },
+  "languages": [
+    "Общий",
+    "Небесный",
+    "Сильван",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "- понимает Небесный, Общий, Сильван и Эльфийский, но не говорит."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Копыта",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 11 (2к6 + 4) дробящего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

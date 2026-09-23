@@ -1,0 +1,98 @@
+{
+  "id": "17340",
+  "slug": "17340-faerie-pest",
+  "name": "Фея-вредитель",
+  "nameEn": "Faerie Pest",
+  "size": "small",
+  "type": "fey",
+  "subtype": null,
+  "alignment": "хаотично-нейтральная, нейтрально-злая",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Monstrous Compendium Vol. Four: Eldraine Creatures",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "кожаный доспех"
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "5d6 + 5"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 30,
+    "hover": true
+  },
+  "abilities": {
+    "str": 8,
+    "dex": 16,
+    "con": 12,
+    "int": 10,
+    "wis": 12,
+    "cha": 14
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3,
+    "stealth": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Сильван"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Клинок-жало",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 6 (1к6 + 3) рубящего урона плюс 5 (2к4) урона ядом. Если фея с преимуществом совершает бросок атаки, цель дополнительно получает 3 (1к6) рубящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Фея может накладывать одно из следующих заклинаний, не требующее материальных компонентов и использующее Харизму в качестве базовой характеристики для заклинания (Сл спасброска заклинания 12):"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "порча [bane], скольжение [grease];"
+    },
+    {
+      "name": "1/день",
+      "type": "special",
+      "description": "глухота/слепота [blindness/deafness]."
+    },
+    {
+      "name": "Кража нервов (1/день)",
+      "type": "special",
+      "description": "Фея испускает взрыв сбивающей с толку магии в 15-футовом конусе. Каждое существо в этой области должно преуспеть в спасброске Интеллекта Сл 12, иначе оно будет испугано феей на 1 минуту. Испуганное существо может повторять спасбросок в конце каждого своего хода, прекращая эффект на себе в случае успеха.",
+      "save": {
+        "ability": "INT",
+        "dc": 12,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

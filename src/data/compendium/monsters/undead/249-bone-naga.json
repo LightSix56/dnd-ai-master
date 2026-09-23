@@ -1,0 +1,91 @@
+{
+  "id": "249",
+  "slug": "249-bone-naga",
+  "name": "Костяная нага",
+  "nameEn": "Bone naga",
+  "size": "large",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "законно-злая",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 58,
+    "hitDice": "9d10 + 9"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 15,
+    "con": 12,
+    "int": 15,
+    "wis": 15,
+    "cha": 16
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "- Общий плюс один другой язык."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Нага является заклинателем 5-го уровня (Сл спасброска от заклинания 12, +4 к попаданию атаками заклинаниями), которому для накладывания заклинаний нужны только вербальные компоненты."
+    },
+    {
+      "name": "Если нага при жизни была охранной нагой",
+      "description": "[guardian naga], то её базовой характеристикой является Мудрость, и у неё подготовлены следующие заклинания жреца:"
+    },
+    {
+      "name": "Если нага при жизни была духовной нагой",
+      "description": "[spirit naga], то её базовой характеристикой является Интеллект, и у неё подготовлены следующие заклинания волшебника:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 10 футов, одно существо. Попадание: Колющий урон 10 (2к6 + 3) плюс урон ядом 10 (3к6).",
+      "attackBonus": 5,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "плюс"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 5,
+    "spellAttackBonus": 4
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "id": "98",
+  "slug": "98-black-dragon-wyrmling",
+  "name": "Вирмлинг чёрного дракона",
+  "nameEn": "Black dragon wyrmling",
+  "size": "medium",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "хаотично-злой",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 33,
+    "hitDice": "6d8 + 6"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 60,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 14,
+    "con": 13,
+    "int": 10,
+    "wis": 11,
+    "cha": 13
+  },
+  "savingThrows": {
+    "dex": 4,
+    "con": 3,
+    "wis": 2,
+    "cha": 3
+  },
+  "skills": {
+    "perception": 4,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "acid"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "blindsight": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Дракон может дышать и воздухом и под водой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 7 (1к10 + 2) плюс урон кислотой 2 (1к4).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 2,
+          "type": "плюс"
+        }
+      ]
+    },
+    {
+      "name": "Кислотное дыхание (перезарядка 5–6)",
+      "type": "breath",
+      "description": "Дракон выдыхает кислоту 15-футовой линией шириной 5 футов. Все существа в этой линии должны совершить спасбросок Ловкости Сл 11, получая урон кислотой 22 (5к8) при провале, или половину этого урона при успехе.",
+      "recharge": "5-6",
+      "save": {
+        "ability": "DEX",
+        "dc": 11,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

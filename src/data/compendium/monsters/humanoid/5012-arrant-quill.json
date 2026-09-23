@@ -1,0 +1,141 @@
+{
+  "id": "5012",
+  "slug": "5012-arrant-quill",
+  "name": "Аррант Квилл",
+  "nameEn": "Arrant Quill",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "нейтрально-злой, именной НИП",
+  "challengeRating": 11,
+  "xp": 7200,
+  "source": "Candlekeep Mysteries",
+  "isNamed": true,
+  "armorClass": {
+    "value": 14
+  },
+  "hitPoints": {
+    "average": 135,
+    "hitDice": "18d8 + 54"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 18,
+    "con": 16,
+    "int": 16,
+    "wis": 15,
+    "cha": 20
+  },
+  "savingThrows": {
+    "int": 7,
+    "wis": 6,
+    "cha": 9
+  },
+  "skills": {
+    "performance": 13,
+    "history": 7,
+    "arcana": 11,
+    "deception": 9
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий",
+    "Драконий",
+    "Подземный",
+    "Эльфийский"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Аррант совершает две атаки кинжалом и использует Совершенную насмешку."
+    },
+    {
+      "name": "Кинжал",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием:+8 к попаданию, досягаемость 5 фт. или дистанция 20/60 фт., одна цель. Попадание: 6 (1к4 + 4) колющего урон.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Басня Квилла (Перезарядка 6)",
+      "type": "special",
+      "description": "Квилл произносит короткую притчу, нацеливаясь на пять видимых им существ в радиусе 30 футов от него. Каждая цель, которая может слышать магические слова Квилла, должна совершить спасбросок Мудрости Сл 17, получая 36 (8к8) урона психической энергией в случае провале, или половину этого урона в случае успеха.",
+      "damage": [
+        {
+          "dice": "8d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "6",
+      "save": {
+        "ability": "CHA",
+        "dc": 17,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Квилл накладывает одно из следующих заклинаний, используя Харизму в качестве своей базовой характеристики (Сл спасброска 17):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "свет [light], волшебная рука [mage hand], фокусы [prestidigitation]"
+    },
+    {
+      "name": "3/день каждое",
+      "type": "special",
+      "description": "обнаружение магии [detect magic], рассеивание магии [dispel magic], огонь фей [faerie fire], удержание чудовища [hold monster]"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "сокрытие разума [mind blank], телепортация [teleport]"
+    },
+    {
+      "name": "Совершенная насмешка",
+      "type": "special",
+      "description": "Квилл разрождается чередой пронизанных магией оскорблений в видимое им существо в 60 футах от себя. Если существо может слышать Квилла (при этом она не обязана его понимать), оно должно преуспеть в спасброске Мудрости Сл 17, иначе получит 66 (12к10) урона психической энергией и получить помеху на следующий бросок атаки, который оно совершит до конца своего следующего хода.",
+      "damage": [
+        {
+          "dice": "12d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CHA",
+        "dc": 17,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

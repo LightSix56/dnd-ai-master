@@ -1,0 +1,23 @@
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  output: "standalone",
+  /* config options here */
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  reactStrictMode: false,
+  allowedDevOrigins: [
+    "*.*.*.*",
+    "26.*.*.*",
+    "192.168.*.*",
+    "10.*.*.*",
+    "172.*.*.*",
+    "*.local",
+    "*.localhost",
+    "localhost",
+    "127.0.0.1",
+  ],
+};
+
+export default nextConfig;

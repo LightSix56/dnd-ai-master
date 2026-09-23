@@ -1,0 +1,116 @@
+{
+  "id": "17363",
+  "slug": "17363-giant-fog",
+  "name": "Туманный великан",
+  "nameEn": "Giant, Fog",
+  "size": "huge",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "нейтрально-злой",
+  "challengeRating": 11,
+  "xp": 7200,
+  "source": "Mordenkainen's Fiendish Folio Vol 1",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "кольчуга"
+  },
+  "hitPoints": {
+    "average": 200,
+    "hitDice": "16d12 + 96"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 27,
+    "dex": 10,
+    "con": 22,
+    "int": 12,
+    "wis": 16,
+    "cha": 16
+  },
+  "savingThrows": {
+    "con": 10,
+    "wis": 7,
+    "cha": 7
+  },
+  "skills": {
+    "perception": 7,
+    "insight": 7,
+    "persuasion": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17
+  },
+  "languages": [
+    "Общий",
+    "Великаний"
+  ],
+  "traits": [
+    {
+      "name": "Обитатель тумана",
+      "description": "В свой ход туманный великан игнорирует эффекты заклинания туманное облако [fog cloud], наложенного им или его союзниками."
+    },
+    {
+      "name": "Тонкий нюх",
+      "description": "Туманный великан совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на обоняние."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Его базовой характеристикой является Харизма (Сл спасброска от заклинания 15, +7 к попаданию атаками заклинаниями). Туманный великан может накладывать следующие заклинания, не нуждаясь в материальных компонентах:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Туманный великан совершает две атаки Двуручным мечом и накладывает туманное облако [fog cloud]."
+    },
+    {
+      "name": "Двуручный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +12 к попаданию, досягаемость 10 фт., одна цель. Попадание: 29 (6к6 + 8) рубящего урона.",
+      "attackBonus": 12,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "6d6",
+          "mod": 8,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Камень",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +12 к попаданию, дистанция 60/240 фт., одна цель. Попадание: 30 (4к10 + 8) дробящего урона.",
+      "attackBonus": 12,
+      "range": {
+        "normal": 60,
+        "long": 240
+      },
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 8,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Мелкий тиран (перезарядка 6)",
+      "type": "special",
+      "description": "Туманный великан выкрикивает чудовищные угрозы прислуживающим ему существам. Все его союзники Среднего размера и меньшие, находящиеся в пределах 120 футов, которые могут его видеть или слышать, могут совершить рукопашную атаку реакцией.",
+      "recharge": "6"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,116 @@
+{
+  "id": "10569",
+  "slug": "10569-bozak-draconian",
+  "name": "Драконид бозак",
+  "nameEn": "Bozak Draconian",
+  "size": "medium",
+  "type": "monstrosity",
+  "subtype": "Чародей",
+  "alignment": "законно-злой",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Dragonlance: Shadow of the Dragon Queen",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 40,
+    "hitDice": "9d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 10,
+    "con": 11,
+    "int": 11,
+    "wis": 10,
+    "cha": 14
+  },
+  "savingThrows": {
+    "int": 2,
+    "wis": 2,
+    "cha": 4
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Предсмертная агония",
+      "description": "Когда хиты драконида опускаются до 0, его чешуя и плоть сморщиваются, а его кости взрываются. Все существа в пределах 10 футов от него должны преуспеть в спасброске Ловкости Сл 10 или получить 9 (2к8) урона силовым полем."
+    },
+    {
+      "name": "Планирование",
+      "description": "Когда драконид падает и дееспособен, он вычитает до 100 футов от высоты падения при расчете урона от падения, и может переместиться до 2 футов по горизонтали за каждый 1 фут спуска."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Драконид совершает две атаки Трезубцем или две атаки Электрическим разрядом."
+    },
+    {
+      "name": "Трезубец",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +4 к попаданию, досягаемость 5 фт. или дистанция 20/60 фт., одна цель. Попадание: 5 (1к6 + 2) колющего урона или 6 (1к8 + 2) колющего урона при использовании двумя руками при совершении рукопашной атаки.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Электрический разряд",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +4 к попаданию, дистанция 60 фт., одна цель. Попадание: 10 (3к6) урона электричеством.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 60
+      },
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Драконид накладывает одно из следующих заклинаний, не нуждаясь в материальных компонентах. Его базовой характеристикой является Харизма (Сл спасброска 12):"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "зловонное облако [stinking cloud], невидимость [invisibility], паутина [web], увеличение/уменьшение [enlarge/reduce]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

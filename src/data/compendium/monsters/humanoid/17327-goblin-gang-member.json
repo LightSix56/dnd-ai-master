@@ -1,0 +1,92 @@
+{
+  "id": "17327",
+  "slug": "17327-goblin-gang-member",
+  "name": "Член банды гоблинов",
+  "nameEn": "Goblin Gang Member",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "гоблиноид",
+  "alignment": "нейтрально-злой",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "кожаный доспех"
+  },
+  "hitPoints": {
+    "average": 10,
+    "hitDice": "3d6"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 8,
+    "dex": 16,
+    "con": 10,
+    "int": 10,
+    "wis": 10,
+    "cha": 8
+  },
+  "savingThrows": {},
+  "skills": {
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Гоблинский"
+  ],
+  "traits": [
+    {
+      "name": "Ловкий побег",
+      "description": "Гоблин может в каждом своём ходу бонусным действием совершать действие Засада или Отход."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Кинжал",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 5 (1к4 + 3) колющего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Легкий арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +5 к попаданию, дистанция 80/320 фт., одна цель. Попадание: 7 (1к8 + 3) колющего урона.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 80,
+        "long": 320
+      },
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

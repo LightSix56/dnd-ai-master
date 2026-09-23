@@ -1,0 +1,72 @@
+{
+  "id": "8506",
+  "slug": "8506-enormous-tentacle",
+  "name": "Огромное щупальце",
+  "nameEn": "Enormous Tentacle",
+  "size": "huge",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Acquisition Incorporated",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 60,
+    "hitDice": "8d12 + 8"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 14,
+    "con": 12,
+    "int": 1,
+    "wis": 10,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "blindsight": 10
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Досягаемость",
+      "description": "Щупальце может дотянуться до любого места в комнате."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Сжимание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 35 футов, одно существо. Попадание: 13 (2к8 + 4) дробящего урона и цель становится схваченной (Сл высвобождения 16). Пока цель схвачена, она опутана, и щупальце не может сжимать другую цель.",
+      "attackBonus": 6,
+      "reachFt": 35,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

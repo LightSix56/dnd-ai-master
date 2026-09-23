@@ -1,0 +1,116 @@
+{
+  "id": "6032",
+  "slug": "6032-flask-of-wine",
+  "name": "Фляга Вина",
+  "nameEn": "Flask of Wine",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "табакси",
+  "alignment": "хаотично-добрый, именной НИП",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Tomb of Annihilation",
+  "isNamed": true,
+  "armorClass": {
+    "value": 14,
+    "type": "кожаный доспех"
+  },
+  "hitPoints": {
+    "average": 40,
+    "hitDice": "9d8"
+  },
+  "speed": {
+    "walk": 30,
+    "climb": 20
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 17,
+    "con": 11,
+    "int": 13,
+    "wis": 14,
+    "cha": 15
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 2,
+    "perception": 4,
+    "survival": 6,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Фляга знает Общий плюс два других языка."
+    },
+    {
+      "name": "Кошачье проворство",
+      "description": "Когда Фляга двигается в бою в свой ход, он может удвоить свою скорость до конца хода. Использовав эту особенность, табакси не можете использовать её снова, до тех пор, пока он не переместся на 0 футов за один из своих ходов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Фляга совершает две атаки когтями, кротким мечом или коротким луком."
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 фт., одна цель. Попадание: 2 (1к4) рубящего урона.",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: 4-5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 6 (1к6 + 3) рубящего урона.",
+      "attackBonus": -5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Короткий лук",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +5 к попаданию, дистанция 80/320 фт., одна цель. Попадание: 6 (1к6 + 3) колющего урона.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 80,
+        "long": 320
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,100 @@
+{
+  "id": "6149",
+  "slug": "6149-fazrian",
+  "name": "Фазриан",
+  "nameEn": "Fazrian",
+  "size": "large",
+  "type": "celestial",
+  "subtype": null,
+  "alignment": "законно-злой, именной НИП",
+  "challengeRating": 16,
+  "xp": 15000,
+  "source": "Waterdeep: Dungeon of the Mad Mage",
+  "isNamed": true,
+  "armorClass": {
+    "value": 19,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 200,
+    "hitDice": "16d10 + 112"
+  },
+  "speed": {
+    "walk": 40,
+    "fly": 120
+  },
+  "abilities": {
+    "str": 24,
+    "dex": 20,
+    "con": 24,
+    "int": 19,
+    "wis": 22,
+    "cha": 25
+  },
+  "savingThrows": {
+    "con": 12,
+    "wis": 11,
+    "cha": 12
+  },
+  "skills": {
+    "perception": 11
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 21,
+    "truesight": 120
+  },
+  "languages": [
+    "Все",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Оружие ангела",
+      "description": "Атаки оружием Фазриана являются магическими. Если Фазриан попадает любым оружием, оно причиняет дополнительный урон излучением 5к8 (уже включено в атаку)."
+    },
+    {
+      "name": "Божественная осведомленность",
+      "description": "Фазриан знает, когда слышит ложь."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Базовой характеристикой Фазриана является Харизма (Сл спасброска от заклинания 20). Фазриан может накладывать следующие заклинания, не нуждаясь в материальных компонентах:"
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Фазриан совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Фазриан совершает две рукопашные атаки."
+    },
+    {
+      "name": "Двуручный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +12 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 21 (4к6 + 7) плюс урон излучением 22 (5к8).",
+      "attackBonus": 12,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "4d6",
+          "mod": 7,
+          "type": "плюс"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

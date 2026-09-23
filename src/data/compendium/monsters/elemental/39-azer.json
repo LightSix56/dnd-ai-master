@@ -1,0 +1,84 @@
+{
+  "id": "39",
+  "slug": "39-azer",
+  "name": "Эйзер",
+  "nameEn": "Azer",
+  "size": "medium",
+  "type": "elemental",
+  "subtype": null,
+  "alignment": "законно-нейтральный",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех, щит"
+  },
+  "hitPoints": {
+    "average": 39,
+    "hitDice": "6d8 + 12"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 12,
+    "con": 15,
+    "int": 12,
+    "wis": 13,
+    "cha": 10
+  },
+  "savingThrows": {
+    "con": 4
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire",
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [
+    "Игнан"
+  ],
+  "traits": [
+    {
+      "name": "Раскаленное тело",
+      "description": "Существо, касающееся эйзера или попадающее по нему рукопашной атакой, находясь в пределах 5 футов от него, получает урон огнём 5 (1к10)."
+    },
+    {
+      "name": "Раскаленное оружие",
+      "description": "Если эйзер попадает металлическим рукопашным оружием, он причиняет дополнительный урон огнём 3 (1к6) (уже учтено в атаках)."
+    },
+    {
+      "name": "Свечение",
+      "description": "Эйзер испускает яркий свет в радиусе 10 футов и тусклый свет в пределах ещё 10 футов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Боевой молот",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: Дробящий урон 7 (1к8 + 3), или дробящий урон 8 (1к10 + 3), если используется двумя руками для совершения рукопашной атаки, плюс урон огнём 3 (1к6).",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

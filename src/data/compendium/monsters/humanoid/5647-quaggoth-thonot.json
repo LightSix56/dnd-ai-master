@@ -1,0 +1,90 @@
+{
+  "id": "5647",
+  "slug": "5647-quaggoth-thonot",
+  "name": "Кваггот тонот",
+  "nameEn": "Quaggoth Thonot",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "кваггот",
+  "alignment": "хаотично-нейтральный",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 45,
+    "hitDice": "6d8 + 18"
+  },
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 12,
+    "con": 16,
+    "int": 6,
+    "wis": 12,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 120
+  },
+  "languages": [
+    "Подземный"
+  ],
+  "traits": [
+    {
+      "name": "Ярость от ранения",
+      "description": "Если у кваггота 10 или меньше хитов, он совершает броски атаки с преимуществом. Кроме того, он причиняет дополнительный урон 7 (2к6) всем целям, по которым попадает рукопашными атаками."
+    },
+    {
+      "name": "Врождённое колдовство (псионика)",
+      "description": "Базовой характеристикой кваггота является Мудрость (Сл спасброска от заклинаний 11). Кваггот может накладывать следующие заклинания, не нуждаясь ни в каких компонентах:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Кваггот совершает две атаки когтём."
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 6 (1к6 + 3).",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "ability": "WIS"
+  }
+}

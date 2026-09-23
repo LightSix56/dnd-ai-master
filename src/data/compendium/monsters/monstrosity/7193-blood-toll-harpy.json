@@ -1,0 +1,96 @@
+{
+  "id": "7193",
+  "slug": "7193-blood-toll-harpy",
+  "name": "Гарпия кровавой дани",
+  "nameEn": "Blood-Toll Harpy",
+  "size": "medium",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "хаотично-злой",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "Mythic Odysseys of Theros",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11
+  },
+  "hitPoints": {
+    "average": 9,
+    "hitDice": "2d8"
+  },
+  "speed": {
+    "walk": 20,
+    "fly": 40
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 13,
+    "con": 10,
+    "int": 6,
+    "wis": 11,
+    "cha": 13
+  },
+  "savingThrows": {},
+  "skills": {
+    "intimidation": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Кровавое бешенство. Гарпия совершает с п",
+      "description": "реимуществом броски рукопашных атак по существам, у которых хиты ниже максимума."
+    },
+    {
+      "name": "Темная преданность",
+      "description": "Гарпия совершает с преимуществом спасброски от испуга и очарования."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Гарпия совершает две рукопашные атаки: одну Укусом и одну Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: 3 (1к4 + 1) колющего урона.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: 3 (1к4 + 1) рубящего урона.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 1,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

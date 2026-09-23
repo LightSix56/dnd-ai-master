@@ -1,0 +1,88 @@
+{
+  "id": "15699",
+  "slug": "15699-granite-juggernaut",
+  "name": "Гранитный джаггернаут",
+  "nameEn": "Granite Juggernaut",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 12,
+  "xp": 8400,
+  "source": "Vecna: Eve of Ruin",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 157,
+    "hitDice": "15d10 + 75"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 23,
+    "dex": 1,
+    "con": 20,
+    "int": 2,
+    "wis": 11,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "bludgeoning",
+    "piercing",
+    "slashing",
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "blindsight": 120
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Джаггернаут совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Осадный монстр",
+      "description": "Джаггернаут наносит двойной урон объектам и постройкам."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +10 к попаданию, досягаемость 5 футов, одна цель. Попадание: 11 (1к10 + 6) дробящего урона. Если целью атаки является существо Большого размера или меньше, то оно должно преуспеть в спасброске Силы Сл 18 или будет сбито с ног.",
+      "attackBonus": 10,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 6,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 18,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "id": "6423",
+  "slug": "6423-ulder-ravengard",
+  "name": "Ульдер Рейвенгард",
+  "nameEn": "Ulder Ravengard",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "нейтральный, именной НИП",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Baldur's Gate: Descent Into Avernus",
+  "isNamed": true,
+  "armorClass": {
+    "value": 20,
+    "type": "латы, щит"
+  },
+  "hitPoints": {
+    "average": 112,
+    "hitDice": "15d8 + 45"
+  },
+  "speed": {
+    "walk": 25
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 14,
+    "con": 16,
+    "int": 11,
+    "wis": 10,
+    "cha": 17
+  },
+  "savingThrows": {
+    "con": 6,
+    "wis": 3
+  },
+  "skills": {
+    "athletics": 6,
+    "perception": 3,
+    "intimidation": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Ульдер совершает три рукопашные атаки, только одна из которых может быть атакой щитом."
+    },
+    {
+      "name": "Длинный меч +1",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: 8 (1к8 + 4) рубящего урона или 9 (1к10 + 4) рубящего урона, если используется двумя руками.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Щит",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одно существо. Попадание: 6 (1к6 + 3) дробящего урона, при этом Ульдер отталкивает цель на 5 футов от себя и перемещается в освобождённое целью пространство.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Если цель при этом оказывается в предела",
+      "type": "special",
+      "description": "х 5 футов от союзника Ульдера, союзник совершает провоцированную атаку по этому существу."
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Удар стража",
+      "type": "special",
+      "description": "Если враг в пределах 5 футов от Ульдера атакует любую цель, кроме него, Ульдер может совершить по этому врагу рукопашную атаку."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

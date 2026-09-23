@@ -1,0 +1,69 @@
+{
+  "id": "386",
+  "slug": "386-rhinoceros",
+  "name": "Носорог",
+  "nameEn": "Rhinoceros",
+  "size": "large",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 45,
+    "hitDice": "6d10 + 12"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 21,
+    "dex": 8,
+    "con": 15,
+    "int": 2,
+    "wis": 12,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Атака в броске",
+      "description": "Если носорог переместится как минимум на 20 футов по прямой к цели, а затем в том же ходу попадет по ней атакой бодания, цель получает от атаки дополнительный дробящий урон 9 (2к8). Если цель — существо, она должна преуспеть в спасброске Силы Сл 15, иначе будет сбита с ног."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Бодание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: Дробящий урон 14 (2к8 + 5).",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 5,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

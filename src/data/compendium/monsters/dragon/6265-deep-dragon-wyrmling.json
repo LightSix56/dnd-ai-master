@@ -1,0 +1,102 @@
+{
+  "id": "6265",
+  "slug": "6265-deep-dragon-wyrmling",
+  "name": "Вирмлинг глубинного дракона",
+  "nameEn": "Deep Dragon Wyrmling",
+  "size": "medium",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "нейтрально-злой",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 27,
+    "hitDice": "5d8 + 5"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 60,
+    "swim": 30,
+    "burrow": 15
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 11,
+    "con": 12,
+    "int": 11,
+    "wis": 12,
+    "cha": 13
+  },
+  "savingThrows": {
+    "dex": 2,
+    "con": 3,
+    "wis": 3,
+    "cha": 3
+  },
+  "skills": {
+    "perception": 3,
+    "stealth": 4,
+    "persuasion": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "blindsight": 10,
+    "darkvision": 90
+  },
+  "languages": [
+    "Драконий"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 7 (1к10+2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Кошмарное дыхание (перезарядка 5–6)",
+      "type": "breath",
+      "description": "Дракон выдыхает облако спор 15-футовым конусом. Все существа в этой области должны совершить спасбросок Мудрости Сл 11. В случае провала существо получает 5 (1к10) урона психической энергией и становится испуганным драконом на 1 минуту. В случае успеха существо получает половину урона без дополнительных эффектов. Испуганное существо может повторять спасбросок в конце каждого своего хода, оканчивая эффект на себе при успехе.",
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 15
+      },
+      "save": {
+        "ability": "CHA",
+        "dc": 11,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,100 @@
+{
+  "id": "5773",
+  "slug": "5773-frost-giant-skeleton",
+  "name": "Скелет ледяного великана",
+  "nameEn": "Frost Giant Skeleton",
+  "size": "huge",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "законно-злая",
+  "challengeRating": 6,
+  "xp": 2300,
+  "source": "Icewind Dale: Rime of the Frostmaiden",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "обломки доспеха"
+  },
+  "hitPoints": {
+    "average": 102,
+    "hitDice": "12d12 + 24"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 23,
+    "dex": 9,
+    "con": 15,
+    "int": 6,
+    "wis": 8,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "cold",
+    "poison"
+  ],
+  "damageVulnerabilities": [
+    "bludgeoning"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 9,
+    "darkvision": 60
+  },
+  "languages": [
+    "Понимает Великаний",
+    "но не говорит."
+  ],
+  "traits": [
+    {
+      "name": "Необычная природа",
+      "description": "Скелету не нужен воздух, еда, питьё и сон."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Скелет великана совершает две атаки секирой."
+    },
+    {
+      "name": "Секира",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 10 фт., одна цель. Попадание: 25 (3к12 + 6) рубящего урона.",
+      "attackBonus": 9,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d12",
+          "mod": 6,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Замораживающий взгляд",
+      "type": "special",
+      "description": "Скелет выбирает одно существо, которое он может видеть в пределах 60 футов. Цель должна преуспеть в спасброске Телосложения Сл 13, иначе получит 35 (10к6) урона холодом и станет парализованной до конца своего следующего хода.",
+      "damage": [
+        {
+          "dice": "10d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

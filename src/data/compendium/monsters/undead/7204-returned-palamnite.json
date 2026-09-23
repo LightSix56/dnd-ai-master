@@ -1,0 +1,91 @@
+{
+  "id": "7204",
+  "slug": "7204-returned-palamnite",
+  "name": "Вернувшийся-паламнит",
+  "nameEn": "Returned Palamnite",
+  "size": "medium",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "хаотично-злая",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Mythic Odysseys of Theros",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 65,
+    "hitDice": "10d8 + 20"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 17,
+    "con": 14,
+    "int": 13,
+    "wis": 12,
+    "cha": 15
+  },
+  "savingThrows": {},
+  "skills": {
+    "acrobatics": 5,
+    "athletics": 2,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [
+    "все",
+    "известные при жизни"
+  ],
+  "traits": [
+    {
+      "name": "Мимолётный гнев",
+      "description": "Если другое существо наносит вернувшемуся урон, то вернувшийся совершает броски атаки с преимуществом до конца своего следующего хода."
+    },
+    {
+      "name": "Сопротивление изгнанию",
+      "description": "Вернувшийся совершает с преимуществом спасброски против эффектов, изгоняющих Нежить."
+    },
+    {
+      "name": "Непроницаемое лицо",
+      "description": "Вернувшийся имеет иммунитет к любому эффекту, который может ощутить его эмоции или прочитать его мысли. Проверки Мудрости (Проницательность), направленные на то, чтобы удостовериться в намерениях или искренности вернувшегося, совершаются с помехой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Вернувшийся совершает две атаки коротким мечом."
+    },
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к6 + 3) колющего урона плюс 10 (3к6) урона ядом.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,92 @@
+{
+  "id": "6350",
+  "slug": "6350-metallic-peacekeeper",
+  "name": "Металлический миротворец",
+  "nameEn": "Metallic Peacekeeper",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "нейтрально-добрый",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 68,
+    "hitDice": "8d8 + 32"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 10,
+    "con": 18,
+    "int": 14,
+    "wis": 12,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Драконий",
+    "Телепатия 30 фт."
+  ],
+  "traits": [
+    {
+      "name": "Неизменяемая форма",
+      "description": "Миротворец обладает иммунитетом ко всем заклинаниям и эффектам, изменяющим его форму."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Миротворец совершает две рукопашных атаки."
+    },
+    {
+      "name": "Удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 16 (3к8+3) дробящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Успокаивающий туман (перезарядка 5-6)",
+      "type": "special",
+      "description": "Миротворец выпускает успокаивающий газ в сферу радиусом 30 фт., с центром на себе. Каждое существо в этой области должно преуспеть в спасброске Харизмы Сл 14, иначе станет очарованно миротворцем на 1 минуту. Пока существо очаровано таким образом, оно недееспособно и имеет скорость 0.",
+      "recharge": "5-6",
+      "save": {
+        "ability": "CHA",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

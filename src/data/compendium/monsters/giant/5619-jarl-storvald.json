@@ -1,0 +1,115 @@
+{
+  "id": "5619",
+  "slug": "5619-jarl-storvald",
+  "name": "Ярл Сторвальд",
+  "nameEn": "Jarl Storvald",
+  "size": "huge",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "нейтрально-злой, именной НИП",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Storm King's Thunder",
+  "isNamed": true,
+  "armorClass": {
+    "value": 15,
+    "type": "лоскутный доспех"
+  },
+  "hitPoints": {
+    "average": 138,
+    "hitDice": "12d12 + 60"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 23,
+    "dex": 9,
+    "con": 21,
+    "int": 9,
+    "wis": 16,
+    "cha": 16
+  },
+  "savingThrows": {
+    "con": 8,
+    "wis": 6,
+    "cha": 6
+  },
+  "skills": {
+    "athletics": 9,
+    "perception": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "cold"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16
+  },
+  "languages": [
+    "Общий",
+    "Великаний",
+    "Язык Гигантских сов"
+  ],
+  "traits": [
+    {
+      "name": "Особое снаряжение",
+      "description": "У Ярла есть камень с руной Блод [blod Stone] , прикрученный к 50-фунтовой железной цепи, которую он носит на шее."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Ярл совершает две атаки секирой."
+    },
+    {
+      "name": "Секира",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 10 футов, одна цель. Попадание: 25 (3к12 + 6) рубящего урона.",
+      "attackBonus": 9,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d12",
+          "mod": 6,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Камень",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +9 к попаданию, дистанция 60/240 футов, одна цель. Попадание: 28 (4к10 + 6) дробящего урона.",
+      "attackBonus": 9,
+      "range": {
+        "normal": 60,
+        "long": 240
+      },
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 6,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Ярл накладывает одно из следующий заклинаний, не нуждаясь в никаких материальных компонентах, и Интеллект является для них базовой характеристикой Ярла (Сл спасброска от заклинания 14; +6 к попаданию атаками заклинаниями):",
+      "attackBonus": 6
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "прыжок [jump], поиск животных или растений [locate animals or plants], поиск предмета [locate object],"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

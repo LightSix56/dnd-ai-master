@@ -1,0 +1,96 @@
+{
+  "id": "114",
+  "slug": "114-white-dragon-wyrmling",
+  "name": "Вирмлинг белого дракона",
+  "nameEn": "White dragon wyrmling",
+  "size": "medium",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "хаотично-злой",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 32,
+    "hitDice": "5d8 + 10"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 60,
+    "swim": 30,
+    "burrow": 15
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 10,
+    "con": 14,
+    "int": 5,
+    "wis": 10,
+    "cha": 11
+  },
+  "savingThrows": {
+    "dex": 2,
+    "con": 4,
+    "wis": 2,
+    "cha": 2
+  },
+  "skills": {
+    "perception": 4,
+    "stealth": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "cold"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "blindsight": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Драконий"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 7 (1к10 + 2) плюс урон холодом 2 (1к4).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 2,
+          "type": "плюс"
+        }
+      ]
+    },
+    {
+      "name": "Холодное дыхание (перезарядка 5–6)",
+      "type": "breath",
+      "description": "Дракон выдыхает волну града 15-футовым конусом. Все существа в этой области должны совершить спасбросок Телосложения Сл 12, получая урон холодом 22 (5к8) при провале, или половину этого урона при успехе.",
+      "recharge": "5-6",
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 15
+      },
+      "save": {
+        "ability": "CON",
+        "dc": 12,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

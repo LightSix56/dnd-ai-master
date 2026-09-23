@@ -1,0 +1,97 @@
+{
+  "id": "5388",
+  "slug": "5388-scaladar",
+  "name": "Скаладар",
+  "nameEn": "Scaladar",
+  "size": "huge",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Waterdeep: Dungeon of the Mad Mage",
+  "isNamed": false,
+  "armorClass": {
+    "value": 19,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 94,
+    "hitDice": "7d12 + 49"
+  },
+  "speed": {
+    "walk": 30,
+    "climb": 20
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 10,
+    "con": 25,
+    "int": 1,
+    "wis": 12,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "force"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Поглощение молний",
+      "description": "Всякий раз, когда скаладар подвергается урону электричеством, он не получает никакого урона, а его жало дополнительно наносит 11 (2к10) урона электричеством до конца своего следующего хода."
+    },
+    {
+      "name": "Связь скаладаров",
+      "description": "Скаладар знает расположение других скаладаров в пределах 100 футов от себя, и он чувствует, когда любой из них получает урон."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Скаладар совершает три атаки: две когтями и одну жалом."
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 10 фт., одна цель. Попадание: 10 (1к12 + 4) дробящий урон, и цель становится схваченной (Сл высвобождения 15). У скаладара два когтя и каждым он может схватить одну цель.",
+      "attackBonus": 7,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d12",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Жало",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 10 фт., одна цель. Попадание: 9 (1к10 + 4) колющий урон плюс 11 (2к10) урон электричеством.",
+      "attackBonus": 7,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,106 @@
+{
+  "id": "290",
+  "slug": "290-blue-slaad",
+  "name": "Синий слаад",
+  "nameEn": "Blue slaad",
+  "size": "large",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "хаотично-нейтральная",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 123,
+    "hitDice": "13d10 + 52"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 15,
+    "con": 18,
+    "int": 7,
+    "wis": 7,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 1
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 60
+  },
+  "languages": [
+    "Слаадский",
+    "Телепатия 60 фт."
+  ],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Слаад совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Регенерация",
+      "description": "Слаад восстанавливает 10 хитов в начале своего хода, если у него есть хотя бы 1 хит."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Слаад совершает три атаки: одну укусом, и две когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 12 (2к6 + 5).",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 12 (2к6 + 5). Если цель — гуманоид, она должна преуспеть в спасброске Телосложения Сл 15, иначе заразится вирусом хаоса. Будучи больной, цель не может восстанавливать хиты, и максимум её хитов уменьшается на 10 (3к6) каждые 24 часа. Если болезнь уменьшает максимум хитов до 0, цель мгновенно превращается в красного слаада или, если могла накладывать заклинания как минимум 3 уровня, в зеленого слаада. Только заклинание исполнение желаний может обратить это превращение.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

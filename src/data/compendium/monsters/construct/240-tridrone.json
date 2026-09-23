@@ -1,0 +1,99 @@
+{
+  "id": "240",
+  "slug": "240-tridrone",
+  "name": "Тридрон",
+  "nameEn": "Tridrone",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "законно-нейтральный",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 16,
+    "hitDice": "3d8 + 3"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 13,
+    "con": 12,
+    "int": 9,
+    "wis": 10,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "truesight": 120
+  },
+  "languages": [
+    "Модронский"
+  ],
+  "traits": [
+    {
+      "name": "Косное сознание",
+      "description": "Тридрона нельзя заставить действовать так, как противоречит его природе или инструкциям."
+    },
+    {
+      "name": "Распад",
+      "description": "Если тридрон умирает, его тело рассыпается в пыль, оставляя лишь оружие и то, что он нес."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Тридрон совершает три атаки кулаком или три атаки метательным копьем."
+    },
+    {
+      "name": "Кулак",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: 3 (1к4 + 1) дробящего урона.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 1,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Метательное копье",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +3 к попаданию, досягаемость 5 футов или дистанция 30/120 футов, одна цель. Попадание: 4 (1к6 + 1) колющего урона.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "range": {
+        "normal": 30,
+        "long": 120
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

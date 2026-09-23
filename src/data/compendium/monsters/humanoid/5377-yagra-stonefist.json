@@ -1,0 +1,105 @@
+{
+  "id": "5377",
+  "slug": "5377-yagra-stonefist",
+  "name": "Ягра Стоунфист",
+  "nameEn": "Yagra Stonefist",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "женщина полуорк",
+  "alignment": "нейтральный, именной НИП",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Waterdeep: Dragon Heist",
+  "isNamed": true,
+  "armorClass": {
+    "value": 11,
+    "type": "кожаный доспех"
+  },
+  "hitPoints": {
+    "average": 32,
+    "hitDice": "5d8 + 10"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 11,
+    "con": 14,
+    "int": 10,
+    "wis": 10,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "intimidation": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Орочий"
+  ],
+  "traits": [
+    {
+      "name": "Тактика стаи",
+      "description": "Ягра совершает с преимуществом броски атаки по существу, если в пределах 5 футов от этого существа находится как минимум один дееспособный союзник Ягры."
+    },
+    {
+      "name": "Непоколебимая стойкость",
+      "description": "Если хиты Ягры опускаются до нуля, но при этом она не убита, её хиты вместо этого опускаются до 1. Она не можете использовать это умение снова, пока не закончит продолжительный отдых."
+    },
+    {
+      "name": "Свирепые атаки",
+      "description": "Если Ягра совершила критическое попадание рукопашной атакой оружием, она может добавить к урону еще одну кость урона оружия."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Ягра совершает две рукопашные атаки."
+    },
+    {
+      "name": "Булава",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одно существо. Попадание: Дробящий урон 5 (1к6 + 2).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Тяжелый арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +2 к попаданию, дистанция 100/400 футов, одна цель. Попадание: Колющий урон 5 (1к10).",
+      "attackBonus": 2,
+      "range": {
+        "normal": 100,
+        "long": 400
+      },
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

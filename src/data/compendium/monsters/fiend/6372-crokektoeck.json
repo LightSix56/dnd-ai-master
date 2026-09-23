@@ -1,0 +1,107 @@
+{
+  "id": "6372",
+  "slug": "6372-crokektoeck",
+  "name": "Крокек’тоик",
+  "nameEn": "Crokek'toeck",
+  "size": "gargantuan",
+  "type": "fiend",
+  "subtype": "демон",
+  "alignment": "хаотично-злое",
+  "challengeRating": 14,
+  "xp": 11500,
+  "source": "Baldur's Gate: Descent Into Avernus",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 297,
+    "hitDice": "17d20 + 119"
+  },
+  "speed": {
+    "walk": 60,
+    "swim": 60
+  },
+  "abilities": {
+    "str": 28,
+    "dex": 10,
+    "con": 24,
+    "int": 6,
+    "wis": 10,
+    "cha": 13
+  },
+  "savingThrows": {
+    "con": 12,
+    "wis": 5
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 120
+  },
+  "languages": [
+    "Бездны"
+  ],
+  "traits": [
+    {
+      "name": "Язык",
+      "description": "Крокек’тоик понимает язык Бездны, но не говорит."
+    },
+    {
+      "name": "Амфибия",
+      "description": "Крокек’тоик может дышать и на воздухе и под водой."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Крокек’тоик совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Магическое оружие",
+      "description": "Атаки крокек’тоика являются магическими."
+    },
+    {
+      "name": "Надёжная память",
+      "description": "Крокек’тоик невосприимчив к водам реки Стикс и прочим эффектам, которые отнимают или меняют воспоминания, либо обнаруживают или читают его мысли."
+    },
+    {
+      "name": "Прыжок с места",
+      "description": "Крокек’тоик совершает прыжки в длину на расстояние до 60 фт. и прыжки в высоту на расстояние до 30 фт., хоть с разбегом, хоть без него."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +14 к попаданию, досягаемость 15 фт., одна цель. Попадание: 44 (10к6 + 9) колющего урона.",
+      "attackBonus": 14,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "10d6",
+          "mod": 9,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Изрыгание союзников (перезарядка 6)",
+      "type": "special",
+      "description": "Крокек’тоик открывает пасть и изрыгает 1к4 барлгуры [barlgura] или 3к6 гнолл [gnoll] во главе с 1 клыком Йеногу [gnoll fang of Yeenoghu], или 6к6 дретчей [dretch], или 1к3 врока [vrock]. Каждое изрыгнутое существо появляется в свободном пространстве в пределах 30 футов от пасти Крокек’тоика или в следующем ближайшем свободном пространстве.",
+      "recharge": "6"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "id": "174",
+  "slug": "174-githyanki-warrior",
+  "name": "Гитъянки воитель",
+  "nameEn": "Githyanki warrior",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "гит",
+  "alignment": "законно-злой",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "полулаты"
+  },
+  "hitPoints": {
+    "average": 49,
+    "hitDice": "9d8 + 9"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 14,
+    "con": 12,
+    "int": 13,
+    "wis": 13,
+    "cha": 10
+  },
+  "savingThrows": {
+    "con": 3,
+    "int": 3,
+    "wis": 3
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [
+    "Гитский"
+  ],
+  "traits": [
+    {
+      "name": "Врождённое колдовство (псионика)",
+      "description": "Базовой характеристикой гитъянки является Харизма. Он может накладывать следующие заклинания, не нуждаясь ни в каких компонентах:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Гитъянки совершает две атаки двуручным мечом."
+    },
+    {
+      "name": "Двуручный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 9 (2к6 + 2) плюс урон психической энергией 7 (2к6).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 2,
+          "type": "плюс"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

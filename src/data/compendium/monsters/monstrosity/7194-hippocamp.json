@@ -1,0 +1,89 @@
+{
+  "id": "7194",
+  "slug": "7194-hippocamp",
+  "name": "Гиппокамп",
+  "nameEn": "Hippocamp",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "хаотично-добрый",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Mythic Odysseys of Theros",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "4d10"
+  },
+  "speed": {
+    "walk": 20,
+    "swim": 50
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 15,
+    "con": 11,
+    "int": 5,
+    "wis": 10,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 120
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Гиппокамп может дышать только под водой."
+    },
+    {
+      "name": "Атака в броске",
+      "description": "Если гиппокамп переместится как минимум на 20 футов по прямой к цели, а затем в том же ходу попадет по ней атакой тараном, цель получает от атаки дополнительные 7 (2к6) дробящего урона. Если цель — существо, она должна преуспеть в спасброске Силы Сл 12, иначе будет сбита с ног."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Копыта",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 9 (2к6 + 2) дробящего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Таран",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: 4 (1к6 + 1) дробящего урона.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 1,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

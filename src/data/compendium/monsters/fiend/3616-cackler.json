@@ -1,0 +1,100 @@
+{
+  "id": "3616",
+  "slug": "3616-cackler",
+  "name": "Зубоскал",
+  "nameEn": "Cackler",
+  "size": "small",
+  "type": "fiend",
+  "subtype": "демон",
+  "alignment": "хаотично-злое",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 10,
+    "hitDice": "3d6"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 9,
+    "dex": 16,
+    "con": 11,
+    "int": 11,
+    "wis": 7,
+    "cha": 12
+  },
+  "savingThrows": {},
+  "skills": {
+    "performance": 3,
+    "deception": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 120
+  },
+  "languages": [
+    "Общий",
+    "Бездны"
+  ],
+  "traits": [
+    {
+      "name": "Врождённое колдовство",
+      "description": "Базовой характеристикой зубоскала является Харизма (Сл спасброска от заклинания 11, +3 к попаданию заклинанием). Он может накладывать следующие заклинания, не нуждаясь в материальных компонентах:"
+    },
+    {
+      "name": "Предсмертный смех",
+      "description": "Когда зубоскал умирает, он издает предсмертный смех, который оставляет раны в умах близстоящих существ. Каждое существо в радиусе 10 футов от зубоскала должно преуспеть в Спасброске Мудрости Сл 11 или получить 2 (1к4) урона психической энергией."
+    },
+    {
+      "name": "Подражание",
+      "description": "Зубоскал может подражать простым звукам, которые когда-либо слышал. Существо, слышащее эти звуки, может понять, что это имитация, если совершит успешную проверку Мудрости (Проницательность) Сл 11."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 5 (1к4 + 3).",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Шипастая цепь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 10 футов, одна цель. Попадание: Рубящий урон 6 (1к6 + 3).",
+      "attackBonus": 5,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

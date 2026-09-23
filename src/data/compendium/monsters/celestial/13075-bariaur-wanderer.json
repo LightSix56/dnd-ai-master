@@ -1,0 +1,123 @@
+{
+  "id": "13075",
+  "slug": "13075-bariaur-wanderer",
+  "name": "Бариаур-странник",
+  "nameEn": "Bariaur Wanderer",
+  "size": "medium",
+  "type": "celestial",
+  "subtype": null,
+  "alignment": "хаотично-добрый",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Planescape: Adventures in the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "проклёпанный доспех"
+  },
+  "hitPoints": {
+    "average": 71,
+    "hitDice": "11d8 + 22"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 14,
+    "con": 15,
+    "int": 11,
+    "wis": 15,
+    "cha": 10
+  },
+  "savingThrows": {
+    "str": 6,
+    "dex": 4
+  },
+  "skills": {
+    "athletics": 6,
+    "perception": 4,
+    "survival": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Небесный"
+  ],
+  "traits": [
+    {
+      "name": "Ощущение портала",
+      "description": "Бариаур может ощущать присутствие порталов в пределах 30 футов, включая неактивные порталы, и инстинктивно знает место назначения каждого из них. Бариаур знает расстояние и направление к последнему порталу, которым он пользовался, пока они находятся на одном и том же плане."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Бариаур совершает две атаки Зазубренным копьём или Коротким луком."
+    },
+    {
+      "name": "Зазубренное копьё",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +6 к попаданию, досягаемость 5 фт. или дистанция 30/120 футов, одна цель. Попадание: 9 (1к10 + 4) колющего урона. Если целью является существо, его скорость уменьшается на 10 футов до начала следующего хода бариаура.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "range": {
+        "normal": 30,
+        "long": 120
+      },
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Таран",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 8 (1к8 + 4) дробящего урона. Если перед атакой бариаур переместится как минимум на 20 футов по прямой к цели, то цель дополнительно получает 10 (3к6) дробящего урона и должна преуспеть в спасброске Силы Сл 14, иначе упадёт ничком.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Использование заклинания",
+      "type": "special",
+      "description": "Бариаур накладывает одно из следующих заклинаний, используя Мудрость в качестве базовой характеристики:"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "пляшущие огоньки [dancing lights], искусство друидов [druidcraft];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "чудо-ягоды [goodberry], бесследное передвижение [pass without trace], языки [tongues]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

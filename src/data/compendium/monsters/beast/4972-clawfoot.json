@@ -1,0 +1,94 @@
+{
+  "id": "4972",
+  "slug": "4972-clawfoot",
+  "name": "Когтелап",
+  "nameEn": "Clawfoot",
+  "size": "medium",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Eberron: Rising from the Last War",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 19,
+    "hitDice": "3d8 + 6"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 16,
+    "con": 14,
+    "int": 4,
+    "wis": 12,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Тактика стаи",
+      "description": "Когтелапы совершают атаки с преимуществом, если хотя бы один из союзников когтелапа находится в 5 футах от враждебного существа."
+    },
+    {
+      "name": "Рывок",
+      "description": "Если когтелап движется по крайней мере на 20 футов прямо к существу, а затем попадает по нему атакой когтями в том же ходу, то цель должна преуспеть в спасброске Силы Сл 11 или будет сбита с ног."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Когтелап совершает две атаки: одну укусом, вторую когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов. Попадание: 7 (1к8 +3) колющего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием:+ 5 к попаданию, досягаемость 5 футов. Попадание: 7 (1к8 +3) рубящего урона.",
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

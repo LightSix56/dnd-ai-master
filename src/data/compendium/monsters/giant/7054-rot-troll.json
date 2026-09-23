@@ -1,0 +1,132 @@
+{
+  "id": "7054",
+  "slug": "7054-rot-troll",
+  "name": "Гнилой тролль",
+  "nameEn": "Rot Troll]Гнилой тролль [Rot Troll",
+  "size": "large",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "обычно хаотично-злойБольшой? Великан, хаотично-злой",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 138,
+    "hitDice": "12d10 + 72"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 13,
+    "con": 22,
+    "int": 5,
+    "wis": 8,
+    "cha": 4
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "necrotic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "darkvision": 60
+  },
+  "languages": [
+    "Великаний"
+  ],
+  "traits": [
+    {
+      "name": "Гнилостное разложение",
+      "description": "В конце каждого хода тролля, каждое существо в пределах 5 футов от него получает 11 (2к10) урона некротической энергией, если тролль не получал урона огнём или кислотой в этом ходу."
+    },
+    {
+      "name": "Гнилостное разложение",
+      "description": "В конце каждого хода тролля каждое существо в пределах 5 фт. от него получает 11 (2к10) урона некротической энергией, если тролль не получал урона огнём или кислотой на этом ходу."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Тролль совершает одну атаку Укусом и две атаки Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 фт., одна цель. Попадание: 9 (1к10 + 4) колющего урона плюс 16 (3к10) урона некротической энергией.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 фт., одна цель. Попадание: 11 (2к6 + 4) рубящего урона, плюс 7 (2к6) урона некротической энергией.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Тролль совершает три атаки: одну укусом и две когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 фт., одна цель. Попадание: 7 (1к6 + 4) колющего урона плюс 16 (3к10) урона некротической энергией.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 фт., одна цель. Попадание: 11 (2к6 + 4) рубящего урона, плюс 5 (1к10) урона некротической энергией.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,79 @@
+{
+  "id": "6852",
+  "slug": "6852-podling",
+  "name": "Выплодок",
+  "nameEn": "Podling",
+  "size": "medium",
+  "type": "plant",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Van Richten's Guide to Ravenloft",
+  "isNamed": false,
+  "armorClass": {
+    "value": 10
+  },
+  "hitPoints": {
+    "average": 26,
+    "hitDice": "4d8 + 8"
+  },
+  "speed": {
+    "walk": 20
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 11,
+    "con": 14,
+    "int": 10,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "blindsight": 30
+  },
+  "languages": [
+    "Глубинная речь"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Глубинная речь, языки, которые существо знало при жизни."
+    },
+    {
+      "name": "Подобие жизни",
+      "description": "Выплодок — это физическая копия существа, переваренного телоглотом [bodytaker]. У выплодка есть воспоминания переваренного существа, и он ведет себя так же, как это существо, но со случайными оплошностями. Наблюдатель, знакомый с переваренным существом, может распознать несоответствия при успешной проверке Мудрости (Проницательность) Сл 20 или автоматически, если выплодок делает что-то прямо противоречащее сложившимся убеждениям или поведению переваренного существа. Выплодок превращается в кашицу, когда он умирает, когда умирает телоглот [bodytaker], создавший его, или когда телоглот освобождает его (никаких действий не требуется)."
+    },
+    {
+      "name": "Необычная природа",
+      "description": "Выплодок не нуждается во сне."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт.,одна цель. Попадание: 5 (1к6 + 2) дробящего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,104 @@
+{
+  "id": "7755",
+  "slug": "7755-brimskarda",
+  "name": "Бримскарда",
+  "nameEn": "Brimskarda",
+  "size": "huge",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "законно-злой, именной НИП",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Storm King's Thunder",
+  "isNamed": true,
+  "armorClass": {
+    "value": 16,
+    "type": "платье из драконьей чешуи"
+  },
+  "hitPoints": {
+    "average": 162,
+    "hitDice": "13d12 + 78"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 25,
+    "dex": 9,
+    "con": 23,
+    "int": 14,
+    "wis": 14,
+    "cha": 13
+  },
+  "savingThrows": {
+    "dex": 3,
+    "con": 10,
+    "cha": 5
+  },
+  "skills": {
+    "athletics": 11,
+    "perception": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16
+  },
+  "languages": [
+    "Общий",
+    "Великаний",
+    "Гоблинский"
+  ],
+  "traits": [
+    {
+      "name": "Особое снаряжение",
+      "description": "Бримскарда носит хрустальный флакон на шее как медальон. В этом флаконе содержится зелье неуязвимости [potion of invulnerability], Бримскарда осушает его в первый раунд битвы."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Бримскарда совершает две атаки двуручным мечом."
+    },
+    {
+      "name": "Двуручный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +11 к попаданию, досягаемость 10 футов, одна цель. Попадание: Рубящий урон 28 (6к6 + 7).",
+      "attackBonus": 11,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "6d6",
+          "mod": 7,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Железный котёл",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +11 к попаданию, дистанция 60/240 футов, одна цель. Попадание: Дробящий урон 29 (4к10 + 7).",
+      "attackBonus": 11,
+      "range": {
+        "normal": 60,
+        "long": 240
+      },
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 7,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

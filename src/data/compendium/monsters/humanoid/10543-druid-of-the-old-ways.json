@@ -1,0 +1,94 @@
+{
+  "id": "10543",
+  "slug": "10543-druid-of-the-old-ways",
+  "name": "Друид Старины",
+  "nameEn": "Druid of the Old Ways",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любой расы",
+  "alignment": "хаотично-нейтральный",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "шкурный доспех"
+  },
+  "hitPoints": {
+    "average": 90,
+    "hitDice": "12d8 + 36"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 15,
+    "con": 16,
+    "int": 10,
+    "wis": 20,
+    "cha": 14
+  },
+  "savingThrows": {
+    "dex": 5,
+    "con": 6,
+    "wis": 8
+  },
+  "skills": {
+    "perception": 8,
+    "survival": 8,
+    "nature": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 18
+  },
+  "languages": [
+    "Общий",
+    "Друидический"
+  ],
+  "traits": [
+    {
+      "name": "Осадное чудовище",
+      "description": "Друид наносит двойной урон объектам и сооружениям."
+    },
+    {
+      "name": "Разговор с животными и растениями",
+      "description": "Друид может общаться с животными и растениями, как если бы они и друид говорили на одном языке."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Друид Старины является заклинателем 12-го уровня. Его базовой заклинательной характеристикой является Мудрость (Сл спасброска от заклинания 16; +8 к попаданию атаками заклинаниями). Он имеет следующие подготовленные заклинания друида:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Боевой посох",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: 3 (1к6) дробящего урона или 4 (1к8) дробящего урона если используется двумя руками.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 0,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 12,
+    "spellAttackBonus": 8,
+    "ability": "WIS"
+  }
+}

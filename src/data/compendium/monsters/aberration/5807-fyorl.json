@@ -1,0 +1,72 @@
+{
+  "id": "5807",
+  "slug": "5807-fyorl",
+  "name": "Ф'йорл",
+  "nameEn": "F'yorl",
+  "size": "medium",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "законно-злая, именной НИП",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Icewind Dale: Rime of the Frostmaiden",
+  "isNamed": true,
+  "armorClass": {
+    "value": 11
+  },
+  "hitPoints": {
+    "average": 9,
+    "hitDice": "13d8 + 13"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 12,
+    "con": 12,
+    "int": 19,
+    "wis": 17,
+    "cha": 17
+  },
+  "savingThrows": {
+    "int": 7,
+    "wis": 6,
+    "cha": 6
+  },
+  "skills": {
+    "perception": 6,
+    "arcana": 7,
+    "deception": 6,
+    "insight": 6,
+    "stealth": 4,
+    "persuasion": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 120
+  },
+  "languages": [
+    "Глубинная речь",
+    "Подземный",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Ф'йорл совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

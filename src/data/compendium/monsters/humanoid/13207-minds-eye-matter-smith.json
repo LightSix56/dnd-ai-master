@@ -1,0 +1,95 @@
+{
+  "id": "13207",
+  "slug": "13207-minds-eye-matter-smith",
+  "name": "Кузнец материи Ока разума",
+  "nameEn": "Mind’s Eye Matter Smith",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Planescape: Adventures in the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "15 с доспехом мага"
+  },
+  "hitPoints": {
+    "average": 78,
+    "hitDice": "12d8 + 24"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 14,
+    "con": 14,
+    "int": 14,
+    "wis": 14,
+    "cha": 16
+  },
+  "savingThrows": {
+    "int": 4,
+    "cha": 5
+  },
+  "skills": {
+    "perception": 6,
+    "investigation": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16
+  },
+  "languages": [
+    "Общий плюс два языка"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Кузнец материи совершает две атаки Проявлением силы."
+    },
+    {
+      "name": "Проявление силы",
+      "type": "melee_attack",
+      "description": "Рукопашная или Дальнобойная атака заклинанием: +5 к попаданию, досягаемость 5 футов или дистанция 120 футов, одна цель. Попадание: 10 (2к6 + 3) урона силовым полем.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Кузнец материи накладывает одно из следующих заклинаний, не нуждаясь в материальных компонентах, используя Харизму в качестве базовой характеристики:"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "доспехи мага [mage armor], волшебная рука [mage hand], фокусы [prestidigitation]"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "сотворение пищи и воды [create food and water], изготовление [fabricate] (действием)"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

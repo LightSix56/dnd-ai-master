@@ -1,0 +1,102 @@
+{
+  "id": "13712",
+  "slug": "13712-norker-war-leader",
+  "name": "Военачальник Норкер",
+  "nameEn": "Norker War Leader",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "Гоблиноид",
+  "alignment": "хаотично-злой",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Mordenkainen's Fiendish Folio Vol 1",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 39,
+    "hitDice": "6d8 + 12"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 10,
+    "con": 15,
+    "int": 12,
+    "wis": 11,
+    "cha": 13
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 5,
+    "perception": 2,
+    "intimidation": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Гоблинский"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Военачальник норкер совершает одну атаку секирой и одну атаку Укусом, а затем использует Сражайтесь, слизняки."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к6 + 3) колющего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Секира",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 9 (1к12 + 3) рубящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d12",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Сражайтесь, слизняки",
+      "type": "special",
+      "description": "Военачальник норкер выбирает до трёх союзных гоблиноидов, которых может видеть в пределах 30 футов. Каждое выбранное существо может использовать свою реакцию, чтобы совершить одну рукопашную атаку."
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Защитное возмездие",
+      "type": "special",
+      "description": "Если существо совершает рукопашную атаку оружием против норкера в пределах 5 футов от него, то он может реакцией нанести 6 колющего урона этому существу."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

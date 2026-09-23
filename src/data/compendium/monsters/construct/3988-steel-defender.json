@@ -1,0 +1,84 @@
+{
+  "id": "3988",
+  "slug": "3988-steel-defender",
+  "name": "Стальной защитник",
+  "nameEn": "Steel Defender",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Tasha's Cauldron of Everything",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 2,
+    "hitDice": "1d8"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 12,
+    "con": 14,
+    "int": 4,
+    "wis": 10,
+    "cha": 6
+  },
+  "savingThrows": {
+    "dex": 1,
+    "con": 2
+  },
+  "skills": {
+    "athletics": 2,
+    "perception": 0
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "понимает языки",
+    "на которых вы говорите"
+  ],
+  "traits": [
+    {
+      "name": "Бдительный",
+      "description": "Защитника нельзя застать врасплох."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Исполненный силы удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: ваш модификатор броска атаки заклинанием для попадания, досягаемость 5 футов, одна видимая цель. Попадание: 1к8 + БМ урона силовым полем.",
+      "reachFt": 5
+    },
+    {
+      "name": "Ремонт (3/день)",
+      "type": "special",
+      "description": "Магические механизмы внутри защитника способны восстановить 2к8 + БМ хитов ему, одному Конструкту или одному объекту в 5 футах от защитника."
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Отражение атаки",
+      "type": "special",
+      "description": "Защитник создаёт помеху к броску атаки одного существа, которое он может видеть в пределах 5 футов, при условии, что эта атака совершается не по защитнику."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

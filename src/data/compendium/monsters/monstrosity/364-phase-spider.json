@@ -1,0 +1,86 @@
+{
+  "id": "364",
+  "slug": "364-phase-spider",
+  "name": "Исчезающий паук",
+  "nameEn": "Phase spider",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 32,
+    "hitDice": "5d10 + 5"
+  },
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 15,
+    "con": 12,
+    "int": 6,
+    "wis": 10,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {
+    "stealth": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Эфирный скачок",
+      "description": "Паук может бонусным действием магическим образом переместиться с Материального Плана на Эфирный План, или наоборот."
+    },
+    {
+      "name": "Паучье лазание",
+      "description": "Паук может лазать по сложным поверхностям, включая потолки, без совершения проверок характеристик."
+    },
+    {
+      "name": "Хождение по паутине",
+      "description": "Паук игнорирует ограничения перемещения, вызванные паутиной."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одно существо. Попадание: Колющий урон 7 (1к10 + 2), и цель должна совершить спасбросок Телосложения Сл 11, получая урон ядом 18 (4к8) при провале, или половину этого урона при успехе. Если урон ядом уменьшает хиты цели до 0, цель остается стабилизированной, но отравленной на 1 час, даже если позже восстановит хиты, и она парализована, пока отравлена таким образом.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 11,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

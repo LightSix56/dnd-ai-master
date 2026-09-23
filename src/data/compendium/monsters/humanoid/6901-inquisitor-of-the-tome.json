@@ -1,0 +1,133 @@
+{
+  "id": "6901",
+  "slug": "6901-inquisitor-of-the-tome",
+  "name": "Инквизитор тома",
+  "nameEn": "Inquisitor of the Tome",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Van Richten's Guide to Ravenloft",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11,
+    "type": "14 с доспехами мага"
+  },
+  "hitPoints": {
+    "average": 77,
+    "hitDice": "14d8 + 14"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 12,
+    "con": 12,
+    "int": 19,
+    "wis": 16,
+    "cha": 15
+  },
+  "savingThrows": {
+    "int": 7,
+    "wis": 6,
+    "cha": 5
+  },
+  "skills": {
+    "history": 7,
+    "arcana": 10,
+    "nature": 7,
+    "religion": 10
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "truesight": 30
+  },
+  "languages": [
+    "любые четыре языка",
+    "Телепатия 120 фт."
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Инквизитор атакует дважды."
+    },
+    {
+      "name": "Снаряд силы",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +7 к попаданию, дальность 120 фт., одна цель. Попадание: 22 (4к8 + 4) урона силовым полем, и если цель — существо Большого или меньшего размера, инквизитор может оттолкнуть его на расстояние до 10 футов.",
+      "attackBonus": 7,
+      "damage": [
+        {
+          "dice": "4d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Длинный серебряный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 фт., одна цель. Попадание: 8 (1к8 + 4) рубящего урона или 9 (1к10 + 4) рубящего урона при использовании двумя руками, и 18 (4к8) урона силовым полем.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Врожденное колдовство (псионика)",
+      "type": "special",
+      "description": "Инквизитор накладывает одно из следующих заклинаний, не нуждаясь ни в каких компонентах. Его базовой характеристикой является Интеллект (Сл спасброска 15):"
+    },
+    {
+      "name": "По желанию",
+      "type": "special",
+      "description": "волшебная рука [mage hand], доспехи мага [mage armor], левитация [levitate], обнаружение магии [detect magic], послание [sending], рассеивание магии [dispel magic]"
+    },
+    {
+      "name": "1/день каждый",
+      "type": "special",
+      "description": "Отилюков упругий шар [otiluke’s resilient sphere], телекинез [telekinesis]"
+    },
+    {
+      "name": "Имплозия (перезарядка 4-6)",
+      "type": "special",
+      "description": "Каждое существо в сфере радиусом 20 футов, с центром в точке, которую инквизитор может видеть в пределах 120 футов от себя, должно преуспеть в спасброске Телосложения Сл 15 или получит 31 (6к8 + 4) урона силовым полем, будет сбито с ног и перемещено в свободное пространство, ближайшее к центру сферы. Большие и меньшего размера объекты в сфере, которые никто не несёт и не носит, автоматически получают урон и аналогичным образом перемещаются.",
+      "damage": [
+        {
+          "dice": "6d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Телекинетическое уклонение",
+      "type": "special",
+      "description": "В ответ на попадание броска атаки инквизитор увеличивает свой КД на 4 против этой атаки. Если это приводит к тому, что атака промахивается, атакующий вместо этого становится сам поражён этой атакой."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

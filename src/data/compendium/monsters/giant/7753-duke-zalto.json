@@ -1,0 +1,104 @@
+{
+  "id": "7753",
+  "slug": "7753-duke-zalto",
+  "name": "Герцог Залто",
+  "nameEn": "Duke Zalto",
+  "size": "huge",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "законно-злой, именной НИП",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Storm King's Thunder",
+  "isNamed": true,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 221,
+    "hitDice": "13d12 + 137"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 25,
+    "dex": 9,
+    "con": 23,
+    "int": 14,
+    "wis": 14,
+    "cha": 13
+  },
+  "savingThrows": {
+    "dex": 3,
+    "con": 10,
+    "cha": 5
+  },
+  "skills": {
+    "athletics": 11,
+    "perception": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16
+  },
+  "languages": [
+    "Общий",
+    "Великаний",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Особое снаряжение",
+      "description": "Залто носит кольцо сопротивления молнии [ring of resistance]."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Великан совершает две атаки палицей."
+    },
+    {
+      "name": "Железная палица",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +11 к попаданию, досягаемость 10 футов, одна цель. Попадание: 28 (6к6 + 7) дробящего урона.",
+      "attackBonus": 11,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "6d6",
+          "mod": 7,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Камень",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +11 к попаданию, дистанция 60/240 футов, одна цель. Попадание: 29 (4к10 + 7) дробящего урона.",
+      "attackBonus": 11,
+      "range": {
+        "normal": 60,
+        "long": 240
+      },
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 7,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

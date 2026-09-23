@@ -1,0 +1,112 @@
+{
+  "id": "17198",
+  "slug": "17198-maschin-i-bozorg",
+  "name": "Бозорг-машина",
+  "nameEn": "Maschin-i-Bozorg",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "любое мировоззрение",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Quest from the Infinite Staircase",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 94,
+    "hitDice": "9d10 + 45"
+  },
+  "speed": {
+    "walk": 20
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 16,
+    "con": 20,
+    "int": 2,
+    "wis": 10,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 120
+  },
+  "languages": [
+    "понимает Гномий",
+    "но не может говорить"
+  ],
+  "traits": [
+    {
+      "name": "Перегрев",
+      "description": "Когда хиты бозорг-машины опускаются до 0, её двигатель перегружается, на краткое мгновение сильно нагревая внешнюю оболочку. Все существа в пределах 10 футов от бозорг-машины должны совершить спасбросок Телосложения Сл 16, получая 7 (2к6) урона огнём при провале или половину этого урона при успехе."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Бозорг-машина совершает две атаки Ядовитым уколом."
+    },
+    {
+      "name": "Ядовитый укол",
+      "type": "melee_attack",
+      "description": "Дальнобойная или рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов или дистанция 30/120 фт., одна цель. Попадание: 13 (4к4 + 3) колющего урона и цель должна преуспеть в спасброске Телосложения Сл 16, иначе становясь отравленной на 1 минуту. Цель может повторить спасбросок в конце каждого своего хода. В случае успеха эффект заканчивается.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "range": {
+        "normal": 30,
+        "long": 120
+      },
+      "damage": [
+        {
+          "dice": "4d4",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 16,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Струя пара (перезарядка 5–6)",
+      "type": "special",
+      "description": "Бозорг-машина испускает обжигающий пар 30-футовым конусом. Каждое существо в этой области должно совершить спасбросок Телосложения Сл 16, получая 28 (8к6) урона огнём при провале или вдвое меньше этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "8d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 30
+      },
+      "save": {
+        "ability": "CON",
+        "dc": 16,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

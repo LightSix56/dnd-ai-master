@@ -1,0 +1,113 @@
+{
+  "id": "8843",
+  "slug": "8843-hadozee-warrior",
+  "name": "Хадози-воитель",
+  "nameEn": "Hadozee Warrior",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "любое мировоззрение",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "кираса"
+  },
+  "hitPoints": {
+    "average": 16,
+    "hitDice": "3d8 + 3"
+  },
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 16,
+    "con": 13,
+    "int": 10,
+    "wis": 13,
+    "cha": 12
+  },
+  "savingThrows": {
+    "dex": 5,
+    "con": 3
+  },
+  "skills": {
+    "perception": 3,
+    "survival": 5,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "Общий",
+    "Язык Хадози"
+  ],
+  "traits": [
+    {
+      "name": "Планирование",
+      "description": "Если хадози дееспособен и не носит тяжёлую броню, то может растянуть свои кожные складки, чтобы переместиться на 5 футов по горизонтали за каждый фут спуска."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Хадози совершает две атаки Коротким мечом."
+    },
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к6 + 3) колющего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Лёгкий арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +5 к попаданию, дистанция 80/320 фт., одна цель. Попадание: 12 (2к8 + 3) колющего урона.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 80,
+        "long": 320
+      },
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Безопасный спуск",
+      "type": "special",
+      "description": "Если хадози должен получить урон от падения, он расправляет кожные складки и уменьшает этот урон до нуля. Хадози не должен носить тяжелый доспех."
+    },
+    {
+      "name": "Невероятное уклонение",
+      "type": "special",
+      "description": "Если по хадози атакой попадает нападающий, которого он может видеть, хадози может уменьшить урон от этой атаки вдвое."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

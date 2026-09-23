@@ -1,0 +1,109 @@
+{
+  "id": "17208",
+  "slug": "17208-vegepygmy-moldmaker",
+  "name": "Вегепигмей плеснеплет",
+  "nameEn": "Vegepygmy Moldmaker",
+  "size": "small",
+  "type": "plant",
+  "subtype": null,
+  "alignment": "нейтральное",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Quest from the Infinite Staircase",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 44,
+    "hitDice": "8d6 + 16"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 14,
+    "con": 14,
+    "int": 10,
+    "wis": 16,
+    "cha": 11
+  },
+  "savingThrows": {
+    "int": 2,
+    "wis": 5
+  },
+  "skills": {
+    "perception": 5,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "darkvision": 60
+  },
+  "languages": [
+    "Язык Вегепигмеев"
+  ],
+  "traits": [
+    {
+      "name": "Растительный камуфляж",
+      "description": "Вегепигмей совершает проверки Ловкости (Скрытность) с преимуществом, если он находится в любой достаточно укрытой растительностью местности."
+    },
+    {
+      "name": "Регенерация",
+      "description": "Вегепигмей восстанавливает 7 хитов в начале своего хода. Если он получает урон холодом, огнем или некротической энергией, то эта черта не работает в начале следующего хода вегепигмея. Он умирает только если начинает ход с 0 хитов и не может регенерировать."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Вегепигмей совершает две атаки Когтем."
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 12 (3к6 + 2) рубящего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Токсичная плесень (2/день)",
+      "type": "special",
+      "description": "Вегепигмей выбирают целью видимое им в пределах 60 футов существо. Если цель не является вегепигмеем, то она должна совершить спасбросок Телосложения Сл 13. При провале цель получает 13 (3к8) урона ядом и становится ослепшей и оглохшей на 1 минуту, покрываясь толстым слоем плесени. При успехе существо получает только половину этого урона.",
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 13,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Цель может повторить спасбросок в конце",
+      "type": "special",
+      "description": "каждого своего хода. В случае успеха эффект заканчивается."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

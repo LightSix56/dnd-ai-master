@@ -1,0 +1,112 @@
+{
+  "id": "7722",
+  "slug": "7722-axe-of-mirabar-soldier",
+  "name": "Воин Секиры Мирабара",
+  "nameEn": "Axe of Mirabar Soldier",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "щитовой дварф",
+  "alignment": "законно-добрый",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Storm King's Thunder",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 67,
+    "hitDice": "9d8 + 27"
+  },
+  "speed": {
+    "walk": 25
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 13,
+    "con": 16,
+    "int": 10,
+    "wis": 11,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 5,
+    "perception": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Дварфийский"
+  ],
+  "traits": [
+    {
+      "name": "Дварфская устойчивость",
+      "description": "Воин Секиры Мирабара совершает с преимуществом спасброски от яда."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Воин Секиры Мирабара совершает две атаки боевым топором. Если у него вынут ручной топор, он может также совершить атаку ручным топором."
+    },
+    {
+      "name": "Боевой топор",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к8 + 3) рубящего урона, или 8 (1к10 + 3) рубящего урона, если используется двумя руками.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Ручной топор",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к6 + 3) рубящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Тяжелый арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +3 к попаданию, дистанция 100/400 футов, одна цель. Попадание: 6 (1к10 + 1) колющего урона.",
+      "attackBonus": 3,
+      "range": {
+        "normal": 100,
+        "long": 400
+      },
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

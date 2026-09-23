@@ -1,0 +1,77 @@
+{
+  "id": "3615",
+  "slug": "3615-galvanice-weird",
+  "name": "Гальваническая аномалия",
+  "nameEn": "Galvanice weird",
+  "size": "medium",
+  "type": "elemental",
+  "subtype": null,
+  "alignment": "хаотично-нейтральный",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "3d8 + 9"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 10,
+    "con": 17,
+    "int": 3,
+    "wis": 10,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Предсмертная вспышка",
+      "description": "Когда гальваническая аномалия умирает, она разрывается во всплеске льда и молнии. Каждое существо в пределах 10 футов от взрывающейся аномалии должно совершить спасбросок Ловкости Сл 13, получая 7 (2к6) урона электричеством при провале или вдвое меньше урона при успехе."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: Дробящий урон 5 (1к6 + 2) плюс урон электричеством 5 (2к4). Если целью является существо, оно должно преуспеть в спасброске Телосложения Сл 13 или потеряет способность совершать реакции до начала следующего хода аномалии.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "плюс"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

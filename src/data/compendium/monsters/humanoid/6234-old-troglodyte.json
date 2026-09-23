@@ -1,0 +1,87 @@
+{
+  "id": "6234",
+  "slug": "6234-old-troglodyte",
+  "name": "Старый троглодит",
+  "nameEn": "Old Troglodyte",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "троглодит",
+  "alignment": "хаотично-злой",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "Waterdeep: Dungeon of the Mad Mage",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 8,
+    "hitDice": "2d8 - 1"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 10,
+    "con": 14,
+    "int": 6,
+    "wis": 10,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {
+    "stealth": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Троглодитский"
+  ],
+  "traits": [
+    {
+      "name": "Кожа хамелеона",
+      "description": "Троглодит совершает с преимуществом проверки Ловкости (Скрытность), совершенные чтобы спрятаться."
+    },
+    {
+      "name": "Вонь",
+      "description": "Все существа кроме троглодитов, начинающие ход в пределах 5 футов от троглодита, должны преуспеть в спасброске Телосложения Сл 12, иначе станут отравленными до начала своего следующего хода. При успешном спасброске существо получает иммунитет к вони всех троглодитов на 1 час."
+    },
+    {
+      "name": "Чувствительность к солнечному свету",
+      "description": "Находясь на солнечном свету, троглодит совершает с помехой броски атаки, а также проверки Мудрости (Восприятие), полагающиеся на зрение."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Троглодит совершает три атаки когтями."
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 4 (1к4 + 2).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,150 @@
+{
+  "id": "6824",
+  "slug": "6824-adult-kruthik",
+  "name": "Взрослый крутик",
+  "nameEn": "Adult Kruthik]Взрослый крутик [Adult Kruthik",
+  "size": "medium",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззренияСредний? Монстр, без мировоззрения",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 39,
+    "hitDice": "6d8 + 12"
+  },
+  "speed": {
+    "walk": 40,
+    "burrow": 20,
+    "climb": 40
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 16,
+    "con": 15,
+    "int": 7,
+    "wis": 12,
+    "cha": 8
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "darkvision": 60,
+    "tremorsense": 60
+  },
+  "languages": [
+    "Крутик"
+  ],
+  "traits": [
+    {
+      "name": "Тактика стаи",
+      "description": "Крутик совершает броски атаки с преимуществом против существ, в пределах 5 футов от которых находится дееспособный союзник крутика."
+    },
+    {
+      "name": "Прокладывание туннеля",
+      "description": "Крутик может копать сквозь сплошной камень со скоростью копания, уменьшенной вдвое, оставляя за собой туннель диаметром в 5 футов."
+    },
+    {
+      "name": "Тонкий нюх",
+      "description": "Крутик совершает с преимуществом проверки Мудрости (Восприятие), которые полагаются на нюх."
+    },
+    {
+      "name": "Тактика стаи",
+      "description": "Крутик совершает броски атаки с преимуществом против существ, в пределах 5 футов от которых находится дееспособный союзник крутика."
+    },
+    {
+      "name": "Прокладывание туннеля",
+      "description": "Крутик может копать сквозь сплошной камень со скоростью копания, уменьшенной вдвое, оставляя за собой туннель диаметром 5 футов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Крутик совершает две атаки Уколом или Шипами."
+    },
+    {
+      "name": "Укол",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к6 + 3) колющего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Шипы",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +5 к попаданию, дистанция 20/60 футов, одна цель. Попадание: 5 (1к4 + 3) колющего урона.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Крутик совершает две атаки уколом или две шипами."
+    },
+    {
+      "name": "Укол",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к атаке, досягаемость 5 футов, одна цель. Попадание: 6 (1к6 + 3) колющего урона.",
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Шипы",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +5 к попаданию, дистанция 20/60 футов, одна цель. Попадание: 5 (1к4 + 3) колющего урона.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

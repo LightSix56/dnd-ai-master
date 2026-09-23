@@ -1,0 +1,104 @@
+{
+  "id": "258",
+  "slug": "258-orc-war-chief",
+  "name": "Боевой вождь орков",
+  "nameEn": "Orc war chief",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "орк",
+  "alignment": "хаотично-злой",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "кольчуга"
+  },
+  "hitPoints": {
+    "average": 93,
+    "hitDice": "11d8 + 44"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 12,
+    "con": 18,
+    "int": 11,
+    "wis": 11,
+    "cha": 16
+  },
+  "savingThrows": {
+    "str": 6,
+    "con": 6,
+    "wis": 2
+  },
+  "skills": {
+    "intimidation": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Орочий"
+  ],
+  "traits": [
+    {
+      "name": "Агрессивный",
+      "description": "Орк может бонусным действием переместиться на расстояние, не превышающее его скорость, в сторону видимого враждебного существа."
+    },
+    {
+      "name": "Ярость Груумша",
+      "description": "Орк дополнительно наносит 4 (1к8) урона, когда попадает атакой оружием (уже учтено в атаках)."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Орк совершает две атаки секирой или копьем."
+    },
+    {
+      "name": "Секира",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 15 (1к12 + 4 + 1к8) рубящего урона.",
+      "attackBonus": 6,
+      "reachFt": 5
+    },
+    {
+      "name": "Копье",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +6 к попаданию, досягаемость 5 футов или дистанция 20/60 футов, одна цель. Попадание: 12 (1к6 + 4 плюс 1к8) колющего урона, или 13 (2к8 + 4) колющего урона, если используется двумя руками для совершения рукопашной атаки.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Боевой клич (1/день)",
+      "type": "special",
+      "description": "Все существа на выбор боевого вождя в пределах 30 футов, слышащие его, и пока не находящиеся под действием Боевого клича, до начала следующего хода боевого вождя совершают броски атаки с преимуществом. После этого боевой вождь может бонусным действием совершить одну атаку."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

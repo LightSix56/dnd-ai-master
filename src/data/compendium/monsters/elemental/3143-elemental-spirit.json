@@ -1,0 +1,77 @@
+{
+  "id": "3143",
+  "slug": "3143-elemental-spirit",
+  "name": "Дух стихии",
+  "nameEn": "Elemental Spirit",
+  "size": "medium",
+  "type": "elemental",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Tasha's Cauldron of Everything",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11
+  },
+  "hitPoints": {
+    "average": 50,
+    "hitDice": "1d8"
+  },
+  "speed": {
+    "walk": 40,
+    "fly": 40,
+    "hover": true,
+    "swim": 40,
+    "burrow": 40
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 15,
+    "con": 17,
+    "int": 4,
+    "wis": 10,
+    "cha": 16
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire",
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Первичный",
+    "понимает языки",
+    "на которых вы говорите"
+  ],
+  "traits": [
+    {
+      "name": "Аморфный (только воздух, огонь и вода)",
+      "description": "Элементаль может перемещаться сквозь пространство шириной в 1 дюйм, без протискивания."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Элементаль совершает количество атак, равное половине уровня ячейки, использованной для призыва (с округлением в меньшую сторону)."
+    },
+    {
+      "name": "Размашистый удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: ваш модификатор броска атаки заклинанием к попаданию, досягаемость 5 фт., одна цель. Попадание: 1к10 + 4 + уровень ячейки дробящего урона (только воздух, земля или вода) или урона огнём (только огонь).",
+      "reachFt": 5
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

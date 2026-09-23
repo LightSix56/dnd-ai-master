@@ -1,0 +1,100 @@
+{
+  "id": "6919",
+  "slug": "6919-deathpact-angel",
+  "name": "Ангел пакта смерти",
+  "nameEn": "Deathpact Angel",
+  "size": "medium",
+  "type": "celestial",
+  "subtype": null,
+  "alignment": "законно-злой",
+  "challengeRating": 14,
+  "xp": 11500,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 175,
+    "hitDice": "27d8 + 54"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 90
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 18,
+    "con": 14,
+    "int": 19,
+    "wis": 20,
+    "cha": 23
+  },
+  "savingThrows": {
+    "int": 9,
+    "wis": 10,
+    "cha": 11
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 20,
+    "truesight": 120
+  },
+  "languages": [
+    "Все"
+  ],
+  "traits": [
+    {
+      "name": "Облёт",
+      "description": "Ангел не провоцирует атаки, когда вылетает из досягаемости врага."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Ангел совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Базовой характеристикой Ангела является Харизма (Сл спасброска от заклинания 19, +11 к попаданию атакой заклинанием). Ангела может накладывать следующие заклинания, нуждаясь только в вербальных компонентах:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Ангел совершает две атаки своей косой. Он может заменить одну из этих атак на Цепи обязательств."
+    },
+    {
+      "name": "Коса",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 10 фт., одна цель. Попадание: 9 (2к4 + 4) рубящего урона плюс 27 (6к8) урона некротической энергией.",
+      "attackBonus": 9,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Цепи обязательств",
+      "type": "special",
+      "description": "Ангел нацеливается на одно очарованное им существо, которое может видеть в пределах 90 футов от себя. Цель должна преуспеть в спасброске Харизмы Сл 19, иначе она станет парализованной на 1 минуту или до тех пор, пока не получит урона.",
+      "save": {
+        "ability": "CHA",
+        "dc": 19,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

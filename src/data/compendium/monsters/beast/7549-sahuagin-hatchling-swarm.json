@@ -1,0 +1,82 @@
+{
+  "id": "7549",
+  "slug": "7549-sahuagin-hatchling-swarm",
+  "name": "Рой детёнышей сахуагинов",
+  "nameEn": "Sahuagin Hatchling Swarm",
+  "size": "large",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "хаотично-злой",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Ghosts of Saltmarsh",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14
+  },
+  "hitPoints": {
+    "average": 52,
+    "hitDice": "8d10 + 8"
+  },
+  "speed": {
+    "walk": 0,
+    "swim": 40
+  },
+  "abilities": {
+    "str": 9,
+    "dex": 18,
+    "con": 12,
+    "int": 3,
+    "wis": 10,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 120
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Кровавое бешенство",
+      "description": "Рой совершает с преимуществом броски рукопашных атак по существам, у которых хиты ниже максимума."
+    },
+    {
+      "name": "Бурление",
+      "description": "Как только рой вступает в бой, он наносит себе 10 рубящего урона в конце своего хода, если он не атаковал в этот ход. Этот урон игнорирует сопротивление, и он не может уменьшить хиты роя до 0."
+    },
+    {
+      "name": "Рой",
+      "description": "Рой может занимать пространство другого существа, и наоборот, и рой может перемещаться через любой проход, достаточный для Крохотных детёнышей сахуагинов. Рой не может восстанавливать хиты и получать временные хиты."
+    },
+    {
+      "name": "Подводное дыхание",
+      "description": "Рой может дышать только под водой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укусы",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 0 футов, одно существо в пространстве роя. Попадание: 14 (4к6) колющего урона или 7 (2к6) колющего урона, если у роя половина хитов или меньше.",
+      "attackBonus": 6,
+      "reachFt": 0,
+      "damage": [
+        {
+          "dice": "4d6",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

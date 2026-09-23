@@ -1,0 +1,112 @@
+{
+  "id": "17420",
+  "slug": "17420-tecuziztecatl",
+  "name": "Текусистекатль",
+  "nameEn": "Tecuziztecatl",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "нейтральный, именной НИП",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Tales from the Yawning Portal",
+  "isNamed": true,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 102,
+    "hitDice": "12d10 + 36"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 30,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 10,
+    "con": 16,
+    "int": 15,
+    "wis": 16,
+    "cha": 13
+  },
+  "savingThrows": {},
+  "skills": {
+    "deception": 3,
+    "stealth": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "blindsight": 30
+  },
+  "languages": [
+    "Олман",
+    "Первичный"
+  ],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Текусистекатль может дышать и воздухом, и под водой."
+    },
+    {
+      "name": "Гибкость",
+      "description": "Текусистекатль может войти в пространство достаточное для Среднего существа без протискивания."
+    },
+    {
+      "name": "Свечение",
+      "description": "Текусистекатль испускает тусклый свет в пределах 20 футов."
+    },
+    {
+      "name": "Паучье лазание",
+      "description": "Текусистекатль может лазать по сложным поверхностям, включая потолки, без совершения проверок характеристик."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Текусистекатль совершает две атаки Ложноножкой."
+    },
+    {
+      "name": "Ложноножка",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 10 фт, одна цель. Попадание: 12 (2к8 + 3) дробящего урона.",
+      "attackBonus": 5,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Плевок кислотой (перезарядка 4–6)",
+      "type": "breath",
+      "description": "Текусистекатль выдыхает кислоту 30-футовой линией шириной 5 футов. Все существа в этой линии должны совершить спасбросок Ловкости Сл 13, получая 18 (4к8) урона кислотой при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "4d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 13,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

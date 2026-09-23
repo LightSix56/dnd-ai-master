@@ -1,0 +1,100 @@
+{
+  "id": "7413",
+  "slug": "7413-talamin-raanan",
+  "name": "Таламин Раанан",
+  "nameEn": "Talamin Raanan",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "высшая эльфийка",
+  "alignment": "хаотично-нейтральный, именной НИП",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Explorer's Guide to Wildemount",
+  "isNamed": true,
+  "armorClass": {
+    "value": 15,
+    "type": "проклепанная кожа"
+  },
+  "hitPoints": {
+    "average": 65,
+    "hitDice": "10d8 + 20"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 16,
+    "con": 14,
+    "int": 14,
+    "wis": 11,
+    "cha": 14
+  },
+  "savingThrows": {
+    "str": 4,
+    "dex": 5,
+    "wis": 2
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий",
+    "Эльфийский"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Таламин совершает три рукопашные атаки: две скимитаром, и одну кинжалом. Вместо этого Таламин может совершить две дальнобойные атаки кинжалами."
+    },
+    {
+      "name": "Скимитар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к6 + 3) рубящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Кинжал",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +5 к попаданию, досягаемость 5 футов или дистанция 20/60 футов, одна цель. Попадание: 5 (1к4 + 3) колющего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Парирование",
+      "type": "special",
+      "description": "Таламин добавляет 2 к КД против одной рукопашной атаки, которая должна попасть по нему. Для этого Таламин должен видеть атакующего, и должен использовать рукопашное оружие."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

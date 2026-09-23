@@ -1,0 +1,104 @@
+{
+  "id": "7696",
+  "slug": "7696-kella-darkhope",
+  "name": "Келла Даркхоуп",
+  "nameEn": "Kella Darkhope",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "женщина Чондатан",
+  "alignment": "нейтрально-злой, именной НИП",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Storm King's Thunder",
+  "isNamed": true,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 27,
+    "hitDice": "6d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 15,
+    "con": 10,
+    "int": 12,
+    "wis": 14,
+    "cha": 16
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 6,
+    "sleight_of_hand": 4,
+    "deception": 5,
+    "insight": 4,
+    "investigation": 5,
+    "stealth": 4,
+    "persuasion": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16
+  },
+  "languages": [
+    "два любых языка"
+  ],
+  "traits": [
+    {
+      "name": "Хитрое действие",
+      "description": "Келла может в каждом своём ходу бонусным действием совершать Засаду, Отход или Рывок."
+    },
+    {
+      "name": "Скрытая атака (1/ход)",
+      "description": "Келла наносит дополнительный урон 7 (2к6), если попадает по цели атакой оружием, совершённой с преимуществом к броску атаки, или же если цель находится в пределах 5 футов от дееспособного союзника Келлы, и Келла совершала бросок атаки без помехи."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Келла совершает две рукопашные атаки."
+    },
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 5 (1к6 + 2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Ручной арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +4 к попаданию, дистанция 30/120 футов, одна цель. Попадание: 5 (1к6 + 2) колющего урона.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 30,
+        "long": 120
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,118 @@
+{
+  "id": "7268",
+  "slug": "7268-core-spawn-crawler",
+  "name": "Падальщик порождений ядра",
+  "nameEn": "Core Spawn Crawler",
+  "size": "small",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "хаотично-злая",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Explorer's Guide to Wildemount",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 21,
+    "hitDice": "6d6"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 7,
+    "dex": 14,
+    "con": 10,
+    "int": 9,
+    "wis": 12,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "blindsight": 30,
+    "tremorsense": 60
+  },
+  "languages": [
+    "Глубинная речь"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Понимает Глубинную речь, но не говорит."
+    },
+    {
+      "name": "Тактика стаи",
+      "description": "Падальщик совершает с преимуществом броски атаки по существу, если как минимум один союзник падальщика находится в пределах 5 футов от этого существа, и этот союзник дееспособен."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Падальщик совершает четыре атаки: одну Укусом, две Когтями и одну Хвостом."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одно существо. Попадание: 4 (1к4 + 2) колющего урона, и цель должна преуспеть в спасброске Мудрости Сл 11, иначе станет испуганной до начала следующего хода падальщика.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CHA",
+        "dc": 11,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 15 футов, одна цель. Попадание: 4 (1к4 + 2) рубящего урона.",
+      "attackBonus": 4,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Хвост",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 15 футов, одна цель. Попадание: 5 (1к6 + 2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

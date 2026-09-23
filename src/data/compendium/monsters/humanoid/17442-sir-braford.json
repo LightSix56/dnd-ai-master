@@ -1,0 +1,88 @@
+{
+  "id": "17442",
+  "slug": "17442-sir-braford",
+  "name": "Сэр Брэфорд",
+  "nameEn": "Sir Braford",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "нейтрально-злой, именной НИП",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Tales from the Yawning Portal",
+  "isNamed": true,
+  "armorClass": {
+    "value": 18,
+    "type": "кольчужная рубаха, щит"
+  },
+  "hitPoints": {
+    "average": 19,
+    "hitDice": "3d8 + 6"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 9,
+    "con": 14,
+    "int": 10,
+    "wis": 13,
+    "cha": 14
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 5,
+    "perception": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Дубовая кора",
+      "description": "КД Сэра Брэфорда не может быть ниже 16."
+    },
+    {
+      "name": "Особое снаряжение",
+      "description": "Сэр Брэдфорд владеет разрушающим остриём [shatterspike], магическим длинным мечом, который дарует +1 к попаданию и урону, наносимым с его помощью (уже включено в его атаку)."
+    },
+    {
+      "name": "Древесный раб",
+      "description": "Если древа Галтиас погибнет, Шарвин умрет через 24 часа."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Длинный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 8 (1к8 + 4) рубящего урона или 9 (1к10 + 4) рубящего урона, если используется двумя руками.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Защита",
+      "type": "special",
+      "description": "Когда существо, которое видит сэр Брафорд, атакует цель, находящуюся в радиусе 5 футов от него, он может реакцией выставить свой щит и наложить помеху на данный бросок атаки."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

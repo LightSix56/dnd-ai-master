@@ -1,0 +1,85 @@
+{
+  "id": "487",
+  "slug": "487-ice-toad",
+  "name": "Ледяная жаба",
+  "nameEn": "Ice toad",
+  "size": "medium",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "The Rise of Tiamat",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 32,
+    "hitDice": "5d8 + 10"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 10,
+    "con": 14,
+    "int": 8,
+    "wis": 10,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "cold"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Язык Ледяных жаб"
+  ],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Жаба может дышать как под так и над водой."
+    },
+    {
+      "name": "Морозная аура",
+      "description": "Любое существо, начинающее ход в 5 футах от жабы получает урон холодом 3 (1к6)."
+    },
+    {
+      "name": "Прыжок с места",
+      "description": "Жаба может совершить прыжок в длину на расстояние до 20 футов и на расстояние до 10 футов в высоту без разбега."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: 5 (1к8+1) колющего урона плюс 4 (1к8) урона холодом. Если цель - существо Среднего или меньшего размера, оно становится схваченным (Сл побега 11). Пока жаба удерживает цель, она не может укусить кого-то другого.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

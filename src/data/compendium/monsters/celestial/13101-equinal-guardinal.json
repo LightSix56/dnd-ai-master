@@ -1,0 +1,117 @@
+{
+  "id": "13101",
+  "slug": "13101-equinal-guardinal",
+  "name": "Гардинал эквинал",
+  "nameEn": "Equinal Guardinal",
+  "size": "large",
+  "type": "celestial",
+  "subtype": null,
+  "alignment": "хаотично-добрый, нейтрально-добрый",
+  "challengeRating": 6,
+  "xp": 2300,
+  "source": "Planescape: Adventures in the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 93,
+    "hitDice": "11d10 + 33"
+  },
+  "speed": {
+    "walk": 50
+  },
+  "abilities": {
+    "str": 23,
+    "dex": 16,
+    "con": 17,
+    "int": 15,
+    "wis": 14,
+    "cha": 12
+  },
+  "savingThrows": {
+    "str": 9,
+    "con": 6
+  },
+  "skills": {
+    "athletics": 9,
+    "perception": 5,
+    "religion": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15
+  },
+  "languages": [
+    "Общий",
+    "Небесный"
+  ],
+  "traits": [
+    {
+      "name": "Лобовая атака",
+      "description": "Если эквинал переместится как минимум на 30 футов по прямой к цели, останавливаясь в пределах 5 футов от цели, оно должно преуспеть в спасброске Силы Сл 17, иначе получит 14 (4к6) дробящего урона и упадёт ничком."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Эквинал совершает две атаки Кулаком."
+    },
+    {
+      "name": "Кулак",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 футов, одна цель. Попадание: 13 (2к6+6) дробящего урона плюс 3 (1к6) урона излучением.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 6,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Камень",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +9 к попаданию, дистанция 60/180 футов, одна цель. Попадание: 22 (3к10+6) дробящего урона. Если целью является существо, оно должно преуспеть в спасброске Силы Сл 17, иначе упадёт ничком.",
+      "attackBonus": 9,
+      "range": {
+        "normal": 60,
+        "long": 180
+      },
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 6,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 17,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Крик (перезарядка 6)",
+      "type": "special",
+      "description": "Эквинал издает громовой крик. Каждое существо в пределах 30 футов от эквинала должно преуспеть в спасброске Телосложения Сл 14, иначе станет ошеломленным до конца следующего хода эквинала.",
+      "recharge": "6",
+      "save": {
+        "ability": "CON",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

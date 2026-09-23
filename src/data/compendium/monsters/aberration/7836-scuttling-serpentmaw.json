@@ -1,0 +1,95 @@
+{
+  "id": "7836",
+  "slug": "7836-scuttling-serpentmaw",
+  "name": "Стремительная змеиная пасть",
+  "nameEn": "Scuttling Serpentmaw",
+  "size": "small",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Critical Role: Call of the Netherdeep",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 65,
+    "hitDice": "10d6 + 30"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 14,
+    "con": 16,
+    "int": 3,
+    "wis": 11,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {
+    "stealth": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "blindsight": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Змеиная пасть может дышать и воздухом и под водой."
+    },
+    {
+      "name": "Тактика стаи",
+      "description": "Змеиная пасть совершает с преимуществом броски атаки по существу, если как минимум один союзник змеиной пасти находится в пределах 5 футов от этого существа, и этот союзник дееспособен."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Змеиная пасть совершает одну атаку Укусом и две атаки Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 15 футов, одна цель. Попадание: 10 (2к6 + 3) колющего урона или 17 (4к6 + 3) колющего урона, если змеиная пасть совершала бросок атаки с преимуществом.",
+      "attackBonus": 5,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к8 + 3) рубящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

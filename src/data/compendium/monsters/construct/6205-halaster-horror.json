@@ -1,0 +1,95 @@
+{
+  "id": "6205",
+  "slug": "6205-halaster-horror",
+  "name": "Ужас Халастера",
+  "nameEn": "Halaster Horror",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Waterdeep: Dungeon of the Mad Mage",
+  "isNamed": false,
+  "armorClass": {
+    "value": 20,
+    "type": "латный доспех, щит"
+  },
+  "hitPoints": {
+    "average": 60,
+    "hitDice": "8d8 + 24"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 13,
+    "con": 16,
+    "int": 10,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "necrotic",
+    "force"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "blindsight": 60
+  },
+  "languages": [
+    "понимает язык своего создателя но не говорит."
+  ],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Ужас Халастера совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Иммунитет к заклинаниям",
+      "description": "Ужас Халастера обладает иммунитетом к трём заклинаниям, выбираемым его создателем. Обычно это конус холода [cone of cold], огненный шар [fireball] и распад [disintegrate]."
+    },
+    {
+      "name": "Природа конструкта",
+      "description": "Ужасу Халастера не нужен воздух, еда, питье и сон."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Ужас Халастера совершает две атаки посохом."
+    },
+    {
+      "name": "Посох",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 8 (1к8 + 4) дробящего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

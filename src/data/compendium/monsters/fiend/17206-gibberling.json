@@ -1,0 +1,75 @@
+{
+  "id": "17206",
+  "slug": "17206-gibberling",
+  "name": "Бормотун",
+  "nameEn": "Gibberling",
+  "size": "small",
+  "type": "fiend",
+  "subtype": "демон",
+  "alignment": "хаотично-злое",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Quest from the Infinite Staircase",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 7,
+    "hitDice": "2d6"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 14,
+    "con": 11,
+    "int": 5,
+    "wis": 7,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "darkvision": 120
+  },
+  "languages": [
+    "Язык Бормотунов"
+  ],
+  "traits": [
+    {
+      "name": "Боязнь огня",
+      "description": "Если бормотун получает урон огнем, то он совершает броски атаки и проверки характеристик с помехой до конца своего следующего хода."
+    },
+    {
+      "name": "Непрерывное бормотание",
+      "description": "Все не являющиеся бормотунами и не оглохшие существа в пределах 30 футов от бормотуна совершают спасброски Телосложения для поддержания концентрации на заклинаниях и схожих эффектах с помехой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 фт., одна цель. Попадание: 3 (1к4 + 1) колющего урона.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

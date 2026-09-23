@@ -1,0 +1,78 @@
+{
+  "id": "3315",
+  "slug": "3315-cannon",
+  "name": "Пушка",
+  "nameEn": "Cannon",
+  "size": "large",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Dungeon Master's Guide",
+  "isNamed": false,
+  "armorClass": {
+    "value": 19
+  },
+  "hitPoints": {
+    "average": 75,
+    "hitDice": "1d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 10,
+    "con": 10,
+    "int": 10,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Пушка с помощью пороха мечет тяжёлые чуг",
+      "description": "унные ядра с разрушительной скоростью. В кампаниях, где пороха нет, пушка может быть магическим устройством, построенным гномами или магами-инженерами."
+    },
+    {
+      "name": "Обычно пушка покоится на деревянной раме",
+      "description": "с колёсами. Прежде чем совершить выстрел, её нужно зарядить и навести на цель. Требуется одно действие для зарядки, одно действие для нацеливания и одно действие для выстрела."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Пушечное ядро",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +6 к попаданию, дистанция 600/2400 футов, одна цель. Попадание: 44 (8к10) дробящего урона.",
+      "attackBonus": 6,
+      "range": {
+        "normal": 600,
+        "long": 2400
+      },
+      "damage": [
+        {
+          "dice": "8d10",
+          "mod": 0,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

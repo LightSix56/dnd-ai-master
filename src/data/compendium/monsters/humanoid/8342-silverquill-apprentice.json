@@ -1,0 +1,98 @@
+{
+  "id": "8342",
+  "slug": "8342-silverquill-apprentice",
+  "name": "Ученик с Сильверквилла",
+  "nameEn": "Silverquill Apprentice",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "Бард",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Strixhaven: A Curriculum of Chaos",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "15 с доспехом мага"
+  },
+  "hitPoints": {
+    "average": 44,
+    "hitDice": "8d8 + 8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 14,
+    "con": 13,
+    "int": 12,
+    "wis": 11,
+    "cha": 15
+  },
+  "savingThrows": {
+    "dex": 4,
+    "cha": 4
+  },
+  "skills": {
+    "performance": 6,
+    "deception": 4,
+    "persuasion": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий",
+    "и два любых языка"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Чернильный клинок",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака заклинанием: +4 к попаданию, досягаемость 5 футов или дистанция 60 футов, одна цель. Попадание: 5 (1к6 + 2) колющего урона плюс 9 (2к8) урона психической энергией.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "range": {
+        "normal": 60
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Ученик накладывает одно из следующих заклинаний, используя Харизму в качестве базовой характеристики (Сл спасброска от заклинаний 12):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "пляшущие огоньки [dancing lights], дружба [friends];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "приказ [command], доспехи мага [mage armor]."
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Зажигательный стих",
+      "type": "special",
+      "description": "Когда существо, которое ученик видит в пределах 30 футов от себя, проваливает спасбросок, ученик волшебным образом сочиняет захватывающую прозу, позволяя существу повторить спасбросок и использовать более высокий результат."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

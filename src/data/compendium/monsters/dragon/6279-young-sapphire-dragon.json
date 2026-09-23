@@ -1,0 +1,134 @@
+{
+  "id": "6279",
+  "slug": "6279-young-sapphire-dragon",
+  "name": "Молодой сапфировый дракон",
+  "nameEn": "Young Sapphire Dragon",
+  "size": "large",
+  "type": "dragon",
+  "subtype": "самоцветный",
+  "alignment": "законно-нейтральный",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 157,
+    "hitDice": "15d10 + 75"
+  },
+  "speed": {
+    "walk": 40,
+    "fly": 80,
+    "burrow": 20,
+    "climb": 40
+  },
+  "abilities": {
+    "str": 21,
+    "dex": 14,
+    "con": 20,
+    "int": 16,
+    "wis": 15,
+    "cha": 16
+  },
+  "savingThrows": {
+    "dex": 6,
+    "con": 9,
+    "wis": 6,
+    "cha": 7
+  },
+  "skills": {
+    "perception": 10,
+    "history": 7,
+    "stealth": 6,
+    "persuasion": 11
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 20,
+    "blindsight": 30,
+    "darkvision": 120
+  },
+  "languages": [
+    "Общий",
+    "Драконий",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Паучье лазанье",
+      "description": "Дракон может лазать по сложным поверхностям, включая потолки, без совершения проверок характеристик."
+    },
+    {
+      "name": "Прокладывание туннеля",
+      "description": "Дракон может копать сквозь сплошной камень со скоростью копания, уменьшенной вдвое, оставляя за собой туннель диаметром 10 фт."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дракон совершает одну атаку Укусом и две Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 10 фт., одна цель. Попадание: 16 (2к10+5) колющего урона плюс 4 (1к8) урона звуком.",
+      "attackBonus": 9,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 фт., одна цель. Попадание: 8 (1к6+5) рубящего урона.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний (Псионика)",
+      "type": "special",
+      "description": "Дракон накладывает одно из следующих заклинаний, не требующее компонентов заклинания и использующее Интеллект в качестве базовой характеристики (Спасбросок от заклинаний Сл 15):"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "диссонирующий шёпот [dissonant whisper], удержание личности [hold person], слияние с камнем [meld into stone],."
+    },
+    {
+      "name": "Ослабляющее дыхание (перезарядка 5-6)",
+      "type": "breath",
+      "description": "Дракон выдыхает импульс высокотонального, почти неслышного звука в конусе 30 фт. Каждое существо в этой области должно совершить спасбросок Телосложение Сл 17. В случае провала существо получает 33 (6к10) урона звуком и становится недееспособным до конца своего следующего хода. В случае успеха существо получает половину урона без дополнительных эффектов.",
+      "damage": [
+        {
+          "dice": "6d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

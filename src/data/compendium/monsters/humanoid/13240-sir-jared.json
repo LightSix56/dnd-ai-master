@@ -1,0 +1,86 @@
+{
+  "id": "13240",
+  "slug": "13240-sir-jared",
+  "name": "Сэр Джаред",
+  "nameEn": "Sir Jared",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "нейтрально-добрый, именной НИП",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "The Book of Many Things",
+  "isNamed": true,
+  "armorClass": {
+    "value": 20,
+    "type": "латы, щит"
+  },
+  "hitPoints": {
+    "average": 90,
+    "hitDice": "12d8 + 36"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 12,
+    "con": 17,
+    "int": 13,
+    "wis": 14,
+    "cha": 17
+  },
+  "savingThrows": {
+    "str": 7,
+    "con": 6
+  },
+  "skills": {
+    "athletics": 7,
+    "perception": 6,
+    "survival": 5,
+    "arcana": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий",
+    "Полуросликов"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Сэр Джаред совершает три атаки Длинным мечом."
+    },
+    {
+      "name": "Длинный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: 8 (1к8 + 4) рубящего урона плюс 4 (1к8) урона излучением. При результате на кости \"19\" или \"20\" Джаред совершает критическое попадание.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Защити союзника",
+      "type": "special",
+      "description": "Джаред создаёт помеху атаке одного существа, которое он может видеть в пределах 5 футов, при условии, что эта атака совершается не по Джареду."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

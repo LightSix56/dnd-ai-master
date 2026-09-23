@@ -1,0 +1,135 @@
+{
+  "id": "6183",
+  "slug": "6183-trobriand",
+  "name": "Тробрианд",
+  "nameEn": "Trobriand",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения, именной НИП",
+  "challengeRating": 22,
+  "xp": 41000,
+  "source": "Waterdeep: Dungeon of the Mad Mage",
+  "isNamed": true,
+  "armorClass": {
+    "value": 20,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 210,
+    "hitDice": "20d10 + 100"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 24,
+    "dex": 9,
+    "con": 20,
+    "int": 20,
+    "wis": 11,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "bludgeoning",
+    "piercing",
+    "slashing",
+    "fire",
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 120
+  },
+  "languages": [
+    "Любой 6"
+  ],
+  "traits": [
+    {
+      "name": "Поглощение огня",
+      "description": "Каждый раз, когда Тробрианд должен получить урон огнём, он не получает урон, и вместо этого восстанавливает число хитов, равное причиняемому урону огнём."
+    },
+    {
+      "name": "Неизменяемая форма",
+      "description": "Тробрианд обладает иммунитетом ко всем заклинаниям и эффектам, изменяющим его форму."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Тробрианд совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Магическое оружие",
+      "description": "Атаки оружием Тробрианда являются магическими."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Тробрианд является заклинателем 18-го уровня. Его базовой характеристикой является Интеллект (Сл спасброска от заклинания 20, +12 к попаданию атаками заклинаниями). У него подготовлены следующие заклинания волшебника:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Тробрианд совершает две рукопашные атаки."
+    },
+    {
+      "name": "Размашистый удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +13 к попаданию, досягаемость 5 футов, одна цель. Попадание: Дробящий урон 20 (3к8 + 7).",
+      "attackBonus": 13,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 7,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +13 к попаданию, досягаемость 10 футов, одна цель. Попадание: Рубящий урон 23 (3к10 + 7).",
+      "attackBonus": 13,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 7,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Ядовитое дыхание (перезарядка 6)",
+      "type": "breath",
+      "description": "Тробрианд выдыхает ядовитый газ 15-футовым конусом. Все существа в этой области должны совершить спасбросок Телосложения Сл 19, получая урон ядом 45 (10к8) при провале, или половину этого урона при успехе.",
+      "recharge": "6",
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 15
+      },
+      "save": {
+        "ability": "CON",
+        "dc": 19,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 18,
+    "spellAttackBonus": 12,
+    "ability": "INT"
+  }
+}

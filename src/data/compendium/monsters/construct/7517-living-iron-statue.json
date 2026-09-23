@@ -1,0 +1,115 @@
+{
+  "id": "7517",
+  "slug": "7517-living-iron-statue",
+  "name": "Оживлённая железная статуя",
+  "nameEn": "Living Iron Statue",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Ghosts of Saltmarsh",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 102,
+    "hitDice": "12d8 + 48"
+  },
+  "speed": {
+    "walk": 20
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 14,
+    "con": 18,
+    "int": 6,
+    "wis": 10,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [
+    "acid"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "- понимает языки своего создателя, но не говорит."
+    },
+    {
+      "name": "Неизменяемая форма",
+      "description": "Статуя обладает иммунитетом ко всем заклинаниям и эффектам, изменяющим её форму."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Статуя совершает две атаки: одну Клинком и одну Молотом."
+    },
+    {
+      "name": "Клинок",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 10 (2к6 + 3) рубящего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Молоток",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 10 (2к6 + 3) дробящего урона, и цель падает ничком.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Вихрь (Перезарядка 5-6)",
+      "type": "special",
+      "description": "Статуя может действием начать вращаться в талии, вокруг своей оси нацеливаясь на выбранных ею существ в пределах 10 футов от неё. Каждая цель должна совершить спасбросок Ловкости Сл 13, получая 19 (3к10 + 3) дробящего урона при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "DEX",
+        "dc": 13,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

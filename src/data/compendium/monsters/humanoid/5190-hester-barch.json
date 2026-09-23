@@ -1,0 +1,84 @@
+{
+  "id": "5190",
+  "slug": "5190-hester-barch",
+  "name": "Хестер Барч",
+  "nameEn": "Hester Barch",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "законно-добрый, именной НИП",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Waterdeep: Dragon Heist",
+  "isNamed": true,
+  "armorClass": {
+    "value": 10
+  },
+  "hitPoints": {
+    "average": 9,
+    "hitDice": "2d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 10,
+    "con": 10,
+    "int": 10,
+    "wis": 14,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "medicine": 4,
+    "insight": 4,
+    "religion": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Врождённая псионика (перезарядка после короткого или продолжительного отдыха)",
+      "description": "Хестер может накладывать заклинание обнаружение мыслей [detect thoughts] без потребности в соматических или материальных компонентах. Использовав эту особенность один раз, магистр должна совершить короткий или длительный отдых, прежде чем сможет использовать её снова. Базовая характеристика её заклинаний — Мудрость (Сл спасброска от заклинания 12)."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Хестер является заклинателем 1-го уровня. Его базовой характеристикой является Мудрость (Сл спасброска от заклинания 12, +4 к попаданию атаками заклинаниями). У него приготовлены следующие заклинания жреца:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Дубина",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 футов, одна цель. Попадание: Дробящий урон 2 (1к4).",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 0,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 1,
+    "spellAttackBonus": 4,
+    "ability": "WIS"
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "id": "7904",
+  "slug": "7904-rock-gnome-recluse",
+  "name": "Скальный гном затворник",
+  "nameEn": "Rock Gnome Recluse",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "гном",
+  "alignment": "хаотично-нейтральный",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Essentials Kit: Dragon of Icespire peak",
+  "isNamed": false,
+  "armorClass": {
+    "value": 10,
+    "type": "13 с доспехом мага"
+  },
+  "hitPoints": {
+    "average": 7,
+    "hitDice": "2d6"
+  },
+  "speed": {
+    "walk": 25
+  },
+  "abilities": {
+    "str": 6,
+    "dex": 11,
+    "con": 10,
+    "int": 15,
+    "wis": 10,
+    "cha": 13
+  },
+  "savingThrows": {},
+  "skills": {
+    "history": 4,
+    "arcana": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Гномий",
+    "Подземный"
+  ],
+  "traits": [
+    {
+      "name": "Гномья хитрость",
+      "description": "Гном совершает с преимуществом спасброски Интеллекта, Мудрости и Харизмы от магии."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Базовой характеристикой гнома является Интеллект (Сл спасброска от заклинания 11). Он может накладывать следующие заклинания, не нуждаясь в материальных компонентах:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Волшебная стрела (Расходует ячейку заклинаний 1-го уровня)",
+      "type": "special",
+      "description": "Гном создает три волшебных дротика. Каждый дротик поражает выбранное гномом существо в пределах 120 футов от него и наносит 3 (1к4 + 1) урона силовым полем.",
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 1,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Луч холода",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +4 к попаданию, дистанция 60 футов, одно существо. Попадание: 4 (1к8) урона холодом, и скорость цели снижается на 10 футов до начала следующего хода гнома.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 60
+      },
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,84 @@
+{
+  "id": "74",
+  "slug": "74-shadow-demon",
+  "name": "Теневой демон",
+  "nameEn": "Shadow demon",
+  "size": "medium",
+  "type": "fiend",
+  "subtype": "демон",
+  "alignment": "хаотично-злое",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 66,
+    "hitDice": "12d8 + 12"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 30
+  },
+  "abilities": {
+    "str": 1,
+    "dex": 17,
+    "con": 12,
+    "int": 14,
+    "wis": 13,
+    "cha": 14
+  },
+  "savingThrows": {
+    "dex": 5,
+    "cha": 4
+  },
+  "skills": {
+    "stealth": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "cold",
+    "poison"
+  ],
+  "damageVulnerabilities": [
+    "radiant"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 120
+  },
+  "languages": [
+    "Бездны",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Бестелесное перемещение",
+      "description": "Демон может перемещаться сквозь других существ и предметы, как если бы они были труднопроходимой местностью. Он получает урон силовым полем 5 (1к10), если оканчивает ход внутри предмета."
+    },
+    {
+      "name": "Чувствительность к свету",
+      "description": "Находясь на ярком свету, демон совершает с помехой броски атаки, а также проверки Мудрости (Восприятие), полагающиеся на зрение."
+    },
+    {
+      "name": "Скрытность в тени",
+      "description": "Находясь в области тусклого света или тьмы, демон может совершать действие Засада бонусным действием."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одно существо. Попадание: Урон психической энергией 10 (2к6 + 3) или, если демон совершал бросок атаки с преимуществом, урон психической энергией 17 (4к6 + 3).",
+      "attackBonus": 5,
+      "reachFt": 5
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

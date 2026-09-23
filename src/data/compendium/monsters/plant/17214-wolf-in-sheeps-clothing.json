@@ -1,0 +1,93 @@
+{
+  "id": "17214",
+  "slug": "17214-wolf-in-sheeps-clothing",
+  "name": "Волк-в-овечьей-шкуре",
+  "nameEn": "Wolf-in-Sheep’s-Clothing",
+  "size": "medium",
+  "type": "plant",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Quest from the Infinite Staircase",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 112,
+    "hitDice": "15d8 + 45"
+  },
+  "speed": {
+    "walk": 20,
+    "climb": 20
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 9,
+    "con": 16,
+    "int": 5,
+    "wis": 12,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 7,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Обманчивая внешность",
+      "description": "Если волк-в-овечьей-шкуре неподвижен к началу боя, то он совершает бросок Инициативы с преимуществом. Более того, если существо не видело перемещений или действий волка-в-овечьей-шкуре, то это существо должно преуспеть в проверке Интеллекта (Расследование) Сл 18, чтобы понять, что тот живой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Волк-в-овечьей-шкуре совершает одну атаку Укусом и две атаки Корневым щупальцем."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 фт., одна цель. Попадание: 9 (1к8 + 5) колющего урона плюс 7 (2к6) урона кислотой.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Корневое щупальце",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 20 фт., одна цель. Попадание: 8 (1к8 + 5) дробящего урона. Если цель — существо Среднего размера или меньше, то оно становится схваченным (Сл освобождения 16). Пока цель схвачена подобным образом, она также опутана. В начале каждого хода волка-в-овечьей-шкуре тот может подтянуть цель на расстояние вплоть до 10 футов ближе к себе (действие не требуется). У волка-в-овечьей-шкуре есть четыре корневых щупальца, каждое из которых может держать в захвате только одну цель за раз.",
+      "attackBonus": 8,
+      "reachFt": 20,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 5,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

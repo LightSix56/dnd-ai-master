@@ -1,0 +1,100 @@
+{
+  "id": "208",
+  "slug": "208-kenku",
+  "name": "Кенку",
+  "nameEn": "Kenku",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "кенку",
+  "alignment": "хаотично-нейтральный",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 13,
+    "hitDice": "3d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 16,
+    "con": 10,
+    "int": 11,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 2,
+    "deception": 4,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий",
+    "Ауран"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "-понимает Ауран и Общий, но говорит только с помощью особенности Подражание."
+    },
+    {
+      "name": "Мастер устраивать засады",
+      "description": "В первом раунде сражения кенку совершает с преимуществом броски атаки по всем существам, которых он застал врасплох."
+    },
+    {
+      "name": "Подражание",
+      "description": "Кенку может подражать любым звукам, которые он уже слышал, включая голоса. Существо, слышащее эти звуки, может понять, что это подражание, если совершит успешную проверку Мудрости (Проницательность) Сл 14."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 6 (1к6 + 3).",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Короткий лук",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +5 к попаданию, дистанция 80/320 футов, одна цель. Попадание: Колющий урон 6 (1к6 + 3).",
+      "attackBonus": 5,
+      "range": {
+        "normal": 80,
+        "long": 320
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

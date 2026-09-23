@@ -1,0 +1,128 @@
+{
+  "id": "6596",
+  "slug": "6596-derro-savant",
+  "name": "Дерро савант",
+  "nameEn": "Derro Savant]Дерро савант [Derro Savant",
+  "size": "small",
+  "type": "aberration",
+  "subtype": "чародей",
+  "alignment": "обычно хаотично-злаяМаленький? Гуманоид (дерро), хаотично-злой",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "кожаная броня"
+  },
+  "hitPoints": {
+    "average": 36,
+    "hitDice": "8d6 + 8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 9,
+    "dex": 14,
+    "con": 12,
+    "int": 11,
+    "wis": 5,
+    "cha": 14
+  },
+  "savingThrows": {},
+  "skills": {
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 7,
+    "darkvision": 120
+  },
+  "languages": [
+    "Дварфийский",
+    "Подземный"
+  ],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Дерро совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Чувствительность к солнечному свету",
+      "description": "Находясь на солнечном свету, дерро совершает с помехой броски атаки, а также проверки Мудрости (Восприятие), полагающиеся на зрение."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Боевой посох",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +1 к попаданию, досягаемость 5 фт., одна цель. Попадание: 2 (1к6-1) дробящего урона.",
+      "attackBonus": 1,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": -1,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Цветной луч",
+      "type": "special",
+      "description": "Дерро выпускает яркий луч магической энергии линией шириной 5 футов и длиной 60 футов. Каждое существо на линии должно совершить спасбросок Ловкости Сл 12, получая 21 (6к6) урона излучением при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "6d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 12,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Дерро накладывает одно из следующих заклинаний, используя Харизму в качестве базовой характеристики (Сл спасброска от заклинаний 12):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "волшебная рука [mage hand], сообщение [message], фокусы [prestidigitation];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "невидимость [invisibility], усыпление [sleep], паук [spider climb]."
+    },
+    {
+      "name": "Боевой посох",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +1 к попаданию, досягаемость 5 фт., одна цель. Попадание: 2 (1к6-1) дробящего урона.",
+      "attackBonus": 1,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": -1,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

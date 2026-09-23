@@ -1,0 +1,160 @@
+{
+  "id": "6291",
+  "slug": "6291-ancient-sea-serpent",
+  "name": "Древний морской змей",
+  "nameEn": "Ancient Sea Serpent",
+  "size": "gargantuan",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 14,
+  "xp": 11500,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 170,
+    "hitDice": "11d20 + 55"
+  },
+  "speed": {
+    "walk": 20,
+    "swim": 60
+  },
+  "abilities": {
+    "str": 24,
+    "dex": 15,
+    "con": 20,
+    "int": 13,
+    "wis": 16,
+    "cha": 12
+  },
+  "savingThrows": {
+    "str": 12,
+    "con": 10
+  },
+  "skills": {
+    "perception": 8,
+    "stealth": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "cold"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 18,
+    "darkvision": 120
+  },
+  "languages": [
+    "Общий",
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Морской змей может дышать и воздухом и под водой."
+    },
+    {
+      "name": "Легендарное сопротивление (2/день)",
+      "description": "Если морской змей проваливает спасбросок, он может вместо этого сделать спасбросок успешным."
+    },
+    {
+      "name": "Осадный монстр",
+      "description": "Морской змей наносит двойной урон объектам и сооружениям."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Морской змей совершает одну атаку Укусом и одну атаку Сжиманием или Хвостом."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +12 к попаданию, досягаемость 15 фт., одна цель. Попадание: 20 (2к12+7) колющего урона плюс 6 (1к12) урона холодом.",
+      "attackBonus": 12,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "2d12",
+          "mod": 7,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Сжимание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +12 к попаданию, досягаемость 20 фт., одна цель. Попадание: 29 (4к10+7) дробящего урона и цель схвачена (Сл высвобождения 20). Пока захват не закончится, цель опутана, и морской змей не может схватить другую цель.",
+      "attackBonus": 12,
+      "reachFt": 20,
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 7,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Хвост",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +12 к попаданию, досягаемость 20 фт., одна цель. Попадание: 13 (1к12+7) дробящего урона и если цель - существо, оно должно преуспеть в спасброске Силы Сл 20, иначе будет отброшено на расстояние до 30 фт. от морского змея и сбито с ног.",
+      "attackBonus": 12,
+      "reachFt": 20,
+      "damage": [
+        {
+          "dice": "1d12",
+          "mod": 7,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 20,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Холодное дыхание (перезарядка 5-6)",
+      "type": "breath",
+      "description": "Морской змей выдыхает 60-футовый конус холода. Каждое существо в этой области должно совершить спасбросок Телосложения Сл 18, получая 49 (9к10) урона холодом в случае провала или половину этого урона в случае успеха.",
+      "damage": [
+        {
+          "dice": "9d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "CON",
+        "dc": 18,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": {
+    "actionsPerRound": 3,
+    "options": [
+      {
+        "name": "Хвост",
+        "cost": 1,
+        "description": "Морской змей совершает одну атаку хвостом."
+      },
+      {
+        "name": "Укус (стоит 2 действия)",
+        "cost": 2,
+        "description": "Морской змей совершает одну атаку укусом."
+      }
+    ]
+  },
+  "lairActions": [],
+  "spellcasting": null
+}

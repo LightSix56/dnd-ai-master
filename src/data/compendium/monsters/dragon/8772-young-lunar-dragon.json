@@ -1,0 +1,123 @@
+{
+  "id": "8772",
+  "slug": "8772-young-lunar-dragon",
+  "name": "Молодой лунный дракон",
+  "nameEn": "Young Lunar Dragon",
+  "size": "large",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "обычно нейтрально-злой",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 123,
+    "hitDice": "13d10 + 52"
+  },
+  "speed": {
+    "walk": 40,
+    "fly": 80,
+    "burrow": 20
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 12,
+    "con": 18,
+    "int": 8,
+    "wis": 10,
+    "cha": 13
+  },
+  "savingThrows": {
+    "con": 7,
+    "wis": 3
+  },
+  "skills": {
+    "perception": 6,
+    "stealth": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "cold"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 240
+  },
+  "languages": [
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Прокладывание туннеля",
+      "description": "Дракон может копать сквозь сплошной камень со скоростью копания, уменьшенной вдвое, оставляя за собой туннель диаметром 10 фт."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дракон совершает одну атаку Укусом и две Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 10 фт., одна цель. Попадание: 7 (1к6+4) колющего урона плюс 3 (1к6) урона холодом.",
+      "attackBonus": 7,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 фт., одна цель. Попадание: 7 (1к6+4) рубящего урона.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Холодное дыхание (перезарядка 5–6)",
+      "type": "breath",
+      "description": "Дракон выдыхает волну ледяного воздуха 30-футовым конусом. Каждое существо в области конуса области должно совершить спасбросок Телосложения Сл 15. При провале существо получает 27 (6к8) урона холодом и его скорость уменьшается до 0, до конца его следующего хода. В случае успеха существо получает половину этого урона и его скорость не уменьшается.",
+      "damage": [
+        {
+          "dice": "6d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 30
+      },
+      "save": {
+        "ability": "CON",
+        "dc": 15,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

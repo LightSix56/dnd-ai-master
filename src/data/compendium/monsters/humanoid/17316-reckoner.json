@@ -1,0 +1,92 @@
+{
+  "id": "17316",
+  "slug": "17316-reckoner",
+  "name": "Созидатель",
+  "nameEn": "Reckoner",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любая раса",
+  "alignment": "законно-нейтральный",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 52,
+    "hitDice": "8d8 + 16"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 12,
+    "con": 15,
+    "int": 15,
+    "wis": 12,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3,
+    "intimidation": 2,
+    "arcana": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "Общий",
+    "плюс один другой язык"
+  ],
+  "traits": [
+    {
+      "name": "Первый удар",
+      "description": "Созидатель совершает броски инициативы с преимуществом."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Созидатель является заклинателем Боросов 5-го уровня. Его базовой характеристикой заклинаний является Интеллект (Сл спасброска от заклинаний 12, +4 к попаданию атаками заклинаниями). У него подготовлены следующие заклинания волшебника:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Длинный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 7 (1к8 + 3) рубящего урона или 8 (1к10 + 3) рубящего урона при использовании двумя руками.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Молниеносный ответный удар (перезарядка 5–6)",
+      "type": "special",
+      "description": "Когда существо атакует созидателя, атакующий получает урон электричеством, равный половине урона, нанесенного атакой.",
+      "recharge": "5-6"
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "spellAttackBonus": 4,
+    "ability": "INT"
+  }
+}

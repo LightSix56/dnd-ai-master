@@ -1,0 +1,77 @@
+{
+  "id": "5965",
+  "slug": "5965-dilophosaurus",
+  "name": "Дилофозавр",
+  "nameEn": "Dilophosaurus",
+  "size": "medium",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Adventurers League",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "4d8 + 4"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 15,
+    "con": 14,
+    "int": 2,
+    "wis": 12,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 6 (1к8 + 2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Ядовитый плевок",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +4 к попаданию, досягаемость 10/20 футов, одна цель. Попадание: цель должна преуспеть в спасброске Телосложения Сл 12 или ослепнет на 1 минуту. Ослеплённое существо должно повторить спасбросок в конце следующего хода, при провале оно становится парализованным до тех пор, пока оно будет ослеплено, в случае успеха слепота проходит. Ослеплённое и парализованное существо может повторять спасбросок в конце своего хода, окончив оба состояния при успехе. Существа, иммунные к состоянию Отравлен, невосприимчивы к этому эффекту.",
+      "attackBonus": 4,
+      "save": {
+        "ability": "CON",
+        "dc": 12,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

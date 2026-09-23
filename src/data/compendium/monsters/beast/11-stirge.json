@@ -1,0 +1,71 @@
+{
+  "id": "11",
+  "slug": "11-stirge",
+  "name": "Кровопийца",
+  "nameEn": "Stirge",
+  "size": "tiny",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 2,
+    "hitDice": "1d4"
+  },
+  "speed": {
+    "walk": 10,
+    "fly": 40
+  },
+  "abilities": {
+    "str": 4,
+    "dex": 16,
+    "con": 11,
+    "int": 2,
+    "wis": 8,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 9,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Высасывание крови",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одно существо. Попадание: Колющий урон 5 (1к4 + 3), и кровопийца прикрепляется к цели. Пока кровопийца прикреплен, он не совершает атаки. Вместо этого в начале каждого следующего хода кровопийцы цель теряет 5 (1к4 + 3) хитов из-за потери крови.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Кровопийца может отцепиться, потратив 5",
+      "type": "special",
+      "description": "футов перемещения. Он делает это после того, как выпивает на 10 хитов крови из цели или если цель умирает. Любое существо, в том числе цель, может действием оторвать кровопийцу."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

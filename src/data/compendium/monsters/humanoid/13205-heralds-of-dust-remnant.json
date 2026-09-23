@@ -1,0 +1,93 @@
+{
+  "id": "13205",
+  "slug": "13205-heralds-of-dust-remnant",
+  "name": "Проповедник Вестников праха",
+  "nameEn": "Heralds of Dust Remnant",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Planescape: Adventures in the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "15 с доспехом мага"
+  },
+  "hitPoints": {
+    "average": 45,
+    "hitDice": "7d8 + 14"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 8,
+    "dex": 14,
+    "con": 15,
+    "int": 17,
+    "wis": 14,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4,
+    "arcana": 5,
+    "stealth": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14
+  },
+  "languages": [
+    "Общий плюс три языка"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Проповедник совершает две атаки Волной некротики."
+    },
+    {
+      "name": "Волна некротики",
+      "type": "melee_attack",
+      "description": "Рукопашная или Дальнобойная атака заклинанием: +5 к попаданию, досягаемость 5 футов или дистанция 120 футов, одна цель. Попадание: 14 (2к10 + 3) урона некротической энергией.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Проповедник накладывает одно из следующих заклинаний, не нуждаясь в материальных компонентах, используя Интеллект в качестве базовой характеристики (Сл спасброска заклинания 13):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "доспехи мага [mage armor], волшебная рука [mage hand], фокусы [prestidigitation]"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "порча [bane], переносящая дверь [dimension door], паутина [web]"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

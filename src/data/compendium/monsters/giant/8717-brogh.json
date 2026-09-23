@@ -1,0 +1,102 @@
+{
+  "id": "8717",
+  "slug": "8717-brogh",
+  "name": "Б'рог",
+  "nameEn": "B'rogh",
+  "size": "huge",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "любое мировоззрение",
+  "challengeRating": 6,
+  "xp": 2300,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 92,
+    "hitDice": "8d12 + 40"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 21,
+    "dex": 14,
+    "con": 21,
+    "int": 5,
+    "wis": 10,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 8,
+    "survival": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Б'рог совершает четыре атаки Кулаком или две атаки Камнем."
+    },
+    {
+      "name": "Кулак",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 10 футов, одна цель. Попадание: 12 (2к6 + 5) дробящего урона.",
+      "attackBonus": 8,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 5,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Камень",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +5 к попаданию, дальность 60/240 футов, одна цель. Попадание: 23 (4к8 + 5) дробящего урона.",
+      "attackBonus": 5,
+      "damage": [
+        {
+          "dice": "4d8",
+          "mod": 5,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Ужасающее разрывание",
+      "type": "special",
+      "description": "Б'рог использует все четыре руки, чтобы выбрать целью одно существо Большого или меньшего размера, которое он может видеть в пределах 10 футов от себя. Цель должна преуспеть в спасброске Ловкости Сл 16, иначе будет схвачена (Сл высвобождения 16). Пока этот захват не закончится, Б’рог не может совершать атаки Кулаком или Камнем, а цель получает 49 (8к10 + 5) дробящего урона в начале каждого своего хода. Существо, хиты которого из-за этого повреждения опустились до 0, разрывается на четыре части.",
+      "damage": [
+        {
+          "dice": "8d10",
+          "mod": 5,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 16,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

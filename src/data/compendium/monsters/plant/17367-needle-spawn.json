@@ -1,0 +1,94 @@
+{
+  "id": "17367",
+  "slug": "17367-needle-spawn",
+  "name": "Игольчатое отродье",
+  "nameEn": "Needle Spawn",
+  "size": "medium",
+  "type": "plant",
+  "subtype": null,
+  "alignment": "хаотично-злое",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Mordenkainen's Fiendish Folio Vol 1",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 19,
+    "hitDice": "3d10 + 3"
+  },
+  "speed": {
+    "walk": 30,
+    "climb": 20
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 16,
+    "con": 14,
+    "int": 13,
+    "wis": 11,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "blindsight": 30
+  },
+  "languages": [
+    "Сильван"
+  ],
+  "traits": [
+    {
+      "name": "Ближняя стрельба. Пока отродье дееспособ",
+      "description": "но, оно не получает помеху на дальнобойные атакам, пока в пределах 5 футов от него находится видимое им враждебное существо, если цель атаки так же находится в пределах 5 футов от него."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Залп игл",
+      "type": "special",
+      "description": "Отродье совершает 1к6 атак Иглами, но не может атаковать одно и то же существо больше двух раз за ход."
+    },
+    {
+      "name": "Клешня. Рукопашная атака оружием: +5 к п",
+      "type": "special",
+      "description": "опаданию, досягаемость 5 фт., одна цель. Попадание: 6 (1к6 + 3) рубящего урона.",
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Игла",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +5 к попаданию, дистанция 60 футов, одна цель. Попадание: 5 (1к4 + 3) колющего урона.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 60
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

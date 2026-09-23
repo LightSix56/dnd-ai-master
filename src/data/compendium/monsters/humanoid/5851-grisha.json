@@ -1,0 +1,87 @@
+{
+  "id": "5851",
+  "slug": "5851-grisha",
+  "name": "Гриша",
+  "nameEn": "Grisha",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек дамаранец",
+  "alignment": "хаотично-злой, именной НИП",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Out of the Abyss",
+  "isNamed": true,
+  "armorClass": {
+    "value": 18,
+    "type": "кольчуга, щит"
+  },
+  "hitPoints": {
+    "average": 33,
+    "hitDice": "6d8 + 6"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 12,
+    "con": 12,
+    "int": 11,
+    "wis": 14,
+    "cha": 16
+  },
+  "savingThrows": {
+    "wis": 4,
+    "cha": 5
+  },
+  "skills": {
+    "religion": 2,
+    "persuasion": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий",
+    "Подземный"
+  ],
+  "traits": [
+    {
+      "name": "Использование заклинаний",
+      "description": "Гриша – заклинатель 6-го уровня. Его базовой характеристикой является Мудрость (Сл спасброска от заклинаний 12, +4 к попаданию заклинатель- ными атаками). У него заготовлены следующие заклинания жреца:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Гриша совершает две атаки своим цепом +1."
+    },
+    {
+      "name": "Цеп +1",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: Дробящий урон 7 (1к8 + 3).",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "ability": "WIS"
+  }
+}

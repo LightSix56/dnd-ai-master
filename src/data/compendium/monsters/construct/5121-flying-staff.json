@@ -1,0 +1,81 @@
+{
+  "id": "5121",
+  "slug": "5121-flying-staff",
+  "name": "Летающий посох",
+  "nameEn": "Flying Staff",
+  "size": "small",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Waterdeep: Dragon Heist",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 17,
+    "hitDice": "5d6"
+  },
+  "speed": {
+    "walk": 0,
+    "fly": 50,
+    "hover": true
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 15,
+    "con": 11,
+    "int": 1,
+    "wis": 5,
+    "cha": 1
+  },
+  "savingThrows": {
+    "dex": 4
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 7,
+    "blindsight": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Восприимчивость к антимагии",
+      "description": "Посох недееспособен, пока находится в пределах области преграды магии. Став целью рассеивания магии, посох должен преуспеть в спасброске Телосложения Сл спасброска заклинателя, иначе потеряет сознание на 1 минуту."
+    },
+    {
+      "name": "Обманчивая внешность",
+      "description": "Пока посох остается без движения, он неотличим от обычного посоха."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Посох",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: Дробящий урон 5 (1к8 + 1).",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 1,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

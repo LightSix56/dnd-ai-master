@@ -1,0 +1,134 @@
+{
+  "id": "68",
+  "slug": "68-goristro",
+  "name": "Гористро",
+  "nameEn": "Goristro",
+  "size": "huge",
+  "type": "fiend",
+  "subtype": "демон",
+  "alignment": "хаотично-злое",
+  "challengeRating": 17,
+  "xp": 18000,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 19,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 310,
+    "hitDice": "23d12 + 161"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 25,
+    "dex": 11,
+    "con": 25,
+    "int": 6,
+    "wis": 13,
+    "cha": 14
+  },
+  "savingThrows": {
+    "str": 13,
+    "dex": 6,
+    "con": 13,
+    "wis": 7
+  },
+  "skills": {
+    "perception": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17,
+    "darkvision": 120
+  },
+  "languages": [
+    "Бездны"
+  ],
+  "traits": [
+    {
+      "name": "Атака в броске",
+      "description": "Если гористро переместится как минимум на 15 футов по прямой к цели, а затем в том же ходу попадёт по ней атакой бодания, цель получает дополнительный колющий урон 38 (7к10). Если цель — существо, она должна преуспеть в спасброске Силы Сл 21, иначе её оттолкнёт на 20 футов и собьёт с ног."
+    },
+    {
+      "name": "Запоминание пути",
+      "description": "Гористро может с лёгкостью вспомнить любой пройдённый путь."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Гористро совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Осадное чудовище",
+      "description": "Гористро причиняет двойной урон предметам и строениям."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Гористро совершает три атаки: две кулаками и одну копытом."
+    },
+    {
+      "name": "Кулак",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +13 к попаданию, досягаемость 10 футов, одна цель. Попадание: Дробящий урон 20 (3к8 + 7).",
+      "attackBonus": 13,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 7,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Копыто",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +13 к попаданию, досягаемость 5 футов, одна цель. Попадание: Дробящий урон 23 (3к10 + 7). Если цель — существо, она должна преуспеть в спасброске Силы Сл 21, иначе её собьёт с ног.",
+      "attackBonus": 13,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 7,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 21,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Бодание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +13 к попаданию, досягаемость 10 футов, одна цель. Попадание: Колющий урон 45 (7к10 + 7).",
+      "attackBonus": 13,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "7d10",
+          "mod": 7,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

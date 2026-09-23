@@ -1,0 +1,119 @@
+{
+  "id": "8856",
+  "slug": "8856-plasmoid-warrior",
+  "name": "Плазмоид-воитель",
+  "nameEn": "Plasmoid Warrior",
+  "size": "medium",
+  "type": "ooze",
+  "subtype": null,
+  "alignment": "любое мировоззрение",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех, щит"
+  },
+  "hitPoints": {
+    "average": 71,
+    "hitDice": "11d8 + 22"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 14,
+    "con": 14,
+    "int": 10,
+    "wis": 11,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 5,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Аморфный",
+      "description": "Плазмоид можете протискиваться в узкое пространство шириной в 1 дюйм при условии, что ничего не несёт и не носит. Он совершает с преимуществом проверки характеристик если пытается схватить или избежать захвата."
+    },
+    {
+      "name": "Задержка дыхания",
+      "description": "Плазмоид может задержать дыхание на 1 час."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Плазмоид совершает три атаки Ложноножкой. Он может заменить одну из них атакой Копьём или Пистолетом."
+    },
+    {
+      "name": "Ложноножка",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 6 (1к6 +3) дробящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Копьё",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +5 к попаданию, досягаемость 5 фт. или дистанция 20/60 фт., одна цель. Попадание: 6 (1к6 + 3) колющего урона или 7 (1к8 + 3) колющего урона, при использовании двумя руками.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Пистолет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +4 к попаданию, дистанция 30/90 фт., одна цель. Попадание: 7 (1к10 + 2) колющего урона.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 30,
+        "long": 90
+      },
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

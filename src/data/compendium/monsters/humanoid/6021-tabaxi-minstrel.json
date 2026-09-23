@@ -1,0 +1,104 @@
+{
+  "id": "6021",
+  "slug": "6021-tabaxi-minstrel",
+  "name": "Табакси-менестрель",
+  "nameEn": "Tabaxi Minstrel",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "табакси",
+  "alignment": "хаотично-добрый",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Tomb of Annihilation",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "5d8"
+  },
+  "speed": {
+    "walk": 30,
+    "climb": 20
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 15,
+    "con": 11,
+    "int": 14,
+    "wis": 12,
+    "cha": 16
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3,
+    "performance": 7,
+    "stealth": 4,
+    "persuasion": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "плюс два любых языка"
+  ],
+  "traits": [
+    {
+      "name": "Кошачье проворство",
+      "description": "Когда табакси двигается в бою в свой ход, он может удвоить свою скорость до конца хода. Использовав эту особенность, табакси не можете использовать её снова, до тех пор, пока он не переместся на 0 футов за один из своих ходов."
+    },
+    {
+      "name": "Вдохновение (1/день)",
+      "description": "В течение короткого отдыха табакси может потратить 1 минуту на пение, игру на инструменте, рассказ истории или чтение стихотворения, чтобы успокоить и вдохновить других существ, кроме себя. До пяти существ по выбору табакси, которые могут видеть и слышать его выступление, получают 8 временных хитов в конце короткого отдыха табакси."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Табакси совершает две атаки когтями или две атаки дротиком."
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 фт., одна цель. Попадание: 2 (1к4) рубящего урона.",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Дротик",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +4 к попаданию, дистанция 20/60 фт., одна цель. Попадание: 4 (1к4 + 2) колющего урона.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

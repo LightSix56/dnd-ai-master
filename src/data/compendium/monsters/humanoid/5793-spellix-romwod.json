@@ -1,0 +1,104 @@
+{
+  "id": "5793",
+  "slug": "5793-spellix-romwod",
+  "name": "Спелликс Ромвуд",
+  "nameEn": "Spellix Romwod",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "гном",
+  "alignment": "хаотично-нейтральный, именной НИП",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Icewind Dale: Rime of the Frostmaiden",
+  "isNamed": true,
+  "armorClass": {
+    "value": 14,
+    "type": "шкурный доспех"
+  },
+  "hitPoints": {
+    "average": 33,
+    "hitDice": "6d6 + 12"
+  },
+  "speed": {
+    "walk": 25
+  },
+  "abilities": {
+    "str": 6,
+    "dex": 15,
+    "con": 14,
+    "int": 15,
+    "wis": 9,
+    "cha": 16
+  },
+  "savingThrows": {},
+  "skills": {
+    "history": 4,
+    "arcana": 4,
+    "deception": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 9,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Гномий",
+    "Гоблинский",
+    "Драконий",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Гномья хитрость",
+      "description": "Спелликс совершает с преимуществом спасброски Интеллекта, Мудрости и Харизмы от магии."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Базовой характеристикой Спелликса является Харизма (Сл спасброска от заклинания 13). Он может накладывать следующие заклинания, не нуждаясь в материальных компонентах:"
+    },
+    {
+      "name": "*см. Действия",
+      "description": ""
+    }
+  ],
+  "actions": [
+    {
+      "name": "Электрошок (заговор)",
+      "type": "melee_attack",
+      "description": "Рукопашная атака заклинанием: +5 к попаданию, досягаемость 5 фт., одно существо (бросок атаки совершается с преимуществом если цель облачена в доспехи из металла). Попадание: 4 (1к8) урона электричеством и цель не может совершать реакции до начала своего следующего хода.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Огненный снаряд (заговор)",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +5 к попаданию, дистанция 120 фт., одна цель. Попадание: 5 (1к10) урона огнём. Пораженные уроном этого заклинания горючие предметы воспламеняются, если их никто не несет и не носит.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

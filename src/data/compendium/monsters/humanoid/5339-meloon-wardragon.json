@@ -1,0 +1,93 @@
+{
+  "id": "5339",
+  "slug": "5339-meloon-wardragon",
+  "name": "Мейлун Вардрагон",
+  "nameEn": "Meloon Wardragon",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "нейтрально-злой, именной НИП",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Waterdeep: Dragon Heist",
+  "isNamed": true,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 143,
+    "hitDice": "22d8 + 44"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 15,
+    "con": 14,
+    "int": 10,
+    "wis": 14,
+    "cha": 15
+  },
+  "savingThrows": {
+    "str": 9,
+    "con": 6
+  },
+  "skills": {
+    "athletics": 9,
+    "survival": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Глубинная речь",
+    "Телепатия 60 фт."
+  ],
+  "traits": [
+    {
+      "name": "Особое снаряжение",
+      "description": "Мейлун владеет лазурным лезвием, но не может на него настроиться и не получает его преимуществ."
+    },
+    {
+      "name": "Второе дыхание (перезарядка после короткого или продолжительного отдыха)",
+      "description": "Бонусным действием Мейлун может восстановить 20 хитов."
+    },
+    {
+      "name": "Упорный (2/день)",
+      "description": "Мейлун может перебросить проваленный спасбросок, и обязан использовать новый результат"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Мейлун совершает четыре атаки лазурным лезвием."
+    },
+    {
+      "name": "Лазурное лезвие",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 футов, одна цель. Попадание: 11 (1к12 + 5) рубящего урона.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d12",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,71 @@
+{
+  "id": "12561",
+  "slug": "12561-halia",
+  "name": "Халия",
+  "nameEn": "Halia",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "любое хаотичное мировоззрение, именной НИП",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Phandelver and Below: The Shattered Obelisk",
+  "isNamed": true,
+  "armorClass": {
+    "value": 13,
+    "type": "шкурный доспех"
+  },
+  "hitPoints": {
+    "average": 67,
+    "hitDice": "9d8 + 27"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 12,
+    "con": 17,
+    "int": 9,
+    "wis": 11,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Один любой язык (обычно Общий)"
+  ],
+  "traits": [
+    {
+      "name": "Безрассудство",
+      "description": "В начале своего хода берсерк может решить, что в этом ходу все рукопашные атаки оружием будет совершать с преимуществом, но в этом случае до начала его следующего хода все броски атаки по нему тоже будут совершаться с преимуществом."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Психический удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к6 + 3) дробящего урона плюс 3 (1к6) урона психической энергией.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

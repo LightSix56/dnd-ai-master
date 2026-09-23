@@ -1,0 +1,101 @@
+{
+  "id": "8021",
+  "slug": "8021-tooth-n-claw",
+  "name": "Зуб-Коготь",
+  "nameEn": "Tooth-N-Claw",
+  "size": "medium",
+  "type": "fiend",
+  "subtype": null,
+  "alignment": "законно-злое, именной НИП",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Essentials Kit: Storm Lord's Wrath",
+  "isNamed": true,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 45,
+    "hitDice": "7d8 + 14"
+  },
+  "speed": {
+    "walk": 50
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 12,
+    "con": 14,
+    "int": 6,
+    "wis": 13,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "cold"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Инфернальный"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "понимает Инфернальном, но не говорит."
+    },
+    {
+      "name": "Острый слух и тонкий нюх",
+      "description": "Зуб-Коготь совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на слух и обоняние."
+    },
+    {
+      "name": "Тактика стаи",
+      "description": "Зуб-Коготь совершает с преимуществом броски атаки по существу, если в пределах 5 футов от этого существа находится как минимум один дееспособный союзник Зуб-Когтя."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 7 (1к8 + 3) колющего урона плюс 7 (2к6) урона холодом.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Замораживающее дыхание (Перезарядка 5–6)",
+      "type": "breath",
+      "description": "Зуб-Коготь выдыхает ледяной поток 15 футовым конусом. Каждое существо в этой области должно совершить спасбросок Ловкости Сл 12, получая 21 (6к6) урона холодом при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "6d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "DEX",
+        "dc": 12,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

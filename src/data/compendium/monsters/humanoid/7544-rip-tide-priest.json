@@ -1,0 +1,81 @@
+{
+  "id": "7544",
+  "slug": "7544-rip-tide-priest",
+  "name": "Священник бурных вод",
+  "nameEn": "Rip Tide Priest",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "нейтрально-злой",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Ghosts of Saltmarsh",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "кольчужная рубаха"
+  },
+  "hitPoints": {
+    "average": 52,
+    "hitDice": "8d8 + 16"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 11,
+    "con": 14,
+    "int": 10,
+    "wis": 11,
+    "cha": 16
+  },
+  "savingThrows": {},
+  "skills": {
+    "deception": 5,
+    "religion": 2,
+    "stealth": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий",
+    "Акван"
+  ],
+  "traits": [
+    {
+      "name": "Использование заклинаний",
+      "description": "Священник является заклинателем 5-го уровня. Его базовой характеристикой является Харизма (Сл спасброска от заклинаний 13, +5 к атакам заклинаниями). У него подготовлены следующие заклинания чародея:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Боевой посох",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию,досягаемость 5 футов, одна цель. Попадание: 6 (1к8 + 2) дробящего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 5,
+    "ability": "CHA"
+  }
+}

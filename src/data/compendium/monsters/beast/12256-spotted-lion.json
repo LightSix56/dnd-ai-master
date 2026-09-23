@@ -1,0 +1,78 @@
+{
+  "id": "12256",
+  "slug": "12256-spotted-lion",
+  "name": "Пятнистый лев",
+  "nameEn": "Spotted Lion",
+  "size": "huge",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Bigby Presents: Glory of the Giants",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 66,
+    "hitDice": "7d12 + 21"
+  },
+  "speed": {
+    "walk": 60
+  },
+  "abilities": {
+    "str": 23,
+    "dex": 14,
+    "con": 17,
+    "int": 5,
+    "wis": 13,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 5,
+    "stealth": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Тактика стаи",
+      "description": "Лев совершает с преимуществом броски атаки по существу, если как минимум один союзник льва находится в пределах 5 футов от этого существа, и этот союзник дееспособен."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Разрывание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 10 футов, одна цель. Попадание: 15 (2к8 + 6) колющего урона. Если лев переместится как минимум на 20 футов по прямой к существу, то перед попаданием по ней атаки, цель должна преуспеть в спасброске Силы Сл 16, иначе будет сбита с ног. Если цель сбита с ног, лев может бонусным действием совершить по ней одну атаку Разрыванием.",
+      "attackBonus": 8,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 6,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 16,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

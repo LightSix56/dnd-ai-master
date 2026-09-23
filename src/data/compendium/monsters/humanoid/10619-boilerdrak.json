@@ -1,0 +1,90 @@
+{
+  "id": "10619",
+  "slug": "10619-boilerdrak",
+  "name": "Пародрак",
+  "nameEn": "Boilerdrak",
+  "size": "large",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Dragonlance: Shadow of the Dragon Queen",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15
+  },
+  "hitPoints": {
+    "average": 100,
+    "hitDice": "1d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 10,
+    "con": 10,
+    "int": 10,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Пламя",
+      "type": "special",
+      "description": "Пародрак выбрасывает пламя 60-футовым конусом. Все существа в этой области должны совершить спасбросок Ловкости Сл 15, получая 27 (5к10) урона огнём при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "5d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 60
+      },
+      "save": {
+        "ability": "DEX",
+        "dc": 15,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Взрыв",
+      "type": "special",
+      "description": "Пародрак взрывается 30-футовой сферой и уничтожается. Все существа в этой области должны совершить спасбросок Ловкости Сл 15, получая 27 (5к10) урона огнём при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "5d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 15,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

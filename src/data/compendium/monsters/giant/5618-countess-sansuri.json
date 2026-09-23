@@ -1,0 +1,122 @@
+{
+  "id": "5618",
+  "slug": "5618-countess-sansuri",
+  "name": "Графиня Сансури",
+  "nameEn": "Countess Sansuri",
+  "size": "huge",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "нейтрально-злой, именной НИП",
+  "challengeRating": 11,
+  "xp": 7200,
+  "source": "Storm King's Thunder",
+  "isNamed": true,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 200,
+    "hitDice": "16d12 + 96"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 27,
+    "dex": 10,
+    "con": 22,
+    "int": 16,
+    "wis": 16,
+    "cha": 16
+  },
+  "savingThrows": {
+    "con": 10,
+    "wis": 7,
+    "cha": 7
+  },
+  "skills": {
+    "perception": 7,
+    "insight": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17
+  },
+  "languages": [
+    "Общий",
+    "Ауран",
+    "Великаний"
+  ],
+  "traits": [
+    {
+      "name": "Тонкий нюх",
+      "description": "Сансури совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на обоняние."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Сансури совершает две атаки копьём."
+    },
+    {
+      "name": "Копьё",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +12 к попаданию, досягаемость 10 футов, одна цель. Попадание: 21 (3к8 + 8) колющего урона. (Графиня использует копьё двумя руками)",
+      "attackBonus": 12,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 8,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Камень",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +12 к попаданию, дистанция 60/240 футов, одна цель. Попадание: 30 (4к10 + 8) дробящего урона.",
+      "attackBonus": 12,
+      "range": {
+        "normal": 60,
+        "long": 240
+      },
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 8,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Сансури накладывает одно из следующих заклинаний, не требуя материальных компонентов и используя Интеллект в качестве базовой характеристики (Сл спасброска заклинаний 15; +7 к атакам заклинаниями):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "волшебная рука [mage hand], сообщение [message], фокусы [prestidigitation], луч холода [ray of frost]"
+    },
+    {
+      "name": "2/день каждый",
+      "type": "special",
+      "description": "волшебный замок [arcane lock], порыв ветра [gust of wind], невидимость [invisibility], волшебная стрела [magic missile], невидимый слуга [unseen servant]"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "сфера неуязвимости [globe of invulnerability], ускорение [haste], гипнотический узор [hypnotic pattern], град [ice storm], молния [lightning bolt], меч Морденкайнена [Mordenkainen’s sword],"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

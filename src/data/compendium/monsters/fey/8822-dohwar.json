@@ -1,0 +1,90 @@
+{
+  "id": "8822",
+  "slug": "8822-dohwar",
+  "name": "Довар",
+  "nameEn": "Dohwar",
+  "size": "small",
+  "type": "fey",
+  "subtype": null,
+  "alignment": "любое мировоззрение",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11
+  },
+  "hitPoints": {
+    "average": 10,
+    "hitDice": "3d6"
+  },
+  "speed": {
+    "walk": 20,
+    "swim": 20
+  },
+  "abilities": {
+    "str": 5,
+    "dex": 12,
+    "con": 11,
+    "int": 11,
+    "wis": 14,
+    "cha": 13
+  },
+  "savingThrows": {
+    "dex": 3,
+    "wis": 4
+  },
+  "skills": {
+    "deception": 3,
+    "insight": 4,
+    "persuasion": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий",
+    "Доварский",
+    "Телепатия 30 фт. (смотри также слияние ниже)"
+  ],
+  "traits": [
+    {
+      "name": "Слияние",
+      "description": "Два довара могут вести телепатическую беседу друг с другом и с третьим согласным существом по своему выбору, если все трое находятся в пределах 30 футов друг от друга."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 фт., одна цель. Попадание: 3 (1к4 + 1) колющего урона.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний (псионика)",
+      "type": "special",
+      "description": "Базовой характеристикой довара является Харизма (Сл спасброска от заклинаний 11). Он может накладывать следующие заклинания, не нуждаясь ни в каких в компонентах."
+    },
+    {
+      "name": "3/день",
+      "type": "special",
+      "description": "обнаружение мыслей [detect thoughts];"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

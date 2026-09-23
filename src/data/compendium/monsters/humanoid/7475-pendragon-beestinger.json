@@ -1,0 +1,88 @@
+{
+  "id": "7475",
+  "slug": "7475-pendragon-beestinger",
+  "name": "Пендрагон Пчелиное жало",
+  "nameEn": "Pendragon Beestinger",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "нейтрально-злой, именной НИП",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Acquisition Incorporated",
+  "isNamed": true,
+  "armorClass": {
+    "value": 12,
+    "type": "15 с доспехом мага"
+  },
+  "hitPoints": {
+    "average": 27,
+    "hitDice": "5d8 + 5"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 14,
+    "con": 12,
+    "int": 17,
+    "wis": 10,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "performance": 2,
+    "intimidation": 5,
+    "arcana": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий",
+    "Драконий",
+    "Полуросликов",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Отголосок заклинания (1/день)",
+      "description": "Пендрагон может наложить заклинание, которое он наложил в свой последний ход, время наложение которого становится \"1 бонусное действие\". Это бонусное заклинание использует ячейку заклинаний, как обычно."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Пендрагон является заклинателем 4-го уровня. Базовой характеристикой Пендрагона является Интеллект (Сл спасброска от заклинания 13, +5 к попаданию атаками заклинаниями). У него подготовлены следующие заклинания волшебника:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 5 (1к6 + 2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 4,
+    "spellAttackBonus": 5,
+    "ability": "INT"
+  }
+}

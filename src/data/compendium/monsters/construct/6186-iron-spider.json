@@ -1,0 +1,64 @@
+{
+  "id": "6186",
+  "slug": "6186-iron-spider",
+  "name": "Железный паук",
+  "nameEn": "Iron Spider",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Waterdeep: Dungeon of the Mad Mage",
+  "isNamed": false,
+  "armorClass": {
+    "value": 19
+  },
+  "hitPoints": {
+    "average": 80,
+    "hitDice": "15d10 - 2"
+  },
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 10,
+    "con": 10,
+    "int": 3,
+    "wis": 3,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 6,
+    "blindsight": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Паучье лазание",
+      "description": "Железный паук может лазать по сложным поверхностям, включая потолки, без совершения проверок характеристик."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Нить-трос",
+      "type": "special",
+      "description": "Действием железный паук может выстрелить 6-дюймовый толщиной нить-трос длиной до 50 футов, прикрепляя дальний конец троса к твердой поверхности на расстоянии до 50 футов от него самого. Дополнительным действием он может отсоединить другой конец троса от себя и прикрепить его к твердой поверхности в пределах 10 футов. После того как он создаст 200 футов нить-троса, паук не может больше его произвести до следующего рассвета."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

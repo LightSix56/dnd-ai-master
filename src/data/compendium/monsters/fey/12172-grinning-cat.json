@@ -1,0 +1,103 @@
+{
+  "id": "12172",
+  "slug": "12172-grinning-cat",
+  "name": "Улыбающийся кот",
+  "nameEn": "Grinning Cat",
+  "size": "large",
+  "type": "fey",
+  "subtype": null,
+  "alignment": "обычно хаотично-нейтральная",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Bigby Presents: Glory of the Giants",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 45,
+    "hitDice": "7d10 + 7"
+  },
+  "speed": {
+    "walk": 40,
+    "climb": 40
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 15,
+    "con": 13,
+    "int": 15,
+    "wis": 14,
+    "cha": 16
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4,
+    "stealth": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Сильван"
+  ],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Кот совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к10 + 2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 9 (2к6 + 2) рубящего урона. Если улыбающийся кот был невидим до того, как атаковал, цель должна преуспеть в спасброске Силы Сл 12, иначе будет сбита с ног. Если цель лежит ничком, кошка может совершить по ней атаку Укусом бонусным действием.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 12,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Растворение",
+      "type": "special",
+      "description": "Улыбающийся кот волшебным образом становится невидимым на 1 час или до тех пор, пока не атакует, постепенно исчезая в течение своего хода. Он может оставить видимой часть своего тела, такую как хвост, голова или ухмыляющийся рот. Любое снаряжение, которое носит кот, становится невидимым вместе с ним."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "id": "5746",
+  "slug": "5746-living-blade-of-disaster",
+  "name": "Оживлённый клинок разрушения",
+  "nameEn": "Living Blade of Disaster",
+  "size": "small",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Icewind Dale: Rime of the Frostmaiden",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 67,
+    "hitDice": "9d6 + 36"
+  },
+  "speed": {
+    "walk": 0,
+    "fly": 30,
+    "hover": true
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 16,
+    "con": 19,
+    "int": 6,
+    "wis": 10,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "bludgeoning",
+    "piercing",
+    "slashing",
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Живое заклинание совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Неудержимый",
+      "description": "Живое заклинание может пройти сквозь любой барьер, даже стену магической силы."
+    },
+    {
+      "name": "Необычная природа",
+      "description": "Живое заклинание не нуждается в воздухе, еде, питье и сне."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Силовой клинок",
+      "type": "melee_attack",
+      "description": "Рукопашная атака заклинанием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: 26 (4к12) урона силовым полем, если только живое заклинание не выбросило «18» или выше на к20 при броске атаки, в этом случае атака считается критической и наносит вместо этого 78 (12к12) урона силовым полем.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "4d12",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Упреждающий удар",
+      "type": "special",
+      "description": "Живое заклинание совершает рукопашную атаку против существа, начинающего свой ход в пределах 5 футов от живого заклинания."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

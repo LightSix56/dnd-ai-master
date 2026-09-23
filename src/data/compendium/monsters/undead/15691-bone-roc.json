@@ -1,0 +1,93 @@
+{
+  "id": "15691",
+  "slug": "15691-bone-roc",
+  "name": "Костяной рух",
+  "nameEn": "Bone roc",
+  "size": "huge",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "обычно нейтрально-злая",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Vecna: Eve of Ruin",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15
+  },
+  "hitPoints": {
+    "average": 133,
+    "hitDice": "14d12 + 42"
+  },
+  "speed": {
+    "walk": 15,
+    "fly": 90
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 20,
+    "con": 16,
+    "int": 2,
+    "wis": 17,
+    "cha": 10
+  },
+  "savingThrows": {
+    "dex": 8,
+    "wis": 6
+  },
+  "skills": {
+    "perception": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [
+    "bludgeoning"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 120
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Костяной рух совершает атаку Клювом и две атаки Когтями."
+    },
+    {
+      "name": "Клюв",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одна цель. Попадание: 14 (2к8 + 5) колющего урона.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одна цель. Попадание: 12 (2к6 + 5) рубящего урона плюс 10 (3к6) урона некротической энергией.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,123 @@
+{
+  "id": "5292",
+  "slug": "5292-istrid-horn",
+  "name": "Истрид Хорн",
+  "nameEn": "Istrid Horn",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "дварф",
+  "alignment": "нейтрально-злой, именной НИП",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Waterdeep: Dragon Heist",
+  "isNamed": true,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 117,
+    "hitDice": "18d8 + 36"
+  },
+  "speed": {
+    "walk": 25
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 10,
+    "con": 14,
+    "int": 11,
+    "wis": 17,
+    "cha": 13
+  },
+  "savingThrows": {
+    "con": 5,
+    "wis": 6
+  },
+  "skills": {
+    "intimidation": 4,
+    "religion": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Дварфийский"
+  ],
+  "traits": [
+    {
+      "name": "Дварфская устойчивость",
+      "description": "Истрид совершает с преимуществом спасброски от яда."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Истрид является заклинателем 9-го уровня. Её базовой характеристикой является Мудрость (Сл спасброска от заклинания 14, +6 к попаданию атаками заклинаниями). У неё подготовлены следующие заклинания жреца:"
+    },
+    {
+      "name": "Заговоры (неограниченно)",
+      "description": "свет [light], починка [mending], священное пламя [sacred flame], уход за умирающим [spare the dying];"
+    },
+    {
+      "name": "1 уровень (4 ячейки)",
+      "description": "божественное благоволение [divine favor], направляющий снаряд [guiding bolt], лечащее слово [healing word], щит веры [shield of faith];"
+    },
+    {
+      "name": "2 уровень (3 ячейки)",
+      "description": "малое восстановление [lesser restoration], магическое оружие [magic weapon], удержание личности [hold person], тишина [silence], божественное оружие [spiritual weapon];"
+    },
+    {
+      "name": "3 уровень (3 ячейки)",
+      "description": "маяк надежды [beacon of hope], мантия крестоносца [crusader's mantle], рассеивание магии [dispel magic], возрождение [revivify], духовные стражи [spirit guardians], хождение по воде [water walk];"
+    },
+    {
+      "name": "4 уровень (3 ячейки)",
+      "description": "изгнание [banishment], свобода перемещения [freedom of movement], страж веры [guardian of faith], каменная кожа [stoneskin];"
+    },
+    {
+      "name": "5 уровень (1 ячейка)",
+      "description": "небесный огонь [flame strike], множественное лечение ран [mass cure wounds], удержание чудовища [hold monster]."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Истрид совершает две рукопашные атаки."
+    },
+    {
+      "name": "Молот",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию,досягаемость 5 футов, одна цель. Попадание: 8 (2к6 +1) дробящего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 1,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Нюх на сокровища (3/день)",
+      "type": "special",
+      "description": "Истрид может определять по запаху местонахождение драгоценных металлов и камней, таких как монеты и ограненные драгоценные камни, в пределах 60 футов от себя."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 9,
+    "spellAttackBonus": 6,
+    "ability": "WIS"
+  }
+}

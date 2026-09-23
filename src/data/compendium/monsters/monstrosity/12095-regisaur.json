@@ -1,0 +1,91 @@
+{
+  "id": "12095",
+  "slug": "12095-regisaur",
+  "name": "Регизавр",
+  "nameEn": "Regisaur",
+  "size": "gargantuan",
+  "type": "monstrosity",
+  "subtype": "Динозавр",
+  "alignment": "без мировоззрения",
+  "challengeRating": 14,
+  "xp": 11500,
+  "source": "Bigby Presents: Glory of the Giants",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 181,
+    "hitDice": "11d20 + 66"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 27,
+    "dex": 8,
+    "con": 23,
+    "int": 4,
+    "wis": 12,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Регизавр совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Регизавр совершает одну атаку Укусом и одну атаку Хвостом. Регизавр не может совершить обе атаки по одной и той же цели."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +13 к попаданию, досягаемость 10 футов, одна цель. Попадание: 47 (6к12 + 8) колющего урона, и цель становится схваченной (Сл высвобождения 18). Пока цель схвачена, она так же опутана, и регизавр не может Укусить другую цель",
+      "attackBonus": 13,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "6d12",
+          "mod": 8,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Хвост",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +13 к попаданию, досягаемость 20 футов, одна цель. Попадание: 26 (4к8 + 8) дробящего урона.",
+      "attackBonus": 13,
+      "reachFt": 20,
+      "damage": [
+        {
+          "dice": "4d8",
+          "mod": 8,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

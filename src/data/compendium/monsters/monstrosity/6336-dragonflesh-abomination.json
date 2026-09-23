@@ -1,0 +1,142 @@
+{
+  "id": "6336",
+  "slug": "6336-dragonflesh-abomination",
+  "name": "Отродье драконьей плоти",
+  "nameEn": "Dragonflesh Abomination",
+  "size": "huge",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "нейтрально-злой",
+  "challengeRating": 6,
+  "xp": 2300,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 66,
+    "hitDice": "7d12 + 21"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 40
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 14,
+    "con": 17,
+    "int": 5,
+    "wis": 12,
+    "cha": 6
+  },
+  "savingThrows": {
+    "str": 7,
+    "con": 6
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [
+    "Общий",
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Понимает Драконий и Общий, но не говорит."
+    },
+    {
+      "name": "Отвратительные миазмы",
+      "description": "Отродье окружено ядовитым зловонием. В начале хода отродья любое существо в радиусе 5 фт. от него должно совершить спасбросок Телосложения Сл 14, иначе станет отравленным до начала следующего хода отродья."
+    },
+    {
+      "name": "Регенерация",
+      "description": "Отродье восстанавливает 10 хитов в начале своего хода, если у него есть хотя бы 1 хит."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Отродье совершает три атаки, используя Коготь, Кислотную слюну или их комбинацию. Оно может заменить одну из этих атак атакой Хвостом."
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 10 фт., одна цель. Попадание: 8 (1к8+4) рубящего урона плюс 5 (1к10) урона ядом.",
+      "attackBonus": 7,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Хвост",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 15 фт., одна цель. Попадание: 10 (1к12+4) дробящего урона. Если цель существо, оно должно преуспеть в спасброске Силы Сл 15, иначе станет сбитым с ног.",
+      "attackBonus": 7,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "1d12",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Кислотная слюна",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +5 к попаданию, дистанция 60 фт., одна цель. Попадание: 10 (3к6) урона кислотой.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 60
+      },
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Кислотная отрыжка (перезарядка 5-6)",
+      "type": "special",
+      "description": "Отродье извергает облако кислотного газа в 30-футовом конусе. Все существа в этой области должны совершить спасбросок Телосложения Сл 14, получая 28 (8к6) урона кислотой при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "8d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "CON",
+        "dc": 14,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

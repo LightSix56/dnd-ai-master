@@ -1,0 +1,114 @@
+{
+  "id": "8411",
+  "slug": "8411-skabatha-nightshade",
+  "name": "Скабата Пасленовая",
+  "nameEn": "Skabatha Nightshade",
+  "size": "medium",
+  "type": "fey",
+  "subtype": "Карга",
+  "alignment": "нейтрально-злая, именной НИП",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "The Wild Beyond The Witchlight: A Feywild Adventure",
+  "isNamed": true,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 150,
+    "hitDice": "20d8 + 60"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 9,
+    "con": 16,
+    "int": 12,
+    "wis": 16,
+    "cha": 15
+  },
+  "savingThrows": {
+    "con": 6,
+    "int": 4,
+    "wis": 6,
+    "cha": 5
+  },
+  "skills": {
+    "perception": 6,
+    "arcana": 7,
+    "deception": 5,
+    "stealth": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "truesight": 60
+  },
+  "languages": [
+    "Общий",
+    "Инфернальный",
+    "Сильван",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Дар бессмертия",
+      "description": "Скабата невосприимчива к любому воздействию, которое могло бы состарить её и она не может умереть от старости."
+    },
+    {
+      "name": "Забывчивость",
+      "description": "Первое существо, которое Скабата видит после продолжительного отдыха, для нее невидимо. Она не может вспомнить, что видела это существо или воспринимала его своим истинным зрением до конца своего следующего продолжительного отдыха."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Скабата совершает две атаки Когтями."
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одно существо. Попадание: 25 (6к6 + 4) урона ядом.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "6d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Скабата накладывает одно из следующих заклинаний, используя Мудрость в качестве базовой характеристики (Сл спасброска от заклинаний 14):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "обнаружение магии [detect magic], искусство друидов [druidcraft], разговор с животными [speak with animals];"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "превращение [polymorph], снятие проклятья [remove curse], разговор с растениями [speak with plants];"
+    },
+    {
+      "name": "1/день",
+      "type": "special",
+      "description": "пробуждение разума [awaken] (накладывается действием), уход в иной мир [plane shift] (только на себя)."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,68 @@
+{
+  "id": "5472",
+  "slug": "5472-animated-ballista",
+  "name": "Оживлённая баллиста",
+  "nameEn": "Animated Ballista",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Waterdeep: Dungeon of the Mad Mage",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15
+  },
+  "hitPoints": {
+    "average": 50,
+    "hitDice": "9d10 + 1"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 10,
+    "con": 10,
+    "int": 3,
+    "wis": 3,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 6,
+    "blindsight": 120
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Магический болт огня",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +6 к попаданию, дистанция 120 фт., одна цель. Попадание: 16 (3к10) урона огнём. Не может атаковать существ, находящихся непосредственно над ней.",
+      "attackBonus": 6,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

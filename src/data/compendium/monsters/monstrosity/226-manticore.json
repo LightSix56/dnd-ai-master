@@ -1,0 +1,109 @@
+{
+  "id": "226",
+  "slug": "226-manticore",
+  "name": "Мантикора",
+  "nameEn": "Manticore",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "законно-злой",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 68,
+    "hitDice": "8d10 + 24"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 50
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 16,
+    "con": 17,
+    "int": 7,
+    "wis": 12,
+    "cha": 8
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Выращивание шипов на хвосте",
+      "description": "У мантикоры есть 24 шипа на хвосте. Использованные шипы отрастают, когда мантикора оканчивает продолжительный отдых."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Мантикора совершает три атаки: либо одну укусом и две когтями, либо три атаки шипами с хвоста."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 7 (1к8 + 3).",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 6 (1к6 + 3).",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Шип с хвоста",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +5 к попаданию, дистанция 100/200 футов, одна цель. Попадание: Колющий урон 7 (1к8 + 3).",
+      "attackBonus": 5,
+      "range": {
+        "normal": 100,
+        "long": 200
+      },
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

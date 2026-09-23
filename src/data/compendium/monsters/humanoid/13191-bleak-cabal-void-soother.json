@@ -1,0 +1,107 @@
+{
+  "id": "13191",
+  "slug": "13191-bleak-cabal-void-soother",
+  "name": "Пустотелый Мрачной Клики",
+  "nameEn": "Bleak Cabal Void Soother",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Planescape: Adventures in the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "кираса"
+  },
+  "hitPoints": {
+    "average": 55,
+    "hitDice": "10d8 + 10"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 14,
+    "con": 12,
+    "int": 12,
+    "wis": 15,
+    "cha": 10
+  },
+  "savingThrows": {
+    "con": 3,
+    "wis": 4
+  },
+  "skills": {
+    "medicine": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий плюс один язык"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Пустотелый совершает две атаки Булавой или Снарядом пустоты."
+    },
+    {
+      "name": "Булава",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к6 + 3) дробящего урона плюс 3 (1к6) урона силовым полем.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Снаряд пустоты",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +5 к попаданию, дистанция 90 футов, одна цель. Попадание: 9 (2к8) урона силовым полем.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 90
+      },
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Пустотелый накладывает одно из следующих заклинаний, не нуждаясь в материальных компонентах, используя Мудрость в качестве базовой характеристики (Сл спасброска заклинания 12):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "указание [guidance], свет [light]"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "умиротворение [calm emotions], малое восстановление [lesser restoration], снятие проклятия [remove curse], защита от энергии [protection from energy]"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

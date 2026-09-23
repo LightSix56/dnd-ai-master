@@ -1,0 +1,108 @@
+{
+  "id": "4984",
+  "slug": "4984-living-cloudkill",
+  "name": "Ожившее облако смерти",
+  "nameEn": "Living Cloudkill",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Eberron: Rising from the Last War",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 73,
+    "hitDice": "7d10 + 35"
+  },
+  "speed": {
+    "walk": 25,
+    "fly": 25
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 15,
+    "con": 20,
+    "int": 3,
+    "wis": 11,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Аморфность",
+      "description": "Живое заклинание может перемещаться в пространстве в один дюйм шириной, не протискиваясь."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Живое заклинание имеет преимущества на спасброски от заклинаний."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Живое заклинание совершает два магических удара."
+    },
+    {
+      "name": "Магический удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака заклинанием: +8 к попаданию, досягаемость 10 футов, одна цель. Попадание: 22 (5к6+5) урона ядом.",
+      "attackBonus": 8,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "5d6",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Имитация заклинания (Перезарядка 5-6)",
+      "type": "special",
+      "description": "Живое заклинание создаёт сферу с диаметром 40 футов из ядовитого желто-зеленого тумана на расстоянии 60 футов от себя. Этот туман огибает углы. Когда существо впервые за ход входит в область заклинания или начинает там ход, оно должно совершить спасбросок Телосложения Сл 16. Существо получает 22 (5к8) урона ядом при провале или половину этого урона в случае успеха.",
+      "damage": [
+        {
+          "dice": "5d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "CON",
+        "dc": 16,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Облако удаляется на 10 футов от живого з",
+      "type": "special",
+      "description": "аклинания в начале каждого из его ходов, катясь по земле и просачиваясь через отверстия. Облако существует 10 минут или до тех пор, пока не закончится концентрация живого заклинания (как если бы оно концентрировались на заклинании)."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

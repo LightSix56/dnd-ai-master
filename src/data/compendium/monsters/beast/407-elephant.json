@@ -1,0 +1,83 @@
+{
+  "id": "407",
+  "slug": "407-elephant",
+  "name": "Слон",
+  "nameEn": "Elephant",
+  "size": "huge",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 76,
+    "hitDice": "8d12 + 24"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 22,
+    "dex": 9,
+    "con": 17,
+    "int": 3,
+    "wis": 11,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Растаптывающий рывок",
+      "description": "Если слон переместится как минимум на 20 футов по прямой к существу, а затем в том же ходу попадет по нему атакой бодания, цель должна преуспеть в спасброске Силы Сл 12, иначе будет сбита с ног. Если цель сбита с ног, слон может бонусным действием совершить по ней одну атаку растаптыванием."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Бодание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 19 (3к8 + 6).",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 6,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Растаптывание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одно лежащее ничком существо. Попадание: Дробящий урон 22 (3к10 + 6).",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 6,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,104 @@
+{
+  "id": "314",
+  "slug": "314-xorn",
+  "name": "Зорн",
+  "nameEn": "Xorn",
+  "size": "medium",
+  "type": "elemental",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 19,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 73,
+    "hitDice": "7d8 + 42"
+  },
+  "speed": {
+    "walk": 20,
+    "burrow": 20
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 10,
+    "con": 22,
+    "int": 11,
+    "wis": 10,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 6,
+    "stealth": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 60,
+    "tremorsense": 60
+  },
+  "languages": [
+    "Терран"
+  ],
+  "traits": [
+    {
+      "name": "Скольжение сквозь землю",
+      "description": "Зорн может перемещаться, копая, сквозь немагические и необработанные землю и камень. При этом зорн не беспокоит материал, через который перемещается."
+    },
+    {
+      "name": "Каменный камуфляж",
+      "description": "Зорн совершает с преимуществом проверки Ловкости (Скрытность), когда пытается спрятаться на каменистой местности."
+    },
+    {
+      "name": "Нюх на сокровища",
+      "description": "Зорн может определять по запаху местонахождение драгоценных металлов и камней, таких как монеты и ограненные драгоценные камни, в пределах 60 футов от себя."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Зорн совершает три атаки когтем и одну атаку укусом."
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 6 (1к6 + 3).",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 13 (3к6 + 3).",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

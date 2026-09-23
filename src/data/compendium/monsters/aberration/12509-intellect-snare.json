@@ -1,0 +1,90 @@
+{
+  "id": "12509",
+  "slug": "12509-intellect-snare",
+  "name": "Ловушка интеллекта",
+  "nameEn": "Intellect Snare",
+  "size": "small",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "нейтрально-злая",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Phandelver and Below: The Shattered Obelisk",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14
+  },
+  "hitPoints": {
+    "average": 99,
+    "hitDice": "18d6 + 36"
+  },
+  "speed": {
+    "walk": 45,
+    "fly": 45,
+    "hover": true
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 18,
+    "con": 15,
+    "int": 23,
+    "wis": 17,
+    "cha": 11
+  },
+  "savingThrows": {
+    "int": 9,
+    "wis": 6,
+    "cha": 3
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "blindsight": 120
+  },
+  "languages": [
+    "Глубинная речь",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Какофония разумов",
+      "description": "Любое существо, которое начинает свой ход в пределах 30 футов от ловушки интеллекта, должно преуспеть в спасброске Мудрости Сл 17, иначе оно станет недееспособно на 1 минуту. Недееспособное существо может повторять спасбросок в начале каждого своего хода, прекращая эффект на себе при успехе. Существо, преуспевшее в спасброске, получает иммунитет к Какофонии разумов этой ловушки интеллекта на 24 часа."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Ловушка интеллекта совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Ловушка интеллекта совершает две атаки щупальцами."
+    },
+    {
+      "name": "Щупальце",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 15 футов, одна цель. Попадание: 10 (1к8 + 6) урона силовым полем, и если цель — существо Среднего размера или меньше, она становится схваченным (Сл высвобождения 17).",
+      "attackBonus": 9,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 6,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

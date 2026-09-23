@@ -1,0 +1,108 @@
+{
+  "id": "17298",
+  "slug": "17298-blood-witch",
+  "name": "Кровавая Ведьма",
+  "nameEn": "Blood Witch",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любая раса",
+  "alignment": "хаотично-злой",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "15 с доспехом мага"
+  },
+  "hitPoints": {
+    "average": 78,
+    "hitDice": "12d8 + 24"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 14,
+    "con": 15,
+    "int": 13,
+    "wis": 9,
+    "cha": 19
+  },
+  "savingThrows": {
+    "wis": 2,
+    "cha": 7
+  },
+  "skills": {
+    "perception": 2,
+    "intimidation": 7,
+    "arcana": 4,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 120
+  },
+  "languages": [
+    "Бездны",
+    "плюс один любой язык (обычно Общий)"
+  ],
+  "traits": [
+    {
+      "name": "Танец кровавой ведьмы",
+      "description": "Ведьма может использовать бонусное действие, чтобы контролировать движение одного видимого ею существа, проклятого заклинанием сглаз [hex], в пределах 30 футов от себя. Существо должно преуспеть в спасброске Харизмы Сл 15 или в случае провала должно реакцией переместиться на 30 футов в направлении, выбранном ведьмой."
+    },
+    {
+      "name": "Дьявольское зрение. Магическая тьма не м",
+      "description": "ешает тёмному зрению ведьмы."
+    },
+    {
+      "name": "Врожденное колдовство",
+      "description": "Базовой характеристикой ведьмы является Харизма (Сл спасброска от заклинания 15, +7 к попаданию атаками заклинаниями). Она может накладывать следующие заклинания, не требующие материальных компонентов:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Ведьма совершает две атаки: одну Длинным мечом и одну Коротким мечом."
+    },
+    {
+      "name": "Длинный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: 7 (1к8 + 3) рубящего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: 6 (1к6 + 3) колющего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

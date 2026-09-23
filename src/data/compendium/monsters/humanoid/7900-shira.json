@@ -1,0 +1,81 @@
+{
+  "id": "7900",
+  "slug": "7900-shira",
+  "name": "Шира",
+  "nameEn": "Shira",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "хаотично-добрый, именной НИП",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Critical Role: Call of the Netherdeep",
+  "isNamed": true,
+  "armorClass": {
+    "value": 10
+  },
+  "hitPoints": {
+    "average": 4,
+    "hitDice": "1d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 10,
+    "con": 10,
+    "int": 10,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Дубина",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 футов, одна цель. Попадание: 2 (1к4) дробящего урона.",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 0,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Шира может накладывать следующие заклинания, используя Харизму в качестве базовой характеристики (Сл спасброска от заклинания 10, +2 к попаданию атаками заклинаниями):",
+      "attackBonus": 2
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "леденящее прикосновение [chill touch];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "глухота/слепота [blindness/deafness], луч болезни [ray of sickness]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

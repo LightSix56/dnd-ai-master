@@ -1,0 +1,122 @@
+{
+  "id": "13215",
+  "slug": "13215-heralds-of-dust-exorcist",
+  "name": "Экзорцист Вестников праха",
+  "nameEn": "Heralds of Dust Exorcist",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 6,
+  "xp": 2300,
+  "source": "Adventure Atlas: The Mortuary",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "16 с доспехом мага"
+  },
+  "hitPoints": {
+    "average": 112,
+    "hitDice": "15d8 + 45"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 8,
+    "dex": 16,
+    "con": 16,
+    "int": 17,
+    "wis": 14,
+    "cha": 11
+  },
+  "savingThrows": {
+    "int": 6,
+    "wis": 5,
+    "cha": 3
+  },
+  "skills": {
+    "perception": 5,
+    "arcana": 6,
+    "religion": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "truesight": 60
+  },
+  "languages": [
+    "Общий плюс три языка"
+  ],
+  "traits": [
+    {
+      "name": "Нетленный сосуд",
+      "description": "Экзорцист не может быть одержим Небожителями, Исчадиями или Нежитью"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Экзорцист совершает две атаки Могильной вспышкой."
+    },
+    {
+      "name": "Могильная вспышка",
+      "type": "ranged_attack",
+      "description": "Рукопашная и Дальнобойная атака заклинанием: +6 к попаданию, досягаемость 5 футов или дистанция 120 футов ,одна цель. Попадание: 19 (3к10 + 3) урона некротической энергией или урона излучением (на выбор экзорциста).",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Принятие сущности (перезарядка 5-6)",
+      "type": "special",
+      "description": "Экзорцист приоткрывает завесу смерти для существа, которое он может видеть в пределах 60 футов, открывая цель для злонамеренных сущностей. Цель должна совершить спасбросок Сл Харизмы 14. При провале получая 36 (8к8) урона психической энергией и становясь недееспособной на 1 минуту, в течение которой её рвёт и она бессвязно бормочет чужим голосом. При успехе цель получает только половину этого урона. Недееспособная цель может повторять спасбросок в конце каждого своего хода, оканчивая на себе действие эффекта в случае успеха.",
+      "damage": [
+        {
+          "dice": "8d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6"
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Экзорцист накладывает одно из следующих заклинаний, не нуждаясь в материальных компонентах, используя Интеллект в качестве базовой характеристики (Сл спасброска заклинания 14, +6 к попаданию атаки заклинанием):",
+      "attackBonus": 6
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "обнаружение зла и добра [detect evil and good], доспехи мага [mage armor] (только на себя), волшебная рука [mage hand]"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "защита от зла и добра [protection from evil and good], снятие проклятия [remove curse], разговор с мёртвыми [speak with dead]"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "изгнание [banishment], рассеивание зла и добра [dispel evil and good]"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

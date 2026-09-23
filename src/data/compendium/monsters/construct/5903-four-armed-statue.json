@@ -1,0 +1,111 @@
+{
+  "id": "5903",
+  "slug": "5903-four-armed-statue",
+  "name": "Четырёхрукая статуя",
+  "nameEn": "Four-Armed Statue",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 10,
+  "xp": 5900,
+  "source": "Out of the Abyss",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 178,
+    "hitDice": "17d10 + 85"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 22,
+    "dex": 9,
+    "con": 20,
+    "int": 3,
+    "wis": 11,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "bludgeoning",
+    "piercing",
+    "slashing",
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 120
+  },
+  "languages": [
+    "Все"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "- понимает языки своего создателя, но не говорит."
+    },
+    {
+      "name": "Неизменяемая форма",
+      "description": "Статуя обладает иммунитетом ко всем заклинаниям и эффектам, изменяющим его форму."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Статуя совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Магическое оружие",
+      "description": "Атаки оружием статуи являются магическими."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Статуя делает четыре атаки мечом."
+    },
+    {
+      "name": "Меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +10 к попаданию, дистанция 5 фт., одна цель Попадание: 10 (1к8+6) рубящего урона.",
+      "attackBonus": 10,
+      "range": {
+        "normal": 5
+      },
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 6,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Замедление (перезарядка 5–6)",
+      "type": "special",
+      "description": "Статуя нацеливается на одно или несколько существ, видимых в пределах 10 футов от себя. Все цели должны совершить спасбросок Мудрости Сл 17 от этой магии. При провале цель не может совершать реакции, её скорость уменьшается вдвое, и она не может совершать более одной атаки за свой ход. Кроме того, цель может в свой ход совершать либо действие, либо бонусное действие, но не то и другое. Эти эффекты длятся 1 минуту. Цель может повторять этот спасбросок в конце каждого своего хода, оканчивая эффект на себе при успехе.",
+      "recharge": "5-6",
+      "save": {
+        "ability": "CHA",
+        "dc": 17,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

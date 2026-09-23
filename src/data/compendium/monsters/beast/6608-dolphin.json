@@ -1,0 +1,95 @@
+{
+  "id": "6608",
+  "slug": "6608-dolphin",
+  "name": "Дельфин",
+  "nameEn": "Dolphin]Дельфин [Dolphin",
+  "size": "medium",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззренияСредний? Зверь, без мировоззрения",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 11,
+    "hitDice": "2d8 + 2"
+  },
+  "speed": {
+    "walk": 0,
+    "swim": 60
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 13,
+    "con": 13,
+    "int": 6,
+    "wis": 12,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "blindsight": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Задержка дыхания",
+      "description": "Дельфин может задержать дыхание на 20 минут."
+    },
+    {
+      "name": "Атака в броске",
+      "description": "Если дельфин переместится как минимум на 30 футов по прямой к цели, а затем в том же ходу попадёт по ней атакой тарана, цель получает от атаки дополнительный дробящий урон 3 (1к6)."
+    },
+    {
+      "name": "Задержка дыхания",
+      "description": "Дельфин может задержать дыхание на 20 минут."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Размашистый удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 5 (1к6 + 2) дробящего урона. Если дельфин переместится как минимум на 30 футов по прямой к цели, а затем в том же ходу попадёт по ней атакой тарана, цель дополнительно получает 3 (1к6) дробящего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Таран",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: Дробящий урон 5 (1к6 + 2).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

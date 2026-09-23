@@ -1,0 +1,71 @@
+{
+  "id": "7434",
+  "slug": "7434-swarms-of-black-gulls",
+  "name": "Рой чёрных чаек",
+  "nameEn": "Swarms of black gulls",
+  "size": "medium",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Explorer's Guide to Wildemount",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 24,
+    "hitDice": "7d8 - 7"
+  },
+  "speed": {
+    "walk": 10,
+    "fly": 50
+  },
+  "abilities": {
+    "str": 6,
+    "dex": 14,
+    "con": 8,
+    "int": 3,
+    "wis": 12,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Рой",
+      "description": "Рой может занимать пространство другого существа, и наоборот, и рой может перемещаться через любой проход, достаточный для Крохотных воронов. Рой не может восстанавливать хиты и получать временные хиты."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Клювы",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель в пространстве роя. Попадание: 7 (2к6) колющего урона, или 3 (1к6) колющего урона, если у роя половина хитов или меньше.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

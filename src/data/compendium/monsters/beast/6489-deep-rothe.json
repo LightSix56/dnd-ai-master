@@ -1,0 +1,96 @@
+{
+  "id": "6489",
+  "slug": "6489-deep-rothe",
+  "name": "Глубинный роф",
+  "nameEn": "Deep rothe]Глубинный роф [Deep rothe",
+  "size": "medium",
+  "type": "beast",
+  "subtype": "крупный рогатый скот",
+  "alignment": "без мировоззренияСредний? Зверь, без мировоззрения",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 10
+  },
+  "hitPoints": {
+    "average": 13,
+    "hitDice": "2d8 + 4"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 10,
+    "con": 14,
+    "int": 2,
+    "wis": 10,
+    "cha": 4
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Вьючное животное",
+      "description": "Роф считается на один размер больше при определении его грузоподъемности."
+    },
+    {
+      "name": "Атака в броске",
+      "description": "Если роф переместится как минимум на 20 футов по прямой к цели, а затем в том же ходу попадёт по ней атакой бодания, цель получает от атаки дополнительный колющий урон 7 (2к6)."
+    },
+    {
+      "name": "Врождённая колдовство",
+      "description": "Базовой характеристикой глубинных роф является Харизма. Они могут врождённо накладывать пляшущие огоньки [dancing lights] по желанию, без компонентов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Бодание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к6 + 4) колющего урона. Если глубинный роф переместится как минимум на 20 футов по прямой к цели, а затем в том же ходу попадёт по ней атакой бодания, цель дополнительно получает 7 (2к6) колющего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Пляшущие огоньки",
+      "type": "special",
+      "description": "Роф накладывает пляшущие огоньки [dancing lights], без затрат ячеек заклинаний и используя Мудрость в качестве базовой характеристики."
+    },
+    {
+      "name": "Бодание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 7 (1к6 + 4).",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

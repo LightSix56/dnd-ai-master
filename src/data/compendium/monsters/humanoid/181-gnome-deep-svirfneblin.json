@@ -1,0 +1,108 @@
+{
+  "id": "181",
+  "slug": "181-gnome-deep-svirfneblin",
+  "name": "Глубинный гном (Свирфнеблин)",
+  "nameEn": "Gnome, deep Svirfneblin",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "гном",
+  "alignment": "нейтрально-добрый",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "кольчужная рубаха"
+  },
+  "hitPoints": {
+    "average": 16,
+    "hitDice": "3d6 + 6"
+  },
+  "speed": {
+    "walk": 20
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 14,
+    "con": 14,
+    "int": 12,
+    "wis": 10,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 2,
+    "investigation": 3,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 120
+  },
+  "languages": [
+    "Гномий",
+    "Подземный",
+    "Терран"
+  ],
+  "traits": [
+    {
+      "name": "Каменный камуфляж",
+      "description": "Гном совершает с преимуществом проверки Ловкости (Скрытность), когда пытается спрятаться на каменистой местности."
+    },
+    {
+      "name": "Гномья хитрость",
+      "description": "Гном совершает с преимуществом спасброски Интеллекта, Мудрости и Харизмы от магии."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Базовой характеристикой гнома является Интеллект (Сл спасброска от заклинания 11). Он может накладывать следующие заклинания, не нуждаясь в материальных компонентах:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Боевая кирка",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 6 (1к8 + 2).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Отравленный дротик",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +4 к попаданию, дистанция 30/120 футов, одно существо. Попадание: Колющий урон 4 (1к4 + 2), и цель должна преуспеть в спасброске Телосложения Сл 12, иначе станет отравленной на 1 минуту. Цель может повторять этот спасбросок в конце каждого своего хода, оканчивая эффект на себе при успехе.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 30,
+        "long": 120
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 12,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

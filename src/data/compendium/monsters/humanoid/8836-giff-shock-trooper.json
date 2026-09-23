@@ -1,0 +1,127 @@
+{
+  "id": "8836",
+  "slug": "8836-giff-shock-trooper",
+  "name": "Гифф-штурмовик",
+  "nameEn": "Giff Shock Trooper",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "любое мировоззрение",
+  "challengeRating": 6,
+  "xp": 2300,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 93,
+    "hitDice": "11d8 + 44"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 14,
+    "con": 18,
+    "int": 11,
+    "wis": 12,
+    "cha": 13
+  },
+  "savingThrows": {
+    "str": 8,
+    "con": 7,
+    "wis": 4
+  },
+  "skills": {
+    "athletics": 8,
+    "perception": 4,
+    "intimidation": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Знатоки огнестрельного оружия",
+      "description": "Знание оружия позволяет гиффу игнорировать свойство «перезарядка» любого огнестрельного оружия."
+    },
+    {
+      "name": "Безрассудный рывок",
+      "description": "Если гифф переместится как минимум на 20 футов по прямой и окажется в пределах 5 футов от существа Большого размера или меньше, то цель должна преуспеть в спасброске Силы Сл 16, иначе получит 7 (2к6) дробящего урона и будет сбита с ног."
+    },
+    {
+      "name": "Осадное чудовище",
+      "description": "Гифф наносит двойной урон объектам и сооружениям."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Гифф совершает две атаки Двуручным мечом или Мушкетом."
+    },
+    {
+      "name": "Двуручный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 фт., одна цель. Попадание: 15 (3к6 + 5) рубящего урона.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Мушкет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +5 к попаданию, дистанция 40/120 фт., одна цель. Попадание: 15 (2к12 + 2) колющего урона.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 40,
+        "long": 120
+      },
+      "damage": [
+        {
+          "dice": "2d12",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Звуковая бомба",
+      "type": "special",
+      "description": "Гиф поджигает бомбу размером с грейпфрут и бросает её в точку в пределах 60 футов, где она взрывается. Все существа в пределах 10 футов от этой точки должны совершить спасбросок Ловкости Сл 15, получая 18 (4к8) урона звуком при провале или половину этого урона при успехе. После того как гифф бросит бомбу бросьте к6. Если выпадет «4» или меньше, у гиффа больше не остаётся бомб для броска.",
+      "damage": [
+        {
+          "dice": "4d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 15,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

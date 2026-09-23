@@ -1,0 +1,105 @@
+{
+  "id": "12726",
+  "slug": "12726-sabrina-kill-more-kilgore-levels-9-11",
+  "name": "Сабрина “Убей еще” Килгор (9-11 уровня)",
+  "nameEn": "Sabrina “Kill More” Kilgore (Levels 9-11)",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "Человек",
+  "alignment": "хаотично-нейтральный, именной НИП",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Keys from the Golden Vault",
+  "isNamed": true,
+  "armorClass": {
+    "value": 17,
+    "type": "наборный доспех"
+  },
+  "hitPoints": {
+    "average": 58,
+    "hitDice": "9d8 + 18"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 13,
+    "con": 14,
+    "int": 10,
+    "wis": 11,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 5,
+    "perception": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "один любой язык (обычно Общий)"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Сабрина совершает две атаки длинным мечом. Если у неё вынут короткий меч, она может также совершить атаку коротким мечом."
+    },
+    {
+      "name": "Длинный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к8 + 3) рубящего урона, или 8 (1к10 + 3) рубящего урона, если используется двумя руками.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к6 + 3) колющего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Тяжелый арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +3 к попаданию, дистанция 100/400 футов, одна цель. Попадание: 6 (1к10 + 1) колющего урона.",
+      "attackBonus": 3,
+      "range": {
+        "normal": 100,
+        "long": 400
+      },
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

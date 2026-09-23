@@ -1,0 +1,98 @@
+{
+  "id": "242",
+  "slug": "242-pentadrone",
+  "name": "Пентадрон",
+  "nameEn": "Pentadrone",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "законно-нейтральный",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 32,
+    "hitDice": "5d10 + 5"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 14,
+    "con": 12,
+    "int": 10,
+    "wis": 10,
+    "cha": 13
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "truesight": 120
+  },
+  "languages": [
+    "Модронский"
+  ],
+  "traits": [
+    {
+      "name": "Косное сознание",
+      "description": "Пентадрона нельзя заставить действовать так, как противоречит его природе или инструкциям."
+    },
+    {
+      "name": "Распад",
+      "description": "Если пентадрон умирает, его тело рассыпается в пыль, оставляя лишь оружие и то, что он нес."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Пентадрон совершает пять атак рукой."
+    },
+    {
+      "name": "Рука",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: Дробящий урон 5 (1к6 + 2).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Парализующий газ (перезарядка 5–6)",
+      "type": "breath",
+      "description": "Пентадрон выдыхает газ 30-футовым конусом. Все существа в этой области должны преуспеть в спасброске Телосложения Сл 11, иначе станут парализованными на 1 минуту. Существо может повторять этот спасбросок в конце каждого своего хода, оканчивая эффект на себе при успехе.",
+      "recharge": "5-6",
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 30
+      },
+      "save": {
+        "ability": "CON",
+        "dc": 11,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

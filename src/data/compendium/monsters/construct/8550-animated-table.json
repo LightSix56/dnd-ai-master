@@ -1,0 +1,85 @@
+{
+  "id": "8550",
+  "slug": "8550-animated-table",
+  "name": "Оживлённый стол",
+  "nameEn": "Animated Table",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Tales from the Yawning Portal",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 39,
+    "hitDice": "6d10 + 6"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 8,
+    "con": 13,
+    "int": 1,
+    "wis": 3,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 6,
+    "blindsight": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Восприимчивость к антимагии",
+      "description": "Стол недееспособен, пока находится в пределах области преграды магии [antimagic field]. Став целью рассеивания магии [dispel magic], стол должен преуспеть в спасброске Телосложения Сл спасброска заклинателя, иначе потеряет сознание на 1 минуту."
+    },
+    {
+      "name": "Обманчивая внешность",
+      "description": "Пока стол остается без движения, она неотличим от обычного стола."
+    },
+    {
+      "name": "Атака в броске",
+      "description": "Если стол переместится как минимум на 20 футов по прямой к цели, а затем в том же ходу попадет по ней атакой тараном, цель дополнительно получает от атаки 10 (3к6) дробящего урона. Если цель — существо, она должна преуспеть в спасброске Силы Сл 15, иначе будет сбита с ног."
+    },
+    {
+      "name": "Природа конструкта",
+      "description": "Оживший стол не нуждается в воздухе, пище, воде или сне."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Таран",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: 13 (2к8 + 4) дробящего урона",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

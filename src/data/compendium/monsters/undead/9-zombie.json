@@ -1,0 +1,77 @@
+{
+  "id": "9",
+  "slug": "9-zombie",
+  "name": "Зомби",
+  "nameEn": "Zombie",
+  "size": "medium",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "нейтрально-злая",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Player's Handbook",
+  "isNamed": false,
+  "armorClass": {
+    "value": 8
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "3d8 + 9"
+  },
+  "speed": {
+    "walk": 20
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 6,
+    "con": 16,
+    "int": 3,
+    "wis": 6,
+    "cha": 5
+  },
+  "savingThrows": {
+    "wis": 0
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Понимает языки, которые знал при жизни, но не может говорить."
+    },
+    {
+      "name": "Стойкость нежити",
+      "description": "Если зомби получает урон, уменьшающий хиты до 0, он совершает спасбросок Телосложения Сл 5 + полученный урон, если только это не был урон излучением или урон от критического попадания. При успехе хиты зомби опускаются всего лишь до 1."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Размашистый удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: 4 (1к6 + 1) дробящего урона.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 1,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

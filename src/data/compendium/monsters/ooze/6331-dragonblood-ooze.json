@@ -1,0 +1,107 @@
+{
+  "id": "6331",
+  "slug": "6331-dragonblood-ooze",
+  "name": "Слизь крови дракона",
+  "nameEn": "Dragonblood Ooze",
+  "size": "large",
+  "type": "ooze",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 68,
+    "hitDice": "8d10 + 24"
+  },
+  "speed": {
+    "walk": 20,
+    "climb": 20
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 6,
+    "con": 17,
+    "int": 2,
+    "wis": 12,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "blindsight": 120
+  },
+  "languages": [
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Язык",
+      "description": "Понимает Драконий и языки своего создателя, но не говорит."
+    },
+    {
+      "name": "Аморфный",
+      "description": "Слизь может перемещаться сквозь пространство шириной в 1 дюйм без протискивания."
+    },
+    {
+      "name": "Паучье лазанье",
+      "description": "Слизь может лазать по сложным поверхностям, включая потолки, без совершения проверок характеристик."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Слизь совершает две атаки Ложноножками. Слизь может заменить одну атаку Ложноножкой своим Дыханием слизью, если таковое имеется."
+    },
+    {
+      "name": "Ложноножка",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 10 футов, одна цель. Попадание: 9 (1к10 + 4) дробящего урона плюс 14 (4к6) урона кислотой. Если целью является существо Большого размера или меньше, оно захвачено (Сл высвобождения 15). Пока захват не окончится, цель получает 7 (2к6) урона кислотой в начале каждого своего хода.",
+      "attackBonus": 7,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Дыхание слизью (перезарядка 6)",
+      "type": "breath",
+      "description": "Слизь разбрызгивает свою студенистую массу в 30-футовом конусе. Все существа в этой области должны совершить спасбросок Ловкости Сл 14. При провале существо получает 22 (4к10) урона кислотой и подтягивается на 30 фт. прямо к слизи. При успехе существо получает половину этого урона и не подтягивается.",
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "6",
+      "save": {
+        "ability": "DEX",
+        "dc": 14,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

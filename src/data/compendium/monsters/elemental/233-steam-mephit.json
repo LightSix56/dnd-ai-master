@@ -1,0 +1,95 @@
+{
+  "id": "233",
+  "slug": "233-steam-mephit",
+  "name": "Паровой мефит",
+  "nameEn": "Steam mephit",
+  "size": "small",
+  "type": "elemental",
+  "subtype": null,
+  "alignment": "нейтрально-злой",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 10
+  },
+  "hitPoints": {
+    "average": 21,
+    "hitDice": "6d6"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 30
+  },
+  "abilities": {
+    "str": 5,
+    "dex": 11,
+    "con": 10,
+    "int": 11,
+    "wis": 10,
+    "cha": 12
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire",
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Акван",
+    "Игнан"
+  ],
+  "traits": [
+    {
+      "name": "Предсмертная вспышка",
+      "description": "Когда мефит умирает, он взрывается облаком пара. Все существа в пределах 5 футов от мефита должны преуспеть в спасброске Ловкости Сл 10, иначе получат урон огнём 4 (1к8)."
+    },
+    {
+      "name": "Врождённое колдовство (1/день)",
+      "description": "Мефит может накладывать размытый образ [blur], не нуждаясь в материальных компонентах. Его базовой характеристикой является Харизма."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 футов, одно существо. Попадание: Рубящий урон 2 (1к4) плюс урон огнём 2 (1к4).",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 0,
+          "type": "плюс"
+        }
+      ]
+    },
+    {
+      "name": "Паровое дыхание (перезарядка 6)",
+      "type": "breath",
+      "description": "Мефит выдыхает обжигающий пар 15-футовым конусом. Все существа в этой области должны преуспеть в спасброске Ловкости Сл 10, получая урон огнём 4 (1к8) при провале, или половину этого урона при успехе.",
+      "recharge": "6",
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 15
+      },
+      "save": {
+        "ability": "DEX",
+        "dc": 10,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

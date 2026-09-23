@@ -1,0 +1,97 @@
+{
+  "id": "5110",
+  "slug": "5110-davil-starsong",
+  "name": "Давил Старсонг",
+  "nameEn": "Davil Starsong",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "эльф",
+  "alignment": "нейтральный, именной НИП",
+  "challengeRating": 6,
+  "xp": 2300,
+  "source": "Waterdeep: Dragon Heist",
+  "isNamed": true,
+  "armorClass": {
+    "value": 15,
+    "type": "кольчужная рубаха"
+  },
+  "hitPoints": {
+    "average": 82,
+    "hitDice": "15d8 + 15"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 14,
+    "con": 12,
+    "int": 16,
+    "wis": 12,
+    "cha": 17
+  },
+  "savingThrows": {
+    "dex": 5,
+    "cha": 6
+  },
+  "skills": {
+    "performance": 6,
+    "history": 6,
+    "arcana": 6,
+    "insight": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Дварфийский",
+    "Драконий",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Наследие фей",
+      "description": "Давил совершает с преимуществом спасброски от очарования, и его невозможно магически усыпить."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Давил является заклинателем 12-го уровня. Его базовой характеристикой является Харизма (Сл спасброска от заклинания 14, +6 к попаданию атаками заклинаниями). У него подготовлены следующие заклинания волшебника:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Кинжал",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +5 к попаданию, досягаемость 5 футов или дистанция 20/60 футов, одна цель. Попадание: Колющий урон 4 (1к4 + 2).",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 12,
+    "spellAttackBonus": 6,
+    "ability": "CHA"
+  }
+}

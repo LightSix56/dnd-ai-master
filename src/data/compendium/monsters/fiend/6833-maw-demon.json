@@ -1,0 +1,114 @@
+{
+  "id": "6833",
+  "slug": "6833-maw-demon",
+  "name": "Утробный демон",
+  "nameEn": "Maw demon]Утробный демон [Maw demon",
+  "size": "medium",
+  "type": "fiend",
+  "subtype": "демон",
+  "alignment": "обычно хаотично-злоеСреднее? Исчадие (демон), хаотично-злое",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 33,
+    "hitDice": "6d8 + 6"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 8,
+    "con": 13,
+    "int": 5,
+    "wis": 8,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 9,
+    "darkvision": 60
+  },
+  "languages": [
+    "Бездны"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Понимает язык Бездны но не может говорить."
+    },
+    {
+      "name": "Языки",
+      "description": "Понимает язык Бездны но не может говорить."
+    },
+    {
+      "name": "Буйство",
+      "description": "Снижая хиты существа до 0 рукопашной атакой в свой ход, утробный демон может использовать бонусное действие, чтобы переместиться на половину своей скорости и совершить атаку укусом."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 11 (2к8 + 2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Изрыгание (перезарядка 6)",
+      "type": "special",
+      "description": "Демона рвёт 15-футовый кубом. Каждое существо в этой области должно преуспеть в спасброске Ловкости Сл 11 или получить 11 (2к10) урона кислотой и упасть ничком в рвоту.",
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "6",
+      "save": {
+        "ability": "DEX",
+        "dc": 11,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 11 (2к8 + 2).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,94 @@
+{
+  "id": "12125",
+  "slug": "12125-fomorian-noble",
+  "name": "Дворянин фомор",
+  "nameEn": "Fomorian Noble",
+  "size": "huge",
+  "type": "giant",
+  "subtype": "Волшебник",
+  "alignment": "обычно хаотично-злой",
+  "challengeRating": 15,
+  "xp": 13000,
+  "source": "Bigby Presents: Glory of the Giants",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "17 с доспехом мага"
+  },
+  "hitPoints": {
+    "average": 253,
+    "hitDice": "22d12 + 110"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 23,
+    "dex": 18,
+    "con": 20,
+    "int": 19,
+    "wis": 14,
+    "cha": 16
+  },
+  "savingThrows": {
+    "int": 9,
+    "wis": 7,
+    "cha": 8
+  },
+  "skills": {
+    "perception": 7,
+    "arcana": 14,
+    "stealth": 9
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17
+  },
+  "languages": [
+    "Великаний плюс три любых языка"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Фомор совершает три атаки Жезлом."
+    },
+    {
+      "name": "Жезл",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +11 к попаданию, досягаемость 10 фт., одна цель. Попадание: 16 (3к6 + 6) дробящего урона плюс 11 (2к10) урона силовым полем.",
+      "attackBonus": 11,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 6,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Фомор накладывает одно из следующих заклинаний, используя Интеллект в качестве базовой характеристики (Сл спасброска от заклинаний 17):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "доспехи мага [mage armor] (только на себя), волшебная рука [mage hand], фокусы [prestidigitation];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "пляшущая молния [chain lightning], конус холода [cone of cold] (вариант 6-го уровня), огненный шар [fireball] (вариант 6-го уровня), полёт [fly], уход в иной мир [plane shift] (только на себя)."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,80 @@
+{
+  "id": "5850",
+  "slug": "5850-female-steeder",
+  "name": "Самка стидера",
+  "nameEn": "Female Steeder",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Out of the Abyss",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 30,
+    "hitDice": "4d10 + 8"
+  },
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 16,
+    "con": 14,
+    "int": 2,
+    "wis": 10,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {
+    "stealth": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 120
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 7 (1к8 + 3) плюс и цель должна совершить спасбросок Телосложения Сл 12, получая урон кислотой 9 (2к8) при провале или половину этого урона при успехе.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 12,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Липкие лапы (перезаряжается, когда стидер не удержи",
+      "type": "melee_attack",
+      "description": "вает ни одного существа). Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одно существо Среднего или меньшего размера. Попадание: Цель прилипает к лапе стидера и схвачена до тех пор, пока не освободится (Сл высвобождения 12). Стидер может удерживать только одно существо за раз.",
+      "attackBonus": 5,
+      "reachFt": 5
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

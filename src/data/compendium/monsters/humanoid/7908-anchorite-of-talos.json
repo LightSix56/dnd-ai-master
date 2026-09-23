@@ -1,0 +1,99 @@
+{
+  "id": "7908",
+  "slug": "7908-anchorite-of-talos",
+  "name": "Отшельник Талоса",
+  "nameEn": "Anchorite of Talos",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "полуорк, перевертыш",
+  "alignment": "перевертыш), нейтрально-злой",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Essentials Kit: Dragon of Icespire peak",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "шкурный доспех"
+  },
+  "hitPoints": {
+    "average": 58,
+    "hitDice": "9d8 + 18"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 13,
+    "con": 14,
+    "int": 9,
+    "wis": 15,
+    "cha": 12
+  },
+  "savingThrows": {},
+  "skills": {
+    "survival": 4,
+    "nature": 1,
+    "stealth": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Орочий"
+  ],
+  "traits": [
+    {
+      "name": "Перевертыш",
+      "description": "Отшельник может действием превратиться в кабана или принять свой истинный облик гуманоида. Все его статистики кроме размера остаются одинаковыми во всех обликах. Все несомое и носимое им снаряжение не превращается. Он принимает свой истинный облик, если умирает."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Базовой характеристикой отшельника является Мудрость (Сл спасброска от заклинаний 12). Отшельник может накладывать следующие заклинания без использования материальных компонентов:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Перчатки с когтями (только в облике Гуманоида)",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 5 (1к4 + 3) рубящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Бивни (только в облике Кабана)",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 6 (1к6 + 3) рубящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "ability": "WIS"
+  }
+}

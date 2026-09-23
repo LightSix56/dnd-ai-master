@@ -1,0 +1,108 @@
+{
+  "id": "8316",
+  "slug": "8316-prismari-professor-of-perfection",
+  "name": "Профессор совершенства Призмари",
+  "nameEn": "Prismari Professor of Perfection",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "Чародей",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Strixhaven: A Curriculum of Chaos",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "16 с доспехами мага"
+  },
+  "hitPoints": {
+    "average": 97,
+    "hitDice": "15d8 + 30"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 16,
+    "con": 15,
+    "int": 15,
+    "wis": 13,
+    "cha": 19
+  },
+  "savingThrows": {
+    "dex": 6,
+    "int": 5,
+    "wis": 4,
+    "cha": 7
+  },
+  "skills": {
+    "acrobatics": 6,
+    "athletics": 5,
+    "perception": 4,
+    "performance": 10,
+    "arcana": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14
+  },
+  "languages": [
+    "Общий",
+    "и ещё четыре любых языка"
+  ],
+  "traits": [
+    {
+      "name": "Хождение по воде",
+      "description": "Профессор может ходить по воде и другим жидкостям, как по твердой земле."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Профессор совершает три атаки Приливный ударом."
+    },
+    {
+      "name": "Приливный удар",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака заклинанием: +7 к попаданию, досягаемость 5 футов или 60 футов, одна цель. Попадание: 13 (2к8 + 4) урона холодом.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Профессор накладывает одно из следующих заклинаний, используя Харизму в качестве базовой характеристики (Сл спасброска от заклинаний 15):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "малая иллюзия [minor illusion];"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "власть над водами [control water], сотворение или уничтожение воды [create or destroy water], доспехи мага [mage armor], изменение формы камня [stone shape];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "ледяная стена [wall of ice]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

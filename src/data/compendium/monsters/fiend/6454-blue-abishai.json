@@ -1,0 +1,177 @@
+{
+  "id": "6454",
+  "slug": "6454-blue-abishai",
+  "name": "Синий абишай",
+  "nameEn": "Blue Abishai]Синий абишай [Blue Abishai",
+  "size": "medium",
+  "type": "fiend",
+  "subtype": "дьявол, волшебник",
+  "alignment": "волшебник), обычно законно-злоеСреднее? Исчадие (дьявол), законно-злое",
+  "challengeRating": 17,
+  "xp": 18000,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 19,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 202,
+    "hitDice": "27d8 + 81"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 50
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 14,
+    "con": 17,
+    "int": 22,
+    "wis": 23,
+    "cha": 18
+  },
+  "savingThrows": {
+    "int": 12,
+    "wis": 12
+  },
+  "skills": {
+    "arcana": 12
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire",
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 120
+  },
+  "languages": [
+    "Драконий",
+    "Инфернальный",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Дьявольское зрение",
+      "description": "Магическая тьма не мешает тёмному зрению абишая."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Абишай совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Дьявольское зрение",
+      "description": "Магическая тьма не мешает тёмному зрению абишая."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Абишай совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Магическое оружие",
+      "description": "Атаки оружием абишая являются магическими."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Абишай является заклинателем 13-го уровня. Его базовой характеристикой является Интеллект (Сл спасброска от заклинаний 20, +12 к атакам заклинаниями). У него подготовлены следующие заклинания волшебника:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Абишай совершает три атаки укусом или ударом молнии."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одна цель. Попадание: 13 (2к10 + 2) колющего урона плюс 14 (4к6) урона электричеством.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Удар молнии",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +12 к попаданию, дистанция 120 футов, одна цель. Попадание: 36 (8к8) урона электричеством.",
+      "attackBonus": 12,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "8d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Абишай накладывает одно из следующих заклинаний, используя Интеллект в качестве базовой характеристики (Сл спасброска от заклинаний 20):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "маскировка [disguise self], волшебная рука [mage hand], малая иллюзия [minor illusion];"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "очарование личности [charm person], рассеивание магии [dispel magic], высшая невидимость [greater invisibility], силовая стена [wall of force]."
+    },
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Абишай совершает две атаки: одну железным молотом и одну укусом."
+    },
+    {
+      "name": "Боевой посох",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одна цель. Попадание: 5 (1к6 + 2) дробящего урона, или 6 (1к8 + 2) дробящего урона при ударе двумя руками.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одна цель. Попадание: 13 (2к10 + 2) колющего урона плюс 14 (4к6) урона электричеством.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 13,
+    "ability": "INT"
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "id": "5006",
+  "slug": "5006-tarkanan-assassin",
+  "name": "Таркананский убийца",
+  "nameEn": "Tarkanan Assassin",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любая раса",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Eberron: Rising from the Last War",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "проклёпанная кожа"
+  },
+  "hitPoints": {
+    "average": 45,
+    "hitDice": "7d8 + 14"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 16,
+    "con": 14,
+    "int": 10,
+    "wis": 14,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 3,
+    "perception": 4,
+    "sleight_of_hand": 5,
+    "deception": 2,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Воровской жаргон"
+  ],
+  "traits": [
+    {
+      "name": "Нестабильная метка",
+      "description": "Когда убийца накладывает врожденное заклинание, каждое существо в пределах 10 футов от него должно совершить в спасброске Телосложения Сл 12, получая 4 (1к8) урона силовым в случае провала или половину урона в случае успеха."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Убийца совершает две атаки коротким мечом."
+    },
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов., одна цель. Попадание: 6 (1к6 + 3) колющего урона, плюс 7 (2к6) урона ядом.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Огненный снаряд (Заговор)",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +4 к попаданию, дистанция 120 футов, одна цель. Попадание: 11 (2к10) урона огнём. Горючие предметы, по которым попало это заклинание, воспламеняются, если их никто не несет и не носит.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Цветной шарик (1/день)",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +4 к попаданию, дистанция 90 футов, одно существо. Попадание: 18 (4к8) тип урона выбирает убийца: кислота, огонь, электричество, яд, звук.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 90
+      },
+      "damage": [
+        {
+          "dice": "4d8",
+          "mod": 0,
+          "type": "тип"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,104 @@
+{
+  "id": "3333",
+  "slug": "3333-jamna-gleamsilver",
+  "name": "Джэмна Глимсилвер",
+  "nameEn": "Jamna Gleamsilver",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "гном",
+  "alignment": "нейтральный, именной НИП",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Hoard of the Dragon Queen",
+  "isNamed": true,
+  "armorClass": {
+    "value": 15,
+    "type": "кожаный доспех"
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "4d6 + 8"
+  },
+  "speed": {
+    "walk": 25
+  },
+  "abilities": {
+    "str": 8,
+    "dex": 17,
+    "con": 14,
+    "int": 15,
+    "wis": 10,
+    "cha": 12
+  },
+  "savingThrows": {
+    "dex": 5,
+    "int": 4
+  },
+  "skills": {
+    "acrobatics": 5,
+    "perception": 4,
+    "deception": 3,
+    "insight": 2,
+    "stealth": 7,
+    "persuasion": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Гномий",
+    "Гоблинский",
+    "Сильван"
+  ],
+  "traits": [
+    {
+      "name": "Хитрое действие",
+      "description": "Джэмна может совершать как бонусное действие, действия Рывок, Отход или Засада."
+    },
+    {
+      "name": "Гномья хитрость",
+      "description": "Джэмна совершает с преимуществом спасброски Интеллекта, Мудрости и Харизмы против магии."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Джэмна является заклинателем 4-го уровня. Её базовой характеристикой является Интеллект (Сл спасброска от заклинаний 12, +4 к попаданию атаками заклинаниями). У Джэмны подготовлены следующие заклинания волшебника:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Джэмна совершает две атаки коротким мечом."
+    },
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к6+3) колющего урона или 9 (1к6+3 плюс 1к6) колющего урона, если цель Среднего размера или больше.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 4,
+    "spellAttackBonus": 4,
+    "ability": "INT"
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "id": "198",
+  "slug": "198-helmed-horror",
+  "name": "Шлемоносный ужас",
+  "nameEn": "Helmed horror",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 20,
+    "type": "латный доспех, щит"
+  },
+  "hitPoints": {
+    "average": 60,
+    "hitDice": "8d8 + 24"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 13,
+    "con": 16,
+    "int": 10,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "necrotic",
+    "force"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "blindsight": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "- понимает язык своего создателя но не говорит."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Шлемоносный ужас совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Иммунитет к заклинаниям",
+      "description": "Шлемоносный ужас обладает иммунитетом к трем заклинаниям, выбираемым его создателем. Обычно это молния [lightning bolt], огненный шар [fireball] и раскалённый металл [heat metal]."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Шлемоносный ужас совершает две атаки длинным мечом."
+    },
+    {
+      "name": "Длинный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 8 (1к8 + 4), или рубящий урон 9 (1к10 + 4), если используется двумя руками.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

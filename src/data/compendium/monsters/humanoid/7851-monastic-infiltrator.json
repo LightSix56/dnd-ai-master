@@ -1,0 +1,118 @@
+{
+  "id": "7851",
+  "slug": "7851-monastic-infiltrator",
+  "name": "Монах лазутчик",
+  "nameEn": "Monastic Infiltrator",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "Монах",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 6,
+  "xp": 2300,
+  "source": "Critical Role: Call of the Netherdeep",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "защита без доспехов"
+  },
+  "hitPoints": {
+    "average": 112,
+    "hitDice": "15d8 + 45"
+  },
+  "speed": {
+    "walk": 50
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 20,
+    "con": 16,
+    "int": 15,
+    "wis": 17,
+    "cha": 16
+  },
+  "savingThrows": {
+    "dex": 8,
+    "wis": 6
+  },
+  "skills": {
+    "acrobatics": 8,
+    "perception": 6,
+    "deception": 9,
+    "stealth": 11
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Знает Общий и ещё три языка."
+    },
+    {
+      "name": "Защита без доспехов",
+      "description": "Пока лазутчик не носит ни доспехи, ни щит, к КД прибавляется его модификатор Мудрости."
+    },
+    {
+      "name": "Защищённый разум",
+      "description": "Заклинания и другие эффекты не позволяют другим существам читать мысли лазутчика или определять, лжёт ли он. Существа могут телепатически общаться с лазутчиком только если он позволяет это."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Лазутчик совершает три безоружных удара."
+    },
+    {
+      "name": "Безоружный удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одна цель. Попадание: 10 (1к10 + 5) урона силовым полем.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Лазутчик может накладывать следующие заклинания, используя Мудрость в качестве базовой характеристики (Сл спасброска от заклинания 14):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "маскировка [disguise self];"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "обнаружение мыслей [detect thoughts], невидимость [invisibility];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "переносящая дверь [dimension door], область истины [zone of truth]."
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Ответный удар",
+      "type": "special",
+      "description": "Когда существо в пределах 5 футов от лазутчика попадает или промахивается по лазутчику рукопашной атакой, лазутчик наносит один безоружный удар по атакующему."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

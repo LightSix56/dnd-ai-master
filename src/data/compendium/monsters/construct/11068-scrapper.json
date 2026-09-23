@@ -1,0 +1,120 @@
+{
+  "id": "11068",
+  "slug": "11068-scrapper",
+  "name": "Ломовик",
+  "nameEn": "Scrapper",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Misplaced Monsters: Volume One",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 126,
+    "hitDice": "12d10 + 60"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 10,
+    "con": 20,
+    "int": 3,
+    "wis": 10,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 120
+  },
+  "languages": [
+    "понимает языки создателя",
+    "но не говорит"
+  ],
+  "traits": [
+    {
+      "name": "Электрифицированное шасси",
+      "description": "Существо, попавшее в ломовика рукопашной атакой в пределах 5 футов от него, получает 19 (3к12) урона электричеством."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Ломовик совершает две атаки Ударом шипами. Он может заменить одну из этих атак атакой Проводами."
+    },
+    {
+      "name": "Удар шипами",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одна цель. Попадание: 14 (2к8+5) дробящего урона плюс 5 (1к10) колющего урона.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 5,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Провода",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 20 футов, одно Большое или меньших размеров существо. Попадание: Цель схвачена (Сл высвобождения 16) и должна преуспеть в спасброске Силы Сл 16, иначе будет притянута в незанятое пространство в пределах 5 футов от ломовика и получит 19 (3к12) урона электричеством. Ломовик может иметь только одно существо схваченное таким образом за раз.",
+      "attackBonus": 8,
+      "reachFt": 20,
+      "damage": [
+        {
+          "dice": "3d12",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 16,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Луч из глаза (перезарядка 5-6)",
+      "type": "special",
+      "description": "Ломовик стреляет магическим лучом из своего расширенного глаза в одно существо, которое он может видеть в пределах 120 футов от себя. Цель должна совершить спасбросок Ловкости Сл 16, получая 44 (8к10) урона силовым полем в случае провала или половину этого урона в случае успеха.",
+      "damage": [
+        {
+          "dice": "8d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "DEX",
+        "dc": 16,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

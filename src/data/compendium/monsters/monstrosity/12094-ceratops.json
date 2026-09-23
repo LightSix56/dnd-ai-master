@@ -1,0 +1,96 @@
+{
+  "id": "12094",
+  "slug": "12094-ceratops",
+  "name": "Цератопс",
+  "nameEn": "Ceratops",
+  "size": "gargantuan",
+  "type": "monstrosity",
+  "subtype": "Динозавр",
+  "alignment": "без мировоззрения",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Bigby Presents: Glory of the Giants",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 139,
+    "hitDice": "9d20 + 45"
+  },
+  "speed": {
+    "walk": 50
+  },
+  "abilities": {
+    "str": 24,
+    "dex": 8,
+    "con": 21,
+    "int": 4,
+    "wis": 10,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Цератопс совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Цератопс совершает одну атаку Боданием и одну атаку Топотом."
+    },
+    {
+      "name": "Бодание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +11 к попаданию, досягаемость 10 футов, одна цель. Попадание: 29 (4к10 + 7) колющего урона. Если цератопс переместится как минимум на 20 футов по прямой к цели, то перед попаданием по ней атаки, цель дополнительно получает 11 (2к10) колющего урона; если целью является существо, оно также должно преуспеть в спасброске Силы Сл 19, иначе будет отброшено на расстояние до 20 футов от цератопса и упадёт ничком.",
+      "attackBonus": 11,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 7,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 19,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Топот",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +11 к попаданию, досягаемость 5 футов, одна цель. Попадание: 29 (4к10 + 7) дробящего урона.",
+      "attackBonus": 11,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 7,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

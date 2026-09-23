@@ -1,0 +1,81 @@
+{
+  "id": "1314",
+  "slug": "1314-aldani-lobsterfolk",
+  "name": "Алдани (Лобстеролюд)",
+  "nameEn": "Aldani Lobsterfolk",
+  "size": "medium",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "законно-нейтральный",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Tomb of Annihilation",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 49,
+    "hitDice": "9d8 + 9"
+  },
+  "speed": {
+    "walk": 20,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 8,
+    "con": 12,
+    "int": 10,
+    "wis": 14,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4,
+    "survival": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Алдани может дышать и воздухом и под водой"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Алдани совершает две атаки клешнями."
+    },
+    {
+      "name": "Клешня",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: 5 (1к8 + 1) рубящего урона, и цель схвачена (Сл высвобождения 11). У алдани две клешни, каждой из них он может схватить одну цель",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 1,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

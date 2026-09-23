@@ -1,0 +1,91 @@
+{
+  "id": "573",
+  "slug": "573-orc-hand-of-yurtrus",
+  "name": "Орк рука Юртруса",
+  "nameEn": "Orc hand of Yurtrus",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "орк",
+  "alignment": "хаотично-злой",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Volo's guide to monsters",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "шкурный доспех"
+  },
+  "hitPoints": {
+    "average": 30,
+    "hitDice": "4d8 + 12"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 11,
+    "con": 16,
+    "int": 11,
+    "wis": 14,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {
+    "intimidation": 1,
+    "arcana": 2,
+    "medicine": 4,
+    "religion": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Орочий"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Понимает Общий и Орочий, но не может говорить."
+    },
+    {
+      "name": "Агрессия",
+      "description": "Бонусным действием орк может переместиться на расстояние не больше своей скорости к враждебному существу, которое может видеть."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Орк является заклинателем 4-го уровня. Его базовой характеристикой является Мудрость (Сл спасброска от заклинаний 12, +4 к попаданию заклинаниями). Ему не требуются вербальные компоненты для накладывания заклинаний. У орка подготовлены следующие заклинания жреца:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Касание Белой руки",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием:+3 к попаданию, досягаемость 5 футов, одна цель. Попадание: 9 (2к8) урона некротической энергией.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 4,
+    "ability": "WIS"
+  }
+}

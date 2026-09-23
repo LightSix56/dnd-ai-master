@@ -1,0 +1,96 @@
+{
+  "id": "7538",
+  "slug": "7538-pirate-bosun",
+  "name": "Пиратский боцман",
+  "nameEn": "Pirate Bosun",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любая раса",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Ghosts of Saltmarsh",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "проклёпанная кожа"
+  },
+  "hitPoints": {
+    "average": 27,
+    "hitDice": "5d8 + 5"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 11,
+    "con": 13,
+    "int": 11,
+    "wis": 10,
+    "cha": 13
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 5,
+    "intimidation": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "любой один язык (обычно Общий)"
+  ],
+  "traits": [
+    {
+      "name": "Переносчик грузов",
+      "description": "Боцман с преимуществом совершает проверки Силы."
+    },
+    {
+      "name": "Морская качка",
+      "description": "Боцман с преимуществом совершает проверки характеристик и спасброски, чтобы не быть сбитым с ног."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Лёгкий молот",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +5 к попаданию, досягаемость 5 футов или дистанция 20/60 футов, одна цель. Попадание: 5 (1к4 + 3) дробящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Крюк",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к8 + 3) колющего урона, и цель схвачена (Сл высвобождения 13).",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

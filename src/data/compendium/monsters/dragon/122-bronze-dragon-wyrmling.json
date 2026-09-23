@@ -1,0 +1,115 @@
+{
+  "id": "122",
+  "slug": "122-bronze-dragon-wyrmling",
+  "name": "Вирмлинг бронзового дракона",
+  "nameEn": "Bronze dragon wyrmling",
+  "size": "medium",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "законно-добрый",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 32,
+    "hitDice": "5d8 + 10"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 60,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 10,
+    "con": 15,
+    "int": 12,
+    "wis": 11,
+    "cha": 15
+  },
+  "savingThrows": {
+    "dex": 2,
+    "con": 4,
+    "wis": 2,
+    "cha": 4
+  },
+  "skills": {
+    "perception": 4,
+    "stealth": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "blindsight": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Дракон может дышать и воздухом и под водой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 8 (1к10 + 3).",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Оружия дыхания (перезарядка 5–6)",
+      "type": "special",
+      "description": "Дракон использует один из следующих видов оружия дыхания.",
+      "recharge": "5-6"
+    },
+    {
+      "name": "Электрическое дыхание",
+      "type": "breath",
+      "description": "Дракон выдыхает молнию 40-футовой линией шириной 5 футов. Все существа в этой линии должны совершить спасбросок Ловкости Сл 12, получая урон электричеством 16 (3к10) при провале, или половину этого урона при успехе.",
+      "recharge": "5-6",
+      "save": {
+        "ability": "DEX",
+        "dc": 12,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Отталкивающее дыхание",
+      "type": "breath",
+      "description": "Дракон выдыхает отталкивающую энергию 30-футовым конусом. Все существа в этой области должны преуспеть в спасброске Силы Сл 12. При провале существо толкается на 30 футов от дракона.",
+      "recharge": "5-6",
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 30
+      },
+      "save": {
+        "ability": "STR",
+        "dc": 12,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

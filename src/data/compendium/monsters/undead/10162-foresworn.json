@@ -1,0 +1,106 @@
+{
+  "id": "10162",
+  "slug": "10162-foresworn",
+  "name": "Отверженный",
+  "nameEn": "Foresworn",
+  "size": "medium",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "законно-добрая",
+  "challengeRating": 6,
+  "xp": 2300,
+  "source": "Monstrous Compendium Vol 2: Dragonlance Creatures",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 82,
+    "hitDice": "11d8 + 33"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 14,
+    "con": 17,
+    "int": 12,
+    "wis": 18,
+    "cha": 10
+  },
+  "savingThrows": {
+    "str": 8,
+    "wis": 7
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 60
+  },
+  "languages": [
+    "Все",
+    "известные при жизни"
+  ],
+  "traits": [
+    {
+      "name": "Обязанности",
+      "description": "Отверженный обязан исполнить единственный долг, который он дал себе при жизни. Пока долг не завершён, всякий раз, когда отверженного уничтожают, он вновь формируется в прежнем месте через 3 (1к6) дней, при этом все его хиты восстанавливаются."
+    },
+    {
+      "name": "Бестелесное движение",
+      "description": "Отверженный может перемещаться сквозь других существ и объекты, как если бы они были труднопроходимой местностью. Он получает 5 (1к10) урона силовым полем, если заканчивает свой ход внутри объекта."
+    },
+    {
+      "name": "Необычная природа",
+      "description": "Отверженному не нужен воздух, еда, питье или сон."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Отверженный совершает три атаки Призрачной алебардой."
+    },
+    {
+      "name": "Призрачная алебарда",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 фт., одна цель. Попадание: 12 (2к6 + 5) урона силовым полем.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Отверженный накладывает одно из следующий заклинаний, не нуждаясь в никаких материальных компонентах, и Интеллект является для них базовой характеристикой (Сл спасброска от заклинания 15):"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "приказ [command], обнаружение зла и добра [detect evil and good]"
+    },
+    {
+      "name": "1/день",
+      "type": "special",
+      "description": "силовая стена [wall of force]"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

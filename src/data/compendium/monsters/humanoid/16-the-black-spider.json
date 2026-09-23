@@ -1,0 +1,101 @@
+{
+  "id": "16",
+  "slug": "16-the-black-spider",
+  "name": "Неззнар Черный Паук",
+  "nameEn": "The Black Spider",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "эльф",
+  "alignment": "нейтрально-злой, именной НИП",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Lost Mine of Phandelver",
+  "isNamed": true,
+  "armorClass": {
+    "value": 11,
+    "type": "14 с доспехами мага"
+  },
+  "hitPoints": {
+    "average": 27,
+    "hitDice": "6d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 9,
+    "dex": 13,
+    "con": 10,
+    "int": 16,
+    "wis": 14,
+    "cha": 13
+  },
+  "savingThrows": {
+    "int": 5,
+    "wis": 4
+  },
+  "skills": {
+    "perception": 4,
+    "arcana": 5,
+    "stealth": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 120
+  },
+  "languages": [
+    "Подземный",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Особое снаряжение",
+      "description": "У Неззнара есть посох паука [spider staff]."
+    },
+    {
+      "name": "Наследие фей",
+      "description": "Неззнар совершает с преимуществом спасброски от очарования, и магия не может усыпить его."
+    },
+    {
+      "name": "Чувствительность к солнечному свету",
+      "description": "Неззнар совершает с помехой броски атаки, когда он или его цель находится на солнечном свету."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Неззнар может накладывать следующие заклинания, не используя никаких материальных компонентов:"
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Неззнар является заклинателем 4 уровня, использующим Интеллект в качестве базовой характеристики (Сл спасброска от заклинаний 13; +5 к попаданию атакам заклинаний). У Неззнара есть следующие подготовленные заклинания из списка волшебника:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Паучий посох",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +1 к попаданию, досягаемость 5 футов, одна цель. Попадание: 2 (1к6 − 1) дробящего урона плюс 3 (1к6) урона ядом.",
+      "attackBonus": 1,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 4,
+    "ability": "INT"
+  }
+}

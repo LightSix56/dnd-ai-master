@@ -1,0 +1,91 @@
+{
+  "id": "7727",
+  "slug": "7727-sharda",
+  "name": "Шарда",
+  "nameEn": "Sharda",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек иллюсканка",
+  "alignment": "нейтрально-злой, именной НИП",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Storm King's Thunder",
+  "isNamed": true,
+  "armorClass": {
+    "value": 16,
+    "type": "каменный нагрудник"
+  },
+  "hitPoints": {
+    "average": 33,
+    "hitDice": "6d8 + 6"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 14,
+    "con": 12,
+    "int": 10,
+    "wis": 13,
+    "cha": 14
+  },
+  "savingThrows": {},
+  "skills": {
+    "deception": 4,
+    "religion": 2,
+    "persuasion": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [
+    "Общий",
+    "Терран"
+  ],
+  "traits": [
+    {
+      "name": "Темная преданность",
+      "description": "Фанатик совершает с преимуществом спасброски от испуга и очарования."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Фанатик является заклинателем 4-го уровня. Его базовой характеристикой является Мудрость (Сл спасброска от заклинания 11, +3 к попаданию атаками заклинаниями). У него подготовлены следующие заклинания жреца:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Фанатик совершает две рукопашные атаки."
+    },
+    {
+      "name": "Каменная дубина",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одно существо. Попадание: 4 (1к4 + 2) дробящего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 4,
+    "spellAttackBonus": 3,
+    "ability": "WIS"
+  }
+}

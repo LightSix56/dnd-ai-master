@@ -1,0 +1,109 @@
+{
+  "id": "8841",
+  "slug": "8841-hadozee-explorer",
+  "name": "Хадози-исследователь",
+  "nameEn": "Hadozee Explorer",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "любое мировоззрение",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "проклёпанный доспех"
+  },
+  "hitPoints": {
+    "average": 49,
+    "hitDice": "9d8 + 9"
+  },
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 17,
+    "con": 13,
+    "int": 13,
+    "wis": 17,
+    "cha": 14
+  },
+  "savingThrows": {
+    "con": 3,
+    "wis": 5
+  },
+  "skills": {
+    "athletics": 2,
+    "perception": 5,
+    "survival": 5,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15
+  },
+  "languages": [
+    "Общий",
+    "Язык Хадози"
+  ],
+  "traits": [
+    {
+      "name": "Планирование",
+      "description": "Если хадози дееспособен и не носит тяжёлую броню, то может растянуть свои кожные складки, чтобы переместиться на 5 футов по горизонтали за каждый фут спуска."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Хадози совершает две атаки Коротким мечом."
+    },
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к6 + 3) колющего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Мушкет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +5 к попаданию, дистанция 40/120 фт., одна цель. Попадание: 16 (2к12 + 3) колющего урона.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 40,
+        "long": 120
+      },
+      "damage": [
+        {
+          "dice": "2d12",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Безопасный спуск",
+      "type": "special",
+      "description": "Если хадози должен получить урон от падения, он расправляет кожные складки и уменьшает этот урон до нуля. Хадози не должен носить тяжелый доспех."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

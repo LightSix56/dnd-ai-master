@@ -1,0 +1,134 @@
+{
+  "id": "10285",
+  "slug": "10285-forest-master",
+  "name": "Хозяйка леса",
+  "nameEn": "Forest Master",
+  "size": "large",
+  "type": "celestial",
+  "subtype": "Единорог",
+  "alignment": "нейтрально-добрый, именной НИП",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Monstrous Compendium Vol 2: Dragonlance Creatures",
+  "isNamed": true,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 105,
+    "hitDice": "14d10 + 28"
+  },
+  "speed": {
+    "walk": 50
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 14,
+    "con": 15,
+    "int": 13,
+    "wis": 19,
+    "cha": 17
+  },
+  "savingThrows": {
+    "int": 4,
+    "wis": 7
+  },
+  "skills": {
+    "perception": 7,
+    "nature": 4,
+    "insight": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17,
+    "darkvision": 60
+  },
+  "languages": [
+    "Небесный",
+    "Сильван",
+    "Эльфийский",
+    "Телепатия 60 фт."
+  ],
+  "traits": [
+    {
+      "name": "Легендарное сопротивление (2/день)",
+      "description": "Если Хозяйка Леса проваливает спасбросок, она может вместо этого сделать его успешным."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Хозяйка леса совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Повелитель зверей",
+      "description": "Хозяйка леса может понимать и общаться с любым зверем, даже если тот не владеет какими-либо языками."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Хозяйка леса совершает две атаки Копытом или две атаки Лунным снарядом, или их комбинации."
+    },
+    {
+      "name": "Копыто",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 фт., одна цель. Попадание: 11 (2к6 + 4) дробящего урона.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Лунный снаряд",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +7 к попаданию, дальность 60 футов, одна цель. Попадание: 11 (2к6 + 4) урона излучением.",
+      "attackBonus": 7,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Хозяйка леса накладывает одно из следующих заклинаний, используя Мудрость в качестве базовой характеристики (Сл спасброска от заклинаний 15):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "искусство друидов [druidcraft], туманное облако [fog cloud], указание [guidance]"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "чудо-ягоды [goodberry], высшее восстановление [greater restoration], бесследное передвижение [pass without trace], разговор с растениями [speak with plants]"
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Туманный побег",
+      "type": "special",
+      "description": "Если Хозяйка леса получает урон от рукопашной атаки, то она вместе со всем снаряжением, которое она несёт или носит, телепортируется в незанятое пространство в пределах 30 футов, которое она может видеть."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

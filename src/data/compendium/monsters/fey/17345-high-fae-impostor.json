@@ -1,0 +1,120 @@
+{
+  "id": "17345",
+  "slug": "17345-high-fae-impostor",
+  "name": "Самозванец высших фей",
+  "nameEn": "High Fae Impostor",
+  "size": "medium",
+  "type": "fey",
+  "subtype": null,
+  "alignment": "любое мировоззрение",
+  "challengeRating": 11,
+  "xp": 7200,
+  "source": "Monstrous Compendium Vol. Four: Eldraine Creatures",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15
+  },
+  "hitPoints": {
+    "average": 149,
+    "hitDice": "23d8 + 46"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 30,
+    "hover": true
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 21,
+    "con": 15,
+    "int": 18,
+    "wis": 16,
+    "cha": 23
+  },
+  "savingThrows": {
+    "dex": 9,
+    "wis": 7
+  },
+  "skills": {
+    "performance": 10,
+    "deception": 14,
+    "stealth": 13
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий",
+    "Сильван"
+  ],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Высшая фея совершают с преимуществом спасброски от заклинаний и других магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Высшая фея совершает две атаки Клинком фей и один раз использует Досадный розыгрыш."
+    },
+    {
+      "name": "Клинок фей",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 фт., одна цель. Попадание: 18 (3к8 + 5) урона силовым полем.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Высшая фея может накладывать одно из следующих заклинаний, не требующее материальных компонентов и использующее Харизму в качестве базовой характеристики для заклинания (Сл спасброска 18):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "дружба [friends], малая иллюзия [minor illusion]"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "речь златоуста [enthrall], нистулова ложная аура [nystul's magic aura]"
+    },
+    {
+      "name": "Досадный розыгрыш",
+      "type": "special",
+      "description": "Высшая фея нацеливается на одно видимое ей существо, в пределах 60 футов, с помощью магического трюка. Цель должна совершить спасбросок Мудрости Сл 18. В случае провала цель получает 21 (6к6) урона психической энергией и становится испуганной до начала следующего хода высшей феи. В случае успеха цель получает только половину этого урона.",
+      "damage": [
+        {
+          "dice": "6d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CHA",
+        "dc": 18,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

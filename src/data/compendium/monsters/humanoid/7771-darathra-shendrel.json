@@ -1,0 +1,98 @@
+{
+  "id": "7771",
+  "slug": "7771-darathra-shendrel",
+  "name": "Даратра Шендрел",
+  "nameEn": "Darathra Shendrel",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек иллюсканец",
+  "alignment": "законно-добрый, именной НИП",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Storm King's Thunder",
+  "isNamed": true,
+  "armorClass": {
+    "value": 14,
+    "type": "кираса"
+  },
+  "hitPoints": {
+    "average": 18,
+    "hitDice": "4d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 11,
+    "con": 14,
+    "int": 11,
+    "wis": 11,
+    "cha": 15
+  },
+  "savingThrows": {},
+  "skills": {
+    "intimidation": 4,
+    "history": 2,
+    "investigation": 4,
+    "persuasion": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Храбрый",
+      "description": "Даратра совершает с преимуществом спасброски от испуга."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Даратра совершает две рукопашных атаки."
+    },
+    {
+      "name": "Двуручный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: рубящий урон 10 (2к6+3).",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Тяжёлый арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +2 к попаданию, дистанция 100/400 фт., одна цель. Попадание: колющий урон 5 (1к10). Даратра носит с собой 10 болтов для арбалета.",
+      "attackBonus": 2,
+      "range": {
+        "normal": 100,
+        "long": 400
+      },
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,87 @@
+{
+  "id": "3234",
+  "slug": "3234-husk-zombie",
+  "name": "Иссохшийся зомби",
+  "nameEn": "Husk Zombie",
+  "size": "medium",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "нейтрально-злая",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Explorer's Guide to Wildemount",
+  "isNamed": false,
+  "armorClass": {
+    "value": 10
+  },
+  "hitPoints": {
+    "average": 37,
+    "hitDice": "5d8 + 15"
+  },
+  "speed": {
+    "walk": 35
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 10,
+    "con": 16,
+    "int": 3,
+    "wis": 6,
+    "cha": 5
+  },
+  "savingThrows": {
+    "str": 5,
+    "wis": 0
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "darkvision": 60
+  },
+  "languages": [
+    "понимает все",
+    "известные при жизни",
+    "но не говорит"
+  ],
+  "traits": [
+    {
+      "name": "Проклятье иссушения",
+      "description": "Гуманоид убитый рукопашной атакой зомби восстает, как иссохшийся зомби в свой следующий ход."
+    },
+    {
+      "name": "Стойкость нежити",
+      "description": "Если зомби получает урон, уменьшающий хиты до 0, он совершает спасбросок Телосложения Сл 5 + полученный урон, если только это не был урон излучением или урон от критического попадания. При успехе хиты зомби опускаются всего лишь до 1."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Зомби совершает две атаки когтями. За каждую атаку уменьшающую хиты существа до 0, зомби может совершить дополнительную атаку когтём."
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 6 (1к6 + 3).",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

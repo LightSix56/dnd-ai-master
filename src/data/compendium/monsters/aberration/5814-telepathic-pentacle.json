@@ -1,0 +1,99 @@
+{
+  "id": "5814",
+  "slug": "5814-telepathic-pentacle",
+  "name": "Телепатический Пентакль",
+  "nameEn": "Telepathic Pentacle",
+  "size": "huge",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Icewind Dale: Rime of the Frostmaiden",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 172,
+    "hitDice": "15d12 + 75"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 30,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 12,
+    "con": 20,
+    "int": 2,
+    "wis": 10,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Задержка дыхания",
+      "description": "Пентакль может задержать дыхание на 1 час."
+    },
+    {
+      "name": "Многочисленные головы",
+      "description": "У пентакля пять голов. Пока у пентакля больше одной головы, он совершает с преимуществом спасброски от испуга, глухоты, лишения сознания, ослепления, очарования и ошеломления."
+    },
+    {
+      "name": "Если пентакль за один ход получает урон",
+      "description": "25 или больше, одна из его голов умирает. Если умрут все головы, умирает и пентакль."
+    },
+    {
+      "name": "В конце своего хода он отращивает по две",
+      "description": "головы за каждую умершую голову с конца его предыдущего хода, если только он не получал за этот период урон огнём. За каждую отращенную голову пентакль восстанавливает по 10 хитов."
+    },
+    {
+      "name": "Реагирующие головы",
+      "description": "За каждую голову после первой пенткаль получает дополнительную реакцию, которую можно использовать только для совершения провоцированных атак."
+    },
+    {
+      "name": "Неусыпный",
+      "description": "Пока пентакль спит, как минимум одна его голова бодрствует."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Пентакль совершает столько атак укусом, сколько голов у него есть."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 10 футов, одна цель. Попадание: Колющий урон 10 (1к10 + 5).",
+      "attackBonus": 8,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

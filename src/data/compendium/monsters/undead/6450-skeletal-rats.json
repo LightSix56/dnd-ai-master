@@ -1,0 +1,73 @@
+{
+  "id": "6450",
+  "slug": "6450-skeletal-rats",
+  "name": "Скелеты крыс",
+  "nameEn": "Skeletal Rats",
+  "size": "medium",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Baldur's Gate: Descent Into Avernus",
+  "isNamed": false,
+  "armorClass": {
+    "value": 10
+  },
+  "hitPoints": {
+    "average": 24,
+    "hitDice": "7d8 - 7"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 9,
+    "dex": 11,
+    "con": 9,
+    "int": 2,
+    "wis": 10,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 30
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Тонкий нюх",
+      "description": "Скелеты крыс совершают с преимуществом проверки Мудрости (Восприятие), полагающиеся на обоняние."
+    },
+    {
+      "name": "Рой",
+      "description": "Скелеты крыс могут занимать пространство другого существа, и наоборот, и скелеты могут перемещаться через любой проход, достаточный для Крохотных крыс. Скелеты крыс не могут восстанавливать хиты и получать временные хиты."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укусы",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 0 футов, одна цель в пространстве роя. Попадание: Колющий урон 7 (2к6), или колющий урон 3 (1к6), если у роя половина хитов или меньше.",
+      "attackBonus": 2,
+      "reachFt": 0,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

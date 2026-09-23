@@ -1,0 +1,86 @@
+{
+  "id": "17281",
+  "slug": "17281-hybrid-spy",
+  "name": "Гибрид-шпион",
+  "nameEn": "Hybrid Spy",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "гибрид Симиков",
+  "alignment": "нейтрально-добрый",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "4d8 + 4"
+  },
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 17,
+    "con": 12,
+    "int": 13,
+    "wis": 14,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "плюс один язык"
+  ],
+  "traits": [
+    {
+      "name": "Кожа хамелеона",
+      "description": "Гибрид совершает с преимуществом проверки Ловкости (Скрытность), совершаемые для того, чтобы спрятаться."
+    },
+    {
+      "name": "Паучье лазание",
+      "description": "Гибрид может взбираться по сложным поверхностям, в том числе вверх ногами по потолку, без необходимости совершать проверки характеристик."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Гибрид совершает две атаки Коротким мечом."
+    },
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 6 (1к6 + 3) колющего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

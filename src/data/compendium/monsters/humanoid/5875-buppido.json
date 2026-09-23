@@ -1,0 +1,108 @@
+{
+  "id": "5875",
+  "slug": "5875-buppido",
+  "name": "Баппидо",
+  "nameEn": "Buppido",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "хаотично-злой, именной НИП",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Out of the Abyss",
+  "isNamed": true,
+  "armorClass": {
+    "value": 13,
+    "type": "кожаный доспех"
+  },
+  "hitPoints": {
+    "average": 13,
+    "hitDice": "3d6 + 3"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 9,
+    "dex": 14,
+    "con": 12,
+    "int": 11,
+    "wis": 5,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 7,
+    "darkvision": 120
+  },
+  "languages": [
+    "Дварфийский",
+    "Подземный"
+  ],
+  "traits": [
+    {
+      "name": "Безумие",
+      "description": "Баппидо обладает преимуществом на спасброски против очарования и страха."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Баппидо совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Чувствительность к солнечному свету",
+      "description": "Баппидо совершает с помехой броски атаки и проверки Мудрости (Восприятие), основанные на зрении, находясь на солнечном свете."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Короткое копье с крюком",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 фт., одна цель. Попадание: Колющий урон 1 (1к4 - 1). Если цель является существом, дерро может вместо нанесения урона опрокинуть ее, и в этом случае цель должна совершить успешный спасбросок Силы Сл 9 или упадет ничком.",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": -1,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 9,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Легкий многозарядный арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +4 к попаданию, дистанция 40/160 фт., одна цель. Попадание: Колющий урон 6 (1к8 + 2).",
+      "attackBonus": 4,
+      "range": {
+        "normal": 40,
+        "long": 160
+      },
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

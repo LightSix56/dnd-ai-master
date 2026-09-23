@@ -1,0 +1,90 @@
+{
+  "id": "4913",
+  "slug": "4913-sacred-stone-monk",
+  "name": "Монах Священного Камня",
+  "nameEn": "Sacred Stone Monk",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "Человек",
+  "alignment": "законно-злой",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Princes of the Apocalypse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "4d8 + 4"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 15,
+    "con": 12,
+    "int": 10,
+    "wis": 14,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {
+    "acrobatics": 4,
+    "athletics": 3,
+    "perception": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "tremorsense": 10
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Защита без доспехов",
+      "description": "Пока монах не носит ни доспехи, ни щит, в его КД включается модификатор Мудрости (уже учтено)."
+    },
+    {
+      "name": "Движение без доспехов",
+      "description": "Пока монах не носит ни доспехи, ни щит, скорость его передвижения увеличивается на 10 футов (уже учтено)."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Монах совершает две рукопашные атаки."
+    },
+    {
+      "name": "Безоружный удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: дробящий урон 5 (1к6 + 2).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Парирование",
+      "type": "special",
+      "description": "Монах добавляет 2 к своему КД против одной рукопашной или дальнобойной атаки оружием, которая должна была попасть по нему. Для этого монах должен видеть атакующего."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,101 @@
+{
+  "id": "8869",
+  "slug": "8869-void-scavver",
+  "name": "Пустотный поглотитель",
+  "nameEn": "Void Scavver",
+  "size": "huge",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 11,
+  "xp": 7200,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 157,
+    "hitDice": "15d12 + 60"
+  },
+  "speed": {
+    "walk": 0,
+    "fly": 40
+  },
+  "abilities": {
+    "str": 22,
+    "dex": 16,
+    "con": 19,
+    "int": 4,
+    "wis": 13,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 5,
+    "stealth": 11
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "darkvision": 120
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Необычная природа",
+      "description": "Поглотитель не нуждается в воздухе."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Проглатывающий укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +10 к попаданию, досягаемость 10 фт., одна цель. Попадание: 45 (6к12 + 6) колющего урона. Если цель — существо Среднего размера или меньше, она должна преуспеть в спасброске Ловкости Сл 16, иначе будет проглочена поглотителем. Поглотитель может проглотить лишь одно существо за раз.",
+      "attackBonus": 10,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "6d12",
+          "mod": 6,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 16,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Проглоченное существо ослеплёно и опутан",
+      "type": "special",
+      "description": "о, обладает полным укрытием от атак и прочих эффектов, исходящих снаружи поглотителя, и получает 11 (2к10) урона ядом в начале каждого хода поглотителя от ядовитого газа в его пищеводе.",
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Если поглотитель за один ход получает 25",
+      "type": "special",
+      "description": "или больше урона от существа, находящегося внутри, поглотитель должен в конце этого хода преуспеть в спасброске Телосложения Сл 20, иначе отрыгнёт проглоченное существо, которое падает ничком в пространстве в пределах 10 футов от поглотителя. Если поглотитель умирает, проглоченное существо перестаёт быть опутанным им и может высвободиться из трупа, потратив 10 футов перемещения, падая при выходе ничком.",
+      "save": {
+        "ability": "CON",
+        "dc": 20,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

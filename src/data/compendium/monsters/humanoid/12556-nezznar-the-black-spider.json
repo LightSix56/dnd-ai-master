@@ -1,0 +1,111 @@
+{
+  "id": "12556",
+  "slug": "12556-nezznar-the-black-spider",
+  "name": "Неззнар Черный Паук",
+  "nameEn": "Nezznar the Black Spider",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "Эльф, Волшебник",
+  "alignment": "Волшебник), нейтрально-злой, именной НИП",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Phandelver and Below: The Shattered Obelisk",
+  "isNamed": true,
+  "armorClass": {
+    "value": 11,
+    "type": "14 с доспехами мага"
+  },
+  "hitPoints": {
+    "average": 27,
+    "hitDice": "6d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 9,
+    "dex": 13,
+    "con": 10,
+    "int": 16,
+    "wis": 14,
+    "cha": 13
+  },
+  "savingThrows": {
+    "int": 5,
+    "wis": 4
+  },
+  "skills": {
+    "perception": 4,
+    "arcana": 5,
+    "stealth": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 120
+  },
+  "languages": [
+    "Подземный",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Особое снаряжение",
+      "description": "У Неззнара есть полностью заряженный посох паука [spider staff]."
+    },
+    {
+      "name": "Наследие фей",
+      "description": "Неззнар совершает с преимуществом спасброски от очарования, и магия не может усыпить его."
+    },
+    {
+      "name": "Чувствительность к солнечному свету",
+      "description": "Неззнар совершает с помехой броски атаки, когда он или его цель находится на солнечном свету."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Неззнар совершает две атаки взрывом яда."
+    },
+    {
+      "name": "Взрыв яда",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака заклинанием: +5 к попаданию, досягаемость 5 футов или дистанция 120 футов, одно существо. Попадание: 9 (2d8) урона ядом.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Неззнар может накладывать следующие заклинания. Его базовой характеристикой является Интеллект (Сл спасбросков 13, если не указано обратного):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "пляшущие огоньки [dancing lights], волшебная рука [mage hand], паук [spider climb] (от посоха паука [spider staff]), паутина [web] (от посоха паука [spider staff], Сл спасброска 15)"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "тьма [darkness], огонь фей [faerie fire], невидимость [invisibility], доспехи мага [mage armor], волшебная стрела [magic missile], внушение [suggestion]"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

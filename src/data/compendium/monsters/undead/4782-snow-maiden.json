@@ -1,0 +1,88 @@
+{
+  "id": "4782",
+  "slug": "4782-snow-maiden",
+  "name": "Снежная дева",
+  "nameEn": "Snow Maiden",
+  "size": "medium",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "хаотично-злая",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Curse of Strahd",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "5d8"
+  },
+  "speed": {
+    "walk": 0,
+    "fly": 50,
+    "hover": true
+  },
+  "abilities": {
+    "str": 1,
+    "dex": 14,
+    "con": 11,
+    "int": 10,
+    "wis": 10,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "cold",
+    "poison",
+    "necrotic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "понимает все",
+    "известные при жизни",
+    "но не говорит"
+  ],
+  "traits": [
+    {
+      "name": "Бестелесное перемещение",
+      "description": "Снежная дева может перемещаться сквозь других существ и предметы, как если бы они были труднопроходимой местностью. Она получает урон силовым полем 5 (1к10), если оканчивает ход внутри предмета."
+    },
+    {
+      "name": "Чувствительность к солнечному свету",
+      "description": "Находясь на солнечном свету, снежная дева совершает с помехой броски атаки, а также проверки Мудрости (Восприятие), полагающиеся на зрение."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Вытягивание жизни",
+      "type": "melee_attack",
+      "description": "Рукопашная атака заклинанием: +4 к попаданию, досягаемость 5 футов, одно существо. Попадание: 10 (3к6) урона холодом. Цель должна преуспеть в спасброске Телосложения Сл 10, иначе максимум её хитов уменьшится на количество, равное полученному урону. Это уменьшение длится до тех пор, пока существо не окончит продолжительный отдых. Цель умирает, если этот эффект уменьшает максимум её хитов до 0.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 10,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

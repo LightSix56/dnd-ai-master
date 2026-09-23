@@ -1,0 +1,79 @@
+{
+  "id": "8483",
+  "slug": "8483-nightsea-chil-liren",
+  "name": "Хладный л'рен Ночного моря",
+  "nameEn": "Nightsea chil-liren",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "обычно нейтральный",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "Journeys through the Radiant Citadel",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11
+  },
+  "hitPoints": {
+    "average": 11,
+    "hitDice": "2d8 + 2"
+  },
+  "speed": {
+    "walk": 10,
+    "swim": 40
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 13,
+    "con": 12,
+    "int": 11,
+    "wis": 11,
+    "cha": 12
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Акван"
+  ],
+  "traits": [
+    {
+      "name": "Подводное дыхание",
+      "description": "Л'рен может дышать только под водой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Копье",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +2 к попаданию, досягаемость 5 футов или дистанция 20/60 футов, одна цель. Попадание: 3 (1к6) колющего урона или 4 (1к8) колющего урона, если используется двумя руками для совершения рукопашной атаки.",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

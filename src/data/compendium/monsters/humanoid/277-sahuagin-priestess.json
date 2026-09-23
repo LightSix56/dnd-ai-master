@@ -1,0 +1,113 @@
+{
+  "id": "277",
+  "slug": "277-sahuagin-priestess",
+  "name": "Жрица сахуагинов",
+  "nameEn": "Sahuagin priestess",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "сахуагин",
+  "alignment": "законно-злой",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 33,
+    "hitDice": "6d8 + 6"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 40
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 11,
+    "con": 12,
+    "int": 12,
+    "wis": 14,
+    "cha": 13
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 6,
+    "religion": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 120
+  },
+  "languages": [
+    "Сахуагинский"
+  ],
+  "traits": [
+    {
+      "name": "Кровавое бешенство",
+      "description": "Сахуагин совершает с преимуществом броски рукопашных атак по существам, у которых хиты ниже максимума."
+    },
+    {
+      "name": "Ограниченная амфибийность",
+      "description": "Сахуагин может дышать и воздухом и под водой, но чтобы не задохнуться, ей нужно погружаться в воду хотя бы раз каждые 4 часа."
+    },
+    {
+      "name": "Акулья телепатия",
+      "description": "Сахуагин может магическим образом командовать всеми акулами, находящимися в пределах 120 футов от нее, при помощи ограниченной телепатии."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Сахуагин является заклинателем 6-го уровня. Ее базовой характеристикой является Мудрость (Сл спасброска от заклинания 12, +4 к попаданию атаками заклинаниями). У неё подготовлены следующие заклинания жреца:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Сахуагин совершает две атаки: одну укусом, и одну когтем."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 3 (1к4 + 1).",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 3 (1к4 + 1).",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 1,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 6,
+    "spellAttackBonus": 4,
+    "ability": "WIS"
+  }
+}

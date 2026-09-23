@@ -1,0 +1,80 @@
+{
+  "id": "4315",
+  "slug": "4315-juvenile-mimic",
+  "name": "Молодой мимик",
+  "nameEn": "Juvenile mimic",
+  "size": "tiny",
+  "type": "monstrosity",
+  "subtype": "перевёртыш",
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Tasha's Cauldron of Everything",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11
+  },
+  "hitPoints": {
+    "average": 7,
+    "hitDice": "2d4 + 2"
+  },
+  "speed": {
+    "walk": 10,
+    "climb": 10
+  },
+  "abilities": {
+    "str": 1,
+    "dex": 12,
+    "con": 13,
+    "int": 10,
+    "wis": 13,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "stealth": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "acid"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Подземный",
+    "Телепатия 120 футов"
+  ],
+  "traits": [
+    {
+      "name": "Обманчивая внешность (только в облике предмета)",
+      "description": "Пока мимик остается без движения, он неотличим от обычного предмета."
+    },
+    {
+      "name": "Паучье лазанье",
+      "description": "Мимик может лазать по сложным поверхностям, включая потолки, без совершения проверок характеристик."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: колющий урон 1 + урон кислотой 2 (1к4).",
+      "attackBonus": 3,
+      "reachFt": 5
+    },
+    {
+      "name": "Перевёртыш",
+      "type": "special",
+      "description": "Мимик может превратиться в любой предмет, или принять свой истинный, бесформенный облик. Во всех обликах его характеристики не меняются. Всё несомое и носимое им снаряжение не превращается. Он принимает свой истинный облик, если умирает."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

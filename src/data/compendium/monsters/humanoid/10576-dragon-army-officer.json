@@ -1,0 +1,106 @@
+{
+  "id": "10576",
+  "slug": "10576-dragon-army-officer",
+  "name": "Офицер Драконьей армии",
+  "nameEn": "Dragon Army Officer",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "законно-злой",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Dragonlance: Shadow of the Dragon Queen",
+  "isNamed": false,
+  "armorClass": {
+    "value": 19,
+    "type": "наборный доспех, щит"
+  },
+  "hitPoints": {
+    "average": 65,
+    "hitDice": "10d8 + 20"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 14,
+    "con": 15,
+    "int": 12,
+    "wis": 14,
+    "cha": 12
+  },
+  "savingThrows": {
+    "dex": 4,
+    "wis": 4
+  },
+  "skills": {
+    "athletics": 5,
+    "perception": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14
+  },
+  "languages": [
+    "Общий",
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Драконья преданность",
+      "description": "Пока офицер может видеть невраждебного ему Дракона, он совершает с преимуществом броски атаки."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Офицер совершает две атаки Жестоким копьём и использует Приказ на штурм, если доступен."
+    },
+    {
+      "name": "Жестокое копьё",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 10 фт., одна цель. Попадание: 8 (1к10 + 3) колющего урона плюс 2 (1к4) урона огнём.",
+      "attackBonus": 5,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Тяжелый арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +4 к попаданию, дистанция 100/400 фт., одна цель. Попадание: 7 (1к10 + 2) колющего урона плюс 5 (1к10) урона огнём.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 100,
+        "long": 400
+      },
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Приказ на штурм (перезарядка 5-6)",
+      "type": "special",
+      "description": "Офицер выкрикивает приказ и выбирает в качестве цели двух существ в пределах 60 футов. Если цель обладает особенностью Драконья преданность и может слышать офицера, реакцией цель может совершить одну рукопашную атаку.",
+      "recharge": "5-6"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

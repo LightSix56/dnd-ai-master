@@ -1,0 +1,104 @@
+{
+  "id": "7541",
+  "slug": "7541-pirate-captain",
+  "name": "Капитан пиратов",
+  "nameEn": "Pirate Captain",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любая раса",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Ghosts of Saltmarsh",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "проклёпанный доспех"
+  },
+  "hitPoints": {
+    "average": 45,
+    "hitDice": "7d8 + 14"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 14,
+    "con": 14,
+    "int": 11,
+    "wis": 10,
+    "cha": 14
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 5,
+    "intimidation": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Капитан знает один любой язык, обычно Общий."
+    },
+    {
+      "name": "Морская качка",
+      "description": "Капитан с преимуществом совершает проверки характеристик и спасброски, чтобы не быть сбитым с ног."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Капитан совершает две атаки: одну Ручным арбалетом и одну Длинным мечом."
+    },
+    {
+      "name": "Ручной арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +4 к попаданию, дистанция 30/120 футов, одна цель. Попадание: 5 (1к6 + 2) колющего урона.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 30,
+        "long": 120
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Длинный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 9 (1к8 + 5) рубящего урона или 10 (1к10 + 5) рубящего урона, если используется двумя руками.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Соберись, собака (2/день)",
+      "type": "special",
+      "description": "Всякий раз, когда дружественное существо в пределах 30 футов от капитана, которое может его слышать, промахивается атакой, капитан может выкрикнуть ему несколько угроз, что позволяет этому существу повторно совершить бросок атаки."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

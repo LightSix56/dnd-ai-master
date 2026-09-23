@@ -1,0 +1,90 @@
+{
+  "id": "353",
+  "slug": "353-giant-elk",
+  "name": "Гигантский лось",
+  "nameEn": "Giant elk",
+  "size": "huge",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 42,
+    "hitDice": "5d12 + 10"
+  },
+  "speed": {
+    "walk": 60
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 16,
+    "con": 14,
+    "int": 7,
+    "wis": 14,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14
+  },
+  "languages": [
+    "Язык Гигантских лосей",
+    "понимает Общий",
+    "Сильван и Эльфийский",
+    "но не говорит на них"
+  ],
+  "traits": [
+    {
+      "name": "Атака в броске",
+      "description": "Если лось переместится как минимум на 20 футов по прямой к цели, а затем в том же ходу попадет по ней атакой тараном, цель получает от атаки дополнительные 7 (2к6) урона. Если цель — существо, она должна преуспеть в спасброске Силы Сл 14, иначе будет сбита с ног."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Таран",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 10 футов, одна цель. Попадание: 11 (2к6 + 4) дробящего урона.",
+      "attackBonus": 6,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Копыта",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одно лежащее ничком существо. Попадание: 22 (4к8 + 4) дробящего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "4d8",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

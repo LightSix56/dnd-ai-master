@@ -1,0 +1,92 @@
+{
+  "id": "8313",
+  "slug": "8313-prismari-apprentice",
+  "name": "Ученик с Призмари",
+  "nameEn": "Prismari Apprentice",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "Чародей",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Strixhaven: A Curriculum of Chaos",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "15 с доспехами мага"
+  },
+  "hitPoints": {
+    "average": 44,
+    "hitDice": "8d8 + 8"
+  },
+  "speed": {
+    "walk": 35
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 14,
+    "con": 13,
+    "int": 12,
+    "wis": 13,
+    "cha": 15
+  },
+  "savingThrows": {
+    "dex": 4,
+    "cha": 4
+  },
+  "skills": {
+    "acrobatics": 4,
+    "athletics": 4,
+    "performance": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [
+    "Общий",
+    "и два любых языка"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Стихийный удар",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака заклинанием: +4 к попаданию, досягаемость 5 футов или дистанция 60 футов, одна цель. Попадание: 10 (3к6) урона огнём или холодом (по выбору ученика).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "range": {
+        "normal": 60
+      },
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Ученик накладывает одно из следующих заклинаний, используя Харизму в качестве базовой характеристики (Сл спасброска от заклинаний 12):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "малая иллюзия [minor illusion];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "порыв ветра [gust of wind], доспехи мага [mage armor], безмолвный образ [silent image]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

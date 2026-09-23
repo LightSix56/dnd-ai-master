@@ -1,0 +1,94 @@
+{
+  "id": "6605",
+  "slug": "6605-quetzalcoatlus",
+  "name": "Кетцалькоатль",
+  "nameEn": "Quetzalcoatlus]Кетцалькоатль [Quetzalcoatlus",
+  "size": "huge",
+  "type": "beast",
+  "subtype": "динозавр",
+  "alignment": "без мировоззренияОгромный? Зверь, без мировоззрения",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 30,
+    "hitDice": "4d12 + 4"
+  },
+  "speed": {
+    "walk": 10,
+    "fly": 80
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 13,
+    "con": 13,
+    "int": 2,
+    "wis": 10,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Пролёт",
+      "description": "Кетцалькоатль не провоцирует атаки, когда вылетает из зоны досягаемости врага."
+    },
+    {
+      "name": "Нырок",
+      "description": "Если кетцалькоатль летит и ныряет вниз по крайней мере на 30 футов к цели, и потом попадает по ней атакой укусом, то эта атака наносит дополнительно 10 (3к6) урона цели."
+    },
+    {
+      "name": "Пролёт",
+      "description": "Кетцалькоатль не провоцирует атаки, когда вылетает из досягаемости врага."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 10 футов, одна цель. Попадание: 12 (3к6 + 2) колющего урона. Если кетцалькоатль летит и ныряет вниз по крайней мере на 30 футов к цели, и потом попадает по ней атакой укусом, то эта атака дополнительно наносит 10 (3к6) урона цели.",
+      "attackBonus": 4,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 10 футов, одна цель. Попадание: 12 (3к6 + 2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

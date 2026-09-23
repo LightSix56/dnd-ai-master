@@ -1,0 +1,113 @@
+{
+  "id": "6414",
+  "slug": "6414-duke-thalamra-vanthampur",
+  "name": "Герцогиня Таламра Вантампур",
+  "nameEn": "Duke Thalamra Vanthampur",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "законно-злой, именной НИП",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Baldur's Gate: Descent Into Avernus",
+  "isNamed": true,
+  "armorClass": {
+    "value": 10
+  },
+  "hitPoints": {
+    "average": 78,
+    "hitDice": "12d8 + 24"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 10,
+    "con": 15,
+    "int": 13,
+    "wis": 16,
+    "cha": 18
+  },
+  "savingThrows": {},
+  "skills": {
+    "intimidation": 6,
+    "deception": 6,
+    "insight": 5,
+    "religion": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "darkvision": 120
+  },
+  "languages": [
+    "Общий",
+    "Инфернальный"
+  ],
+  "traits": [
+    {
+      "name": "Дьявольское зрение",
+      "description": "Магическая тьма не мешает темному зрению Таламры."
+    },
+    {
+      "name": "Темная преданность",
+      "description": "Таламра совершает с преимуществом спасброски от испуга и очарования."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Таламра дважды использует мистический заряд или совершает два безоружных удара."
+    },
+    {
+      "name": "Мистический заряд (заговор)",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +6 к попаданию, дистанция 120 футов, одна цель. Попадание: 9 (1к10 + 4) урона силовым полем.",
+      "attackBonus": 6,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Безоружный удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 4 дробящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Адское возмездие (заклинание 1-го уровня; 2/день)",
+      "type": "special",
+      "description": "Когда Таламре наносит урон существо в пределах 60 футов от неё, которое она видит, это существо окутывает адское пламя. Существо должно совершить спасбросок Ловкости Сл 14. Оно получает 16 (3к10) урона огнём при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 14,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

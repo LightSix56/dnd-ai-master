@@ -1,0 +1,92 @@
+{
+  "id": "7482",
+  "slug": "7482-chaos-quadrapod",
+  "name": "Квадропод хаоса",
+  "nameEn": "Chaos Quadrapod",
+  "size": "large",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "хаотично-злая",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Acquisition Incorporated",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 52,
+    "hitDice": "7d10 + 14"
+  },
+  "speed": {
+    "walk": 40,
+    "climb": 40
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 13,
+    "con": 15,
+    "int": 6,
+    "wis": 10,
+    "cha": 4
+  },
+  "savingThrows": {},
+  "skills": {
+    "acrobatics": 5,
+    "perception": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "blindsight": 120
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Квадропод совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Квадропод хаоса совершает до двух атак Щупальцами."
+    },
+    {
+      "name": "Щупальца",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 15 футов, одна цель. Попадание: 10 (2к6 + 3) дробящего урона. Если цель — существо, она становится захваченной (Сл высвобождения 14). Пока цель схвачена, она опутана, а квадропод не может использовать щупальца на другой цели.",
+      "attackBonus": 6,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Облако хаоса (Перезаряжается после короткого или продолжительного отдыха)",
+      "type": "special",
+      "description": "Квадропод хаоса выпускает сгусток клубящегося эфирного света, который взрывается в точке, которую он может видеть в пределах 60 футов от себя. Каждое существо в сфере радиусом 20 футов с центром в этой точке должно преуспеть в спасброске Харизмы Сл 14, иначе станет ошеломлённым до конца своего следующего хода.",
+      "save": {
+        "ability": "CHA",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

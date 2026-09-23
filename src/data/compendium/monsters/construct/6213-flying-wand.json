@@ -1,0 +1,79 @@
+{
+  "id": "6213",
+  "slug": "6213-flying-wand",
+  "name": "Летающая волшебная палочка",
+  "nameEn": "Flying wand",
+  "size": "small",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Waterdeep: Dungeon of the Mad Mage",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 17,
+    "hitDice": "5d6"
+  },
+  "speed": {
+    "walk": 0,
+    "fly": 50,
+    "hover": true
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 15,
+    "con": 11,
+    "int": 1,
+    "wis": 5,
+    "cha": 1
+  },
+  "savingThrows": {
+    "dex": 4
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 7,
+    "blindsight": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Восприимчивость к антимагии",
+      "description": "Волшебная палочка недееспособен, пока находится в пределах области преграды магии. Став целью рассеивания магии, волшебная палочка должен преуспеть в спасброске Телосложения Сл спасброска заклинателя, иначе потеряет сознание на 1 минуту."
+    },
+    {
+      "name": "Обманчивая внешность",
+      "description": "Пока волшебная палочка остается без движения, он неотличим от обычной волшебной палочки."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Волшебная стрела",
+      "type": "special",
+      "description": "Волшебная палочка стреляет зарядом магической силы в одно видимое ей существо в пределах 60 футов от нее. Цель получает 3 (1к4 + 1) урона силовым полем (бросок атаки не требуется).",
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 1,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

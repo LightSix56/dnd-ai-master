@@ -1,0 +1,120 @@
+{
+  "id": "13671",
+  "slug": "13671-forlarren",
+  "name": "Истерзанный",
+  "nameEn": "Forlarren",
+  "size": "medium",
+  "type": "fey",
+  "subtype": null,
+  "alignment": "хаотично-нейтральная",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Mordenkainen's Fiendish Folio Vol 1",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 33,
+    "hitDice": "6d4 + 18"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 16,
+    "con": 17,
+    "int": 12,
+    "wis": 11,
+    "cha": 18
+  },
+  "savingThrows": {},
+  "skills": {
+    "acrobatics": 5,
+    "deception": 8,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 30
+  },
+  "languages": [
+    "Общий",
+    "Сильван"
+  ],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Истерзанный совершает с преимуществом спасброски против заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Базовой характеристикой монстра является харизма (Сл спасброска от заклинания 14). Он может накладывать следующие заклинания, не нуждаясь в материальных компонентах:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Истерзанный совершает две атаки Когтем и одну атаку Пронзанием, или три атаки Цветным лучом."
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, дистанция 5 фт., одна цель. Попадание: 6 (1к6+3) рубящего урона.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 5
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Пронзание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, дистанция 5 фт., одна цель. Попадание: 7 (1к8+3) колющего урона.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 5
+      },
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Цветной луч",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +6 к попаданию, дистанция 60 фт., одна цель. Попадание: 3 (1к6) урона электричеством, 3 (1к6) урона огнём и 3 (1к6) урона холодом.",
+      "attackBonus": 6,
+      "range": {
+        "normal": 60
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

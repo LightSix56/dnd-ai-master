@@ -1,0 +1,86 @@
+{
+  "id": "48",
+  "slug": "48-bulette",
+  "name": "Панцирница",
+  "nameEn": "Bulette",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 94,
+    "hitDice": "9d10 + 45"
+  },
+  "speed": {
+    "walk": 40,
+    "burrow": 40
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 11,
+    "con": 21,
+    "int": 2,
+    "wis": 10,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 60,
+    "tremorsense": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Прыжок с места",
+      "description": "Панцирница совершает прыжки в длину на расстояние до 30 футов и прыжки в высоту на расстояние до 15 футов, хоть с разбегом, хоть без него."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 30 (4к12 + 4).",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "4d12",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Смертельный прыжок",
+      "type": "special",
+      "description": "Если панцирница прыгает как минимум на 15 футов частью перемещения, она может после этого действием приземлиться на лапы в пространстве, содержащем одно или несколько других существ. Каждое такое существо должно преуспеть в спасброске Силы или Ловкости Сл 16 (на выбор цели) иначе будет сбито с ног и получит дробящий урон 14 (3к6 + 4) плюс рубящий урон 14 (3к6 + 4). При успешном спасброске существо получает только половину урона, не сбивается с ног, и толкается на 5 футов из пространства панцирницы в свободное пространство по своему выбору. Если в пределах дистанции нет свободного пространства, существо вместо этого сбивается с ног в пространстве панцирницы.",
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

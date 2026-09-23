@@ -1,0 +1,96 @@
+{
+  "id": "6343",
+  "slug": "6343-gem-stalker",
+  "name": "Самоцветный охотник",
+  "nameEn": "Gem Stalker",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 67,
+    "hitDice": "9d10 + 18"
+  },
+  "speed": {
+    "walk": 40,
+    "climb": 40
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 15,
+    "con": 14,
+    "int": 15,
+    "wis": 10,
+    "cha": 6
+  },
+  "savingThrows": {
+    "dex": 5,
+    "int": 5
+  },
+  "skills": {
+    "perception": 3,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "darkvision": 120
+  },
+  "languages": [
+    "понимает Драконий",
+    "но не говорит",
+    "Телепатия 60 фт."
+  ],
+  "traits": [
+    {
+      "name": "Паучье лазание",
+      "description": "Самоцветный охотник может лазать по сложным поверхностям, включая потолки, без совершения проверок характеристик."
+    },
+    {
+      "name": "Необычная природа",
+      "description": "Самоцветному охотнику не требуются пища или вода."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Самоцветный охотник совершает четыре атаки Когтем."
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: 10 (2к6+3) рубящего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Защитная связь",
+      "type": "special",
+      "description": "Когда другое существо, которое самоцветный охотник видит в пределах 30 фт., собирается нанести урон, самоцветный охотник уменьшает этот урон на 10 (3к6). После чего самоцветный охотник получает урон, равный значению на которое он его уменьшил."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,136 @@
+{
+  "id": "7263",
+  "slug": "7263-aeorian-absorber",
+  "name": "Эорский поглотитель",
+  "nameEn": "Aeorian Absorber",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "нейтрально-злой",
+  "challengeRating": 10,
+  "xp": 5900,
+  "source": "Explorer's Guide to Wildemount",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 171,
+    "hitDice": "18d10 + 72"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 21,
+    "dex": 18,
+    "con": 18,
+    "int": 6,
+    "wis": 14,
+    "cha": 8
+  },
+  "savingThrows": {
+    "wis": 6,
+    "cha": 3
+  },
+  "skills": {
+    "perception": 6,
+    "survival": 6,
+    "stealth": 8
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "necrotic",
+    "radiant"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 120
+  },
+  "languages": [
+    "понимает Драконий",
+    "но не говорит на нём"
+  ],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Поглотитель совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Наскок",
+      "description": "Если поглотитель переместится как минимум на 20 футов по прямой к существу, а затем в том же ходу попадет по нему атакой когтем, эта цель должна преуспеть в спасброске Силы Сл 17, иначе будет сбита с ног. Если цель сбита с ног, поглотитель может бонусным действием совершить по ней одну атаку укусом."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Поглотитель совершает три атаки: одну Укусом или Психическим снарядом и две Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 футов, одно существо. Попадание: 10 (1к10 + 5) колющего урона плюс 5 (1к10) урона силовым полем.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 футов, одна цель. Попадание: 8 (1к6 + 5) рубящего урона плюс 3 (1к6) урона силовым полем.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Психический снаряд",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +8 к попаданию, дистанция 120 футов, одно существо. Попадание: 22 (4к10) урона психической энергией.",
+      "attackBonus": 8,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Луч из хвоста",
+      "type": "special",
+      "description": "Когда поглотитель получает урон от заклинания, он получает только половину нанесённого урона. Если заклинатель находится в пределах 60 футов от поглотителя, поглотитель может заставить заклинателя совершить спасбросок Ловкости Сл 16. При провале заклинатель получает вторую половину этого урона.",
+      "save": {
+        "ability": "DEX",
+        "dc": 16,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "id": "20481",
+  "slug": "20481-skeletal-bull",
+  "name": "Скелет быка",
+  "nameEn": "Skeletal Bull",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Adventurers League",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14
+  },
+  "hitPoints": {
+    "average": 93,
+    "hitDice": "11d8 + 44"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 19,
+    "con": 18,
+    "int": 6,
+    "wis": 10,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [
+    "bludgeoning"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 9,
+    "darkvision": 60
+  },
+  "languages": [
+    "понимает язык Бездны",
+    "но не говорит"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Бодание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, дистанция 5 фт., одно существо. Попадание: 13 (2к8 + 4) дробящего урона.",
+      "attackBonus": 6,
+      "range": {
+        "normal": 5
+      },
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, дистанция 5 фт., одно существо. Попадание: 17 (2к12 + 4) дробящего урона.",
+      "attackBonus": 6,
+      "range": {
+        "normal": 5
+      },
+      "damage": [
+        {
+          "dice": "2d12",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

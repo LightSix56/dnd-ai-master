@@ -1,0 +1,93 @@
+{
+  "id": "59",
+  "slug": "59-cyclops",
+  "name": "Циклоп",
+  "nameEn": "Cyclops",
+  "size": "huge",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "хаотично-нейтральный",
+  "challengeRating": 6,
+  "xp": 2300,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 138,
+    "hitDice": "12d12 + 60"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 22,
+    "dex": 11,
+    "con": 20,
+    "int": 8,
+    "wis": 6,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8
+  },
+  "languages": [
+    "Великаний"
+  ],
+  "traits": [
+    {
+      "name": "Плохое восприятие глубины",
+      "description": "Циклоп совершает с помехой броски атаки по цели, находящейся на расстоянии более 30 футов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Циклоп совершает две атаки палицей."
+    },
+    {
+      "name": "Палица",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 10 футов, одна цель. Попадание: Дробящий урон 19 (3к8 + 6).",
+      "attackBonus": 9,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 6,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Камень",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +9 к попаданию, дистанция 30/120 футов, одна цель. Попадание: Дробящий урон 28 (4к10 + 6).",
+      "attackBonus": 9,
+      "range": {
+        "normal": 30,
+        "long": 120
+      },
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 6,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

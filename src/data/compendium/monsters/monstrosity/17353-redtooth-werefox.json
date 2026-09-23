@@ -1,0 +1,117 @@
+{
+  "id": "17353",
+  "slug": "17353-redtooth-werefox",
+  "name": "Верлис Краснозубья",
+  "nameEn": "Redtooth Werefox",
+  "size": "medium",
+  "type": "monstrosity",
+  "subtype": "эльф",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Monstrous Compendium Vol. Four: Eldraine Creatures",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 60,
+    "hitDice": "11d8 + 11"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 17,
+    "con": 12,
+    "int": 11,
+    "wis": 13,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "acrobatics": 5,
+    "perception": 5,
+    "survival": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Эльфийский (не может говорить в форме лисы)"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Верлис совершает две атаки Укусом или две атаки Копьем, или одну атаку Укусом и одну атаку Копьем."
+    },
+    {
+      "name": "Укус (только в форме лисы или гибрида)",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 8 (1к10 + 3) колющего урона. Если верлис переместился как минимум на 20 футов прямо к цели непосредственно перед попаданием, и цель является существом Среднего размера или меньше, цель должна преуспеть в спасброске Силы Сл 13, иначе упадёт ничком",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Копьё (только в форме эльфа или гибрида)",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 10 фт., одна цель. Попадание: 9 (1к12 + 3) колющего урона.",
+      "attackBonus": 5,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d12",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Опутывающая стрела (только в форме эльфа или гибрида)",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +5 к попаданию, дистанция 150/600 фт., одна цель. Попадание: 10 (2к6 + 3) колющего урона, и цель должна преуспеть в спасброске Ловкости Сл 11, иначе будет опутанна до начала следующего хода верлиса.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 150,
+        "long": 600
+      },
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 11,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

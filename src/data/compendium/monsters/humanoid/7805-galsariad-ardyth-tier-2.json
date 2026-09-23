@@ -1,0 +1,119 @@
+{
+  "id": "7805",
+  "slug": "7805-galsariad-ardyth-tier-2",
+  "name": "Галсариад Ардит (2-го уровня)",
+  "nameEn": "Galsariad Ardyth (Tier 2)",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "Волшебник, Дроу, Эльф",
+  "alignment": "Дроу, Эльф), нейтральный, именной НИП",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Critical Role: Call of the Netherdeep",
+  "isNamed": true,
+  "armorClass": {
+    "value": 12,
+    "type": "15 с доспехом мага"
+  },
+  "hitPoints": {
+    "average": 67,
+    "hitDice": "15d8"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 30,
+    "hover": true
+  },
+  "abilities": {
+    "str": 8,
+    "dex": 14,
+    "con": 10,
+    "int": 18,
+    "wis": 15,
+    "cha": 12
+  },
+  "savingThrows": {
+    "int": 7,
+    "wis": 5
+  },
+  "skills": {
+    "arcana": 7,
+    "nature": 7,
+    "investigation": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 120
+  },
+  "languages": [
+    "Общий",
+    "Драконий",
+    "Подземный"
+  ],
+  "traits": [
+    {
+      "name": "Наследие фей",
+      "description": "Галсариад совершает с преимуществом спасброски от очарования, и магия не может его усыпить."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Иссушить потенциал",
+      "type": "melee_attack",
+      "description": "Рукопашная или Дальнобойная атака заклинанием: +7 к попаданию, досягаемость 5 футов или дистанция 60 футов, одно существо. Попадание: 22 (4к10) урона некротической энергией, и Галсариад получает 5 временных хитов.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "range": {
+        "normal": 60
+      },
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Гравитационная волна (Перезарядка 5–6)",
+      "type": "special",
+      "description": "Галсариад вызывает пульсирующую волну магической гравитации, заполняющую сферу радиусом 20 футов с центром в точке, которую он видит в пределах 100 футов. Каждое существо в этой области должно совершить спасбросок Силы Сл 15. При провале существо получает 35 (10к6) урона силовым полем, притягивается на 20 футов к центру сферы и падает ничком. При успехе существо получает половину этого урона, не притягивается и не падает ничком.",
+      "damage": [
+        {
+          "dice": "10d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "STR",
+        "dc": 15,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Галсариад может накладывать следующие заклинания, используя Интеллект в качестве базовой характеристики (Сл спасброска от заклинания 15):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "доспехи мага [mage armor], волшебная рука [mage hand];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "скороход [longstrider], наблюдение [scrying] (накладывает действием), замедление [slow]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

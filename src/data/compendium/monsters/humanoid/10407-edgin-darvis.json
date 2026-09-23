@@ -1,0 +1,129 @@
+{
+  "id": "10407",
+  "slug": "10407-edgin-darvis",
+  "name": "Эдгин Дарвис",
+  "nameEn": "Edgin Darvis",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "бард",
+  "alignment": "хаотично-добрый, именной НИП",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Honor among Thieves",
+  "isNamed": true,
+  "armorClass": {
+    "value": 14,
+    "type": "кожаный доспех"
+  },
+  "hitPoints": {
+    "average": 110,
+    "hitDice": "17d8 + 34"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 16,
+    "con": 14,
+    "int": 14,
+    "wis": 16,
+    "cha": 18
+  },
+  "savingThrows": {
+    "dex": 6,
+    "cha": 7
+  },
+  "skills": {
+    "performance": 10,
+    "sleight_of_hand": 6,
+    "deception": 7,
+    "persuasion": 10
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Эдгин совершает две атаки укреплённой лютней или две атаки коротким мечом."
+    },
+    {
+      "name": "Укреплённая лютня",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к8+2) дробящего урона плюс 11 (2к10) урона звуком.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к6+3) колющего урона плюс 11 (2к10) урона звуком.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Дезориентирующие слова",
+      "type": "special",
+      "description": "Эдгин испускает поток насмешек вперемешку с тонкой магией на от одного до трёх существ, видимых им в пределах 60 футов. Каждая цель должна преуспеть в спасброске Мудрости Сл 15, иначе получит урон психической энергией 10 (3к6), и следующий бросок атаки до начала следующего хода Эдгина совершит с помехой.",
+      "save": {
+        "ability": "CHA",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Эдгин накладывает одно из следующих заклинаний, используя Харизму в качестве базовой характеристики (Сл спасброска от заклинания 15):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "дружба [friends], сообщение [message]"
+    },
+    {
+      "name": "3/день каждое: маскировка [disguise self",
+      "type": "special",
+      "description": "], очарование личности [charm person]"
+    },
+    {
+      "name": "1/день: внушение [suggestion]",
+      "type": "special",
+      "description": ""
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Вдохновляющие слова (3/день)",
+      "type": "special",
+      "description": "Когда существо, которое Эдгин может видеть в пределах 60 футов от себя, проваливает проверку характеристики, бросок атаки или спасбросок, Эдгин может магически воодушевить это существо. Воодушевлённое существо может добавить 1к8 к своему броску, потенциально превращая провал в успех."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

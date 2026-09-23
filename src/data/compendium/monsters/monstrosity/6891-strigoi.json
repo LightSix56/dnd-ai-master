@@ -1,0 +1,104 @@
+{
+  "id": "6891",
+  "slug": "6891-strigoi",
+  "name": "Стригой",
+  "nameEn": "Strigoi",
+  "size": "medium",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Van Richten's Guide to Ravenloft",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 52,
+    "hitDice": "7d8 + 21"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 40
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 14,
+    "con": 16,
+    "int": 11,
+    "wis": 17,
+    "cha": 10
+  },
+  "savingThrows": {
+    "str": 5,
+    "dex": 4,
+    "wis": 5
+  },
+  "skills": {
+    "perception": 5,
+    "stealth": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "darkvision": 120
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Телепатия кровопийцы",
+      "description": "Стригои могут магически управлять любым кровопийцей [stirge] в пределах 120 футов от себя, используя ограниченную форму телепатии."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Стригои совершают одну атаку когтем и одну атаку хоботком."
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 7 (1к8 + 3) рубящего урона и 6 (1к12) урона кислотой.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Хоботок",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одно существо. Попадание: 8 (1к10 + 3) колющего урона и 10 (3к6) урона некротической энергией, и стригой восстанавливает хиты, равные по величине нанесённому урону некротической энергией. Существо, хиты которого уменьшаются до 0 в результате этой атаки, умирает и не оставляет после себя ничего, кроме своей кожи и снаряжения.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Ненасытные дети (1 раз в день)",
+      "type": "special",
+      "description": "Стригой магически призывает 1к4 + 2 кровопийц [stirge] в свободном пространстве, которое он может видеть в пределах 30 футов от себя. Кровопийцы [stirge] находятся под контролем стригоя и ходят сразу после него в порядке инициативы. Кровопийцы исчезают через 1 час, или когда стригой умирает или когда стригой отпускает их (никаких действий не требуется)."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

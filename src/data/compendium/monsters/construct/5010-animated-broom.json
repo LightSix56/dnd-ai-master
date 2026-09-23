@@ -1,0 +1,84 @@
+{
+  "id": "5010",
+  "slug": "5010-animated-broom",
+  "name": "Оживлённая метла",
+  "nameEn": "Animated Broom",
+  "size": "small",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Candlekeep Mysteries",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 17,
+    "hitDice": "5d6"
+  },
+  "speed": {
+    "walk": 0,
+    "fly": 50,
+    "hover": true
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 17,
+    "con": 10,
+    "int": 1,
+    "wis": 5,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 7,
+    "blindsight": 120
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Обманчивый объект",
+      "description": "Если метла неподвижна в начале боя, она получает преимущество на бросок инициативы. Более того, если существо не заметило её движений или действий, это существо должно преуспеть в проверке Сл 15 Мудрости (Восприятие) для определения того, что метла является оживлённой."
+    },
+    {
+      "name": "Облёт",
+      "description": "Метла не провоцирует атаки, когда вылетает из досягаемости врага."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Метла совершает две рукопашные атаки."
+    },
+    {
+      "name": "Древко",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 5 (1к4 + 3) дробящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

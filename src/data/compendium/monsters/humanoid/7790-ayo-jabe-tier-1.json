@@ -1,0 +1,113 @@
+{
+  "id": "7790",
+  "slug": "7790-ayo-jabe-tier-1",
+  "name": "Айо Джабе (1-го уровня)",
+  "nameEn": "Ayo Jabe (Tier 1)",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "Следопыт, Дженази воды",
+  "alignment": "Дженази воды), хаотично-добрый, именной НИП",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Critical Role: Call of the Netherdeep",
+  "isNamed": true,
+  "armorClass": {
+    "value": 14,
+    "type": "проклёпанный кожаный доспех"
+  },
+  "hitPoints": {
+    "average": 65,
+    "hitDice": "10d8 + 20"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 14,
+    "con": 14,
+    "int": 10,
+    "wis": 12,
+    "cha": 12
+  },
+  "savingThrows": {
+    "str": 4,
+    "dex": 4
+  },
+  "skills": {
+    "athletics": 4,
+    "perception": 3,
+    "survival": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "Общий",
+    "Гоблинский",
+    "Орочий"
+  ],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Айо может дышать и воздухом и под водой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Айо совершает две атаки Гарпуном или Длинным луком."
+    },
+    {
+      "name": "Гарпун",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 11 (2к8 + 2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Длинный лук",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +4 к попаданию, дистанция 150/600 футов, одна цель. Попадание: 11 (2к8 + 2) колющего урона.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 150,
+        "long": 600
+      },
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Айо может накладывать следующие заклинания, используя Мудрость в качестве базовой характеристики (Сл спасброска от заклинания 11):"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "дружба с животными [animal friendship], чудо-ягоды [goodberry];"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

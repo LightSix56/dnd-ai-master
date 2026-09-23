@@ -1,0 +1,96 @@
+{
+  "id": "6168",
+  "slug": "6168-play-by-play-generator",
+  "name": "Генератор репортажей",
+  "nameEn": "Play-by-Play Generator",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "хаотично-злой",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Waterdeep: Dungeon of the Mad Mage",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "4d8 + 4"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 30
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 14,
+    "con": 12,
+    "int": 10,
+    "wis": 10,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "truesight": 120
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Косное сознание",
+      "description": "Генератор нельзя заставить действовать так, как противоречит его природе или инструкциям."
+    },
+    {
+      "name": "Распад",
+      "description": "Если генератор умирает, его тело рассыпается в пыль, оставляя лишь оружие и то, что он нес."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Генератор совершает две атаки кулаками или четыре атаки дротиком."
+    },
+    {
+      "name": "Кулак",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: Дробящий урон 3 (1к4 + 1).",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 1,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Магический дротик",
+      "type": "special",
+      "description": "Куб метает в цель магический дротик, которую он может видеть на расстоянии до 60 футов от него. Каждый дротик поражает свою цель автоматически (бросок атаки не требуется), нанося 5 (2к4) урона силовым полем.",
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

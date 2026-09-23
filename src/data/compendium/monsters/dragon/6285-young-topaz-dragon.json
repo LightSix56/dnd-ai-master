@@ -1,0 +1,133 @@
+{
+  "id": "6285",
+  "slug": "6285-young-topaz-dragon",
+  "name": "Молодой топазный дракон",
+  "nameEn": "Young Topaz Dragon",
+  "size": "large",
+  "type": "dragon",
+  "subtype": "самоцветный",
+  "alignment": "хаотично-нейтральный",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 127,
+    "hitDice": "17d10 + 34"
+  },
+  "speed": {
+    "walk": 40,
+    "fly": 80,
+    "swim": 40
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 12,
+    "con": 15,
+    "int": 16,
+    "wis": 15,
+    "cha": 16
+  },
+  "savingThrows": {
+    "dex": 4,
+    "con": 5,
+    "wis": 5,
+    "cha": 6
+  },
+  "skills": {
+    "perception": 8,
+    "intimidation": 9,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 18,
+    "blindsight": 30,
+    "darkvision": 120
+  },
+  "languages": [
+    "Общий",
+    "Драконий",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Дракон может дышать как воздухом, так и водой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дракон совершает одну атаку Укусом и две Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 10 фт., одна цель. Попадание: 14 (2к10+3) колющего урона плюс 3 (1к6) урона некротической энергией.",
+      "attackBonus": 6,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: 6 (1к6+3) рубящего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний (Псионика)",
+      "type": "special",
+      "description": "Дракон накладывает одно из следующих заклинаний, не требующее компонентов заклинания и использующее Интеллект в качестве базовой характеристики (Сл спасброска от заклинания 14):"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "порча [bane], сотворение или уничтожение воды [create or destroy water]."
+    },
+    {
+      "name": "Опустошающее дыхание (перезарядка 5-6)",
+      "type": "breath",
+      "description": "Дракон выдыхает желтоватую некротическую энергию в 30-футовый конус. Каждое существо в этой области должно совершить спасбросок Телосложения Сл 13. В случае провала, существо получает 28 (8к6) урона некротической энергией и слабеет до конца своего следующего хода. Ослабленное существо получает помеху на проверки и спасброски Силы, а так же атаки оружием, использующие Силу, наносят половину урона. В случае успеха существо получает вдвое меньше урона и не ослабевает.",
+      "damage": [
+        {
+          "dice": "8d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "CON",
+        "dc": 13,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

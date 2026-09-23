@@ -1,0 +1,125 @@
+{
+  "id": "8408",
+  "slug": "8408-pari",
+  "name": "Пери",
+  "nameEn": "Pari",
+  "size": "medium",
+  "type": "celestial",
+  "subtype": null,
+  "alignment": "обычно законно-добрый",
+  "challengeRating": 13,
+  "xp": 10000,
+  "source": "Journeys through the Radiant Citadel",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "кираса"
+  },
+  "hitPoints": {
+    "average": 180,
+    "hitDice": "19d8 + 95"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 90
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 20,
+    "con": 20,
+    "int": 20,
+    "wis": 22,
+    "cha": 22
+  },
+  "savingThrows": {
+    "con": 10,
+    "wis": 11,
+    "cha": 11
+  },
+  "skills": {
+    "perception": 11,
+    "insight": 16
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 21,
+    "truesight": 120
+  },
+  "languages": [
+    "Все",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Пери совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Необычная природа",
+      "description": "Пери не требует еды, питья или сна."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Пери совершает три атаки Булавой."
+    },
+    {
+      "name": "Булава",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +10 к попаданию, досягаемость 5 футов, одна цель. Попадание: 8 (1к6 + 5) дробящего урона плюс 14 (4к6) урона излучением.",
+      "attackBonus": 10,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 5,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Дезориентирующее будущее",
+      "type": "special",
+      "description": "Пери пытается переполнить разум одного существа, которое она может видеть в пределах 60 футов от себя, видениями будущего. Цель должна преуспеть в спасброске Сл 19, иначе получит 27 (5к10) урона психической энергией и с помехой совершать броски атаки до начала следующего хода пери.",
+      "damage": [
+        {
+          "dice": "5d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Пери накладывает одно из следующих заклинаний, используя Харизму в качестве базовой характеристики (Сл спасброска от заклинаний 19):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "обнаружение зла и добра [detect evil and good];"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "лечение ран [cure wounds] (версия 6-го уровня), малое восстановление [lesser restoration];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "общение [commune] (накладывается действием), рассеивание зла и добра [dispel evil and good]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "id": "8872",
+  "slug": "8872-solar-dragon-wyrmling",
+  "name": "Вирмлинг солнечного дракона",
+  "nameEn": "Solar Dragon Wyrmling",
+  "size": "medium",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "обычно нейтральный",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 51,
+    "hitDice": "6d8 + 24"
+  },
+  "speed": {
+    "walk": 20,
+    "fly": 40,
+    "hover": true
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 15,
+    "con": 18,
+    "int": 11,
+    "wis": 12,
+    "cha": 10
+  },
+  "savingThrows": {
+    "dex": 4,
+    "con": 6,
+    "wis": 3,
+    "cha": 2
+  },
+  "skills": {
+    "perception": 5,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "radiant"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "darkvision": 120
+  },
+  "languages": [
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Облёт",
+      "description": "Дракон не провоцирует атаки, когда вылетает из досягаемости врага."
+    },
+    {
+      "name": "Необычная природа",
+      "description": "Дракон не нуждается в воздухе."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дракон совершает одну атаку Укусом и одну атаку Хвостом."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к6 + 3) колющего урона плюс 3 (1к6) урона излучением.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Хвост",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 10 фт., одна цель. Попадание: 5 (1к4 + 3) дробящего урона.",
+      "attackBonus": 5,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Фотонное дыхание (Перезарядка 5-6)",
+      "type": "breath",
+      "description": "Дракон выдыхает мерцающую частицу энергии излучения, летящую в точку, которую дракон может видеть в пределах 120 футов от себя, а затем расширяющуюся в сферу радиусом 10 футов с центром в этой точке. Все существа в сфере должны совершить спасбросок Телосложения Сл 14, получая 22 (4к10) урона излучением при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "CON",
+        "dc": 14,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

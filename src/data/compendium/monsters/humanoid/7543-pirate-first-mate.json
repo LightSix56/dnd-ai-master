@@ -1,0 +1,85 @@
+{
+  "id": "7543",
+  "slug": "7543-pirate-first-mate",
+  "name": "Первый помощник пират",
+  "nameEn": "Pirate First Mate",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любая раса",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Ghosts of Saltmarsh",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "кольчуга"
+  },
+  "hitPoints": {
+    "average": 26,
+    "hitDice": "4d8 + 8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 11,
+    "con": 14,
+    "int": 11,
+    "wis": 10,
+    "cha": 13
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 4,
+    "intimidation": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Один любой язык",
+    "обычно Общий"
+  ],
+  "traits": [
+    {
+      "name": "Морская качка",
+      "description": "Первый помощник с преимуществом совершает проверки характеристик и спасброски, чтобы не быть сбитым с ног."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Первый помощник совершает две атаки Длинным мечом."
+    },
+    {
+      "name": "Длинный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к8 + 2) рубящего урона или 7 (1к10 + 2) рубящего урона, если используется двумя руками. Если целью является существо, первый помощник может выбрать не наносить урона атакой, чтобы обезоружить цель. Цель должна преуспеть в спасброске Силы Сл 14, иначе роняет один предмет, который она держит, на землю.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

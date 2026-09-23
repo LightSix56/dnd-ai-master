@@ -1,0 +1,104 @@
+{
+  "id": "5898",
+  "slug": "5898-emerald-enclave-scout",
+  "name": "Разведчик Изумрудного Анклава",
+  "nameEn": "Emerald Enclave Scout",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "дварф",
+  "alignment": "законно-нейтральный",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Out of the Abyss",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "кираса"
+  },
+  "hitPoints": {
+    "average": 19,
+    "hitDice": "3d8 + 6"
+  },
+  "speed": {
+    "walk": 25
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 14,
+    "con": 14,
+    "int": 11,
+    "wis": 13,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 5,
+    "survival": 5,
+    "nature": 5,
+    "stealth": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Дварфийский"
+  ],
+  "traits": [
+    {
+      "name": "Острые зрение и слух",
+      "description": "Разведчик совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на зрение или слух."
+    },
+    {
+      "name": "Дварфская устойчивость",
+      "description": "Дварф совершает с преимуществом спасброски от яда."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Разведчик совершает две рукопашные атаки или две дальнобойные атаки."
+    },
+    {
+      "name": "Боевая кирка",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 7 (1к8 + 3) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Тяжелый арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +3 к попаданию, дистанция 100/400 фт., одна цель. Попадание: 5 (1к10) колющего урона.",
+      "attackBonus": 3,
+      "range": {
+        "normal": 100,
+        "long": 400
+      },
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

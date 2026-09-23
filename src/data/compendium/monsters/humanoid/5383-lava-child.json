@@ -1,0 +1,100 @@
+{
+  "id": "5383",
+  "slug": "5383-lava-child",
+  "name": "Дитя лавы",
+  "nameEn": "Lava child",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "дитя лавы",
+  "alignment": "нейтральный",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Waterdeep: Dungeon of the Mad Mage",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11
+  },
+  "hitPoints": {
+    "average": 60,
+    "hitDice": "8d8 + 24"
+  },
+  "speed": {
+    "walk": 25,
+    "climb": 20
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 13,
+    "con": 16,
+    "int": 11,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 6,
+    "survival": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "bludgeoning",
+    "piercing",
+    "slashing",
+    "fire"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Игнан"
+  ],
+  "traits": [
+    {
+      "name": "Иммунитет к металлу",
+      "description": "Дитя лавы может беспрепятственно перемещаться сквозь металл, и у него есть преимущество в бросках атаки против любого существа, носящего металлическую броню или использующего металлический щит."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дитя лавы совершает две атаки: одну Укусом и одну Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 11 (2к6 + 4) колющего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к6 + 4) рубящего урона.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

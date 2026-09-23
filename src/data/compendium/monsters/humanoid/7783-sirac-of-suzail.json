@@ -1,0 +1,94 @@
+{
+  "id": "7783",
+  "slug": "7783-sirac-of-suzail",
+  "name": "Сирак из Сюзейла",
+  "nameEn": "Sirac of Suzail",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек чондатанец",
+  "alignment": "законно-добрый, именной НИП",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Storm King's Thunder",
+  "isNamed": true,
+  "armorClass": {
+    "value": 14,
+    "type": "кожаный доспех"
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "5d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 17,
+    "con": 11,
+    "int": 12,
+    "wis": 13,
+    "cha": 16
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 4,
+    "survival": 3,
+    "insight": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [
+    "Общий",
+    "Орочий"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 6 (1к6+3) колющего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Дротик",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +5 к попаданию, дистанция 20/60 фт., одна цель. Попадание: 5 (1к4+3) колющего урона. Сирак носит с собой шесть дротиков.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Парирование",
+      "type": "special",
+      "description": "Сирак добавляет 2 к своему КД против одной рукопашной атаки оружием, которая должна попасть по нему. Для этого Сирак должен видеть атакующего и держать в руке рукопашное оружие."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

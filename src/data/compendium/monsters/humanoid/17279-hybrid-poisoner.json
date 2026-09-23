@@ -1,0 +1,90 @@
+{
+  "id": "17279",
+  "slug": "17279-hybrid-poisoner",
+  "name": "Гибрид-отравитель",
+  "nameEn": "Hybrid Poisoner",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "гибрид Симиков",
+  "alignment": "нейтрально-добрый",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14
+  },
+  "hitPoints": {
+    "average": 26,
+    "hitDice": "4d8 + 8"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 19,
+    "con": 14,
+    "int": 12,
+    "wis": 13,
+    "cha": 12
+  },
+  "savingThrows": {
+    "dex": 6,
+    "con": 4
+  },
+  "skills": {
+    "athletics": 3,
+    "perception": 3,
+    "stealth": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "darkvision": 30
+  },
+  "languages": [
+    "Общий",
+    "плюс один язык"
+  ],
+  "traits": [
+    {
+      "name": "Убийство",
+      "description": "В свой первый ход гибрид-отравитель совершает с преимуществом броски атаки против любого существа, которое не делало хода. Любое попадание гибрида по захваченному врасплох существу считается критическим попаданием."
+    },
+    {
+      "name": "Ядовитая кожа",
+      "description": "Любое существо, которое касается гибрида или попадает по нему рукопашной атакой, находясь в пределах 5 футов от него, получает 3 (1к6) урона ядом."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Токсическое прикосновение",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: 7 (2к6) дробящего урона, и цель должна преуспеть в спасброске Телосложения Сл 12, иначе станет отравленной на 1 минуту. В конце каждого хода отравленная цель должна повторять спасбросок, получая 3 (1к6) урона ядом при провале, при успехе цель перестает быть отравленной.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 0,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 12,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

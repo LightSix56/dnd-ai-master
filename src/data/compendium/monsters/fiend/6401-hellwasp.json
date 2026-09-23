@@ -1,0 +1,106 @@
+{
+  "id": "6401",
+  "slug": "6401-hellwasp",
+  "name": "Адская оса",
+  "nameEn": "Hellwasp",
+  "size": "large",
+  "type": "fiend",
+  "subtype": null,
+  "alignment": "законно-злое",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Baldur's Gate: Descent Into Avernus",
+  "isNamed": false,
+  "armorClass": {
+    "value": 19,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 52,
+    "hitDice": "8d10 + 8"
+  },
+  "speed": {
+    "walk": 10,
+    "fly": 60,
+    "hover": true
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 15,
+    "con": 12,
+    "int": 10,
+    "wis": 10,
+    "cha": 7
+  },
+  "savingThrows": {
+    "dex": 5,
+    "wis": 3
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire"
+  ],
+  "damageVulnerabilities": [
+    "cold"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Инфернальный",
+    "Телепатия 300 фт. (только с другими Адскими осами)"
+  ],
+  "traits": [
+    {
+      "name": "Магическое оружие",
+      "description": "Атаки оружием Адской осы являются магическими."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Адская оса совершает две атаки: одну жалом и одну мечевидными когтями."
+    },
+    {
+      "name": "Жало",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одно существо. Попадание: 8 (1к8 + 4) колющего урона плюс 7 (2к6) урона огнём и цель должна совершить спасбросок Телосложения Сл 12, иначе станет отравленной на 1 минуту. Пока цель отравлена подобным образом, она парализована. Цель может повторять спасбросок в конце каждого своего хода, оканчивая на себе эффект при успехе.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 12,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Мечевидные когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: 11 (2к6 + 4) колющего урона.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,94 @@
+{
+  "id": "5830",
+  "slug": "5830-vampiric-ixitxachitl",
+  "name": "Икситксачитл вампир",
+  "nameEn": "Vampiric Ixitxachitl",
+  "size": "medium",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "хаотично-злая",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Out of the Abyss",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 44,
+    "hitDice": "8d8 + 8"
+  },
+  "speed": {
+    "walk": 0,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 18,
+    "con": 13,
+    "int": 12,
+    "wis": 13,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 60
+  },
+  "languages": [
+    "Бездны",
+    "Язык Икситксачитлов"
+  ],
+  "traits": [
+    {
+      "name": "Регенерация",
+      "description": "Икситксачитл восстанавливает 10 хитов в начале своего хода. Икситксачитл умирает только в том случае, если он начинает ход с количеством хитов равным 0."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус вампира",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: Колющий урон 6 (1к8 + 2). Цель должна совершить успешный спасбросок Телосложения Сл 11 или ее максимальные хиты уменьшатся на количество полученного урона, а икситксачитл восстанавливает это количество хитов. Хиты будут уменьшены до тех пор, пока цель не совершит продолжительный отдых. Цель умрет, если максимальное количество хитов уменьшится до 0.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 11,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Хвост с шипами",
+      "type": "melee_attack",
+      "description": "Когда существо вызывает провоцированную атаку икситксачитла, этот икситксачитл может совершить следующую атаку вместо укуса. Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов., одна цель. Попадание: Колющий урон 9 (1к10 + 4).",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

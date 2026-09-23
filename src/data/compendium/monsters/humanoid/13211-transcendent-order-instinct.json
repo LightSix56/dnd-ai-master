@@ -1,0 +1,94 @@
+{
+  "id": "13211",
+  "slug": "13211-transcendent-order-instinct",
+  "name": "Чутьё Совершенного ордена",
+  "nameEn": "Transcendent Order Instinct",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Planescape: Adventures in the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "защита без доспехов"
+  },
+  "hitPoints": {
+    "average": 49,
+    "hitDice": "9d8 + 9"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 16,
+    "con": 12,
+    "int": 10,
+    "wis": 16,
+    "cha": 12
+  },
+  "savingThrows": {
+    "wis": 5,
+    "cha": 3
+  },
+  "skills": {
+    "acrobatics": 5,
+    "perception": 5,
+    "performance": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15
+  },
+  "languages": [
+    "Общий плюс один язык"
+  ],
+  "traits": [
+    {
+      "name": "Защита без доспехов",
+      "description": "Пока чутьё не носит ни доспехи, ни щит, к КД прибавляется его модификатор Мудрости."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Чутьё совершает три Безоружных удара."
+    },
+    {
+      "name": "Безоружный удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к8 + 3) дробящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Чутьё может совершать до трёх реакций в",
+      "type": "special",
+      "description": "раунд, но только одну в ход."
+    },
+    {
+      "name": "Отражение снарядов",
+      "type": "special",
+      "description": "В ответ на попадание по нему атакой дальнобойным оружием, чутьё отражает снаряд. Урон от этой атаки уменьшается на 1к6."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

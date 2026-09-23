@@ -1,0 +1,120 @@
+{
+  "id": "8406",
+  "slug": "8406-riverine",
+  "name": "Речник",
+  "nameEn": "Riverine",
+  "size": "large",
+  "type": "fey",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 12,
+  "xp": 8400,
+  "source": "Journeys through the Radiant Citadel",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14
+  },
+  "hitPoints": {
+    "average": 204,
+    "hitDice": "24d10 + 72"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 60
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 19,
+    "con": 17,
+    "int": 12,
+    "wis": 16,
+    "cha": 21
+  },
+  "savingThrows": {
+    "int": 5,
+    "wis": 7,
+    "cha": 9
+  },
+  "skills": {
+    "perception": 7,
+    "nature": 5,
+    "insight": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17,
+    "blindsight": 60
+  },
+  "languages": [
+    "Общий",
+    "Акван",
+    "Сильван"
+  ],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Речник может дышать и воздухом и под водой."
+    },
+    {
+      "name": "Легендарное сопротивление (3/день)",
+      "description": "Если речник проваливает спасбросок, он может вместо этого сделать спасбросок успешным."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Речник совершает две атаки Полноводным ударом."
+    },
+    {
+      "name": "Полноводный удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 10 футов, одна цель. Попадание: 14 (2к8 + 5) дробящего урона плюс 10 (3к6) урона холодом.",
+      "attackBonus": 9,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 5,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Речник накладывает одно из следующих заклинаний, используя Харизму в качестве базовой характеристики (Сл спасброска от заклинаний 17):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "власть над водами [control water], туманное облако [fog cloud];"
+    },
+    {
+      "name": "1/день",
+      "type": "special",
+      "description": "высшее восстановление [greater restoration]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": {
+    "actionsPerRound": 3,
+    "options": [
+      {
+        "name": "Стремительный водоворот",
+        "cost": 1,
+        "description": "Речник использует Водоворот. Сразу после телепортации каждое существо в пределах 5 футов от места назначения речника получает 5 (1к10) урона холодом."
+      },
+      {
+        "name": "Бушующий поток (стоит 2 действия)",
+        "cost": 2,
+        "description": "Речник выпускает поток речной воды 30-футовой линией и шириной 5 футов. Каждое существо в этой области должно совершить спасбросок Ловкости Сл 17. При провале существо получает 11 (2к10) дробящего урона и падает ничком. При успехе существо получает половину этого урона и не падает ничком."
+      }
+    ]
+  },
+  "lairActions": [],
+  "spellcasting": null
+}

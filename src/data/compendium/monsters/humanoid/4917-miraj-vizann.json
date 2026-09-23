@@ -1,0 +1,92 @@
+{
+  "id": "4917",
+  "slug": "4917-miraj-vizann",
+  "name": "Мирадж Визанн",
+  "nameEn": "Miraj Vizann",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "дженази земли",
+  "alignment": "нейтрально-злой, именной НИП",
+  "challengeRating": 6,
+  "xp": 2300,
+  "source": "Princes of the Apocalypse",
+  "isNamed": true,
+  "armorClass": {
+    "value": 10,
+    "type": "13 с доспехами мага"
+  },
+  "hitPoints": {
+    "average": 82,
+    "hitDice": "11d8 + 33"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 10,
+    "con": 17,
+    "int": 13,
+    "wis": 11,
+    "cha": 18
+  },
+  "savingThrows": {},
+  "skills": {
+    "arcana": 4,
+    "deception": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий",
+    "Первичный"
+  ],
+  "traits": [
+    {
+      "name": "Хождение по земле",
+      "description": "Мирадж может перемещаться по труднопроходимой местности из земли или камня, не затрачивая дополнительное движение."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Базовой характеристикой Мираджа является Телосложение (Сл спасброска от заклинаний 14). Он может накладывать следующие заклинания, не нуждаясь в материальных компонентах:"
+    },
+    {
+      "name": "1/день",
+      "description": "бесследное передвижение[pass without trace]"
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Мирадж является заклинателем 11-го уровня. Его базовой характеристикой является Харизма (Сл спасброска от заклинаний 15, +7 к атакам заклинаниями). Он знает следующие заклинания чародея:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Посох",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: дробящий урон 4 (1к6 + 1) или дробящий урон 5 (1к8 + 1) при использовании оружия двумя руками.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 1,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 11,
+    "ability": "CHA"
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "id": "17280",
+  "slug": "17280-hybrid-shocker",
+  "name": "Гибрид-шокер",
+  "nameEn": "Hybrid Shocker",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "гибрид Симиков",
+  "alignment": "нейтрально-добрый",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 39,
+    "hitDice": "6d8 + 12"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 14,
+    "con": 14,
+    "int": 10,
+    "wis": 12,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [
+    "Общий",
+    "плюс один язык"
+  ],
+  "traits": [
+    {
+      "name": "Наэлектризованное тело. Любое существо,",
+      "description": "которое касается гибрида или попадает по нему рукопашной атакой, находясь в пределах 5 футов от него, получает 5 (1к10) урона электричеством."
+    },
+    {
+      "name": "Свечение",
+      "description": "Гибрид излучает яркий свет в радиусе 10 футов и тусклый свет еще на 10 футов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Гибрид совершает две атаки: одну Шокирующим прикосновением и одну Щупальцами."
+    },
+    {
+      "name": "Шокирующее прикосновение",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 9 (2к8) урона электричеством.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Щупальца",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 15 фт., одно существо. Попадание: цель схвачена (Сл высвобождения 11), и гибрид притягивает цель к себе на расстояние до 15 футов. Пока этот захват не закончится, цель получает 5 (1к10) урона электричеством в начале каждого своего хода, и гибрид не может использовать свои Щупальца на другом существе.",
+      "attackBonus": 4,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

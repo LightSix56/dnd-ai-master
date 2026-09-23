@@ -1,0 +1,80 @@
+{
+  "id": "324",
+  "slug": "324-ogre-zombie",
+  "name": "Огр зомби",
+  "nameEn": "Ogre zombie",
+  "size": "large",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "нейтрально-злая",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 8
+  },
+  "hitPoints": {
+    "average": 85,
+    "hitDice": "9d10 + 36"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 6,
+    "con": 18,
+    "int": 3,
+    "wis": 6,
+    "cha": 5
+  },
+  "savingThrows": {
+    "wis": 0
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Великаний"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "- понимает Великаний и Общий, но не говорит."
+    },
+    {
+      "name": "Стойкость нежити",
+      "description": "Если урон опускает хиты зомби до 0, он совершает спасбросок Телосложения Сл 5 + полученный урон, если только это не был урон излучением или урон от критического попадания. При успехе хиты зомби опускаются до 1."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Моргенштерн",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: Дробящий урон 13 (2к8 + 4).",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

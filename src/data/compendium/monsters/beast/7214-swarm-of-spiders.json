@@ -1,0 +1,83 @@
+{
+  "id": "7214",
+  "slug": "7214-swarm-of-spiders",
+  "name": "Рой пауков",
+  "nameEn": "Swarm of Spiders",
+  "size": "medium",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "5d8"
+  },
+  "speed": {
+    "walk": 20,
+    "climb": 20
+  },
+  "abilities": {
+    "str": 3,
+    "dex": 13,
+    "con": 10,
+    "int": 1,
+    "wis": 7,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "blindsight": 10
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Рой",
+      "description": "Рой может занимать пространство другого существа, и наоборот, и рой может перемещаться через любой проход, достаточный для Крохотных пауков. Рой не может восстанавливать хиты и получать временные хиты."
+    },
+    {
+      "name": "Паучье лазанье",
+      "description": "Рой пауков может лазать по сложным поверхностям, включая потолки, без совершения проверок характеристик."
+    },
+    {
+      "name": "Чувство паутины",
+      "description": "Находясь в контакте с паутиной, рой пауков знает точное местоположение всех существ, находящихся в контакте с этой же паутиной."
+    },
+    {
+      "name": "Хождение по паутине",
+      "description": "Рой пауков игнорирует ограничения перемещения, вызванные паутиной."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укусы",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 0 футов, одна цель в пространстве роя. Попадание: 10 (4к4), колющего урона или 5 (2к4) колющего урона, если у роя половина хитов или меньше.",
+      "attackBonus": 3,
+      "reachFt": 0,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

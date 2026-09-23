@@ -1,0 +1,87 @@
+{
+  "id": "17302",
+  "slug": "17302-firefist",
+  "name": "Огненный кулак",
+  "nameEn": "Firefist",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любая раса",
+  "alignment": "законно-добрый",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 117,
+    "hitDice": "18d8 + 36"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 10,
+    "con": 14,
+    "int": 11,
+    "wis": 17,
+    "cha": 13
+  },
+  "savingThrows": {
+    "con": 5,
+    "wis": 6
+  },
+  "skills": {
+    "intimidation": 4,
+    "religion": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "один любой язык (обычно Общий)"
+  ],
+  "traits": [
+    {
+      "name": "Использование заклинаний",
+      "description": "Огненный кулак является заклинателем Боросов 9-го уровня. Его базовой характеристикой заклинания является Мудрость (Сл спасброска от заклинаний 14, +6 к попаданию атаками заклинаниями). У него подготовлены следующие заклинания жреца:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Огненный кулак совершает две атаки Двуручным мечом."
+    },
+    {
+      "name": "Двуручный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: 10 (2к6 + 3) рубящего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "spellAttackBonus": 6,
+    "ability": "WIS"
+  }
+}

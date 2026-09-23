@@ -1,0 +1,105 @@
+{
+  "id": "954",
+  "slug": "954-baba-lysagas-creeping-hut",
+  "name": "Избушка на курьих ножках",
+  "nameEn": "Baba Lysaga’s Creeping Hut",
+  "size": "gargantuan",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 11,
+  "xp": 7200,
+  "source": "Curse of Strahd",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 263,
+    "hitDice": "17d20 + 85"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 26,
+    "dex": 7,
+    "con": 20,
+    "int": 1,
+    "wis": 3,
+    "cha": 3
+  },
+  "savingThrows": {
+    "con": 9,
+    "wis": 0,
+    "cha": 0
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 6,
+    "blindsight": 120
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Восприимчивость к антимагии",
+      "description": "Избушка становится выведенной из строя, пока волшебный самоцвет, который её оживляет, находится в поле антимагии. Если она станет целью рассеивания магии, избушка должна будет пройти спасбросок Телосложения со сложностью, равной сложности спасброска от заклинаний сотворившего рассеивание и, при провале, потерять сознание на 1 минуту."
+    },
+    {
+      "name": "Осадный монстр",
+      "description": "Избушка наносит удвоенные повреждения предметам и сооружениям."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Изба совершает три атаки корнями. Одна из них может быть заменена на атаку камнем."
+    },
+    {
+      "name": "Корень",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +12 к попаданию, досягаемость 60 футов, одна цель. Попадание: 30 (4к10+8) дробящего урона.",
+      "attackBonus": 12,
+      "reachFt": 60,
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 8,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Камень",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +12 к попаданию, дистанция 120 футов, одна цель. Попадание: 21 (3к8+8) дробящего урона.",
+      "attackBonus": 12,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 8,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

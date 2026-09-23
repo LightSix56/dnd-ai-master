@@ -1,0 +1,155 @@
+{
+  "id": "6914",
+  "slug": "6914-ogre-chain-brute",
+  "name": "Огр цепной громила",
+  "nameEn": "Ogre Chain Brute]Огр цепной громила [Ogre Chain Brute",
+  "size": "large",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "обычно хаотично-злойБольшой? Великан, хаотично-злой",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11,
+    "type": "шкурный доспех"
+  },
+  "hitPoints": {
+    "average": 59,
+    "hitDice": "7d10 + 21"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 8,
+    "con": 16,
+    "int": 5,
+    "wis": 7,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Великаний"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Кулак",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 9 (2к4 + 4) дробящего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Цепное сокрушение (перезарядка 6)",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 10 футов, одна цель. Попадание: 13 (2к8 + 4) дробящего урона и цель должна преуспеть в спасброске Телосложения Сл 14, иначе станет ошеломлённой на 1 минуту. Цель повторяет спасбросок при получении урона и в конце каждого своего хода, оканчивая на себе эффект в случае успеха.",
+      "attackBonus": 6,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ],
+      "recharge": "6",
+      "save": {
+        "ability": "CON",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Взмах цепью",
+      "type": "special",
+      "description": "Огр размахивает цепью, и все существа в пределах 10 футов от него должны совершить спасбросок Ловкости Сл 14. В случае провала существо получает 8 (1к8 + 4) дробящего урона и сбивается с ног. В случае успеха существо получает только половину этого урона и не сбивается с ног.",
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 14,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Кулак",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 1 футов, одна цель. Попадание: 9 (2к4 + 4) дробящего урона.",
+      "attackBonus": 6,
+      "reachFt": 1,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Взмах цепью",
+      "type": "special",
+      "description": "Огр размахивает цепью, и все существа в пределах 10 футов от него должны пройти спасбросок Ловкости Сл 14. В случае провала существо получает 8 (1к8 + 4) дробящего урона и сбивается с ног. В случае успеха существо получает только половину этого урона и не сбивается с ног.",
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 14,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Цепное сокрушение (перезарядка 6)",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к атаке, досягаемость 10 футов, одна цель. Попадание: 13 (2к8 + 4) дробящего урона и цель должна преуспеть в спасброске Телосложения Сл 14, иначе будет сбита с ног и потеряет сознание на 1 минуту. Бессознательная цель повторяет спасбросок, если получает урон и в конце каждого своего хода, завершая эффект в случае успеха.",
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ],
+      "recharge": "6",
+      "save": {
+        "ability": "CON",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

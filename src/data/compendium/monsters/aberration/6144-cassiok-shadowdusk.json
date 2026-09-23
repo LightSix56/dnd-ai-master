@@ -1,0 +1,87 @@
+{
+  "id": "6144",
+  "slug": "6144-cassiok-shadowdusk",
+  "name": "Кассиок Сумеречная тень",
+  "nameEn": "Cassiok Shadowdusk",
+  "size": "medium",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "хаотично-злая, именной НИП",
+  "challengeRating": 12,
+  "xp": 8400,
+  "source": "Waterdeep: Dungeon of the Mad Mage",
+  "isNamed": true,
+  "armorClass": {
+    "value": 12,
+    "type": "15 с доспехами мага"
+  },
+  "hitPoints": {
+    "average": 99,
+    "hitDice": "18d8 + 18"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 14,
+    "con": 12,
+    "int": 20,
+    "wis": 15,
+    "cha": 16
+  },
+  "savingThrows": {
+    "int": 9,
+    "wis": 6
+  },
+  "skills": {
+    "history": 13,
+    "arcana": 13
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий",
+    "Глубинная речь",
+    "Инфернальный",
+    "Подземный"
+  ],
+  "traits": [
+    {
+      "name": "Сопротивление",
+      "description": "к урону урон от заклинаний; немагический дробящий, колющий и рубящий урон (от каменной кожи [stoneskin])."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Кассиок совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Особое снаряжение",
+      "description": "Кассиок владеет посохом силы [staff of power], дающим ему +2 бонус к КД, спасброскам и броскам атаки заклинаниями. Его строение тела в виде инсектоида не позволяет совершать посохом рукопашные атаки. Если хиты Кассиока уменьшатся до 20 и менее, он своим следующим действием мстительно ломает свой посох силы, проклиная при этом персонажей."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Кассиок является заклинателем 18-го уровня. Его базовой характеристикой является Интеллект (Сл спасброска от заклинания 17, +9 к попаданию атаками заклинаниями). Кассиок может неограниченно накладывать заклинания маскировка [disguise self] и невидимость [invisibility], и у него подготовлены следующие заклинания волшебника:"
+    },
+    {
+      "name": "*У архимага эти заклинания уже наложены перед сражением",
+      "description": ""
+    }
+  ],
+  "actions": [],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 18,
+    "spellAttackBonus": 9,
+    "ability": "INT"
+  }
+}

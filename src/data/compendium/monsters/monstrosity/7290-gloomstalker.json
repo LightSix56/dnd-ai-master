@@ -1,0 +1,132 @@
+{
+  "id": "7290",
+  "slug": "7290-gloomstalker",
+  "name": "Сумрачный охотник",
+  "nameEn": "Gloomstalker",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "нейтрально-злой",
+  "challengeRating": 6,
+  "xp": 2300,
+  "source": "Explorer's Guide to Wildemount",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 90,
+    "hitDice": "12d10 + 24"
+  },
+  "speed": {
+    "walk": 40,
+    "fly": 80
+  },
+  "abilities": {
+    "str": 22,
+    "dex": 16,
+    "con": 14,
+    "int": 5,
+    "wis": 17,
+    "cha": 14
+  },
+  "savingThrows": {
+    "str": 9,
+    "dex": 6
+  },
+  "skills": {
+    "athletics": 9,
+    "perception": 6,
+    "intimidation": 5,
+    "stealth": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [
+    "radiant"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 240
+  },
+  "languages": [
+    "понимает Общий",
+    "но не говорит на нём"
+  ],
+  "traits": [
+    {
+      "name": "Чувствительность к солнечному свету",
+      "description": "Находясь на солнечном свету, сумрачный охотник совершает с помехой броски атаки, а также проверки Мудрости (Восприятие), полагающиеся на зрение."
+    },
+    {
+      "name": "Теневой шаг",
+      "description": "Сумрачный охотник бонусным действием может телепортироваться на расстояние до 40 фт. в свободное пространство, которое он может видеть."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Сумрачный охотник совершает две атаки: одну Укусом и одну Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 футов, одно существо. Попадание: 15 (2к8 + 6) колющего урона плюс 7 (2к6) урона некротической энергией.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 6,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 футов, одна цель. Попадание: 13 (2к6 + 6) рубящего урона плюс 7 (2к6) урона некротической энергией.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 6,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Захват",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 футов, одно существо Среднего размера или меньше. Попадание: 13 (2к6 + 6) рубящего урона плюс 7 (2к6) урона некротической энергией, и цель схвачена (Сл высвобождения 17). Пока цель схвачена таким образом она опутана.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 6,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Вопль (Перезарядка 6)",
+      "type": "special",
+      "description": "Сумрачный охотник издает ужасающий вопль. Каждый противник в пределах 60 футов от сумрачного охотника, который может его слышать, должен совершить спасбросок Телосложения Сл 13, иначе станет парализованным до конца своего следующего хода.",
+      "recharge": "6",
+      "save": {
+        "ability": "CON",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

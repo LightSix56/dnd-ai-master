@@ -1,0 +1,115 @@
+{
+  "id": "5100",
+  "slug": "5100-ahmaergo",
+  "name": "Амерго",
+  "nameEn": "Ahmaergo",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "дварф",
+  "alignment": "законно-злой, именной НИП",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Waterdeep: Dragon Heist",
+  "isNamed": true,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 143,
+    "hitDice": "22d8 + 44"
+  },
+  "speed": {
+    "walk": 25
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 15,
+    "con": 14,
+    "int": 15,
+    "wis": 14,
+    "cha": 12
+  },
+  "savingThrows": {
+    "str": 9,
+    "con": 6
+  },
+  "skills": {
+    "athletics": 9,
+    "perception": 6,
+    "intimidation": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Дварфийский",
+    "Подземный"
+  ],
+  "traits": [
+    {
+      "name": "Второе дыхание (перезарядка после короткого или продолжительного отдыха)",
+      "description": "Бонусным действием Амерго может восстановить 20 хитов."
+    },
+    {
+      "name": "Упорный (2/день)",
+      "description": "Амерго может перебросить проваленный спасбросок, и обязан использовать новый результат"
+    },
+    {
+      "name": "Дварфская устойчивость",
+      "description": "Амерго совершаете с преимуществом спасброски для того что бы не стать отравленным."
+    },
+    {
+      "name": "Дополнительный урон",
+      "description": "Если у Амерго остаётся больше половины его хитов, он дополнительно наносит 7 (2к6) урона при каждом попадании."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Амерго совершает три атаки секирой."
+    },
+    {
+      "name": "Секира",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 футов, одна цель. Попадание: 11 (1к12 + 5) рубящего урона.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d12",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Тяжёлый арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +6 к попаданию, дистанция 100/400 футов, одна цель. Попадание: 7 (1к10 + 2) колющего урона.",
+      "attackBonus": 6,
+      "range": {
+        "normal": 100,
+        "long": 400
+      },
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

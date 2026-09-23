@@ -1,0 +1,106 @@
+{
+  "id": "6153",
+  "slug": "6153-hammer-handed-golem",
+  "name": "Молоторукий голем",
+  "nameEn": "Hammer-handed golem",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 10,
+  "xp": 5900,
+  "source": "Waterdeep: Dungeon of the Mad Mage",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 178,
+    "hitDice": "17d10 + 85"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 22,
+    "dex": 9,
+    "con": 20,
+    "int": 3,
+    "wis": 11,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "bludgeoning",
+    "piercing",
+    "slashing",
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 120
+  },
+  "languages": [
+    "понимает языки своего создателя",
+    "но не говорит"
+  ],
+  "traits": [
+    {
+      "name": "Неизменяемый облик",
+      "description": "Голем обладает иммунитетом ко всем заклинаниям и эффектам, изменяющим его облик."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Голем совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Магическое оружие",
+      "description": "Атаки оружием голема являются магическими."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Голем совершает два удара молотом."
+    },
+    {
+      "name": "Удар молотом",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +10 к попаданию, досягаемость 5 футов, одна цель. Попадание: Дробящий урон 19 (3к8 + 6) и цель должна преуспеть в спасброске Сл 17 Телосложения, иначе станет ошеломлёной до конца своего следующего хода.",
+      "attackBonus": 10,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 6,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Замедление (перезарядка 5–6)",
+      "type": "special",
+      "description": "Голем нацеливается на одно или несколько существ, видимых в пределах 10 футов от себя. Все цели должны совершить спасбросок Мудрости Сл 17 от этой магии. При провале цель не может совершать реакции, её скорость уменьшается вдвое, и она не может совершать более одной атаки за свой ход. Кроме того, цель может в свой ход совершать либо действие, либо бонусное действие, но не то и другое. Эти эффекты длятся 1 минуту. Цель может повторять этот спасбросок в конце каждого своего хода, оканчивая эффект на себе при успехе.",
+      "recharge": "5-6",
+      "save": {
+        "ability": "CHA",
+        "dc": 17,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "id": "12259",
+  "slug": "12259-stone-giant-of-evil-earth",
+  "name": "Каменный великан Злой земли",
+  "nameEn": "Stone Giant of Evil Earth",
+  "size": "huge",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "обычно нейтрально-злой",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Bigby Presents: Glory of the Giants",
+  "isNamed": false,
+  "armorClass": {
+    "value": 20,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 137,
+    "hitDice": "11d12 + 66"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 23,
+    "dex": 13,
+    "con": 22,
+    "int": 10,
+    "wis": 12,
+    "cha": 9
+  },
+  "savingThrows": {
+    "str": 10,
+    "con": 10
+  },
+  "skills": {
+    "athletics": 14,
+    "perception": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Великаний",
+    "Терран"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Великан совершает две атаки Громовой каменной дубиной или Валуном в любой комбинации."
+    },
+    {
+      "name": "Громовая каменная дубина",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +10 к попаданию, досягаемость 15 футов, одна цель. Попадание: 16 (3к6 + 6) дробящего урона. Великан может заставить дубинку испустить взрыв громовой энергии, который наносит 10 (3к6) урона звуком каждому существу, кроме великана, находящемуся в пределах 30 футов от цели. Дубина может взорваться таким образом только один раз за ход.",
+      "attackBonus": 10,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 6,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Валун",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +10 к попаданию, дистанция 60/240 футов, одна цель. Попадание: 19 (3к8 + 6) дробящего урона, и цель должна преуспеть в спасброске Силы Сл 18, иначе будет сбита с ног. После того, как великан бросит валун, совершите бросок к6; при результате \"3\" или ниже у великана больше не остаётся валунов для броска.",
+      "attackBonus": 10,
+      "range": {
+        "normal": 60,
+        "long": 240
+      },
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 6,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 18,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Непоколебимый",
+      "type": "special",
+      "description": "Если великан проваливает спасбросок против эффекта, который переместит его или собьёт его с ног, или того и другого вместе, он вместо этого преуспевает в спасброске."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

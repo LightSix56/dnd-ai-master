@@ -1,0 +1,80 @@
+{
+  "id": "175",
+  "slug": "175-githyanki-knight",
+  "name": "Гитъянки-рыцарь",
+  "nameEn": "Githyanki knight",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "гит",
+  "alignment": "законно-злой",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 91,
+    "hitDice": "14d8 + 28"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 14,
+    "con": 15,
+    "int": 14,
+    "wis": 14,
+    "cha": 15
+  },
+  "savingThrows": {
+    "con": 5,
+    "int": 5,
+    "wis": 5
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Гитский"
+  ],
+  "traits": [
+    {
+      "name": "Врождённое колдовство (псионика)",
+      "description": "Базовой характеристикой гитъянки является Интеллект (Сл спасброска от заклинания 13, +5 к попаданию атаками заклинаниями). Он может накладывать следующие заклинания, не нуждаясь ни в каких компонентах:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Гитъянки совершает две атаки серебряным двуручным мечом."
+    },
+    {
+      "name": "Серебряный двуручный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 13 (2к6 + 6) плюс урон психической энергией 10 (3к6). Это атака магическим оружием. При критическом попадании по цели, находящейся в астральном теле (как при использовании заклинания проекция в астрал), гитъянки может перерезать серебряную нить, соединяющую цель с материальным телом, вместо причинения урона.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 6,
+          "type": "плюс"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,99 @@
+{
+  "id": "5325",
+  "slug": "5325-lady-gondafrey",
+  "name": "Леди Гондафрей",
+  "nameEn": "Lady Gondafrey",
+  "size": "medium",
+  "type": "elemental",
+  "subtype": null,
+  "alignment": "законно-добрый, именной НИП",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Waterdeep: Dragon Heist",
+  "isNamed": true,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 52,
+    "hitDice": "7d8 + 21"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 60
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 11,
+    "con": 16,
+    "int": 10,
+    "wis": 11,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Терран"
+  ],
+  "traits": [
+    {
+      "name": "Обманчивая внешность",
+      "description": "Пока Леди Гондафрей остаётся без движения, она неотличима от неживой статуи."
+    },
+    {
+      "name": "Стихийная натура",
+      "description": "Леди Гондафрей не нужен воздух, еда, питьё и сон."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Леди Гондафрей совершает две атаки: одну укусом и одну когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 5 (1к6 + 2).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 5 (1к6 + 2).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

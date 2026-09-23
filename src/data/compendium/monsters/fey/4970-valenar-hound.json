@@ -1,0 +1,88 @@
+{
+  "id": "4970",
+  "slug": "4970-valenar-hound",
+  "name": "Валенарская гончая",
+  "nameEn": "Valenar Hound",
+  "size": "medium",
+  "type": "fey",
+  "subtype": null,
+  "alignment": "нейтральная",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Eberron: Rising from the Last War",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 19,
+    "hitDice": "3d8 + 6"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 15,
+    "con": 14,
+    "int": 10,
+    "wis": 15,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14
+  },
+  "languages": [
+    "Общий",
+    "Сильван",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Понимает Общий, Эльфийский и Сильван, но не говорит."
+    },
+    {
+      "name": "Привязанность",
+      "description": "Гончая может магическим образом установить связь с одним существом в радиусе 30 футов, которое может видеть, потратив 1 час для наблюдения за ним. Привязанность существует до тех пор, пока гончая не установит связь с другим существом или пока существо не погибнет. Гончая и существо могут общаться телепатически находясь на расстоянии, не превышающем 100 футов."
+    },
+    {
+      "name": "Острый слух и тонкий нюх",
+      "description": "Гончая совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на слух и обоняние."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: Колющий урон 6 (1к6 + 3). Если цель — существо, она должна преуспеть в спасброске Силы Сл 13, иначе будет сбита с ног.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

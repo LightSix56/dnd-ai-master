@@ -1,0 +1,113 @@
+{
+  "id": "5000",
+  "slug": "5000-bone-knight",
+  "name": "Костяной рыцарь",
+  "nameEn": "Bone Knight",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любая раса",
+  "alignment": "любое мировоззрение кроме доброго",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Eberron: Rising from the Last War",
+  "isNamed": false,
+  "armorClass": {
+    "value": 20,
+    "type": "костяной доспех"
+  },
+  "hitPoints": {
+    "average": 84,
+    "hitDice": "13d8 + 26"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 13,
+    "con": 14,
+    "int": 12,
+    "wis": 14,
+    "cha": 16
+  },
+  "savingThrows": {
+    "wis": 5,
+    "cha": 6
+  },
+  "skills": {
+    "athletics": 7,
+    "intimidation": 6,
+    "deception": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "один любой язык (обычно Общий)"
+  ],
+  "traits": [
+    {
+      "name": "Костяной командир",
+      "description": "Бонусным действием рыцарь может нацелиться на одного скелет [skeleton] или зомби [zombie], которого он может видеть в пределах 30 футов. Цель должна совершить спасбросок Мудрости Сл 14. В случае провала цель должна подчиняться командам рыцаря, пока рыцарь не умрёт или не окончит служение это бонусным действием. Одновременно рыцарь может командовать 12 мертвецами."
+    },
+    {
+      "name": "Главнокомандующий бледного знамени",
+      "description": "Находясь в пределах 60 футов от рыцаря, любой союзник-Нежить рыцаря получает преимущество на спасброски против любых эффектов."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Рыцарь является заклинателем 8-го уровня. Его базовой характеристикой является Харизма (Сл спасброска от заклинаний 14, +6 к атакам заклинаниями). У рыцаря подготовлены следующие заклинания паладина:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Рыцарь дважды атакует одним из своих оружий."
+    },
+    {
+      "name": "Двуручный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов. одна цель. Попадание: 11 (2к6+4) рубящего урона.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Длинный лук",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +4 к попаданию, дистанция 150/600 футов, одна цель. Попадание: 5 (1к8 + 1) колющего урона.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 150,
+        "long": 600
+      },
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 8,
+    "ability": "CHA"
+  }
+}

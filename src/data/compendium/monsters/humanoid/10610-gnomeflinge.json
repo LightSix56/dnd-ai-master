@@ -1,0 +1,69 @@
+{
+  "id": "10610",
+  "slug": "10610-gnomeflinge",
+  "name": "Гномомёт",
+  "nameEn": "Gnomeflinge",
+  "size": "large",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Dragonlance: Shadow of the Dragon Queen",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15
+  },
+  "hitPoints": {
+    "average": 100,
+    "hitDice": "1d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 10,
+    "con": 10,
+    "int": 10,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Метание личного состава",
+      "type": "special",
+      "description": "Гномомёт катапультирует существо Среднего или меньшего размера на горизонтальное расстояние не менее 60 футов и максимальное горизонтальное расстояние в 60 футов, 150 футов или 300 футов, в зависимости от выбранного варианта при нацеливании катапульты. Согласно этой траектории существо всегда достигает высоты 60 футов по вертикали."
+    },
+    {
+      "name": "Летящее по траектории существо, сталкива",
+      "type": "special",
+      "description": "ющееся с другим существом или предметом, получает 3 (1к6) дробящего урона за каждые 10 футов расстояния от гномомёта.",
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 0,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

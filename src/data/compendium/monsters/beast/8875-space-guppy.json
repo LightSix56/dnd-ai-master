@@ -1,0 +1,67 @@
+{
+  "id": "8875",
+  "slug": "8875-space-guppy",
+  "name": "Космическая гуппи",
+  "nameEn": "Space Guppy",
+  "size": "small",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 3,
+    "hitDice": "1d6"
+  },
+  "speed": {
+    "walk": 0,
+    "fly": 30
+  },
+  "abilities": {
+    "str": 3,
+    "dex": 16,
+    "con": 10,
+    "int": 1,
+    "wis": 10,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Воздушная оболочка",
+      "description": "Если у гуппи есть хотя бы 1 хит, она может производить вокруг себя воздушную оболочку, находясь в вакууме. Эта воздушная оболочка может неограниченно долго поддерживать гуппи и еще одно Крошечное существо в его пространстве."
+    },
+    {
+      "name": "Пролёт",
+      "description": "Гуппи не провоцирует атаки, когда вылетает из досягаемости врага."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Шлепок хвостом",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 1 дробящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,95 @@
+{
+  "id": "250",
+  "slug": "250-spirit-naga",
+  "name": "Духовная нага",
+  "nameEn": "Spirit naga",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "хаотично-злой",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 75,
+    "hitDice": "10d10 + 20"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 17,
+    "con": 14,
+    "int": 16,
+    "wis": 15,
+    "cha": 16
+  },
+  "savingThrows": {
+    "dex": 6,
+    "con": 5,
+    "wis": 5,
+    "cha": 6
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Бездны"
+  ],
+  "traits": [
+    {
+      "name": "Восстановление",
+      "description": "Если нага умирает, она возвращается к жизни через 1к6 дней и восстанавливает все хиты. Только заклинание исполнение желаний [wish] может прекратить действие этой особенности."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Нага является заклинателем 10-го уровня. Ее базовой характеристикой является Интеллект (Сл спасброска от заклинания 14, +6 к попаданию атаками заклинаниями), и ей для накладывания заклинаний нужны только вербальные компоненты. У неё подготовлены следующие заклинания волшебника:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 10 футов, одно существо. Попадание: Колющий урон 7 (1к6 + 4), и цель должна совершить спасбросок Телосложения Сл 13, получая урон ядом 31 (7к8) при провале, или половину этого урона при успехе.",
+      "attackBonus": 7,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 13,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 10,
+    "spellAttackBonus": 6,
+    "ability": "INT"
+  }
+}

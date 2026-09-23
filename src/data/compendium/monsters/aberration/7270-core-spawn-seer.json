@@ -1,0 +1,135 @@
+{
+  "id": "7270",
+  "slug": "7270-core-spawn-seer",
+  "name": "Провидец порождений ядра",
+  "nameEn": "Core Spawn Seer",
+  "size": "medium",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "хаотично-злая",
+  "challengeRating": 13,
+  "xp": 10000,
+  "source": "Explorer's Guide to Wildemount",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 153,
+    "hitDice": "18d8 + 72"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 12,
+    "con": 18,
+    "int": 22,
+    "wis": 19,
+    "cha": 16
+  },
+  "savingThrows": {
+    "dex": 6,
+    "int": 11,
+    "wis": 9,
+    "cha": 8
+  },
+  "skills": {
+    "perception": 9
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 19,
+    "blindsight": 60,
+    "tremorsense": 60
+  },
+  "languages": [
+    "Общий",
+    "Глубинная речь",
+    "Подземный",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Скольжение по земле",
+      "description": "Провидец может проходить сквозь немагическую, необработанную землю и камень. Делая это, провидец не разрушает материал, через который он проходит."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Провидец совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Провидец дважды использует Расщепляющий посох, дважды использует Психоделическую сферу или каждый из них по одному разу."
+    },
+    {
+      "name": "Расщепляющий посох",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одно существо. Попадание: 9 (1к6 + 6) дробящего урона плюс 18 (4к8) урона излучением, и цель падает ничком.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 6,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Психоделическая сфера",
+      "type": "special",
+      "description": "Провидец метает мерцающий шар в одно существо, которое он может видеть в пределах 120 футов. Цель должна преуспеть в спасброске Мудрости Сл 19, иначе получит 27 (5к10) урона психической энергией и страдает от случайного состояния до начала следующего хода провидца. Бросьте к6 для определения состояния:",
+      "damage": [
+        {
+          "dice": "5d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CHA",
+        "dc": 19,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "1-2",
+      "type": "special",
+      "description": "Ослеплён;"
+    },
+    {
+      "name": "3-4",
+      "type": "special",
+      "description": "Испуган;"
+    },
+    {
+      "name": "5-6",
+      "type": "special",
+      "description": "Ошеломлён."
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Отложенный урон",
+      "type": "special",
+      "description": "Когда по провидцу попадают атакой, он получает только половину наносимого урона. В первый раз, когда провидец попадает рукопашной атакой в свой следующий ход, цель дополнительно получает 1к6 урона излучением."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

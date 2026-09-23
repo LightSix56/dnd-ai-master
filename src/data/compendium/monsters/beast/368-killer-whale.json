@@ -1,0 +1,81 @@
+{
+  "id": "368",
+  "slug": "368-killer-whale",
+  "name": "Косатка",
+  "nameEn": "Killer whale",
+  "size": "huge",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 90,
+    "hitDice": "12d12 + 12"
+  },
+  "speed": {
+    "walk": 0,
+    "swim": 60
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 10,
+    "con": 13,
+    "int": 3,
+    "wis": 12,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "blindsight": 120
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Эхолокация",
+      "description": "Косатка не может использовать слепое зрение, будучи оглохшей."
+    },
+    {
+      "name": "Задержка дыхания",
+      "description": "Косатка может задержать дыхание на 30 минут."
+    },
+    {
+      "name": "Острый слух",
+      "description": "Косатка совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на слух."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 21 (5к6 + 4).",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "5d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

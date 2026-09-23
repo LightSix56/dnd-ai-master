@@ -1,0 +1,144 @@
+{
+  "id": "6275",
+  "slug": "6275-young-moonstone-dragon",
+  "name": "Молодой луннокаменный дракон",
+  "nameEn": "Young Moonstone Dragon",
+  "size": "large",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 144,
+    "hitDice": "17d10 + 51"
+  },
+  "speed": {
+    "walk": 40,
+    "fly": 80
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 16,
+    "con": 17,
+    "int": 18,
+    "wis": 17,
+    "cha": 19
+  },
+  "savingThrows": {
+    "con": 6,
+    "int": 7,
+    "wis": 6,
+    "cha": 7
+  },
+  "skills": {
+    "perception": 6,
+    "stealth": 6,
+    "persuasion": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "blindsight": 30,
+    "darkvision": 120
+  },
+  "languages": [
+    "Общий",
+    "Драконий",
+    "Сильван"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дракон совершает одну атаку Укусом и две Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 10 фт., одна цель. Попадание: 15 (2к10+4) колющего урона плюс 5 (1к10) урона излучением.",
+      "attackBonus": 7,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 фт., одна цель. Попадание: 11 (2к6+4) рубящего урона.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Дракон накладывает одно из следующих заклинаний, не требующее компонентов заклинания и использующее Харизму в качестве базовой характеристики (Сл спасброска от заклинания 15):"
+    },
+    {
+      "name": "1/день",
+      "type": "special",
+      "description": "огонь фей [faerie fire], умиротворение [calm emotions]."
+    },
+    {
+      "name": "Оружия дыхания (перезарядка 5-6)",
+      "type": "special",
+      "description": "Дракон использует один из следующих видов оружия дыхания:",
+      "recharge": "5-6"
+    },
+    {
+      "name": "Дыхание снов",
+      "type": "breath",
+      "description": "Дракон выдыхает туман в 90-футовом конусе. Каждое существо в этой области должно преуспеть в спасброске Телосложения Сл 14, иначе теряет сознание на 10 минут. Этот эффект заканчивается для существа, если оно получает урон или кто-то использует действие, чтобы его разбудить.",
+      "recharge": "5-6",
+      "save": {
+        "ability": "CON",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Дыхание лунного света",
+      "type": "breath",
+      "description": "Дракон выдыхает луч лунного света линией длиной 60 фт. и шириной 5 фт.. Каждое существо в этой области должно совершить спасбросок Ловкости Сл 14, в случае провала получая 38 (7к10) урона излучением или половину урона при успехе.",
+      "damage": [
+        {
+          "dice": "7d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "DEX",
+        "dc": 14,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

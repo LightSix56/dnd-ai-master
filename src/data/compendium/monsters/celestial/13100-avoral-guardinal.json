@@ -1,0 +1,99 @@
+{
+  "id": "13100",
+  "slug": "13100-avoral-guardinal",
+  "name": "Гардинал аворал",
+  "nameEn": "Avoral Guardinal",
+  "size": "medium",
+  "type": "celestial",
+  "subtype": null,
+  "alignment": "нейтрально-добрый",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Planescape: Adventures in the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 172,
+    "hitDice": "23d8 + 69"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 50
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 19,
+    "con": 17,
+    "int": 16,
+    "wis": 16,
+    "cha": 18
+  },
+  "savingThrows": {
+    "dex": 8,
+    "cha": 8
+  },
+  "skills": {
+    "perception": 11,
+    "religion": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 21,
+    "darkvision": 120
+  },
+  "languages": [
+    "Общий",
+    "Небесный"
+  ],
+  "traits": [
+    {
+      "name": "Облёт",
+      "description": "Аворал не провоцирует атаки, когда вылетает из досягаемости врага."
+    },
+    {
+      "name": "Пикирующая атака",
+      "description": "Если аворал летит и пикирует как минимум на 30 футов по прямой к существу Среднего размера или меньше, а затем останавливается в 5 футах от него, существо должно совершить спасбросок Силы Сл 15, иначе получит 14 (4к6) колющего урона."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Аворал совершает две атаки Когтём. Он может заменить одну из атак Использованием заклинания."
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одна цель. Попадание: 11 (2к6 + 4) колющего урона плюс 13 (2к12) урона излучением.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Аворал накладывает одно из следующих заклинаний, не нуждаясь в материальных компонентах, используя Харизму в качестве базовой характеристики (Сл спасброска заклинания 16):"
+    },
+    {
+      "name": "1/день",
+      "type": "special",
+      "description": "приказ [command], удержание личности [hold person]"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

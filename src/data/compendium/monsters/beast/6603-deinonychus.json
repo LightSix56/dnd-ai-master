@@ -1,0 +1,127 @@
+{
+  "id": "6603",
+  "slug": "6603-deinonychus",
+  "name": "Дейноних",
+  "nameEn": "Deinonychus]Дейноних [Deinonychus",
+  "size": "medium",
+  "type": "beast",
+  "subtype": "динозавр",
+  "alignment": "без мировоззренияСредний? Зверь, без мировоззрения",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 26,
+    "hitDice": "4d8 + 8"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 15,
+    "con": 14,
+    "int": 4,
+    "wis": 12,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Наскок",
+      "description": "Если дейноних перемещается по крайней мере 20 футов по прямой к существу и попадает по нему атакой когтями в тот же ход, то цель должна преуспеть в спасброске Силы Сл 12 или оказаться сбитой с ног. Если цель сбита с ног, то дейноних может сделать одну атаку укусом по ней бонусным действием."
+    },
+    {
+      "name": "Наскок",
+      "description": "Если дейноних перемещается по крайней мере 20 футов по прямой к существу и попадает по нему атакой когтями в тот же ход, то цель должна преуспеть в спасброске Силы Сл 12 или оказаться сбитой с ног. Если цель сбита с ног, то дейноних может сделать одну атаку укусом по ней бонусным действием."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дейноних совершает три атаки: одну укусом и две когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к8 + 2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к8 + 2) рубящего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дейноних совершает три атаки: одну укусом и две когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к8 + 2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к8 + 2) рубящего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

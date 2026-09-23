@@ -1,0 +1,97 @@
+{
+  "id": "7739",
+  "slug": "7739-guh",
+  "name": "Гух",
+  "nameEn": "Guh",
+  "size": "huge",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "хаотично-злой, именной НИП",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Storm King's Thunder",
+  "isNamed": true,
+  "armorClass": {
+    "value": 9,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 160,
+    "hitDice": "10d12 + 95"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 21,
+    "dex": 1,
+    "con": 19,
+    "int": 5,
+    "wis": 9,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий",
+    "Великаний",
+    "Гоблинский"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Она говорит на Общем, языке Великанов и Гоблинском, хотя словарный запас у нее ограничен односложными словами."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Великан совершает две атаки палицей."
+    },
+    {
+      "name": "Палица",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 10 футов, одна цель. Попадание: Дробящий урон 18 (3к8 + 5).",
+      "attackBonus": 8,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 5,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Камень",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +8 к попаданию, дистанция 60/240 футов, одна цель. Попадание: Дробящий урон 21 (3к10 + 5).",
+      "attackBonus": 8,
+      "range": {
+        "normal": 60,
+        "long": 240
+      },
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 5,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

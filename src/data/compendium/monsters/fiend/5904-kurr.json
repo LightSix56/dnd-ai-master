@@ -1,0 +1,101 @@
+{
+  "id": "5904",
+  "slug": "5904-kurr",
+  "name": "Курр",
+  "nameEn": "Kurr",
+  "size": "medium",
+  "type": "fiend",
+  "subtype": "гнолл",
+  "alignment": "хаотично-злое, именной НИП",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Out of the Abyss",
+  "isNamed": true,
+  "armorClass": {
+    "value": 14,
+    "type": "шкурный доспех"
+  },
+  "hitPoints": {
+    "average": 65,
+    "hitDice": "10d8 + 20"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 15,
+    "con": 15,
+    "int": 10,
+    "wis": 11,
+    "cha": 13
+  },
+  "savingThrows": {
+    "con": 4,
+    "wis": 2,
+    "cha": 3
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Бездны"
+  ],
+  "traits": [
+    {
+      "name": "Буйство",
+      "description": "Если Курр в свой ход опускает рукопашной атакой хиты существа до 0, он может бонусным действием переместиться на расстояние до половины своей скорости и совершить атаку укусом."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Курр совершает три атаки: одну укусом, и две когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одно существо. Попадание: Колющий урон 6 (1к6 + 3), и цель должна преуспеть в спасброске Телосложения Сл 12, иначе получит урон ядом 7 (2к6).",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 12,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 7 (1к8 + 3).",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

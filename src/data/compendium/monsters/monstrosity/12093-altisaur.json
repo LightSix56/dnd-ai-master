@@ -1,0 +1,98 @@
+{
+  "id": "12093",
+  "slug": "12093-altisaur",
+  "name": "Алтизавр",
+  "nameEn": "Altisaur",
+  "size": "gargantuan",
+  "type": "monstrosity",
+  "subtype": "Динозавр",
+  "alignment": "без мировоззрения",
+  "challengeRating": 13,
+  "xp": 10000,
+  "source": "Bigby Presents: Glory of the Giants",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 198,
+    "hitDice": "12d20 + 72"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 28,
+    "dex": 6,
+    "con": 23,
+    "int": 3,
+    "wis": 12,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 11
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 21
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Алтизавр совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Алтизавр совершает одну атаку Топотом и одну атаку Хвостом. Алтизавр не может совершить обе атаки по одной и той же цели."
+    },
+    {
+      "name": "Топот",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +14 к попаданию, досягаемость 10 футов, одна цель. Попадание: 33 (7к6 + 9) дробящего урона. Если цель - существо Огромного размера или меньше, оно должно преуспеть в спасброске Силы Сл 22, иначе упадёт ничком.",
+      "attackBonus": 14,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "7d6",
+          "mod": 9,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 22,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Хвост",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +14 к попаданию, досягаемость 20 футов, одна цель. Попадание: 45 (8к8 + 9) дробящего урона, и цель отталкивается на расстояние до 20 футов по горизонтали от алтизавра.",
+      "attackBonus": 14,
+      "reachFt": 20,
+      "damage": [
+        {
+          "dice": "8d8",
+          "mod": 9,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

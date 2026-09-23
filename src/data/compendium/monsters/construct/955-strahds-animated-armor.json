@@ -1,0 +1,105 @@
+{
+  "id": "955",
+  "slug": "955-strahds-animated-armor",
+  "name": "Оживлённая броня Страда",
+  "nameEn": "Strahd’s Animated Armor",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "законно-злой",
+  "challengeRating": 6,
+  "xp": 2300,
+  "source": "Curse of Strahd",
+  "isNamed": false,
+  "armorClass": {
+    "value": 21,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 112,
+    "hitDice": "15d8 + 45"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 13,
+    "con": 16,
+    "int": 9,
+    "wis": 10,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "blindsight": 60
+  },
+  "languages": [
+    "Понимает Общий",
+    "но не может говорить"
+  ],
+  "traits": [
+    {
+      "name": "Восприимчивость к антимагии",
+      "description": "Броня становится выведенной из строя, пока находится в поле антимагии. Если он станет целью рассеивания магии [dispel magic], броня должна будет совершить спасбросок Телосложения со сложностью, равной сложности спасброска от заклинаний наложившего рассеивание и, при провале, потерять сознание на 1 минуту."
+    },
+    {
+      "name": "Обманчивая внешность",
+      "description": "Пока броня не двигается, её невозможно отличить от обычного комплекта брони."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Доспех совершает две рукопашные атаки или использует Шокирующий Снаряд дважды."
+    },
+    {
+      "name": "Двуручный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 10 (2к6 + 3) рубящего урона плюс 3 (1к6) урона электричеством.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Шокирующий Снаряд",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +4 к попаданию (с преимуществом на бросок атаки если цель носит металлический доспех), дистанция 60 футов, одна цель. Попадание: 10 (3к6) урона электричеством.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 60
+      },
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

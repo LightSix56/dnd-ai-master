@@ -1,0 +1,114 @@
+{
+  "id": "17306",
+  "slug": "17306-golgari-shaman",
+  "name": "Шаман Голгари",
+  "nameEn": "Golgari Shaman",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "эльф",
+  "alignment": "нейтрально-злой",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "шкурный доспех"
+  },
+  "hitPoints": {
+    "average": 88,
+    "hitDice": "16d8 + 16"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 15,
+    "con": 12,
+    "int": 12,
+    "wis": 17,
+    "cha": 16
+  },
+  "savingThrows": {
+    "con": 4,
+    "wis": 6
+  },
+  "skills": {
+    "arcana": 4,
+    "nature": 4,
+    "insight": 6,
+    "religion": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "Общий",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Наследие фей",
+      "description": "Шаман совершает с преимуществом спасброски от состояния очарованный и его не может усыпить магия."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Шаман является заклинателем Голгари 8-го уровня. Его базовой характеристикой заклинаний является Мудрость (Сл спасброска от заклинаний 14, +6 к попаданию атаками заклинаниями). У него подготовлены следующие заклинания друида:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Боевой посох",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 5 (1к6 + 2) дробящего урона или 6 (1к8 + 2) дробящего урона, если используется двумя руками.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Грибковая гниль",
+      "type": "melee_attack",
+      "description": "Рукопашная атака заклинанием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: 9 (2к8) урона некротической энергией, и цель должна совершить спасбросок Телосложения Сл 14, при провале получая 18 (4к8) урона ядом или половину этого урона при успехе.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 14,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Подпитка смертью",
+      "type": "special",
+      "description": "Когда хиты существа в пределах 30 футов от шамана опускаются до 0, шаман получает 5 (1к10) временных хитов."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "spellAttackBonus": 6,
+    "ability": "WIS"
+  }
+}

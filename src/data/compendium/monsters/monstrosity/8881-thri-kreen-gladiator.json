@@ -1,0 +1,104 @@
+{
+  "id": "8881",
+  "slug": "8881-thri-kreen-gladiator",
+  "name": "Три-крин гладиатор",
+  "nameEn": "Thri-kreen Gladiator",
+  "size": "medium",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "любое мировоззрение",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 142,
+    "hitDice": "19d8 + 57"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 18,
+    "con": 16,
+    "int": 10,
+    "wis": 15,
+    "cha": 11
+  },
+  "savingThrows": {
+    "str": 7,
+    "dex": 7,
+    "wis": 5
+  },
+  "skills": {
+    "acrobatics": 7,
+    "athletics": 7,
+    "perception": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "darkvision": 60
+  },
+  "languages": [
+    "Три-кринский",
+    "Телепатия 60 фт."
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Три-крин совершает две атаки Гиткой и одну атаку Чаткчей."
+    },
+    {
+      "name": "Гитка",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию (с преимуществом если три-крин с неполными хитами), досягаемость 5 фт., одна цель. Попадание: 13 (2к8 + 4) рубящего урона.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Чаткча",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +7 к попаданию (с преимуществом если три-крин с неполными хитами), дистанция 30/120 фт., одна цель. Попадание: 7 (1к6 + 4) рубящего урона.",
+      "attackBonus": 7,
+      "range": {
+        "normal": 30,
+        "long": 120
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Парирование",
+      "type": "special",
+      "description": "Три-крин добавляет 3 к КД против одной рукопашной атаки, которая должна попасть по нему. Для этого он должен видеть атакующего, и должен использовать рукопашное оружие."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

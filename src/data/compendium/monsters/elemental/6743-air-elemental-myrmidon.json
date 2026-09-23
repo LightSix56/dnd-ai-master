@@ -1,0 +1,131 @@
+{
+  "id": "6743",
+  "slug": "6743-air-elemental-myrmidon",
+  "name": "Воздушный элементальный мирмидон",
+  "nameEn": "Air Elemental Myrmidon]Воздушный элементальный мирмидон [Air Elemental Myrmidon",
+  "size": "medium",
+  "type": "elemental",
+  "subtype": null,
+  "alignment": "обычно нейтральныйСредний? Элементаль, нейтральный",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 117,
+    "hitDice": "18d8 + 36"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 30,
+    "hover": true
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 14,
+    "con": 14,
+    "int": 9,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Ауран",
+    "один язык по выбору создателя"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Ауран и один язык по выбору создателя"
+    },
+    {
+      "name": "Магическое оружие",
+      "description": "Атаки оружием мирмидона являются магическими."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Мирмидон совершает три атаки Цепом."
+    },
+    {
+      "name": "Цеп",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: 8 (1к8 + 4) урона силовым поле.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Удар молнии (перезарядка 6)",
+      "type": "special",
+      "description": "Мирмидон совершает одну атаку Цепом. В случае попадания цель дополнительно получает 18 (4к8) урона электричеством и должна преуспеть спасброске Телосложения Сл 13. В случае провала цель становится ошеломлённой до конца следующего хода мирмидона.",
+      "damage": [
+        {
+          "dice": "4d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "6"
+    },
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Мирмидон совершает три атаки цепом."
+    },
+    {
+      "name": "Цеп",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: 8 (1к8 + 4) дробящего урона.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Удар молнии (перезарядка 6)",
+      "type": "special",
+      "description": "Мирмидон совершает одну атаку Цепом. В случае попадания цель получает дополнительно 18 (4к8) урона электричеством и должна преуспеть спасброске Телосложения Сл 13. В случае провала цель становится Ошеломлённой до конца следующего хода мирмидона.",
+      "damage": [
+        {
+          "dice": "4d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "6"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,97 @@
+{
+  "id": "6044",
+  "slug": "6044-drufi",
+  "name": "Друфи",
+  "nameEn": "Drufi",
+  "size": "huge",
+  "type": "giant",
+  "subtype": "женщина",
+  "alignment": "нейтрально-злой, именной НИП",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Storm King's Thunder",
+  "isNamed": true,
+  "armorClass": {
+    "value": 15,
+    "type": "лоскутный доспех"
+  },
+  "hitPoints": {
+    "average": 138,
+    "hitDice": "12d12 + 60"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 23,
+    "dex": 9,
+    "con": 21,
+    "int": 9,
+    "wis": 10,
+    "cha": 12
+  },
+  "savingThrows": {
+    "con": 8,
+    "wis": 3,
+    "cha": 4
+  },
+  "skills": {
+    "athletics": 9,
+    "perception": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "cold"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "Великаний"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Друфи совершает две атаки секирой."
+    },
+    {
+      "name": "Секира",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 10 футов, одна цель. Попадание: Рубящий урон 25 (3к12 + 6).",
+      "attackBonus": 9,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d12",
+          "mod": 6,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Камень",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +9 к попаданию, дистанция 60/240 футов, одна цель. Попадание: Дробящий урон 28 (4к10 + 6).",
+      "attackBonus": 9,
+      "range": {
+        "normal": 60,
+        "long": 240
+      },
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 6,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

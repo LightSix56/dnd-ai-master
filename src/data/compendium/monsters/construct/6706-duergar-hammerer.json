@@ -1,0 +1,148 @@
+{
+  "id": "6706",
+  "slug": "6706-duergar-hammerer",
+  "name": "Дуэргарский молотобоец",
+  "nameEn": "Duergar Hammerer]Дуэргарский молотобоец [Duergar Hammerer",
+  "size": "medium",
+  "type": "construct",
+  "subtype": "дварф",
+  "alignment": "любое мировоззрениеСредний? Конструкт, законно-злой",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 33,
+    "hitDice": "6d8 + 6"
+  },
+  "speed": {
+    "walk": 20
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 7,
+    "con": 12,
+    "int": 5,
+    "wis": 5,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 7,
+    "darkvision": 60
+  },
+  "languages": [
+    "Дварфийский"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "понимает Дварфийский, но не говорит на нём"
+    },
+    {
+      "name": "Осадное чудовище",
+      "description": "Молотобоец причиняет двойной урон предметам и строениям."
+    },
+    {
+      "name": "Языки",
+      "description": "понимает Дварфийский, но не говорит на нём"
+    },
+    {
+      "name": "Двигатель боли",
+      "description": "Раз за ход, существо, напавшее на молотобойца может прицелиться в дуэргара, заточённого внутри механизма. Нападающий совершает броски атаки с помехой. Попав в цель, атака наносит дополнительных 5 (1к10) урона молотобойцу, и механизм может ответить реакцией, применив Мультиатаку."
+    },
+    {
+      "name": "Осадное чудовище",
+      "description": "Молотобоец причиняет двойной урон предметам и строениям."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Молотобоец совершает одну атаку Когтями и одну Молотом."
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к6 + 3) дробящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Молот",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 10 (2к6 + 3) дробящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Молотобоец совершает две атаки: одну с помощью когтей одну с помощью молота."
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к6 + 3) дробящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Молот",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 10 (2к6 + 3) дробящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Двигатель боли",
+      "type": "special",
+      "description": "Сразу же после того, как существо в пределах 5 футов от молотобойца попадает по нему броском атаки, молотобоец совершает атаку Молотом против этого существа."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

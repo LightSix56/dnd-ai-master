@@ -1,0 +1,119 @@
+{
+  "id": "7558",
+  "slug": "7558-vampiric-jade-statue",
+  "name": "Нефритовая статуя вампира",
+  "nameEn": "Vampiric Jade Statue",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Ghosts of Saltmarsh",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 114,
+    "hitDice": "12d10 + 48"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 14,
+    "con": 18,
+    "int": 6,
+    "wis": 10,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [
+    "force"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "понимает языки своего создателя",
+    "но не говорит"
+  ],
+  "traits": [
+    {
+      "name": "Неизменяемая форма",
+      "description": "Статуя обладает иммунитетом ко всем заклинаниям и эффектам, изменяющим её форму."
+    },
+    {
+      "name": "Легендарное сопротивление (3/день)",
+      "description": "Если статуя проваливает спасбросок, она может вместо этого сделать спасбросок успешным."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Статуя совершает три атаки: одну Укусом и две Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 10 (2к6 + 3) колющего урона. Если целью является существо, это существо становится проклятым статуей. Проклятие длится 10 минут. Пока существо проклято, статуя совершает по нему все атаки с преимуществом.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 10 (2к6 + 3) рубящего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": {
+    "actionsPerRound": 3,
+    "options": [
+      {
+        "name": "Укус",
+        "cost": 1,
+        "description": "Статуя совершает одну атаку Укусом."
+      },
+      {
+        "name": "Кровавый жнец",
+        "cost": 1,
+        "description": "Все существа, в настоящее время проклятые статуей и находящиеся в пределах 20 футов от неё, получают 5 урона некротической энергией."
+      },
+      {
+        "name": "Перемещение",
+        "cost": 1,
+        "description": "Статуя перемещается на свою скорость, не провоцируя атак."
+      }
+    ]
+  },
+  "lairActions": [],
+  "spellcasting": null
+}

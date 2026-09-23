@@ -1,0 +1,127 @@
+{
+  "id": "6845",
+  "slug": "6845-mouth-of-grolantor",
+  "name": "Пасть Гролантора",
+  "nameEn": "Mouth of Grolantor]Пасть Гролантора [Mouth of Grolantor",
+  "size": "huge",
+  "type": "giant",
+  "subtype": "холмовой великан",
+  "alignment": "обычно хаотично-злойОгромный? Великан (холмовой великан), хаотично-злой",
+  "challengeRating": 6,
+  "xp": 2300,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 105,
+    "hitDice": "10d12 + 40"
+  },
+  "speed": {
+    "walk": 50
+  },
+  "abilities": {
+    "str": 21,
+    "dex": 10,
+    "con": 18,
+    "int": 5,
+    "wis": 7,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 1
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [
+    "Великаний"
+  ],
+  "traits": [
+    {
+      "name": "Пасть безумия",
+      "description": "Великан имеет иммунитет к заклинанию смятение [confusion] и похожей магии."
+    },
+    {
+      "name": "В каждый свой ход великан использует все",
+      "description": "свое движение, чтобы подойти к ближайшему существу или тому, что он считает едой. Бросьте к10 в начале каждого хода великана, чтобы определить курс его действий в этом ходу:"
+    },
+    {
+      "name": "Пасть безумия",
+      "description": "Великан имеет иммунитет к заклинанию смятение [confusion] и похожей магии."
+    },
+    {
+      "name": "В каждый свой ход великан использует все",
+      "description": "свое движение, чтобы подойти к ближайшему существу или тому, что он считает едой. Бросьте к10 в начале каждого хода великана, чтобы определить курс его действий:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одно существо. Попадание: 15 (3к6 + 5) колющего урона, и гигант магически восстанавливает количество хитов, равное нанесённому урону.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Кулак",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 10 футов, одна цель. Попадание: 18 (3к8 + 5) дробящего урона.",
+      "attackBonus": 8,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 5,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одно существо. Попадание: 15 (3к6 + 5) колющего урона, и гигант магически восстанавливает столько хитов, сколько нанес урона.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Кулак",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 10 футов, одна цель. Попадание: 18 (3к8 + 5) дробящего урона.",
+      "attackBonus": 8,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 5,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

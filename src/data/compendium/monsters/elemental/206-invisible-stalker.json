@@ -1,0 +1,92 @@
+{
+  "id": "206",
+  "slug": "206-invisible-stalker",
+  "name": "Невидимый охотник",
+  "nameEn": "Invisible stalker",
+  "size": "medium",
+  "type": "elemental",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 6,
+  "xp": 2300,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14
+  },
+  "hitPoints": {
+    "average": 104,
+    "hitDice": "16d8 + 32"
+  },
+  "speed": {
+    "walk": 50,
+    "fly": 50,
+    "hover": true
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 19,
+    "con": 14,
+    "int": 10,
+    "wis": 15,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 8,
+    "stealth": 10
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 18,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Ауран"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "- понимает Общий, но не говорит на нем."
+    },
+    {
+      "name": "Невидимость",
+      "description": "Охотник невидим."
+    },
+    {
+      "name": "Безупречный следопыт",
+      "description": "Призыватель назначает охотнику добычу. Охотник знает, в каком направлении находится добыча и расстояние до нее, если они находятся на одном плане существования. Охотник также знает местонахождение того, кто его призвал."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Охотник совершает два размашистых удара."
+    },
+    {
+      "name": "Размашистый удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: Дробящий урон 10 (2к6 + 3).",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

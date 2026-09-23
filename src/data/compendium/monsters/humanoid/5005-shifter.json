@@ -1,0 +1,91 @@
+{
+  "id": "5005",
+  "slug": "5005-shifter",
+  "name": "Шифтер",
+  "nameEn": "Shifter",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "шифтер",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Eberron: Rising from the Last War",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "кожаный доспех"
+  },
+  "hitPoints": {
+    "average": 19,
+    "hitDice": "3d8 + 6"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 16,
+    "con": 14,
+    "int": 11,
+    "wis": 15,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "acrobatics": 5,
+    "perception": 4,
+    "nature": 2,
+    "insight": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Превращение (перезарядка после короткого и продолжительного",
+      "description": "отдыха). Бонусным действием шифтер может принять звериный облик на 1 минуту или пока не умрёт. Шифтер получает 5 временных хитов. Он может совершать атаку укусом, когда принимает вид животного и может бонусным действием совершать атаку укусом каждый свой ход."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к6+3) колющего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одно существо. Попадание 5 (1к4+3) колющего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

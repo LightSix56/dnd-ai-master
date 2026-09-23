@@ -1,0 +1,90 @@
+{
+  "id": "15697",
+  "slug": "15697-degloth",
+  "name": "Дэглот",
+  "nameEn": "Degloth",
+  "size": "large",
+  "type": "fiend",
+  "subtype": "Демон",
+  "alignment": "обычно хаотично-злое",
+  "challengeRating": 11,
+  "xp": 7200,
+  "source": "Vecna: Eve of Ruin",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 133,
+    "hitDice": "14d10 + 56"
+  },
+  "speed": {
+    "walk": 40,
+    "climb": 40
+  },
+  "abilities": {
+    "str": 23,
+    "dex": 17,
+    "con": 18,
+    "int": 6,
+    "wis": 11,
+    "cha": 9
+  },
+  "savingThrows": {
+    "str": 10,
+    "con": 8
+  },
+  "skills": {
+    "athletics": 10,
+    "perception": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 120
+  },
+  "languages": [
+    "Бездны",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Дэглот совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дэглот совершает две атаки Бритвенным кулаком."
+    },
+    {
+      "name": "Бритвенный кулак",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +10 к попаданию, досягаемость 10 футов, одна цель. Попадание: 17 (2к10 + 6) рубящего урона. Если цель — существо с размером не больше Среднего, то оно становится схваченным (Сл высвобождения равна 18). Пока цель схвачена, она опутана, и дэглот не может схватить этим кулаком другую цель. У дэглота есть два кулака.",
+      "attackBonus": 10,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 6,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

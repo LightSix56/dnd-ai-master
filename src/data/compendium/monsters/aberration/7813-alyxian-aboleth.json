@@ -1,0 +1,122 @@
+{
+  "id": "7813",
+  "slug": "7813-alyxian-aboleth",
+  "name": "Аболет Аликсиан",
+  "nameEn": "Alyxian Aboleth",
+  "size": "large",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "законно-злая, именной НИП",
+  "challengeRating": 12,
+  "xp": 8400,
+  "source": "Critical Role: Call of the Netherdeep",
+  "isNamed": true,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 135,
+    "hitDice": "18d10 + 36"
+  },
+  "speed": {
+    "walk": 10,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 21,
+    "dex": 9,
+    "con": 15,
+    "int": 18,
+    "wis": 18,
+    "cha": 18
+  },
+  "savingThrows": {
+    "con": 6,
+    "int": 8,
+    "wis": 8
+  },
+  "skills": {
+    "perception": 12,
+    "history": 12
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 22,
+    "darkvision": 120
+  },
+  "languages": [
+    "Глубинная речь",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Аболет может дышать и воздухом и под водой."
+    },
+    {
+      "name": "Слизистое облако",
+      "description": "Находясь под водой, аболет окружен слизью. Существа, которые касаются аболета или попадают по нему рукопашной атакой, находясь в пределах 5 футов от него, должны преуспеть в спасброске Силы Сл 14, иначе станут опутаны до конца следующего хода аболета."
+    },
+    {
+      "name": "Зондирующая телепатия",
+      "description": "Если существо общается телепатически с аболетом, и аболет при этом видит это существо, он может узнать самые потаенные желания существа."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Аболет совершает две атаки Щупальцем."
+    },
+    {
+      "name": "Щупальце",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 10 футов, одна цель. Попадание: 12 (2к6 + 5) дробящего урона плюс 3 (1к6) урона психической энергией.",
+      "attackBonus": 9,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 5,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Хвост",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 10 футов одна цель. Попадание: 14 (2к8 + 5) дробящего урона.",
+      "attackBonus": 9,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 5,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": {
+    "actionsPerRound": 3,
+    "options": [
+      {
+        "name": "Удар хвостом",
+        "cost": 1,
+        "description": "Аболет совершает одну атаку Хвостом."
+      },
+      {
+        "name": "Психическое истощение (стоит 2 действия)",
+        "cost": 2,
+        "description": "Одно очарованное аболетом существо получает 10 (3к6) урона психической энергией, и аболет восстанавливает хиты, равные урону, который получило существо."
+      }
+    ]
+  },
+  "lairActions": [],
+  "spellcasting": null
+}

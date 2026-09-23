@@ -1,0 +1,96 @@
+{
+  "id": "17236",
+  "slug": "17236-guardian-of-gorm",
+  "name": "Страж Горма",
+  "nameEn": "Guardian of Gorm",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "законно-добрый",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "Quest from the Infinite Staircase",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "кольчуга"
+  },
+  "hitPoints": {
+    "average": 9,
+    "hitDice": "2d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 10,
+    "con": 10,
+    "int": 10,
+    "wis": 13,
+    "cha": 12
+  },
+  "savingThrows": {
+    "str": 5,
+    "wis": 4
+  },
+  "skills": {
+    "athletics": 4,
+    "insight": 3,
+    "religion": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Храбрый",
+      "description": "Страж совершает с преимуществом спасброски от состояния испуганный."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Электрическая булава",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 5 (1к6 + 2) колющего урона плюс 2 (1к4) урона электричеством.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Ручной топор",
+      "type": "melee_attack",
+      "description": "Дальнобойная или рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт. или дистанция 20/60 фт. Попадание: 5 (1к6+2) рубящего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

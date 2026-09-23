@@ -1,0 +1,116 @@
+{
+  "id": "8873",
+  "slug": "8873-space-clown",
+  "name": "Космический клоун",
+  "nameEn": "Space Clown",
+  "size": "medium",
+  "type": "fiend",
+  "subtype": null,
+  "alignment": "обычно хаотично-злое",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 58,
+    "hitDice": "9d8 + 18"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 16,
+    "con": 14,
+    "int": 11,
+    "wis": 11,
+    "cha": 16
+  },
+  "savingThrows": {},
+  "skills": {
+    "acrobatics": 5,
+    "performance": 5,
+    "sleight_of_hand": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Бездны"
+  ],
+  "traits": [
+    {
+      "name": "Предсмертная вспышка",
+      "description": "Когда хиты клоуна опускаются до 0, он лопается как воздушный шар, разбрызгивая вокруг едкий гнилостный ихор. Все существа в пределах 5 футов от клоуна, когда он взрывается, должны совершить спасбросок Ловкости Сл 12, получая 10 (3к6) урона кислотой при провале или половину этого урона при успехе."
+    },
+    {
+      "name": "Пищалки",
+      "description": "Клоуны носят башмаки, которые пищат при ходьбе. Этот звук слышен в пределах 30 футов. Пока длится эффект Воображаемой формы клоуна его шаги неслышны."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Шок",
+      "type": "melee_attack",
+      "description": "Рукопашная атака заклинанием: +5 к попаданию, досягаемость 5 фт., одна цель Попадание: 17 (4к6 + 3) урона электричеством.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "4d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Лучевая пушка",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +5 к попаданию, дистанция 120 фт., одно существо. Попадание: 7 (2к6) урона психической энергией, и если цель — гуманоид с показателем Интеллекта 3 или выше, она должна совершить спасбросок Мудрости Сл 12. При провале, цель считает всё видимое и услышанное ей уморительно смешным, и становится недееспособной на 1 минуту. Цель может повторять спасбросок в конце каждого своего хода, оканчивая эффект на себе в случае успеха.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CHA",
+        "dc": 12,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Базовой характеристикой клоуна является Харизма. Он может накладывать следующие заклинания, не нуждаясь в материальных компонентах:"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "волшебная рука [mage hand], дружба [friends], фокусы [prestidigitation];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "отражения [mirror image], паук [spider climb]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

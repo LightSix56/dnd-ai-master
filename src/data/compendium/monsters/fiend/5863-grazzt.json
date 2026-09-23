@@ -1,0 +1,116 @@
+{
+  "id": "5863",
+  "slug": "5863-grazzt",
+  "name": "Граз'зт",
+  "nameEn": "Graz'zt",
+  "size": "large",
+  "type": "fiend",
+  "subtype": "демон",
+  "alignment": "хаотично-злое, именной НИП",
+  "challengeRating": 24,
+  "xp": 62000,
+  "source": "Out of the Abyss",
+  "isNamed": true,
+  "armorClass": {
+    "value": 20,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 378,
+    "hitDice": "36d10 + 180"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 22,
+    "dex": 15,
+    "con": 21,
+    "int": 23,
+    "wis": 21,
+    "cha": 26
+  },
+  "savingThrows": {
+    "dex": 9,
+    "con": 12,
+    "wis": 12
+  },
+  "skills": {
+    "perception": 12,
+    "deception": 15,
+    "insight": 12,
+    "persuasion": 15
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "bludgeoning",
+    "piercing",
+    "slashing",
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 22,
+    "truesight": 120
+  },
+  "languages": [
+    "Все",
+    "Телепатия 120 фт."
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Граз’зт дважды атакует Волной скорби."
+    },
+    {
+      "name": "Волна скорби (Двуручный меч)",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +13 к попаданию, досягаемость 10 футов, одна цель. Попадание: 20 (4к6 + 6) рубящего урона плюс 14 (4к6) урона кислотой.",
+      "attackBonus": 13,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "4d6",
+          "mod": 6,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Телепортация",
+      "type": "special",
+      "description": "Граз’зт магически телепортируется со всем снаряжением, которое он носит на себе или с собой, на расстояние до 120 футов в незанятое место, которое он может видеть"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": {
+    "actionsPerRound": 3,
+    "options": [
+      {
+        "name": "Атака",
+        "cost": 1,
+        "description": "Граз’зт один раз атакует Волной Скорби."
+      },
+      {
+        "name": "Танцуй, моя куколка!",
+        "cost": 1,
+        "description": "Одно существо, очарованное Граз’зтом, которое он может видеть, должно использовать свою реакцию на то, чтобы переместиться на свою скорость туда, куда укажет Граз’зт."
+      },
+      {
+        "name": "Посеять раздор",
+        "cost": 1,
+        "description": "Граз’зт накладывает заклинание корона безумия [crown of madness] или диссонирующий шёпот [dissonant whisper]."
+      },
+      {
+        "name": "Телепортация",
+        "cost": 1,
+        "description": "Граз’зт использует свое действие Телепортация."
+      }
+    ]
+  },
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,69 @@
+{
+  "id": "70",
+  "slug": "70-manes",
+  "name": "Мэйн",
+  "nameEn": "Manes",
+  "size": "small",
+  "type": "fiend",
+  "subtype": "демон",
+  "alignment": "хаотично-злое",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 9
+  },
+  "hitPoints": {
+    "average": 9,
+    "hitDice": "2d6 + 2"
+  },
+  "speed": {
+    "walk": 20
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 9,
+    "con": 13,
+    "int": 3,
+    "wis": 8,
+    "cha": 4
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 9,
+    "darkvision": 60
+  },
+  "languages": [
+    "понимает язык Бездны",
+    "но не говорит"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 5 (2к4).",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

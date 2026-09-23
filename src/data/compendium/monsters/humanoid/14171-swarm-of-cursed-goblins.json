@@ -1,0 +1,73 @@
+{
+  "id": "14171",
+  "slug": "14171-swarm-of-cursed-goblins",
+  "name": "Рой проклятых гоблинов",
+  "nameEn": "Swarm of cursed goblins",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "гоблиноиды",
+  "alignment": "законно-злой",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Adventurers League",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "5d8"
+  },
+  "speed": {
+    "walk": 20
+  },
+  "abilities": {
+    "str": 8,
+    "dex": 14,
+    "con": 10,
+    "int": 8,
+    "wis": 10,
+    "cha": 8
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 120
+  },
+  "languages": [
+    "Гоблинский"
+  ],
+  "traits": [
+    {
+      "name": "Рой",
+      "description": "Рой может занимать пространство другого существа, и наоборот, и рой может перемещаться через любой проход, достаточный для одного Крошечного существа. Рой не может восстанавливать хиты и получать временные хиты."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Крошечные скимитары",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 0 фт., одна цель в клетке роя. Попадание: 10 (4к4) дробящего урона, или 5 (2к4) дробящего урона, если у роя половина хитов или меньше.",
+      "attackBonus": 3,
+      "reachFt": 0,
+      "damage": [
+        {
+          "dice": "4d4",
+          "mod": 0,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

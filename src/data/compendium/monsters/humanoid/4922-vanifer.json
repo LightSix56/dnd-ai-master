@@ -1,0 +1,102 @@
+{
+  "id": "4922",
+  "slug": "4922-vanifer",
+  "name": "Вейнифер",
+  "nameEn": "Vanifer",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "тифлинг",
+  "alignment": "нейтрально-злой, именной НИП",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Princes of the Apocalypse",
+  "isNamed": true,
+  "armorClass": {
+    "value": 15,
+    "type": "кожаный клёпаный доспех"
+  },
+  "hitPoints": {
+    "average": 112,
+    "hitDice": "15d8 + 45"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 16,
+    "con": 17,
+    "int": 12,
+    "wis": 13,
+    "cha": 19
+  },
+  "savingThrows": {},
+  "skills": {
+    "performance": 8,
+    "arcana": 5,
+    "deception": 8
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Игнан",
+    "Инфернальный"
+  ],
+  "traits": [
+    {
+      "name": "Погребальный костер",
+      "description": "Когда хиты Вейнифер падают до 0, её тело исчезает во вспышке огня и дыма. Всё, во что она была одета и что носила с собой, остаётся лежать в кучке пепла."
+    },
+    {
+      "name": "Легендарное сопротивление (2/день)",
+      "description": "Если Вейнифер проваливает спасбросок, она может вместо этого сделать спасбросок успешным."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Вейнифер является заклинателем 10-го уровня. Её базовой характеристикой является Харизма (Сл спасброска от заклинаний 16, +8 к атакам заклинаниями). Вейнифер знает следующие заклинания чародея:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Вейнифер совершает две атаки."
+    },
+    {
+      "name": "Высекающий Искры",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +9 к попаданию, досягаемость 5 фт. или дистанция 20/60 фт., одна цель. Попадание: колющий урон 7 (1к4 + 5) плюс урон огнём 7 (2к6).",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 5,
+          "type": "плюс"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 10,
+    "ability": "CHA"
+  }
+}

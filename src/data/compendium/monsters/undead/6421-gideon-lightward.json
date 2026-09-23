@@ -1,0 +1,105 @@
+{
+  "id": "6421",
+  "slug": "6421-gideon-lightward",
+  "name": "Гидеон Лайтвард",
+  "nameEn": "Gideon Lightward",
+  "size": "medium",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "законно-злая, именной НИП",
+  "challengeRating": 6,
+  "xp": 2300,
+  "source": "Baldur's Gate: Descent Into Avernus",
+  "isNamed": true,
+  "armorClass": {
+    "value": 11
+  },
+  "hitPoints": {
+    "average": 136,
+    "hitDice": "16d8 + 64"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 13,
+    "con": 18,
+    "int": 10,
+    "wis": 18,
+    "cha": 13
+  },
+  "savingThrows": {
+    "dex": 4,
+    "con": 7,
+    "wis": 7
+  },
+  "skills": {
+    "insight": 7,
+    "religion": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "necrotic"
+  ],
+  "damageVulnerabilities": [
+    "radiant"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Регенерация",
+      "description": "Гидеон восстанавливает 10 хитов в начале каждого своего хода. Если он получает урон излучением, то эта особенность не действует в начале его следующего хода. Гидеон умирает, только если начинает свой ход с 0 хитов и не может регенерировать."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Гидеон совершает две атаки кулаками."
+    },
+    {
+      "name": "Кулак",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: 11 (2к6 + 4) дробящего урона.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Иссушающий взгляд",
+      "type": "special",
+      "description": "Гидеон выбирает целью одно существо, которое видит в пределах 60 футов. Цель должна совершить спасбросок Телосложения Сл 15, получая 22 (4к10) урона некротической энергией при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 15,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

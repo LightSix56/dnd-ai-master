@@ -1,0 +1,74 @@
+{
+  "id": "8401",
+  "slug": "8401-reaper-spirit",
+  "name": "Дух жнеца",
+  "nameEn": "Reaper spirit",
+  "size": "medium",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "нейтральная",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "The Book of Many Things",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11
+  },
+  "hitPoints": {
+    "average": 40,
+    "hitDice": "1d8"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 30,
+    "hover": true
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 16,
+    "con": 16,
+    "int": 16,
+    "wis": 16,
+    "cha": 16
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "necrotic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "darkvision": 60
+  },
+  "languages": [
+    "Понимает языки",
+    "на которых говорите вы"
+  ],
+  "traits": [
+    {
+      "name": "Бестелесное перемещение",
+      "description": "Жнец может перемещаться сквозь других существ и предметы, как если бы они были труднопроходимой местностью. Он получает 1к10 урона силовым полем, если заканчивает ход внутри предмета."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Жнец совершает количество атак, равное половине уровня заклинания (округляется в меньшую сторону)."
+    },
+    {
+      "name": "Жатвенная коса",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: ваш модификатор атаки заклинанием для попадания (с преимуществом), досягаемость 5 футов, одна цель. Попадание: 1к10 + 3 + уровень заклинания урона некротической энергией.",
+      "reachFt": 5
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

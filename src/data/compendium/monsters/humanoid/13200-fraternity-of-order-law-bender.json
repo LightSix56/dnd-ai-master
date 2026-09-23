@@ -1,0 +1,113 @@
+{
+  "id": "13200",
+  "slug": "13200-fraternity-of-order-law-bender",
+  "name": "Блюститель закона Братства порядка",
+  "nameEn": "Fraternity of Order Law Bender",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Planescape: Adventures in the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "15 с доспехом мага"
+  },
+  "hitPoints": {
+    "average": 137,
+    "hitDice": "25d8 + 25"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 8,
+    "dex": 15,
+    "con": 12,
+    "int": 19,
+    "wis": 16,
+    "cha": 14
+  },
+  "savingThrows": {
+    "con": 5,
+    "wis": 7
+  },
+  "skills": {
+    "perception": 7,
+    "insight": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17
+  },
+  "languages": [
+    "Общий плюс три языка"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Блюститель закона совершает три атаки Магической вспышкой и использует Силу авторитета или Использование заклинаний."
+    },
+    {
+      "name": "Магическая вспышка",
+      "type": "melee_attack",
+      "description": "Рукопашная или Дальнобойная атака заклинанием: +8 к попаданию, досягаемость 5 футов или дистанция 90 футов, одна цель. Попадание: 17 (2к12 + 4) урона силовым полем.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "range": {
+        "normal": 90
+      },
+      "damage": [
+        {
+          "dice": "2d12",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Сила авторитета",
+      "type": "special",
+      "description": "Блюститель закона нацеливается на существо, которое он может видеть в пределах 60 футов. Цель должна преуспеть в спасброске Интеллекта Сл 16, иначе получит 10 (3к6) урона психической энергией и станет недееспособной на 1 минуту. В конце каждого своего хода цель может повторять спасбросок, оканчивая на себе действие эффекта случае успеха. Цель, преуспевшая в спасброске, становится невосприимчивой к Силе авторитета этого блюстителя закона на 24 часа.",
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "INT",
+        "dc": 16,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Блюститель закона накладывает одно из следующих заклинаний, не нуждаясь в материальных компонентах, используя Интеллект в качестве базовой характеристики:"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "рассеивание магии [dispel magic], полёт [fly], доспехи мага [mage armor], волшебная рука [mage hand], фокусы [prestidigitation]"
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Вероятностная лазейка (3/день)",
+      "type": "special",
+      "description": "Когда блюститель закона или существо, которое он может видеть, совершает бросок атаки, спасбросок или проверку характеристик, блюститель закона может дать этому броску преимущество или помеху."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

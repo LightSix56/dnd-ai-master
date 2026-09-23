@@ -1,0 +1,101 @@
+{
+  "id": "3330",
+  "slug": "3330-blagothkus",
+  "name": "Благоткас",
+  "nameEn": "Blagothkus",
+  "size": "huge",
+  "type": "giant",
+  "subtype": "облачный великан",
+  "alignment": "нейтрально-злой, именной НИП",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Hoard of the Dragon Queen",
+  "isNamed": true,
+  "armorClass": {
+    "value": 17,
+    "type": "наборный доспех"
+  },
+  "hitPoints": {
+    "average": 138,
+    "hitDice": "12d12 + 60"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 26,
+    "dex": 13,
+    "con": 20,
+    "int": 16,
+    "wis": 15,
+    "cha": 15
+  },
+  "savingThrows": {
+    "con": 9,
+    "wis": 6,
+    "cha": 6
+  },
+  "skills": {
+    "perception": 6,
+    "intimidation": 6,
+    "arcana": 7,
+    "insight": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16
+  },
+  "languages": [
+    "Общий",
+    "Великаний",
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Острый нюх",
+      "description": "Благоткас получает преимущество на проверки Мудрости (Восприятие) опирающиеся на обоняние."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Благоткас может по наитию творить следующие заклинаний (Сл спасброска от заклинания 15) без требования материальных компонентов:"
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Благоткас является заклинателем 5-го уровня. Его базовой характеристикой является Интеллект (Сл спасброска от заклинания 15, +7 к попаданию атаками заклинаниями). У Благоткаса подготовлены следующие заклинания волшебника:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Благоткас совершает две атаки моргенштерном."
+    },
+    {
+      "name": "Моргенштерн",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +10 к попаданию, досягаемость 10 футов, одна цель. Попадание: 21 (3к8+8) колющего урона.",
+      "attackBonus": 10,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 8,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 5,
+    "spellAttackBonus": 7,
+    "ability": "INT"
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "id": "6248",
+  "slug": "6248-ancient-crystal-dragon",
+  "name": "Древний кристаллический дракон",
+  "nameEn": "Ancient Crystal Dragon",
+  "size": "gargantuan",
+  "type": "dragon",
+  "subtype": "самоцветный",
+  "alignment": "хаотично-нейтральный",
+  "challengeRating": 19,
+  "xp": 22000,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 20,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 222,
+    "hitDice": "12d20 + 96"
+  },
+  "speed": {
+    "walk": 40,
+    "fly": 80,
+    "burrow": 40,
+    "climb": 40
+  },
+  "abilities": {
+    "str": 25,
+    "dex": 12,
+    "con": 26,
+    "int": 20,
+    "wis": 16,
+    "cha": 21
+  },
+  "savingThrows": {
+    "dex": 7,
+    "con": 14,
+    "wis": 9,
+    "cha": 11
+  },
+  "skills": {
+    "perception": 15,
+    "survival": 9,
+    "stealth": 13
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 25,
+    "blindsight": 60,
+    "darkvision": 120
+  },
+  "languages": [
+    "Общий",
+    "Драконий",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Легендарное сопротивление (3/день)",
+      "description": "Если дракон провалит спасбросок, он может вместо этого сделать спасбросок успешным."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дракон совершает одну атаку Укусом и две Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +13 к попаданию, досягаемость 15 фт., одна цель. Попадание: 18 (2к10+7) колющего урона плюс 9 (2к8) урона излучением.",
+      "attackBonus": 13,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 7,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +13 к попаданию, досягаемость 10 фт., одна цель. Попадание: 14 (2к6+7) рубящего урона.",
+      "attackBonus": 13,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 7,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний (Псионика)",
+      "type": "special",
+      "description": "Дракон накладывает одно из следующих заклинаний, не требующее компонентов заклинания и использующее Интеллект в качестве базовой характеристики (Спасбросок от заклинаний Сл 19):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "пляшущие огоньки [dancing lights], указание [guidance];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "приказ [command], предсказание [divination], гипнотический узор [hypnotic pattern], высшее восстановление [greater restoration], невидимость [invisibility]."
+    },
+    {
+      "name": "Мерцающее дыхание (Перезарядка 5-6)",
+      "type": "breath",
+      "description": "Дракон выдыхает ярко сияющую вспышку в 90-футовом конусе. Все существа в этой области должно совершить Спасбросок Телосложения Сл 22, получив 49 (11к8) урона излучением при провале спасброска или половину урона при успешном. После чего дракон получает 25 временных хитов, поглощая часть энергии излучения.",
+      "damage": [
+        {
+          "dice": "11d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "CON",
+        "dc": 22,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": {
+    "actionsPerRound": 3,
+    "options": [
+      {
+        "name": "Коготь",
+        "cost": 1,
+        "description": "Дракон совершает атаку когтем."
+      },
+      {
+        "name": "Псионика (стоит 2 действия)",
+        "cost": 2,
+        "description": "Дракон использует Псионический шаг или Использование заклинаний."
+      },
+      {
+        "name": "Звездный удар (стоит 3 действия)",
+        "cost": 3,
+        "description": "Дракон выпускает обжигающий луч звездного света в существо, которое он видит в пределах 60 футах. Цель должна преуспеть в спасброске Ловкости Сл 19, в случае провала получая 38 (11к6) урона излучением."
+      }
+    ]
+  },
+  "lairActions": [],
+  "spellcasting": null
+}

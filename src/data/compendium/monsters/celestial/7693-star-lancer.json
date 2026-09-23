@@ -1,0 +1,84 @@
+{
+  "id": "7693",
+  "slug": "7693-star-lancer",
+  "name": "Звёздный копьеносец",
+  "nameEn": "Star Lancer",
+  "size": "large",
+  "type": "celestial",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Monstrous Compendium Vol 1: Spelljammer Creatures",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 60,
+    "hitDice": "8d10 + 16"
+  },
+  "speed": {
+    "walk": 0,
+    "fly": 50
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 15,
+    "con": 15,
+    "int": 10,
+    "wis": 13,
+    "cha": 8
+  },
+  "savingThrows": {
+    "dex": 4,
+    "con": 4
+  },
+  "skills": {
+    "perception": 3,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "Небесный",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Облёт",
+      "description": "Звездный копьеносец не провоцирует атаки вылетая из досягаемости врага."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Рог",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: 7 (1к6 + 4) колющего урона. Если звездный копьеносец перемещается по крайней мере на 20 футов прямо к цели непосредственно перед попаданием, цель дополнительно получает 10 (3к6) колющего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Покров невидимости (3/день)",
+      "type": "special",
+      "description": "Копьеносец и одно сидящее на нём существо (выбирается копьеносцем) магическим образом становятся невидимыми. Этот эффект длится до тех пор, пока копьеносец или сидящее на нем верхом существо, не атакует или не накладывает заклинание, или пока не закончится концентрация копьеносца (как при концентрации на заклинании). Любое снаряжение, которое несут или носят невидимые существа, также становится невидимым на время действия Покрова невидимости."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,107 @@
+{
+  "id": "6826",
+  "slug": "6826-young-kruthik",
+  "name": "Молодой крутик",
+  "nameEn": "Young Kruthik]Молодой крутик [Young Kruthik",
+  "size": "small",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззренияМаленький? Монстр, без мировоззрения",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 9,
+    "hitDice": "2d6 + 2"
+  },
+  "speed": {
+    "walk": 30,
+    "burrow": 10,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 16,
+    "con": 13,
+    "int": 4,
+    "wis": 10,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 30,
+    "tremorsense": 60
+  },
+  "languages": [
+    "Крутик"
+  ],
+  "traits": [
+    {
+      "name": "Тактика стаи",
+      "description": "Крутик совершает броски атаки с преимуществом против существ, в пределах 5 футов от которых находится дееспособный союзник крутика."
+    },
+    {
+      "name": "Прокладывание туннеля",
+      "description": "Крутик может копать сквозь сплошной камень со скоростью копания, уменьшенной вдвое, оставляя за собой туннель диаметром 2,5 футов."
+    },
+    {
+      "name": "Тонкий нюх",
+      "description": "Крутик совершает с преимуществом проверки Мудрости (Восприятие), которые полагаются на нюх."
+    },
+    {
+      "name": "Тактика стаи",
+      "description": "Крутик совершает броски атаки с преимуществом против существ, в пределах 5 футов от которых находится дееспособный союзник крутика."
+    },
+    {
+      "name": "Прокладывание туннеля",
+      "description": "Крутик может копать сквозь сплошной камень со скоростью копания, уменьшенной вдвое, оставляя за собой туннель диаметром 2,5 футов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укол",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 5 (1к4 + 3) колющего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Укол",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 5 (1к4 + 3) колющего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

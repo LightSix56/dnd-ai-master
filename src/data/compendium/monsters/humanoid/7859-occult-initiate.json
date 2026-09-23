@@ -1,0 +1,109 @@
+{
+  "id": "7859",
+  "slug": "7859-occult-initiate",
+  "name": "Оккультист послушник",
+  "nameEn": "Occult Initiate",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "Чародей",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Critical Role: Call of the Netherdeep",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "15 с доспехом мага"
+  },
+  "hitPoints": {
+    "average": 66,
+    "hitDice": "12d8 + 12"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 14,
+    "con": 12,
+    "int": 14,
+    "wis": 10,
+    "cha": 16
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 2,
+    "history": 4,
+    "arcana": 6,
+    "deception": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Знает Общий и ещё один язык."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 5 (1к6 + 2) колющего урона плюс 7 (2к6) урона психической энергией.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Магический заряд (Перезарядка 5–6)",
+      "type": "special",
+      "description": "Послушник создает взрыв магической силы в сфере радиусом 20 футов с центром в точке, которую он может видеть в пределах 120 футов. Каждое существо в этой области должно совершить спасбросок Ловкости Сл 13. При провале существо получает 10 (3к6) урона силовым полем и отбрасывается на 10 футов от центра зоны. При успехе он получает половину этого урона и не отбрасывается.",
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "DEX",
+        "dc": 13,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Послушник может накладывать следующие заклинания, используя Харизму в качестве базовой характеристики (Сл спасброска от заклинания 13):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "свет [light], волшебная рука [mage hand];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "обнаружение магии [detect magic], левитация [levitate]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,83 @@
+{
+  "id": "7714",
+  "slug": "7714-sea-elf",
+  "name": "Морской эльф",
+  "nameEn": "Sea elf",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "эльф",
+  "alignment": "хаотично-добрый",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "Storm King's Thunder",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11
+  },
+  "hitPoints": {
+    "average": 11,
+    "hitDice": "2d8 + 2"
+  },
+  "speed": {
+    "walk": 10,
+    "swim": 40
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 13,
+    "con": 12,
+    "int": 11,
+    "wis": 11,
+    "cha": 12
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Морской эльф может дышать и воздухом и под водой."
+    },
+    {
+      "name": "Наследие фей",
+      "description": "Морской эльф совершает с преимуществом спасброски от очарования, и магия не может его усыпить."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Копье",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +2 к попаданию, досягаемость 5 футов или дистанция 20/60 футов, одна цель. Попадание: Колющий урон 3 (1к6), или колющий урон 4 (1к8), если используется двумя руками для совершения рукопашной атаки.",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,132 @@
+{
+  "id": "5039",
+  "slug": "5039-dragon-tortoise",
+  "name": "Сухопутная дракочерепаха",
+  "nameEn": "Dragon Tortoise",
+  "size": "gargantuan",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 17,
+  "xp": 18000,
+  "source": "Candlekeep Mysteries",
+  "isNamed": false,
+  "armorClass": {
+    "value": 20,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 341,
+    "hitDice": "22d20 + 110"
+  },
+  "speed": {
+    "walk": 20
+  },
+  "abilities": {
+    "str": 25,
+    "dex": 10,
+    "con": 20,
+    "int": 10,
+    "wis": 12,
+    "cha": 12
+  },
+  "savingThrows": {
+    "dex": 6,
+    "con": 11,
+    "wis": 7
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 120
+  },
+  "languages": [
+    "Драконий",
+    "Терран"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дракочерепаха совершает три атаки: одну укусом, и две когтями. Она может совершить одну атаку хвостом вместо двух атак когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +13 к попаданию, досягаемость 15 футов, одна цель. Попадание: Колющий урон 26 (3к12 + 7).",
+      "attackBonus": 13,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "3d12",
+          "mod": 7,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +13 к попаданию, досягаемость 10 футов, одна цель. Попадание: Рубящий урон 16 (2к8 + 7).",
+      "attackBonus": 13,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 7,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Хвост",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +13 к попаданию, досягаемость 15 футов, одна цель. Попадание: Дробящий урон 26 (3к12 + 7). Если цель — существо, она должна преуспеть в спасброске Силы Сл 20, иначе будет оттолкнута на 10 футов от дракочерепахи и сбита с ног.",
+      "attackBonus": 13,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "3d12",
+          "mod": 7,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 20,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Песочное дыхание (перезарядка 5–6)",
+      "type": "breath",
+      "description": "Дракочерепаха выдыхает конус плотного песка 60-футовым конусом. Все существа в этой области должны совершить спасбросок Телосложения Сл 18, получая 52 (15к6) рубящего урона при провале, или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "15d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 60
+      },
+      "save": {
+        "ability": "CON",
+        "dc": 18,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

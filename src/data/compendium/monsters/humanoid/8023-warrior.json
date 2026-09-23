@@ -1,0 +1,118 @@
+{
+  "id": "8023",
+  "slug": "8023-warrior",
+  "name": "Боец",
+  "nameEn": "Warrior",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "7-й уровень",
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Essentials Kit: Divine Contention",
+  "isNamed": false,
+  "armorClass": {
+    "value": 20,
+    "type": "латы, щит"
+  },
+  "hitPoints": {
+    "average": 52,
+    "hitDice": "8d8 + 16"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 14,
+    "con": 14,
+    "int": 10,
+    "wis": 12,
+    "cha": 10
+  },
+  "savingThrows": {
+    "con": 5
+  },
+  "skills": {
+    "athletics": 6,
+    "perception": 4,
+    "survival": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14
+  },
+  "languages": [
+    "Общий",
+    "и ещё один язык"
+  ],
+  "traits": [
+    {
+      "name": "Второе дыхание",
+      "description": "В свой ход боец может бонусным действием восстановить кол-во хитов в размере 1к10 + его уровень. Использовав это умение, ему нужно завершить короткий, либо продолжительный отдых, чтобы получить возможность использовать его снова."
+    },
+    {
+      "name": "Улучшенные критические попадания",
+      "description": "Броски атаки бойца считаются критическим попаданием при выпадении «19» или «20» на к20."
+    },
+    {
+      "name": "Боевая готовность",
+      "description": "Боец совершает с преимуществом броски инициативы."
+    },
+    {
+      "name": "Роль воина",
+      "description": "Боец имеет одну из следующих особенностей на ваш выбор:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Дополнительная атака",
+      "type": "multiattack",
+      "description": "Когда боец совершает в свой ход действие Атака, он совершает две атаки вместо одной."
+    },
+    {
+      "name": "Длинный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт. , одна цель. Попадание: 7 (1к8 + 3) рубящего урона или 8 (1к10 + 3) рубящего урона при атаке двумя руками.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Длинный лук",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +5 к попаданию, дистанция 150/600 фт., одна цель. Попадание: 6 (1к8 + 2) колющего урона.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 150,
+        "long": 600
+      },
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Защита (только для Защитника)",
+      "type": "special",
+      "description": "Боец накладывает помеху на атаку существа, находящегося в радиусе 5 футов от него, если целью атаки не является сам боец. Боец должен видеть нападающего."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,112 @@
+{
+  "id": "7812",
+  "slug": "7812-maggie-keeneyes-tier-3",
+  "name": "Мэгги Кинайс (3-го уровня)",
+  "nameEn": "Maggie Keeneyes (Tier 3)",
+  "size": "large",
+  "type": "giant",
+  "subtype": "огр",
+  "alignment": "законно-нейтральный, именной НИП",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Critical Role: Call of the Netherdeep",
+  "isNamed": true,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 142,
+    "hitDice": "15d10 + 60"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 14,
+    "con": 18,
+    "int": 14,
+    "wis": 14,
+    "cha": 8
+  },
+  "savingThrows": {
+    "str": 8,
+    "con": 7
+  },
+  "skills": {
+    "athletics": 8,
+    "perception": 5,
+    "insight": 5,
+    "persuasion": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Великаний"
+  ],
+  "traits": [
+    {
+      "name": "Боевая готовность",
+      "description": "Мэгги и её союзники находящиеся в пределах 30 футов от неё, совершают броски инициативы с преимуществом, пока Мэгги дееспособна."
+    },
+    {
+      "name": "Толчок",
+      "description": "Один раз во время каждого своего хода, после попадания по существу атакой, Мэгги может заставить существо совершить спасбросок Силы Сл 16; при провале отбрасывая его на 15 футов от Мэгги по горизонтали и сбивая его с ног."
+    },
+    {
+      "name": "Особое снаряжение",
+      "description": "Мэгги облачена в руидиевый доспех. Если Мэгги выбросает 1 на спасброске, будучи облачённой в этот доспех, Мэгги должна совершить спасбросок Харизмы Сл 20, при провале получая 1 степень истощения."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Мэгги совершает две атаки Тяжёлой секирой или Броском молота."
+    },
+    {
+      "name": "Тяжёлая секира",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 10 футов, одна цель. Попадание: 16 (2к12 + 5) рубящего урона.",
+      "attackBonus": 8,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d12",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Бросок молота",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +8 к попаданию, дистанция 20/60 футов, одна цель. Попадание: 15 (4к4 + 5) дробящего урона.",
+      "attackBonus": 8,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "4d4",
+          "mod": 5,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

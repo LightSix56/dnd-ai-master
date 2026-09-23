@@ -1,0 +1,85 @@
+{
+  "id": "5345",
+  "slug": "5345-obaya-uday",
+  "name": "Обайя Удэй",
+  "nameEn": "Obaya Uday",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "чультанка; человек",
+  "alignment": "нейтрально-добрый, именной НИП",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Waterdeep: Dragon Heist",
+  "isNamed": true,
+  "armorClass": {
+    "value": 13,
+    "type": "кольчужная рубаха"
+  },
+  "hitPoints": {
+    "average": 27,
+    "hitDice": "5d8 + 5"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 10,
+    "con": 12,
+    "int": 13,
+    "wis": 16,
+    "cha": 13
+  },
+  "savingThrows": {},
+  "skills": {
+    "medicine": 7,
+    "religion": 5,
+    "persuasion": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "2 любых языка"
+  ],
+  "traits": [
+    {
+      "name": "Божественная слава",
+      "description": "Обайя может бонусным действием потратить одну ячейку заклинания, чтобы её рукопашные атаки оружием магическим образом причиняли цели при попадании дополнительный урон излучением 10 (3к6). Это преимущество длится до конца текущего хода. Если Обайя потратит ячейку 2-го уровня или выше, дополнительный урон увеличивается на 1к6 за каждый уровень выше 1-го."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Обайя является заклинателем 5-го уровня. Её базовой характеристикой является Мудрость (Сл спасброска от заклинания 13, +5 к попаданию атаками заклинаниями). У него подготовлены следующие заклинания жреца:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Булава",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 футов, одна цель. Попадание: Дробящий урон 3 (1к6).",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 0,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 5,
+    "spellAttackBonus": 5,
+    "ability": "WIS"
+  }
+}

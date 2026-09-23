@@ -1,0 +1,114 @@
+{
+  "id": "10443",
+  "slug": "10443-sofina",
+  "name": "Софина",
+  "nameEn": "Sofina",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "волшебник",
+  "alignment": "нейтрально-злой, именной НИП",
+  "challengeRating": 15,
+  "xp": 13000,
+  "source": "Honor among Thieves",
+  "isNamed": true,
+  "armorClass": {
+    "value": 14,
+    "type": "магическая мантия; 17 с доспехами мага"
+  },
+  "hitPoints": {
+    "average": 161,
+    "hitDice": "19d8 + 76"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 14,
+    "con": 18,
+    "int": 20,
+    "wis": 14,
+    "cha": 8
+  },
+  "savingThrows": {
+    "str": 2,
+    "dex": 3,
+    "con": 5,
+    "int": 11,
+    "wis": 8,
+    "cha": 0
+  },
+  "skills": {
+    "history": 10,
+    "arcana": 10,
+    "insight": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий",
+    "Бездны",
+    "Драконий",
+    "Инфернальный",
+    "Тэйский"
+  ],
+  "traits": [
+    {
+      "name": "Особое снаряжение",
+      "description": "Софина носит магическую робу, которая дает ей бонус +2 к КД и бонус +1 ко всем спасброскам (уже включено в блок статистики)."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Софина совершает три атаки Некротическим ударом."
+    },
+    {
+      "name": "Некротический удар",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака заклинанием: +10 к попаданию, досягаемость 5 футов или дистанция 120 футов, одна цель. Попадание: 32 (5к10+5) урона некротической энергией.",
+      "attackBonus": 10,
+      "reachFt": 5,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "5d10",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Софина накладывает одно из следующий заклинаний, используя Интеллект в качестве заклинательной характеристики (Сл спасброска от заклинания 18):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "волшебная рука [mage hand], сообщение [message], фокусы [prestidigitation]"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "волна грома [thunderwave], длань Бигби [bigby's hand], доспехи мага [mage armor], Отилюков упругий шар [otiluke’s resilient sphere], переносящая дверь [dimension door], проклятие [bestow curse]"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "остановка времени [time stop], перст смерти [finger of death], Эвардовы чёрные щупальца [evard's black tentacles]"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,79 @@
+{
+  "id": "5992",
+  "slug": "5992-quetzalcoatlus-zombie",
+  "name": "Кетцалькоатль зомби",
+  "nameEn": "Quetzalcoatlus Zombie",
+  "size": "huge",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Adventurers League",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 42,
+    "hitDice": "5d12 + 10"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 9,
+    "con": 15,
+    "int": 1,
+    "wis": 6,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 10 футов, одна цель. Попадание: 12 (3к6 + 2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Смертельный прыжок",
+      "type": "special",
+      "description": "Если кетцалькоатль зомби прыгает не менее, чем на 15 футов в качестве части своего движения, он может затем использовать это действие, чтобы приземлиться на ноги в пространстве, в котором находится одно или несколько других существ. Каждое из этих существ должно преуспеть в спасброске Силы или Ловкости (выбор цели) Сл 12 или будет сбито с ног и получит 12 (1к6 + 2) дробящего урона и 12 (3к6 + 2) рубящего урона. При успешном спасении, существо получает только половину урона, не сбивается с ног, но отталкивается на 5 футов (в свободное пространство, по выбору цели) от пространства кетцалькоатля зомби. Если поблизости нет свободного пространства, существо сбито с ног и находится под кетцалькоатлем зомби.",
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

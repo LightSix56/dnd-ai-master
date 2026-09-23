@@ -1,0 +1,91 @@
+{
+  "id": "4914",
+  "slug": "4914-burrowshark",
+  "name": "Подземная акула",
+  "nameEn": "Burrowshark",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "нейтрально-злой",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Princes of the Apocalypse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 82,
+    "hitDice": "11d8 + 33"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 12,
+    "con": 16,
+    "int": 10,
+    "wis": 11,
+    "cha": 13
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 6,
+    "perception": 2,
+    "intimidation": 3,
+    "уход_за_животными": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Узы Чёрной Земли",
+      "description": "Подземная акула имеет магическую связь со своей прирученной ездовой панцирницей. Когда подземная акула находится верхом на своей панцирнице, она разделяет её восприятие и может ехать на ней, когда та зарывается в землю. Привязанная таким образом панцирница подчиняется командам подземной акулы. Если её панцирница умирает, подземная акула может обучить новую за один месяц."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Подземная акула совершает три рукопашные атаки."
+    },
+    {
+      "name": "Копьё",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +6 к попаданию, досягаемость 5 фт. или дистанция 20/60 фт., одна цель. Попадание: колющий урон 7 (1к6 + 4) или колющий урон 8 (1к8 + 4) при использовании оружия двумя руками в рукопашной атаке.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Непоколебимость",
+      "type": "special",
+      "description": "Когда на подземную акулу воздействует эффект, который должен передвинуть её, сбить с ног или сделать и то, и другое, она может использовать реакцию, чтобы не двигаться и устоять на ногах."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

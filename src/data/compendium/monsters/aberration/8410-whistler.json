@@ -1,0 +1,105 @@
+{
+  "id": "8410",
+  "slug": "8410-whistler",
+  "name": "Свистун",
+  "nameEn": "Whistler",
+  "size": "large",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "обычно нейтрально-злая",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Journeys through the Radiant Citadel",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 180,
+    "hitDice": "24d10 + 48"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 16,
+    "con": 14,
+    "int": 15,
+    "wis": 16,
+    "cha": 18
+  },
+  "savingThrows": {
+    "dex": 7,
+    "cha": 8
+  },
+  "skills": {
+    "stealth": 11
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "blindsight": 60
+  },
+  "languages": [
+    "Глубинная речь",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Размытая форма",
+      "description": "Броски атаки против свистуна совершаются с помехой, до тех пор, пока свистун дееспособен."
+    },
+    {
+      "name": "Необычная природа",
+      "description": "Свистуну не нужны воздух, еда, питье или сон."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Свистун совершает три атаки Психическим ударом."
+    },
+    {
+      "name": "Психический удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака заклинанием: +8 к попаданию, досягаемость 10 футов, одно существо. Попадание: 15 (2к10 + 4) урона психической энергией.",
+      "attackBonus": 8,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Потусторонняя мелодия (перезарядка 5-6)",
+      "type": "special",
+      "description": "Свистун телепатически насвистывает потустороннюю мелодию в разумах до двух существ, которых он может видеть в пределах досягаемости своей телепатии. Каждая цель должна преуспеть в спасброске Мудрости Сл 16, иначе получит 33 (6к10) урона психической энергией и станет испуганной свистуном на 1 минуту. Испуганное существо может повторить спасбросок в конце каждого своего хода, оканчивая на себе действие эффекта в случае успеха.",
+      "damage": [
+        {
+          "dice": "6d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "CHA",
+        "dc": 16,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

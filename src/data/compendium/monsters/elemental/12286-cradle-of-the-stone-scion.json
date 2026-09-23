@@ -1,0 +1,137 @@
+{
+  "id": "12286",
+  "slug": "12286-cradle-of-the-stone-scion",
+  "name": "Колыбель каменного отпрыска",
+  "nameEn": "Cradle of the Stone Scion",
+  "size": "gargantuan",
+  "type": "elemental",
+  "subtype": null,
+  "alignment": "обычно нейтральный",
+  "challengeRating": 23,
+  "xp": 50000,
+  "source": "Bigby Presents: Glory of the Giants",
+  "isNamed": false,
+  "armorClass": {
+    "value": 20,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 455,
+    "hitDice": "26d20 + 182"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 26,
+    "dex": 15,
+    "con": 24,
+    "int": 11,
+    "wis": 18,
+    "cha": 10
+  },
+  "savingThrows": {
+    "wis": 11,
+    "cha": 7
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "acid",
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "tremorsense": 120
+  },
+  "languages": [
+    "Великаний",
+    "Первичный"
+  ],
+  "traits": [
+    {
+      "name": "Пробуждение отпрыска",
+      "description": "Колыбель - это сосуд отпрыска Скорауса [scion of Skoraeus]. Когда хиты колыбели уменьшаются до 0, её остов рассыпается в пыль. Отпрыск мгновенно появляется в том пространстве, которое занимала колыбель, и использует инициативу колыбели."
+    },
+    {
+      "name": "Легендарное сопротивление (5/день)",
+      "description": "Если колыбель проваливает спасбросок, она может вместо этого сделать спасбросок успешным."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Колыбель совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Осадный монстр",
+      "description": "Колыбель наносит двойной урон объектам и сооружениям."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Колыбель совершает две атаки Размашистым ударом или Плевком камнем."
+    },
+    {
+      "name": "Размашистый удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: + 15 к попаданию, досягаемость 20 футов, одна цель. Попадание: 30 (4к10 + 8) дробящего урона.",
+      "reachFt": 20,
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 8,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Плевок камнем",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +15 к попаданию, дистанция 120 футов, одна цель. Попадание: 24 (3к10 + 8) дробящего урона, и цель должна преуспеть в спасброске Силы Сл 23, иначе упадёт ничком.",
+      "attackBonus": 15,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 8,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 23,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Сокрушительный рёв (перезарядка 5-6)",
+      "type": "special",
+      "description": "Колыбель издает болезненный протяжный рёв. Каждое существо в пределах 60 футов от колыбели должно совершить спасбросок Телосложения Сл 23. В случае провала существо получает 33 (6к10) урона звуком и становится недееспособным до конца своего следующего хода.",
+      "damage": [
+        {
+          "dice": "6d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "CON",
+        "dc": 23,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

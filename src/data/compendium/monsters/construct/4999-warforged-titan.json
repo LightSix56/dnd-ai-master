@@ -1,0 +1,123 @@
+{
+  "id": "4999",
+  "slug": "4999-warforged-titan",
+  "name": "Кованый титан",
+  "nameEn": "Warforged Titan",
+  "size": "huge",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "законно-нейтральный",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Eberron: Rising from the Last War",
+  "isNamed": false,
+  "armorClass": {
+    "value": 20,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 125,
+    "hitDice": "10d12 + 60"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 23,
+    "dex": 8,
+    "con": 22,
+    "int": 3,
+    "wis": 11,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Понимает один язык своего создателя, но не говорит."
+    },
+    {
+      "name": "Платформы",
+      "description": "У кованых титанов есть две платформы, встроенных в его ноги. Одно существо Среднего размера или меньше может перемещаться на каждой платформе, без протискивания. Чтобы совершить рукопашную атаку оружием по цели в пределах 5 футов от кованого, оно должно использовать копьё или оружие с большой досягаемостью, а цель должна быть Большого размера или ещё больше."
+    },
+    {
+      "name": "Осадный монстр",
+      "description": "Кованый титан наносит двойной урон объектам и сооружениям."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Кованый титан совершает одну атаку рукой-топором и одну атаку кулаком-молотом."
+    },
+    {
+      "name": "Рука-топор",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 10 футов, одна цель. Попадание: 19 (3к8 + 6) рубящего урона, плюс 11 (2к10) рубящего урона, если цель сбита с ног.",
+      "attackBonus": 9,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 6,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Кулак-молот",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 10 футов, одна цель. Попадание: 19 (3к8 + 6) дробящего урона. Если цель является существом, то оно должно преуспеть в спасброске Силы Сл 17, иначе оно будет сбито с ног.",
+      "attackBonus": 9,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 6,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 17,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Взмах топором (Перезарядка 6)",
+      "type": "special",
+      "description": "Кованый титан совершает взмах топором, и каждое существо в пределах 10 футов от него должно совершить спасбросок Ловкости Сл 17. Существо получает 19 (3к8 +6) рубящего урона в случае провала и половину урона в случае успеха.",
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 6,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "6",
+      "save": {
+        "ability": "DEX",
+        "dc": 17,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

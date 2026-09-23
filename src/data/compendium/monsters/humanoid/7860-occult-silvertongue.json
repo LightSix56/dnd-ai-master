@@ -1,0 +1,107 @@
+{
+  "id": "7860",
+  "slug": "7860-occult-silvertongue",
+  "name": "Оккультист златоуст",
+  "nameEn": "Occult Silvertongue",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "Чародей",
+  "alignment": "законно-злой",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Critical Role: Call of the Netherdeep",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "16 с доспехом мага"
+  },
+  "hitPoints": {
+    "average": 127,
+    "hitDice": "17d8 + 51"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 16,
+    "con": 16,
+    "int": 15,
+    "wis": 17,
+    "cha": 20
+  },
+  "savingThrows": {
+    "wis": 6,
+    "cha": 8
+  },
+  "skills": {
+    "perception": 6,
+    "history": 5,
+    "arcana": 8,
+    "deception": 11
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "truesight": 60
+  },
+  "languages": [
+    "Общий",
+    "любые три языка",
+    "Телепатия 60 фт."
+  ],
+  "traits": [
+    {
+      "name": "Чужеродный разум",
+      "description": "Если существо пытается прочитать мысли златоуста или наносит ему урон психической энергией, это существо должно преуспеть в спасброске Интеллекта Сл 16, иначе станет ошеломлённым до начала своего следующего хода."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Златоуст совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Багровый снаряд",
+      "type": "melee_attack",
+      "description": "Рукопашная или Дальнобойная атака заклинанием: +8 к попаданию, досягаемость 5 футов или дистанция 60 футов, одно существо. Попадание: 27 (4к10 + 5) урона психической энергией.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "range": {
+        "normal": 60
+      },
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Златоуст может накладывать следующие заклинания, используя Харизму в качестве базовой характеристики (Сл спасброска от заклинания 16):"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "очарование личности [charm person], доспехи мага [mage armor], послание [sending];"
+    },
+    {
+      "name": "1/день",
+      "type": "special",
+      "description": "переносящая дверь [dimension door]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

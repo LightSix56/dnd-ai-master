@@ -1,0 +1,93 @@
+{
+  "id": "8854",
+  "slug": "8854-plasmoid-boss",
+  "name": "Шишка плазмоидов",
+  "nameEn": "Plasmoid Boss",
+  "size": "large",
+  "type": "ooze",
+  "subtype": null,
+  "alignment": "любое мировоззрение",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11
+  },
+  "hitPoints": {
+    "average": 82,
+    "hitDice": "11d10 + 22"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 12,
+    "con": 14,
+    "int": 14,
+    "wis": 13,
+    "cha": 15
+  },
+  "savingThrows": {
+    "con": 4,
+    "wis": 3
+  },
+  "skills": {
+    "intimidation": 4,
+    "deception": 4,
+    "persuasion": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Аморфный",
+      "description": "Плазмоид можете протискиваться в узкое пространство шириной в 1 дюйм при условии, что ничего не несёт и не носит. Он совершает с преимуществом проверки характеристик если пытается схватить или избежать захвата."
+    },
+    {
+      "name": "Задержка дыхания",
+      "description": "Плазмоид может задержать дыхание на 1 час."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Плазмоид совершает три атаки Ложноножкой."
+    },
+    {
+      "name": "Ложноножка",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию (с преимуществом, если рядом с ним в пределах 10 футов находятся один или несколько союзников), досягаемость 10 фт., одна цель. Попадание: 11 (2к6 + 4) дробящего урона.",
+      "attackBonus": 6,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Невероятное уклонение",
+      "type": "special",
+      "description": "Плазмоид получает половину урона от попавшей по нему атаке. Плазмоид должен видеть атакующего."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

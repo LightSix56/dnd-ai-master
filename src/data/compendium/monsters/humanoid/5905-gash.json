@@ -1,0 +1,111 @@
+{
+  "id": "5905",
+  "slug": "5905-gash",
+  "name": "Гаш",
+  "nameEn": "Gash",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "гнолл",
+  "alignment": "хаотично-злой, именной НИП",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Out of the Abyss",
+  "isNamed": true,
+  "armorClass": {
+    "value": 15,
+    "type": "шкурный доспех, щит"
+  },
+  "hitPoints": {
+    "average": 11,
+    "hitDice": "5d8 - 11"
+  },
+  "speed": {
+    "walk": 25
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 12,
+    "con": 11,
+    "int": 6,
+    "wis": 10,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Гноллий"
+  ],
+  "traits": [
+    {
+      "name": "Буйство",
+      "description": "Если Гаш в свой ход опускает рукопашной атакой хиты существа до 0, он может бонусным действием переместиться на расстояние до половины своей скорости и совершить атаку укусом."
+    },
+    {
+      "name": "Травмированный",
+      "description": "Гаш имеет помехи на проверки и спасброски Мудрости из-за пережитых им физических и ментальных издевательств. Заклинание малое восстановление [lesser restoration] избавит его от этих эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одно существо. Попадание: Колющий урон 4 (1к4 + 2).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Копье",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +4 к попаданию, досягаемость 5 футов или дистанция 20/60 футов, одна цель. Попадание: Колющий урон 5 (1к6 + 2), или колющий урон 6 (1к8 + 2), если используется двумя руками для совершения рукопашной атаки.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Длинный лук",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +3 к попаданию, дистанция 150/600 футов, одна цель. Попадание: Колющий урон 5 (1к8 + 1).",
+      "attackBonus": 3,
+      "range": {
+        "normal": 150,
+        "long": 600
+      },
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

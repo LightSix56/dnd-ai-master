@@ -1,0 +1,96 @@
+{
+  "id": "7787",
+  "slug": "7787-shalvus-martholio",
+  "name": "Шалвус Мартолио",
+  "nameEn": "Shalvus Martholio",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек тёрами",
+  "alignment": "хаотично-добрый, именной НИП",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Storm King's Thunder",
+  "isNamed": true,
+  "armorClass": {
+    "value": 13,
+    "type": "кожаный доспех"
+  },
+  "hitPoints": {
+    "average": 27,
+    "hitDice": "6d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 15,
+    "con": 10,
+    "int": 12,
+    "wis": 14,
+    "cha": 14
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4,
+    "sleight_of_hand": 4,
+    "deception": 4,
+    "insight": 4,
+    "investigation": 3,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Скрытая атака (1/ход)",
+      "description": "Шалвус причиняет дополнительный урон 7 (2к6), когда попадает по цели атакой оружием, обладая преимуществом при броске атаки, или когда цель находится в пределах 5 фт. от боеспособного союзника Шалвуса, и у Шалвуса нет помехи к броску атаки."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Боевой посох",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 фт., одна цель. Попадание: 3 (1к6) дробящего урона или 4 (1к8) дробящего урона, если использовать посох двумя руками.",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 0,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Ручной арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +4 к попаданию, дистанция 30/120 фт., одна цель. Попадание: 5 (1к6+2) колющего урона. Шалвус носит с собой 10 болтов для арбалета.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 30,
+        "long": 120
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

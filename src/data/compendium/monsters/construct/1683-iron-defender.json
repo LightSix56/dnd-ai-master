@@ -1,0 +1,87 @@
+{
+  "id": "1683",
+  "slug": "1683-iron-defender",
+  "name": "Железный защитник",
+  "nameEn": "Iron Defender",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Eberron: Rising from the Last War",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 30,
+    "hitDice": "4d8 + 12"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 14,
+    "con": 16,
+    "int": 8,
+    "wis": 11,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "darkvision": 60
+  },
+  "languages": [
+    "понимает языки своего создателя",
+    "но не говорит"
+  ],
+  "traits": [
+    {
+      "name": "Обострённые чувства",
+      "description": "Защитник имеет преимущество на проверки Мудрости (Восприятие)."
+    },
+    {
+      "name": "Телепатическая связь",
+      "description": "Пока защитник находится на том же плане, что и его хозяин, он может магическим образом передавать ему свои чувства, а также они могут общаться телепатически."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 6 (1к6+3), и цель должна совершить спасбросок Силы Сл 13, иначе получит дополнительно 3 (1к6+3) колющего урона, и станет схваченной (Сл освобождения 13). Защитник может удерживать таким способом только одну цель.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

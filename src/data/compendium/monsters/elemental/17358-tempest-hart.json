@@ -1,0 +1,133 @@
+{
+  "id": "17358",
+  "slug": "17358-tempest-hart",
+  "name": "Штормовой олень",
+  "nameEn": "Tempest Hart",
+  "size": "huge",
+  "type": "elemental",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 11,
+  "xp": 7200,
+  "source": "Monstrous Compendium Vol. Four: Eldraine Creatures",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 147,
+    "hitDice": "14d12 + 56"
+  },
+  "speed": {
+    "walk": 50,
+    "fly": 50
+  },
+  "abilities": {
+    "str": 21,
+    "dex": 17,
+    "con": 18,
+    "int": 3,
+    "wis": 18,
+    "cha": 14
+  },
+  "savingThrows": {
+    "dex": 7,
+    "wis": 8
+  },
+  "skills": {
+    "perception": 12
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "thunder"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 22
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Легендарное сопротивление (3/день)",
+      "description": "Если штормовой олень проваливает спасбросок, вместо этого он может выбрать успех."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Олень совершает атаку Молниеносными рогами и Громовыми копытами."
+    },
+    {
+      "name": "Молниеносные рога",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 15 фт., одна цель. Попадание: 16 (2к10 + 5) урон электричеством. Если цель — существо, она должна преуспеть в спасброске Телосложения Сл 16, иначе она станет ошеломленной до начала следующего хода оленя.",
+      "attackBonus": 9,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 16,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Громовые копыта",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 фт., одна цель. Попадание: 14 (2к8 + 5) урона звуком.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Олень может использовать до двух реакций",
+      "type": "special",
+      "description": "за раунд, но только одну за ход."
+    },
+    {
+      "name": "Опутывающий рост",
+      "type": "special",
+      "description": "Сразу после того, как видимое оленем существо в пределах 120 футов от него, попадает по нему броском атаки, олень уменьшает урон по себе вдвое. Атакующий должен немедленно совершить спасбросок Силы Сл 16, так как бобовые стебли обвивают его в пространстве. В случае провала существо становится схвачено (Сл высвобождения 16) и пока захват не окончен, оно опутано. Бобовые стебли исчезают через 1 минуту, если олень становится недееспособным или когда умирает.",
+      "save": {
+        "ability": "STR",
+        "dc": 16,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Молниеносный ответ",
+      "type": "special",
+      "description": "В ответ на спасбросок олень вызывает разряд молнии, нацеленный на видимое им существо, в пределах 120 футов от себя. Цель должна совершить спасбросок Ловкости Сл 16, получая 19 (3к12) урона электричеством при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "3d12",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 16,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

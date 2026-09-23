@@ -1,0 +1,115 @@
+{
+  "id": "6289",
+  "slug": "6289-young-dragon-turtle",
+  "name": "Молодая дракочерепаха",
+  "nameEn": "Young Dragon Turtle",
+  "size": "huge",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 10,
+  "xp": 5900,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 19,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 178,
+    "hitDice": "17d12 + 68"
+  },
+  "speed": {
+    "walk": 20,
+    "swim": 40
+  },
+  "abilities": {
+    "str": 21,
+    "dex": 10,
+    "con": 19,
+    "int": 10,
+    "wis": 12,
+    "cha": 12
+  },
+  "savingThrows": {
+    "dex": 4,
+    "con": 8,
+    "wis": 5
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 120
+  },
+  "languages": [
+    "Акван",
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Дракочерепаха может дышать как воздухом, так и водой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дракочерепаха совершает одну атаку Укусом или Хвостом и две атаки Когтем."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 10 фт., одна цель. Попадание: 11 (1к12+5) колющего урона плюс 6 (1к12) урона электричеством.",
+      "attackBonus": 9,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d12",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 фт., одна цель. Попадание: 9 (1к8+5) рубящего урона.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Паровое дыхание (перезарядка 5-6)",
+      "type": "breath",
+      "description": "Дракочерепаха выдыхает пар в 30-футовом конусе. Все существа в этой области должны совершить спасбросок Телосложения Сл 16, при провале получая 42 (12к6) урона огнём или половину этого урона при успехе. Нахождение под водой не даёт сопротивления к этому урону.",
+      "damage": [
+        {
+          "dice": "12d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "CON",
+        "dc": 16,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,94 @@
+{
+  "id": "6206",
+  "slug": "6206-poison-weird",
+  "name": "Ядовитая аномалия",
+  "nameEn": "Poison Weird",
+  "size": "large",
+  "type": "elemental",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Waterdeep: Dungeon of the Mad Mage",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 58,
+    "hitDice": "9d10 + 9"
+  },
+  "speed": {
+    "walk": 0,
+    "swim": 60
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 16,
+    "con": 13,
+    "int": 11,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "blindsight": 30
+  },
+  "languages": [
+    "Акван"
+  ],
+  "traits": [
+    {
+      "name": "Языки —",
+      "description": "понимает Акван, но не говорит."
+    },
+    {
+      "name": "Невидимость в воде",
+      "description": "Ядовитая аномалия невидима, если полностью погружена в воду."
+    },
+    {
+      "name": "Связанная с варевом",
+      "description": "Аномалия умирает, если её заставят покинуть резервуар или если на токсичное варево будет наложено заклинание очищение пищи и питья [purify food and drink]."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Сжимание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 10 футов, одно существо. Попадание: Дробящий урон 13 (3к6 + 3). Если размер цели не больше Среднего, она становится схваченной (Сл высвобождения 13) и подтягивается на 5 футов к ядовитой аномалии.",
+      "attackBonus": 5,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Будучи схваченной ядовитой аномалией, су",
+      "type": "special",
+      "description": "щество получает 10 (3к6) урона ядом в начале каждого своего хода. Пока цель схвачена, она опутана, водная аномалия пытается её утопить, и аномалия не может сжимать другую цель.",
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

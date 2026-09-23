@@ -1,0 +1,97 @@
+{
+  "id": "5874",
+  "slug": "5874-spiderbait",
+  "name": "Спайдербэйт",
+  "nameEn": "Spiderbait",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "гоблиноид",
+  "alignment": "нейтральный, именной НИП",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Out of the Abyss",
+  "isNamed": true,
+  "armorClass": {
+    "value": 15,
+    "type": "кожаный доспех, щит"
+  },
+  "hitPoints": {
+    "average": 7,
+    "hitDice": "2d6"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 8,
+    "dex": 14,
+    "con": 10,
+    "int": 10,
+    "wis": 8,
+    "cha": 8
+  },
+  "savingThrows": {},
+  "skills": {
+    "acrobatics": 6,
+    "athletics": 3,
+    "stealth": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 9,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Гоблинский"
+  ],
+  "traits": [
+    {
+      "name": "Ловкий побег",
+      "description": "Гоблин может в каждом своем ходу бонусным действием совершать действие Засада или Отход."
+    },
+    {
+      "name": "Бдительный",
+      "description": "Спайдербэйт имеет преимущество на проверки, совершаемые для того, чтобы не быть застанным врасплох."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Скимитар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 5 (1к6 + 2).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Короткий лук",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +4 к попаданию, дистанция 80 футов/320 футов, одна цель. Попадание: Колющий урон 5 (1к6 + 2).",
+      "attackBonus": 4,
+      "range": {
+        "normal": 80
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

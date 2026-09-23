@@ -1,0 +1,138 @@
+{
+  "id": "8425",
+  "slug": "8425-mercion",
+  "name": "Мерсион",
+  "nameEn": "Mercion",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "Человек, Жрица",
+  "alignment": "Жрица), законно-добрый, именной НИП",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "The Wild Beyond The Witchlight: A Feywild Adventure",
+  "isNamed": true,
+  "armorClass": {
+    "value": 19,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 31,
+    "hitDice": "9d8 - 9"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 10,
+    "con": 9,
+    "int": 12,
+    "wis": 17,
+    "cha": 17
+  },
+  "savingThrows": {
+    "wis": 5,
+    "cha": 5
+  },
+  "skills": {
+    "medicine": 5,
+    "insight": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "Общий",
+    "Дварфийский"
+  ],
+  "traits": [
+    {
+      "name": "Особое снаряжение",
+      "description": "Мерсион орудует боевым посохом +1[weapon +1]."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Мерсион совершает одну атаку Божественным сиянием и одну атаку Боевым посохом +1. Она может заменить одну из этих атак накладыванием заклинания."
+    },
+    {
+      "name": "Божественное сияние",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +5 к попаданию, досягаемость 5 футов или дистанция 60 футов, одна цель. Попадание: 13 (3к8) урона излучением.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "range": {
+        "normal": 60
+      },
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Боевой посох +1",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием:+4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к6 + 3) дробящего урона или 7 (1d8 + 3) дробящего урона при использовании двумя руками.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Сияющее пламя (перезарядка 5-6)",
+      "type": "special",
+      "description": "Мерсион создает взрыв магического сияющего пламени, центрированный в точке, которую она может видеть в пределах 120 футов. Каждое существо в сфере радиусом 20 футов с центром в этой точке должно совершить спасбросок Ловкости Сл 13, получая 28 (8к6) урона излучением при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "8d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "DEX",
+        "dc": 13,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Мерсион накладывает одно из следующих заклинаний, используя Мудрость в качестве базовой характеристики (Сл спасброска от заклинаний 13):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "свет [light], уход за умирающим [spare the dying];"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "приказ [command], сотворение пищи и воды [create food and water], лечение ран [cure wounds], огонь фей [faerie fire], удержание личности [hold person], возрождение [revivify];"
+    },
+    {
+      "name": "1/день",
+      "type": "special",
+      "description": "защита от смерти [death ward]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

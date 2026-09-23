@@ -1,0 +1,94 @@
+{
+  "id": "7720",
+  "slug": "7720-uthgardt-barbarian-leader",
+  "name": "Лидер варваров Утгардтцев",
+  "nameEn": "Uthgardt Barbarian Leader",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "хаотично-нейтральный",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Storm King's Thunder",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "шкурный доспех"
+  },
+  "hitPoints": {
+    "average": 67,
+    "hitDice": "9d8 + 27"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 15,
+    "con": 17,
+    "int": 9,
+    "wis": 11,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий",
+    "Бохти",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Безрассудство",
+      "description": "В начале своего хода берсерк может решить, что в этом ходу все рукопашные атаки оружием будет совершать с преимуществом, но в этом случае до начала его следующего хода все броски атаки по нему тоже будут совершаться с преимуществом."
+    },
+    {
+      "name": "Особое снаряжение",
+      "description": "Лидер варваров Утгардтцев вооружен луком клятвы [oathbow]."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Секира",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 9 (1к12 + 3) рубящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d12",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Лук клятвы",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +5 к попаданию, дистанция 150/600 футов, одна цель. Попадание: 7 (1к8+3) колющего урона при попадании, и дополнительные 10 (3к6) колющего урона против заклятого врага.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 150,
+        "long": 600
+      },
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

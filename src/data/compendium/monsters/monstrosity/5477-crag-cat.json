@@ -1,0 +1,95 @@
+{
+  "id": "5477",
+  "slug": "5477-crag-cat",
+  "name": "Скальная кошка",
+  "nameEn": "Crag Cat",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Storm King's Thunder",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 34,
+    "hitDice": "4d10 + 12"
+  },
+  "speed": {
+    "walk": 40,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 17,
+    "con": 16,
+    "int": 4,
+    "wis": 14,
+    "cha": 8
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4,
+    "stealth": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Необнаружимость",
+      "description": "Кошка не может быть целью какой-либо магии прорицания или обнаружен с помощью магических датчиков."
+    },
+    {
+      "name": "Наскок",
+      "description": "Если кошка движется по крайней мере 20 футов прямо к существу, а потом бьет его атакой когтями в этом же ходу, то цель должна преуспеть в спасброске Силы Сл 13 или быть сбитой с ног. Если цель сбита с ног, кошка может бонусным действием один раз атаковать укусом."
+    },
+    {
+      "name": "Отражение заклинаний",
+      "description": "Кошка имеет преимущество на спасброски против любого заклинания, которое воздействует только на него (не на область). Если спасбросок кошки против заклинания 7-го уровня или ниже успешен, то заклинание не имеет никакого эффекта на кота и перенацеливается на самого заклинателя."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 8 (1к10 + 3) колющий урон.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к8 + 3) рубящий урон.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,106 @@
+{
+  "id": "67",
+  "slug": "67-glabrezu",
+  "name": "Глабрезу",
+  "nameEn": "Glabrezu",
+  "size": "large",
+  "type": "fiend",
+  "subtype": "демон",
+  "alignment": "хаотично-злое",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 157,
+    "hitDice": "15d10 + 75"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 15,
+    "con": 21,
+    "int": 19,
+    "wis": 17,
+    "cha": 16
+  },
+  "savingThrows": {
+    "str": 9,
+    "con": 9,
+    "wis": 7,
+    "cha": 7
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "truesight": 120
+  },
+  "languages": [
+    "Бездны",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Врождённое колдовство",
+      "description": "Базовой характеристикой глабрезу является Интеллект (Сл спасброска от заклинания 16). Глабрезу может накладывать следующие заклинания, не нуждаясь в материальных компонентах:"
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Глабрезу совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Глабрезу совершает четыре атаки: две клешнями, и две кулаками. В качестве альтернативы, он совершает две атаки клешнями и накладывает одно заклинание."
+    },
+    {
+      "name": "Клешня",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 10 футов, одна цель. Попадание: Дробящий урон 16 (2к10 + 5). Если цель — существо с размером не больше Среднего, оно становится схваченным (Сл высвобождения равна 15). У глабрезу есть две клешни, и каждая может держать по одной цели.",
+      "attackBonus": 9,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 5,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Кулак",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 футов, одна цель. Попадание: Дробящий урон 7 (2к4 + 2).",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

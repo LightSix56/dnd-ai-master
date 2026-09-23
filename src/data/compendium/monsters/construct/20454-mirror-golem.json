@@ -1,0 +1,105 @@
+{
+  "id": "20454",
+  "slug": "20454-mirror-golem",
+  "name": "Зеркальный голем",
+  "nameEn": "Mirror Golem",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 6,
+  "xp": 2300,
+  "source": "Adventurers League",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14
+  },
+  "hitPoints": {
+    "average": 93,
+    "hitDice": "11d8 + 44"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 19,
+    "con": 18,
+    "int": 6,
+    "wis": 10,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "bludgeoning",
+    "piercing",
+    "slashing",
+    "poison"
+  ],
+  "damageVulnerabilities": [
+    "force"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "понимает языки своего создателя",
+    "но не говорит"
+  ],
+  "traits": [
+    {
+      "name": "Боязнь звука",
+      "description": "Если голем получает урон звуком, то он до конца своего следующего хода совершает помехой броски атаки и проверки характеристик."
+    },
+    {
+      "name": "Неизменяемая форма",
+      "description": "Голем обладает иммунитетом ко всем заклинаниям и эффектам, изменяющим его форму."
+    },
+    {
+      "name": "Поглощение электричества",
+      "description": "Каждый раз, когда голем должен получить урон электричеством, он не получает урон, и вместо этого восстанавливает число хитов, равное причиняемому урону электричеством."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Голем совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Магическое оружие",
+      "description": "Атаки оружием голема являются магическими."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Голем совершает два удара кулаком."
+    },
+    {
+      "name": "Кулак",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, дистанция 10 фт., одно существо. Попадание: 13 (2к8 + 4) дробящего урона.",
+      "attackBonus": 6,
+      "range": {
+        "normal": 10
+      },
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

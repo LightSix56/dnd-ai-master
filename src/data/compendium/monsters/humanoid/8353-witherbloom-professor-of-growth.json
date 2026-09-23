@@ -1,0 +1,107 @@
+{
+  "id": "8353",
+  "slug": "8353-witherbloom-professor-of-growth",
+  "name": "Профессор роста Визерблума",
+  "nameEn": "Witherbloom Professor of Growth",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "Друид",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Strixhaven: A Curriculum of Chaos",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "шкурный доспех"
+  },
+  "hitPoints": {
+    "average": 112,
+    "hitDice": "15d8 + 45"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 13,
+    "con": 16,
+    "int": 16,
+    "wis": 19,
+    "cha": 13
+  },
+  "savingThrows": {
+    "con": 6,
+    "int": 6,
+    "wis": 7,
+    "cha": 4
+  },
+  "skills": {
+    "survival": 7,
+    "arcana": 6,
+    "medicine": 7,
+    "nature": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14
+  },
+  "languages": [
+    "Общий",
+    "и ещё четыре языка"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Профессор совершает две атаки Зеленой плетью."
+    },
+    {
+      "name": "Зеленая плеть",
+      "type": "melee_attack",
+      "description": "Рукопашная атака заклинанием: +7 к попаданию, досягаемость 30 футов, одна цель. Попадание: 11 (2к6 + 4) колющего урона плюс 7 (2к6) урона ядом и цель должна преуспеть в спасброске Силы Сл 15, иначе будет притянута на 10 футов ближе к профессору.",
+      "attackBonus": 7,
+      "reachFt": 30,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Профессор накладывает одно из следующих заклинаний, используя Мудрость в качестве базовой характеристики:"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "искусство друидов [druidcraft], уход за умирающим [spare the dying];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "высшее восстановление [greater restoration], малое восстановление [lesser restoration], множественное лечение ран [mass cure wounds], бесследное передвижение [pass without trace], рост растений [plant growth], возрождение [revivify]."
+    },
+    {
+      "name": "Призыв аватара природы (Перезаряжается после окончания короткого или продолжительного отдыха)",
+      "type": "special",
+      "description": "Профессор волшебным образом призывает гроффа [groff]. Грофф появляется в свободном пространстве в пределах 60 футов от профессора, действует как союзник профессора и начинают свой ход сразу после профессора. Профессор может телепатически общаться с этим гроффом, пока он существует. Грофф существует в течение 10 минут, пока он или профессор не умрут, или пока профессор не отпустит его действием."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

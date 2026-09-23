@@ -1,0 +1,107 @@
+{
+  "id": "6018",
+  "slug": "6018-liara-portyr",
+  "name": "Лиара Портир",
+  "nameEn": "Liara Portyr",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "законно-злой, именной НИП",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Tomb of Annihilation",
+  "isNamed": true,
+  "armorClass": {
+    "value": 15,
+    "type": "проклёпанная кожа, щит"
+  },
+  "hitPoints": {
+    "average": 84,
+    "hitDice": "13d8 + 26"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 12,
+    "con": 15,
+    "int": 14,
+    "wis": 14,
+    "cha": 16
+  },
+  "savingThrows": {
+    "con": 4,
+    "wis": 4
+  },
+  "skills": {
+    "athletics": 5,
+    "intimidation": 5,
+    "deception": 5,
+    "insight": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий",
+    "Дварфийский",
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Пламенная ярость",
+      "description": "Один раз за ход, попав по существу рукопашным оружием, Лиара может извергнуть из оружия магическое пламя и дополнительно нанести цели 10 (3к6) урона огнём."
+    },
+    {
+      "name": "Храбрый",
+      "description": "Лиара совершает с преимуществом спасброски от испуга."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Лиара совершает три рукопашные атаки."
+    },
+    {
+      "name": "Боевой топор",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к8 + 3) рубящего урона, или 8 (1к10 + 3) при ударе двумя руками.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Тяжёлый арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +3 к попаданию, дистанция 100/400 фт., одна цель. Попадание: 6 (1к10 + 1) колющего урона.",
+      "attackBonus": 3,
+      "range": {
+        "normal": 100,
+        "long": 400
+      },
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

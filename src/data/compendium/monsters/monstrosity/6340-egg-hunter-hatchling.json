@@ -1,0 +1,83 @@
+{
+  "id": "6340",
+  "slug": "6340-egg-hunter-hatchling",
+  "name": "Личинка охотника за яйцами",
+  "nameEn": "Egg Hunter Hatchling",
+  "size": "tiny",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 28,
+    "hitDice": "8d4 + 8"
+  },
+  "speed": {
+    "walk": 30,
+    "burrow": 10,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 8,
+    "dex": 17,
+    "con": 13,
+    "int": 1,
+    "wis": 10,
+    "cha": 5
+  },
+  "savingThrows": {
+    "dex": 5,
+    "wis": 2
+  },
+  "skills": {
+    "perception": 2,
+    "stealth": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Охотник за яйцами может дышать и воздухом и под водой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Охотник за яйцами совершает две атаки Зубами."
+    },
+    {
+      "name": "Яйцевой зуб",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 10 (2к6+3) колющего урона или 17 (4к6+3) колющего урона если цель предмет.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

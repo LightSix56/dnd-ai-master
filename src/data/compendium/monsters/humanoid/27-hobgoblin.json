@@ -1,0 +1,89 @@
+{
+  "id": "27",
+  "slug": "27-hobgoblin",
+  "name": "Хобгоблин",
+  "nameEn": "Hobgoblin",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "гоблиноид",
+  "alignment": "законно-злой",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "кольчуга, щит"
+  },
+  "hitPoints": {
+    "average": 11,
+    "hitDice": "2d8 + 2"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 12,
+    "con": 12,
+    "int": 10,
+    "wis": 10,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Гоблинский"
+  ],
+  "traits": [
+    {
+      "name": "Воинское превосходство",
+      "description": "Один раз в ход хобгоблин может причинить дополнительный урон 7 (2к6) существу, по которому он попал атакой оружием, если это существо находится в пределах 5 футов от дееспособного союзника хобгоблина."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Длинный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: 5 (1к8 + 1) рубящего урона, или 6 (1к10+1) рубящего урона, если используется двумя руками.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 1,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Длинный лук",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +3 к попаданию, дистанция 150 футов/600 футов, одна цель. Попадание: 5 (1к8 + 1) колющего урона.",
+      "attackBonus": 3,
+      "range": {
+        "normal": 150
+      },
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

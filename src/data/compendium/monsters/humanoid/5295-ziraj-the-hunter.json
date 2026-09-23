@@ -1,0 +1,114 @@
+{
+  "id": "5295",
+  "slug": "5295-ziraj-the-hunter",
+  "name": "Зираж-охотник",
+  "nameEn": "Ziraj the Hunter",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "полуорк",
+  "alignment": "нейтрально-злой, именной НИП",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Waterdeep: Dragon Heist",
+  "isNamed": true,
+  "armorClass": {
+    "value": 17,
+    "type": "кожаный доспех +2"
+  },
+  "hitPoints": {
+    "average": 153,
+    "hitDice": "18d8 + 72"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 18,
+    "con": 18,
+    "int": 11,
+    "wis": 14,
+    "cha": 15
+  },
+  "savingThrows": {
+    "wis": 5,
+    "cha": 5
+  },
+  "skills": {
+    "athletics": 7,
+    "survival": 5,
+    "intimidation": 5,
+    "stealth": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Орочий"
+  ],
+  "traits": [
+    {
+      "name": "Использование заклинаний",
+      "description": "Зираж является заклинателем 10-го уровня. Его базовой характеристикой является Харизма (Сл спасброска от заклинания 13, +5 к попаданию атаками заклинаниями). У него подготовлены следующие заклинания паладина:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Зираж совершает три атаки глефой или большим длинным луком."
+    },
+    {
+      "name": "Глефа",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 9 (1к10 + 4).",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Большой длинный лук",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +7 к попаданию, дистанция 150/600 футов, одна цель. Попадание: Колющий урон 11 (2к6 + 4).",
+      "attackBonus": 7,
+      "range": {
+        "normal": 150,
+        "long": 600
+      },
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Ужасный аспект (Перезаряжается после короткого или длинного отдыха)",
+      "type": "special",
+      "description": "Зираж распространяет вокруг себя магическую угрозу. Все противники в радиусе 30 футов должны пройти проверку по Мудрости Сл 13. При провале спасброска, цели получает статус испуганный на 1 минуту. Если испуганная цель оканчивает свой ход за пределом радиуса в 30 футов от Зиража, то она может повторить спасбросок и окончить эффект в случае успеха."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 10,
+    "spellAttackBonus": 5,
+    "ability": "CHA"
+  }
+}

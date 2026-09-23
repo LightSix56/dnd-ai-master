@@ -1,0 +1,101 @@
+{
+  "id": "5047",
+  "slug": "5047-ktulah",
+  "name": "К’Тулах",
+  "nameEn": "K’Tulah",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "табакси",
+  "alignment": "нейтрально-добрый, именной НИП",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Candlekeep Mysteries",
+  "isNamed": true,
+  "armorClass": {
+    "value": 11,
+    "type": "16 с дубовой корой"
+  },
+  "hitPoints": {
+    "average": 27,
+    "hitDice": "5d8 + 5"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 12,
+    "con": 13,
+    "int": 12,
+    "wis": 15,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4,
+    "medicine": 4,
+    "nature": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Друидический"
+  ],
+  "traits": [
+    {
+      "name": "Кошачье проворство",
+      "description": "Когда К’Тулах перемещается в бою в свой ход, она может удвоить свою скорость до конца хода. Использовав эту особенность, она не можете использовать её снова, до тех пор пока вы не переместитесь на 0 футов в один из своих ходов."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "К’Тулах является заклинателем 4-го уровня. Его базовой характеристикой является Мудрость (Сл спасброска от заклинания 12, +4 к попаданию атаками заклинаниями). У неё подготовлены следующие заклинания друида:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Боевой посох",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию (+4 к попаданию с дубинкой), досягаемость 5 футов, одна цель. Попадание: Дробящий урон 3 (1к6), или дробящий урон 6 (1к8) с дубинкой или при использовании двумя руками.",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 0,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 футов, одна цель. Попадание: 2 (1к4) рубящего урона.",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 4,
+    "spellAttackBonus": 4,
+    "ability": "WIS"
+  }
+}

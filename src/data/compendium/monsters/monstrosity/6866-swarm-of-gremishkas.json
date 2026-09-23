@@ -1,0 +1,90 @@
+{
+  "id": "6866",
+  "slug": "6866-swarm-of-gremishkas",
+  "name": "Рой гремишек",
+  "nameEn": "Swarm of Gremishkas",
+  "size": "medium",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Van Richten's Guide to Ravenloft",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 24,
+    "hitDice": "7d6"
+  },
+  "speed": {
+    "walk": 25
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 14,
+    "con": 10,
+    "int": 12,
+    "wis": 14,
+    "cha": 4
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 30
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Понимает Общий, но не может говорить."
+    },
+    {
+      "name": "Ограниченный иммунитет к заклинаниям",
+      "description": "Рой автоматически преуспевает в спасбросках против заклинаний 3-го уровня или ниже, и броски атаки таких заклинаний всегда промахиваются по нему."
+    },
+    {
+      "name": "Рой",
+      "description": "Рой может занимать пространство другого существа и наоборот, и рой может перемещаться через любое отверстие, достаточно большое для крошечной гремишки. Рой не может восстанавливать хиты или получать временные хиты."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укусы",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 0 фт., одна цель в пространстве роя. Попадание: 12 (3к6 + 2) колющего урона или 5 (1к6 + 2) колющего урона, если рой имеет половину своих хитов или меньше, плюс 7 (2к6) урона силовым полем.",
+      "attackBonus": 4,
+      "reachFt": 0,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Перенаправление заклинаний",
+      "type": "special",
+      "description": "В ответ на бросок атаки заклинанием, который промахивается по нему, рой заставляет это заклинание поразить другое существо по своему выбору в пределах 30 футов от себя, которое он может видеть."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

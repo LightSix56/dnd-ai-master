@@ -1,0 +1,106 @@
+{
+  "id": "13201",
+  "slug": "13201-hands-of-havoc-fire-starter",
+  "name": "Воспламенитель Подручный хаоса",
+  "nameEn": "Hands of Havoc Fire Starter",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Planescape: Adventures in the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "кираса"
+  },
+  "hitPoints": {
+    "average": 65,
+    "hitDice": "10d8 + 20"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 14,
+    "con": 14,
+    "int": 10,
+    "wis": 16,
+    "cha": 11
+  },
+  "savingThrows": {
+    "str": 5,
+    "con": 4
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "Общий плюс один язык"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Воспламенитель совершает две атаки Опустошающим молотом или Колбой опустошения."
+    },
+    {
+      "name": "Опустошающий молот",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к8 + 3) дробящего урона плюс 9 (2к8) урона огнём. Если целью является существо, то магическое пламя цепляется за неё, в результате чего она получает 3 (1к6) урона огнём в начале каждого своего хода. Сразу после получения этого урона в свой ход, цель может совершить спасбросок Ловкости Сл 13, оканчивая на себе действие эффекта при успехе.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Колба опустошения",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +4 к попаданию, дистанция 30/90 футов, одна цель. Попадание: 13 (2к12) урона огнём. Если целью является существо, то магическое пламя цепляется за неё, в результате чего она получает 3 (1к6) урона огнём в начале каждого своего хода. Сразу после получения этого урона в свой ход, цель может совершить спасбросок Ловкости Сл 13, оканчивая на себе действие эффекта при успехе.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 30,
+        "long": 90
+      },
+      "damage": [
+        {
+          "dice": "2d12",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "После того, как воспламенитель бросит ко",
+      "type": "special",
+      "description": "лбу, бросьте к6; при результате \"3\" или ниже у воспламенитель кончаются колбы для метания."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,115 @@
+{
+  "id": "79",
+  "slug": "79-bone-devil",
+  "name": "Костяной дьявол (Осилут)",
+  "nameEn": "Bone devil",
+  "size": "large",
+  "type": "fiend",
+  "subtype": "дьявол",
+  "alignment": "законно-злое",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 19,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 142,
+    "hitDice": "15d10 + 60"
+  },
+  "speed": {
+    "walk": 40,
+    "fly": 40
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 16,
+    "con": 18,
+    "int": 13,
+    "wis": 14,
+    "cha": 16
+  },
+  "savingThrows": {
+    "int": 5,
+    "wis": 6,
+    "cha": 6
+  },
+  "skills": {
+    "deception": 7,
+    "insight": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire",
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 120
+  },
+  "languages": [
+    "Инфернальный",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Дьявольское зрение",
+      "description": "Магическая тьма не мешает темному зрению дьявола."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Дьявол совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дьявол совершает три атаки: две когтями, и одну жалом."
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 10 футов, одна цель. Попадание: Рубящий урон 8 (1к8 + 4).",
+      "attackBonus": 8,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Жало",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 10 футов, одна цель. Попадание: Колющий урон 13 (2к8 + 4) плюс урон ядом 17 (5к6), и цель должна преуспеть в спасброске Телосложения Сл 14, иначе станет отравленной на 1 минуту. Цель может повторять этот спасбросок в конце каждого своего хода, оканчивая эффект на себе при успехе.",
+      "attackBonus": 8,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "плюс"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

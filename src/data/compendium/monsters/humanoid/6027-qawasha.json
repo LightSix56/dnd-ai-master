@@ -1,0 +1,85 @@
+{
+  "id": "6027",
+  "slug": "6027-qawasha",
+  "name": "Каваша",
+  "nameEn": "Qawasha",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "мужчина чультец человек",
+  "alignment": "любое мировоззрение, именной НИП",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Tomb of Annihilation",
+  "isNamed": true,
+  "armorClass": {
+    "value": 11,
+    "type": "16 с дубовой корой"
+  },
+  "hitPoints": {
+    "average": 27,
+    "hitDice": "5d8 + 5"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 12,
+    "con": 13,
+    "int": 12,
+    "wis": 15,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4,
+    "medicine": 4,
+    "nature": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14
+  },
+  "languages": [
+    "Друидический"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Знает два языка на выбор помимо Друидического."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Каваша является заклинателем 4-го уровня. Его базовой характеристикой является Мудрость (Сл спасброска от заклинания 12, +4 к попаданию атаками заклинаниями). У него подготовлены следующие заклинания друида:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Боевой посох",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию (+4 к попаданию с дубинкой), досягаемость 5 футов, одна цель. Попадание: 3 (1к6) дробящего урона, 4 (1к8) дробящего урона при использовании двумя руками, или дробящий урон 6 (1к8+2) с дубинкой [shillelagh].",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 0,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 4,
+    "spellAttackBonus": 4,
+    "ability": "WIS"
+  }
+}

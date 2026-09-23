@@ -1,0 +1,90 @@
+{
+  "id": "17307",
+  "slug": "17307-horncaller",
+  "name": "Трубящий в рог",
+  "nameEn": "Horncaller",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любая раса",
+  "alignment": "законно-добрый",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "шкурный доспех"
+  },
+  "hitPoints": {
+    "average": 39,
+    "hitDice": "6d8 + 12"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 12,
+    "con": 14,
+    "int": 10,
+    "wis": 14,
+    "cha": 13
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4,
+    "nature": 2,
+    "уход_за_животными": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14
+  },
+  "languages": [
+    "Общий",
+    "плюс один другой язык"
+  ],
+  "traits": [
+    {
+      "name": "Врожденное колдовство",
+      "description": "Базовой характеристикой трубящего в рог является Мудрость (Сл спасброска от заклинания 14). Он может накладывать следующие заклинания, не нуждаясь в материальных компонентах:"
+    },
+    {
+      "name": "Разговор со зверями",
+      "description": "Трубящий в рог может общаться со зверями, как если бы они говорили на одном языке."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Трубящий в рог совершает две рукопашные атаки своим Посохом и использует Единство с Душой мира."
+    },
+    {
+      "name": "Посох",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 фт., одна цель. Попадание: 4 (1к6 + 1) колющего урона или 5 (1к8 + 1) дробящего урона при использовании двумя руками.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Единство с Душой мира",
+      "type": "special",
+      "description": "Трубящий в рог выбирает одного зверя, которого он может видеть в пределах 30 футов от себя. Если зверь может слышать трубящего в рог, зверь использует свою реакцию, чтобы совершить одну рукопашную атаку против цели, которую видит трубящего в рог."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

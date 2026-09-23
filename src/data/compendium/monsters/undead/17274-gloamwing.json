@@ -1,0 +1,108 @@
+{
+  "id": "17274",
+  "slug": "17274-gloamwing",
+  "name": "Сумракокрыл",
+  "nameEn": "Gloamwing",
+  "size": "large",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "нейтрально-злая",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 136,
+    "hitDice": "16d10 + 48"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 60
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 16,
+    "con": 17,
+    "int": 2,
+    "wis": 11,
+    "cha": 6
+  },
+  "savingThrows": {
+    "str": 8,
+    "dex": 6
+  },
+  "skills": {
+    "perception": 3,
+    "stealth": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "darkvision": 120
+  },
+  "languages": [
+    "понимает Общий"
+  ],
+  "traits": [
+    {
+      "name": "Связь смерти",
+      "description": "Если хиты спектрального наездника опускаются до 0, сумракокрыл так же погибает."
+    },
+    {
+      "name": "Облёт",
+      "description": "Сумракокрыл не провоцирует атаку, когда вылетает за пределы досягаемости врага."
+    },
+    {
+      "name": "Чувствительность к солнечному свету",
+      "description": "Находясь на солнечном свету, сумракокрыл совершает с помехой броски атаки, а также проверки Мудрости (Восприятие), основанные на зрении."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Сумракокрыл совершает две атаки: одну Укусом и одну Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 фт., одна цель. Попадание: 18 (3к8 + 5) колющего урона.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 фт., одна цель. Попадание: 15 (3к6 + 5) рубящего урона.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

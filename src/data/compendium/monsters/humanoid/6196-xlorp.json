@@ -1,0 +1,68 @@
+{
+  "id": "6196",
+  "slug": "6196-xlorp",
+  "name": "Кслорп",
+  "nameEn": "Xlorp",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "гном",
+  "alignment": "хаотично-злой, именной НИП",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Waterdeep: Dungeon of the Mad Mage",
+  "isNamed": true,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 16,
+    "hitDice": "3d6 + 6"
+  },
+  "speed": {
+    "walk": 20
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 14,
+    "con": 14,
+    "int": 12,
+    "wis": 10,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 2,
+    "investigation": 3,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 120
+  },
+  "languages": [
+    "Великаний"
+  ],
+  "traits": [
+    {
+      "name": "Каменный камуфляж",
+      "description": "Гном совершает с преимуществом проверки Ловкости (Скрытность), когда пытается спрятаться на каменистой местности."
+    },
+    {
+      "name": "Гномья хитрость",
+      "description": "Гном совершает с преимуществом спасброски Интеллекта, Мудрости и Харизмы от магии."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Базовой характеристикой гнома является Интеллект (Сл спасброска от заклинания 11). Он может накладывать следующие заклинания, не нуждаясь в материальных компонентах:"
+    }
+  ],
+  "actions": [],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

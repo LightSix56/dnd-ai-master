@@ -1,0 +1,80 @@
+{
+  "id": "867",
+  "slug": "867-avatar-of-death",
+  "name": "Образ смерти",
+  "nameEn": "Avatar of Death",
+  "size": "medium",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "нейтрально-злая",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Dungeon Master's Guide",
+  "isNamed": false,
+  "armorClass": {
+    "value": 20
+  },
+  "hitPoints": {
+    "average": 10,
+    "hitDice": "1d8"
+  },
+  "speed": {
+    "walk": 60,
+    "fly": 60,
+    "hover": true
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 16,
+    "con": 16,
+    "int": 16,
+    "wis": 16,
+    "cha": 16
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "necrotic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "darkvision": 60,
+    "truesight": 60
+  },
+  "languages": [
+    "все",
+    "известные вызвавшему персонажу"
+  ],
+  "traits": [
+    {
+      "name": "Бестелесное перемещение",
+      "description": "Образ может проходить сквозь предметы и других существ, как будто они являются труднопроходимой местностью. Он получает 5 (1к10) урона силовым полем, если заканчивает ход в предмете."
+    },
+    {
+      "name": "Иммунитет к изгнанию",
+      "description": "Образ обладает иммунитетом к умениям, изгоняющим нежить."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Коса смерти",
+      "type": "special",
+      "description": "Образ рубит призрачной косой сквозь существо, находящееся в пределах 5 футах от него, нанося 7 (1к8 + 3) рубящего урона плюс 4 (1к8) урона некротической энергией.",
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

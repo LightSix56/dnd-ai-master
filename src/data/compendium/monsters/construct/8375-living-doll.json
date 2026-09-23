@@ -1,0 +1,86 @@
+{
+  "id": "8375",
+  "slug": "8375-living-doll",
+  "name": "Живая кукла",
+  "nameEn": "Living Doll",
+  "size": "tiny",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "нейтрально-злой",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "The Wild Beyond The Witchlight: A Feywild Adventure",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 28,
+    "hitDice": "8d4 + 8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 3,
+    "dex": 11,
+    "con": 13,
+    "int": 10,
+    "wis": 10,
+    "cha": 7
+  },
+  "savingThrows": {
+    "int": 2,
+    "wis": 2,
+    "cha": 0
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 30
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Обманчивая внешность",
+      "description": "Если кукла неподвижна на момент начала сражения, она имеет преимущество на проверку инициативы. Более того, если существо не наблюдало за перемещениями или действиями куклы, оно должно преуспеть в проверке Интеллекта (Расследование), чтобы понять, что кукла одушевлена."
+    },
+    {
+      "name": "Регенерация",
+      "description": "Кукла восстанавливает 5 хитов в начале каждого своего хода. Если кукла получает урон огнём или психической энергией, эта особенность не действует в начале её следующего хода. Кукла умирает только если начинает ход с 0 хитов и не может регенерировать."
+    },
+    {
+      "name": "Необычная природа",
+      "description": "Кукла не нуждается в воздухе, пище, питье или сне."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Хваткие руки",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 фт., одна цель. Попадание: цель становится схваченной (Сл высвобождения 6) и получает 11 (2к10) урона психической энергией в начале каждого своего хода, пока захват не окончится. Кукла может схватить только одну цель.",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

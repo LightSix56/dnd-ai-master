@@ -1,0 +1,84 @@
+{
+  "id": "5808",
+  "slug": "5808-grandolpha-muzgardt",
+  "name": "Грандолфа Музгардт",
+  "nameEn": "Grandolpha Muzgardt",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "дварф",
+  "alignment": "законно-злой, именной НИП",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Icewind Dale: Rime of the Frostmaiden",
+  "isNamed": true,
+  "armorClass": {
+    "value": 9
+  },
+  "hitPoints": {
+    "average": 59,
+    "hitDice": "7d8 + 28"
+  },
+  "speed": {
+    "walk": 25
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 9,
+    "con": 18,
+    "int": 13,
+    "wis": 17,
+    "cha": 16
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "darkvision": 120
+  },
+  "languages": [
+    "Общий",
+    "Дварфийский",
+    "Подземный"
+  ],
+  "traits": [
+    {
+      "name": "Дуэргарская устойчивость",
+      "description": "Грандолфа совершает с преимуществом спасброски от яда, заклинаний и иллюзий, а также спасброски для сопротивления очарованию и параличу."
+    },
+    {
+      "name": "Врождённое колдовство (псионика)",
+      "description": "Базовой характеристикой Грандолфа является Мудрость (Сл спасброска от заклинания 13). Она может накладывать следующие заклинания, не нуждаясь ни в каких компонентах:"
+    },
+    {
+      "name": "Чувствительность к солнечному свету",
+      "description": "Находясь на солнечном свету, Грандолфа совершает с помехой броски атаки, а также проверки Мудрости (Восприятие), полагающиеся на зрение."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Ядовитые брызги",
+      "type": "special",
+      "description": "Грандолфа простираете руку к существу, видимому в пределах 10 футов, и выпускаете из ладони клубы токсичного газа. Это существо должно преуспеть в спасброске Телосложения Сл 13, получая в случае провала 13 (2к12) урона ядом.",
+      "damage": [
+        {
+          "dice": "2d12",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

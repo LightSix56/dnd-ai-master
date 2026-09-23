@@ -1,0 +1,107 @@
+{
+  "id": "8884",
+  "slug": "8884-vampirate",
+  "name": "Вампират",
+  "nameEn": "Vampirate",
+  "size": "medium",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "обычно законно-злая",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 42,
+    "hitDice": "5d8 + 20"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 14,
+    "con": 18,
+    "int": 10,
+    "wis": 11,
+    "cha": 12
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "cold",
+    "poison",
+    "necrotic"
+  ],
+  "damageVulnerabilities": [
+    "radiant"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 120
+  },
+  "languages": [
+    "все",
+    "известные при жизни"
+  ],
+  "traits": [
+    {
+      "name": "Взрыв",
+      "description": "Когда хиты вампирата уменьшаются до 0, он взрывается облаком праха. Любое существо в пределах 5 футов должно преуспеть в спасброске Телосложения Сл 14, иначе получит 5 (1к10) урона некротической энергией."
+    },
+    {
+      "name": "Паучье лазание",
+      "description": "Вампират может лазать по сложным поверхностям, включая потолки, без совершения проверок характеристик."
+    },
+    {
+      "name": "Необычная природа",
+      "description": "Вампират не нуждается в воздухе и питье."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Вытягивание энергии",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака заклинанием: +4 к попаданию, досягаемость 5 фт. или дистанция 30 фт., одно существо. Попадание: 11 (2к10) урона некротической энергией. Гуманоид, чьи хиты были уменьшены до 0 этой атакой, умирает и мгновенно превращается в свободно действующую тень [shadow] под контролем Мастера.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "range": {
+        "normal": 30
+      },
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Лёгкий арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +4 к попаданию, дистанция 80/320 фт., одна цель. Попадание: 11 (2к8 + 2) колющего урона.",
+      "attackBonus": 4,
+      "range": {
+        "normal": 80,
+        "long": 320
+      },
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

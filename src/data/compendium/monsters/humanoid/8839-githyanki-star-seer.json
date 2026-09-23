@@ -1,0 +1,102 @@
+{
+  "id": "8839",
+  "slug": "8839-githyanki-star-seer",
+  "name": "Гитъянки звездный провидец",
+  "nameEn": "Githyanki Star Seer",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "гит, колдун",
+  "alignment": "колдун), любое мировоззрение",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "доспех мага"
+  },
+  "hitPoints": {
+    "average": 110,
+    "hitDice": "17d8 + 34"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 11,
+    "con": 14,
+    "int": 19,
+    "wis": 16,
+    "cha": 14
+  },
+  "savingThrows": {
+    "con": 5,
+    "int": 7,
+    "wis": 6
+  },
+  "skills": {
+    "history": 10,
+    "arcana": 10
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "Общий",
+    "Гитский"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Гитъянки совершает три атаки Астральным снарядом."
+    },
+    {
+      "name": "Астральный снаряд",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака заклинанием: +7 к попаданию, досягаемость 5 фт. или дистанция 60 фт., одна цель. Попадание: 20 (3к10 + 4) урона излучением.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "range": {
+        "normal": 60
+      },
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний (псионика)",
+      "type": "special",
+      "description": "Базовой характеристикой гитъянки является Интеллект (Сл спасброска от заклинаний 15). Он может накладывать следующие заклинания, не нуждаясь ни в каких компонентах:"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "волшебная рука [mage hand] (рука невидима), свет [light];"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "доспехи мага [mage armor] (только на себя), невидимость [invisibility], обнаружение магии [detect magic], (только на себя), языки [tongues];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "связь с иным миром [contact other plane] (действием), телекинез [telekinesis], уход в иной мир [plane shift]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,93 @@
+{
+  "id": "3620",
+  "slug": "3620-hypnos-magen",
+  "name": "Гипнос маген",
+  "nameEn": "Hypnos magen",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Icewind Dale: Rime of the Frostmaiden",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 34,
+    "hitDice": "4d8 + 16"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 14,
+    "con": 18,
+    "int": 14,
+    "wis": 10,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "понимает языки своего создателя",
+    "но не говорит",
+    "Телепатия 30 фт."
+  ],
+  "traits": [
+    {
+      "name": "Пламенная смерть",
+      "description": "Когда маген умирает, его тело распадается в безвредной вспышке огня и дыма, оставляя после себя все, что он носил или нёс."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Маген совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Неестественная природа",
+      "description": "Маген не нуждается в воздухе, еде, питье и сне."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Психическая плеть",
+      "type": "special",
+      "description": "Глаза магена начинают светиться серебряным светом, пока он целится на одно существо, которое может видеть в пределах 60 футов от себя. Цель должна преуспеть в спасброске Мудрости Сл 12 или получить 11 (2к10) урона психической энергией.",
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CHA",
+        "dc": 12,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Внушение",
+      "type": "special",
+      "description": "Маген накладывает заклинание внушение [suggestion] (Сл спасброска 12), не требуя никаких материальных компонентов. Целью должно быть существо, с которым маген может общаться телепатически. Если существо преуспевает в своем спасброске, то оно становится невосприимчивым к заклинанию внушение [suggestion] этого магена на протяжении следующих 24 часов. Базовой характеристикой магена является Интеллект."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

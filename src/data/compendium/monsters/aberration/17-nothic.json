@@ -1,0 +1,97 @@
+{
+  "id": "17",
+  "slug": "17-nothic",
+  "name": "Нотик",
+  "nameEn": "Nothic",
+  "size": "medium",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "нейтрально-злая",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 45,
+    "hitDice": "6d8 + 18"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 16,
+    "con": 16,
+    "int": 13,
+    "wis": 10,
+    "cha": 8
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 2,
+    "arcana": 3,
+    "insight": 4,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "truesight": 120
+  },
+  "languages": [
+    "Подземный"
+  ],
+  "traits": [
+    {
+      "name": "Острое зрение",
+      "description": "Нотик совершает с преимуществом проверки Мудрости (Восприятие), основанные на зрении."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Нотик совершает две атаки когтями."
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 6 (1к6 + 3).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Разлагающий взгляд",
+      "type": "special",
+      "description": "Нотик выбирает одно существо в пределах 30 футов, которое он может видеть. Цель должна преуспеть в спасброске Телосложения Сл 12 от этой магии, иначе она получит урон некротической энергией 10 (3к6).",
+      "save": {
+        "ability": "CON",
+        "dc": 12,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Мистическая проницательность",
+      "type": "special",
+      "description": "Нотик выбирает одно существо в пределах 30 футов, которое он может видеть. Цель должна противопоставить свою проверку Харизмы (Обман) проверке Мудрости (Проницательность) нотика. Если нотик победит, он узнает один секрет или факт о существе. Цель автоматически побеждает, если обладает иммунитетом к очарованию."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

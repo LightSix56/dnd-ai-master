@@ -1,0 +1,124 @@
+{
+  "id": "8082",
+  "slug": "8082-lorehold-professor-of-chaos",
+  "name": "Профессор хаоса Лорхолда",
+  "nameEn": "Lorehold Professor of Chaos",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "Волшебник",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Strixhaven: A Curriculum of Chaos",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "15 с доспехом мага"
+  },
+  "hitPoints": {
+    "average": 108,
+    "hitDice": "17d8 + 32"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 14,
+    "con": 14,
+    "int": 19,
+    "wis": 15,
+    "cha": 13
+  },
+  "savingThrows": {
+    "con": 5,
+    "int": 7,
+    "wis": 5,
+    "cha": 4
+  },
+  "skills": {
+    "perception": 7,
+    "history": 7,
+    "arcana": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15
+  },
+  "languages": [
+    "Общий",
+    "и ещё четыре любых языка"
+  ],
+  "traits": [
+    {
+      "name": "Голос из прошлого (1/день)",
+      "description": "Профессор может наложить заклинание связь с иным миром [contact other plane], чтобы связаться с давно умершим духом, используя Интеллект в качестве базовой характеристики."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Профессор совершает две атаки Спектральным свитком. Он также может использовать Вес истории, если он доступен."
+    },
+    {
+      "name": "Спектральный свиток",
+      "type": "melee_attack",
+      "description": "Рукопашная атака заклинанием: +7 к попаданию, досягаемость 30 футов, одна цель. Попадание: 15 (2к10 + 4) урона силовым полем. Если целью является существо, оно должно преуспеть в спасброске Силы Сл 15, иначе падает ничком.",
+      "attackBonus": 7,
+      "reachFt": 30,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Профессор накладывает одно из следующих заклинаний, используя Интеллект в качестве базовой характеристики:"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "понимание языков [comprehend languages], указание [guidance], свет [light];"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "поиск предмета [locate object], доспехи мага [mage armor], создание прохода [passwall]."
+    },
+    {
+      "name": "Вес истории (Перезарядка 5-6)",
+      "type": "special",
+      "description": "Профессор волшебным образом сжимает время вокруг шести существ по своему выбору, которых он может видеть в пределах 30 футов. Каждая цель должна преуспеть в спасброске Мудрости Сл 15, иначе станет опутанной на 1 минуту, но скорость опутанной цели уменьшается вдвое, а не уменьшается до 0. В начале каждого своего хода опутанная цель получает 4 (1к8) урона силовым полем. Опутанная цель может повторять спасбросок в конце каждого своего хода, оканчивая на себе эффект в случае успеха.",
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "CHA",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

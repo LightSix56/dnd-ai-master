@@ -1,0 +1,84 @@
+{
+  "id": "8387",
+  "slug": "8387-detached-shadow",
+  "name": "Отсечённая тень",
+  "nameEn": "Detached Shadow",
+  "size": "medium",
+  "type": "fey",
+  "subtype": null,
+  "alignment": "хаотично-злая",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "The Wild Beyond The Witchlight: A Feywild Adventure",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 16,
+    "hitDice": "3d8 + 3"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 6,
+    "dex": 14,
+    "con": 13,
+    "int": 6,
+    "wis": 10,
+    "cha": 8
+  },
+  "savingThrows": {},
+  "skills": {
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "necrotic"
+  ],
+  "damageVulnerabilities": [
+    "radiant"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Аморфный",
+      "description": "Тень может перемещаться сквозь пространство шириной в 1 дюйм без протискивания."
+    },
+    {
+      "name": "Скрытность в тени",
+      "description": "Находясь в области тусклого освещения или темноты, тень может совершать действие Засада бонусным действием."
+    },
+    {
+      "name": "Слабость на солнечном свете",
+      "description": "Под солнечным светом тень совершает с помехой броски атаки, проверки характеристик и спасброски."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Вытягивание силы",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одно существо. Попадание: 9 (2к6 + 2) урона некротической энергией, и значение Силы цели уменьшается на 1к4. Цель падает без сознания, если её Силы уменьшается до 0. Уменьшение длится до тех пор, пока цель не окончит короткий или продолжительный отдых.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

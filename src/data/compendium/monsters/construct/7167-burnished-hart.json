@@ -1,0 +1,103 @@
+{
+  "id": "7167",
+  "slug": "7167-burnished-hart",
+  "name": "Сверкающий олень",
+  "nameEn": "Burnished Hart",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Mythic Odysseys of Theros",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 45,
+    "hitDice": "6d8 + 18"
+  },
+  "speed": {
+    "walk": 50
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 14,
+    "con": 16,
+    "int": 3,
+    "wis": 15,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire",
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 120
+  },
+  "languages": [
+    "понимает один язык своего создателя",
+    "но не говорит"
+  ],
+  "traits": [
+    {
+      "name": "Атака в броске",
+      "description": "Если олень переместится как минимум на 20 футов по прямой к цели, а затем в том же ходу попадет по ней атакой рогами, цель дополнительно получает от атаки 7 (2к6) урона огнём. Если цель — существо, она должна преуспеть в спасброске Силы Сл 13, иначе будет сбита с ног."
+    },
+    {
+      "name": "Нагретое тело",
+      "description": "Существо, которое касается оленя или попадает по нему рукопашной атакой, находясь в пределах 5 футов от него, получает 5 (1к10) урона огнём."
+    },
+    {
+      "name": "Устойчивый",
+      "description": "Олень совершает с преимуществом спасброски Силы и Ловкости против эффектов, сбивающих его с ног."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Олень совершает две атаки: одну Рогами, а другую Копытами."
+    },
+    {
+      "name": "Оленьи рога",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к8 + 3) колющего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Копыта",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 5 (1к4 + 3) дробящего урона плюс 2 (1к4) урона огнём.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

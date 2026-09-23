@@ -1,0 +1,89 @@
+{
+  "id": "4930",
+  "slug": "4930-wiggan-nettlebee",
+  "name": "Вигган Неттлби",
+  "nameEn": "Wiggan Nettlebee",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "полурослик",
+  "alignment": "нейтрально-злой, именной НИП",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Princes of the Apocalypse",
+  "isNamed": true,
+  "armorClass": {
+    "value": 11,
+    "type": "16 с дубовой корой"
+  },
+  "hitPoints": {
+    "average": 36,
+    "hitDice": "8d6 + 8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 8,
+    "dex": 12,
+    "con": 12,
+    "int": 14,
+    "wis": 15,
+    "cha": 13
+  },
+  "savingThrows": {},
+  "skills": {
+    "deception": 3,
+    "insight": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий",
+    "Полуросликов"
+  ],
+  "traits": [
+    {
+      "name": "Непоколебимая преданность",
+      "description": "Вигган совершает спасброски против испуга и очарования с преимуществом."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Вигган является заклинателем 4-го уровня. Его базовой характеристикой является Мудрость (Сл спасброска от заклинаний 12, +4 к атакам заклинаниями). У него подготовлены следующие заклинания жреца:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Вигган совершает две атаки своей деревянной клюкой."
+    },
+    {
+      "name": "Деревянная клюка (дубинка)",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +0 к попаданию (+4 если наложен заговор дубинка [shillelagh]), досягаемость 5 фт., одна цель. Попадание: дробящий урон 1 (1к4-1) или дробящий урон 6 (1к8 + 2) если наложен заговор дубинка [shillelagh].",
+      "attackBonus": 0,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": -1,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 4,
+    "ability": "WIS"
+  }
+}

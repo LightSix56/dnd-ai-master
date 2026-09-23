@@ -1,0 +1,83 @@
+{
+  "id": "17390",
+  "slug": "17390-choker",
+  "name": "Душитель",
+  "nameEn": "Choker",
+  "size": "small",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "хаотично-злая",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Tales from the Yawning Portal",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 13,
+    "hitDice": "3d6 + 3"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 14,
+    "con": 13,
+    "int": 4,
+    "wis": 12,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {
+    "stealth": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 60
+  },
+  "languages": [
+    "Глубинная речь"
+  ],
+  "traits": [
+    {
+      "name": "Искажённое проворство (Перезарядка после короткого или продолжительного отдыха)",
+      "description": "Душитель совершает дополнительное Действие в свой ход."
+    },
+    {
+      "name": "Паучье лазание",
+      "description": "Душитель может карабкаться по сложным поверхностям, включая вверх ногами по потолку, без необходимости проходить какие-то проверки."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Душитель совершает две атаки щупальцем."
+    },
+    {
+      "name": "Щупальце",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 10 футов, одна цель. Попадание: 5 (1к4 + 3) дробящего урона плюс 3 (1к6) колющего урона. И если цель Большого или меньшего размера, она становится схваченной (сложность освобождения 15). Пока цель схвачена, она становится опутанной, и душитель не может использовать это щупальце по другой цели. У душителя два щупальца. Если эта атака стала критической, цель в добавок ко всему не сможет дышать или говорить до момента окончания захвата.",
+      "attackBonus": 5,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

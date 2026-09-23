@@ -1,0 +1,73 @@
+{
+  "id": "6346",
+  "slug": "6346-hoard-scarab",
+  "name": "Сокровищный скарабей",
+  "nameEn": "Hoard Scarab",
+  "size": "tiny",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 7,
+    "hitDice": "3d4"
+  },
+  "speed": {
+    "walk": 20,
+    "fly": 20,
+    "burrow": 20
+  },
+  "abilities": {
+    "str": 4,
+    "dex": 16,
+    "con": 11,
+    "int": 3,
+    "wis": 8,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 9,
+    "darkvision": 60,
+    "tremorsense": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Обманчивая внешность",
+      "description": "Если скарабей неподвижен в начале боя, он имеет преимущество в броске инициативы. Более того, если существо не наблюдало за движением или действием скарабея, это существо должно преуспеть в проверке Интеллекта (Расследование) Сл 18, чтобы определить, что скарабей является одушевленным."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 5 (1к4+3) колющего урона. Если целью является существо, оно получает помеху на броски атаки до начала своего следующего хода.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

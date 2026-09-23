@@ -1,0 +1,128 @@
+{
+  "id": "5844",
+  "slug": "5844-troglodyte-champion-of-laogzed",
+  "name": "Троглодит чемпион Лаогзеда",
+  "nameEn": "Troglodyte Champion of Laogzed",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "троглодит",
+  "alignment": "хаотично-злой",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Out of the Abyss",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 59,
+    "hitDice": "7d8 + 28"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 12,
+    "con": 18,
+    "int": 8,
+    "wis": 12,
+    "cha": 12
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 6,
+    "intimidation": 3,
+    "stealth": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 60
+  },
+  "languages": [
+    "Троглодитский"
+  ],
+  "traits": [
+    {
+      "name": "Кожа хамелеона",
+      "description": "Троглодит совершает с преимуществом проверки Ловкости (Скрытность), совершенные чтобы спрятаться."
+    },
+    {
+      "name": "Вонь",
+      "description": "Все существа кроме троглодитов, начинающие ход в пределах 5 футов от троглодита, должны преуспеть в спасброске Телосложения Сл 14, иначе станут отравленными до начала своего следующего хода. При успешном спасброске существо получает иммунитет к вони всех троглодитов на 1 час."
+    },
+    {
+      "name": "Чувствительность к солнечному свету",
+      "description": "Находясь на солнечном свету, троглодит совершает с помехой броски атаки, а также проверки Мудрости (Восприятие), полагающиеся на зрение."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Троглодит совершает три атаки: одну укусом, и две когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 6 (1к4 + 4).",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 8 (1к8 + 4).",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Палица",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: Дробящий урон 8 (1к8 + 4).",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Кислотный поток (Перезарядка 5-6)",
+      "type": "special",
+      "description": "Троглодит плюет кислотой по линии длиной 15 футов и шириной 5 футов. Каждое существо в этой линии должно совершить спасбросок Ловкости Сл 14, и получить урон кислотой 10 (3к6) при провале или половину этого урона при успехе.",
+      "recharge": "5-6",
+      "save": {
+        "ability": "DEX",
+        "dc": 14,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

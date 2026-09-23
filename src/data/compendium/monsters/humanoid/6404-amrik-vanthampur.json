@@ -1,0 +1,91 @@
+{
+  "id": "6404",
+  "slug": "6404-amrik-vanthampur",
+  "name": "Амрик Вантампур",
+  "nameEn": "Amrik Vanthampur",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "законно-злой, именной НИП",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Baldur's Gate: Descent Into Avernus",
+  "isNamed": true,
+  "armorClass": {
+    "value": 17,
+    "type": "кожаный доспех, модификатор Харизмы"
+  },
+  "hitPoints": {
+    "average": 66,
+    "hitDice": "12d8 + 12"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 18,
+    "con": 12,
+    "int": 14,
+    "wis": 14,
+    "cha": 15
+  },
+  "savingThrows": {},
+  "skills": {
+    "acrobatics": 6,
+    "athletics": 3,
+    "deception": 6,
+    "insight": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий",
+    "Инфернальный"
+  ],
+  "traits": [
+    {
+      "name": "Элегантная защита",
+      "description": "Пока Амрик носит лёгкую броню или не носит броню и не носит щит, к КД добавляется модификатор Харизмы."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Амрик совершает три атаки кинжалом."
+    },
+    {
+      "name": "Кинжал",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +6 к попаданию, досягаемость 5 футов или дистанция 20/60 футов, одна цель. Попадание: 6 (1к4 + 4) колющего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Дымовая бомба (1/день)",
+      "type": "special",
+      "description": "Амрик кидает дымовую бомбу на дистанцию до 20 футов. При падении бомба взрывается, создавая облако чёрного дыма, заполняющее сферу радиусом 10 футов. Видимость в этой области сильно залонена. Сильный ветер может развеять облако, иначе оно существует до конца следующего хода Амрика."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

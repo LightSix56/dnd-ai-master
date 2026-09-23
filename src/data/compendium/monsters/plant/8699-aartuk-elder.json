@@ -1,0 +1,101 @@
+{
+  "id": "8699",
+  "slug": "8699-aartuk-elder",
+  "name": "Аартук-старейшина",
+  "nameEn": "Aartuk Elder",
+  "size": "large",
+  "type": "plant",
+  "subtype": null,
+  "alignment": "обычно законно-злое",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 75,
+    "hitDice": "10d10 + 20"
+  },
+  "speed": {
+    "walk": 20,
+    "climb": 20
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 10,
+    "con": 15,
+    "int": 12,
+    "wis": 14,
+    "cha": 12
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Язык Аартуков"
+  ],
+  "traits": [
+    {
+      "name": "Паучье лазание",
+      "description": "Аартук может карабкаться по сложным поверхностям, в том числе вверх ногами по потолку, без необходимости совершать проверки характеристик."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Аартук совершает или две атаки Ветвями, или две атаки Гранулами света, или по одной каждой каждой из них."
+    },
+    {
+      "name": "Ветвь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 10 фт., одна цель. Попадание: 11 (2к6 + 4) дробящего урона.",
+      "attackBonus": 6,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Гранула света",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +4 к попаданию, дальность 60 футов, одна цель. Попадание: 10 (4к4) урона излучением.",
+      "attackBonus": 4,
+      "damage": [
+        {
+          "dice": "4d4",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинание (псионика)",
+      "type": "special",
+      "description": "Базовой характеристикой аартука является Мудрость (Сл спасброска от заклинаний 12). Он может накладывать следующие заклинания, не нуждаясь ни в каких компонентах:"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "обнаружение магии [detect magic], послание [sending], умиротворение [calm emotions]"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

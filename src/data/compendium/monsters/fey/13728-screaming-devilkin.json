@@ -1,0 +1,81 @@
+{
+  "id": "13728",
+  "slug": "13728-screaming-devilkin",
+  "name": "Кричащий дьяволёнок",
+  "nameEn": "Screaming Devilkin",
+  "size": "small",
+  "type": "fey",
+  "subtype": null,
+  "alignment": "законно-злая",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Mordenkainen's Fiendish Folio Vol 1",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 18,
+    "hitDice": "4d6 + 4"
+  },
+  "speed": {
+    "walk": 0,
+    "fly": 40
+  },
+  "abilities": {
+    "str": 4,
+    "dex": 16,
+    "con": 13,
+    "int": 5,
+    "wis": 8,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 9,
+    "darkvision": 30
+  },
+  "languages": [
+    "Сильван"
+  ],
+  "traits": [
+    {
+      "name": "Проворный летун",
+      "description": "Пока кричащий дьяволёнок летает, провоцированные атаки по нему совершаются с помехой."
+    },
+    {
+      "name": "Непрерывный крик",
+      "description": "Каждое существо, кроме кричащего дьяволёнка, которое начинает свой ход в пределах 30 футов от одного или более кричащего дьяволёнка, должно совершить спасбросок Мудрости Сл 10. При провале существо становится недееспособно до начала своего следующего хода. При успехе, существо не подвергается эффекту."
+    },
+    {
+      "name": "Низкие ноги",
+      "description": "Кричащий дьяволёнок совершает с помехой броски атаки, а все броски атаки по кричащему дьяволёнку совершаются с преимуществом пока он не летает."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Колючий хвост",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 5 (1к4 + 3) колющего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,119 @@
+{
+  "id": "8435",
+  "slug": "8435-kettlesteam-the-kenku",
+  "name": "Кенку Парочайник",
+  "nameEn": "Kettlesteam the Kenku",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "Кенку, Колдун",
+  "alignment": "Колдун), хаотично-нейтральный, именной НИП",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "The Wild Beyond The Witchlight: A Feywild Adventure",
+  "isNamed": true,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "5d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 16,
+    "con": 10,
+    "int": 11,
+    "wis": 10,
+    "cha": 16
+  },
+  "savingThrows": {
+    "wis": 2,
+    "cha": 5
+  },
+  "skills": {
+    "perception": 2,
+    "arcana": 2,
+    "deception": 5,
+    "investigation": 2,
+    "stealth": 5,
+    "persuasion": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий",
+    "Ауран"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "-понимает Ауран и Общий, но говорит только с помощью особенности Подражание."
+    },
+    {
+      "name": "Подражание",
+      "description": "Кенку может подражать любым звукам, которые он уже слышал, включая голоса. Существо, слышащее эти звуки, может понять, что это подражание, если совершит успешную проверку Мудрости (Проницательность) Сл 14."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Парочайник совершает две атаки кинжалом."
+    },
+    {
+      "name": "Кинжал",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +5 к попаданию, досягаемость 5 футов или дистанция 20/60 футов, одна цель. Попадание: 5 (1к4 + 3) колющего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Парочайник накладывает одно из следующих заклинаний, используя Харизму в качестве базовой характеристики (Сл спасброска от заклинаний 13):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "маскировка [disguise self], дружба [friends], волшебная рука [mage hand], малая иллюзия [minor illusion];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "проклятие [bestow curse], огонь фей [faerie fire], разговор с животными [speak with animals]."
+    },
+    {
+      "name": "Сумеречный сон (2/день)",
+      "type": "special",
+      "description": "Парочайник нацеливается на одно существо, которое она может видеть в пределах 10 футов. Цель окутывается облаком магического, вызывающего сон газа и должна преуспеть в спасброске Телосложения Сл 13, иначе потеряет сознание на 1 минуту. Существо, усыпленное этим газом, мгновенно просыпается, если оно получает урон или если кто-то использует действие, чтобы встряхнуть или ударить спящего, чтобы разбудить его.",
+      "save": {
+        "ability": "CON",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

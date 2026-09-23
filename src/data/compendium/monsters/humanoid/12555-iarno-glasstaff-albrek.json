@@ -1,0 +1,100 @@
+{
+  "id": "12555",
+  "slug": "12555-iarno-glasstaff-albrek",
+  "name": "Ярно \"Стеклянный посох\" Альбрек",
+  "nameEn": "Iarno \"Glasstaff\" Albrek",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "Человек, Волшебник",
+  "alignment": "Волшебник), законно-злой, именной НИП",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Phandelver and Below: The Shattered Obelisk",
+  "isNamed": true,
+  "armorClass": {
+    "value": 12,
+    "type": "16 с доспехом мага [mage armor] и посохом защиты [staff of defense]"
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "5d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 9,
+    "dex": 14,
+    "con": 11,
+    "int": 17,
+    "wis": 12,
+    "cha": 11
+  },
+  "savingThrows": {
+    "int": 5,
+    "wis": 3
+  },
+  "skills": {
+    "history": 5,
+    "arcana": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [
+    "Общий",
+    "Дварфийский",
+    "Драконий",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Специальное снаряжение",
+      "description": "Стеклянный посох владеет посохом защиты [staff of defense]. Имея посох в руке, он может действием наложить заклинание доспехи мага [mage armor] и реакцией наложить заклинание щит [shield]."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Стеклянный посох совершает две атаки Шокирующим взрывом."
+    },
+    {
+      "name": "Шокирующий взрыв",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака заклинанием: +5 к попаданию, досягаемость 5 футов или дальность 120 футов, одна цель. Попадание: 6 (1к6 + 3) урон электричеством.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Стеклянный посох накладывает одно из следующих заклинаний, не нуждаясь в материальных компонентах. Базовой характеристикой Ярно является Интеллект (Сл спасброска заклинания 13):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "свет [light], волшебная рука [mage hand]"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "очарование личности [charm person], удержание личности [hold person], волшебная стрела [magic missile]"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

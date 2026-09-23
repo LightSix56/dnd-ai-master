@@ -1,0 +1,114 @@
+{
+  "id": "8859",
+  "slug": "8859-psurlon-ringer",
+  "name": "Псурлон-притворщик",
+  "nameEn": "Psurlon Ringer",
+  "size": "medium",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "обычно законно-злая",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "доспех мага"
+  },
+  "hitPoints": {
+    "average": 31,
+    "hitDice": "7d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 11,
+    "con": 10,
+    "int": 17,
+    "wis": 11,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Глубинная речь плюс языки гуманоида",
+    "которого он имитирует",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Аберрантный",
+      "description": "разум. Невозможно магическим образом прочитать мысли псурлона, а также усыпить его."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Псурлон совершает две атаки Кинжалом."
+    },
+    {
+      "name": "Кинжал",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +2 к попаданию, досягаемость 5 фт. или дистанция 20/60 фт., одна цель. Попадание: 2 (1к4) колющего урона плюс 4 (1к8) урона психической энергией.",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Психическое сокрушение",
+      "type": "special",
+      "description": "Псурлон выбирает в качестве цели одно существо, которое он может видеть в пределах 120 футов. Цель должна совершить спасбросок Мудрости Сл 13, получая 12 (2к8 + 3) урона психической энергией при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CHA",
+        "dc": 13,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Использование заклинаний (псионика)",
+      "type": "special",
+      "description": "Базовой характеристикой псурлона является Интеллект (Сл спасброска от заклинаний 13). Он может накладывать следующие заклинания, не нуждаясь ни в каких компонентах:"
+    },
+    {
+      "name": "2/день",
+      "type": "special",
+      "description": "доспехи мага [mage armor] (только на себя);"
+    },
+    {
+      "name": "1/день",
+      "type": "special",
+      "description": "внушение [suggestion]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,122 @@
+{
+  "id": "8878",
+  "slug": "8878-ssurran-defiler",
+  "name": "Ссуран-осквернитель",
+  "nameEn": "Ssurran Defiler",
+  "size": "medium",
+  "type": "monstrosity",
+  "subtype": "людоящер",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех, крепость интеллекта"
+  },
+  "hitPoints": {
+    "average": 52,
+    "hitDice": "7d8 + 21"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 12,
+    "con": 16,
+    "int": 15,
+    "wis": 15,
+    "cha": 7
+  },
+  "savingThrows": {
+    "con": 5,
+    "int": 4
+  },
+  "skills": {
+    "perception": 4,
+    "survival": 4,
+    "arcana": 4,
+    "stealth": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14
+  },
+  "languages": [
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Задержка дыхания",
+      "description": "Ссуран может задержать дыхание на 15 минут."
+    },
+    {
+      "name": "Крепость интеллекта",
+      "description": "К КД ссурана добавляется его модификатор Интеллекта."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Ссуран совершает две атаки Когтями и использует Осквернение (если доступно)."
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 фт., одна цель. Попадание: 4 (1к6 + 1) рубящего урона плюс 4 (1к8) урона некротической энергией.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 1,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Осквернение (перезарядка 6)",
+      "type": "special",
+      "description": "Обычная растительность в пределах 10 футов от ссурана вянет и умирает. Кроме того, все существа в пределах 10 футов от ссурана должны совершить спасбросок Телосложения Сл 11, получая 22 (4к10) урона некротической энергией при провале или половину этого урона при успехе. Ссуран восстанавливает 5 (1к10) хитов за каждое существо, провалившее спасбросок.",
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "6",
+      "save": {
+        "ability": "CON",
+        "dc": 11,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Использование заклинаний (псионика)",
+      "type": "special",
+      "description": "Базовой характеристикой ссурана является Интеллект. Он может накладывать следующие заклинания, не нуждаясь ни в каких компонентах:"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "волшебная рука [mage hand] (рука невидима);"
+    },
+    {
+      "name": "1/день",
+      "type": "special",
+      "description": "невидимость [invisibility] (только на себя)."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

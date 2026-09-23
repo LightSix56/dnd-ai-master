@@ -1,0 +1,116 @@
+{
+  "id": "15690",
+  "slug": "15690-blazebear",
+  "name": "Медвезарево",
+  "nameEn": "Blazebear",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 12,
+  "xp": 8400,
+  "source": "Vecna: Eve of Ruin",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 189,
+    "hitDice": "18d10 + 90"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 24,
+    "dex": 17,
+    "con": 21,
+    "int": 3,
+    "wis": 13,
+    "cha": 16
+  },
+  "savingThrows": {
+    "str": 11,
+    "cha": 7
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "darkvision": 120
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Медвезарево совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Туманное зрение",
+      "description": "Медвезарево может видеть сквозь сильно заслоненные области, созданные туманами или дымом, включая область действия заклинания туманное облако [fog cloud]."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Медвезарево совершает две атаки Укусом. Он может заменить одну атаку на Ошеломляющий взгляд, если тот доступен."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +11 к попаданию, досягаемость 5 футов, одна цель. Попадание: 20 (2к12 + 7) колющего урона плюс 11 (2к10) урона силовым полем.",
+      "attackBonus": 11,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d12",
+          "mod": 7,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Ошеломляющий взгляд (Перезарядка 5-6)",
+      "type": "special",
+      "description": "Медвезарево выбирает целью двух существ, которых видит в пределах 120 футов. Каждая цель должна совершить спасбросок Мудрости Сл 15, при провале становясь ошеломленной до конца своего следующего хода.",
+      "recharge": "5-6",
+      "save": {
+        "ability": "CHA",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Антимагический удар. Рукопашная атака оружием",
+      "type": "special",
+      "description": "+11 к попаданию, досягаемость 10 футов, одно существо, накладывающее заклинание 3-его уровня или ниже. Попадание: 22 (4к10) урона силовым полем, также цель должна преуспеть в спасброске Интеллекта Сл 15, иначе заклинание проваливается и не оказывает никакого эффекта.",
+      "attackBonus": 11,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "INT",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

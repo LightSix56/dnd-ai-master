@@ -1,0 +1,112 @@
+{
+  "id": "12158",
+  "slug": "12158-giant-goose",
+  "name": "Гигантская гусыня",
+  "nameEn": "Giant Goose",
+  "size": "large",
+  "type": "fey",
+  "subtype": null,
+  "alignment": "обычно нейтральная",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Bigby Presents: Glory of the Giants",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 60,
+    "hitDice": "8d10 + 16"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 16,
+    "con": 15,
+    "int": 6,
+    "wis": 14,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 60
+  },
+  "languages": [
+    "понимает Великаний и Сильван",
+    "но не говорит"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Гусыня совершает одну атаку Клювом и две атаки Крыльями."
+    },
+    {
+      "name": "Клюв",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 10 футов, одна цель. Попадание: 9 (2к6 + 2) дробящего урона.",
+      "attackBonus": 4,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Крыло",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к10 + 2) дробящего урона, и цель должна преуспеть в спасброске Силы Сл 12, иначе падает ничком.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 12,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Громогласный гогот (перезарядка 5-6)",
+      "type": "special",
+      "description": "Гусыня гогочет с оглушительной громкостью. Каждое существо в пределах 30 футов от гусыни должно совершить спасбросок Телосложения Сл 12. В случае провала существо получает 16 (3к10) урона звуком и становится оглохшим до начала следующего хода гусыни. В случае успеха существо получает только половину этого урона. Гогот слышен на расстоянии до 300 футов.",
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "CON",
+        "dc": 12,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

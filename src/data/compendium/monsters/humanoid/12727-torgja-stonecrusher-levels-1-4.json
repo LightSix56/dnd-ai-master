@@ -1,0 +1,82 @@
+{
+  "id": "12727",
+  "slug": "12727-torgja-stonecrusher-levels-1-4",
+  "name": "Торджа Камнедробилка (1-4 уровня)",
+  "nameEn": "Torgja Stonecrusher (Levels 1-4)",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "дварф",
+  "alignment": "хаотично-нейтральный, именной НИП",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "Keys from the Golden Vault",
+  "isNamed": true,
+  "armorClass": {
+    "value": 12,
+    "type": "кожаный доспех"
+  },
+  "hitPoints": {
+    "average": 11,
+    "hitDice": "2d8 + 2"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 12,
+    "con": 12,
+    "int": 10,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "один любой язык (обычно Общий)"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Скимитар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: 4 (1к6 + 1) рубящего урона.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 1,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Лёгкий арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +3 к попаданию, дистанция 80 футов/320 футов, одна цель. Попадание: 5 (1к8 + 1) колющего урона.",
+      "attackBonus": 3,
+      "range": {
+        "normal": 80
+      },
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

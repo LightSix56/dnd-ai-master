@@ -1,0 +1,79 @@
+{
+  "id": "29491",
+  "slug": "29491-huron-stahlmast",
+  "name": "Хурон Штальмаст",
+  "nameEn": "Huron Stahlmast",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "Человек",
+  "alignment": "законно-злой",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "Explorer's Guide to Wildemount",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "кожаный доспех"
+  },
+  "hitPoints": {
+    "average": 9,
+    "hitDice": "2d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 12,
+    "con": 10,
+    "int": 10,
+    "wis": 11,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "deception": 2,
+    "religion": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Один любой язык (обычно Общий)"
+  ],
+  "traits": [
+    {
+      "name": "Тёмная преданность",
+      "description": "Хурон совершает с преимуществом спасброски от очарования и испуга."
+    },
+    {
+      "name": "Особое снаряжение",
+      "description": "Хурон носит ночные очки [Goggles of night]."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Скимитар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: 4 (1к6 + 1) рубящего урона.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 1,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

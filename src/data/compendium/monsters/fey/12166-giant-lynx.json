@@ -1,0 +1,85 @@
+{
+  "id": "12166",
+  "slug": "12166-giant-lynx",
+  "name": "Гигантская рысь",
+  "nameEn": "Giant Lynx",
+  "size": "medium",
+  "type": "fey",
+  "subtype": null,
+  "alignment": "обычно нейтральная",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Bigby Presents: Glory of the Giants",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "4d8 + 4"
+  },
+  "speed": {
+    "walk": 30,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 18,
+    "con": 13,
+    "int": 12,
+    "wis": 14,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 6,
+    "stealth": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "truesight": 60
+  },
+  "languages": [
+    "Великаний",
+    "Сильван"
+  ],
+  "traits": [
+    {
+      "name": "Рысий взгляд (1/день)",
+      "description": "Рысь может наложить заклинание подсматривание [clairvoyance], без использования материальных компонентов и используя Мудрость в качестве базовой характеристики."
+    },
+    {
+      "name": "Лесной камуфляж",
+      "description": "Рысь с преимуществом совершает проверку Ловкости (Скрытность), совершаемую для того, чтобы спрятаться в подлеске или заснеженной местности."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 8 (1к8 + 4) рубящего урона. Если рысь переместится как минимум на 20 футов по прямой к цели, а затем в том же ходу попадёт по ней атакой, цель должна совершить спасбросок Силы Сл 12, иначе цель падает ничком. Если цель сбита с ног, то рысь может совершить по ней еще одну атаку Когтями бонусным действием.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 12,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

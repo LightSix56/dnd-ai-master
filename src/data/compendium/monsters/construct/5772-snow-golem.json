@@ -1,0 +1,110 @@
+{
+  "id": "5772",
+  "slug": "5772-snow-golem",
+  "name": "Снежный голем",
+  "nameEn": "Snow Golem",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Icewind Dale: Rime of the Frostmaiden",
+  "isNamed": false,
+  "armorClass": {
+    "value": 8
+  },
+  "hitPoints": {
+    "average": 39,
+    "hitDice": "6d8 + 12"
+  },
+  "speed": {
+    "walk": 10
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 6,
+    "con": 14,
+    "int": 1,
+    "wis": 6,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "bludgeoning",
+    "piercing",
+    "slashing",
+    "cold",
+    "poison"
+  ],
+  "damageVulnerabilities": [
+    "fire"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "blindsight": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Поглощение холода",
+      "description": "Каждый раз, когда голем должен получить урон холодом, он не получает урон, и вместо этого восстанавливает число хитов, равное причиняемому урону холодом."
+    },
+    {
+      "name": "Неизменяемая форма",
+      "description": "Голем обладает иммунитетом ко всем заклинаниям и эффектам, изменяющим его форму."
+    },
+    {
+      "name": "Таяние",
+      "description": "Находясь в области чрезвычайной жары, голем теряет 1к6 хитов в начале каждого своего хода."
+    },
+    {
+      "name": "Необычная природа",
+      "description": "Голем не нуждается в воздухе, еде, питье и сне."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Голем совершает три рукопашные атаки."
+    },
+    {
+      "name": "Удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 5 (1к6 + 2) дробящего урона плюс 7 (2к6) урона холодом.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Снежок",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +0 к попаданию, дистанция 60 фт., одна цель. Попадание: 9 (2к6 + 2) урона холодом.",
+      "attackBonus": 0,
+      "range": {
+        "normal": 60
+      },
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,123 @@
+{
+  "id": "7570",
+  "slug": "7570-thousand-teeth",
+  "name": "Тысячезуб",
+  "nameEn": "Thousand Teeth",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "нейтрально-злой, именной НИП",
+  "challengeRating": 6,
+  "xp": 2300,
+  "source": "Ghosts of Saltmarsh",
+  "isNamed": true,
+  "armorClass": {
+    "value": 12,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 93,
+    "hitDice": "11d10 + 33"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 50
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 10,
+    "con": 17,
+    "int": 2,
+    "wis": 10,
+    "cha": 7
+  },
+  "savingThrows": {
+    "str": 7,
+    "con": 6
+  },
+  "skills": {
+    "athletics": 7,
+    "stealth": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Задержка дыхания",
+      "description": "Тысячезуб может задержать дыхание на 30 минут."
+    },
+    {
+      "name": "Легендарное сопротивление (2/день)",
+      "description": "Если Тысячезуб проваливает спасбросок, он может вместо этого сделать спасбросок успешным."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Тысячезуб совершает две атаки: одну укусом, и одну хвостом."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: 15 (2к10 + 4) колющего урона..",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Хвост",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 10 футов, одна цель. Попадание: 8 (1к8 + 4) дробящего урона. Если цель — существо, она должна преуспеть в спасброске Силы Сл 15, иначе будет сбита с ног.",
+      "attackBonus": 7,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": {
+    "actionsPerRound": 3,
+    "options": [
+      {
+        "name": "Обнаружение",
+        "cost": 1,
+        "description": "Тысячезуб совершает проверку Мудрости (Восприятие)."
+      },
+      {
+        "name": "Выпад",
+        "cost": 1,
+        "description": "Тысячезуб перемещается на половину своей скорости."
+      },
+      {
+        "name": "Укус (стоит 2 действия)",
+        "cost": 2,
+        "description": "Тысячезуб совершает атаку Укусом."
+      }
+    ]
+  },
+  "lairActions": [],
+  "spellcasting": null
+}

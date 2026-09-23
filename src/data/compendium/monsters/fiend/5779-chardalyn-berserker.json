@@ -1,0 +1,114 @@
+{
+  "id": "5779",
+  "slug": "5779-chardalyn-berserker",
+  "name": "Чардалиновый берсерк",
+  "nameEn": "Chardalyn Berserker",
+  "size": "medium",
+  "type": "fiend",
+  "subtype": null,
+  "alignment": "хаотично-злое",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Icewind Dale: Rime of the Frostmaiden",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "шкурный доспех"
+  },
+  "hitPoints": {
+    "average": 90,
+    "hitDice": "12d8 + 36"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 12,
+    "con": 17,
+    "int": 9,
+    "wis": 11,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {
+    "survival": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Один любой язык (обычно Общий)."
+    },
+    {
+      "name": "Безрассудство",
+      "description": "В начале своего хода берсерк может решить, что в этом ходу все рукопашные атаки оружием будет совершать с преимуществом, но в этом случае до начала его следующего хода все броски атаки по нему тоже будут совершаться с преимуществом."
+    },
+    {
+      "name": "Чардалиновый психоз",
+      "description": "В начале каждого своего хода берсерк должен бросить к6. При результате «1» берсерк ничего не делает в свой ход, а только говорит с несуществующим злым повелителем, которому он поклялся служить."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Берсерк совершает три атаки рукопашным оружием."
+    },
+    {
+      "name": "Чардалиновый цеп",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 7 (1к8 + 3) дробящего урона и цель должна преуспеть в спасброске Телосложения Сл 13, иначе станет отравленной до конца своего следующего хода.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Чардалиновое метательное копьё",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +5 к попаданию, досягаемость 5 фт., или дистанция 30/120 фт., одна цель. Попадание: 6 (1к6 + 3) колющего урона и цель должна преуспеть в спасброске Телосложения Сл 13, иначе станет отравленной до конца своего следующего хода.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "range": {
+        "normal": 30,
+        "long": 120
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

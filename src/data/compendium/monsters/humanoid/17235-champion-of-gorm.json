@@ -1,0 +1,101 @@
+{
+  "id": "17235",
+  "slug": "17235-champion-of-gorm",
+  "name": "Чемпион Горма",
+  "nameEn": "Champion of Gorm",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "законно-добрый",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Quest from the Infinite Staircase",
+  "isNamed": false,
+  "armorClass": {
+    "value": 19,
+    "type": "наборный доспех, щит"
+  },
+  "hitPoints": {
+    "average": 33,
+    "hitDice": "6d8 + 6"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 10,
+    "con": 12,
+    "int": 12,
+    "wis": 15,
+    "cha": 16
+  },
+  "savingThrows": {
+    "str": 5,
+    "wis": 4
+  },
+  "skills": {
+    "athletics": 5,
+    "insight": 4,
+    "religion": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Храбрый",
+      "description": "Чемпион совершает с преимуществом спасброски от состояния испуганный."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Чемпион совершает две атаки Электрической булавой либо три атаки Ручным топором."
+    },
+    {
+      "name": "Электрическая булава",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 6 (1к6 + 3) колющего урона плюс 5 (2к4) урона электричеством.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Ручной топор",
+      "type": "melee_attack",
+      "description": "Дальнобойная или рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт. или дистанция 20/60 фт. Попадание: 6 (1к6+3) рубящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,97 @@
+{
+  "id": "6444",
+  "slug": "6444-smiler-the-defiler",
+  "name": "Весельчак-осквернитель",
+  "nameEn": "Smiler the Defiler",
+  "size": "medium",
+  "type": "fey",
+  "subtype": "эльф",
+  "alignment": "хаотично-злая, именной НИП",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Baldur's Gate: Descent Into Avernus",
+  "isNamed": true,
+  "armorClass": {
+    "value": 18,
+    "type": "кожаный доспех +2"
+  },
+  "hitPoints": {
+    "average": 165,
+    "hitDice": "22d8 + 66"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 20,
+    "con": 16,
+    "int": 18,
+    "wis": 11,
+    "cha": 18
+  },
+  "savingThrows": {},
+  "skills": {
+    "deception": 7,
+    "persuasion": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Сильван",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Особое снаряжение",
+      "description": "Весельчак облачён в кожаный доспех +2 и орудует коротким мечом +1."
+    },
+    {
+      "name": "Фейский шаг (перезарядка 4-6)",
+      "description": "Бонусным действием эладрин может телепортироваться на расстояние до 30 футов в свободное пространство, находящееся в его поле зрения."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Базовой характеристикой эладрина является Харизма (Сл спасброска от заклинания 15). Он может накладывать следующие заклинания, не нуждаясь в материальных компонентах:"
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Эладрин совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Эладрин совершает две атаки оружием. Вместо одной из атак он может наложить заклинание."
+    },
+    {
+      "name": "Короткий",
+      "type": "melee_attack",
+      "description": "меч +1. Рукопашная атака оружием: +9 к попаданию, досягаемость 5 футов, одна цель. Попадание: 9 (1к6 + 6) колющего урона.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 6,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

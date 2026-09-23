@@ -1,0 +1,118 @@
+{
+  "id": "6052",
+  "slug": "6052-ekene-afa",
+  "name": "Экини-Афа",
+  "nameEn": "Ekene-Afa",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "женщина чультка человек",
+  "alignment": "законно-добрый, именной НИП",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Tomb of Annihilation",
+  "isNamed": true,
+  "armorClass": {
+    "value": 16,
+    "type": "клепанный кожаный доспех, щит"
+  },
+  "hitPoints": {
+    "average": 112,
+    "hitDice": "15d8 + 45"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 15,
+    "con": 16,
+    "int": 10,
+    "wis": 12,
+    "cha": 15
+  },
+  "savingThrows": {
+    "str": 7,
+    "dex": 5,
+    "con": 6
+  },
+  "skills": {
+    "athletics": 10,
+    "intimidation": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Экини знает один любой язык (обычно Общий)."
+    },
+    {
+      "name": "Храбрый",
+      "description": "Экини совершает с преимуществом спасброски от испуга."
+    },
+    {
+      "name": "Жестокость",
+      "description": "Рукопашное оружие причиняет одну дополнительную кость своего урона, когда Экини попадает им (уже включено в атаку)."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Экини совершает три рукопашные атаки или две дальнобойные атаки."
+    },
+    {
+      "name": "Копье",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +7 к попаданию, досягаемость 5 футов или дистанция 20/60 футов, одна цель. Попадание: Колющий урон 11 (2к6 + 4), или колющий урон 13 (2к8 + 4), если используется двумя руками для совершения рукопашной атаки.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Удар щитом",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одно существо. Попадание: Дробящий урон 9 (2к4 + 4). Если цель — существо с размером не больше Среднего, она должна преуспеть в спасброске Силы Сл 15, иначе будет сбита с ног.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Парирование",
+      "type": "special",
+      "description": "Экини добавляет 3 к КД против одной рукопашной атаки, которая должна попасть по ней. Для этого Экини должна видеть атакующего, и должна использовать рукопашное оружие."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,73 @@
+{
+  "id": "8339",
+  "slug": "8339-relic-sloth",
+  "name": "Реликтовый ленивец",
+  "nameEn": "Relic Sloth",
+  "size": "huge",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Strixhaven: A Curriculum of Chaos",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 76,
+    "hitDice": "8d12 + 24"
+  },
+  "speed": {
+    "walk": 20,
+    "climb": 20
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 9,
+    "con": 17,
+    "int": 2,
+    "wis": 12,
+    "cha": 8
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 10 футов, одна цель. Попадание: 14 (2к8 + 5) рубящего урона, и цель схвачена (Сл высвобождения 15). Реликтовый ленивец может одновременно держать в захвате не более двух целей.",
+      "attackBonus": 7,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Медленный, но устойчивый",
+      "type": "special",
+      "description": "Когда реликтовый ленивец подвергается воздействию, которое перемещает его из его текущего пространства или сбивает с ног, он не перемещается и не сбивается с ног."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

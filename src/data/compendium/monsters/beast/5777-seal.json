@@ -1,0 +1,67 @@
+{
+  "id": "5777",
+  "slug": "5777-seal",
+  "name": "Тюлень",
+  "nameEn": "Seal",
+  "size": "medium",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Icewind Dale: Rime of the Frostmaiden",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11
+  },
+  "hitPoints": {
+    "average": 9,
+    "hitDice": "2d8"
+  },
+  "speed": {
+    "walk": 20,
+    "swim": 40
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 12,
+    "con": 11,
+    "int": 3,
+    "wis": 12,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Задержка дыхания",
+      "description": "Тюлень может задержать дыхание на 15 минут."
+    },
+    {
+      "name": "Тонкий нюх",
+      "description": "Тюлень совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на обоняние."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 фт., одна цель. Попадание: 1 колющего урона.",
+      "attackBonus": 2,
+      "reachFt": 5
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

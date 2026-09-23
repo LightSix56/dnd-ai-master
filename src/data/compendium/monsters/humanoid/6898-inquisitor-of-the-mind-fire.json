@@ -1,0 +1,123 @@
+{
+  "id": "6898",
+  "slug": "6898-inquisitor-of-the-mind-fire",
+  "name": "Инквизитор огня разума",
+  "nameEn": "Inquisitor of the Mind Fire",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Van Richten's Guide to Ravenloft",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "кираса"
+  },
+  "hitPoints": {
+    "average": 77,
+    "hitDice": "14d8 + 14"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 14,
+    "con": 12,
+    "int": 17,
+    "wis": 16,
+    "cha": 19
+  },
+  "savingThrows": {
+    "int": 6,
+    "wis": 6,
+    "cha": 7
+  },
+  "skills": {
+    "perception": 6,
+    "insight": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "truesight": 30
+  },
+  "languages": [
+    "любые три языка",
+    "Телепатия 120 фт."
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Инквизитор дважды атакует своим длинным серебряным мечом или дважды использует огонь разума."
+    },
+    {
+      "name": "Длинный серебряный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 фт., одна цель. Попадание: 8 (1к8 + 4) рубящего урона или 9 (1к10 + 4) рубящего урона при использовании двумя руками, и 18 (4к8) урона силовым полем.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Огонь разума",
+      "type": "special",
+      "description": "Инквизитор нацеливается на одно существо, которое он может видеть в пределах 120 футов от себя. Цель должна преуспеть в спасброске Интеллекта Сл 15, иначе получит 17 (3к8 + 4) урона психической энергией и станет ошеломлена до начала следующего хода инквизитора.",
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "INT",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Врожденное колдовство (псионика)",
+      "type": "special",
+      "description": "Инквизитор накладывает одно из следующих заклинаний, не нуждаясь ни в каких компонентах. Его базовой характеристикой является Харизма (Сл спасброска 15):"
+    },
+    {
+      "name": "По желанию",
+      "type": "special",
+      "description": "внушение [suggestion], магический глаз [arcane eye], обнаружение магии [detect magic], обнаружение мыслей [detect thoughts], послание [sending], рассеивание магии [dispel magic], умиротворение [calm emotions]"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "изменение памяти [modify memory], множественное внушение [mass suggestion]"
+    },
+    {
+      "name": "Приказ инквизитора (перезарядка 5-6)",
+      "type": "special",
+      "description": "Каждое существо по выбору инквизитора, которое оно может видеть в пределах 60 футов от него, должно преуспеть в спасброске Мудрости Сл 15, иначе станет очарованным до начала следующего хода инквизитора. В течение хода очарованного существа инквизитор может телепатически контролировать её движение, действие или и то, и другое. Будучи подконтрольной, цель может совершать только действие Атака (цель выбирает инквизитор) или действие Рывок.",
+      "recharge": "5-6",
+      "save": {
+        "ability": "CHA",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

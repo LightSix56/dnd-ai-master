@@ -1,0 +1,102 @@
+{
+  "id": "5389",
+  "slug": "5389-shadow-assassin",
+  "name": "Тень убийца",
+  "nameEn": "Shadow assassin",
+  "size": "medium",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "хаотично-злая",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Waterdeep: Dungeon of the Mad Mage",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14
+  },
+  "hitPoints": {
+    "average": 78,
+    "hitDice": "12d8 + 24"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 6,
+    "dex": 19,
+    "con": 14,
+    "int": 13,
+    "wis": 12,
+    "cha": 14
+  },
+  "savingThrows": {
+    "dex": 8,
+    "int": 5
+  },
+  "skills": {
+    "perception": 9,
+    "stealth": 12
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "necrotic"
+  ],
+  "damageVulnerabilities": [
+    "radiant"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 19,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Понимает языки, которые знал при жизни, но не может говорить."
+    },
+    {
+      "name": "Аморфный",
+      "description": "Убийца может перемещаться сквозь пространство шириной в 1 дюйм без протискивания."
+    },
+    {
+      "name": "Скрытность в тени",
+      "description": "Находясь в области тусклого света или тьмы, убийца может бонусным действием выполнить действие Засада."
+    },
+    {
+      "name": "Слабость на солнечном свете",
+      "description": "Находясь на солнечном свете, убийца совершает с помехой броски атаки, проверки характеристик и спасброски."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Убийца совершает две атаки теневым клинком."
+    },
+    {
+      "name": "Теневой клинок",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 фт., одна цель. Попадание: 7 (1к6 + 4) колющий урон плюс 10 (3к6) урона некротической энергией. Если цель не обладает иммунитетом к урону некротической энергией, её показатель Силы уменьшается на 1к4 каждый раз при попадании этой атакой. Цель умирает, если показатель Силы уменьшается до 0. Уменьшение длится до тех пор, пока цель не закончит короткий или продолжительный отдых.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Если от этой атаки умирает гуманоид с не",
+      "type": "special",
+      "description": "злым мировоззрением, через 1к4 часа из его трупа появится новая тень [shadow]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

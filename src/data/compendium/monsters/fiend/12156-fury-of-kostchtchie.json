@@ -1,0 +1,110 @@
+{
+  "id": "12156",
+  "slug": "12156-fury-of-kostchtchie",
+  "name": "Ярость Костччи",
+  "nameEn": "Fury of Kostchtchie",
+  "size": "huge",
+  "type": "fiend",
+  "subtype": "Демон",
+  "alignment": "обычно хаотично-злое",
+  "challengeRating": 14,
+  "xp": 11500,
+  "source": "Bigby Presents: Glory of the Giants",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 216,
+    "hitDice": "16d12 + 112"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 26,
+    "dex": 10,
+    "con": 25,
+    "int": 10,
+    "wis": 12,
+    "cha": 11
+  },
+  "savingThrows": {
+    "con": 12,
+    "wis": 6
+  },
+  "skills": {
+    "athletics": 13,
+    "perception": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "cold"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 120
+  },
+  "languages": [
+    "Бездны",
+    "Великаний"
+  ],
+  "traits": [
+    {
+      "name": "Леденящая аура",
+      "description": "Существо начинающее свой ход в пределах 10 футов от ярости, должно совершить спасбросок Телосложения Сл 20, иначе получит 11 (2к10) урона холодом."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Ярость совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Ярость совершает две атаки Кулаком или Камнем."
+    },
+    {
+      "name": "Кулак",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +13 к попаданию, досягаемость 10 футов, одна цель. Попадание: 17 (2к8 + 8) дробящего урона плюс 10 (3к6) урона холодом или 17 (5к6) урона холодом, если цель получала урон от Леденящей ауры с конца предыдущего хода ярости.",
+      "attackBonus": 13,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 8,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Камень",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +13 к попаданию, дистанция 60/240 футов, одна цель. Попадание: 30 (4к10 + 8) дробящего урона.",
+      "attackBonus": 13,
+      "range": {
+        "normal": 60,
+        "long": 240
+      },
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 8,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

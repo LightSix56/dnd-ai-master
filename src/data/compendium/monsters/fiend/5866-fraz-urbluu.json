@@ -1,0 +1,116 @@
+{
+  "id": "5866",
+  "slug": "5866-fraz-urbluu",
+  "name": "Фраз-Урб'луу",
+  "nameEn": "Fraz-Urb'Luu",
+  "size": "large",
+  "type": "fiend",
+  "subtype": "демон",
+  "alignment": "хаотично-злое, именной НИП",
+  "challengeRating": 23,
+  "xp": 50000,
+  "source": "Out of the Abyss",
+  "isNamed": true,
+  "armorClass": {
+    "value": 18,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 350,
+    "hitDice": "28d10 + 196"
+  },
+  "speed": {
+    "walk": 40,
+    "fly": 40
+  },
+  "abilities": {
+    "str": 29,
+    "dex": 12,
+    "con": 25,
+    "int": 26,
+    "wis": 24,
+    "cha": 26
+  },
+  "savingThrows": {
+    "dex": 8,
+    "con": 15,
+    "int": 15,
+    "wis": 14
+  },
+  "skills": {
+    "perception": 14,
+    "deception": 15,
+    "stealth": 8
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "bludgeoning",
+    "piercing",
+    "slashing",
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 24,
+    "truesight": 120
+  },
+  "languages": [
+    "Все",
+    "Телепатия 120 фт."
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Фраз-Урб’луу проводит три атаки: одну укусом и две кулаками."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +16 к попаданию, досягаемость 10 фт., одна цель. Попадание: 23 (4к6+9) колющего урона.",
+      "attackBonus": 16,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "4d6",
+          "mod": 9,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Кулак",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +16 к попаданию, досягаемость 10 фт., одна цель. Попадание: 27 (4к8+9) дробящего урона.",
+      "attackBonus": 16,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "4d8",
+          "mod": 9,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": {
+    "actionsPerRound": 3,
+    "options": [
+      {
+        "name": "Хвост",
+        "cost": 1,
+        "description": "Рукопашная атака оружием: +16 к попаданию, досягаемость 15 фт., одна цель. Попадание: 31 (4к10+9) дробящего урона. Если целью было существо Большого или меньшего размера, оно также становится схваченным (Сл высвобождения 24). Схваченное существо опутано. Фраз-Урб’луу может одновременно схватить только одно существо хвостом."
+      },
+      {
+        "name": "Воображаемый убийца (стоит 2 действия)",
+        "cost": 2,
+        "description": "Фраз-Урб’луу может наложить заклинание воображаемый убийца [phantasmal killer], не требующее поддержания концентрации."
+      }
+    ]
+  },
+  "lairActions": [],
+  "spellcasting": null
+}

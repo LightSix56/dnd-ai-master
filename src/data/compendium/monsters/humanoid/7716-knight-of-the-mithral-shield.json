@@ -1,0 +1,109 @@
+{
+  "id": "7716",
+  "slug": "7716-knight-of-the-mithral-shield",
+  "name": "Рыцарь Мифрилового щита",
+  "nameEn": "Knight of the Mithral Shield",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "щитовой дварф",
+  "alignment": "законно-добрый",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Storm King's Thunder",
+  "isNamed": false,
+  "armorClass": {
+    "value": 20,
+    "type": "латы, щит"
+  },
+  "hitPoints": {
+    "average": 52,
+    "hitDice": "8d8 + 16"
+  },
+  "speed": {
+    "walk": 25
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 11,
+    "con": 14,
+    "int": 11,
+    "wis": 11,
+    "cha": 15
+  },
+  "savingThrows": {
+    "con": 4,
+    "wis": 2
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Дварфийский"
+  ],
+  "traits": [
+    {
+      "name": "Храбрый",
+      "description": "Рыцарь совершает с преимуществом спасброски от испуга."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Рыцарь совершает две рукопашные атаки."
+    },
+    {
+      "name": "Боевой молот",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к8+3) дробящего урона или 8 (1к10+3) дробящего урона, если держать его в двух руках.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Тяжёлый арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +2 к попаданию, дистанция 100/400 футов, одна цель. Попадание: Колющий урон 5 (1к10).",
+      "attackBonus": 2,
+      "range": {
+        "normal": 100,
+        "long": 400
+      },
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Лидерство (перезаряжается после короткого или продолжительного отдыха)",
+      "type": "special",
+      "description": "В течение 1 минуты рыцарь может произносить особую команду или предостережение каждый раз, когда невраждебное существо, видимое им в пределах 30 футов, совершает бросок атаки или спасбросок. Это существо может добавить к4 к броску, если может слышать рыцаря и понимает его. Существо может получать преимущество только от одного Лидерства одновременно. Этот эффект оканчивается, если рыцарь становится недееспособным."
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Парирование",
+      "type": "special",
+      "description": "Рыцарь добавляет 2 к КД против одной рукопашной атаки, которая должна попасть по нему. Для этого рыцарь должен видеть атакующего и должен использовать рукопашное оружие."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

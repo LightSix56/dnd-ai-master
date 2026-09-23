@@ -1,0 +1,82 @@
+{
+  "id": "5369",
+  "slug": "5369-thrakkus",
+  "name": "Траккус",
+  "nameEn": "Thrakkus",
+  "size": "medium",
+  "type": "dragon",
+  "subtype": "драконорождённый",
+  "alignment": "хаотично-злой, именной НИП",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Waterdeep: Dragon Heist",
+  "isNamed": true,
+  "armorClass": {
+    "value": 13,
+    "type": "шкурный доспех"
+  },
+  "hitPoints": {
+    "average": 67,
+    "hitDice": "9d8 + 27"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 12,
+    "con": 17,
+    "int": 9,
+    "wis": 11,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий",
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Безрассудство",
+      "description": "В начале своего хода Траккус может решить, что в этом ходу все рукопашные атаки оружием будет совершать с преимуществом, но в этом случае до начала его следующего хода все броски атаки по нему тоже будут совершаться с преимуществом."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Секира",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 9 (1к12 + 3).",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d12",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Оружие дыхания (1/день)",
+      "type": "special",
+      "description": "Действием Траккус может выдохнуть 15 футовый конус огня. Каждое существо в конусе должно совершить спасбросок Ловкости Сл 13, получая 2к6 урона огнём в случае провала или половину урона в случае успеха.",
+      "save": {
+        "ability": "DEX",
+        "dc": 13,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

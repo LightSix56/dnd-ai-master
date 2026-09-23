@@ -1,0 +1,121 @@
+{
+  "id": "17288",
+  "slug": "17288-blood-drinker-vampire",
+  "name": "Вампир пьющий кровь",
+  "nameEn": "Blood Drinker Vampire",
+  "size": "medium",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "законно-злая",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 90,
+    "hitDice": "12d8 + 36"
+  },
+  "speed": {
+    "walk": 40,
+    "fly": 40,
+    "hover": true
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 18,
+    "con": 17,
+    "int": 16,
+    "wis": 13,
+    "cha": 19
+  },
+  "savingThrows": {
+    "dex": 7,
+    "con": 6,
+    "wis": 4
+  },
+  "skills": {
+    "perception": 4,
+    "intimidation": 7,
+    "stealth": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 60
+  },
+  "languages": [
+    "известные при жизни"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Вампир совершает три рукопашные атаки, только одна из которых может быть атакой Укусом."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 фт., одно согласное существо или существо, схваченное вампиром, недееспособное или опутанное. Попадание: 7 (1к6 + 4) колющего урона плюс 7 (2к6) урона некротической энергией. Если цель — гуманоид, она должна преуспеть в спасброске Харизмы Сл 15, иначе будет очарована вампиром на 1 минуту. Очарованная таким образом, цель влюбляется в вампира. Максимум хитов цели уменьшается на величину, равную полученному урону некротической энергией, и вампир восстанавливает хиты, равные этому значению. Снижение длится до тех пор, пока цель не закончит продолжительный отдых. Цель умирает, если ее максимум хитов снижается до 0.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CHA",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Рапира",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 фт., одна цель. Попадание: 8 (1к8 + 4) колющего урона.",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Безоружный удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: 7 (1к8 + 3) дробящего урона. Вампир также может схватить цель (Сл высвобождения 14), если это существо и у вампира свободна рука.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Парирование",
+      "type": "special",
+      "description": "Вампир добавляет +3 к КД против одной рукопашной атаки, которая может его поразить. Для этого вампир должен видеть нападающего и владеть рукопашным оружием."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

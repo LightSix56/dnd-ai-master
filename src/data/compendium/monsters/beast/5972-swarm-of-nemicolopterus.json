@@ -1,0 +1,67 @@
+{
+  "id": "5972",
+  "slug": "5972-swarm-of-nemicolopterus",
+  "name": "Рой Немиколоптеров",
+  "nameEn": "Swarm of Nemicolopterus",
+  "size": "medium",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Adventurers League",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 24,
+    "hitDice": "7d8 - 7"
+  },
+  "speed": {
+    "walk": 5,
+    "fly": 50
+  },
+  "abilities": {
+    "str": 7,
+    "dex": 14,
+    "con": 8,
+    "int": 2,
+    "wis": 13,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 7 (2к6) колющего урона, или 3 (1к6), если у роя половина хитов или меньше.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

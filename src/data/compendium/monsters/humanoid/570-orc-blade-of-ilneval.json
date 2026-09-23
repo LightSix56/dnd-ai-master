@@ -1,0 +1,111 @@
+{
+  "id": "570",
+  "slug": "570-orc-blade-of-ilneval",
+  "name": "Орк клинок Илневала",
+  "nameEn": "Orc blade of Ilneval",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "орк",
+  "alignment": "хаотично-злой",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Volo's guide to monsters",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "кольчуга, щит"
+  },
+  "hitPoints": {
+    "average": 60,
+    "hitDice": "8d8 + 24"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 11,
+    "con": 17,
+    "int": 10,
+    "wis": 12,
+    "cha": 14
+  },
+  "savingThrows": {
+    "wis": 3
+  },
+  "skills": {
+    "perception": 3,
+    "intimidation": 4,
+    "insight": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Орочий"
+  ],
+  "traits": [
+    {
+      "name": "Агрессия",
+      "description": "Бонусным действием орк может переместиться на расстояние до половины своей скорости к враждебному существу, которое может видеть."
+    },
+    {
+      "name": "Каратель врагов Илневала",
+      "description": "Орк наносит дополнительную кость урона, если попадает атакой длинным мечом (включено в атаку)."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Орк совершает две рукопашные атаки своим длинным мечом или две дальнобойные атаки своими метательными копьями. Если Приказ Илневала доступен для использования, то орк может сделать это после этих атак."
+    },
+    {
+      "name": "Длинный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 12 (2к8 + 3) рубящего урона, или 14 (2к10 + 3) рубящего урона при использовании двумя руками.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Метательное копьё",
+      "type": "melee_attack",
+      "description": "Рукопашная или Дальнобойная атака оружием: +5 к попаданию, досягаемость 5 футов или дистанция 30/120 футов, одна цель. Попадание: 6 (1к6 + 3) колющего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "range": {
+        "normal": 30,
+        "long": 120
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Приказ Илневала (Перезарядка 4–6)",
+      "type": "special",
+      "description": "До трех союзных орков не далее 120 футов от этого орка, которые могут его слышать, могут использовать свои реакции, чтобы совершить одну атаку оружием."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

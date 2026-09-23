@@ -1,0 +1,98 @@
+{
+  "id": "7901",
+  "slug": "7901-skeletal-bloodfin",
+  "name": "Скелет бладфина",
+  "nameEn": "Skeletal Bloodfin",
+  "size": "large",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Critical Role: Call of the Netherdeep",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 93,
+    "hitDice": "11d10 + 33"
+  },
+  "speed": {
+    "walk": 5,
+    "swim": 50
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 14,
+    "con": 16,
+    "int": 2,
+    "wis": 10,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "blindsight": 100
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Предсмертная вспышка",
+      "description": "Когда бладфин умирает, он взрывается облаком ядовитой крови. Каждое существо в пределах 10 футов от взрывающегося бладфина должно совершить спасбросок Телосложения Сл 15, иначе получит 10 (3к6) урона ядом. Существо находящееся внутри кровопийцы, когда он взрывается, падает ничком в пространство, ранее занимаемое бладфином и больше не ослеплено и не опутано им."
+    },
+    {
+      "name": "Природа нежити",
+      "description": "Бладфину не нужен воздух, еда, питьё или сон."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Бладфин совершает одну атаку Укусом и одну атаку Хвостом."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию (с преимуществом, если целью является существо, у которого хиты ниже максимума), досягаемость 5 футов, одна цель. Попадание: 14 (2к8 + 5) колющего урона, и если целью является существо, оно становится схваченным (Сл высвобождения 15). Пока этот захват не закончится, существо опутано, и бладфин не может укусить другую цель.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Хвост",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию (с преимуществом, если целью является существо, у которого хиты ниже максимума), досягаемость 10 футов, одна цель. Попадание: 19 (4к6 + 5) дробящего урона.",
+      "attackBonus": 9,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "4d6",
+          "mod": 5,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

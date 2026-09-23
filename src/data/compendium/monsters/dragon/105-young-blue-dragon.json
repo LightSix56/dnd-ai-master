@@ -1,0 +1,109 @@
+{
+  "id": "105",
+  "slug": "105-young-blue-dragon",
+  "name": "Молодой синий дракон",
+  "nameEn": "Young blue dragon",
+  "size": "large",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "законно-злой",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 152,
+    "hitDice": "16d10 + 64"
+  },
+  "speed": {
+    "walk": 40,
+    "fly": 80,
+    "burrow": 20
+  },
+  "abilities": {
+    "str": 21,
+    "dex": 10,
+    "con": 19,
+    "int": 14,
+    "wis": 13,
+    "cha": 17
+  },
+  "savingThrows": {
+    "dex": 4,
+    "con": 8,
+    "wis": 5,
+    "cha": 7
+  },
+  "skills": {
+    "perception": 9,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 19,
+    "blindsight": 30,
+    "darkvision": 120
+  },
+  "languages": [
+    "Общий",
+    "Драконий"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дракон совершает три атаки: одну укусом, и две когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 10 футов, одна цель. Попадание: Колющий урон 16 (2к10 + 5) плюс урон электричеством 5 (1к10).",
+      "attackBonus": 9,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 5,
+          "type": "плюс"
+        }
+      ]
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 12 (2к6 + 5).",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Электрическое дыхание (перезарядка 5–6)",
+      "type": "breath",
+      "description": "Дракон выдыхает молнию 60-футовой линией шириной 5 футов. Все существа в этой линии должны совершить спасбросок Ловкости Сл 16, получая урон электричеством 55 (10к10) при провале, или половину этого урона при успехе.",
+      "recharge": "5-6",
+      "save": {
+        "ability": "DEX",
+        "dc": 16,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

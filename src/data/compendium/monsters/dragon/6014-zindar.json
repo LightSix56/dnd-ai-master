@@ -1,0 +1,136 @@
+{
+  "id": "6014",
+  "slug": "6014-zindar",
+  "name": "Зиндар",
+  "nameEn": "Zindar",
+  "size": "medium",
+  "type": "dragon",
+  "subtype": "полудракон",
+  "alignment": "законно-добрый, именной НИП",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Tomb of Annihilation",
+  "isNamed": true,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 110,
+    "hitDice": "17d8 + 34"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 10,
+    "con": 14,
+    "int": 16,
+    "wis": 15,
+    "cha": 18
+  },
+  "savingThrows": {
+    "con": 5,
+    "wis": 5
+  },
+  "skills": {
+    "history": 9,
+    "arcana": 6,
+    "insight": 5,
+    "investigation": 9
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "blindsight": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Дварфийский",
+    "Драконий",
+    "Первичный"
+  ],
+  "traits": [
+    {
+      "name": "Использование заклинаний",
+      "description": "Зиндар является заклинателем 14-го уровня. Его базовой характеристикой является Харизма (Сл спасброска от заклинаний 15, +7 к атакам заклинаниями). Зиндар знает следующие заклинания чародея:"
+    },
+    {
+      "name": "Драконьи крылья",
+      "description": "В качестве бонусного действия на своём ходу Зиндар может расправить пару драконьих крыльев на спине, получая скорость полёта 30 футов, пока он не отклонит эту черту бонусным действием."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Боевой посох",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 5 (1к6 + 2) дробящего урона, или 6 (1к8 + 2) дробящего урона, при использовании двумя руками.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Оружия дыхания (перезарядка 5–6)",
+      "type": "special",
+      "description": "Зиндар использует один из следующих видов оружия дыхания:",
+      "recharge": "5-6"
+    },
+    {
+      "name": "Огненное дыхание",
+      "type": "breath",
+      "description": "Зиндар выдыхает огонь 15-футовым конусом. Все существа в этой области должны преуспеть в спасброске Ловкости Сл 18, получая 22 (4к10) урона огнём при провале, или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 15
+      },
+      "save": {
+        "ability": "DEX",
+        "dc": 18,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Ослабляющее дыхание",
+      "type": "breath",
+      "description": "Зиндар выдыхает газ 15-футовым конусом. Все существа в этой области должны преуспеть в спасброске Силы Сл 15, иначе в течение 1 минуты будут совершать с помехой броски атаки, основанные на Силе, проверки Силы и спасброски Силы. Существо может повторять этот спасбросок в конце",
+      "recharge": "5-6",
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 15
+      },
+      "save": {
+        "ability": "STR",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 14,
+    "ability": "CHA"
+  }
+}

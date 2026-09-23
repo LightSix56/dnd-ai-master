@@ -1,0 +1,104 @@
+{
+  "id": "9492",
+  "slug": "9492-sea-lion",
+  "name": "Морской лев",
+  "nameEn": "Sea lion",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Ghosts of Saltmarsh",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 90,
+    "hitDice": "12d10 + 24"
+  },
+  "speed": {
+    "walk": 10,
+    "swim": 40
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 15,
+    "con": 15,
+    "int": 3,
+    "wis": 12,
+    "cha": 8
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Морской лев может дышать и воздухом и под водой."
+    },
+    {
+      "name": "Тонкий нюх",
+      "description": "Морской лев совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на нюх."
+    },
+    {
+      "name": "Тактика стаи",
+      "description": "Морской лев совершает с преимуществом броски атаки по существу, если как минимум один союзник льва находится в пределах 5 футов от этого существа, и этот союзник дееспособен."
+    },
+    {
+      "name": "Прыжок в воде",
+      "description": "Проплыв 10 футов, морской лев может выпрыгнуть из воды на высоту до 25 футов или пролететь расстояние до 25 футов над водой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Морской лев совершает три атаки: одну укусом и две когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 12 (2к8 + 3) колющего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 12 (2к8 + 3) рубящего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

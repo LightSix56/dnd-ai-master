@@ -1,0 +1,96 @@
+{
+  "id": "8061",
+  "slug": "8061-first-year-student",
+  "name": "Первокурсник",
+  "nameEn": "First-Year Student",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "Волшебник",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Strixhaven: A Curriculum of Chaos",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11
+  },
+  "hitPoints": {
+    "average": 33,
+    "hitDice": "6d8 + 6"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 8,
+    "dex": 12,
+    "con": 13,
+    "int": 12,
+    "wis": 10,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Знает Общий и ещё 2 любых языка."
+    },
+    {
+      "name": "Рад быть здесь",
+      "description": "Первокурсник с преимуществом совершает броски инициативы."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Магическая вспышка",
+      "type": "melee_attack",
+      "description": "Рукопашная или Дальнобойная атака заклинанием: +3 к попаданию, досягаемость 5 футов или дистанция 60 футов, одна цель. Попадание: 7 (1к12 + 1) урона силовым полем.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "range": {
+        "normal": 60
+      },
+      "damage": [
+        {
+          "dice": "1d12",
+          "mod": 1,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Первокурсник накладывает одно из следующих заклинаний, используя Интеллект в качестве базовой характеристики (Сл спасброска от заклинаний 11):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "волшебная рука [mage hand], фокусы [prestidigitation];"
+    },
+    {
+      "name": "1/день",
+      "type": "special",
+      "description": "обнаружение магии [detect magic]."
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Удача новичка (2/день)",
+      "type": "special",
+      "description": "Когда первокурсник проваливает спасбросок, он может перебросить к20. Он должен использовать новый результат."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

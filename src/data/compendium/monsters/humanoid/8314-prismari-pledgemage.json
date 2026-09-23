@@ -1,0 +1,124 @@
+{
+  "id": "8314",
+  "slug": "8314-prismari-pledgemage",
+  "name": "Маг клятвы с Призмари",
+  "nameEn": "Prismari Pledgemage",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "Чародей",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Strixhaven: A Curriculum of Chaos",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "15 с доспехами мага"
+  },
+  "hitPoints": {
+    "average": 66,
+    "hitDice": "12d8 + 12"
+  },
+  "speed": {
+    "walk": 35
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 15,
+    "con": 13,
+    "int": 12,
+    "wis": 14,
+    "cha": 17
+  },
+  "savingThrows": {
+    "dex": 4,
+    "cha": 5
+  },
+  "skills": {
+    "acrobatics": 4,
+    "athletics": 4,
+    "performance": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий",
+    "и ещё два любых языка"
+  ],
+  "traits": [
+    {
+      "name": "Увёртливость",
+      "description": "Если маг клятвы попадает под действие эффекта, который позволяет совершить спасбросок Ловкости, чтобы получить половину урона, маг клятвы не получает урона при успехе и половину урона при провале. Он не может использовать эту особенность, если становится недееспособным."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Маг клятвы совершает две атаки Стихийным ударом."
+    },
+    {
+      "name": "Стихийный удар",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака заклинанием: +5 к попаданию, досягаемость 5 футов или дистанция 60 футов, одна цель. Попадание: 12 (3к6 + 2) урона огнём или холодом (по выбору мага клятвы).",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "range": {
+        "normal": 60
+      },
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Конец спектакля (1/день)",
+      "type": "special",
+      "description": "Маг клятвы сияет магией стихий, нацеливаясь на одно существо, которое он может видеть в пределах 60 футов. Цель должна совершить спасбросок Мудрости Сл 13. При провале цель получает 28 (8к6) урона огнём или холодом (по выбору мага клятвы) и ошеломляется до начала следующего хода мага клятвы. При успехе цель получает половину этого урона и не ошеломляется.",
+      "damage": [
+        {
+          "dice": "8d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CHA",
+        "dc": 13,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Маг клятвы накладывает одно из следующих заклинаний, используя Харизму в качестве базовой характеристики (Сл спасброска от заклинаний 13):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "малая иллюзия [minor illusion];"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "порыв ветра [gust of wind], безмолвный образ [silent image];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "доспехи мага [mage armor], хождение по воде [water walk]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,124 @@
+{
+  "id": "9264",
+  "slug": "9264-princess-xedalli",
+  "name": "Принцесса Зедалли",
+  "nameEn": "Princess Xedalli",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "волшебник",
+  "alignment": "любое мировоззрение, именной НИП",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": true,
+  "armorClass": {
+    "value": 16,
+    "type": "эльфиская кольчуга"
+  },
+  "hitPoints": {
+    "average": 103,
+    "hitDice": "23d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 14,
+    "con": 10,
+    "int": 21,
+    "wis": 18,
+    "cha": 18
+  },
+  "savingThrows": {
+    "int": 8,
+    "wis": 7,
+    "cha": 7
+  },
+  "skills": {
+    "arcana": 8,
+    "deception": 7,
+    "insight": 7,
+    "persuasion": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Драконий",
+    "Небесный",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Наследие фей",
+      "description": "Зедалли с преимуществом совершает спасброски от состояния очарованный, и её невозможно магически усыпить."
+    },
+    {
+      "name": "Специальное снаряжение",
+      "description": "Зедалли облачена в эльфийскую кольчугу [elven chain] и носит кольцо падающих звёзд [ring of shooting stars]."
+    },
+    {
+      "name": "Необычная природа",
+      "description": "Зедалли не нуждается во сне."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Зедалли совершает две атаки Скимитаром и использует Поток излучения (если доступен)."
+    },
+    {
+      "name": "Скимитар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 5 (1к6 + 2) рубящего урона плюс 10 (3к6) урона излучением.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Поток излучения (3/день)",
+      "type": "special",
+      "description": "Зедалли выпускает из руки магический поток излучения линией длиной 60 футов и шириной 5 футов. Каждое существо в этой линии должно преуспеть в спасброске Телосложения Сл 16, получая 18 (4к8) урона излучением при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "4d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 16,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Базовой характеристикой эльфа является Интеллект. Он может накладывать следующие заклинания:"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "полёт [fly], фальшивый двойник [mislead], послание [sending]"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

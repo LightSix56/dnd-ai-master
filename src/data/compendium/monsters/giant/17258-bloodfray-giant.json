@@ -1,0 +1,96 @@
+{
+  "id": "17258",
+  "slug": "17258-bloodfray-giant",
+  "name": "Великан кровобой",
+  "nameEn": "Bloodfray Giant",
+  "size": "huge",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "нейтрально-злой",
+  "challengeRating": 6,
+  "xp": 2300,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 103,
+    "hitDice": "9d12 + 45"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 23,
+    "dex": 9,
+    "con": 20,
+    "int": 7,
+    "wis": 8,
+    "cha": 9
+  },
+  "savingThrows": {
+    "str": 9,
+    "con": 8,
+    "wis": 2
+  },
+  "skills": {
+    "athletics": 9,
+    "perception": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Великаний"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Цепь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 20 фт., одна цель. Попадание: 16 (3к6 + 6) дробящего урона. Если цель — существо, оно схвачено (Сл высвобождения 17). Пока захват не закончится, цель опутанна, и великан не может использовать эту атаку ни на ком другом.",
+      "attackBonus": 9,
+      "reachFt": 20,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 6,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Камень",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +9 к попаданию, дистанция 60/240 фт., одна цель. Попадание: 16 (3к6 + 6) дробящего урона.",
+      "attackBonus": 9,
+      "range": {
+        "normal": 60,
+        "long": 240
+      },
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 6,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Яростная защита",
+      "type": "special",
+      "description": "После того, как существо, которое видит великан, получает урон от врага в пределах 20 футов от великана, великан совершает атаку Цепью против этого врага."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

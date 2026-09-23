@@ -1,0 +1,80 @@
+{
+  "id": "7867",
+  "slug": "7867-young-horizonback-tortoise",
+  "name": "Молодая небосклонная черепаха",
+  "nameEn": "Young Horizonback Tortoise",
+  "size": "huge",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Critical Role: Call of the Netherdeep",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех, 22 находясь в панцире"
+  },
+  "hitPoints": {
+    "average": 68,
+    "hitDice": "8d12 + 16"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 11,
+    "con": 15,
+    "int": 2,
+    "wis": 12,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [
+    "Гоблинский"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Понимает Гоблинский, но не говорит."
+    },
+    {
+      "name": "Амфибия",
+      "description": "Черепаха может дышать и воздухом и под водой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 10 футов, одна цель. Попадание: 18 (4к6 + 4) колющего урона. Если целью является существо, оно должно преуспеть в спасброске Силы Сл 14, иначе будет сбито с ног.",
+      "attackBonus": 7,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "4d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,116 @@
+{
+  "id": "572",
+  "slug": "572-orc-red-fang-of-shargaas",
+  "name": "Орк красный клык Шаргааса",
+  "nameEn": "Orc red fang of Shargaas",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "орк",
+  "alignment": "хаотично-злой",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Volo's guide to monsters",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "проклепанная кожа"
+  },
+  "hitPoints": {
+    "average": 52,
+    "hitDice": "8d8 + 16"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 16,
+    "con": 15,
+    "int": 9,
+    "wis": 11,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 2,
+    "intimidation": 1,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Орочий"
+  ],
+  "traits": [
+    {
+      "name": "Хитрое действие",
+      "description": "В каждый свой ход орк может использовать действие Рывок, Отход или Засада бонусным действием."
+    },
+    {
+      "name": "Рука Шаргааса",
+      "description": "Орк наносит 2 дополнительных кости урона, когда попадает по цели атакой оружием (включено в его атаки)."
+    },
+    {
+      "name": "Зрение Шаргааса",
+      "description": "Магическая тьма не препятствует тёмному зрению орка."
+    },
+    {
+      "name": "Убийца",
+      "description": "В первый раунд боя орк имеет преимущество на броски на попадание по любому существу, которое ещё не ходило. Если в этот раунд орк попадает по существу, которое застали врасплох, то это попадание автоматически считается критическим."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Орк совершает две атаки скимитаром или дротиком."
+    },
+    {
+      "name": "Скимитар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 13 (3к6 + 3) рубящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Дротик",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +5 к попаданию, дистанция 20/60 футов, одна цель. Попадание: 10 (3к4 + 3) колющего урона.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "3d4",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Вуаль Шаргааса (Перезаряжается после короткого или продолжительного отдыха)",
+      "type": "special",
+      "description": "Орк накладывает заклинание тьма [darkness] без использования любых компонентов. Базовая характеристика – Мудрость."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,81 @@
+{
+  "id": "13630",
+  "slug": "13630-crab-folk",
+  "name": "Краболюд",
+  "nameEn": "Crab Folk",
+  "size": "large",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Mordenkainen's Fiendish Folio Vol 1",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 68,
+    "hitDice": "8d10 + 24"
+  },
+  "speed": {
+    "walk": 40,
+    "swim": 40
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 10,
+    "con": 17,
+    "int": 7,
+    "wis": 9,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 9,
+    "darkvision": 30
+  },
+  "languages": [
+    "Общий",
+    "Великаний"
+  ],
+  "traits": [
+    {
+      "name": "Частичная амфибия",
+      "description": "Краболюд может дышать воздухом и под водой, но должен погружаться в воду каждые 24 часа, чтобы избежать удушения."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Краболюд совершает две атаки Клешнёй."
+    },
+    {
+      "name": "Клешня",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, дистанция 10 фт., одна цель. Попадание: 7 (1к6+4) дробящего урона, и цель становится схваченной (сложность спасброска 14). Пока захват не окончится, краболюд может наносить автоматические попадания по цели свой клешнёй, и теряет возможность совершать атаки этой клешнёй против других целей. Краболюд имеет две клешни, каждой из которых он может схватить только одну цель за раз.",
+      "attackBonus": 6,
+      "range": {
+        "normal": 10
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

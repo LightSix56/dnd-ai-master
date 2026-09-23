@@ -1,0 +1,95 @@
+{
+  "id": "12270",
+  "slug": "12270-troll-amalgam",
+  "name": "Сплав троллей",
+  "nameEn": "Troll Amalgam",
+  "size": "gargantuan",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "обычно хаотично-злой",
+  "challengeRating": 17,
+  "xp": 18000,
+  "source": "Bigby Presents: Glory of the Giants",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 217,
+    "hitDice": "14d20 + 70"
+  },
+  "speed": {
+    "walk": 60,
+    "climb": 60
+  },
+  "abilities": {
+    "str": 25,
+    "dex": 14,
+    "con": 21,
+    "int": 9,
+    "wis": 16,
+    "cha": 5
+  },
+  "savingThrows": {
+    "con": 11,
+    "wis": 9
+  },
+  "skills": {
+    "perception": 9
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 19,
+    "darkvision": 120
+  },
+  "languages": [
+    "Великаний",
+    "Подземный"
+  ],
+  "traits": [
+    {
+      "name": "Легендарное сопротивление (3/день)",
+      "description": "Если сплав проваливает спасбросок, она может вместо этого сделать спасбросок успешным."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Сплав совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Регенерация",
+      "description": "Сплав восстанавливает 15 хитов в начале своего хода. Если сплав получает урон кислотой или огнём, эта особенность не действует в начале следующего хода сплава. Сплав умирает, только если ему нанести не менее 20 хитов урона кислотой или огнём, когда у него 0 хитов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Сплав совершает три атака Разрывом."
+    },
+    {
+      "name": "Разрыв",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +13 к попаданию, досягаемость 15 футов, одна цель. Попадание: 25 (4к8 + 7) рубящего урона.",
+      "attackBonus": 13,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "4d8",
+          "mod": 7,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

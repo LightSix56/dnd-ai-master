@@ -1,0 +1,98 @@
+{
+  "id": "7160",
+  "slug": "7160-naiad",
+  "name": "Наяда",
+  "nameEn": "Naiad",
+  "size": "medium",
+  "type": "fey",
+  "subtype": null,
+  "alignment": "хаотично-нейтральная",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Mythic Odysseys of Theros",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 31,
+    "hitDice": "7d8"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 16,
+    "con": 11,
+    "int": 15,
+    "wis": 10,
+    "cha": 18
+  },
+  "savingThrows": {},
+  "skills": {
+    "sleight_of_hand": 5,
+    "persuasion": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий",
+    "Сильван"
+  ],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Наяда может дышать и воздухом и под водой."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Базовой характеристикой наяды является Харизма (Сл спасброска от заклинания 14). Наяда может накладывать следующие заклинания, не нуждаясь в материальных компонентах:"
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Наяда совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Невидим в воде",
+      "description": "Наяда невидима, когда полностью погружен в воду."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Наяда совершает два Психических прикосновения."
+    },
+    {
+      "name": "Психическое прикосновение",
+      "type": "melee_attack",
+      "description": "Рукопашная атака заклинанием: +6 к попаданию, досягаемость 5 футов., одна цель. Попадание: 9 (1к10 + 4) урона психической энергией.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

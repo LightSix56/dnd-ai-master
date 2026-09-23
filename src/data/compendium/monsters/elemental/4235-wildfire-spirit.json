@@ -1,0 +1,68 @@
+{
+  "id": "4235",
+  "slug": "4235-wildfire-spirit",
+  "name": "Дух дикого огня",
+  "nameEn": "Wildfire spirit",
+  "size": "small",
+  "type": "elemental",
+  "subtype": null,
+  "alignment": "любое мировоззрение",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Tasha's Cauldron of Everything",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 5,
+    "hitDice": "1d8"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 30,
+    "hover": true
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 14,
+    "con": 14,
+    "int": 13,
+    "wis": 15,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "понимает языки",
+    "на которых вы говорите"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Огненное семя",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: ваш модификатор атаки заклинанием для попадания, дальность 60 футов, одна цель, которую вы можете видеть. Попадание: 1к6 + БМ урона огнём."
+    },
+    {
+      "name": "Огненная телепортация",
+      "type": "special",
+      "description": "Дух и каждое согласное существо по вашему выбору в пределах 5 футов от духа телепортируются на 15 футов в свободное пространство, которые вы можете видеть. Затем каждое существо в пределах 5 футов от пространства, из которого телепортировался дух, должно преуспеть в спасброске Ловкости против Сл ваших заклинаний, иначе получит 1к6 + БМ урона огнём."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,136 @@
+{
+  "id": "121",
+  "slug": "121-young-bronze-dragon",
+  "name": "Молодой бронзовый дракон",
+  "nameEn": "Young bronze dragon",
+  "size": "large",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "законно-добрый",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 142,
+    "hitDice": "15d10 + 60"
+  },
+  "speed": {
+    "walk": 40,
+    "fly": 80,
+    "swim": 40
+  },
+  "abilities": {
+    "str": 21,
+    "dex": 10,
+    "con": 19,
+    "int": 14,
+    "wis": 13,
+    "cha": 17
+  },
+  "savingThrows": {
+    "dex": 3,
+    "con": 7,
+    "wis": 4,
+    "cha": 6
+  },
+  "skills": {
+    "perception": 7,
+    "insight": 4,
+    "stealth": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17,
+    "blindsight": 30,
+    "darkvision": 120
+  },
+  "languages": [
+    "Общий",
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Дракон может дышать и воздухом и под водой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дракон совершает три атаки: одну укусом, и две когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 10 футов, одна цель. Попадание: Колющий урон 16 (2к10 + 5).",
+      "attackBonus": 8,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 12 (2к6 + 5).",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Оружия дыхания (перезарядка 5–6)",
+      "type": "special",
+      "description": "Дракон использует один из следующих видов оружия дыхания.",
+      "recharge": "5-6"
+    },
+    {
+      "name": "Электрическое дыхание",
+      "type": "breath",
+      "description": "Дракон выдыхает молнию 60-футовой линией шириной 5 футов. Все существа в этой линии должны совершить спасбросок Ловкости Сл 15, получая урон электричеством 55 (10к10) при провале, или половину этого урона при успехе.",
+      "recharge": "5-6",
+      "save": {
+        "ability": "DEX",
+        "dc": 15,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Отталкивающее дыхание",
+      "type": "breath",
+      "description": "Дракон выдыхает отталкивающую энергию 30-футовым конусом. Все существа в этой области должны преуспеть в спасброске Силы Сл 15. При провале существо толкается на 40 футов от дракона.",
+      "recharge": "5-6",
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 30
+      },
+      "save": {
+        "ability": "STR",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

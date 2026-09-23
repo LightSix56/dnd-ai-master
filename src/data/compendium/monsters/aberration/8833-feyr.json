@@ -1,0 +1,119 @@
+{
+  "id": "8833",
+  "slug": "8833-feyr",
+  "name": "Йспуг",
+  "nameEn": "Feyr",
+  "size": "large",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "обычно хаотично-злая",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 88,
+    "hitDice": "16d10"
+  },
+  "speed": {
+    "walk": 0,
+    "fly": 50,
+    "hover": true
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 16,
+    "con": 11,
+    "int": 14,
+    "wis": 14,
+    "cha": 11
+  },
+  "savingThrows": {
+    "int": 5,
+    "wis": 5
+  },
+  "skills": {
+    "perception": 5,
+    "stealth": 9
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "darkvision": 120
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Йспуг совершает одну атаку Ужасающим укусом и Щупальцем."
+    },
+    {
+      "name": "Ужасающий укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одно существо. Попадание: 8 (1к10 + 3) колющего урона. Каждое существо в пределах 10 футов, которое может видеть йспуга, должно преуспеть в спасброске Мудрости Сл 13, иначе станет испуганным чудовищем до конца следующего хода йспуга.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CHA",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Щупальце",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 10 фт., одно существо. Попадание: 17 (4к6 + 3) урона психической энергией, и цель становится схваченной (Сл высвобождения 13). Пока цель схвачена, йспуг не может использовать это щупальце против других целей. У йспуга два щупальца, каждое из которых может схватить одно существо.",
+      "attackBonus": 6,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "4d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Невидимость",
+      "type": "special",
+      "description": "Йспуг становится невидимым, пока не атакует, не использует Подпитку кошмаром или не станет видимым бонусным действием."
+    },
+    {
+      "name": "Подпитка кошмаром (1/день)",
+      "type": "special",
+      "description": "Йспуг выбирает в качестве цели одно бессознательное существо, которое он может видеть в пределах 10 футов. Цель должна преуспеть в спасброске Мудрости Сл 13, иначе получит 27 (5к10) урона психической энергией. Йспуг получает временные хиты равные нанесённому урону.",
+      "damage": [
+        {
+          "dice": "5d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CHA",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

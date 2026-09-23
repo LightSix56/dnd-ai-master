@@ -1,0 +1,98 @@
+{
+  "id": "959",
+  "slug": "959-phantom-warrior",
+  "name": "Призрачный воин",
+  "nameEn": "Phantom Warrior",
+  "size": "medium",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "любое мировоззрение",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Curse of Strahd",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16
+  },
+  "hitPoints": {
+    "average": 45,
+    "hitDice": "6d8 + 18"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 11,
+    "con": 16,
+    "int": 8,
+    "wis": 10,
+    "cha": 15
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 2,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "cold",
+    "poison",
+    "necrotic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Любые известные ему при жизни"
+    },
+    {
+      "name": "Эфирное зрение",
+      "description": "Призрачный воин может видеть на 60 футов на Эфирный план, пока он находится на материальном плане, и наоборот."
+    },
+    {
+      "name": "Бестелесное передвижение",
+      "description": "Призрачный воин может двигаться через других существ и объекты, как если бы они были сложнопроходимой местностью. Он получает 5 (1к10) урона силовым полем, если завершит свой ход внутри объекта."
+    },
+    {
+      "name": "Спектральная броня и щит",
+      "description": "КД призрачного воина учитывает его спектральную броню и щит."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Призрачный воин совершает две атаки своим призрачным длинным мечом."
+    },
+    {
+      "name": "Призрачный длинный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к8 + 3) урона силовым полем.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Эфирность",
+      "type": "special",
+      "description": "Призрачный воин может входить на эфирный план с материального или наоборот. Он виден на материальном плане, когда он находится в пограничном эфире, и наоборот, но на другом плане он не может повлиять ни на то, ни на другое."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

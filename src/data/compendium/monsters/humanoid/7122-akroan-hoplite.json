@@ -1,0 +1,98 @@
+{
+  "id": "7122",
+  "slug": "7122-akroan-hoplite",
+  "name": "Акросский гоплит",
+  "nameEn": "Akroan Hoplite",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "любое мировоззрение",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Mythic Odysseys of Theros",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "кираса, щит"
+  },
+  "hitPoints": {
+    "average": 52,
+    "hitDice": "8d8 + 16"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 16,
+    "con": 14,
+    "int": 11,
+    "wis": 14,
+    "cha": 13
+  },
+  "savingThrows": {
+    "str": 5,
+    "dex": 5
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Держать строй",
+      "description": "Пока гоплит держит копье, другие существа провоцируют атаку гоплита, когда они приближаются к нему на расстояние 5 футов. Когда гоплит поражает существо провоцированной атакой, используя своё копье, существо дополнительно получает 4 (1к8) колющего урона, и его скорость становится равна 0 до конца его хода."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Гоплит совершает три рукопашные атаки или две дальнобойные атаки."
+    },
+    {
+      "name": "Копье",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +5 к попаданию, досягаемость 5 футов или дальность 20/60 футов, одна цель. Попадание: 6 (1к6 + 3) колющего урона или 7 (1к8 + 3) колющего урона, если используется двумя руками для рукопашной атаки.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Удар щитом",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одно существо. Попадание: 5 (1к4 + 3) дробящего урона. Если целью является существо Среднего размера или меньше, оно должно преуспеть в спасброске Силы Сл 13, иначе упадёт ничком.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

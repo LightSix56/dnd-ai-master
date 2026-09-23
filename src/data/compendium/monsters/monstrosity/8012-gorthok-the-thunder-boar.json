@@ -1,0 +1,109 @@
+{
+  "id": "8012",
+  "slug": "8012-gorthok-the-thunder-boar",
+  "name": "Горток, Громовой кабан",
+  "nameEn": "Gorthok the Thunder Boar",
+  "size": "huge",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "хаотично-злой, именной НИП",
+  "challengeRating": 6,
+  "xp": 2300,
+  "source": "Essentials Kit: Dragon of Icespire peak",
+  "isNamed": true,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 73,
+    "hitDice": "7d12 + 28"
+  },
+  "speed": {
+    "walk": 50
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 11,
+    "con": 19,
+    "int": 6,
+    "wis": 10,
+    "cha": 14
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "thunder"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Неумолимый (перезаряжается после короткого или продолжительного отдыха)",
+      "description": "Если Горток получает 27 урона или меньше, уменьшающий его хиты до 0, на самом деле его хиты опускаются лишь до 1."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Горток совершает две рукопашные атаки: одну Молниеносными бивнями и одну Громовыми копытами."
+    },
+    {
+      "name": "Молниеносные бивни",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 10 фт., одна цель. Попадание: 12 (2к6 + 5) рубящего урона плюс 7 (2к6) урона электричеством.",
+      "attackBonus": 8,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Громовые копыта",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 10 фт., одна цель. Попадание: 12 (2к6 +5) дробящего урона плюс 7 (2к6) урона звуком.",
+      "attackBonus": 8,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 5,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Молния (Перезарядка 6)",
+      "type": "special",
+      "description": "Горток выпускает молнию в одно существо, которое он может видеть в пределах 120 футов от себя. Цель должна совершить спасбросок Ловкости Сл 15, получая 18 (4к8) урона электричеством при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "4d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "6",
+      "save": {
+        "ability": "DEX",
+        "dc": 15,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

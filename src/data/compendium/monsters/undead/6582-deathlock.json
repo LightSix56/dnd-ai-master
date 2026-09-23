@@ -1,0 +1,158 @@
+{
+  "id": "6582",
+  "slug": "6582-deathlock",
+  "name": "Дэтлок",
+  "nameEn": "Deathlock]Дэтлок [Deathlock",
+  "size": "medium",
+  "type": "undead",
+  "subtype": "колдун",
+  "alignment": "обычно нейтрально-злаяСредняя? Нежить, нейтрально-злая",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "15 с магическим доспехом"
+  },
+  "hitPoints": {
+    "average": 36,
+    "hitDice": "8d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 11,
+    "dex": 15,
+    "con": 10,
+    "int": 14,
+    "wis": 12,
+    "cha": 16
+  },
+  "savingThrows": {
+    "int": 4,
+    "cha": 5
+  },
+  "skills": {
+    "history": 4,
+    "arcana": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Языки, что знал при жизни."
+    },
+    {
+      "name": "Сопротивление изгнанию",
+      "description": "Дэтлок совершает с преимуществом спасброски от всех эффектов, изгоняющих нежить."
+    },
+    {
+      "name": "Необычная природа",
+      "description": "Дэтлок не нуждается в воздухе, питье, еде и сне."
+    },
+    {
+      "name": "Языки",
+      "description": "Языки, что знал при жизни."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Врождённое колдовство дэтлока основывается на Харизме (Сл спасброска от заклинания 13). Он может накладывать следующие заклинания, не нуждаясь в материальных компонентах."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Дэтлок является заклинателем 5 уровня. Его базовой характеристикой является Харизма (Сл спасброска от заклинаний 13; +5 к попаданию атаками заклинаниями). Он восстанавливает потраченные ячейки заклинаний после завершения короткого или продолжительного отдыха. Он знает следующие заклинания колдуна."
+    },
+    {
+      "name": "Сопротивление изгнанию",
+      "description": "Дэтлок совершает с преимуществом спасброски от всех эффектов, изгоняющих нежить."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дэтлок совершает две атаки Смертельными когтями или Гиблым снарядом."
+    },
+    {
+      "name": "Смертельные когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 9 (2к6 + 2) урона некротической энергией.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Гиблые снаряды",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +5 к попаданию, дистанция 120 футов, одна цель. Попадание: 14 (2к10 + 3) урона некротической энергией.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 120
+      },
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Дэтлок накладывает одно из следующих заклинаний, используя Харизму в качестве базовой характеристики (Сл спасброска от заклинаний 13):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "обнаружение магии [detect magic], маскировка [disguise self], доспехи мага [mage armor], волшебная рука [mage hand];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "рассеивание магии [dispel magic], голод Хадара [hunger of Hadar], невидимость [invisibility], паук [spider climb]."
+    },
+    {
+      "name": "Смертельные Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 9 (2к6 + 2) урона некротической энергией.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 5,
+    "spellAttackBonus": 5,
+    "ability": "CHA"
+  }
+}

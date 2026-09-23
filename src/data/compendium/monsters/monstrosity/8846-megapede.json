@@ -1,0 +1,111 @@
+{
+  "id": "8846",
+  "slug": "8846-megapede",
+  "name": "Меганожка",
+  "nameEn": "Megapede",
+  "size": "gargantuan",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 11,
+  "xp": 7200,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 175,
+    "hitDice": "13d20 + 39"
+  },
+  "speed": {
+    "walk": 40,
+    "climb": 40
+  },
+  "abilities": {
+    "str": 22,
+    "dex": 10,
+    "con": 17,
+    "int": 1,
+    "wis": 10,
+    "cha": 3
+  },
+  "savingThrows": {
+    "con": 7,
+    "wis": 4
+  },
+  "skills": {
+    "perception": 8,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 18,
+    "darkvision": 120
+  },
+  "languages": [],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Меганожка совершает одну атаку Укусом и использует Вытягивание жизни или Психическую бомбу."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +10 к попаданию, досягаемость 20 фт., одна цель. Попадание: 22 (3к10 + 6) колющего урона плюс 22 (5к8) урона ядом.",
+      "attackBonus": 10,
+      "reachFt": 20,
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 6,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Вытягивание жизни",
+      "type": "special",
+      "description": "Меганожка магическим образом вытягивает жизненную энергию из других существ поблизости. Все существа в пределах 15 футов от меганожки должны совершить спасбросок Телосложения Сл 15, получая 16 (3к10) урона некротической энергией при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 15,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Психическая бомба",
+      "type": "special",
+      "description": "Меганожка выбирает в качестве цели одно существо, которое может видеть в пределах 60 футов. Цель должна совершить спасбросок Мудрости Сл 15. При провале, цель получает 22 (5к8) урона психической энергией и становится недееспособной до конца своего следующего хода. При успехе, цель получает половину этого урона и не становится недееспособной.",
+      "damage": [
+        {
+          "dice": "5d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CHA",
+        "dc": 15,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

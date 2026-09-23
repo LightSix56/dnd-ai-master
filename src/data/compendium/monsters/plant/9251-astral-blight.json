@@ -1,0 +1,79 @@
+{
+  "id": "9251",
+  "slug": "9251-astral-blight",
+  "name": "Астральная зараза",
+  "nameEn": "Astral Blight",
+  "size": "medium",
+  "type": "plant",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 26,
+    "hitDice": "4d8 + 8"
+  },
+  "speed": {
+    "walk": 10
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 8,
+    "con": 14,
+    "int": 6,
+    "wis": 10,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "blindsight": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Свечение",
+      "description": "Пока у заразы есть хотя бы 1 хит, она испускает тусклый свет в пределах 10 футов."
+    },
+    {
+      "name": "Необычная природа",
+      "description": "Зараза не нуждается в воздухе и сне."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Зараза совершает две атаки Вытягивающей тепло лозой."
+    },
+    {
+      "name": "Вытягивающая тепло лоза",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 10 фт., одна цель. Попадание: 6 (1к6 + 3) урона излучением, если цель — существо Большого или меньше размера, она становится схваченной (Сл высвобождения 13). Пока цель схвачена, она получает 3 (1к6) урона холодом в начале каждого своего хода. У заразы две лозы, каждая из которых может схватить одно существо",
+      "attackBonus": 5,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

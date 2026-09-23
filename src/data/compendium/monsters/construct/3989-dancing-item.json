@@ -1,0 +1,74 @@
+{
+  "id": "3989",
+  "slug": "3989-dancing-item",
+  "name": "Танцующий предмет",
+  "nameEn": "Dancing Item",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Tasha's Cauldron of Everything",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 10,
+    "hitDice": "1d8"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 30,
+    "hover": true
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 14,
+    "con": 16,
+    "int": 4,
+    "wis": 10,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "понимает языки",
+    "на которых вы говорите"
+  ],
+  "traits": [
+    {
+      "name": "Неизменяемая форма",
+      "description": "Предмет обладает иммунитетом ко всем эффектам или заклинаниям, изменяющим его форму."
+    },
+    {
+      "name": "Безудержный танец",
+      "description": "Когда любое существо начинает свой ход в пределах 10 футов от предмета, предмет может увеличить или уменьшить (по вашему выбору) скорость ходьбы этого существа на 10 футов до конца хода при условии, что предмет не недееспособен."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Наделённый силой удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: ваш модификатор броска атаки заклинанием к попаданию, досягаемость 5 футов, одна цель, которую вы можете видеть. Попадание: 1к10 + БМ урона силовым полем.",
+      "reachFt": 5
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

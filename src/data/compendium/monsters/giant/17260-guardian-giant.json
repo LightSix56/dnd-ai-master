@@ -1,0 +1,93 @@
+{
+  "id": "17260",
+  "slug": "17260-guardian-giant",
+  "name": "Великан-хранитель",
+  "nameEn": "Guardian Giant",
+  "size": "huge",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "законно-нейтральный",
+  "challengeRating": 8,
+  "xp": 3900,
+  "source": "Guildmasters' guide to Ravnica",
+  "isNamed": false,
+  "armorClass": {
+    "value": 19,
+    "type": "полулаты, щит"
+  },
+  "hitPoints": {
+    "average": 137,
+    "hitDice": "11d12 + 66"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 24,
+    "dex": 17,
+    "con": 22,
+    "int": 10,
+    "wis": 18,
+    "cha": 12
+  },
+  "savingThrows": {
+    "dex": 6,
+    "wis": 7
+  },
+  "skills": {
+    "perception": 10,
+    "insight": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 20
+  },
+  "languages": [
+    "Общий",
+    "Великаний"
+  ],
+  "traits": [
+    {
+      "name": "Бдительный",
+      "description": "Великана невозможно застать врасплох."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Великан совершает три атаки Копьем."
+    },
+    {
+      "name": "Копьё",
+      "type": "melee_attack",
+      "description": "Дальнобойная или рукопашная атака оружием: +10 к попаданию, досягаемость 10 фт. или дистанция 60/240 фт., одна цель. Попадание: 17 (3к6 + 7) колющего урона или 20 (3к8 + 7) колющего урона, если используется двумя руками для рукопашной атаки.",
+      "attackBonus": 10,
+      "reachFt": 10,
+      "range": {
+        "normal": 60,
+        "long": 240
+      },
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 7,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Защита",
+      "type": "special",
+      "description": "Когда нападающий, которого видит великан, совершает бросок атаки против существа в пределах 10 футов от великана, великан может наложить помеху на эту атаку."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

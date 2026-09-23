@@ -1,0 +1,129 @@
+{
+  "id": "12067",
+  "slug": "12067-cloud-giant-of-evil-air",
+  "name": "Облачный великан Злого воздуха",
+  "nameEn": "Cloud Giant of Evil Air",
+  "size": "huge",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "обычно нейтрально-злой",
+  "challengeRating": 12,
+  "xp": 8400,
+  "source": "Bigby Presents: Glory of the Giants",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 200,
+    "hitDice": "16d12 + 96"
+  },
+  "speed": {
+    "walk": 40,
+    "fly": 40
+  },
+  "abilities": {
+    "str": 27,
+    "dex": 10,
+    "con": 22,
+    "int": 12,
+    "wis": 16,
+    "cha": 19
+  },
+  "savingThrows": {
+    "con": 10,
+    "wis": 7,
+    "cha": 8
+  },
+  "skills": {
+    "perception": 7,
+    "insight": 7,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17
+  },
+  "languages": [
+    "Общий",
+    "Ауран",
+    "Великаний"
+  ],
+  "traits": [
+    {
+      "name": "Пролёт",
+      "description": "Великан не провоцирует атаку, когда он вылетает за пределы досягаемости врага."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Великан совершает две атаки Скимитаром и одну атаку Грозовым бумерангом."
+    },
+    {
+      "name": "Скимитар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +12 к попаданию, досягаемость 10 футов, одна цель. Попадание: 18 (3к6 + 8) рубящего урона.",
+      "attackBonus": 12,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 8,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Грозовой бумеранг",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +12 к попаданию, дистанция 60/240 футов, одна цель. Попадание: 15 (3к4 + 8) дробящего урона плюс 7 (2к6) урона звуком и цель должна преуспеть в спасброске Телосложения Сл 16, иначе станет ошеломлённой до конца своего следующего хода. Попадание или промах: Бумеранг магическим образом возвращается в руку великана.",
+      "attackBonus": 12,
+      "range": {
+        "normal": 60,
+        "long": 240
+      },
+      "damage": [
+        {
+          "dice": "3d4",
+          "mod": 8,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 16,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Великан накладывает одно из следующих заклинаний, используя Харизму в качестве базовой характеристики и без использования материальных компонентов (Сл спасброска от заклинаний 16):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "обнаружение магии [detect magic], туманное облако [fog cloud], свет [light];"
+    },
+    {
+      "name": "2/день",
+      "type": "special",
+      "description": "телекинез [telekinesis];"
+    },
+    {
+      "name": "1/день",
+      "type": "special",
+      "description": "газообразная форма [gaseous form];"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,117 @@
+{
+  "id": "12692",
+  "slug": "12692-tixie-tockworth",
+  "name": "Тикси Токворт",
+  "nameEn": "Tixie Tockworth",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "гном",
+  "alignment": "хаотично-злой, именной НИП",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Keys from the Golden Vault",
+  "isNamed": true,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех, щит"
+  },
+  "hitPoints": {
+    "average": 75,
+    "hitDice": "10d6 + 40"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 13,
+    "con": 18,
+    "int": 17,
+    "wis": 9,
+    "cha": 10
+  },
+  "savingThrows": {
+    "int": 6,
+    "wis": 2
+  },
+  "skills": {
+    "perception": 2,
+    "arcana": 9
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "truesight": 60
+  },
+  "languages": [
+    "Общий",
+    "Гномий",
+    "Подземный",
+    "Терран"
+  ],
+  "traits": [
+    {
+      "name": "Силовое поле",
+      "description": "Токворт создает вокруг себя магическое силовое поле. Это силовое поле имеет 15 хитов и восстанавливает все свои хиты в начале каждого хода Токворт, но оно перестает функционировать, если хиты Токворт опускаются до 0. Любой урон, который получает Токворт, сначала вычитается из хитов силового поля. Каждый раз, когда силовое поле восстанавливает хиты, на Токворт заканчиваются следующие состояния: схваченный, опутанный и ошеломлённый."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Токворт совершает три атаки Коротким мечом или Разрядом молнии."
+    },
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 6 (1к6 +3) колющего урона плюс 10 (3к6) силовым полем.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Разряд молнии",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, дистанция 60 футов, одна цель. Попадание: 16 (3к10) урона электричеством.",
+      "attackBonus": 6,
+      "range": {
+        "normal": 60
+      },
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "необнаружимость [nondetection] (только на себя);"
+    },
+    {
+      "name": "2/день",
+      "type": "special",
+      "description": "переносящая дверь [dimension door];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "глухота/слепота [blindness/deafness], размытый образ [blur]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

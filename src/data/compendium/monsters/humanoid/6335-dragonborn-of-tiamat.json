@@ -1,0 +1,104 @@
+{
+  "id": "6335",
+  "slug": "6335-dragonborn-of-tiamat",
+  "name": "Драконорождённый Тиамат",
+  "nameEn": "Dragonborn of Tiamat",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "хаотично-злой",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "латы"
+  },
+  "hitPoints": {
+    "average": 85,
+    "hitDice": "10d8 + 40"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 11,
+    "con": 18,
+    "int": 10,
+    "wis": 12,
+    "cha": 16
+  },
+  "savingThrows": {
+    "str": 8,
+    "con": 7,
+    "wis": 4,
+    "cha": 6
+  },
+  "skills": {
+    "athletics": 8,
+    "perception": 4,
+    "intimidation": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14
+  },
+  "languages": [
+    "Общий",
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Легендарное сопротивление (1/день)",
+      "description": "Если драконорождённый провалит спасбросок, он может вместо этого сделать спасбросок успешным."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Драконорожденный совершает две атаки Секирой."
+    },
+    {
+      "name": "Секира",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 5 фт., одна цель. Попадание: 11 (1к12+5) рубящего урона плюс 13 (3к8) урона некротической энергией.",
+      "attackBonus": 8,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d12",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Некротическое дыхание (перезарядка 6)",
+      "type": "breath",
+      "description": "Драконорожденный выдыхает тёмное пламя в 30-футовом конусе. Все существа в этой области должны совершить спасбросок Мудрости Сл 15. При провале существо получает 36 (8к8) урона некротической энергией и становится испуганным драконорожденным в течение 1 минуты. При успехе существо получает половину урона и не пугается. Испуганное существо может повторять спасбросок в конце каждого своего хода, оканчивая эффект на себя в случае успеха.",
+      "damage": [
+        {
+          "dice": "8d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "6",
+      "save": {
+        "ability": "CHA",
+        "dc": 15,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

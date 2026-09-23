@@ -1,0 +1,112 @@
+{
+  "id": "17352",
+  "slug": "17352-ogre-chitterlord",
+  "name": "Огр повелитель крыс",
+  "nameEn": "Ogre Chitterlord",
+  "size": "large",
+  "type": "giant",
+  "subtype": "друид",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Monstrous Compendium Vol. Four: Eldraine Creatures",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "шкурный доспех"
+  },
+  "hitPoints": {
+    "average": 52,
+    "hitDice": "7d10 + 14"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 10,
+    "con": 15,
+    "int": 5,
+    "wis": 12,
+    "cha": 9
+  },
+  "savingThrows": {
+    "wis": 3
+  },
+  "skills": {
+    "nature": 1,
+    "уход_за_животными": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Великаний"
+  ],
+  "traits": [
+    {
+      "name": "Разговор с крысами",
+      "description": "Огр может устно сообщать простые понятия обычным и гигантским крысам."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Огр совершает две атаки Дубиной или две атаки Кнутом из крысиного хвоста или по одной атаке каждым."
+    },
+    {
+      "name": "Дубина",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: 15 (2к10 + 4) дробящего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Кнут из крысиного хвоста",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 10 фт., одна цель. Попадание: 13 (2к8 + 4) рубящего урона, и если цель Большого размера или меньше, её притягивает на 5 футов к огру.",
+      "attackBonus": 6,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Огр накладывает одно из следующих заклинаний, не требующих материальных компонентов и использующего Мудрость в качестве базовой характеристики для заклинания (Сл спасброска заклинания 11):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "животные чувства [beast sense] (только крысы), искусство друидов [druidcraft], опутывание [entangle];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "почтовое животное [animal messenger] (только крысы), зловонное облако [stinking cloud]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

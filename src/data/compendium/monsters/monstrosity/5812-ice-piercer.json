@@ -1,0 +1,77 @@
+{
+  "id": "5812",
+  "slug": "5812-ice-piercer",
+  "name": "Ледяной пронзатель",
+  "nameEn": "Ice Piercer",
+  "size": "medium",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Icewind Dale: Rime of the Frostmaiden",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "3d8 + 9"
+  },
+  "speed": {
+    "walk": 5,
+    "climb": 5
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 13,
+    "con": 16,
+    "int": 1,
+    "wis": 7,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "blindsight": 30,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Обманчивая внешность",
+      "description": "Пока пронзатель остается без движения на потолке, он неотличим от обычного сталактита."
+    },
+    {
+      "name": "Паучье лазание",
+      "description": "Пронзатель может лазать по сложным поверхностям, включая потолки, без совершения проверок характеристик."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Падение",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, одно существо, находящееся точно под пронзателем. Попадание: Колющий урон 10 (3к6) за каждые 10 футов падения, вплоть до 21 (6к6), плюс 10 (3к6) урона холодом. Промах: Пронзатель получает половину обычного урона за падение.",
+      "attackBonus": 3,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

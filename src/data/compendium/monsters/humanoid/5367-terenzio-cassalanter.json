@@ -1,0 +1,50 @@
+{
+  "id": "5367",
+  "slug": "5367-terenzio-cassalanter",
+  "name": "Теренцио Кассалантер",
+  "nameEn": "Terenzio Cassalanter",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "человек",
+  "alignment": "нейтральный, именной НИП",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Waterdeep: Dragon Heist",
+  "isNamed": true,
+  "armorClass": {
+    "value": 10
+  },
+  "hitPoints": {
+    "average": 1,
+    "hitDice": "1d4 - 1"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 10,
+    "con": 10,
+    "int": 10,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [],
+  "actions": [],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

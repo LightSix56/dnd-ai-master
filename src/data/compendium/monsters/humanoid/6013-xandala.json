@@ -1,0 +1,93 @@
+{
+  "id": "6013",
+  "slug": "6013-xandala",
+  "name": "Зандала",
+  "nameEn": "Xandala",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "полуэльф",
+  "alignment": "нейтрально-злой, именной НИП",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Tomb of Annihilation",
+  "isNamed": true,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 71,
+    "hitDice": "11d8 + 22"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 11,
+    "con": 14,
+    "int": 18,
+    "wis": 16,
+    "cha": 18
+  },
+  "savingThrows": {
+    "con": 7,
+    "wis": 6
+  },
+  "skills": {
+    "survival": 6,
+    "history": 7,
+    "arcana": 7,
+    "deception": 10,
+    "insight": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "Общий",
+    "Дварфийский",
+    "Драконий",
+    "Полуросликов",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Использование заклинаний",
+      "description": "Зандала является заклинателем 9-го уровня. Её базовой характеристикой является Харизма (Сл спасброска от заклинаний 15, +7 к атакам заклинаниями). Зандала знает следующие заклинания чародея:"
+    },
+    {
+      "name": "Ускоренное заклинание (3/день)",
+      "description": "Если она используете заклинание со временем накладывания «1 действие», Зандала можете сотворить это заклинание бонусным действием."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Боевой посох",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 фт., одна цель. Попадание: 3 (1к6) дробящего урона, или 4 (1к8) дробящего урона, при использовании двумя руками.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 0,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 9,
+    "ability": "CHA"
+  }
+}

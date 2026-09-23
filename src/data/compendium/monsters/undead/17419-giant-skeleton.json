@@ -1,0 +1,93 @@
+{
+  "id": "17419",
+  "slug": "17419-giant-skeleton",
+  "name": "Скелет великана",
+  "nameEn": "Giant skeleton",
+  "size": "huge",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "нейтрально-злая",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Tales from the Yawning Portal",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 115,
+    "hitDice": "10d12 + 50"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 21,
+    "dex": 10,
+    "con": 20,
+    "int": 4,
+    "wis": 6,
+    "cha": 6
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [
+    "bludgeoning"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "darkvision": 60
+  },
+  "languages": [
+    "понимает Великаний",
+    "но не может говорить"
+  ],
+  "traits": [
+    {
+      "name": "Увёртливость",
+      "description": "Если скелет подвергается эффекту, позволяющему совершить спасбросок Ловкости, чтобы получить только половину урона, он вместо этого не получает урон, если преуспеет в спасброске, и получает лишь половину урона, если провалит спасбросок."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Скелет совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Иммунитет к изгнанию",
+      "description": "Скелет обладает иммунитетом к эффектам, изгоняющим нежить."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Скелет совершает три атаки Скимитаром."
+    },
+    {
+      "name": "Скимитар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +8 к попаданию, досягаемость 10 фт, одна цель. Попадание: 15 (3к6 + 5) рубящего урона.",
+      "attackBonus": 8,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

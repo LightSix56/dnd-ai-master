@@ -1,0 +1,114 @@
+{
+  "id": "13300",
+  "slug": "13300-werevulture",
+  "name": "Верстервятник",
+  "nameEn": "Werevulture",
+  "size": "medium",
+  "type": "fiend",
+  "subtype": null,
+  "alignment": "хаотично-злое",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "The Book of Many Things",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 75,
+    "hitDice": "10d8 + 30"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 60
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 14,
+    "con": 17,
+    "int": 11,
+    "wis": 13,
+    "cha": 8
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15
+  },
+  "languages": [
+    "Общий (не может говорить в облике стервятника)"
+  ],
+  "traits": [
+    {
+      "name": "Регенерация",
+      "description": "Верстервятник восстанавливает 10 хитов в начале своего хода. Если он получает урон излучением, эта особенность не действует в начале его следующего хода. Верстервятник умирает только если начинает свой ход с 0 хитов и не может регенерировать."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Верстервятник совершает две атаки Когтями или совершает атаку Клювом и Когтями."
+    },
+    {
+      "name": "Клюв (только в облике стервятника или гибрида)",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 10 (2к6 + 3) колющего урона. Если цель — гуманоид, она должна преуспеть в спасброске Телосложения Сл 13, иначе станет проклятой до тех пор, пока на неё не наложат заклинание снятие проклятия [remove curse] или подобную магию. Если хиты проклятой цели опускаются до 0, она становится верстервятником под контролем Мастера и восстанавливает 10 хитов.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 13 (4к4 + 3) рубящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "4d4",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Длинный лук (только в облике гуманоида или гибрида)",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +5 к попаданию, дистанция 150/600 футов, одна цель. Попадание: 11 (2к8 + 2) колющего урона.",
+      "attackBonus": 5,
+      "range": {
+        "normal": 150,
+        "long": 600
+      },
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

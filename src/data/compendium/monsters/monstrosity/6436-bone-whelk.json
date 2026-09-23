@@ -1,0 +1,79 @@
+{
+  "id": "6436",
+  "slug": "6436-bone-whelk",
+  "name": "Костяной слизень",
+  "nameEn": "Bone Whelk",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "Baldur's Gate: Descent Into Avernus",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 27,
+    "hitDice": "5d10"
+  },
+  "speed": {
+    "walk": 15,
+    "climb": 15
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 5,
+    "con": 11,
+    "int": 6,
+    "wis": 9,
+    "cha": 3
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 9,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Паучье лазанье",
+      "description": "Слизень может лазать по сложным поверхностям, включая потолки, без совершения проверок характеристик."
+    },
+    {
+      "name": "Клейкий",
+      "description": "Костяной слизень может приклеить к себе объекты Среднего размера или меньше. Существо размером не больше Среднего, коснувшееся костяного слизня, становится захваченным им (Сл высвобождения 10)."
+    },
+    {
+      "name": "Предсмертный вопль",
+      "description": "Когда костяной слизень умирает, он издаёт леденящий душу вопль, слышимый на расстоянии до 120 футов. Вопль заставляет немагическую органическую материю в пределах 10 футов от слизня гнить. Каждое существо в пределах 10 футов от умирающего костяного слизня получает 9 (2к8) урона некротической энергией."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 футов, одно существо. Попадание: 4 (1к8) колющего урона.",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

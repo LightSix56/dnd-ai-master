@@ -1,0 +1,112 @@
+{
+  "id": "118",
+  "slug": "118-brass-dragon-wyrmling",
+  "name": "Вирмлинг латунного дракона",
+  "nameEn": "Brass dragon wyrmling",
+  "size": "medium",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "хаотично-добрый",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 16,
+    "hitDice": "3d8 + 3"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 60,
+    "burrow": 15
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 10,
+    "con": 13,
+    "int": 10,
+    "wis": 11,
+    "cha": 13
+  },
+  "savingThrows": {
+    "dex": 2,
+    "con": 3,
+    "wis": 2,
+    "cha": 3
+  },
+  "skills": {
+    "perception": 4,
+    "stealth": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "blindsight": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Драконий"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 7 (1к10 + 2).",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Оружие дыхания (перезарядка 5–6)",
+      "type": "special",
+      "description": "Дракон использует один из следующих видов оружия дыхания.",
+      "recharge": "5-6"
+    },
+    {
+      "name": "Огненное дыхание",
+      "type": "breath",
+      "description": "Дракон выдыхает огонь 20-футовой линией шириной 5 футов. Все существа в этой линии должны совершить спасбросок Ловкости Сл 11, получая урон огнём 14 (4к6) при провале, или половину этого урона при успехе.",
+      "recharge": "5-6",
+      "save": {
+        "ability": "DEX",
+        "dc": 11,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Усыпляющее дыхание",
+      "type": "breath",
+      "description": "Дракон выдыхает усыпляющий газ 15-футовым конусом. Все существа в этой области должны преуспеть в спасброске Телосложения Сл 11, иначе потеряют сознание на 1 минуту. Этот эффект оканчивается для существа, если оно получает урон или кто-нибудь действием разбудит его.",
+      "recharge": "5-6",
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 15
+      },
+      "save": {
+        "ability": "CON",
+        "dc": 11,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

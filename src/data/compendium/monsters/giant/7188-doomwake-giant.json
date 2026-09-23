@@ -1,0 +1,111 @@
+{
+  "id": "7188",
+  "slug": "7188-doomwake-giant",
+  "name": "Великан надвигающегося рока",
+  "nameEn": "Doomwake Giant",
+  "size": "huge",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "законно-злой",
+  "challengeRating": 11,
+  "xp": 7200,
+  "source": "Mythic Odysseys of Theros",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 162,
+    "hitDice": "13d12 + 78"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 24,
+    "dex": 12,
+    "con": 22,
+    "int": 12,
+    "wis": 14,
+    "cha": 16
+  },
+  "savingThrows": {
+    "con": 10,
+    "wis": 6
+  },
+  "skills": {
+    "perception": 6,
+    "intimidation": 7
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "necrotic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 120
+  },
+  "languages": [
+    "Великаний"
+  ],
+  "traits": [
+    {
+      "name": "Аура Эреба",
+      "description": "Любое существо, которое начинает свой ход в пределах 10 футов от великана, должно преуспеть в спасброске Телосложения Сл 18, иначе получит 10 (3к6) урона некротической энергией и не сможет восстановить хиты до начала своего следующего хода. При успехе существо становится невосприимчивым к Ауре Эреба великана в течение 24 часов."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Великан совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Великан совершает две атаки Ударом."
+    },
+    {
+      "name": "Удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +11 к попаданию, досягаемость 15 футов, одна цель. Попадание: 20 (3к8 + 7) дробящего урона плюс 10 (3к6) урона некротической энергией.",
+      "attackBonus": 11,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "3d8",
+          "mod": 7,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Вредоносные ветра (Перезарядка 5-6)",
+      "type": "breath",
+      "description": "Великан выдыхает мощный порыв ветра, который создает облако смертоносного тумана 60-футовой линией шириной 10 футов. Все существа в этой линии должны совершить спасбросок Телосложения Сл 18. При провале существо получает 36 (8к8) урона некротической энергией и падает ничком. При успехе существо получает половину этого урона и не падает ничком.",
+      "damage": [
+        {
+          "dice": "8d8",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "CON",
+        "dc": 18,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

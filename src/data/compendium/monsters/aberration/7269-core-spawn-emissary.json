@@ -1,0 +1,122 @@
+{
+  "id": "7269",
+  "slug": "7269-core-spawn-emissary",
+  "name": "Эмиссар порождений ядра",
+  "nameEn": "Core Spawn Emissary",
+  "size": "medium",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "хаотично-злая",
+  "challengeRating": 6,
+  "xp": 2300,
+  "source": "Explorer's Guide to Wildemount",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 102,
+    "hitDice": "12d8 + 48"
+  },
+  "speed": {
+    "walk": 40,
+    "fly": 60,
+    "hover": true
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 15,
+    "con": 18,
+    "int": 8,
+    "wis": 13,
+    "cha": 8
+  },
+  "savingThrows": {
+    "dex": 5,
+    "wis": 4,
+    "cha": 2
+  },
+  "skills": {
+    "perception": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "blindsight": 30,
+    "tremorsense": 60
+  },
+  "languages": [
+    "Понимает Глубинную речь",
+    "но не говорит",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Эмиссар совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Эмиссар совершает три атаки Когтями."
+    },
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одно существо. Попадание: 14 (2к10 + 3) рубящего урона.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 3,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Манящий гул (перезарядка 5-6)",
+      "type": "special",
+      "description": "Эмиссар издает ужасный, но в то же время манящий гул. Каждое существо в пределах 20 футов от эмиссара, которое может его слышать и которое не является Аберрацией, должно совершить спасбросок Телосложения Сл 14, иначе станет очарованным на 1 минуту. Существо может повторять спасбросок в конце каждого своего хода, оканчивая на себя эффект в случае успеха.",
+      "recharge": "5-6",
+      "save": {
+        "ability": "CON",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Кристаллические споры (Перезарядка 6)",
+      "type": "special",
+      "description": "От эмиссара исходит облако ядовитых кристаллических спор радиусом 15 футов. Споры огибают углы. Каждое существо в этой области должно преуспеть в спасброске Телосложения Сл 14, иначе станет отравленным. Будучи отравленным таким образом, существо получает 11 (2к10) урона ядом в начале каждого своего хода. Существо может повторять спасбросок в конце каждого своего хода, оканчивая на себя эффект в случае успеха.",
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "6",
+      "save": {
+        "ability": "CON",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

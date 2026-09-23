@@ -1,0 +1,71 @@
+{
+  "id": "956",
+  "slug": "956-guardian-portrait",
+  "name": "Портрет - страж",
+  "nameEn": "Guardian Portrait",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Curse of Strahd",
+  "isNamed": false,
+  "armorClass": {
+    "value": 5,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "5d8"
+  },
+  "speed": {
+    "walk": 0
+  },
+  "abilities": {
+    "str": 1,
+    "dex": 1,
+    "con": 10,
+    "int": 14,
+    "wis": 10,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Восприимчивость к антимагии",
+      "description": "Портрет становится выведенным из строя, пока находится в поле антимагии. Если он станет целью рассеивания магии [dispel magic], портрет должен будет совершить спасбросок Телосложения со сложностью, равной сложности спасброска от заклинаний наложившего рассеивание и, при провале, потерять сознание на 1 минуту."
+    },
+    {
+      "name": "Врождённое колдовство",
+      "description": "Портрет обладает врождённой способностью накладывать заклинания, базовой характеристикой является Интеллект (Сл спасброска от заклинаний 12). Портрет может накладывать следующие заклинания, без необходимости материальных компонентов:"
+    },
+    {
+      "name": "Обманчивая внешность",
+      "description": "Пока фигура на портрете не двигается, его невозможно отличить от обычной картины."
+    }
+  ],
+  "actions": [],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "ability": "INT"
+  }
+}

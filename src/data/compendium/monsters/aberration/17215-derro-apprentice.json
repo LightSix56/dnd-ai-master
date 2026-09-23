@@ -1,0 +1,117 @@
+{
+  "id": "17215",
+  "slug": "17215-derro-apprentice",
+  "name": "Дерро подмастерье",
+  "nameEn": "Derro Apprentice",
+  "size": "small",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "хаотично-злая",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Quest from the Infinite Staircase",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "кожаный доспех"
+  },
+  "hitPoints": {
+    "average": 22,
+    "hitDice": "5d6 + 5"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 9,
+    "dex": 14,
+    "con": 12,
+    "int": 11,
+    "wis": 5,
+    "cha": 9
+  },
+  "savingThrows": {},
+  "skills": {
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 7,
+    "darkvision": 120
+  },
+  "languages": [
+    "Дварфийский",
+    "Подземный"
+  ],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Дерро совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Чувствительность к солнечному свету",
+      "description": "Дерро совершает с помехой броски атаки, находясь на солнечном свете."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Заряд хаоса",
+      "type": "melee_attack",
+      "description": "Дальнобойная или рукопашная атака заклинанием: +3 к попаданию, досягаемость 5 фт. или дистанция 60 фт., одна цель. Попадание: 10 (3к6) урона. Совершите бросок 1к4, чтобы определить вид урона: 1, кислота; 2, холод; 3, огонь; 4, электричество.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "range": {
+        "normal": 60
+      },
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Силовой взрыв (перезарядка 4–6)",
+      "type": "special",
+      "description": "Сырая арканная магия вырывается из дерро. Все существа в пределах 10 футов от него должны совершить спасбросок Силы Сл 11. При провале существо получает 7 (2к6) урона силовым полем и сбивается с ног. При успехе существо получает только половину этого урона, не сбиваясь с ног.",
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 11,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Дерро накладывает одно из следующих заклинаний, используя Харизму в качестве базовой характеристики (Сл спасброска 11):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "сообщение [message], фокусы [prestidigitation];"
+    },
+    {
+      "name": "1/день",
+      "type": "special",
+      "description": "очарование личности [charm person]."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

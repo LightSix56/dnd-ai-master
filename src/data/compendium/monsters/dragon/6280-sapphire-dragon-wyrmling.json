@@ -1,0 +1,114 @@
+{
+  "id": "6280",
+  "slug": "6280-sapphire-dragon-wyrmling",
+  "name": "Вирмлинг сапфирового дракона",
+  "nameEn": "Sapphire Dragon Wyrmling",
+  "size": "medium",
+  "type": "dragon",
+  "subtype": "самоцветный",
+  "alignment": "законно-нейтральный",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 45,
+    "hitDice": "6d8 + 18"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 60,
+    "burrow": 15,
+    "climb": 30
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 14,
+    "con": 16,
+    "int": 14,
+    "wis": 13,
+    "cha": 14
+  },
+  "savingThrows": {
+    "dex": 4,
+    "con": 5,
+    "wis": 3,
+    "cha": 4
+  },
+  "skills": {
+    "perception": 4,
+    "history": 4,
+    "stealth": 4,
+    "persuasion": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "blindsight": 30,
+    "darkvision": 120
+  },
+  "languages": [
+    "Драконий",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Паучье лазанье",
+      "description": "Дракон может лазать по сложным поверхностям, включая потолки, без совершения проверок характеристик."
+    },
+    {
+      "name": "Прокладывание туннеля",
+      "description": "Дракон может копать сквозь сплошной камень со скоростью копания, уменьшенной вдвое, оставляя за собой туннель диаметром 10 фт."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 фт., одна цель. Попадание: 8 (1к10+3) колющего урона плюс 3 (1к6) урона звуком.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний (Псионика)",
+      "type": "special",
+      "description": "Дракон накладывает одно из следующих заклинаний, не требующее компонентов заклинания и использующее Интеллект в качестве базовой характеристики:"
+    },
+    {
+      "name": "1/день каждое: сигнал тревоги [alarm],",
+      "type": "special",
+      "description": "Тензеров парящий диск [Tenser’s floating disk]."
+    },
+    {
+      "name": "Ослабляющее дыхание (перезарядка 5-6)",
+      "type": "breath",
+      "description": "Дракон выдыхает импульс высокотонального, почти неслышного звука в конусе 15 фт. Каждое существо в этой области должно совершить спасбросок Телосложение Сл 13. В случае провала существо получает 22 (4к10) урона звуком и становится недееспособным до конца своего следующего хода. В случае успеха существо получает половину урона без дополнительных эффектов.",
+      "damage": [
+        {
+          "dice": "4d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6"
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

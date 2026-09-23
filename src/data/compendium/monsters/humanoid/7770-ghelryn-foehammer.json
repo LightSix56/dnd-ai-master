@@ -1,0 +1,86 @@
+{
+  "id": "7770",
+  "slug": "7770-ghelryn-foehammer",
+  "name": "Гелрин Фоухаммер",
+  "nameEn": "Ghelryn Foehammer",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "щитовой дварф",
+  "alignment": "законно-добрый, именной НИП",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Storm King's Thunder",
+  "isNamed": true,
+  "armorClass": {
+    "value": 14,
+    "type": "кираса, щит"
+  },
+  "hitPoints": {
+    "average": 30,
+    "hitDice": "4d8 + 12"
+  },
+  "speed": {
+    "walk": 25
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 7,
+    "con": 17,
+    "int": 10,
+    "wis": 11,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "athletics": 6,
+    "perception": 2,
+    "intimidation": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Дварфийский"
+  ],
+  "traits": [
+    {
+      "name": "Дварфская устойчивость",
+      "description": "Гелрин совершает с преимуществом спасброски от яда."
+    },
+    {
+      "name": "Убийца гигантов",
+      "description": "Любая атака оружием, совершенная Гелрином против гиганта, наносит дополнительный урон 7 (2к6) при попадании."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Гелрин совершает две атаки боевым топором."
+    },
+    {
+      "name": "Боевой топор",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 фт., одна цель. Попадание: 8 (1к8+4) рубящего урона или 9 (1к10+4) рубящего урона, если использовать топор двумя руками.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

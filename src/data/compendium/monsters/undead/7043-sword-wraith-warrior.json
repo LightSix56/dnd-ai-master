@@ -1,0 +1,127 @@
+{
+  "id": "7043",
+  "slug": "7043-sword-wraith-warrior",
+  "name": "Воин призраков меча",
+  "nameEn": "Sword Wraith Warrior]Воин призраков меча [Sword Wraith Warrior",
+  "size": "medium",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "обычно законно-злаяСредняя? Нежить, законно-злая",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "кольчужная рубаха, щит"
+  },
+  "hitPoints": {
+    "average": 45,
+    "hitDice": "6d8 + 18"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 12,
+    "con": 17,
+    "int": 6,
+    "wis": 9,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 9,
+    "darkvision": 60
+  },
+  "languages": [
+    "Все",
+    "известные при жизни"
+  ],
+  "traits": [
+    {
+      "name": "Необычная природа",
+      "description": "Призрак меча не нуждается в воздухе, пище, питье и сне."
+    },
+    {
+      "name": "Смертельная ярость",
+      "description": "Призрак меча может совершить одну атаку оружием бонусным действием, причиняя ею дополнительно 9 (2к8) урона некротической энергией в случае попадания. Если призрак совершит это, то все броски атак против него будут совершаться с преимуществом до начала его следующего хода."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Боевой топор",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 8 (1к8 + 4) рубящего урона, или 9 (1к10 + 4) рубящего урона, если используется двумя руками.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Длинный лук",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +3 к попаданию, дистанция 150/600 футов, одна цель. Попадание: 5 (1к8 + 1) колющего урона.",
+      "attackBonus": 3,
+      "range": {
+        "normal": 150,
+        "long": 600
+      },
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Длинный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: 8 (1к8 + 4) рубящего урона, или 9 (1к10 + 4) рубящего урона, если используется двумя руками.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Длинный лук",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +3 к попаданию, дистанция 150/600 футов, одна цель. Попадание: 5 (1к8+1) колющего урона.",
+      "attackBonus": 3,
+      "range": {
+        "normal": 150,
+        "long": 600
+      },
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

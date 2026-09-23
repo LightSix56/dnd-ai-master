@@ -1,0 +1,75 @@
+{
+  "id": "7733",
+  "slug": "7733-stone-giant-statue",
+  "name": "Статуя каменного великана",
+  "nameEn": "Stone giant statue",
+  "size": "huge",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Storm King's Thunder",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 195,
+    "hitDice": "17d10 + 102"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 22,
+    "dex": 9,
+    "con": 20,
+    "int": 3,
+    "wis": 11,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "bludgeoning",
+    "piercing",
+    "slashing",
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 120
+  },
+  "languages": [
+    "Понимает языки своего создателя",
+    "но не говорит."
+  ],
+  "traits": [
+    {
+      "name": "Неизменяемая форма",
+      "description": "Голем обладает иммунитетом ко всем заклинаниям и эффектам, изменяющим его облик."
+    },
+    {
+      "name": "Сопротивление магии",
+      "description": "Голем совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Магическое оружие",
+      "description": "Атаки оружием голема являются магическими."
+    }
+  ],
+  "actions": [],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

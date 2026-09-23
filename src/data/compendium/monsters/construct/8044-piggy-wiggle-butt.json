@@ -1,0 +1,77 @@
+{
+  "id": "8044",
+  "slug": "8044-piggy-wiggle-butt",
+  "name": "Поросёнок трясущий задом",
+  "nameEn": "Piggy Wiggle Butt",
+  "size": "medium",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "хаотично-злой, именной НИП",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "The Lost Dungeon of Rickedness: Big Rick Energy",
+  "isNamed": true,
+  "armorClass": {
+    "value": 13,
+    "type": "шкурный доспех"
+  },
+  "hitPoints": {
+    "average": 15,
+    "hitDice": "2d8 + 6"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 16,
+    "dex": 12,
+    "con": 16,
+    "int": 7,
+    "wis": 11,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "intimidation": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison",
+    "psychic"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Агрессивный",
+      "description": "Орк может бонусным действием переместиться на расстояние вплоть до показателя своей скорости по направлению к враждебному существу, которое он может видеть."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Глиняный кувшин",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 7 (1к8 + 3) дробящего урона.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

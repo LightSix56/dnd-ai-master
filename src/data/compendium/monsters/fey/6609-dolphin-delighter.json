@@ -1,0 +1,85 @@
+{
+  "id": "6609",
+  "slug": "6609-dolphin-delighter",
+  "name": "Восторженный дельфин",
+  "nameEn": "Dolphin Delighter",
+  "size": "medium",
+  "type": "fey",
+  "subtype": null,
+  "alignment": "обычно хаотично-добрая",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Mordenkainen Presents: Monsters of the Multiverse",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 27,
+    "hitDice": "5d8 + 5"
+  },
+  "speed": {
+    "walk": 0,
+    "swim": 60
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 13,
+    "con": 13,
+    "int": 11,
+    "wis": 12,
+    "cha": 16
+  },
+  "savingThrows": {
+    "wis": 3,
+    "cha": 5
+  },
+  "skills": {
+    "perception": 3,
+    "performance": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "blindsight": 60
+  },
+  "languages": [
+    "Акван",
+    "Телепатия 120 фт."
+  ],
+  "traits": [
+    {
+      "name": "Задержка дыхания",
+      "description": "Дельфин может задержать дыхание на 20 минут."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дельфин совершает две атаки"
+    },
+    {
+      "name": "Ослепительный удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 5 (1к6 + 2) дробящего урона плюс 7 (2к6) урона психической энергией и цель становится ослеплённой до начала следующего хода дельфина.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

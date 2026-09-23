@@ -1,0 +1,104 @@
+{
+  "id": "10566",
+  "slug": "10566-anhkolox",
+  "name": "Анхолокс",
+  "nameEn": "Anhkolox",
+  "size": "huge",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "нейтрально-злая",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Dragonlance: Shadow of the Dragon Queen",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 157,
+    "hitDice": "15d12 + 60"
+  },
+  "speed": {
+    "walk": 50
+  },
+  "abilities": {
+    "str": 22,
+    "dex": 11,
+    "con": 18,
+    "int": 4,
+    "wis": 14,
+    "cha": 2
+  },
+  "savingThrows": {
+    "wis": 6
+  },
+  "skills": {
+    "perception": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Необычная природа",
+      "description": "Анхолокс не нуждается в воздухе, еде, питье и сне."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Анхолокс совершает две атаки Когтями и одну Захватывающим разрыванием."
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +10 к попаданию, досягаемость 5 футов, одна цель. Попадание: 17 (2к10 + 6) колющего урона. Если цель — существо Большого или меньшего размера, она должна преуспеть в спасброске Силы Сл 18, иначе её оттолкнёт до 20 футов в горизонтальном направлении на выбор анхолокса.",
+      "attackBonus": 10,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 6,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 18,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Захватывающее разрывание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: + 10 к попаданию, досягаемость 5 футов, одна цель. Попадание: 23 (5к6 + 6) колющего урона, и если цель - существо Большого или меньшего размера, она должна преуспеть в спасброске Силы Сл 18, иначе будет заключена в грудную клетку анхолокса и станет схваченной (Сл высвобождения 18). Пока цель схвачена, она опутана, и анхолокс не может использовать Захватывающее разрывание на другую цель.",
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "5d6",
+          "mod": 6,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 18,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

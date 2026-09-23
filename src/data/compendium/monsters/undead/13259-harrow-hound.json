@@ -1,0 +1,85 @@
+{
+  "id": "13259",
+  "slug": "13259-harrow-hound",
+  "name": "Гончая разоритель",
+  "nameEn": "Harrow Hound",
+  "size": "medium",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "хаотично-злая, законно-добрая",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "The Book of Many Things",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 45,
+    "hitDice": "6d8 + 18"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 17,
+    "con": 12,
+    "int": 10,
+    "wis": 13,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13
+  },
+  "languages": [
+    "понимает Сильван",
+    "но не говорит",
+    "Язык Мерцающих псов"
+  ],
+  "traits": [
+    {
+      "name": "Тактика стаи. Гончая совершает с преимущ",
+      "description": "еством броски атаки по существу, если как минимум один союзник гончей находится в пределах 5 футов от этого существа, и этот союзник дееспособен."
+    },
+    {
+      "name": "Сверхъестественный следопыт",
+      "description": "Гончая знает расстояние и направление движения любого существа, которое приближалось к ней на расстояние 30 футов, даже если это существо находится на другом плане существования. Если существо, за которым охотится гончая, умирает, она узнаёт об этом."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 5 футов, одна цель. Попадание: 10 (2к6 + 3) колющего урона плюс 3 (1к6) урона некротической энергией. Если целью является существо, оно должно преуспеть в спасброске Силы Сл 13 иначе упадёт ничком.",
+      "attackBonus": 5,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 13,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

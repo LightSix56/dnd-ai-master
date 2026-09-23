@@ -1,0 +1,119 @@
+{
+  "id": "12065",
+  "slug": "12065-cairnwight",
+  "name": "Надгробное умертвие",
+  "nameEn": "Cairnwight",
+  "size": "huge",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "обычно нейтральная",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Bigby Presents: Glory of the Giants",
+  "isNamed": false,
+  "armorClass": {
+    "value": 19,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 138,
+    "hitDice": "12d12 + 60"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 23,
+    "dex": 10,
+    "con": 21,
+    "int": 10,
+    "wis": 12,
+    "cha": 9
+  },
+  "savingThrows": {
+    "con": 9,
+    "wis": 5
+  },
+  "skills": {
+    "athletics": 10,
+    "perception": 5,
+    "stealth": 8
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "darkvision": 60
+  },
+  "languages": [
+    "Великаний"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Надгробное умертвие совершает две атаки Ударом или Камнем и использует Касание окаменения, если оно доступно."
+    },
+    {
+      "name": "Удар",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +10 к попаданию, досягаемость 10 футов, одна цель. Попадание: 22 (3к10 + 6) дробящего урона.",
+      "attackBonus": 10,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 6,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Камень",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +10 к попаданию, дистанция 60/240 футов, одна цель. Попадание: 19 (3к10 + 6) дробящего урона. Если цель — существо, она должны преуспеть в спасброске Силы Сл 17, иначе будет сбита с ног.",
+      "attackBonus": 10,
+      "range": {
+        "normal": 60,
+        "long": 240
+      },
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 6,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 17,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Касание окаменения (перезарядка 5-6)",
+      "type": "special",
+      "description": "Великан касается одного существа, находящегося в пределах 10 футов. Цель должна совершить спасбросок Телосложения Сл 17, иначе получит 26 (4к12) урона силовым полем и начинает превращаться в камень и становится опутанным. Опутанное существо должно повторить спасбросок в конце своего следующего хода, становясь окаменевшим при провале или оканчивая эффект при успехе.",
+      "damage": [
+        {
+          "dice": "4d12",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "CON",
+        "dc": 17,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

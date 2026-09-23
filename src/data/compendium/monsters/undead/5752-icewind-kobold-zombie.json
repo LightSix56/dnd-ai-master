@@ -1,0 +1,74 @@
+{
+  "id": "5752",
+  "slug": "5752-icewind-kobold-zombie",
+  "name": "Кобольд-зомби долины Ледяного Ветра",
+  "nameEn": "Icewind Kobold Zombie",
+  "size": "small",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "нейтрально-злая",
+  "challengeRating": 0.125,
+  "xp": 25,
+  "source": "Icewind Dale: Rime of the Frostmaiden",
+  "isNamed": false,
+  "armorClass": {
+    "value": 9,
+    "type": "части шкурного доспеха"
+  },
+  "hitPoints": {
+    "average": 19,
+    "hitDice": "3d6 + 9"
+  },
+  "speed": {
+    "walk": 20
+  },
+  "abilities": {
+    "str": 8,
+    "dex": 6,
+    "con": 16,
+    "int": 3,
+    "wis": 6,
+    "cha": 3
+  },
+  "savingThrows": {
+    "wis": 0
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 8,
+    "darkvision": 60
+  },
+  "languages": [
+    "Понимает Драконий и Общий",
+    "но не может говорить."
+  ],
+  "traits": [
+    {
+      "name": "Стойкость нежити",
+      "description": "Если зомби получает урон, уменьшающий хиты до 0, он совершает спасбросок Телосложения Сл 5 + полученный урон, если только это не был урон излучением или урон от критического попадания. При успехе хиты зомби опускаются всего лишь до 1."
+    },
+    {
+      "name": "Необычная природа",
+      "description": "Зомби не нуждается в воздухе, еде, питье и сне."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Метательное копьё",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +1 к попаданию, досягаемость 5 фт., одна цель. Попадание: 2 (1к6 – 1) колющего урона.",
+      "attackBonus": 1,
+      "reachFt": 5
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

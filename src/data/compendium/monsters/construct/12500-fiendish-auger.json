@@ -1,0 +1,82 @@
+{
+  "id": "12500",
+  "slug": "12500-fiendish-auger",
+  "name": "Дьявольский шнек",
+  "nameEn": "Fiendish Auger",
+  "size": "huge",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "нейтрально-злой",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Phandelver and Below: The Shattered Obelisk",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15
+  },
+  "hitPoints": {
+    "average": 85,
+    "hitDice": "9d12 + 27"
+  },
+  "speed": {
+    "walk": 40,
+    "burrow": 30
+  },
+  "abilities": {
+    "str": 23,
+    "dex": 10,
+    "con": 17,
+    "int": 6,
+    "wis": 12,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire",
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "blindsight": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Осадный монстр",
+      "description": "Шнек наносит двойной урон объектам и зданиям."
+    },
+    {
+      "name": "Прокладывание туннеля",
+      "description": "Шнек может копать сквозь сплошной камень со скоростью копания, уменьшенной вдвое, оставляя за собой туннель шириной 10 футов."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Пламенная дрель",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 футов, одна цель. Попадание: 17 (2к10 + 6) колющего урона плюс 7 (2к6) урона огнём. Если шнек перемещается как минимум на 20 футов по прямой к цели непосредственно перед попаданием, цель получает дополнительные 11 (2к10) колющего урона, а если цель — существо, она должна преуспеть в спасброске Силы Сл 17 или будет сбито с ног.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 6,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 17,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

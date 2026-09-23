@@ -1,0 +1,75 @@
+{
+  "id": "270",
+  "slug": "270-young-remorhaz",
+  "name": "Молодой ремораз",
+  "nameEn": "Young remorhaz",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 93,
+    "hitDice": "11d10 + 33"
+  },
+  "speed": {
+    "walk": 30,
+    "burrow": 20
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 13,
+    "con": 17,
+    "int": 3,
+    "wis": 10,
+    "cha": 4
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "fire",
+    "cold"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60,
+    "tremorsense": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Раскаленное тело",
+      "description": "Существо, касающееся ремораза или попадающее по нему рукопашной атакой, находясь в пределах 5 футов от него, получает урон огнём 7 (2к6)."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 5 футов, одна цель. Попадание: Колющий урон 20 (3к10 + 4) плюс урон огнём 7 (2к6).",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 4,
+          "type": "плюс"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

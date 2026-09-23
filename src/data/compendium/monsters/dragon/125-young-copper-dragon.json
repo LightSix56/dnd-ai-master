@@ -1,0 +1,133 @@
+{
+  "id": "125",
+  "slug": "125-young-copper-dragon",
+  "name": "Молодой медный дракон",
+  "nameEn": "Young copper dragon",
+  "size": "large",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "хаотично-добрый",
+  "challengeRating": 7,
+  "xp": 2900,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 17,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 119,
+    "hitDice": "14d10 + 42"
+  },
+  "speed": {
+    "walk": 40,
+    "fly": 80,
+    "climb": 40
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 12,
+    "con": 17,
+    "int": 16,
+    "wis": 13,
+    "cha": 15
+  },
+  "savingThrows": {
+    "dex": 4,
+    "con": 6,
+    "wis": 4,
+    "cha": 5
+  },
+  "skills": {
+    "perception": 7,
+    "deception": 5,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "acid"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 17,
+    "blindsight": 30,
+    "darkvision": 120
+  },
+  "languages": [
+    "Общий",
+    "Драконий"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дракон совершает три атаки: одну укусом, и две когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 10 футов, одна цель. Попадание: Колющий урон 15 (2к10 + 4).",
+      "attackBonus": 7,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +7 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 11 (2к6 + 4).",
+      "attackBonus": 7,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Оружия дыхания (перезарядка 5–6)",
+      "type": "special",
+      "description": "Дракон использует один из следующих видов оружия дыхания.",
+      "recharge": "5-6"
+    },
+    {
+      "name": "Кислотное дыхание",
+      "type": "breath",
+      "description": "Дракон выдыхает кислоту 40-футовой линией шириной 5 футов. Все существа в этой линии должны совершить спасбросок Ловкости Сл 14, получая урон кислотой 40 (9к8) при провале, или половину этого урона при успехе.",
+      "recharge": "5-6",
+      "save": {
+        "ability": "DEX",
+        "dc": 14,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Замедляющее дыхание",
+      "type": "breath",
+      "description": "Дракон выдыхает газ 30-футовым конусом. Все существа в этой области должны преуспеть в спасброске Телосложения Сл 14. При провале существо не может использовать реакции, его скорость уменьшается вдвое, и оно не может совершать более одной атаки в ход. Кроме того, существо может в свой ход совершать либо действие, либо бонусное действие, но не то и другое. Эти эффекты длятся 1 минуту. Существо может повторять этот спасбросок в конце каждого своего хода, оканчивая эффект на себе при успехе.",
+      "recharge": "5-6",
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 30
+      },
+      "save": {
+        "ability": "CON",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

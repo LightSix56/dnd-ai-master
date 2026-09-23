@@ -1,0 +1,108 @@
+{
+  "id": "7810",
+  "slug": "7810-maggie-keeneyes-tier-1",
+  "name": "Мэгги Кинайс (1-го уровня)",
+  "nameEn": "Maggie Keeneyes (Tier 1)",
+  "size": "large",
+  "type": "giant",
+  "subtype": "огр",
+  "alignment": "законно-нейтральный, именной НИП",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Critical Role: Call of the Netherdeep",
+  "isNamed": true,
+  "armorClass": {
+    "value": 13,
+    "type": "кожаный доспех"
+  },
+  "hitPoints": {
+    "average": 85,
+    "hitDice": "10d10 + 30"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 18,
+    "dex": 14,
+    "con": 16,
+    "int": 14,
+    "wis": 14,
+    "cha": 8
+  },
+  "savingThrows": {
+    "str": 6,
+    "con": 5
+  },
+  "skills": {
+    "athletics": 6,
+    "perception": 4,
+    "insight": 4,
+    "persuasion": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Великаний"
+  ],
+  "traits": [
+    {
+      "name": "Боевая готовность",
+      "description": "Мэгги и её союзники находящиеся в пределах 30 футов от неё, совершают броски инициативы с преимуществом, пока Мэгги дееспособна."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Гигантский молот",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +6 к попаданию, досягаемость 10 футов, одна цель. Попадание: 13 (2к8 + 4) дробящего урона, если цель - существо, Мэгги может заставить его совершить спасбросок Силы Сл 14; при провале цель отбрасывается на 5 футов от Мэгги и падает ничком.",
+      "attackBonus": 6,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Бросок молота",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +6 к попаданию, дистанция 20/60 футов, одна цель. Попадание: 9 (2к4 + 4) дробящего урона, если цель - существо,Мэгги может заставить его совершить спасбросок Силы Сл 14; при провале цель отбрасывается на 5 футов от Мэгги и падает ничком.",
+      "attackBonus": 6,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "2d4",
+          "mod": 4,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 14,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,86 @@
+{
+  "id": "357",
+  "slug": "357-giant-octopus",
+  "name": "Гигантский осьминог",
+  "nameEn": "Giant octopus",
+  "size": "large",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11
+  },
+  "hitPoints": {
+    "average": 52,
+    "hitDice": "8d10 + 8"
+  },
+  "speed": {
+    "walk": 10,
+    "swim": 60
+  },
+  "abilities": {
+    "str": 17,
+    "dex": 13,
+    "con": 13,
+    "int": 4,
+    "wis": 10,
+    "cha": 4
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 4,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 14,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Задержка дыхания",
+      "description": "Находясь вне воды, осьминог может задержать дыхание на 1 час."
+    },
+    {
+      "name": "Подводный камуфляж",
+      "description": "Осьминог совершает с преимуществом проверки Ловкости (Скрытность), когда находится под водой."
+    },
+    {
+      "name": "Подводное дыхание",
+      "description": "Осьминог может дышать только под водой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Щупальца",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +5 к попаданию, досягаемость 15 футов, одна цель. Попадание: Дробящий урон 10 (2к6 + 3). Если цель — существо, она становится захваченной (Сл высвобождения 16). Пока цель схвачена, она опутана, а осьминог не может использовать щупальца на другой цели.",
+      "attackBonus": 5,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 3,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Чернильное облако (перезаряжается после короткого или продолжительного отдыха)",
+      "type": "special",
+      "description": "Чернильное облако с радиусом 20 футов исходит от осьминога, если он находится под водой. Эта местность становится сильно заслонённой на 1 минуту, хотя сильное течение может развеять это облако. Выпустив чернила, осьминог может бонусным действием совершить действие Рывок."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

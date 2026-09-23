@@ -1,0 +1,72 @@
+{
+  "id": "4311",
+  "slug": "4311-beast-of-the-land",
+  "name": "Земной зверь",
+  "nameEn": "Beast of the Land",
+  "size": "medium",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Tasha's Cauldron of Everything",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13
+  },
+  "hitPoints": {
+    "average": 5,
+    "hitDice": "1d8"
+  },
+  "speed": {
+    "walk": 40,
+    "climb": 40
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 14,
+    "con": 15,
+    "int": 8,
+    "wis": 14,
+    "cha": 11
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "понимает языки",
+    "на которых вы говорите"
+  ],
+  "traits": [
+    {
+      "name": "Атака в броске",
+      "description": "Если зверь переместится как минимум на 20 футов по прямой к цели, а затем попадёт по ней растерзанием в том же ходу, цель дополнительно получит 1к6 рубящего урона. Если целью является существо, оно должно преуспеть в спасброске Силы Сл спасброска ваших заклинаний, иначе будет сбито с ног."
+    },
+    {
+      "name": "Первичная связь",
+      "description": "Вы можете добавить свой бонус мастерства к любой проверке характеристик или спасброску, которые совершает зверь."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Растерзание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: ваш модификатор броска атаки заклинанием к попаданию, досягаемость 5 футов, одна цель. Попадание: 1к8 + 2 + БМ рубящего урона.",
+      "reachFt": 5
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

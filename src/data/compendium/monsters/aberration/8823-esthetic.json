@@ -1,0 +1,87 @@
+{
+  "id": "8823",
+  "slug": "8823-esthetic",
+  "name": "Эстетик",
+  "nameEn": "Esthetic",
+  "size": "gargantuan",
+  "type": "aberration",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 12,
+  "xp": 8400,
+  "source": "Spelljammer: Adventures in Space",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 217,
+    "hitDice": "14d20 + 70"
+  },
+  "speed": {
+    "walk": 0,
+    "fly": 60,
+    "hover": true
+  },
+  "abilities": {
+    "str": 24,
+    "dex": 8,
+    "con": 20,
+    "int": 1,
+    "wis": 10,
+    "cha": 1
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [
+    "acid"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "blindsight": 30
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Биолюминесценция",
+      "description": "Пока у эстетика есть хотя бы 1 хит, он излучает яркий свет в пределах 30 футов и тусклый свет в пределах ещё 30 футов, а его внутренние отсеки тускло освещены."
+    },
+    {
+      "name": "Чароходство",
+      "description": "Эстетик обладает свойствами штурвала чарохода [spelljamming helm], но только создавший его рейгар может настроиться на руль."
+    },
+    {
+      "name": "Необычная природа",
+      "description": "Эстетик не нуждается в воздухе, еде и питье."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Эстетик совершает две атаки Щупальцами."
+    },
+    {
+      "name": "Щупальце",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +11 к попаданию, досягаемость 30 фт., одна цель. Попадание: 17 (3к6 + 7) урона силовым полем. Если цель — существо, она становится схваченной (Сл высвобождения 17). Пока цель схвачена, существо получает 18 (4к8) урона кислотой в начале каждого своего хода, а эстетик не может использовать это щупальце против других целей. У эстетика есть 1к4×2 щупалец, каждое из которых может схватить одну цель.",
+      "attackBonus": 11,
+      "reachFt": 30,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 7,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,85 @@
+{
+  "id": "17362",
+  "slug": "17362-dire-corby",
+  "name": "Свирепый корби",
+  "nameEn": "Dire Corby",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "жутевран",
+  "alignment": "нейтрально-злой",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Mordenkainen's Tome of Foes",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 16,
+    "hitDice": "3d8 + 3"
+  },
+  "speed": {
+    "walk": 40,
+    "climb": 40
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 14,
+    "con": 13,
+    "int": 6,
+    "wis": 8,
+    "cha": 7
+  },
+  "savingThrows": {},
+  "skills": {
+    "acrobatics": 4,
+    "perception": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "darkvision": 60
+  },
+  "languages": [
+    "Подземный"
+  ],
+  "traits": [
+    {
+      "name": "Жуткая какофония",
+      "description": "Любое существо отличное от свирепых корби, начинающее ход в пределах 60 футов от свирепого корби и слышащее его, должно совершить спасбросок Мудрости Сл 11. При провале, существо до начала своего следующего хода не может карабкаться, совершать Рывок, и накладывать заклинания сложнее заговоров."
+    },
+    {
+      "name": "Острый слух",
+      "description": "Свирепый корби совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на слух."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Свирепый корби совершает две атаки Когтем."
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., одна цель. Попадание: 6 (1к8 + 2) рубящего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 2,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

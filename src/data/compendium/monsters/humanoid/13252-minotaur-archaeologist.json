@@ -1,0 +1,81 @@
+{
+  "id": "13252",
+  "slug": "13252-minotaur-archaeologist",
+  "name": "Минотавр археолог",
+  "nameEn": "Minotaur Archaeologist",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": null,
+  "alignment": "любое мировоззрение",
+  "challengeRating": 0.25,
+  "xp": 50,
+  "source": "The Book of Many Things",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 18,
+    "hitDice": "4d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 10,
+    "con": 11,
+    "int": 13,
+    "wis": 12,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 5,
+    "history": 5,
+    "arcana": 3,
+    "religion": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Запоминание лабиринта",
+      "description": "Минотавр может с лёгкостью вспомнить любой пройдённый путь."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Бодание",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одна цель. Попадание: 4 (1к6 + 1) колющего урона. Если минотавр переместится как минимум на 10 футов по прямой к существу, а затем в том же ходу попадет по нему атакой, эта цель дополнительно получает 3 (1к6) колющего урона и если цель Большого размера или меньше, она должна преуспеть в спасброске Силы Сл 11, иначе оттолкнётся от минотавра на 10 футов и упадёт ничком.",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 1,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 11,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

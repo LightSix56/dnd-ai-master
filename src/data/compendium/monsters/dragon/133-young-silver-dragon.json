@@ -1,0 +1,137 @@
+{
+  "id": "133",
+  "slug": "133-young-silver-dragon",
+  "name": "Молодой серебряный дракон",
+  "nameEn": "Young silver dragon",
+  "size": "large",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "законно-добрый",
+  "challengeRating": 9,
+  "xp": 5000,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 18,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 168,
+    "hitDice": "16d10 + 80"
+  },
+  "speed": {
+    "walk": 40,
+    "fly": 80
+  },
+  "abilities": {
+    "str": 23,
+    "dex": 10,
+    "con": 21,
+    "int": 14,
+    "wis": 11,
+    "cha": 19
+  },
+  "savingThrows": {
+    "dex": 4,
+    "con": 9,
+    "wis": 4,
+    "cha": 8
+  },
+  "skills": {
+    "perception": 8,
+    "history": 6,
+    "arcana": 6,
+    "stealth": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "cold"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 18,
+    "blindsight": 30,
+    "darkvision": 120
+  },
+  "languages": [
+    "Общий",
+    "Драконий"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дракон совершает три атаки: одну укусом, и две когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +10 к попаданию, досягаемость 10 футов, одна цель. Попадание: Колющий урон 17 (2к10 + 6).",
+      "attackBonus": 10,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 6,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +10 к попаданию, досягаемость 5 футов, одна цель. Попадание: Рубящий урон 13 (2к6 + 6).",
+      "attackBonus": 10,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 6,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Оружия дыхания (перезарядка 5–6)",
+      "type": "special",
+      "description": "Дракон использует один из следующих видов оружия дыхания.",
+      "recharge": "5-6"
+    },
+    {
+      "name": "Холодное дыхание",
+      "type": "breath",
+      "description": "Дракон выдыхает волну ледяного воздуха 30-футовым конусом. Все существа в этой области должны совершить спасбросок Телосложения Сл 17, получая урон холодом 54 (12к8) при провале, или половину этого урона при успехе.",
+      "recharge": "5-6",
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 30
+      },
+      "save": {
+        "ability": "CON",
+        "dc": 17,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Парализующее дыхание",
+      "type": "breath",
+      "description": "Дракон выдыхает парализующий газ 30-футовым конусом. Все существа в этой области должны преуспеть в спасброске Телосложения Сл 17, иначе станут парализованными на 1 минуту. Существо может повторять этот спасбросок в конце каждого своего хода, оканчивая эффект на себе при успехе.",
+      "recharge": "5-6",
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 30
+      },
+      "save": {
+        "ability": "CON",
+        "dc": 17,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,109 @@
+{
+  "id": "8542",
+  "slug": "8542-samira-arah",
+  "name": "Самира Эра",
+  "nameEn": "Samira Arah",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "Эльфийка",
+  "alignment": "нейтральный, именной НИП",
+  "challengeRating": 1,
+  "xp": 200,
+  "source": "Journeys through the Radiant Citadel",
+  "isNamed": true,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 27,
+    "hitDice": "6d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 15,
+    "con": 10,
+    "int": 12,
+    "wis": 14,
+    "cha": 16
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 6,
+    "sleight_of_hand": 4,
+    "deception": 5,
+    "insight": 4,
+    "investigation": 5,
+    "stealth": 4,
+    "persuasion": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 60
+  },
+  "languages": [
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Самира знает Эльфийский и 2 языка на выбор."
+    },
+    {
+      "name": "Хитрое действие",
+      "description": "В каждый свой ход Самира может бонусным действием выполнить действие «Рывок», «Отход» или «Засада»."
+    },
+    {
+      "name": "Наследие фей",
+      "description": "Самира совершает с преимуществом спасброски от очарования, и магия не может её усыпить."
+    },
+    {
+      "name": "Скрытая атака (1 / ход)",
+      "description": "Самира наносит дополнительный урон 7 (2к6), когда он поражает цель атакой оружием и имеет преимущество в броске атаки, или когда цель находится в пределах 5 футов от союзника Самиры, который не выведен из строя, и Самира не имеет помехи на бросок атаки."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Самира совершает две рукопашные атаки."
+    },
+    {
+      "name": "Короткий меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт., Одна цель. Попадание: 5 (1к6 + 2) колющего урон.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Ручной арбалет",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака оружием: +4 к попаданию, досягаемость 30/120 фт., Одна цель. Попадание: 5 (1к6 + 2) колющего урон.",
+      "attackBonus": 4,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

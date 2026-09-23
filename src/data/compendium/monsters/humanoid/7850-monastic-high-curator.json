@@ -1,0 +1,124 @@
+{
+  "id": "7850",
+  "slug": "7850-monastic-high-curator",
+  "name": "Верховный куратор монастыря",
+  "nameEn": "Monastic High Curator",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "Монах, Волшебник",
+  "alignment": "Волшебник), любое мировоззрение",
+  "challengeRating": 10,
+  "xp": 5900,
+  "source": "Critical Role: Call of the Netherdeep",
+  "isNamed": false,
+  "armorClass": {
+    "value": 19,
+    "type": "защита без доспехов"
+  },
+  "hitPoints": {
+    "average": 130,
+    "hitDice": "20d8 + 40"
+  },
+  "speed": {
+    "walk": 60
+  },
+  "abilities": {
+    "str": 12,
+    "dex": 16,
+    "con": 14,
+    "int": 18,
+    "wis": 22,
+    "cha": 17
+  },
+  "savingThrows": {
+    "dex": 7,
+    "wis": 10
+  },
+  "skills": {
+    "perception": 10,
+    "history": 8,
+    "arcana": 8,
+    "investigation": 8
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 20,
+    "blindsight": 30
+  },
+  "languages": [
+    "Общий"
+  ],
+  "traits": [
+    {
+      "name": "Языки",
+      "description": "Знает Общий и ещё четыре языка."
+    },
+    {
+      "name": "Защита без доспехов",
+      "description": "Пока верховный куратор не носит ни доспехи, ни щит, к КД прибавляется его модификатор Мудрости."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Верховный куратор совершает три атаки Силовым ударом и использует Ожог мозга (если доступно)."
+    },
+    {
+      "name": "Силовой удар",
+      "type": "melee_attack",
+      "description": "Рукопашная или Дальнобойная атака заклинанием: +10 к попаданию, досягаемость 5 футов или дистанция 10 футов, одна цель. Попадание: 17 (2к10 + 6) урона силовым полем.",
+      "attackBonus": 10,
+      "reachFt": 5,
+      "range": {
+        "normal": 10
+      },
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 6,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Ожог мозга (Перезарядка 4–6)",
+      "type": "special",
+      "description": "Верховный куратор нацеливается на двух существ, которых он может видеть в пределах 30 футов. Каждая цель должна совершить спасбросок Телосложения Сл 18. При провале цель получает 28 (8к6) урона психической энергией и не может совершать реакции до начала следующего хода. При успехе цель получает половину этого урона и не страдает от иных эффектов.",
+      "damage": [
+        {
+          "dice": "8d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 18,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Верховный куратор может накладывать следующие заклинания, используя Мудрость в качестве базовой характеристики (Сл спасброска от заклинания 18):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "обнаружение магии [detect magic];"
+    },
+    {
+      "name": "2/день каждое",
+      "type": "special",
+      "description": "обнаружение мыслей [detect thoughts], опознание [identify] (накладывается действием), наблюдение [scrying] (накладывается действием)."
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,188 @@
+{
+  "id": "6274",
+  "slug": "6274-adult-moonstone-dragon",
+  "name": "Взрослый луннокаменный дракон",
+  "nameEn": "Adult Moonstone Dragon",
+  "size": "huge",
+  "type": "dragon",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 15,
+  "xp": 13000,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 19,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 195,
+    "hitDice": "17d12 + 85"
+  },
+  "speed": {
+    "walk": 40,
+    "fly": 80
+  },
+  "abilities": {
+    "str": 20,
+    "dex": 18,
+    "con": 20,
+    "int": 22,
+    "wis": 20,
+    "cha": 23
+  },
+  "savingThrows": {
+    "int": 11,
+    "wis": 10,
+    "cha": 11
+  },
+  "skills": {
+    "perception": 10,
+    "stealth": 9,
+    "persuasion": 11
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 20,
+    "blindsight": 60,
+    "darkvision": 120
+  },
+  "languages": [
+    "Общий",
+    "Гномий",
+    "Драконий",
+    "Сильван",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Легендарное сопротивление (3/день)",
+      "description": "Если дракон провалит спасбросок, он может вместо этого сделать спасбросок успешным."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Дракон совершает одну атаку Укусом и две Когтями."
+    },
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +10 к попаданию, досягаемость 10 фт., одна цель. Попадание: 16 (2к10+5) колющего урона плюс 7 (2к6) урона излучением.",
+      "attackBonus": 10,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "2d10",
+          "mod": 5,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Коготь",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +10 к попаданию, досягаемость 5 фт., одна цель. Попадание: 12 (2к6+5) рубящего урона.",
+      "attackBonus": 10,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 5,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Хвост",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +10 к попаданию, досягаемость 15 фт., одна цель. Попадание: 9 (1к8+5) дробящего урона и если цель - существо, оно должно преуспеть в спасброске Силы Сл 18, иначе будет сбита с ног.",
+      "attackBonus": 10,
+      "reachFt": 15,
+      "damage": [
+        {
+          "dice": "1d8",
+          "mod": 5,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "STR",
+        "dc": 18,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Дракон накладывает одно из следующих заклинаний, не требующее компонентов заклинания и использующее Харизму в качестве базовой характеристики (Сл спасброска от заклинания 19):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "огонь фей [faerie fire];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "умиротворение [calm emotions], невидимость [invisibility], возрождение [revivify]."
+    },
+    {
+      "name": "Оружия дыхания (перезарядка 5-6)",
+      "type": "special",
+      "description": "Дракон использует один из следующих видов оружия дыхания:",
+      "recharge": "5-6"
+    },
+    {
+      "name": "Дыхание снов",
+      "type": "breath",
+      "description": "Дракон выдыхает туман в 90-футовом конусе. Каждое существо в этой области должно преуспеть в спасброске Телосложения Сл 18, иначе теряет сознание на 10 минут. Этот эффект заканчивается для существа, если оно получает урон или кто-то использует действие, чтобы его разбудить.",
+      "recharge": "5-6",
+      "save": {
+        "ability": "CON",
+        "dc": 18,
+        "halfOnSuccess": false
+      }
+    },
+    {
+      "name": "Дыхание лунного света",
+      "type": "breath",
+      "description": "Дракон выдыхает луч лунного света линией длиной 90 фт. и шириной 10 фт.. Каждое существо в этой области должно совершить спасбросок Ловкости Сл 18, в случае провала получая 49 (9к10) урона излучением или половину урона при успехе.",
+      "damage": [
+        {
+          "dice": "9d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "DEX",
+        "dc": 18,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": {
+    "actionsPerRound": 3,
+    "options": [
+      {
+        "name": "Хвост",
+        "cost": 1,
+        "description": "Дракон совершает одну атаку хвостом."
+      },
+      {
+        "name": "Накладывание заклинания (стоит 2 действия)",
+        "cost": 2,
+        "description": "Дракон использует Использование заклинаний."
+      }
+    ]
+  },
+  "lairActions": [],
+  "spellcasting": null
+}

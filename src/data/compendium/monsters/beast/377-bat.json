@@ -1,0 +1,67 @@
+{
+  "id": "377",
+  "slug": "377-bat",
+  "name": "Летучая мышь",
+  "nameEn": "Bat",
+  "size": "tiny",
+  "type": "beast",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Player's Handbook",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12
+  },
+  "hitPoints": {
+    "average": 1,
+    "hitDice": "1d4 - 1"
+  },
+  "speed": {
+    "walk": 5,
+    "fly": 30
+  },
+  "abilities": {
+    "str": 2,
+    "dex": 15,
+    "con": 8,
+    "int": 2,
+    "wis": 12,
+    "cha": 4
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11,
+    "blindsight": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Эхолокация",
+      "description": "Летучая мышь не может использовать слепое зрение, будучи оглохшей."
+    },
+    {
+      "name": "Острый слух",
+      "description": "Летучая мышь совершает с преимуществом проверки Мудрости (Восприятие), полагающиеся на слух."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +0 к попаданию, досягаемость 5 футов, одно существо. Попадание: Колющий урон 1.",
+      "attackBonus": 0,
+      "reachFt": 5
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

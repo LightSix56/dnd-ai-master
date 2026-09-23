@@ -1,0 +1,92 @@
+{
+  "id": "17317",
+  "slug": "17317-scorchbringer-guard",
+  "name": "Огненный страж",
+  "nameEn": "Scorchbringer Guard",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "любая раса",
+  "alignment": "хаотично-нейтральный",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "кираса"
+  },
+  "hitPoints": {
+    "average": 11,
+    "hitDice": "2d8 + 2"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 13,
+    "dex": 14,
+    "con": 12,
+    "int": 10,
+    "wis": 9,
+    "cha": 10
+  },
+  "savingThrows": {},
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 9
+  },
+  "languages": [
+    "один любой язык (обычно Общий)"
+  ],
+  "traits": [
+    {
+      "name": "Взрывоопасный бак",
+      "description": "Когда огненный страж умирает или если он выбрасывает \"1\" при проверке, перезаряжается ли его действие Поджигатель, бак на его спине взрывается в сфере радиусом 10 футов. Каждое существо в этой области должно совершить спасбросок Ловкости Сл 12, получая 7 (2к6) урона огнём при провале или половину этого урона при успехе. Взрыв поджигает легковоспламеняющиеся предметы, которые не носят и не несут на себе. Этот взрыв уничтожает огненного стража."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Лёгкий молот",
+      "type": "melee_attack",
+      "description": "Дальнобойная или рукопашная атака оружием: +4 к попаданию, досягаемость 5 фт. или дистанция 20/60 фт., одна цель. Попадание: 4 (1к4 + 2) дробящего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Поджигатель (перезарядка 4–6)",
+      "type": "special",
+      "description": "Огнемет огненного стража извергает поток пламени по линии длиной 30 футов и шириной 5 футов. Каждое существо в линии должно пройти спасбросок Ловкости Сл 12, получив 7 (2к6) урона огнём при провале или половину этого урона при успехе.",
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 12,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

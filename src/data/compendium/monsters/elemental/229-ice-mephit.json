@@ -1,0 +1,105 @@
+{
+  "id": "229",
+  "slug": "229-ice-mephit",
+  "name": "Ледяной мефит",
+  "nameEn": "Ice mephit",
+  "size": "small",
+  "type": "elemental",
+  "subtype": null,
+  "alignment": "нейтрально-злой",
+  "challengeRating": 0.5,
+  "xp": 100,
+  "source": "Monster Manual",
+  "isNamed": false,
+  "armorClass": {
+    "value": 11
+  },
+  "hitPoints": {
+    "average": 21,
+    "hitDice": "6d6"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 30
+  },
+  "abilities": {
+    "str": 7,
+    "dex": 13,
+    "con": 10,
+    "int": 9,
+    "wis": 11,
+    "cha": 12
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 2,
+    "stealth": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "cold",
+    "poison"
+  ],
+  "damageVulnerabilities": [
+    "bludgeoning",
+    "fire"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [
+    "Акван",
+    "Ауран"
+  ],
+  "traits": [
+    {
+      "name": "Предсмертная вспышка",
+      "description": "Когда мефит умирает, он разлетается во все стороны обломками льда. Все существа в пределах 5 футов от него должны совершить спасбросок Ловкости Сл 10, получая рубящий урон 4 (1к8) при провале, или половину этого урона при успехе."
+    },
+    {
+      "name": "Обманчивая внешность",
+      "description": "Пока мефит остается без движения, он неотличим от обычной глыбы льда."
+    },
+    {
+      "name": "Врождённое колдовство (1/день)",
+      "description": "Мефит может накладывать туманное облако [fog cloud], не нуждаясь в материальных компонентах. Его базовой характеристикой является Харизма."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Когти",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +3 к попаданию, досягаемость 5 футов, одно существо. Попадание: Рубящий урон 3 (1к4 + 1) плюс урон холодом 2 (1к4).",
+      "attackBonus": 3,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 1,
+          "type": "плюс"
+        }
+      ]
+    },
+    {
+      "name": "Ледяное дыхание (перезарядка 6)",
+      "type": "breath",
+      "description": "Мефит выдыхает холодный воздух 15-футовым конусом. Все существа в этой области должны преуспеть в спасброске Ловкости Сл 10, получая урон холодом 5 (2к4) при провале, или половину этого урона при успехе.",
+      "recharge": "6",
+      "aoe": {
+        "shape": "cone",
+        "sizeFt": 15
+      },
+      "save": {
+        "ability": "DEX",
+        "dc": 10,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

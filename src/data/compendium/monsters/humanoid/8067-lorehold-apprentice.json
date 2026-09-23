@@ -1,0 +1,113 @@
+{
+  "id": "8067",
+  "slug": "8067-lorehold-apprentice",
+  "name": "Ученик с Лорхолда",
+  "nameEn": "Lorehold Apprentice",
+  "size": "small",
+  "type": "humanoid",
+  "subtype": "Волшебник",
+  "alignment": "любое мировоззрение",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Strixhaven: A Curriculum of Chaos",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "15 с доспехом мага"
+  },
+  "hitPoints": {
+    "average": 33,
+    "hitDice": "6d8 + 6"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 14,
+    "con": 13,
+    "int": 15,
+    "wis": 12,
+    "cha": 11
+  },
+  "savingThrows": {
+    "con": 3,
+    "int": 4
+  },
+  "skills": {
+    "history": 6,
+    "insight": 3,
+    "investigation": 6
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 11
+  },
+  "languages": [
+    "Общий",
+    "и два любых языка"
+  ],
+  "traits": [],
+  "actions": [
+    {
+      "name": "Удар свитком",
+      "type": "melee_attack",
+      "description": "Рукопашная атака заклинанием: +4 к попаданию, досягаемость 30 футов, одна цель. Попадание: 7 (1к10 + 2) дробящего урона плюс 9 (2к8) урона звуком.",
+      "attackBonus": 4,
+      "reachFt": 30,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 2,
+          "type": "bludgeoning"
+        }
+      ]
+    },
+    {
+      "name": "Свести к воспоминаниям (перезарядка 6)",
+      "type": "special",
+      "description": "Грохочущая золотистая энергия извергается вокруг существа, которое ученик может видеть в пределах 90 футов. Существо должно совершить спасбросок Телосложения Сл 12, получая 33 (6к10) урона звуком при провале или половину этого урона при успехе. Конструкты совершают спасбросок с помехой.",
+      "damage": [
+        {
+          "dice": "6d10",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "6",
+      "save": {
+        "ability": "CON",
+        "dc": 12,
+        "halfOnSuccess": true
+      }
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Ученик накладывает одно из следующих заклинаний, используя Интеллект в качестве базовой характеристики (Сл спасброска от заклинаний 12):"
+    },
+    {
+      "name": "Неограниченно",
+      "type": "special",
+      "description": "указание [guidance], свет [light];"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "понимание языков [comprehend languages], поиск предмета [locate object], доспехи мага [mage armor]."
+    }
+  ],
+  "reactions": [
+    {
+      "name": "Мудрость прошлого (2/день)",
+      "type": "special",
+      "description": "Когда другое существо в пределах 60 футов от ученика промахивается по цели броском атаки, ученик волшебным образом позволяет атакующему повторить бросок атаки. Он должен использовать новый результат."
+    }
+  ],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

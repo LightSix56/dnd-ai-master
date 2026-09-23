@@ -1,0 +1,104 @@
+{
+  "id": "5745",
+  "slug": "5745-living-bigbys-hand",
+  "name": "Оживлённая длань Бигби",
+  "nameEn": "Living Bigby's Hand",
+  "size": "large",
+  "type": "construct",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Icewind Dale: Rime of the Frostmaiden",
+  "isNamed": false,
+  "armorClass": {
+    "value": 20,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 52,
+    "hitDice": "5d10 + 25"
+  },
+  "speed": {
+    "walk": 0,
+    "fly": 60,
+    "hover": true
+  },
+  "abilities": {
+    "str": 26,
+    "dex": 10,
+    "con": 20,
+    "int": 1,
+    "wis": 10,
+    "cha": 1
+  },
+  "savingThrows": {
+    "dex": 2,
+    "wis": 2
+  },
+  "skills": {
+    "perception": 2,
+    "stealth": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12,
+    "darkvision": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Сопротивление магии",
+      "description": "Живое заклинание совершает с преимуществом спасброски от заклинаний и прочих магических эффектов."
+    },
+    {
+      "name": "Необычная природа",
+      "description": "Живое заклинание не нуждается в воздухе, еде, питье и сне."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Силовой кулак",
+      "type": "melee_attack",
+      "description": "Рукопашная атака заклинанием: +10 к попаданию, досягаемость 5 фт., одна цель. Попадание: 26 (4к8 + 8) урона силовым полем и если цель размером меньше Большого живое заклинание может передвинуть её до 5 футов и передвинуться вместе с ней не провоцируя атаки.",
+      "attackBonus": 10,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "4d8",
+          "mod": 8,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Сжимающая длань",
+      "type": "special",
+      "description": "Живое заклинание пытается схватить существо с размером Огромное или меньше, находящееся в пределах 5 футов от неё. Цель должна преуспеть в спасброске Ловкости Сл 15, иначе станет схваченной (Сл освобождения 15). Пока захват не окончен, цель получает 15 (2к6 + 8) дробящего урона в начале каждого своего хода. Живое заклинание может захватить только одно существо за раз и не может использовать «Силовой кулак» пока не окончится захват.",
+      "damage": [
+        {
+          "dice": "2d6",
+          "mod": 8,
+          "type": "bludgeoning"
+        }
+      ],
+      "save": {
+        "ability": "DEX",
+        "dc": 15,
+        "halfOnSuccess": false
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {}
+  }
+}

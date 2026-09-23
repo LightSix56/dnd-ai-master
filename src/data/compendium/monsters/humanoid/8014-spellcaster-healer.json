@@ -1,0 +1,82 @@
+{
+  "id": "8014",
+  "slug": "8014-spellcaster-healer",
+  "name": "Заклинатель (Целитель)",
+  "nameEn": "Spellcaster (Healer)",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "1-й уровень",
+  "alignment": "без мировоззрения",
+  "challengeRating": 0,
+  "xp": 0,
+  "source": "Essentials Kit: Dragon of Icespire peak",
+  "isNamed": false,
+  "armorClass": {
+    "value": 12,
+    "type": "кожаный доспех"
+  },
+  "hitPoints": {
+    "average": 9,
+    "hitDice": "2d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 10,
+    "dex": 12,
+    "con": 10,
+    "int": 15,
+    "wis": 14,
+    "cha": 13
+  },
+  "savingThrows": {
+    "wis": 4
+  },
+  "skills": {
+    "arcana": 4,
+    "investigation": 4,
+    "religion": 4
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 12
+  },
+  "languages": [
+    "Общий",
+    "и ещё один язык"
+  ],
+  "traits": [
+    {
+      "name": "Использование заклинаний (Целитель)",
+      "description": "Базовой характеристикой для ваших заклинаний является Мудрость (Сл спасброска от заклинаний 12, +4 к атакам заклинаниями). У заклинателя подготовлены следующие заклинания жреца:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Боевой посох",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +2 к попаданию, досягаемость 5 фт., одна цель. Попадание: 3 (1к6) дробящего урона или 4 (1к8) дробящего урона при атаке двумя руками.",
+      "attackBonus": 2,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 0,
+          "type": "bludgeoning"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "ability": "WIS"
+  }
+}

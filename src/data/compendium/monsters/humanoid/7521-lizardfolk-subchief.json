@@ -1,0 +1,106 @@
+{
+  "id": "7521",
+  "slug": "7521-lizardfolk-subchief",
+  "name": "Людоящер заместитель вождя",
+  "nameEn": "Lizardfolk Subchief",
+  "size": "medium",
+  "type": "humanoid",
+  "subtype": "людоящер",
+  "alignment": "нейтральный",
+  "challengeRating": 3,
+  "xp": 700,
+  "source": "Ghosts of Saltmarsh",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 52,
+    "hitDice": "8d8 + 16"
+  },
+  "speed": {
+    "walk": 30,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 12,
+    "con": 14,
+    "int": 10,
+    "wis": 16,
+    "cha": 12
+  },
+  "savingThrows": {
+    "wis": 5
+  },
+  "skills": {
+    "athletics": 4,
+    "perception": 5,
+    "survival": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15
+  },
+  "languages": [
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Задержка дыхания",
+      "description": "Людоящер может задержать дыхание на 15 минут."
+    },
+    {
+      "name": "Использование заклинаний",
+      "description": "Людоящер является заклинателем 5-го уровня. Его базовой характеристикой является Мудрость (Сл спасброска от заклинания 13, +5 к попаданию атаками заклинаниями). У него подготовлены следующие заклинания жреца:"
+    }
+  ],
+  "actions": [
+    {
+      "name": "Кинжал из клыка",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 5 футов, одна цель. Попадание: 4 (1к4 + 2) колющего урона.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "1d4",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Ч",
+      "type": "special",
+      "description": "елюсти Семуаньи (Перезарядка 5-6). Заместитель вождя призывает первобытную магию Семуаньи, призывая призрачную челюсть около цели, которую он может видеть в пределах 60 футов. Цель должна совершить спасбросок Ловкости Сл 13, получая 22 (5d8) колющего урона при при провале или половину этого урона при успехе. Существо, которое проваливает этот спасбросок, становится испуганным до конца своего следующего хода.",
+      "damage": [
+        {
+          "dice": "5d8",
+          "mod": 0,
+          "type": "piercing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "DEX",
+        "dc": 13,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 5,
+    "spellAttackBonus": 5,
+    "ability": "WIS"
+  }
+}

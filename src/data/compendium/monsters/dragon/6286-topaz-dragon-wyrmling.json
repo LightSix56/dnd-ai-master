@@ -1,0 +1,112 @@
+{
+  "id": "6286",
+  "slug": "6286-topaz-dragon-wyrmling",
+  "name": "Вирмлинг топазного дракона",
+  "nameEn": "Topaz Dragon Wyrmling",
+  "size": "medium",
+  "type": "dragon",
+  "subtype": "самоцветный",
+  "alignment": "хаотично-нейтральный",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 33,
+    "hitDice": "6d8 + 6"
+  },
+  "speed": {
+    "walk": 30,
+    "fly": 60,
+    "swim": 30
+  },
+  "abilities": {
+    "str": 15,
+    "dex": 12,
+    "con": 13,
+    "int": 14,
+    "wis": 13,
+    "cha": 14
+  },
+  "savingThrows": {
+    "dex": 3,
+    "con": 3,
+    "wis": 3,
+    "cha": 4
+  },
+  "skills": {
+    "perception": 5,
+    "intimidation": 6,
+    "stealth": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 15,
+    "blindsight": 10,
+    "darkvision": 120
+  },
+  "languages": [
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Амфибия",
+      "description": "Дракон может дышать как воздухом, так и водой."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +4 к попаданию, досягаемость 10 фт., одна цель. Попадание: 7 (1к10+2) колющего урона плюс 2 (1к4) урона некротической энергией.",
+      "attackBonus": 4,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний (Псионика)",
+      "type": "special",
+      "description": "Дракон накладывает одно из следующих заклинаний, не требующее компонентов заклинания и использующее Интеллект в качестве базовой характеристики (Сл спасброска от заклинания 12):"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "порча [bane]."
+    },
+    {
+      "name": "Опустошающее дыхание (перезарядка 5-6)",
+      "type": "breath",
+      "description": "Дракон выдыхает желтоватую некротическую энергию в 15-футовый конус. Каждое существо в этой области должно совершить спасбросок Телосложения Сл 11. В случае провала, существо получает 21 (6к6) урона некротической энергией и слабеет до конца своего следующего хода. Ослабленное существо получает помеху на проверки и спасброски Силы, а так же атаки оружием, использующие Силу, наносят половину урона. В случае успеха существо получает вдвое меньше урона и не ослабевает.",
+      "damage": [
+        {
+          "dice": "6d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ],
+      "recharge": "5-6",
+      "save": {
+        "ability": "CON",
+        "dc": 11,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

@@ -1,0 +1,114 @@
+{
+  "id": "6309",
+  "slug": "6309-draconian-mage",
+  "name": "Драконид маг",
+  "nameEn": "Draconian Mage",
+  "size": "medium",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "любое мировоззрение",
+  "challengeRating": 2,
+  "xp": 450,
+  "source": "Fizban's Treasury of Dragons",
+  "isNamed": false,
+  "armorClass": {
+    "value": 15,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 40,
+    "hitDice": "9d8"
+  },
+  "speed": {
+    "walk": 30
+  },
+  "abilities": {
+    "str": 14,
+    "dex": 10,
+    "con": 11,
+    "int": 11,
+    "wis": 10,
+    "cha": 14
+  },
+  "savingThrows": {
+    "int": 2,
+    "wis": 2,
+    "cha": 4
+  },
+  "skills": {},
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10,
+    "darkvision": 60
+  },
+  "languages": [
+    "Общий",
+    "Драконий"
+  ],
+  "traits": [
+    {
+      "name": "Предсмертные муки",
+      "description": "Когда хиты драконида уменьшаются до 0, его чешуя и плоть немедленно сморщиваются, а кости взрываются. Каждое существо в пределах 10 фт. от него должно преуспеть спасброске Ловкости Сл 10, иначе получит 9 (2к8) урона силовым полем."
+    },
+    {
+      "name": "Воздушное скольжение",
+      "description": "Когда драконид падает и дееспособен, он вычитает до 100 футов от падения при расчете урона от падения, и он может перемещаться на 2 фт. по горизонтали за каждый 1 фт., на который он опускается."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Драконид совершает две атаки Трезубцем или Некротическим лучом."
+    },
+    {
+      "name": "Трезубец",
+      "type": "melee_attack",
+      "description": "Рукопашная или Дальнобойная атака оружием: +4 к попаданию, досягаемость 5 фт. или дистанция 20/60 фт., одна цель. Попадание: 5 (1к6+2) колющего урона или 6 (1к8+2) если используется двумя руками для совершения рукопашной атаки.",
+      "attackBonus": 4,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "1d6",
+          "mod": 2,
+          "type": "piercing"
+        }
+      ]
+    },
+    {
+      "name": "Использование заклинаний",
+      "type": "special",
+      "description": "Драконид накладывает одно из следующих заклинаний, не требующее материальных компонентов и используюя Харизму в качестве базовой характеристики (Сл спасброска от заклинаний 12):"
+    },
+    {
+      "name": "1/день каждое",
+      "type": "special",
+      "description": "увеличение/уменьшение [enlarge/reduce], невидимость [invisibility], зловонное облако [stinking cloud]."
+    },
+    {
+      "name": "Некротический луч",
+      "type": "ranged_attack",
+      "description": "Дальнобойная атака заклинанием: +4 к попаданию, досягаемость 60 фт., одна цель. Попадание: 10 (3к6) урона некротической энергией.",
+      "attackBonus": 4,
+      "reachFt": 60,
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 0,
+          "type": "slashing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

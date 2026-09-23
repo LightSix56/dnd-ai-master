@@ -1,0 +1,136 @@
+{
+  "id": "5387",
+  "slug": "5387-muiral",
+  "name": "Муирал",
+  "nameEn": "Muiral",
+  "size": "large",
+  "type": "monstrosity",
+  "subtype": null,
+  "alignment": "хаотично-злой",
+  "challengeRating": 13,
+  "xp": 10000,
+  "source": "Waterdeep: Dungeon of the Mad Mage",
+  "isNamed": false,
+  "armorClass": {
+    "value": 16,
+    "type": "естественная броня"
+  },
+  "hitPoints": {
+    "average": 195,
+    "hitDice": "23d10 + 69"
+  },
+  "speed": {
+    "walk": 50
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 11,
+    "con": 16,
+    "int": 18,
+    "wis": 13,
+    "cha": 18
+  },
+  "savingThrows": {
+    "con": 8,
+    "int": 9
+  },
+  "skills": {
+    "athletics": 9,
+    "perception": 6,
+    "arcana": 9,
+    "stealth": 5
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 16,
+    "darkvision": 120
+  },
+  "languages": [
+    "Общий",
+    "Гоблинский",
+    "Дварфийский",
+    "Подземный",
+    "Эльфийский"
+  ],
+  "traits": [
+    {
+      "name": "Использование заклинаний",
+      "description": "Муирал является заклинателем 13-го уровня. Его базовая заклинательная характеристика это Интеллект (Сл спасброска от заклинаний 17, +9 к атакам заклинаниями). У него подготовлены следующие заклинания волшебника:"
+    },
+    {
+      "name": "Легендарное сопротивление (3/День)",
+      "description": "Если муирал проваливает спасбросок, он может вместо этого сделать спасбросок успешным."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Муирал совершает три атаки: две длинным мечом и одну жалом."
+    },
+    {
+      "name": "Длинный меч",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 фт., одна цель. Попадание: 13 (2к8 + 4) рубящий урон, или 15 (2к10 + 4) рубящий урон при ударе двумя руками.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "2d8",
+          "mod": 4,
+          "type": "slashing"
+        }
+      ]
+    },
+    {
+      "name": "Жало",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 10 фт., одно существо. Попадание: 9 (1к10 + 4) колющий урон. Цель должна совершить спасбросок Телосложения Сл 16, получая 27 (6к8) урона ядом при провале или половину этого урона при успехе.",
+      "attackBonus": 9,
+      "reachFt": 10,
+      "damage": [
+        {
+          "dice": "1d10",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ],
+      "save": {
+        "ability": "CON",
+        "dc": 16,
+        "halfOnSuccess": true
+      }
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": {
+    "actionsPerRound": 3,
+    "options": [
+      {
+        "name": "Наложить заговор",
+        "cost": 1,
+        "description": "Муирал накладывает заговоры."
+      },
+      {
+        "name": "Атакующий выпад (Стоит 2 Действия)",
+        "cost": 2,
+        "description": "Муирал делает одну атаку длинным мечом с улучшенной досягаемостью в 10 футов."
+      },
+      {
+        "name": "Удар при отступлении (Стоит 3 Действия)",
+        "cost": 3,
+        "description": "Муирал перемещается со своей скоростью, не провоцируя атаки. Перед передвижением он может совершить одну атаку длинным мечом."
+      }
+    ]
+  },
+  "lairActions": [],
+  "spellcasting": {
+    "slots": {},
+    "spellsByLevel": {},
+    "casterLevel": 13,
+    "ability": "INT"
+  }
+}

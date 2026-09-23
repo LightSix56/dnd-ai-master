@@ -1,0 +1,88 @@
+{
+  "id": "5729",
+  "slug": "5729-verbeeg-marauder",
+  "name": "Вербиг мародёр",
+  "nameEn": "Verbeeg Marauder",
+  "size": "large",
+  "type": "giant",
+  "subtype": null,
+  "alignment": "нейтральный",
+  "challengeRating": 4,
+  "xp": 1100,
+  "source": "Icewind Dale: Rime of the Frostmaiden",
+  "isNamed": false,
+  "armorClass": {
+    "value": 14,
+    "type": "шкурный доспех, щит"
+  },
+  "hitPoints": {
+    "average": 85,
+    "hitDice": "10d10 + 30"
+  },
+  "speed": {
+    "walk": 40
+  },
+  "abilities": {
+    "str": 19,
+    "dex": 11,
+    "con": 16,
+    "int": 11,
+    "wis": 10,
+    "cha": 9
+  },
+  "savingThrows": {
+    "dex": 2,
+    "con": 5
+  },
+  "skills": {
+    "athletics": 6,
+    "stealth": 2,
+    "уход_за_животными": 2
+  },
+  "damageResistances": [],
+  "damageImmunities": [],
+  "damageVulnerabilities": [],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 10
+  },
+  "languages": [
+    "Общий",
+    "Великаний"
+  ],
+  "traits": [
+    {
+      "name": "Мастер простого оружия",
+      "description": "Простое оружие в руках вербига наносит одну дополнительную кость урона при попадании (уже включено в атаку)."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Мультиатака",
+      "type": "multiattack",
+      "description": "Вербиг совершает две рукопашные атаки."
+    },
+    {
+      "name": "Копьё",
+      "type": "melee_attack",
+      "description": "Рукопашная или дальнобойная атака оружием: +6 к попаданию, досягаемость 5 фт., или дистанция 20/60 фт., одна цель. Попадание: 14 (3к6 + 4) колющего урона или 17 (3к8 + 4) колющего урона при совершении дальнобойной атаки или рукопашной атаки двумя руками.",
+      "attackBonus": 6,
+      "reachFt": 5,
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "damage": [
+        {
+          "dice": "3d6",
+          "mod": 4,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}

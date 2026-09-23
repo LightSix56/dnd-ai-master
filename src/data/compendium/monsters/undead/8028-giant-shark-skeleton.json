@@ -1,0 +1,85 @@
+{
+  "id": "8028",
+  "slug": "8028-giant-shark-skeleton",
+  "name": "Скелет гигантской акулы",
+  "nameEn": "Giant Shark Skeleton",
+  "size": "huge",
+  "type": "undead",
+  "subtype": null,
+  "alignment": "без мировоззрения",
+  "challengeRating": 5,
+  "xp": 1800,
+  "source": "Essentials Kit: Sleeping Dragon's Wake",
+  "isNamed": false,
+  "armorClass": {
+    "value": 13,
+    "type": "природный доспех"
+  },
+  "hitPoints": {
+    "average": 126,
+    "hitDice": "11d12 + 55"
+  },
+  "speed": {
+    "walk": 20,
+    "swim": 50
+  },
+  "abilities": {
+    "str": 23,
+    "dex": 11,
+    "con": 21,
+    "int": 1,
+    "wis": 10,
+    "cha": 5
+  },
+  "savingThrows": {},
+  "skills": {
+    "perception": 3
+  },
+  "damageResistances": [],
+  "damageImmunities": [
+    "poison"
+  ],
+  "damageVulnerabilities": [
+    "bludgeoning"
+  ],
+  "conditionImmunities": [],
+  "senses": {
+    "passivePerception": 13,
+    "blindsight": 60
+  },
+  "languages": [],
+  "traits": [
+    {
+      "name": "Кровавое бешенство",
+      "description": "Акула совершает с преимуществом броски рукопашных атак по существам, у которых хиты ниже максимума."
+    },
+    {
+      "name": "Подводное дыхание",
+      "description": "Акула может дышать только под водой."
+    },
+    {
+      "name": "Природа нежити",
+      "description": "Акула не нуждается в воздухе, еде, питье или сне."
+    }
+  ],
+  "actions": [
+    {
+      "name": "Укус",
+      "type": "melee_attack",
+      "description": "Рукопашная атака оружием: +9 к попаданию, досягаемость 5 футов, одна цель. Попадание: 22 (3к10 + 6) колющего урона.",
+      "attackBonus": 9,
+      "reachFt": 5,
+      "damage": [
+        {
+          "dice": "3d10",
+          "mod": 6,
+          "type": "piercing"
+        }
+      ]
+    }
+  ],
+  "reactions": [],
+  "legendaryActions": null,
+  "lairActions": [],
+  "spellcasting": null
+}
