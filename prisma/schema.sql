@@ -1,4 +1,18 @@
-﻿-- CreateSchema
+-- Очистка старых/неполных таблиц перед созданием
+DROP TABLE IF EXISTS "MapElement" CASCADE;
+DROP TABLE IF EXISTS "Combatant" CASCADE;
+DROP TABLE IF EXISTS "Combat" CASCADE;
+DROP TABLE IF EXISTS "Summary" CASCADE;
+DROP TABLE IF EXISTS "ChatMessage" CASCADE;
+DROP TABLE IF EXISTS "Memory" CASCADE;
+DROP TABLE IF EXISTS "GameEvent" CASCADE;
+DROP TABLE IF EXISTS "Character" CASCADE;
+DROP TABLE IF EXISTS "AttackLibrary" CASCADE;
+DROP TABLE IF EXISTS "SpellLibrary" CASCADE;
+DROP TABLE IF EXISTS "AbilityLibrary" CASCADE;
+DROP TABLE IF EXISTS "Campaign" CASCADE;
+
+-- CreateSchema
 CREATE SCHEMA IF NOT EXISTS "public";
 
 -- CreateTable
@@ -134,7 +148,7 @@ CREATE TABLE "Summary" (
 CREATE TABLE "Combat" (
     "id" TEXT NOT NULL,
     "campaignId" TEXT,
-    "name" TEXT NOT NULL DEFAULT '╨С╨╛╨╣',
+    "name" TEXT NOT NULL DEFAULT 'Бой',
     "status" TEXT NOT NULL DEFAULT 'active',
     "round" INTEGER NOT NULL DEFAULT 1,
     "currentTurnIndex" INTEGER NOT NULL DEFAULT 0,
@@ -325,4 +339,3 @@ ALTER TABLE "Combatant" ADD CONSTRAINT "Combatant_combatId_fkey" FOREIGN KEY ("c
 
 -- AddForeignKey
 ALTER TABLE "MapElement" ADD CONSTRAINT "MapElement_combatId_fkey" FOREIGN KEY ("combatId") REFERENCES "Combat"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
