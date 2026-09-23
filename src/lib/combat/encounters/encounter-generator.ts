@@ -103,11 +103,11 @@ export function loadMonsterDefinition(
   monstersDir?: string
 ): MonsterDefinition {
   if (entry?.filePath) {
-    const baseDir = monstersDir || path.resolve(process.cwd(), "src/data/compendium/monsters");
-    const filePath = path.join(baseDir, entry.filePath);
-    if (fs.existsSync(filePath)) {
+    const baseDir = monstersDir || path.join(process.cwd(), "src/data/compendium/monsters");
+    const filePath = path.join(/*turbopackIgnore: true*/ baseDir, entry.filePath);
+    if (fs.existsSync(/*turbopackIgnore: true*/ filePath)) {
       try {
-        return JSON.parse(fs.readFileSync(filePath, "utf8")) as MonsterDefinition;
+        return JSON.parse(fs.readFileSync(/*turbopackIgnore: true*/ filePath, "utf8")) as MonsterDefinition;
       } catch {
         // Fallback to synthesizing
       }
