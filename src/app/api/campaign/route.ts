@@ -88,9 +88,10 @@ export async function POST(req: Request) {
     });
 
     return Response.json({ campaign });
-  } catch (error) {
+  } catch (error: any) {
     console.error("[campaign] POST error:", error);
-    return Response.json({ error: "Failed to create campaign" }, { status: 500 });
+    const msg = error?.message || "Failed to create campaign";
+    return Response.json({ error: msg }, { status: 500 });
   }
 }
 
