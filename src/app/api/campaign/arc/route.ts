@@ -15,7 +15,7 @@ import {
 } from "@/lib/ai/story-arc";
 import { resolveStoryModel } from "@/lib/ai/models";
 
-export const maxDuration = 800;
+export const maxDuration = 300;
 
 export async function GET(req: Request) {
   try {

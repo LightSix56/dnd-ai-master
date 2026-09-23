@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { generateNextChapter, parseStoryArc, type ArcProgress } from "@/lib/ai/story-arc";
 import { resolveDmModel } from "@/lib/ai/models";
 
-export const maxDuration = 800;
+export const maxDuration = 300;
 
 export async function POST(req: Request) {
   try {
