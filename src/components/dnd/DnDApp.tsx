@@ -76,7 +76,6 @@ import { CreateRoomModal } from "@/components/room/CreateRoomModal";
 import { CharacterPickerModal } from "@/components/room/CharacterPickerModal";
 import { SupabaseAuthModal } from "@/components/auth/SupabaseAuthModal";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
-import { D20Icon, RunedKeyIcon } from "@/components/dnd-icons";
 import { rollDie } from "@/lib/dnd/d20-helper";
 import { formatRubles, formatTokens, type CampaignAiStats } from "@/lib/ai/cost";
 import { toast } from "sonner";
