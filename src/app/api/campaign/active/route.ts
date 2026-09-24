@@ -7,6 +7,32 @@ export async function GET(request: Request) {
     const { user } = await getAuthUserFromRequest(request);
     const userIdFilter = user ? user.id : null;
 
+    const { searchParams } = new URL(request.url);
+    const requestedCampaignId = searchParams.get("campaignId")?.trim();
+
+    // Если запрошена конкретная кампания (например, привязанная к сетевой комнате)
+    if (requestedCampaignId) {
+      const target = await db.campaign.findUnique({
+        where: { id: requestedCampaignId },
+        include: {
+          characters: {
+            orderBy: [{ type: "asc" }, { name: "asc" }],
+          },
+          _count: {
+            select: {
+              events: true,
+              memories: true,
+              chatMessages: true,
+            },
+          },
+        },
+      });
+
+      if (target) {
+        return Response.json({ campaign: target });
+      }
+    }
+
     let active = await db.campaign.findFirst({
       where: { userId: userIdFilter, isActive: true },
       orderBy: { updatedAt: "desc" },

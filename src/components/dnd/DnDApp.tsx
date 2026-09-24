@@ -407,19 +407,63 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
     [activeCampaign?.id, setMemories, setEvents]
   );
 
-  const refreshActiveCampaign = useCallback(async () => {
+  // Сетевая комната активной кампании
+  const activeRoomRef = useRef<any>(null);
+  const activeCampaignRef = useRef<any>(activeCampaign);
+  useEffect(() => {
+    activeCampaignRef.current = activeCampaign;
+  }, [activeCampaign]);
+
+  const [activeRoom, _setActiveRoom] = useState<{
+    id: string;
+    code: string;
+    name: string;
+    status: string;
+    startingLevel: number;
+    hostUserId?: string;
+    campaignId?: string | null;
+    campaignSettings?: any;
+    campaign_settings?: any;
+    participants?: any[];
+  } | null>(null);
+
+  const setActiveRoom = useCallback((roomOrFn: any) => {
+    _setActiveRoom((prev: any) => {
+      const next = typeof roomOrFn === "function" ? roomOrFn(prev) : roomOrFn;
+      activeRoomRef.current = next;
+      return next;
+    });
+  }, []);
+  const [loadingRoom, setLoadingRoom] = useState(false);
+  const [closingRoom, setClosingRoom] = useState(false);
+  const prevCampaignIdRef = useRef<string | null>(null);
+
+  const refreshActiveCampaign = useCallback(async (campaignIdOverride?: string) => {
     try {
       const token = getAuthToken();
-      const res = await fetch("/api/campaign/active", {
+      const targetCampId =
+        campaignIdOverride ||
+        activeRoomRef.current?.campaignId ||
+        activeRoomRef.current?.campaignSettings?.campaignId ||
+        activeRoomRef.current?.campaign_settings?.campaignId;
+      const url = targetCampId
+        ? `/api/campaign/active?campaignId=${encodeURIComponent(targetCampId)}`
+        : "/api/campaign/active";
+      const res = await fetch(url, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       if (res.ok) {
         const data = await res.json();
-        setActiveCampaign(data.campaign || null);
         if (data.campaign) {
-          setCharacters(data.campaign.characters || []);
+          activeCampaignRef.current = data.campaign;
+          setActiveCampaign(data.campaign);
+          if (data.campaign.characters) {
+            setCharacters(data.campaign.characters || []);
+          }
           refreshMemory(data.campaign.id);
-        } else {
+        } else if (!targetCampId && !activeRoomRef.current?.campaignId) {
+          activeCampaignRef.current = null;
+          setActiveCampaign(null);
           setCharacters([]);
         }
       }
@@ -443,21 +487,6 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
     }
     return activeCampaign?.startingLevel ?? activeCampaign?.levelFrom ?? 1;
   }, [playerCharacters, activeCampaign?.startingLevel, activeCampaign?.levelFrom]);
-
-  // Сетевая комната активной кампании
-  const [activeRoom, setActiveRoom] = useState<{
-    id: string;
-    code: string;
-    name: string;
-    status: string;
-    startingLevel: number;
-    hostUserId?: string;
-    campaign_settings?: any;
-    participants?: any[];
-  } | null>(null);
-  const [loadingRoom, setLoadingRoom] = useState(false);
-  const [closingRoom, setClosingRoom] = useState(false);
-  const prevCampaignIdRef = useRef<string | null>(null);
 
   // Совместные раунды комнаты
   const [activeRoomTurn, setActiveRoomTurn] = useState<RoomTurn | null>(null);
@@ -536,15 +565,19 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
           const campId = data.room.campaignId || data.room.campaignSettings?.campaignId || data.room.campaign_settings?.campaignId;
           if (campId) {
             try {
+              const token = getAuthToken();
               await fetch("/api/campaign/activate", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ campaignId: campId }),
+                headers: {
+                  "Content-Type": "application/json",
+                  ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                },
+                body: JSON.stringify({ campaignId: campId, roomCode: cleanCode }),
               });
             } catch (e) {
               console.error("Не удалось активировать кампанию комнаты:", e);
             }
-            refreshActiveCampaign();
+            await refreshActiveCampaign(campId);
           }
 
           // Если пользователь авторизован, но ещё не в отряде комнаты со снапшотом героя — предлагаем выбрать персонажа
@@ -563,7 +596,7 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
         toast.error("Не удалось загрузить данные сетевой комнаты");
       })
       .finally(() => setLoadingRoom(false));
-  }, [initialRoomCode, refreshActiveCampaign, user]);
+  }, [initialRoomCode, refreshActiveCampaign, user, getAuthToken]);
 
   const handleRoomJoined = useCallback(
     async (room: any, participants: any[]) => {
@@ -585,12 +618,16 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
       const campId = room.campaignId || room.campaignSettings?.campaignId || room.campaign_settings?.campaignId;
       if (campId) {
         try {
+          const token = getAuthToken();
           await fetch("/api/campaign/activate", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ campaignId: campId }),
+            headers: {
+              "Content-Type": "application/json",
+              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            },
+            body: JSON.stringify({ campaignId: campId, roomCode: room.code }),
           });
-          await refreshActiveCampaign();
+          await refreshActiveCampaign(campId);
         } catch (e) {
           console.error("Не удалось активировать кампанию комнаты:", e);
         }
@@ -607,7 +644,7 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
         toast.info("Войдите в аккаунт, чтобы привязать своего героя к столу");
       }
     },
-    [user, refreshActiveCampaign]
+    [user, refreshActiveCampaign, getAuthToken]
   );
 
   async function openCampaignForFriends() {
@@ -754,16 +791,22 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
 
   // Периодический опрос участников комнаты, кампании и истории чата в мультиплеере
   useEffect(() => {
-    if (!activeRoom || !activeCampaign) return;
+    if (!activeRoom) return;
 
     const interval = setInterval(async () => {
-      // 1. Обновляем участников комнаты
+      // 1. Обновляем участников комнаты и проверяем привязанную кампанию
+      let currentCampId =
+        activeCampaignRef.current?.id ||
+        activeRoom.campaignId ||
+        activeRoom.campaignSettings?.campaignId ||
+        activeRoom.campaign_settings?.campaignId;
+
       try {
         const res = await fetch(`/api/room/${encodeURIComponent(activeRoom.code)}`);
         if (res.ok) {
           const data = await res.json();
           if (data?.room) {
-            setActiveRoom((prev) => {
+            setActiveRoom((prev: any) => {
               if (!prev) return data.room;
               return {
                 ...prev,
@@ -771,6 +814,18 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
                 participants: data.participants || data.room.participants || prev.participants || [],
               };
             });
+
+            const roomCampId =
+              data.room.campaignId ||
+              data.room.campaignSettings?.campaignId ||
+              data.room.campaign_settings?.campaignId;
+
+            if (roomCampId) {
+              currentCampId = roomCampId;
+              if (!activeCampaignRef.current || activeCampaignRef.current.id !== roomCampId) {
+                refreshActiveCampaign(roomCampId);
+              }
+            }
           }
         }
       } catch {}
@@ -787,12 +842,14 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
       } catch {}
 
       // 2. Обновляем состояние персонажей кампании
-      refreshActiveCampaign();
+      if (currentCampId) {
+        refreshActiveCampaign(currentCampId);
+      }
 
       // 3. Синхронизируем чат, если мы сейчас сами не стримим
-      if (!isLoading) {
+      if (!isLoading && currentCampId) {
         try {
-          const chatRes = await fetch(`/api/chat/history?campaignId=${activeCampaign.id}`);
+          const chatRes = await fetch(`/api/chat/history?campaignId=${encodeURIComponent(currentCampId)}`);
           if (chatRes.ok) {
             const chatData = await chatRes.json();
             if (Array.isArray(chatData.messages) && chatData.messages.length > 0) {
@@ -814,7 +871,7 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
     }, 3500);
 
     return () => clearInterval(interval);
-  }, [activeRoom?.code, activeCampaign?.id, isLoading, refreshActiveCampaign, setMessages]);
+  }, [activeRoom?.code, isLoading, refreshActiveCampaign, setMessages, setActiveRoom]);
 
   // История чата из БД: useChat стартует с пустого списка, поэтому после
   // перезагрузки страницы диалог нужно восстановить вручную. Зависимость —
@@ -1380,7 +1437,16 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
-    if (!activeCampaign) {
+
+    let campaignId = activeCampaign?.id;
+    if (!campaignId && activeRoom) {
+      campaignId =
+        activeRoom.campaignId ||
+        activeRoom.campaignSettings?.campaignId ||
+        activeRoom.campaign_settings?.campaignId;
+    }
+
+    if (!campaignId) {
       toast.error("Сначала создайте кампанию");
       return;
     }
@@ -1398,9 +1464,13 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
 
       setSubmittingTurn(true);
       try {
+        const token = getAuthToken();
         const res = await fetch(`/api/room/${encodeURIComponent(activeRoom.code)}/turn`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
           body: JSON.stringify({
             actionText: userMessage,
             apiKey,
@@ -1424,11 +1494,14 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
           }
           refreshActiveCampaign();
           try {
-            const chatRes = await fetch(`/api/chat/history?campaignId=${activeCampaign.id}`);
-            if (chatRes.ok) {
-              const chatData = await chatRes.json();
-              if (Array.isArray(chatData.messages) && chatData.messages.length > 0) {
-                setMessages(chatData.messages);
+            const targetCampId = campaignId || activeCampaign?.id || activeRoom.campaignId;
+            if (targetCampId) {
+              const chatRes = await fetch(`/api/chat/history?campaignId=${encodeURIComponent(targetCampId)}`);
+              if (chatRes.ok) {
+                const chatData = await chatRes.json();
+                if (Array.isArray(chatData.messages) && chatData.messages.length > 0) {
+                  setMessages(chatData.messages);
+                }
               }
             }
           } catch {}
@@ -1457,12 +1530,22 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
   }
 
   async function handleForceResolveTurn() {
-    if (!activeRoom || !activeCampaign) return;
+    if (!activeRoom) return;
+    const targetCampId =
+      activeCampaign?.id ||
+      activeRoom.campaignId ||
+      activeRoom.campaignSettings?.campaignId ||
+      activeRoom.campaign_settings?.campaignId;
+
     setResolvingTurn(true);
     try {
+      const token = getAuthToken();
       const res = await fetch(`/api/room/${encodeURIComponent(activeRoom.code)}/turn/resolve`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({
           apiKey,
           model,
@@ -1480,13 +1563,17 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
       if (data.nextTurn) {
         setActiveRoomTurn(data.nextTurn);
       }
-      refreshActiveCampaign();
+      if (targetCampId) {
+        refreshActiveCampaign(targetCampId);
+      }
       try {
-        const chatRes = await fetch(`/api/chat/history?campaignId=${activeCampaign.id}`);
-        if (chatRes.ok) {
-          const chatData = await chatRes.json();
-          if (Array.isArray(chatData.messages) && chatData.messages.length > 0) {
-            setMessages(chatData.messages);
+        if (targetCampId) {
+          const chatRes = await fetch(`/api/chat/history?campaignId=${encodeURIComponent(targetCampId)}`);
+          if (chatRes.ok) {
+            const chatData = await chatRes.json();
+            if (Array.isArray(chatData.messages) && chatData.messages.length > 0) {
+              setMessages(chatData.messages);
+            }
           }
         }
       } catch {}
@@ -1727,7 +1814,14 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
         <main className="flex-1 flex flex-col min-w-0 min-h-0">
           {!activeCampaign ? (
             activeRoom ? (
-              <div className="flex-1 overflow-y-auto p-4 sm:p-8 flex items-center justify-center">
+              activeRoom.status === "active" && (activeRoom.campaignId || activeRoom.campaignSettings?.campaignId || activeRoom.campaign_settings?.campaignId) ? (
+                <div className="flex-1 flex flex-col items-center justify-center p-8 gap-3 font-sans">
+                  <Loader2 className="size-8 animate-spin text-amber-500" />
+                  <p className="text-sm font-medium text-foreground">Подключение к приключению стола...</p>
+                  <p className="text-xs text-muted-foreground">Загружаем сюжет, чат и персонажей кампании</p>
+                </div>
+              ) : (
+                <div className="flex-1 overflow-y-auto p-4 sm:p-8 flex items-center justify-center">
                 <Card className="max-w-2xl w-full border border-border bg-card shadow-lg font-sans">
                   <CardHeader className="pb-3 border-b border-border/40">
                     <div className="flex items-center justify-between gap-3">
@@ -1935,33 +2029,40 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
                         Покинуть комнату
                       </Button>
 
-                      <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setCreatingCampaign(true)}
-                          className="text-xs cursor-pointer w-full sm:w-auto"
-                        >
-                          <Plus className="size-3.5 mr-1.5" />
-                          Создать приключение
-                        </Button>
-                        <Button
-                          size="sm"
-                          onClick={() => {
-                            loadCampaignsList();
-                            setShowCampaignList(true);
-                          }}
-                          className="text-xs cursor-pointer w-full sm:w-auto"
-                        >
-                          <BookOpen className="size-3.5 mr-1.5" />
-                          Выбрать кампанию
-                        </Button>
-                      </div>
+                      {Boolean(user?.id && activeRoom.hostUserId === user.id) ? (
+                        <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setCreatingCampaign(true)}
+                            className="text-xs cursor-pointer w-full sm:w-auto"
+                          >
+                            <Plus className="size-3.5 mr-1.5" />
+                            Создать приключение
+                          </Button>
+                          <Button
+                            size="sm"
+                            onClick={() => {
+                              loadCampaignsList();
+                              setShowCampaignList(true);
+                            }}
+                            className="text-xs cursor-pointer w-full sm:w-auto"
+                          >
+                            <BookOpen className="size-3.5 mr-1.5" />
+                            Выбрать кампанию
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className="text-xs text-muted-foreground italic text-center sm:text-right">
+                          Ожидайте, пока ведущий стола начнёт приключение...
+                        </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
               </div>
-            ) : (
+            )
+          ) : (
               <div className="flex-1 flex items-center justify-center p-8">
                 <Card className="max-w-lg w-full">
                   <CardHeader>
