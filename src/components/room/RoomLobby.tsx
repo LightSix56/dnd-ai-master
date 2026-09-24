@@ -521,6 +521,7 @@ export function RoomLobby({
         isOpen={showPicker}
         roomCode={roomCode}
         startingLevel={room.startingLevel}
+        campaignId={room.campaignId || (room.campaignSettings as any)?.campaignId}
         onSelect={() => {
           refresh();
         }}

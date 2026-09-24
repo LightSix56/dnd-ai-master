@@ -3410,6 +3410,7 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
           isOpen={showPicker}
           roomCode={activeRoom.code}
           startingLevel={activeRoom.startingLevel || targetLevel || 1}
+          campaignId={activeCampaign?.id || (activeRoom as any).campaignId}
           onSelect={async (selected) => {
             if (activeRoom?.code) {
               try {

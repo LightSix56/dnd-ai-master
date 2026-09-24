@@ -13,7 +13,16 @@ vi.mock("@/lib/supabase/client", () => {
   };
 });
 
+vi.mock("@/lib/db", () => ({
+  db: {
+    character: {
+      findMany: vi.fn().mockResolvedValue([]),
+    },
+  },
+}));
+
 import { getAuthUserFromRequest, getSupabaseAdminClient } from "@/lib/supabase/client";
+import { db } from "@/lib/db";
 
 describe("Room API Routes (Phase 1)", () => {
   beforeEach(() => {
@@ -115,6 +124,76 @@ describe("Room API Routes (Phase 1)", () => {
       const req = new Request("http://localhost/api/room/UNKNOWN-99");
       const res = await getRoomGet(req, { params: Promise.resolve({ code: "UNKNOWN-99" }) });
       expect(res.status).toBe(404);
+    });
+
+    it("returns room with campaign characters and assignment status", async () => {
+      const mockRoom = {
+        id: "room-id-1",
+        code: "DRAGON-99",
+        name: "Лобби Героев",
+        host_user_id: "user-123",
+        status: "lobby",
+        starting_level: 1,
+        campaign_settings: { campaignId: "camp-1" },
+        room_participants: [
+          {
+            id: "part-1",
+            user_id: "user-123",
+            character_id: "char-1",
+            character_snapshot: { name: "Торин", level: 1 },
+          },
+        ],
+      };
+
+      vi.mocked(getSupabaseAdminClient).mockReturnValue({
+        from: vi.fn().mockReturnValue({
+          select: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              single: vi.fn().mockResolvedValue({ data: mockRoom, error: null }),
+            }),
+          }),
+        }),
+      } as any);
+
+      vi.mocked(db.character.findMany).mockResolvedValueOnce([
+        {
+          id: "char-1",
+          campaignId: "camp-1",
+          name: "Торин",
+          type: "player",
+          race: "Дварф",
+          class: "Воин",
+          level: 1,
+          hpCurrent: 12,
+          hpMax: 12,
+          ac: 16,
+        },
+        {
+          id: "char-2",
+          campaignId: "camp-1",
+          name: "Эльронд",
+          type: "player",
+          race: "Эльф",
+          class: "Маг",
+          level: 1,
+          hpCurrent: 8,
+          hpMax: 8,
+          ac: 12,
+        },
+      ] as any);
+
+      const req = new Request("http://localhost/api/room/DRAGON-99");
+      const res = await getRoomGet(req, { params: Promise.resolve({ code: "DRAGON-99" }) });
+      expect(res.status).toBe(200);
+      const json = await res.json();
+      expect(json.campaignCharacters).toHaveLength(2);
+      expect(json.campaignCharacters[0].name).toBe("Торин");
+      expect(json.campaignCharacters[0].assignedTo).toEqual({
+        userId: "user-123",
+        characterName: "Торин",
+      });
+      expect(json.campaignCharacters[1].name).toBe("Эльронд");
+      expect(json.campaignCharacters[1].assignedTo).toBeNull();
     });
   });
 
