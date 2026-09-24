@@ -56,6 +56,16 @@ import {
   Copy,
   ExternalLink,
   Lock,
+  Crown,
+  User,
+  X,
+  CheckCircle2,
+  Radio,
+  Clock,
+  LogOut,
+  Shield,
+  Heart,
+  Share2,
 } from "lucide-react";
 import { CharacterCard } from "./CharacterCard";
 import { CombatView, type CombatEndSummary } from "@/components/combat/CombatView";
@@ -63,6 +73,7 @@ import { ModelPickerModal } from "./ModelPickerModal";
 import { CostStatsModal } from "./CostStatsModal";
 import { D20RollModal } from "./D20RollModal";
 import { CreateRoomModal } from "@/components/room/CreateRoomModal";
+import { CharacterPickerModal } from "@/components/room/CharacterPickerModal";
 import { SupabaseAuthModal } from "@/components/auth/SupabaseAuthModal";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { D20Icon, RunedKeyIcon } from "@/components/dnd-icons";
@@ -155,7 +166,8 @@ function getMessageError(m: {
   return errorPart?.errorText || null;
 }
 
-export function DnDApp() {
+export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
+  const [sidebarTab, setSidebarTab] = useState<string>("characters");
   const [input, setInput] = useState("");
   const [showSetup, setShowSetup] = useState(false);
   const [creatingCampaign, setCreatingCampaign] = useState(false);
@@ -245,6 +257,7 @@ export function DnDApp() {
   const [showD20Modal, setShowD20Modal] = useState(false);
   const [showCreateRoom, setShowCreateRoom] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showPicker, setShowPicker] = useState(false);
   const { user, signOut: supabaseSignOut, getAuthToken } = useSupabaseAuth();
   const [accountCharacters, setAccountCharacters] = useState<Array<{
     id: string;
@@ -430,6 +443,7 @@ export function DnDApp() {
     name: string;
     status: string;
     startingLevel: number;
+    hostUserId?: string;
     campaign_settings?: any;
     participants?: any[];
   } | null>(null);
@@ -443,8 +457,10 @@ export function DnDApp() {
     const prevId = prevCampaignIdRef.current;
 
     if (prevId && prevId !== currentId) {
-      fetch(`/api/room/campaign/${prevId}`, { method: "DELETE" }).catch(() => {});
-      setActiveRoom(null);
+      if (!initialRoomCode) {
+        fetch(`/api/room/campaign/${prevId}`, { method: "DELETE" }).catch(() => {});
+        setActiveRoom(null);
+      }
     }
 
     prevCampaignIdRef.current = currentId || null;
@@ -455,17 +471,64 @@ export function DnDApp() {
         .then((res) => res.json())
         .then((data) => {
           if (data?.room && data.room.status === "active") {
-            setActiveRoom(data.room);
-          } else {
+            setActiveRoom({
+              ...data.room,
+              participants: data.participants || data.room.participants || [],
+            });
+          } else if (!initialRoomCode) {
             setActiveRoom(null);
           }
         })
-        .catch(() => setActiveRoom(null))
+        .catch(() => {
+          if (!initialRoomCode) setActiveRoom(null);
+        })
         .finally(() => setLoadingRoom(false));
-    } else {
+    } else if (!initialRoomCode) {
       setActiveRoom(null);
     }
-  }, [activeCampaign?.id]);
+  }, [activeCampaign?.id, initialRoomCode]);
+
+  // Подключение к комнате по прямой ссылке /room/[code]
+  useEffect(() => {
+    if (!initialRoomCode) return;
+    const cleanCode = initialRoomCode.trim().toUpperCase();
+
+    setLoadingRoom(true);
+    fetch(`/api/room/${encodeURIComponent(cleanCode)}`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then(async (data) => {
+        if (data?.room) {
+          const roomObj = {
+            ...data.room,
+            participants: data.participants || data.room.participants || [],
+          };
+          setActiveRoom(roomObj);
+          setSidebarTab("room");
+
+          // Если у комнаты есть привязанная кампания, активируем её для игрока
+          const campId = data.room.campaignId || data.room.campaignSettings?.campaignId;
+          if (campId) {
+            try {
+              await fetch("/api/campaign/activate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ campaignId: campId }),
+              });
+            } catch (e) {
+              console.error("Не удалось активировать кампанию комнаты:", e);
+            }
+            refreshActiveCampaign();
+          }
+        } else {
+          toast.error(`Сетевая комната "${cleanCode}" не найдена`);
+        }
+      })
+      .catch((err) => {
+        console.error("Ошибка загрузки комнаты:", err);
+        toast.error("Не удалось загрузить данные сетевой комнаты");
+      })
+      .finally(() => setLoadingRoom(false));
+  }, [initialRoomCode, refreshActiveCampaign]);
 
   async function openCampaignForFriends() {
     if (!activeCampaign) return;
@@ -493,7 +556,11 @@ export function DnDApp() {
       }
 
       const data = await res.json();
-      setActiveRoom(data.room);
+      setActiveRoom({
+        ...data.room,
+        participants: data.participants || data.room.participants || [],
+      });
+      setSidebarTab("room");
       toast.success(`Комната ${data.room.code} открыта для друзей!`);
     } catch (e: any) {
       toast.error(`Ошибка: ${e.message}`);
@@ -515,12 +582,23 @@ export function DnDApp() {
         return;
       }
       setActiveRoom(null);
+      setSidebarTab("characters");
       toast.info("Сетевая комната закрыта");
     } catch (e: any) {
       toast.error(`Ошибка: ${e.message}`);
     } finally {
       setClosingRoom(false);
     }
+  }
+
+  async function leaveRoom() {
+    if (!activeRoom) return;
+    setActiveRoom(null);
+    setSidebarTab("characters");
+    if (initialRoomCode && typeof window !== "undefined") {
+      window.history.pushState({}, "", "/");
+    }
+    toast.info("Вы вышли из сетевой комнаты");
   }
 
   async function copyRoomLink() {
@@ -594,14 +672,58 @@ export function DnDApp() {
     refreshActiveCampaign();
   }, [refreshActiveCampaign]);
 
-  // Периодический опрос персонажей, когда открыта сетевая комната и идёт сбор отряда
+  // Периодический опрос участников комнаты, кампании и истории чата в мультиплеере
   useEffect(() => {
-    if (!activeRoom || !activeCampaign || messages.length > 0) return;
-    const interval = setInterval(() => {
+    if (!activeRoom || !activeCampaign) return;
+
+    const interval = setInterval(async () => {
+      // 1. Обновляем участников комнаты
+      try {
+        const res = await fetch(`/api/room/${encodeURIComponent(activeRoom.code)}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data?.room) {
+            setActiveRoom((prev) => {
+              if (!prev) return data.room;
+              return {
+                ...prev,
+                ...data.room,
+                participants: data.participants || data.room.participants || prev.participants || [],
+              };
+            });
+          }
+        }
+      } catch {}
+
+      // 2. Обновляем состояние персонажей кампании
       refreshActiveCampaign();
-    }, 4000);
+
+      // 3. Синхронизируем чат, если мы сейчас сами не стримим
+      if (!isLoading) {
+        try {
+          const chatRes = await fetch(`/api/chat/history?campaignId=${activeCampaign.id}`);
+          if (chatRes.ok) {
+            const chatData = await chatRes.json();
+            if (Array.isArray(chatData.messages) && chatData.messages.length > 0) {
+              setMessages((prev) => {
+                if (chatData.messages.length !== prev.length) {
+                  return chatData.messages;
+                }
+                const lastPrev = prev[prev.length - 1];
+                const lastNew = chatData.messages[chatData.messages.length - 1];
+                if (lastPrev?.id !== lastNew?.id) {
+                  return chatData.messages;
+                }
+                return prev;
+              });
+            }
+          }
+        } catch {}
+      }
+    }, 3500);
+
     return () => clearInterval(interval);
-  }, [activeRoom, activeCampaign?.id, messages.length, refreshActiveCampaign]);
+  }, [activeRoom?.code, activeCampaign?.id, isLoading, refreshActiveCampaign, setMessages]);
 
   // История чата из БД: useChat стартует с пустого списка, поэтому после
   // перезагрузки страницы диалог нужно восстановить вручную. Зависимость —
@@ -1524,24 +1646,34 @@ export function DnDApp() {
                         <Copy className="size-3" />
                         Скопировать ссылку
                       </Button>
-                      <a
-                        href={`/room/${activeRoom.code}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center h-7 px-2.5 rounded-md text-xs font-medium border border-border bg-background hover:bg-accent text-foreground transition"
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="secondary"
+                        className="h-7 text-xs gap-1 cursor-pointer"
+                        onClick={() => {
+                          setSidebarTab("room");
+                          if (sidebarCollapsed) toggleSidebar();
+                        }}
                       >
-                        <ExternalLink className="size-3 mr-1" />
-                        Перейти
-                      </a>
+                        <Radio className="size-3 text-emerald-500" />
+                        Панель сети ({activeRoom.participants?.length || 1})
+                      </Button>
                       <Button
                         type="button"
                         size="sm"
                         variant="ghost"
                         className="h-7 text-xs text-muted-foreground hover:text-destructive cursor-pointer"
-                        onClick={closeCampaignForFriends}
+                        onClick={activeRoom.hostUserId === user?.id ? closeCampaignForFriends : leaveRoom}
                         disabled={closingRoom}
                       >
-                        {closingRoom ? <Loader2 className="size-3 animate-spin" /> : "Закрыть доступ"}
+                        {closingRoom ? (
+                          <Loader2 className="size-3 animate-spin" />
+                        ) : activeRoom.hostUserId === user?.id ? (
+                          "Закрыть доступ"
+                        ) : (
+                          "Покинуть"
+                        )}
                       </Button>
                     </div>
                   </div>
@@ -2143,13 +2275,24 @@ export function DnDApp() {
                 <div className="w-0.5 h-8 bg-border group-hover:bg-amber-500 rounded transition-colors" />
               </div>
 
-              <Tabs defaultValue="characters" className="flex-1 flex flex-col min-h-0">
+              <Tabs value={sidebarTab} onValueChange={setSidebarTab} className="flex-1 flex flex-col min-h-0">
                 <div className="flex items-center gap-1 mx-2 mt-2">
-                  <TabsList className="grid grid-cols-3 flex-1">
+                  <TabsList className={`grid ${activeRoom ? "grid-cols-4" : "grid-cols-3"} flex-1`}>
                     <TabsTrigger value="characters" className="text-xs">
                       <Users className="size-3 mr-1" />
                       Персы
                     </TabsTrigger>
+                    {activeRoom && (
+                      <TabsTrigger value="room" className="text-xs relative">
+                        <Radio className="size-3 mr-1 text-emerald-500 animate-pulse" />
+                        Сеть
+                        {activeRoom.participants && activeRoom.participants.length > 0 && (
+                          <span className="ml-1 text-[10px] bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 px-1 py-0.2 rounded-full font-bold">
+                            {activeRoom.participants.length}
+                          </span>
+                        )}
+                      </TabsTrigger>
+                    )}
                     <TabsTrigger value="memory" className="text-xs">
                       <Brain className="size-3 mr-1" />
                       Память
@@ -2271,6 +2414,266 @@ export function DnDApp() {
                   </div>
                 </ScrollArea>
               </TabsContent>
+
+              {activeRoom && (
+                <TabsContent value="room" className="flex-1 m-0 min-h-0">
+                  <ScrollArea className="h-full">
+                    <div className="p-3 space-y-3 font-sans">
+                      {/* Карточка комнаты */}
+                      <div className="rounded-lg border bg-card p-3 space-y-2 border-border shadow-xs">
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-1.5 min-w-0">
+                            <Radio className="size-4 text-emerald-500 animate-pulse shrink-0" />
+                            <h3 className="font-semibold text-xs sm:text-sm text-foreground truncate">
+                              {activeRoom.name || "Сетевая комната"}
+                            </h3>
+                          </div>
+                          <Badge variant="outline" className="text-[10px] px-1.5 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 shrink-0">
+                            {activeRoom.status === "active" ? "Игра идёт" : "Лобби"}
+                          </Badge>
+                        </div>
+
+                        <div className="flex items-center justify-between text-xs text-muted-foreground pt-1 border-t border-border/40">
+                          <span>Уровень отряда:</span>
+                          <span className="font-semibold text-foreground">{activeRoom.startingLevel || targetLevel || 1} ур.</span>
+                        </div>
+
+                        {/* Код комнаты и кнопка копирования */}
+                        <div className="flex items-center justify-between gap-2 bg-muted/40 p-1.5 rounded border border-border/50">
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-[11px] text-muted-foreground">Код:</span>
+                            <span className="font-mono text-xs font-bold text-foreground tracking-wider">
+                              {activeRoom.code}
+                            </span>
+                          </div>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            className="h-6 px-2 text-[11px] gap-1 cursor-pointer"
+                            onClick={copyRoomLink}
+                          >
+                            <Copy className="size-3" />
+                            Копировать ссылку
+                          </Button>
+                        </div>
+                      </div>
+
+                      {/* Статус текущего игрока в комнате */}
+                      {(() => {
+                        const currentParticipant = activeRoom.participants?.find(
+                          (p: any) => p.userId === user?.id
+                        );
+
+                        if (!user) {
+                          return (
+                            <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-3 text-xs space-y-2 text-center">
+                              <p className="text-amber-800 dark:text-amber-300 font-medium">
+                                Вы вошли как гость без авторизации
+                              </p>
+                              <p className="text-muted-foreground text-[11px]">
+                                Войдите в аккаунт, чтобы выбрать своего персонажа и играть вместе с друзьями.
+                              </p>
+                              <Button
+                                type="button"
+                                size="sm"
+                                variant="outline"
+                                className="w-full text-xs h-7 gap-1 border-amber-500/40 text-amber-900 dark:text-amber-200 cursor-pointer"
+                                onClick={() => setShowAuthModal(true)}
+                              >
+                                <LogIn className="size-3" />
+                                Войти в аккаунт
+                              </Button>
+                            </div>
+                          );
+                        }
+
+                        if (!currentParticipant) {
+                          return (
+                            <div className="rounded-lg border border-primary/30 bg-primary/5 p-3 text-xs space-y-2">
+                              <p className="font-medium text-foreground">
+                                Вы подключены к комнате!
+                              </p>
+                              <p className="text-muted-foreground text-[11px]">
+                                Выберите своего героя из аккаунта или создайте нового, чтобы вступить в отряд.
+                              </p>
+                              <Button
+                                type="button"
+                                size="sm"
+                                className="w-full text-xs h-7 gap-1 cursor-pointer"
+                                onClick={() => setShowPicker(true)}
+                              >
+                                <User className="size-3" />
+                                Выбрать персонажа
+                              </Button>
+                            </div>
+                          );
+                        }
+
+                        const charSnap = currentParticipant.characterSnapshot || {};
+                        return (
+                          <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-2.5 text-xs flex items-center justify-between gap-2">
+                            <div className="min-w-0">
+                              <div className="text-[10px] text-emerald-700 dark:text-emerald-400 font-medium">
+                                Ваш персонаж в комнате:
+                              </div>
+                              <div className="font-semibold text-foreground truncate">
+                                {charSnap.name || "Герой"} ({charSnap.className || "Игрок"}, {charSnap.level || activeRoom.startingLevel} ур.)
+                              </div>
+                            </div>
+                            <Button
+                              type="button"
+                              size="sm"
+                              variant="ghost"
+                              className="h-6 px-1.5 text-[11px] text-muted-foreground hover:text-foreground shrink-0 cursor-pointer"
+                              onClick={() => setShowPicker(true)}
+                            >
+                              Сменить
+                            </Button>
+                          </div>
+                        );
+                      })()}
+
+                      {/* Список участников */}
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between pb-1 border-b border-border/40">
+                          <span className="text-xs font-semibold text-muted-foreground">
+                            Герои в комнате ({activeRoom.participants?.length || 0})
+                          </span>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="ghost"
+                            className="h-6 px-1.5 text-[11px] gap-1 cursor-pointer"
+                            onClick={() => setShowPicker(true)}
+                            title="Выбрать персонажа"
+                          >
+                            <Plus className="size-3" />
+                            Герой
+                          </Button>
+                        </div>
+
+                        {(!activeRoom.participants || activeRoom.participants.length === 0) ? (
+                          <div className="text-center text-xs text-muted-foreground py-6 border border-dashed rounded-lg">
+                            Пока нет участников. Отправьте друзьям ссылку на комнату!
+                          </div>
+                        ) : (
+                          activeRoom.participants.map((p: any) => {
+                            const snap = p.characterSnapshot || {};
+                            const isMe = user?.id && p.userId === user.id;
+
+                            return (
+                              <div
+                                key={p.id || p.userId}
+                                className={`rounded-lg border p-2.5 text-xs space-y-1.5 transition-colors ${
+                                  isMe
+                                    ? "border-emerald-500/40 bg-emerald-500/5"
+                                    : "border-border bg-card"
+                                }`}
+                              >
+                                <div className="flex items-start justify-between gap-2">
+                                  <div className="flex items-center gap-2 min-w-0">
+                                    {snap.portraitUrl ? (
+                                      <img
+                                        src={snap.portraitUrl}
+                                        alt={snap.name || "Герой"}
+                                        className="size-7 rounded-full object-cover border border-border shrink-0"
+                                      />
+                                    ) : (
+                                      <div className="size-7 rounded-full bg-muted flex items-center justify-center text-muted-foreground shrink-0 border border-border">
+                                        <User className="size-3.5" />
+                                      </div>
+                                    )}
+                                    <div className="min-w-0">
+                                      <div className="flex items-center gap-1.5">
+                                        <span className="font-semibold text-foreground truncate">
+                                          {snap.name || "Безымянный"}
+                                        </span>
+                                        {p.isHost && (
+                                          <span title="Ведущий комнаты">
+                                            <Crown className="size-3 text-amber-500 fill-amber-500 shrink-0 inline-block" />
+                                          </span>
+                                        )}
+                                        {isMe && (
+                                          <Badge variant="outline" className="text-[9px] px-1 py-0 h-3.5 text-emerald-600 border-emerald-500/40">
+                                            Вы
+                                          </Badge>
+                                        )}
+                                      </div>
+                                      <p className="text-[11px] text-muted-foreground truncate">
+                                        {snap.race || "Герой"} • {snap.className || snap.class || "Приключенец"} ({snap.level || activeRoom.startingLevel} ур.)
+                                      </p>
+                                    </div>
+                                  </div>
+
+                                  <div className="shrink-0 flex items-center gap-1">
+                                    {p.isReady ? (
+                                      <span className="flex items-center gap-0.5 text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">
+                                        <CheckCircle2 className="size-3" />
+                                        Готов
+                                      </span>
+                                    ) : (
+                                      <span className="flex items-center gap-0.5 text-[10px] text-muted-foreground">
+                                        <Clock className="size-3" />
+                                        В сборе
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+
+                                {(snap.hpMax !== undefined || snap.armorClass !== undefined) && (
+                                  <div className="flex items-center gap-3 pt-1 border-t border-border/30 text-[10px] text-muted-foreground font-mono">
+                                    {snap.hpMax !== undefined && (
+                                      <span className="flex items-center gap-0.5">
+                                        <Heart className="size-2.5 text-red-500" />
+                                        {snap.hpMax} HP
+                                      </span>
+                                    )}
+                                    {snap.armorClass !== undefined && (
+                                      <span className="flex items-center gap-0.5">
+                                        <Shield className="size-2.5 text-amber-500" />
+                                        {snap.armorClass} КД
+                                      </span>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })
+                        )}
+                      </div>
+
+                      {/* Кнопки управления комнатой */}
+                      <div className="pt-2 border-t border-border/50 flex flex-col gap-2">
+                        {activeRoom.hostUserId === user?.id ? (
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="sm"
+                            className="w-full text-xs h-8 gap-1.5 cursor-pointer"
+                            onClick={closeCampaignForFriends}
+                            disabled={closingRoom}
+                          >
+                            <X className="size-3.5" />
+                            Закрыть сетевую комнату
+                          </Button>
+                        ) : (
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            className="w-full text-xs h-8 gap-1.5 text-muted-foreground hover:text-destructive border-border cursor-pointer"
+                            onClick={leaveRoom}
+                          >
+                            <LogOut className="size-3.5" />
+                            Покинуть комнату
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </ScrollArea>
+                </TabsContent>
+              )}
 
               <TabsContent value="memory" className="flex-1 m-0 min-h-0">
                 <ScrollArea className="h-full">
@@ -2492,6 +2895,34 @@ export function DnDApp() {
         isOpen={showCreateRoom}
         onClose={() => setShowCreateRoom(false)}
       />
+
+      {/* Character Picker for Multiplayer Room */}
+      {activeRoom && (
+        <CharacterPickerModal
+          isOpen={showPicker}
+          roomCode={activeRoom.code}
+          startingLevel={activeRoom.startingLevel || targetLevel || 1}
+          onSelect={async (selected) => {
+            if (activeRoom?.code) {
+              try {
+                const res = await fetch(`/api/room/${encodeURIComponent(activeRoom.code)}`);
+                if (res.ok) {
+                  const data = await res.json();
+                  if (data?.room) {
+                    setActiveRoom({
+                      ...data.room,
+                      participants: data.participants || data.room.participants || [],
+                    });
+                  }
+                }
+              } catch {}
+            }
+            refreshActiveCampaign();
+            toast.success(`Персонаж ${selected.name} присоединился к отряду!`);
+          }}
+          onClose={() => setShowPicker(false)}
+        />
+      )}
 
       {/* Supabase Auth Modal */}
       <SupabaseAuthModal

@@ -138,6 +138,7 @@ export function CharacterPickerModal({
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify({
+          characterId: card.id,
           characterSnapshot: card.rawSnapshot,
         }),
       });

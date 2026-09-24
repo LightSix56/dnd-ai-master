@@ -19,7 +19,7 @@ export async function GET(
       return NextResponse.json({ error: "Комната не найдена" }, { status: 404 });
     }
 
-    return NextResponse.json({ room }, { status: 200 });
+    return NextResponse.json({ room, participants: room.participants || [] }, { status: 200 });
   } catch (err) {
     console.error("[API /api/room/[code]] Error:", err);
     return NextResponse.json(

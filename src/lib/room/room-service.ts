@@ -108,7 +108,7 @@ export class RoomService {
         code,
         name: input.name.trim(),
         host_user_id: hostUserId,
-        status: "lobby",
+        status: input.campaignId ? "active" : "lobby",
         starting_level: startingLevel,
         max_level: maxLevel,
         party_bond: input.partyBond || "strangers",
@@ -140,11 +140,11 @@ export class RoomService {
   /**
    * Находит активную комнату для кампании
    */
-  async getActiveRoomByCampaignId(campaignId: string): Promise<Room | null> {
+  async getActiveRoomByCampaignId(campaignId: string): Promise<RoomWithParticipants | null> {
     if (!campaignId) return null;
     const { data, error } = await this.client
       .from("rooms")
-      .select("*")
+      .select("*, room_participants(*)")
       .filter("campaign_settings->>campaignId", "eq", campaignId)
       .neq("status", "archived")
       .order("created_at", { ascending: false })
@@ -152,7 +152,15 @@ export class RoomService {
       .maybeSingle();
 
     if (error || !data) return null;
-    return mapRoomFromDb(data);
+    const room = mapRoomFromDb(data);
+    const participants = Array.isArray(data.room_participants)
+      ? data.room_participants.map(mapParticipantFromDb)
+      : [];
+
+    return {
+      ...room,
+      participants,
+    };
   }
 
   /**
@@ -206,7 +214,7 @@ export class RoomService {
     // 1. Проверяем существование комнаты и стартовый уровень
     const { data: roomData, error: roomError } = await this.client
       .from("rooms")
-      .select("id, starting_level, status")
+      .select("id, starting_level, status, campaign_settings")
       .eq("id", input.roomId)
       .single();
 
@@ -214,7 +222,7 @@ export class RoomService {
       throw new Error("Комната не найдена.");
     }
 
-    if (roomData.status !== "lobby") {
+    if (roomData.status !== "lobby" && roomData.status !== "active") {
       throw new Error(`Невозможно присоединиться к комнате со статусом "${roomData.status}".`);
     }
 
@@ -243,6 +251,34 @@ export class RoomService {
 
     if (partError || !participantData) {
       throw new Error(`Ошибка подключения к комнате: ${partError?.message || "Сбой записи"}`);
+    }
+
+    // 4. Если кампания уже активна, добавляем/обновляем персонажа в кампании
+    const campaignId = (roomData.campaign_settings as any)?.campaignId;
+    if (campaignId) {
+      try {
+        const snap = input.characterSnapshot as any;
+        const name = (snap?.name || snap?.characterSnapshot?.name || "Герой").trim();
+        const existing = await db.character.findFirst({
+          where: { campaignId, name },
+        });
+        if (!existing) {
+          await db.character.create({
+            data: {
+              campaignId,
+              name,
+              type: "player",
+              race: snap?.race || snap?.characterSnapshot?.race || null,
+              class: snap?.className || snap?.class || snap?.characterSnapshot?.className || null,
+              subclass: snap?.subclass || snap?.characterSnapshot?.subclass || null,
+              level: snap?.level || snap?.characterSnapshot?.level || roomData.starting_level || 1,
+              notes: JSON.stringify(snap),
+            },
+          });
+        }
+      } catch (err) {
+        console.warn("[room-service] Failed to sync participant to campaign db.character:", err);
+      }
     }
 
     return mapParticipantFromDb(participantData);

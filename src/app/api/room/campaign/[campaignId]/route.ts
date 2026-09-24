@@ -14,7 +14,7 @@ export async function GET(
 
     const roomService = new RoomService();
     const room = await roomService.getActiveRoomByCampaignId(campaignId);
-    return NextResponse.json({ room }, { status: 200 });
+    return NextResponse.json({ room, participants: room?.participants || [] }, { status: 200 });
   } catch (err: any) {
     console.error("[API /api/room/campaign/[campaignId] GET] Error:", err);
     return NextResponse.json(

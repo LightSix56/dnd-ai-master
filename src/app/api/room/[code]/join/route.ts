@@ -19,11 +19,12 @@ export async function POST(
     }
 
     const body = await request.json().catch(() => ({}));
-    const { characterId, characterSnapshot } = body;
+    const characterSnapshot = body.characterSnapshot;
+    const characterId = body.characterId || characterSnapshot?.id || `char_${Date.now()}`;
 
-    if (!characterId || !characterSnapshot) {
+    if (!characterSnapshot) {
       return NextResponse.json(
-        { error: "Необходимо передать characterId и characterSnapshot" },
+        { error: "Необходимо передать characterSnapshot" },
         { status: 400 }
       );
     }
