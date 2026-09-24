@@ -19,7 +19,7 @@ import {
   type SystemModelMessage,
 } from "ai";
 import { dmTools, buildToolsContext } from "@/lib/ai/tools";
-import { buildSystemPrompt, type CampaignContext, type PlayerSummary } from "@/lib/ai/system-prompt";
+import type { CampaignContext, PlayerSummary } from "@/lib/ai/system-prompt";
 import { createClient } from "@/lib/ai/client";
 
 export function cleanAssistantNarrative(rawText: string): string {
@@ -29,12 +29,18 @@ export function cleanAssistantNarrative(rawText: string): string {
     .trim();
 }
 import { parseStoryArc } from "@/lib/ai/story-arc";
-import { buildSceneContext } from "@/lib/ai/scene-context";
-import { compactHistory, VERBATIM_MESSAGES } from "@/lib/ai/compact";
+import { compactHistory } from "@/lib/ai/compact";
 import { syncSceneState } from "@/lib/ai/scene-synchronizer";
 import { BOOKKEEPING_TOOLS, resolveCheapModel, resolveDmModel } from "@/lib/ai/models";
 import { calculateCostRub } from "@/lib/ai/cost";
 import { db } from "@/lib/db";
+import {
+  buildFrozenSystemPrompt,
+  getDeterministicTools,
+  compactHistoryWithMilestones,
+  fetchEphemeralSceneTail,
+  injectEphemeralTailToLastUserMessage,
+} from "@/lib/ai/caching";
 
 export const maxDuration = 60;
 
@@ -77,13 +83,9 @@ export async function POST(req: Request) {
     // Это нужно потому что useChat в AI SDK 7.x отправляет сообщения в формате parts
     const allModelMessages = await convertToModelMessages(messages);
 
-    // Скользящее окно: дословно уходит только хвост диалога, всё что старше
-    // представлено сводкой внутри контекста сцены. Без этого история растёт
-    // линейно и умножается на число шагов.
-    const modelMessages: ModelMessage[] =
-      allModelMessages.length > VERBATIM_MESSAGES
-        ? allModelMessages.slice(-VERBATIM_MESSAGES)
-        : allModelMessages;
+    // Зона 2: Дискретное сжатие вехами (Append-Only Milestone Compactor)
+    // Предотвращает постоянный сдвиг токенов и сброс KV-кэша префикса
+    const compactedMessages = compactHistoryWithMilestones(allModelMessages);
 
     // Извлекаем последнее действие/реплику игрока для контекста синхронизатора сцены
     const lastUserMsg = [...allModelMessages].reverse().find((m) => m.role === "user");
@@ -102,6 +104,17 @@ export async function POST(req: Request) {
         orderBy: { updatedAt: "desc" },
       });
       activeCampaignId = active?.id;
+    }
+
+    // Зона 3: Ephemeral Tail — волатильный срез сцены (HP, NPC, недавние события)
+    // Инжектируется строго в хвост последнего сообщения пользователя, сохраняя
+    // 100% Cache Hit префикса (Зона 1) и предшествующей истории (Зона 2).
+    let modelMessages: ModelMessage[] = compactedMessages;
+    if (activeCampaignId) {
+      const ephemeralTail = await fetchEphemeralSceneTail(activeCampaignId);
+      if (ephemeralTail) {
+        modelMessages = injectEphemeralTailToLastUserMessage(compactedMessages, ephemeralTail);
+      }
     }
 
     let campaignContext: CampaignContext | undefined;
@@ -156,21 +169,6 @@ export async function POST(req: Request) {
       }
     }
 
-    // Контекст сцены — с бюджетом символов, вместо прежней выгрузки
-    // 8 событий и 15 памятей целиком (12К символов на каждый шаг).
-    // Это system-инструкции: в AI SDK 7 роль "system" запрещена в messages,
-    // такие сообщения передаются только через instructions.
-    const contextInstructions: SystemModelMessage[] = [];
-    if (activeCampaignId) {
-      const scene = await buildSceneContext(activeCampaignId);
-      if (scene) {
-        contextInstructions.push({ role: "system", content: scene.text });
-        console.log(
-          `[DM] Контекст сцены: ${scene.text.length} симв (памятей ${scene.memoriesUsed}, событий ${scene.eventsUsed}, сводка ${scene.hasSummary ? "есть" : "нет"})`
-        );
-      }
-    }
-
     const selectedModel = resolveDmModel(model);
     const openai = createClient(userApiKey, authMode, baseURL);
     // Используем chat.completions API (классический OpenAI формат) — он поддерживается
@@ -181,7 +179,9 @@ export async function POST(req: Request) {
     const cheapModelName = resolveCheapModel(cheapModel);
     const cheapModelInstance = openai.chat(cheapModelName);
 
-    const systemPrompt = buildSystemPrompt(campaignContext);
+    // Зона 1: Замороженный системный промпт (Frozen Prefix)
+    // Содержит лор, правила и паспорта персонажей без волатильных HP и статусов
+    const frozenSystemPrompt = buildFrozenSystemPrompt(campaignContext);
 
     // Короткая инструкция для служебных шагов: на них не нужен ни лор, ни арка,
     // ни правила отыгрыша — только корректно закрыть вызов инструмента.
@@ -197,18 +197,18 @@ export async function POST(req: Request) {
 
     // Без активной кампании инструменты, работающие с БД, не имеют контекста
     // (contextSchema не пройдёт валидацию) — отдаём только независимые от campaignId.
-    const baseTools = {
+    // Сортируем ключи инструментов детерминированно для сохранения KV-кэша
+    const baseTools = getDeterministicTools({
       roll_dice: dmTools.roll_dice,
       calculate: dmTools.calculate,
       search_web: dmTools.search_web,
       fetch_page: dmTools.fetch_page,
-    };
+    });
 
     const commonOptions = {
       model: modelInstance,
       instructions: [
-        { role: "system", content: systemPrompt } as SystemModelMessage,
-        ...contextInstructions,
+        { role: "system", content: frozenSystemPrompt } as SystemModelMessage,
       ],
       messages: modelMessages,
       stopWhen: [
@@ -348,7 +348,7 @@ export async function POST(req: Request) {
     const result = activeCampaignId
       ? streamText({
           ...commonOptions,
-          tools: dmTools,
+          tools: getDeterministicTools(dmTools),
           toolsContext: buildToolsContext(activeCampaignId),
         })
       : streamText({ ...commonOptions, tools: baseTools });

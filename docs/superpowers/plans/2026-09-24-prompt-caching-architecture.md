@@ -36,79 +36,11 @@
   - `formatSceneSnapshot(state: EphemeralSceneState): string`
   - `injectEphemeralTailToLastUserMessage(messages: ModelMessage[], ephemeralTail: string): ModelMessage[]`
 
-- [ ] **Step 1: Write the failing unit tests for frozen prefix stability and ephemeral tail injection**
-
-```ts
-// src/lib/ai/caching/__tests__/caching-zones.test.ts
-import { describe, it, expect } from "vitest";
-import { buildFrozenSystemPrompt, getDeterministicTools } from "../frozen-prefix";
-import { formatSceneSnapshot, injectEphemeralTailToLastUserMessage } from "../ephemeral-tail";
-
-describe("Caching Zones - Frozen Prefix", () => {
-  it("produces byte-for-byte identical prompt regardless of volatile character HP or wounds", () => {
-    const baseContext = {
-      name: "Тестовая кампания",
-      setting: "Забытые Королевства",
-      tone: "heroic",
-      partyMembers: [
-        { id: "1", name: "Торгрим", race: "Дворф", class: "Жрец", level: 3 },
-      ],
-    };
-
-    const prompt1 = buildFrozenSystemPrompt(baseContext);
-    const prompt2 = buildFrozenSystemPrompt(baseContext);
-    expect(prompt1).toBe(prompt2);
-    expect(prompt1).not.toContain("HP");
-    expect(prompt1).not.toContain("хитов");
-  });
-
-  it("sorts tool keys deterministically in lexicographical order", () => {
-    const rawTools = {
-      roll_dice: { name: "roll_dice" },
-      calculate: { name: "calculate" },
-      search_web: { name: "search_web" },
-      fetch_page: { name: "fetch_page" },
-    };
-    const sorted = getDeterministicTools(rawTools);
-    expect(Object.keys(sorted)).toEqual(["calculate", "fetch_page", "roll_dice", "search_web"]);
-  });
-});
-
-describe("Caching Zones - Ephemeral Tail Injection", () => {
-  it("injects ephemeral scene state into the last user message without altering previous messages", () => {
-    const history = [
-      { role: "user", content: "Привет, мастер" },
-      { role: "assistant", content: "Приветствую, герой" },
-      { role: "user", content: "Иду к северным воротам" },
-    ];
-
-    const tail = "[СЦЕНА: Торгрим HP 14/20]";
-    const updated = injectEphemeralTailToLastUserMessage(history as any, tail);
-
-    expect(updated[0]).toBe(history[0]);
-    expect(updated[1]).toBe(history[1]);
-    expect(updated[2].content).toContain("Иду к северным воротам");
-    expect(updated[2].content).toContain(tail);
-  });
-});
-```
-
-- [ ] **Step 2: Run the test to verify it fails (Red)**
-Run: `npx vitest run src/lib/ai/caching/__tests__/caching-zones.test.ts`
-
-- [ ] **Step 3: Implement `frozen-prefix.ts` and `ephemeral-tail.ts`**
-Implement the functions with clean separation:
-- `buildFrozenSystemPrompt` extracts immutable lore, rules, and static background without any dynamic stats.
-- `getDeterministicTools` sorts dictionary keys.
-- `injectEphemeralTailToLastUserMessage` appends the scene block strictly to the last user message.
-
-- [ ] **Step 4: Run the test to verify it passes (Green)**
-Run: `npx vitest run src/lib/ai/caching/__tests__/caching-zones.test.ts`
-
-- [ ] **Step 5: Git commit**
-```powershell
-$env:HTTPS_PROXY=""; $env:HTTP_PROXY=""; git add src/lib/ai/caching/; git commit -m "feat(caching): add frozen prefix and ephemeral tail injection modules"
-```
+- [x] **Step 1: Write the failing unit tests for frozen prefix stability and ephemeral tail injection**
+- [x] **Step 2: Run the test to verify it fails (Red)**
+- [x] **Step 3: Implement `frozen-prefix.ts` and `ephemeral-tail.ts`**
+- [x] **Step 4: Run the test to verify it passes (Green)**
+- [x] **Step 5: Git commit**
 
 ---
 
@@ -123,61 +55,11 @@ $env:HTTPS_PROXY=""; $env:HTTP_PROXY=""; git add src/lib/ai/caching/; git commit
 - Produces:
   - `compactHistoryWithMilestones(messages: ModelMessage[], options?: { maxVerbatim?: number; chunkSize?: number }): ModelMessage[]`
 
-- [ ] **Step 1: Write the failing unit tests for milestone compaction**
-
-```ts
-// src/lib/ai/caching/__tests__/milestone-compactor.test.ts
-import { describe, it, expect } from "vitest";
-import { compactHistoryWithMilestones } from "../milestone-compactor";
-
-describe("Milestone History Compactor", () => {
-  it("keeps history strictly append-only when below the verbatim threshold", () => {
-    const messages = Array.from({ length: 15 }, (_, i) => ({
-      role: i % 2 === 0 ? "user" : "assistant",
-      content: `Message ${i + 1}`,
-    }));
-
-    const result = compactHistoryWithMilestones(messages as any, { maxVerbatim: 20 });
-    expect(result.length).toBe(15);
-    expect(result).toEqual(messages);
-  });
-
-  it("compacts the oldest chunk into a single milestone when threshold is exceeded", () => {
-    const messages = Array.from({ length: 25 }, (_, i) => ({
-      role: i % 2 === 0 ? "user" : "assistant",
-      content: `Message ${i + 1}`,
-    }));
-
-    const result = compactHistoryWithMilestones(messages as any, {
-      maxVerbatim: 20,
-      chunkSize: 10,
-    });
-
-    // 10 messages compressed into 1 milestone summary + 15 remaining = 16 messages
-    expect(result.length).toBe(16);
-    expect(result[0].role).toBe("user");
-    expect(result[0].content).toContain("[ХРОНИКА РАННИХ СОБЫТИЙ");
-    expect(result[1].content).toBe("Message 11");
-    expect(result[result.length - 1].content).toBe("Message 25");
-  });
-});
-```
-
-- [ ] **Step 2: Run the test to verify it fails (Red)**
-Run: `npx vitest run src/lib/ai/caching/__tests__/milestone-compactor.test.ts`
-
-- [ ] **Step 3: Implement `milestone-compactor.ts`**
-Implement compaction logic:
-- Check `messages.length <= maxVerbatim`.
-- If exceeded, group the oldest `chunkSize` messages into a structured bulleted chronicle milestone and keep the rest intact.
-
-- [ ] **Step 4: Run the test to verify it passes (Green)**
-Run: `npx vitest run src/lib/ai/caching/__tests__/milestone-compactor.test.ts`
-
-- [ ] **Step 5: Git commit**
-```powershell
-$env:HTTPS_PROXY=""; $env:HTTP_PROXY=""; git add src/lib/ai/caching/milestone-compactor.ts src/lib/ai/caching/__tests__/milestone-compactor.test.ts; git commit -m "feat(caching): add discrete milestone history compactor"
-```
+- [x] **Step 1: Write the failing unit tests for milestone compaction**
+- [x] **Step 2: Run the test to verify it fails (Red)**
+- [x] **Step 3: Implement `milestone-compactor.ts`**
+- [x] **Step 4: Run the test to verify it passes (Green)**
+- [x] **Step 5: Git commit**
 
 ---
 
@@ -190,23 +72,10 @@ $env:HTTPS_PROXY=""; $env:HTTP_PROXY=""; git add src/lib/ai/caching/milestone-co
 **Interfaces:**
 - Consumes: `buildFrozenSystemPrompt`, `getDeterministicTools`, `compactHistoryWithMilestones`, `injectEphemeralTailToLastUserMessage`, `fetchEphemeralSceneTail`.
 
-- [ ] **Step 1: Write integration test for solo chat caching workflow**
-Verify that `instructions` is strictly frozen, `modelMessages` has milestone compaction, and the last user message includes the ephemeral scene block.
-
-- [ ] **Step 2: Update `src/app/api/chat/route.ts`**
-- Replace `const systemPrompt = buildSystemPrompt(campaignContext);` with `buildFrozenSystemPrompt(campaignContext);`.
-- Remove `contextInstructions` from `instructions`! `instructions` contains only `{ role: "system", content: frozenSystemPrompt }`.
-- Replace `allModelMessages.slice(-VERBATIM_MESSAGES)` with `compactHistoryWithMilestones(allModelMessages)`.
-- Fetch `ephemeralTail` via `fetchEphemeralSceneTail(activeCampaignId)` and call `injectEphemeralTailToLastUserMessage(compactedMessages, ephemeralTail)`.
-- Pass `getDeterministicTools(activeTools)` to `streamText`.
-
-- [ ] **Step 3: Run Vitest tests**
-Run: `npx vitest run`
-
-- [ ] **Step 4: Git commit**
-```powershell
-$env:HTTPS_PROXY=""; $env:HTTP_PROXY=""; git add src/app/api/chat/route.ts src/app/api/chat/__tests__/; git commit -m "refactor(chat): wire 3-zone prompt caching architecture into solo chat endpoint"
-```
+- [x] **Step 1: Write integration test for solo chat caching workflow**
+- [x] **Step 2: Update `src/app/api/chat/route.ts`**
+- [x] **Step 3: Run Vitest tests**
+- [x] **Step 4: Git commit**
 
 ---
 
