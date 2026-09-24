@@ -11,9 +11,13 @@ vi.mock("@/lib/supabase/client", () => {
   };
 });
 
-vi.mock("ai", () => ({
-  generateText: vi.fn().mockResolvedValue({ text: "Мастер описывает исход раунда." }),
-}));
+vi.mock("ai", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("ai")>();
+  return {
+    ...actual,
+    generateText: vi.fn().mockResolvedValue({ text: "Мастер описывает исход раунда." }),
+  };
+});
 
 vi.mock("@/lib/db", () => ({
   db: {

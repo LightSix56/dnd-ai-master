@@ -12,7 +12,7 @@ import { createTacticalEncounter } from "@/lib/combat/generator";
 
 // Контекст кампании приходит per-request через toolsContext, а не через глобальное
 // состояние модуля: иначе параллельные запросы перетирают campaignId друг друга.
-const campaignContextSchema = z.object({ campaignId: z.string() });
+const campaignContextSchema = z.object({ campaignId: z.string().optional() });
 
 // Записи памяти попадают в контекст каждого запроса, поэтому их длина —
 // это постоянный налог на каждый ход. Режем на входе.
@@ -862,7 +862,21 @@ export const startCombatTool = tool({
   }),
   contextSchema: campaignContextSchema,
   execute: async ({ name, biome, environment, difficulty, archetype, isActClimax, mapPresetId, gridWidth, gridHeight, mapDescription, enemies }, { context }) => {
-    const { campaignId } = context;
+    let campaignId = context?.campaignId;
+    if (!campaignId) {
+      const active = await db.campaign.findFirst({
+        where: { isActive: true },
+        orderBy: { updatedAt: "desc" },
+      });
+      campaignId = active?.id;
+      if (!campaignId) {
+        const created = await db.campaign.create({
+          data: { name: "Быстрое сражение", isActive: true },
+        });
+        campaignId = created.id;
+      }
+    }
+
     const encounter = await createTacticalEncounter({
       campaignId,
       name,
@@ -910,7 +924,17 @@ export const getCombatStatusTool = tool({
   inputSchema: z.object({}),
   contextSchema: campaignContextSchema,
   execute: async (_, { context }) => {
-    const { campaignId } = context;
+    let campaignId = context?.campaignId;
+    if (!campaignId) {
+      const active = await db.campaign.findFirst({
+        where: { isActive: true },
+        orderBy: { updatedAt: "desc" },
+      });
+      campaignId = active?.id;
+    }
+    if (!campaignId) {
+      return { active: false, message: "В данный момент нет активного боя." };
+    }
     const combat = await db.combat.findFirst({
       where: { campaignId, status: "active" },
       include: { combatants: true },

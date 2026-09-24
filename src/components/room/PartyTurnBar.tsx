@@ -25,6 +25,8 @@ export interface PartyTurnBarProps {
   isHost: boolean;
   resolving: boolean;
   onForceResolve?: () => void;
+  activeCombat?: { id: string; name: string; round: number } | null;
+  onOpenCombat?: () => void;
   className?: string;
 }
 
@@ -35,6 +37,8 @@ export function PartyTurnBar({
   isHost,
   resolving,
   onForceResolve,
+  activeCombat,
+  onOpenCombat,
   className,
 }: PartyTurnBarProps) {
   const readiness = calculateTurnReadiness(
@@ -70,17 +74,32 @@ export function PartyTurnBar({
           </span>
         </div>
 
-        {canForceResolve && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onForceResolve}
-            className="text-xs h-7 border-amber-500/40 text-amber-700 hover:bg-amber-50 dark:text-amber-400 dark:hover:bg-amber-950/40 font-medium"
-          >
-            <Zap className="size-3.5 mr-1 text-amber-500" />
-            Отправить ход сейчас
-          </Button>
-        )}
+        <div className="flex items-center gap-2">
+          {activeCombat && onOpenCombat && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onOpenCombat}
+              className="text-xs h-7 border-rose-500/40 text-rose-700 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950/40 font-medium cursor-pointer"
+              title="Перейти к активному тактическому бою"
+            >
+              <Swords className="size-3.5 mr-1 text-rose-500 animate-pulse" />
+              Сетка боя (Раунд {activeCombat.round})
+            </Button>
+          )}
+
+          {canForceResolve && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onForceResolve}
+              className="text-xs h-7 border-amber-500/40 text-amber-700 hover:bg-amber-50 dark:text-amber-400 dark:hover:bg-amber-950/40 font-medium cursor-pointer"
+            >
+              <Zap className="size-3.5 mr-1 text-amber-500" />
+              Отправить ход сейчас
+            </Button>
+          )}
+        </div>
       </CardHeader>
 
       <CardContent className="p-4 flex flex-col gap-3">

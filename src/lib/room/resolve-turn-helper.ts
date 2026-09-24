@@ -5,6 +5,8 @@ import { resolveDmModel } from "@/lib/ai/models";
 import { db } from "@/lib/db";
 import { RoomService } from "./room-service";
 import type { Room, RoomParticipant, RoomTurn, RoomWithParticipants } from "./types";
+import { dmTools, buildToolsContext } from "@/lib/ai/tools";
+import { getDeterministicTools } from "@/lib/ai/caching";
 
 export interface ResolveActiveRoomTurnOptions {
   dmResponse?: string;
@@ -74,18 +76,28 @@ ${arc?.villains?.length ? `- Антагонисты на сцене:\n${arc.vill
 ${partyList || "- Герои приключения"}
 ${actContext}
 
+## ЯЗЫКОВЫЕ ПРАВИЛА (СТРОГО):
+- ОТВЕЧАЙ ИСКЛЮЧИТЕЛЬНО НА РУССКОМ ЯЗЫКЕ!
+- КАТЕГОРИЧЕСКИ ЗАПРЕЩЕНО использовать китайский язык, иероглифы (например, 主持人, 场外, 战斗, 攻击, 投骰, 回合) или любые другие языки, включая любые внеигровые/OOC ремарки или мета-комментарии.
+
 ## ПРАВИЛА И ПОВЕДЕНИЕ ВЕДУЩЕГО (D&D 5e):
 1. **СВЯЗНОЕ ПОВЕСТВОВАНИЕ:**
    - Перед тобой одновременные действия всех участников партии в текущем раунде.
    - Сплети их заявки в единую динамичную, кинематографичную сцену (2-4 содержательных абзаца).
    - Опиши последствия каждого действия, реакцию окружающего мира, врагов и NPC.
-2. **ПРАВИЛА ОТДЫХА И ПОВЫШЕНИЯ УРОВНЯ (REST & LEVEL-UP RULES):**
+2. **ТАКТИЧЕСКИЙ БОЙ НА СЕТКЕ (start_combat):**
+   - КАТЕГОРИЧЕСКИ ЗАПРЕЩЕНО вести бой текстом в чате, рисовать таблицы HP/AC врагов и участников, самостоятельно бросать инициативу или имитировать раунды боя в тексте!
+   - Когда по сюжету начинается сражение (нападение монстров, засада, драка, дуэль, штурм, боссфайт) или игроки заявляют атаку/бой:
+     1. ТЫ ОБЯЗАН НЕЗАМЕДЛИТЕЛЬНО ВЫЗВАТЬ ИНСТРУМЕНТ \`start_combat\`.
+     2. Инструмент \`start_combat\` автоматически развернёт тактическую сетку боя, расставит участников и врагов из официального бестиария D&D 5e и рассчитает XP.
+     3. После вызова \`start_combat\` кратко опиши завязку столкновения и передай управление интерактивной сетке боя.
+3. **ПРАВИЛА ОТДЫХА И ПОВЫШЕНИЯ УРОВНЯ (REST & LEVEL-UP RULES):**
    - **Запрет прокачки в бою:** персонажи категорически НЕ могут повышать уровень, изучать новые заклинания или восстанавливать базовые ячейки/хиты посреди тактической схватки.
    - **Условия повышения уровня:** повышение уровня происходит исключительно во время **продолжительного отдыха (Long Rest / сон не менее 8 часов)** в безопасном укрытии (лагерь с дозором, таверна, святилище) и с подтверждения Ведущего при достижении сюжетной вехи или порога опыта (XP).
    - Если герои завершают важную веху текущего Акта 1 или побеждают босса — отметь возможность отдыха и прокачки при следующем безопасном ночлеге.
-3. **ТАЙНОЕ УКАЗАНИЕ ВЕДУЩЕГО (GM WHISPER):**
+4. **ТАЙНОЕ УКАЗАНИЕ ВЕДУЩЕГО (GM WHISPER):**
    - Если передана скрытая директива от Человека-Мастера, органично и скрытно интегрируй её в повествование как естественное событие мира, не упоминая игрокам сам факт шёпота.
-4. **ФОРМАТ ЗАВЕРШЕНИЯ РАУНДА:**
+5. **ФОРМАТ ЗАВЕРШЕНИЯ РАУНДА:**
    - Закончи описание новой изменившейся обстановкой и кратким вопросом к отряду: «Что вы делаете дальше?».
    - Отвечай на русском языке, образно, атмосферно, в аутентичном средневековом стиле D&D 5e.`;
 }
@@ -162,10 +174,25 @@ export async function resolveActiveRoomTurnHelper(
     partyStatus,
   });
 
+  let campaignId = room.campaignId || (room.campaignSettings as any)?.campaignId;
+  if (!campaignId) {
+    try {
+      const activeCamp = await db.campaign.findFirst({
+        where: { isActive: true },
+        orderBy: { updatedAt: "desc" },
+      });
+      if (activeCamp) {
+        campaignId = activeCamp.id;
+      }
+    } catch {}
+  }
+
   let narrative = typeof options?.dmResponse === "string" ? options.dmResponse.trim() : "";
+  let capturedSteps: any[] = [];
 
   if (!narrative) {
     const cleanKey = (options?.apiKey || process.env.AI_API_KEY || "").trim();
+
     if (cleanKey) {
       try {
         const client = createClient(cleanKey, options?.authMode as AuthMode, options?.baseURL);
@@ -173,13 +200,40 @@ export async function resolveActiveRoomTurnHelper(
 
         const system = buildFrozenRoomSystemPrompt(room);
 
-        const { text } = await generateText({
+        const res = await (generateText as any)({
           model: client.chat(aiModel),
           system,
           prompt,
+          ...(campaignId
+            ? {
+                tools: getDeterministicTools(dmTools),
+                toolsContext: buildToolsContext(campaignId),
+                maxSteps: 3,
+              }
+            : {}),
           temperature: 0.7,
         });
-        narrative = text.trim();
+
+        capturedSteps = res.steps || [];
+        narrative = res.text.trim();
+
+        if (!narrative && capturedSteps.length > 0) {
+          for (const s of capturedSteps) {
+            if (s.text && s.text.trim()) {
+              narrative = s.text.trim();
+              break;
+            }
+          }
+        }
+
+        if (!narrative) {
+          const hadCombat = capturedSteps.some((s: any) =>
+            s.toolCalls?.some((tc: any) => tc.toolName === "start_combat")
+          );
+          if (hadCombat) {
+            narrative = "⚔️ Внимание, к оружию! Враги окружают отряд, воздух наполняется боевыми кличами — переходим к тактической сетке боя!";
+          }
+        }
       } catch (aiErr: any) {
         console.error("[resolveActiveRoomTurnHelper] AI call failed, fallback:", aiErr);
         narrative = `Мастер оценивает действия отряда в раунде ${activeTurn.roundNumber}...`;
@@ -191,9 +245,11 @@ export async function resolveActiveRoomTurnHelper(
 
   const result = await roomService.resolveRoomTurn(room.id, narrative);
 
-  const campaignId = room.campaignId || (room.campaignSettings as any)?.campaignId;
   if (campaignId) {
     try {
+      const allToolCalls = capturedSteps.flatMap((s: any) => s.toolCalls || []);
+      const allToolResults = capturedSteps.flatMap((s: any) => s.toolResults || []);
+
       await db.chatMessage.create({
         data: {
           campaignId,
@@ -208,6 +264,8 @@ export async function resolveActiveRoomTurnHelper(
           role: "assistant",
           content: narrative,
           turn: activeTurn.roundNumber,
+          toolCalls: allToolCalls.length > 0 ? JSON.stringify(allToolCalls) : null,
+          toolResults: allToolResults.length > 0 ? JSON.stringify(allToolResults) : null,
         },
       });
     } catch (dbErr) {

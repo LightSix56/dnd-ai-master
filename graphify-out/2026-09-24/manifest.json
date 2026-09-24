@@ -234,9 +234,9 @@
     "semantic_hash": ""
   },
   "src/components/dnd/DnDApp.tsx": {
-    "mtime": 1790257354.094386,
-    "seen": 1790257481.4791296,
-    "ast_hash": "34dfdcbfd6bfbc6be7b785439dbcea1f",
+    "mtime": 1790263424.578983,
+    "seen": 1790263922.0947847,
+    "ast_hash": "a286d0e36b0c7e74c734390928a9d64b",
     "semantic_hash": ""
   },
   "src/components/dnd/ModelPickerModal.tsx": {
@@ -18678,9 +18678,9 @@
     "semantic_hash": ""
   },
   "src/lib/room/room-service.ts": {
-    "mtime": 1790253845.6597896,
-    "seen": 1790254409.4573958,
-    "ast_hash": "3132062afea03ea4e67defb6f54dc6fb",
+    "mtime": 1790263555.6607685,
+    "seen": 1790263922.636832,
+    "ast_hash": "aac07b07e9ece49f43088636fe7a7e60",
     "semantic_hash": ""
   },
   "src/lib/room/types.ts": {
@@ -18726,9 +18726,9 @@
     "semantic_hash": ""
   },
   "src/components/room/CharacterPickerModal.tsx": {
-    "mtime": 1790239721.1972203,
-    "seen": 1790239934.2704527,
-    "ast_hash": "97a5cd1aa0742f9b5295e7773728576c",
+    "mtime": 1790263385.3759875,
+    "seen": 1790263922.0949173,
+    "ast_hash": "c1caa475c54ac83b160d2612e7a62ff6",
     "semantic_hash": ""
   },
   "src/components/room/CreateRoomModal.tsx": {
@@ -18738,9 +18738,9 @@
     "semantic_hash": ""
   },
   "src/components/room/RoomLobby.tsx": {
-    "mtime": 1790239778.9216588,
-    "seen": 1790239934.2721946,
-    "ast_hash": "ac5a0d49e8a93362e6eb1a88eb80d2fc",
+    "mtime": 1790263603.1622987,
+    "seen": 1790263922.0958395,
+    "ast_hash": "10002127aa5a4eb279b0d67b1a6a3211",
     "semantic_hash": ""
   },
   "src/components/room/__tests__/character-picker.test.ts": {
@@ -18750,15 +18750,15 @@
     "semantic_hash": ""
   },
   "src/hooks/useRoomRealtime.ts": {
-    "mtime": 1790079064.0781376,
-    "seen": 1790079712.4698193,
-    "ast_hash": "daf0b3cd3a0f93baa01f2bbea4cb2790",
+    "mtime": 1790263666.9780703,
+    "seen": 1790263922.617907,
+    "ast_hash": "69c82a32e5083216a816f7ab42817cb5",
     "semantic_hash": ""
   },
   "src/hooks/useSupabaseAuth.ts": {
-    "mtime": 1790149984.589861,
-    "seen": 1790152620.2669282,
-    "ast_hash": "eed84ea9a11a97a8614cd406e80bb850",
+    "mtime": 1790263351.6414244,
+    "seen": 1790263922.6179106,
+    "ast_hash": "1b6af6ae2a36b76e325b8ef5c5de2d46",
     "semantic_hash": ""
   },
   "src/app/api/room/[code]/start-campaign/route.ts": {
@@ -18798,21 +18798,21 @@
     "semantic_hash": ""
   },
   "src/app/api/room/[code]/turn/resolve/route.ts": {
-    "mtime": 1790237565.0439527,
-    "seen": 1790237848.0997527,
-    "ast_hash": "74c0c22c4c86f6b823587f655a6fac28",
+    "mtime": 1790263789.269516,
+    "seen": 1790263922.0902894,
+    "ast_hash": "1bdd08037eebaf35f5fee2b7e95c5ddd",
     "semantic_hash": ""
   },
   "src/app/api/room/[code]/turn/route.ts": {
-    "mtime": 1790237548.3542843,
-    "seen": 1790237848.0997596,
-    "ast_hash": "579bf8ccd24cc46c580cdcc5b35e0ad6",
+    "mtime": 1790263578.8883634,
+    "seen": 1790263922.0902927,
+    "ast_hash": "2e5d5f3661c6be40e026aa9f02ad67e1",
     "semantic_hash": ""
   },
   "src/app/api/room/__tests__/turn-routes.test.ts": {
-    "mtime": 1790238046.5222204,
-    "seen": 1790238474.525288,
-    "ast_hash": "7fa7392807fd78a04f6659c24e2d0322",
+    "mtime": 1790263768.6784048,
+    "seen": 1790263922.0908656,
+    "ast_hash": "604c35209164a0df946de1b3b0a1077b",
     "semantic_hash": ""
   },
   "src/components/room/CoopTurnBar.tsx": {
@@ -18840,9 +18840,9 @@
     "semantic_hash": ""
   },
   "src/lib/room/__tests__/turn-service.test.ts": {
-    "mtime": 1790078884.3323612,
-    "seen": 1790079712.5015695,
-    "ast_hash": "31abbbfd4f3f593991f1a0d8de5526db",
+    "mtime": 1790263491.956249,
+    "seen": 1790263922.6363971,
+    "ast_hash": "4162598c201ac541f143ce68f73c62a0",
     "semantic_hash": ""
   },
   "src/lib/room/turn-batcher.ts": {
@@ -19545,6 +19545,24 @@
     "mtime": 1790262120.0533872,
     "seen": 1790262234.2068746,
     "ast_hash": "19af9e4c0b737279024f06a458b13bce",
+    "semantic_hash": ""
+  },
+  "src/app/api/auth/__tests__/guest-login.test.ts": {
+    "mtime": 1790263316.0663512,
+    "seen": 1790263922.0841048,
+    "ast_hash": "9e208db81730cafe6abc3450ca00b88b",
+    "semantic_hash": ""
+  },
+  "src/app/api/auth/guest-login/route.ts": {
+    "mtime": 1790263334.6201658,
+    "seen": 1790263922.0844293,
+    "ast_hash": "ed9fbabd29d99d828d9dd89d755c5794",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-09-24-multiplayer-network-resilience.md": {
+    "mtime": 1790263292.2279112,
+    "seen": 1790263922.6447043,
+    "ast_hash": "f27c3affd701697737dbc18924f7efc0",
     "semantic_hash": ""
   }
 }

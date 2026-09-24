@@ -280,7 +280,14 @@ describe("Solo Chat Endpoint Prompt Caching Integration", () => {
     const callArgs = mockStreamText.mock.calls[0][0];
     const toolKeys = Object.keys(callArgs.tools);
 
-    expect(toolKeys).toEqual(["calculate", "fetch_page", "roll_dice", "search_web"]);
+    expect(toolKeys).toEqual([
+      "calculate",
+      "fetch_page",
+      "get_combat_status",
+      "roll_dice",
+      "search_web",
+      "start_combat",
+    ]);
     expect(callArgs.instructions).toHaveLength(1);
     expect(callArgs.instructions[0].role).toBe("system");
   });

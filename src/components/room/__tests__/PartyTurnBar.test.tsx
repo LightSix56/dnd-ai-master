@@ -171,4 +171,20 @@ describe("PartyTurnBar", () => {
     // Кнопка принудительного хода не должна показываться во время resolving
     expect(html).not.toContain("Отправить ход сейчас");
   });
+
+  it("отображает кнопку перехода к сетке боя при наличии activeCombat", () => {
+    const html = renderToStaticMarkup(
+      <PartyTurnBar
+        roomTurn={mockRoomTurn}
+        participants={mockParticipants}
+        currentUserId="user-1"
+        isHost={true}
+        resolving={false}
+        activeCombat={{ id: "combat-1", name: "Засада гоблинов", round: 3 }}
+        onOpenCombat={() => {}}
+      />
+    );
+
+    expect(html).toContain("Сетка боя (Раунд 3)");
+  });
 });

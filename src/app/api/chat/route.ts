@@ -203,6 +203,8 @@ export async function POST(req: Request) {
       calculate: dmTools.calculate,
       search_web: dmTools.search_web,
       fetch_page: dmTools.fetch_page,
+      start_combat: dmTools.start_combat,
+      get_combat_status: dmTools.get_combat_status,
     });
 
     const commonOptions = {

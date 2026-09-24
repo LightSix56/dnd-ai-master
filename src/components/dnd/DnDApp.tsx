@@ -177,6 +177,26 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
   const [showCombatView, setShowCombatView] = useState(false);
   const [activeCombat, setActiveCombat] = useState<{ id: string; name: string; round: number } | null>(null);
 
+  const loadActiveCombat = useCallback(async (campaignId: string) => {
+    try {
+      const res = await fetch(`/api/combat/active?campaignId=${encodeURIComponent(campaignId)}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.combat && data.combat.status === "active") {
+          setActiveCombat({
+            id: data.combat.id,
+            name: data.combat.name,
+            round: data.combat.round,
+          });
+        } else {
+          setActiveCombat(null);
+        }
+      }
+    } catch (e) {
+      console.error("Failed to load active combat:", e);
+    }
+  }, []);
+
   // Параметры создания новой кампании
   const [newCampaignName, setNewCampaignName] = useState("");
   const [newCampaignStartingLevel, setNewCampaignStartingLevel] = useState(1);
@@ -756,13 +776,22 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
     },
     onFinish: (message) => {
       refreshData();
+      if (activeCampaign?.id) {
+        loadActiveCombat(activeCampaign.id);
+      }
       // Фоновый scene-synchronizer (deepseek-v4-flash) обновляет статус сцены/NPC за ~2-4.5с.
       // Двухэтапный опрос (2.5с и 5.5с) гарантирует отображение без ручной перезагрузки (F5)
       setTimeout(() => {
         refreshActiveCampaign();
+        if (activeCampaign?.id) {
+          loadActiveCombat(activeCampaign.id);
+        }
       }, 2500);
       setTimeout(() => {
         refreshActiveCampaign();
+        if (activeCampaign?.id) {
+          loadActiveCombat(activeCampaign.id);
+        }
       }, 5500);
       // Извлекаем расход токенов и стоимость из metadata ответа
       const meta = (message as any)?.metadata;
@@ -843,9 +872,10 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
         }
       } catch {}
 
-      // 2. Обновляем состояние персонажей кампании
+      // 2. Обновляем состояние персонажей кампании и активного боя
       if (currentCampId) {
         refreshActiveCampaign(currentCampId);
+        loadActiveCombat(currentCampId);
       }
 
       // 3. Синхронизируем чат, если мы сейчас сами не стримим
@@ -1153,26 +1183,6 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
     };
   }, [activeCampaign]);
 
-  const loadActiveCombat = useCallback(async (campaignId: string) => {
-    try {
-      const res = await fetch(`/api/combat/active?campaignId=${campaignId}`);
-      if (res.ok) {
-        const data = await res.json();
-        if (data.combat && data.combat.status === "active") {
-          setActiveCombat({
-            id: data.combat.id,
-            name: data.combat.name,
-            round: data.combat.round,
-          });
-        } else {
-          setActiveCombat(null);
-        }
-      }
-    } catch (e) {
-      console.error("Failed to load active combat:", e);
-    }
-  }, []);
-
   useEffect(() => {
     const campaignId = activeCampaign?.id;
     if (!campaignId) {
@@ -1182,33 +1192,8 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
 
     // Сразу сбрасываем бой предыдущей кампании, чтобы не было мерцания чужого боя
     setActiveCombat(null);
-
-    let cancelled = false;
-    (async () => {
-      try {
-        const res = await fetch(`/api/combat/active?campaignId=${campaignId}`);
-        if (!res.ok || cancelled) return;
-        const data = await res.json();
-        if (!cancelled) {
-          if (data.combat && data.combat.status === "active") {
-            setActiveCombat({
-              id: data.combat.id,
-              name: data.combat.name,
-              round: data.combat.round,
-            });
-          } else {
-            setActiveCombat(null);
-          }
-        }
-      } catch (e) {
-        console.error("Failed to load active combat:", e);
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [activeCampaign?.id, messages.length]);
+    loadActiveCombat(campaignId);
+  }, [activeCampaign?.id, messages.length, loadActiveCombat]);
 
   // Пока история пишется — опрашиваем прогресс. Генерация идёт минутами,
   // поэтому раз в 3 секунды: чаще незачем, этапы всё равно длинные.
@@ -1516,9 +1501,13 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
           if (data.nextTurn) {
             setActiveRoomTurn(data.nextTurn);
           }
-          refreshActiveCampaign();
+          const targetCampId = campaignId || activeCampaign?.id || activeRoom.campaignId;
+          if (targetCampId) {
+            refreshActiveCampaign(targetCampId);
+            loadActiveCombat(targetCampId);
+            setTimeout(() => loadActiveCombat(targetCampId), 3000);
+          }
           try {
-            const targetCampId = campaignId || activeCampaign?.id || activeRoom.campaignId;
             if (targetCampId) {
               const chatRes = await fetch(`/api/chat/history?campaignId=${encodeURIComponent(targetCampId)}`);
               if (chatRes.ok) {
@@ -1589,6 +1578,8 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
       }
       if (targetCampId) {
         refreshActiveCampaign(targetCampId);
+        loadActiveCombat(targetCampId);
+        setTimeout(() => loadActiveCombat(targetCampId), 3000);
       }
       try {
         if (targetCampId) {
@@ -1784,6 +1775,25 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
             >
               <BookOpen className="size-3.5 mr-1.5 shrink-0" />
               <span>Кампании</span>
+            </button>
+
+            {/* 1.5. Кнопка «Тактический бой» */}
+            <button
+              type="button"
+              onClick={() => {
+                if (activeCampaign?.id) {
+                  loadActiveCombat(activeCampaign.id);
+                }
+                setShowCombatView(true);
+              }}
+              className="shrink-0 h-8 px-3 rounded-md text-xs font-medium border border-rose-500/40 bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 dark:text-rose-300 transition shadow-xs flex items-center cursor-pointer"
+              title="Открыть тактический бой и боевую сетку"
+            >
+              <Swords className="size-3.5 mr-1.5 shrink-0 text-rose-500" />
+              <span>{activeCombat ? "В бой!" : "Бой"}</span>
+              {activeCombat && (
+                <span className="ml-1.5 size-2 rounded-full bg-rose-500 animate-ping shrink-0" />
+              )}
             </button>
 
             {/* 2. Кнопка «Настройки» */}
@@ -2793,6 +2803,8 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
                       isHost={activeRoom.hostUserId === user?.id}
                       resolving={resolvingTurn || activeRoomTurn?.status === "resolving"}
                       onForceResolve={handleForceResolveTurn}
+                      activeCombat={activeCombat}
+                      onOpenCombat={() => setShowCombatView(true)}
                       className="mb-2.5"
                     />
                   )}
