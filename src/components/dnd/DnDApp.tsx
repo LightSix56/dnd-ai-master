@@ -75,6 +75,8 @@ import { D20RollModal } from "./D20RollModal";
 import { CreateRoomModal } from "@/components/room/CreateRoomModal";
 import { JoinRoomModal } from "@/components/room/JoinRoomModal";
 import { CharacterPickerModal } from "@/components/room/CharacterPickerModal";
+import { PartyTurnBar } from "@/components/room/PartyTurnBar";
+import type { RoomTurn } from "@/lib/room/types";
 import { SupabaseAuthModal } from "@/components/auth/SupabaseAuthModal";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { rollDie } from "@/lib/dnd/d20-helper";
@@ -452,6 +454,25 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
   const [closingRoom, setClosingRoom] = useState(false);
   const prevCampaignIdRef = useRef<string | null>(null);
 
+  // Совместные раунды комнаты
+  const [activeRoomTurn, setActiveRoomTurn] = useState<RoomTurn | null>(null);
+  const [submittingTurn, setSubmittingTurn] = useState(false);
+  const [resolvingTurn, setResolvingTurn] = useState(false);
+
+  // Синхронизация активного раунда при входе или смене комнаты
+  useEffect(() => {
+    if (!activeRoom?.code) {
+      setActiveRoomTurn(null);
+      return;
+    }
+    fetch(`/api/room/${encodeURIComponent(activeRoom.code)}/turn`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.turn) setActiveRoomTurn(data.turn);
+      })
+      .catch(() => {});
+  }, [activeRoom?.code]);
+
   // При смене кампании: деактивируем сетевую комнату предыдущей кампании и запрашиваем активную для новой
   useEffect(() => {
     const currentId = activeCampaign?.id;
@@ -745,6 +766,17 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
                 participants: data.participants || data.room.participants || prev.participants || [],
               };
             });
+          }
+        }
+      } catch {}
+
+      // 1.1 Обновляем состояние совместного раунда комнаты
+      try {
+        const turnRes = await fetch(`/api/room/${encodeURIComponent(activeRoom.code)}/turn`);
+        if (turnRes.ok) {
+          const turnData = await turnRes.json();
+          if (turnData?.turn) {
+            setActiveRoomTurn(turnData.turn);
           }
         }
       } catch {}
@@ -1332,6 +1364,68 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
       toast.error("Сначала создайте кампанию");
       return;
     }
+
+    // Если активна сетевая комната стола: кооперативный пошаговый цикл отряда
+    if (activeRoom) {
+      const userMessage = input.trim();
+      const myId = user?.id;
+
+      // Проверка: действие уже отправлено в текущем раунде («Сказанного не вернёшь»)
+      if (myId && activeRoomTurn?.playerInputs?.[myId]) {
+        toast.error("Сказанного не вернёшь: вы уже отправили действие в этом раунде");
+        return;
+      }
+
+      setSubmittingTurn(true);
+      try {
+        const res = await fetch(`/api/room/${encodeURIComponent(activeRoom.code)}/turn`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            actionText: userMessage,
+            apiKey,
+            model,
+            authMode,
+            baseURL,
+          }),
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || "Не удалось отправить действие");
+        }
+
+        setInput("");
+
+        if (data.resolved) {
+          toast.success("Все игроки готовы! Мастер описывает события мира...");
+          if (data.nextTurn) {
+            setActiveRoomTurn(data.nextTurn);
+          }
+          refreshActiveCampaign();
+          try {
+            const chatRes = await fetch(`/api/chat/history?campaignId=${activeCampaign.id}`);
+            if (chatRes.ok) {
+              const chatData = await chatRes.json();
+              if (Array.isArray(chatData.messages) && chatData.messages.length > 0) {
+                setMessages(chatData.messages);
+              }
+            }
+          } catch {}
+        } else {
+          toast.success("Заявка принята! Ожидаем остальных игроков отряда...");
+          if (data.turn) {
+            setActiveRoomTurn(data.turn);
+          }
+        }
+      } catch (err: any) {
+        toast.error(err?.message || "Ошибка отправки действия");
+      } finally {
+        setSubmittingTurn(false);
+      }
+      return;
+    }
+
     if (!apiKey) {
       toast.error("Введите API ключ в настройках");
       openSetup();
@@ -1340,6 +1434,47 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
     const userMessage = input.trim();
     setInput("");
     await sendMessage({ text: userMessage });
+  }
+
+  async function handleForceResolveTurn() {
+    if (!activeRoom || !activeCampaign) return;
+    setResolvingTurn(true);
+    try {
+      const res = await fetch(`/api/room/${encodeURIComponent(activeRoom.code)}/turn/resolve`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          apiKey,
+          model,
+          authMode,
+          baseURL,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Не удалось завершить раунд");
+      }
+
+      toast.success("Ход отправлен Мастеру!");
+      if (data.nextTurn) {
+        setActiveRoomTurn(data.nextTurn);
+      }
+      refreshActiveCampaign();
+      try {
+        const chatRes = await fetch(`/api/chat/history?campaignId=${activeCampaign.id}`);
+        if (chatRes.ok) {
+          const chatData = await chatRes.json();
+          if (Array.isArray(chatData.messages) && chatData.messages.length > 0) {
+            setMessages(chatData.messages);
+          }
+        }
+      } catch {}
+    } catch (err: any) {
+      toast.error(err?.message || "Ошибка завершения раунда");
+    } finally {
+      setResolvingTurn(false);
+    }
   }
 
   async function handleGenerateStory() {
@@ -2504,51 +2639,102 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
                       Вспомни
                     </Button>
                   </div>
-                  <form onSubmit={handleSubmit} className="flex gap-2">
-                    <Textarea
-                      value={input}
-                      onChange={(e) => setInput(e.target.value)}
-                      placeholder="Что ты делаешь? Опиши действие или спроси мастера..."
-                      className="min-h-[60px] max-h-[200px] resize-none"
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && !e.shiftKey) {
-                          e.preventDefault();
-                          handleSubmit(e);
-                        }
-                      }}
-                      disabled={isLoading}
+                  {/* Панель очереди раунда отряда в сетевом режиме */}
+                  {activeRoom && (
+                    <PartyTurnBar
+                      roomTurn={activeRoomTurn}
+                      participants={activeRoom.participants || []}
+                      currentUserId={user?.id}
+                      isHost={activeRoom.hostUserId === user?.id}
+                      resolving={resolvingTurn || activeRoomTurn?.status === "resolving"}
+                      onForceResolve={handleForceResolveTurn}
+                      className="mb-2.5"
                     />
-                    <div className="flex flex-col gap-1">
-                      <Button
-                        type="submit"
-                        size="icon"
-                        disabled={isLoading || !input.trim()}
-                      >
-                        <Send className="size-4" />
-                      </Button>
-                      {isLoading && (
-                        <Button
-                          type="button"
-                          size="icon"
-                          variant="outline"
-                          onClick={stop}
-                        >
-                          <Loader2 className="size-4 animate-spin" />
-                        </Button>
-                      )}
-                      {!isLoading && messages.length > 0 && (
-                        <Button
-                          type="button"
-                          size="icon"
-                          variant="outline"
-                          onClick={() => regenerate()}
-                          title="Повторить последний ответ"
-                        >
-                          <Dices className="size-4" />
-                        </Button>
-                      )}
+                  )}
+
+                  {/* Если игрок уже отправил действие в этом раунде («Сказанного не вернёшь») */}
+                  {activeRoom && user?.id && activeRoomTurn?.playerInputs?.[user.id] ? (
+                    <div className="rounded-xl border border-emerald-500/30 bg-emerald-50/80 dark:bg-emerald-950/30 p-3.5 flex items-center justify-between gap-3 text-sm shadow-xs">
+                      <div className="flex items-center gap-2.5 text-emerald-900 dark:text-emerald-100 min-w-0">
+                        <CheckCircle2 className="size-5 shrink-0 text-emerald-600 dark:text-emerald-400" />
+                        <div className="min-w-0">
+                          <div className="font-semibold text-xs tracking-wide uppercase text-emerald-800 dark:text-emerald-300">
+                            Ваш ход в раунде {activeRoomTurn.roundNumber} принят
+                          </div>
+                          <div className="text-xs italic text-emerald-950/90 dark:text-emerald-200/90 mt-0.5 truncate">
+                            «{activeRoomTurn.playerInputs[user.id].actionText}»
+                          </div>
+                          <div className="text-[11px] text-muted-foreground mt-1">
+                            Сказанного не вернёшь — ожидаем остальных участников отряда...
+                          </div>
+                        </div>
+                      </div>
+                      <Badge variant="outline" className="shrink-0 bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-200 border-emerald-300 text-xs font-medium">
+                        Ход отправлен
+                      </Badge>
                     </div>
-                  </form>
+                  ) : (
+                    <form onSubmit={handleSubmit} className="flex gap-2">
+                      <Textarea
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        placeholder={
+                          activeRoom
+                            ? "Опишите действие вашего героя в этом раунде..."
+                            : "Что ты делаешь? Опиши действие или спроси мастера..."
+                        }
+                        className="min-h-[60px] max-h-[200px] resize-none"
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" && !e.shiftKey) {
+                            e.preventDefault();
+                            handleSubmit(e);
+                          }
+                        }}
+                        disabled={isLoading || submittingTurn || resolvingTurn || activeRoomTurn?.status === "resolving"}
+                      />
+                      <div className="flex flex-col gap-1">
+                        <Button
+                          type="submit"
+                          size="icon"
+                          disabled={
+                            isLoading ||
+                            submittingTurn ||
+                            resolvingTurn ||
+                            activeRoomTurn?.status === "resolving" ||
+                            !input.trim()
+                          }
+                          title={activeRoom ? "Отправить действие за своего персонажа" : "Отправить"}
+                        >
+                          {submittingTurn ? (
+                            <Loader2 className="size-4 animate-spin" />
+                          ) : (
+                            <Send className="size-4" />
+                          )}
+                        </Button>
+                        {isLoading && (
+                          <Button
+                            type="button"
+                            size="icon"
+                            variant="outline"
+                            onClick={stop}
+                          >
+                            <Loader2 className="size-4 animate-spin" />
+                          </Button>
+                        )}
+                        {!isLoading && !activeRoom && messages.length > 0 && (
+                          <Button
+                            type="button"
+                            size="icon"
+                            variant="outline"
+                            onClick={() => regenerate()}
+                            title="Повторить последний ответ"
+                          >
+                            <Dices className="size-4" />
+                          </Button>
+                        )}
+                      </div>
+                    </form>
+                  )}
                 </div>
               </div>
             </>

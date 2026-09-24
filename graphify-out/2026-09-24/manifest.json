@@ -18810,9 +18810,9 @@
     "semantic_hash": ""
   },
   "src/app/api/room/__tests__/turn-routes.test.ts": {
-    "mtime": 1790237717.000897,
-    "seen": 1790237848.1006358,
-    "ast_hash": "df98723778f2b7037b4e6f7696ec9a2e",
+    "mtime": 1790238046.5222204,
+    "seen": 1790238474.525288,
+    "ast_hash": "7fa7392807fd78a04f6659c24e2d0322",
     "semantic_hash": ""
   },
   "src/components/room/CoopTurnBar.tsx": {
@@ -19440,21 +19440,33 @@
     "semantic_hash": ""
   },
   "src/lib/room/resolve-turn-helper.ts": {
-    "mtime": 1790237474.6187906,
-    "seen": 1790237849.317346,
-    "ast_hash": "611f0cc15b86d89cf765a5e542e0d189",
+    "mtime": 1790238081.0232391,
+    "seen": 1790238475.7115824,
+    "ast_hash": "44c575b18710a082ba5e5cbd0c958b66",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-24-cooperative-party-turns.md": {
-    "mtime": 1790237246.3769987,
-    "seen": 1790237849.3379161,
-    "ast_hash": "e825df88286b984b9ad7886d58286f85",
+    "mtime": 1790238154.9527535,
+    "seen": 1790238475.7314491,
+    "ast_hash": "98eca5a5eec1fbd9402f022a88452f57",
     "semantic_hash": ""
   },
   "docs/superpowers/specs/2026-09-24-cooperative-party-turns-design.md": {
     "mtime": 1790236970.7990677,
     "seen": 1790237849.3383596,
     "ast_hash": "065d4304950ae495f347c09776e9ef5a",
+    "semantic_hash": ""
+  },
+  "src/components/room/PartyTurnBar.tsx": {
+    "mtime": 1790238351.986583,
+    "seen": 1790238474.5356238,
+    "ast_hash": "6c9331bbb03026ac1c806843bdfd7aa2",
+    "semantic_hash": ""
+  },
+  "src/components/room/__tests__/PartyTurnBar.test.tsx": {
+    "mtime": 1790238323.609653,
+    "seen": 1790238474.53646,
+    "ast_hash": "21fb32efcb8f4cb5760731740f78e16f",
     "semantic_hash": ""
   }
 }

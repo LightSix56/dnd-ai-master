@@ -183,7 +183,7 @@ git commit -m "feat(room): support host force resolve with afk defensive stances
   }
   ```
 
-- [ ] **Step 1: Создать `src/components/room/PartyTurnBar.tsx`**
+- [x] **Step 1: Создать `src/components/room/PartyTurnBar.tsx`**
 
 1. Чистая светлая тема (`bg-card`, `border-border`, `text-foreground`).
 2. Строка заголовка: `⚔️ Раунд {roomTurn?.roundNumber || 1} • Заявки отряда ({readyCount}/{totalCount})`.
@@ -201,12 +201,12 @@ git commit -m "feat(room): support host force resolve with afk defensive stances
    - Если `isHost && readyCount > 0 && !isAllReady && !resolving`:
      `<Button variant="outline" size="sm" onClick={onForceResolve}><Zap className="size-3.5 mr-1 text-amber-500" />Отправить ход сейчас (пропустить ожидающих)</Button>`.
 
-- [ ] **Step 2: Проверить компиляцию**
+- [x] **Step 2: Проверить компиляцию**
 
 Run: `npx tsc --noEmit`  
 Expected: 0 errors
 
-- [ ] **Step 3: Коммит**
+- [x] **Step 3: Коммит**
 
 ```bash
 git add src/components/room/PartyTurnBar.tsx
@@ -224,7 +224,7 @@ git commit -m "feat(room): create PartyTurnBar component for cooperative turns"
 - Consumes: `<PartyTurnBar />`, `GET /api/room/[code]/turn`, `POST /api/room/[code]/turn`, `POST /api/room/[code]/turn/resolve`
 - Produces: Intercepts chat input in room mode, locks input after submission, polls turn status.
 
-- [ ] **Step 1: Добавить стейт раунда и флаги отправки в `DnDApp.tsx`**
+- [x] **Step 1: Добавить стейт раунда и флаги отправки в `DnDApp.tsx`**
 
 ```tsx
 const [activeRoomTurn, setActiveRoomTurn] = useState<RoomTurn | null>(null);
@@ -232,7 +232,7 @@ const [submittingTurn, setSubmittingTurn] = useState(false);
 const [resolvingTurn, setResolvingTurn] = useState(false);
 ```
 
-- [ ] **Step 2: Добавить поллинг раунда комнаты в интервал**
+- [x] **Step 2: Добавить поллинг раунда комнаты в интервал**
 
 В существующий `setInterval` (строки ~730-775):
 ```tsx
@@ -249,7 +249,7 @@ if (activeRoom?.code) {
 }
 ```
 
-- [ ] **Step 3: Реализовать отправку заявки в сетевом режиме**
+- [x] **Step 3: Реализовать отправку заявки в сетевом режиме**
 
 Функция `handleSendPartyAction()`:
 1. Если `activeRoom && activeCampaign`:
@@ -260,7 +260,7 @@ if (activeRoom?.code) {
    - Если ответ `{ resolved: true }`: показать тост `Все игроки готовы! Мастер описывает события...`, обновить историю чата.
    - Иначе: показать тост `Заявка принята! Ожидаем остальных игроков отряда...`.
 
-- [ ] **Step 4: Блокировка поля ввода для сдавшего игрока**
+- [x] **Step 4: Блокировка поля ввода для сдавшего игрока**
 
 Вычислить:
 ```tsx
@@ -273,23 +273,23 @@ const myActionText = myActionSubmitted ? activeRoomTurn?.playerInputs?.[user!.id
 Отображать баннер блокировки:
 `✅ Ваш ход в раунде {activeRoomTurn?.roundNumber} принят: "{myActionText}". Ожидаем завершения раунда отрядом...`
 
-- [ ] **Step 5: Встроить `<PartyTurnBar>` над формой ввода чата**
+- [x] **Step 5: Встроить `<PartyTurnBar>` над формой ввода чата**
 
 Отрисовывать `<PartyTurnBar>` непосредственно перед `<form onSubmit={handleSubmit} ...>` когда `activeRoom` активен.
 
-- [ ] **Step 6: Реализовать функцию `handleForceResolveTurn` для ДМа**
+- [x] **Step 6: Реализовать функцию `handleForceResolveTurn` для ДМа**
 
 Вызывает `POST /api/room/[code]/turn/resolve`.
 Показывает тост `Ход отправлен Мастеру!`.
 Сбрасывает стейт и обновляет чат.
 
-- [ ] **Step 7: Проверить компиляцию и линтер**
+- [x] **Step 7: Проверить компиляцию и линтер**
 
 Run: `npx tsc --noEmit`  
 Run: `npx eslint src/components/dnd/DnDApp.tsx`  
 Expected: 0 errors
 
-- [ ] **Step 8: Коммит**
+- [x] **Step 8: Коммит**
 
 ```bash
 git add src/components/dnd/DnDApp.tsx
@@ -303,26 +303,26 @@ git commit -m "feat(room): integrate cooperative turn party bar and input lockin
 **Files:**
 - All touched files
 
-- [ ] **Step 1: Полный запуск компилятора TypeScript**
+- [x] **Step 1: Полный запуск компилятора TypeScript**
 
 Run: `npx tsc --noEmit`  
 Expected: 0 errors
 
-- [ ] **Step 2: Запуск всех юнит-тестов комнаты**
+- [x] **Step 2: Запуск всех юнит-тестов комнаты**
 
 Run: `npx vitest run src/lib/room/ src/app/api/room/`  
 Expected: All tests pass (100%)
 
-- [ ] **Step 3: Проверка ESLint**
+- [x] **Step 3: Проверка ESLint**
 
 Run: `npx eslint src/components/room/PartyTurnBar.tsx src/components/dnd/DnDApp.tsx src/app/api/room/[code]/turn/route.ts`  
 Expected: 0 warnings/errors
 
-- [ ] **Step 4: Актуализация графа знаний Graphify**
+- [x] **Step 4: Актуализация графа знаний Graphify**
 
 Run: `graphify update .`
 
-- [ ] **Step 5: Обязательная отправка изменений в Git (GitHub)**
+- [x] **Step 5: Обязательная отправка изменений в Git (GitHub)**
 
 Run: `$env:HTTPS_PROXY=""; $env:HTTP_PROXY=""; git add .; git commit -m "feat(room): complete cooperative party turns with input locking and auto-resolve"; git push origin main`
 
