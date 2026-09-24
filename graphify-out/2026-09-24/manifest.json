@@ -96,9 +96,9 @@
     "semantic_hash": ""
   },
   "src/app/api/chat/route.ts": {
-    "mtime": 1790232697.3089037,
-    "seen": 1790234592.3606555,
-    "ast_hash": "ab01791b1d500406ccb85a3d60ebd501",
+    "mtime": 1790261485.3820386,
+    "seen": 1790262056.8621893,
+    "ast_hash": "41dab2c07374d2e560c71d2ff668f916",
     "semantic_hash": ""
   },
   "src/app/api/combat/action/route.ts": {
@@ -18846,9 +18846,9 @@
     "semantic_hash": ""
   },
   "src/lib/room/turn-batcher.ts": {
-    "mtime": 1790078845.2344198,
-    "seen": 1790079712.5025623,
-    "ast_hash": "00fee9d1befa811c986cb8ecfe3107f0",
+    "mtime": 1790261846.568115,
+    "seen": 1790262058.034087,
+    "ast_hash": "9efcfb8ff6ef48d12fde0cecbe6d4503",
     "semantic_hash": ""
   },
   "scripts/simulate-swamp-battle.ts": {
@@ -19434,15 +19434,15 @@
     "semantic_hash": ""
   },
   "src/app/api/room/__tests__/cooperative-turn.test.ts": {
-    "mtime": 1790237502.291182,
-    "seen": 1790237848.1000605,
-    "ast_hash": "53cac0a898c367dc7ad1509ae23ea5d6",
+    "mtime": 1790261811.1632261,
+    "seen": 1790262056.870931,
+    "ast_hash": "313e927d507199f3405412856a83e780",
     "semantic_hash": ""
   },
   "src/lib/room/resolve-turn-helper.ts": {
-    "mtime": 1790238081.0232391,
-    "seen": 1790238475.7115824,
-    "ast_hash": "44c575b18710a082ba5e5cbd0c958b66",
+    "mtime": 1790261867.8068287,
+    "seen": 1790262058.0332468,
+    "ast_hash": "6fbc9426e622deec1de8e7a41f29f47f",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-24-cooperative-party-turns.md": {
@@ -19500,21 +19500,45 @@
     "semantic_hash": ""
   },
   "src/lib/ai/caching/index.ts": {
-    "mtime": 1790260272.5995796,
-    "seen": 1790260441.0515535,
-    "ast_hash": "1d8e90b623bb280e1cf2453a1c20204e",
+    "mtime": 1790260849.3232887,
+    "seen": 1790262057.9945018,
+    "ast_hash": "75010d264cb66e9757714811dd20b68f",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-24-prompt-caching-architecture.md": {
-    "mtime": 1790260067.129507,
-    "seen": 1790260441.1084752,
-    "ast_hash": "3ba6f13cf173bf51a4ad4d9f855ca529",
+    "mtime": 1790261993.7749908,
+    "seen": 1790262058.0530152,
+    "ast_hash": "c1a88a46fd13170f06eda85f646901d1",
     "semantic_hash": ""
   },
   "docs/superpowers/specs/2026-09-24-prompt-caching-architecture-design.md": {
     "mtime": 1790260001.892577,
     "seen": 1790260441.1090584,
     "ast_hash": "678c22fb9d97502de93bd0ef75cf2e40",
+    "semantic_hash": ""
+  },
+  "src/app/api/chat/__tests__/chat-caching.test.ts": {
+    "mtime": 1790261355.6160414,
+    "seen": 1790262056.8615985,
+    "ast_hash": "d6e1b5ea1d2cf35657d70aee30418117",
+    "semantic_hash": ""
+  },
+  "src/lib/ai/caching/__tests__/milestone-compactor.test.ts": {
+    "mtime": 1790260988.6641767,
+    "seen": 1790262057.9938543,
+    "ast_hash": "fcc305b5713d1750b1de44de8fc6ef55",
+    "semantic_hash": ""
+  },
+  "src/lib/ai/caching/milestone-compactor.ts": {
+    "mtime": 1790260807.2085881,
+    "seen": 1790262057.9945066,
+    "ast_hash": "b9cffb89a2f32a58117905fc26f9a979",
+    "semantic_hash": ""
+  },
+  "src/lib/room/__tests__/room-caching.test.ts": {
+    "mtime": 1790261776.5210655,
+    "seen": 1790262058.031585,
+    "ast_hash": "593b968490b652187d925be944d30e44",
     "semantic_hash": ""
   }
 }

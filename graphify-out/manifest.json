@@ -19540,5 +19540,11 @@
     "seen": 1790262058.031585,
     "ast_hash": "593b968490b652187d925be944d30e44",
     "semantic_hash": ""
+  },
+  "src/lib/ai/caching/__tests__/cost-cache-savings.test.ts": {
+    "mtime": 1790262120.0533872,
+    "seen": 1790262234.2068746,
+    "ast_hash": "19af9e4c0b737279024f06a458b13bce",
+    "semantic_hash": ""
   }
 }
