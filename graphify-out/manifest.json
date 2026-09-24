@@ -78,15 +78,15 @@
     "semantic_hash": ""
   },
   "src/app/api/character/import/route.ts": {
-    "mtime": 1790154134.793008,
-    "seen": 1790155020.0482154,
-    "ast_hash": "b60d5e6ff60a68e17b573d093d53de25",
+    "mtime": 1790283011.7349312,
+    "seen": 1790283329.5016892,
+    "ast_hash": "cb391728f12cb8a5674942657a366f4e",
     "semantic_hash": ""
   },
   "src/app/api/character/route.ts": {
-    "mtime": 1790280452.0311835,
-    "seen": 1790280641.1983836,
-    "ast_hash": "ba82aa582b47badd82e9d9946e6f3991",
+    "mtime": 1790283041.734805,
+    "seen": 1790283329.5016954,
+    "ast_hash": "5debd3fb614d3e9d05cd6242af66a9a4",
     "semantic_hash": ""
   },
   "src/app/api/chat/history/route.ts": {
@@ -672,9 +672,9 @@
     "semantic_hash": ""
   },
   "src/lib/dnd/import-character.ts": {
-    "mtime": 1790071747.1187685,
-    "seen": 1790072524.359502,
-    "ast_hash": "3df0bc4bd0f37e324a6d53b6913e39bb",
+    "mtime": 1790283217.8955917,
+    "seen": 1790283330.775979,
+    "ast_hash": "63c043b8559836c965e56639c4b0e950",
     "semantic_hash": ""
   },
   "src/lib/dnd/search.ts": {
@@ -18630,9 +18630,9 @@
     "semantic_hash": ""
   },
   "src/app/api/room/[code]/route.ts": {
-    "mtime": 1790239644.0914545,
-    "seen": 1790239934.2603555,
-    "ast_hash": "8c3e8fca7b37a119456a9b0fc4723fd8",
+    "mtime": 1790283000.981345,
+    "seen": 1790283329.5106573,
+    "ast_hash": "fbe660e467344f2996fa49a7da9afd72",
     "semantic_hash": ""
   },
   "src/app/api/room/__tests__/routes.test.ts": {
@@ -18678,9 +18678,9 @@
     "semantic_hash": ""
   },
   "src/lib/room/room-service.ts": {
-    "mtime": 1790280446.301021,
-    "seen": 1790280642.462809,
-    "ast_hash": "ba4c2c79973559aee053f927b6fb7a6b",
+    "mtime": 1790283194.6004567,
+    "seen": 1790283330.7796073,
+    "ast_hash": "eb18e26243317c6a63567a37de62e8c6",
     "semantic_hash": ""
   },
   "src/lib/room/types.ts": {
@@ -18726,9 +18726,9 @@
     "semantic_hash": ""
   },
   "src/components/room/CharacterPickerModal.tsx": {
-    "mtime": 1790263385.3759875,
-    "seen": 1790263922.0949173,
-    "ast_hash": "c1caa475c54ac83b160d2612e7a62ff6",
+    "mtime": 1790283095.1699247,
+    "seen": 1790283329.5233767,
+    "ast_hash": "56cd096ed1a011e2c18d8b796e4e4a42",
     "semantic_hash": ""
   },
   "src/components/room/CreateRoomModal.tsx": {
@@ -19587,6 +19587,12 @@
     "mtime": 1790280189.361597,
     "seen": 1790280641.1977873,
     "ast_hash": "01d90a52e7f065983e10a7a7cd3aa961",
+    "semantic_hash": ""
+  },
+  "src/lib/room/__tests__/character-dedup-stats.test.ts": {
+    "mtime": 1790282810.6894975,
+    "seen": 1790283330.7763934,
+    "ast_hash": "a765cbc0af692f7de70a8cdb61bfa4c3",
     "semantic_hash": ""
   }
 }

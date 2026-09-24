@@ -78,11 +78,255 @@ export interface SheetCharacter {
   spellSlots?: Record<string, { totalSlots?: number; expendedSlots?: number }>;
 }
 
+export interface ExtractedStats {
+  str: number;
+  dex: number;
+  con: number;
+  int: number;
+  wis: number;
+  cha: number;
+  hpMax: number;
+  hpCurrent: number;
+  ac: number;
+  speed: number;
+}
+
+const CLASS_STANDARD_SCORES: Record<string, { str: number; dex: number; con: number; int: number; wis: number; cha: number }> = {
+  варвар: { str: 16, dex: 14, con: 16, int: 8, wis: 10, cha: 10 },
+  barbarian: { str: 16, dex: 14, con: 16, int: 8, wis: 10, cha: 10 },
+  воин: { str: 16, dex: 14, con: 15, int: 10, wis: 12, cha: 8 },
+  fighter: { str: 16, dex: 14, con: 15, int: 10, wis: 12, cha: 8 },
+  паладин: { str: 16, dex: 10, con: 14, int: 8, wis: 10, cha: 16 },
+  paladin: { str: 16, dex: 10, con: 14, int: 8, wis: 10, cha: 16 },
+  жрец: { str: 14, dex: 10, con: 14, int: 10, wis: 16, cha: 12 },
+  cleric: { str: 14, dex: 10, con: 14, int: 10, wis: 16, cha: 12 },
+  друид: { str: 10, dex: 14, con: 14, int: 12, wis: 16, cha: 8 },
+  druid: { str: 10, dex: 14, con: 14, int: 12, wis: 16, cha: 8 },
+  плут: { str: 10, dex: 16, con: 14, int: 13, wis: 12, cha: 14 },
+  rogue: { str: 10, dex: 16, con: 14, int: 13, wis: 12, cha: 14 },
+  вор: { str: 10, dex: 16, con: 14, int: 13, wis: 12, cha: 14 },
+  следопыт: { str: 12, dex: 16, con: 14, int: 10, wis: 15, cha: 8 },
+  ranger: { str: 12, dex: 16, con: 14, int: 10, wis: 15, cha: 8 },
+  монах: { str: 12, dex: 16, con: 14, int: 10, wis: 15, cha: 8 },
+  monk: { str: 12, dex: 16, con: 14, int: 10, wis: 15, cha: 8 },
+  бард: { str: 8, dex: 14, con: 14, int: 12, wis: 10, cha: 16 },
+  bard: { str: 8, dex: 14, con: 14, int: 12, wis: 10, cha: 15 },
+  волшебник: { str: 8, dex: 14, con: 14, int: 16, wis: 12, cha: 10 },
+  wizard: { str: 8, dex: 14, con: 14, int: 16, wis: 12, cha: 10 },
+  маг: { str: 8, dex: 14, con: 14, int: 16, wis: 12, cha: 10 },
+  колдун: { str: 8, dex: 14, con: 14, int: 12, wis: 10, cha: 16 },
+  warlock: { str: 8, dex: 14, con: 14, int: 12, wis: 10, cha: 16 },
+  чародей: { str: 8, dex: 14, con: 14, int: 10, wis: 12, cha: 16 },
+  sorcerer: { str: 8, dex: 14, con: 14, int: 10, wis: 12, cha: 16 },
+  изобретатель: { str: 10, dex: 14, con: 14, int: 16, wis: 12, cha: 8 },
+  artificer: { str: 10, dex: 14, con: 14, int: 16, wis: 12, cha: 8 },
+};
+
+export function getArchetypeAbilityScores(className?: string | null): {
+  str: number;
+  dex: number;
+  con: number;
+  int: number;
+  wis: number;
+  cha: number;
+} {
+  if (!className) return { str: 15, dex: 14, con: 13, int: 12, wis: 10, cha: 8 };
+  const lower = className.trim().toLowerCase();
+  for (const [key, val] of Object.entries(CLASS_STANDARD_SCORES)) {
+    if (lower.includes(key)) return { ...val };
+  }
+  return { str: 15, dex: 14, con: 13, int: 12, wis: 10, cha: 8 };
+}
+
+const STAT_ALIASES: Record<"str" | "dex" | "con" | "int" | "wis" | "cha", string[]> = {
+  str: ["СИЛ", "str", "STR", "Сила", "сила", "strength", "Strength"],
+  dex: ["ЛОВ", "dex", "DEX", "Ловкость", "ловкость", "dexterity", "Dexterity"],
+  con: ["ТЕЛ", "con", "CON", "Телосложение", "телосложение", "constitution", "Constitution"],
+  int: ["ИНТ", "int", "INT", "Интеллект", "интеллект", "intelligence", "Intelligence"],
+  wis: ["МДР", "wis", "WIS", "Мудрость", "мудрость", "wisdom", "Wisdom"],
+  cha: ["ХАР", "cha", "CHA", "Харизма", "харизма", "charisma", "Charisma"],
+};
+
+function readStatFromContainer(
+  container: Record<string, any> | undefined | null,
+  aliases: string[]
+): number | undefined {
+  if (!container || typeof container !== "object") return undefined;
+  for (const key of aliases) {
+    const val = container[key];
+    if (typeof val === "number" && !isNaN(val) && val > 0) return val;
+    if (typeof val === "string") {
+      const parsed = parseInt(val, 10);
+      if (!isNaN(parsed) && parsed > 0) return parsed;
+    }
+  }
+  return undefined;
+}
+
+export function extractCharacterStats(raw: unknown): ExtractedStats {
+  const root = (raw && typeof raw === "object" ? raw : {}) as Record<string, any>;
+  const data = (root.data && typeof root.data === "object" ? root.data : {}) as Record<string, any>;
+  const rawSheet = (root.rawSheet && typeof root.rawSheet === "object" ? root.rawSheet : {}) as Record<string, any>;
+  const charSnap = (root.characterSnapshot && typeof root.characterSnapshot === "object" ? root.characterSnapshot : {}) as Record<string, any>;
+  const charObj = (root.character && typeof root.character === "object" ? root.character : {}) as Record<string, any>;
+
+  // Класс и уровень
+  const className =
+    root.className ||
+    root.class ||
+    data.className ||
+    data.class ||
+    charSnap.className ||
+    charSnap.class ||
+    rawSheet.className ||
+    rawSheet.class ||
+    "";
+  const level = clampLevel(
+    root.level ?? data.level ?? charSnap.level ?? rawSheet.level ?? 1
+  );
+
+  const fallbackArchetype = getArchetypeAbilityScores(className);
+
+  // Возможные контейнеры характеристик
+  const scoreContainers = [
+    root.abilityScores,
+    data.abilityScores,
+    charSnap.abilityScores,
+    rawSheet.abilityScores,
+    charObj.abilityScores,
+    root.attributes,
+    data.attributes,
+    root.stats,
+    data.stats,
+    root,
+    data,
+    charSnap,
+    rawSheet,
+  ];
+
+  const bonusContainers = [
+    root.abilityBonuses,
+    data.abilityBonuses,
+    charSnap.abilityBonuses,
+    rawSheet.abilityBonuses,
+  ];
+
+  const asiContainers = [
+    root.asiBonuses,
+    data.asiBonuses,
+    charSnap.asiBonuses,
+    rawSheet.asiBonuses,
+  ];
+
+  function extractOneStat(statKey: "str" | "dex" | "con" | "int" | "wis" | "cha"): number {
+    const aliases = STAT_ALIASES[statKey];
+    let baseScore: number | undefined;
+
+    for (const c of scoreContainers) {
+      const found = readStatFromContainer(c, aliases);
+      if (found !== undefined) {
+        baseScore = found;
+        break;
+      }
+    }
+
+    let bonus = 0;
+    for (const bc of bonusContainers) {
+      const b = readStatFromContainer(bc, aliases);
+      if (b !== undefined) {
+        bonus += b;
+        break;
+      }
+    }
+
+    let asi = 0;
+    for (const ac of asiContainers) {
+      const a = readStatFromContainer(ac, aliases);
+      if (a !== undefined) {
+        asi += a;
+        break;
+      }
+    }
+
+    if (baseScore !== undefined) {
+      return baseScore + bonus + asi;
+    }
+
+    // Если характеристика не найдена вообще — берём классовый архетип
+    return fallbackArchetype[statKey];
+  }
+
+  const str = extractOneStat("str");
+  const dex = extractOneStat("dex");
+  const con = extractOneStat("con");
+  const int = extractOneStat("int");
+  const wis = extractOneStat("wis");
+  const cha = extractOneStat("cha");
+
+  // HP
+  const hitDieMatch = String(
+    root.hitDice || data.hitDice || charSnap.hitDice || ""
+  ).match(/[dк](\d+)/i);
+  let hitDie = hitDieMatch ? parseInt(hitDieMatch[1], 10) : 8;
+  if (!hitDieMatch) {
+    const lowerClass = String(className).toLowerCase();
+    if (lowerClass.includes("варвар")) hitDie = 12;
+    else if (lowerClass.includes("воин") || lowerClass.includes("паладин") || lowerClass.includes("следопыт")) hitDie = 10;
+    else if (lowerClass.includes("волшебник") || lowerClass.includes("чародей")) hitDie = 6;
+    else hitDie = 8;
+  }
+
+  const conMod = modifier(con);
+  const calculatedHp = hitDie + conMod + (level - 1) * (Math.ceil((1 + hitDie) / 2) + conMod);
+
+  const rawHpMax =
+    root.hpMax ??
+    root.maxHp ??
+    data.hpMax ??
+    data.maxHp ??
+    charSnap.hpMax ??
+    charSnap.maxHp;
+  const hpMax =
+    typeof rawHpMax === "number" && rawHpMax > 0 ? rawHpMax : Math.max(1, calculatedHp);
+
+  const rawHpCurrent =
+    root.hpCurrent ??
+    data.hpCurrent ??
+    charSnap.hpCurrent ??
+    root.currentHp ??
+    data.currentHp;
+  const hpCurrent =
+    typeof rawHpCurrent === "number" && rawHpCurrent > 0 ? Math.min(rawHpCurrent, hpMax) : hpMax;
+
+  // AC
+  const dexMod = modifier(dex);
+  const rawAc =
+    root.ac ??
+    root.armorClass ??
+    root.calculatedAC ??
+    data.ac ??
+    data.armorClass ??
+    data.calculatedAC ??
+    charSnap.ac ??
+    charSnap.armorClass;
+  const ac = typeof rawAc === "number" && rawAc > 0 ? rawAc : 10 + dexMod;
+
+  // Speed
+  const rawSpeed = root.speed ?? data.speed ?? charSnap.speed;
+  const speed = typeof rawSpeed === "number" && rawSpeed > 0 ? rawSpeed : 30;
+
+  return { str, dex, con, int, wis, cha, hpMax, hpCurrent, ac, speed };
+}
+
 function totalScore(src: SheetCharacter, key: string): number {
-  const base = src.abilityScores?.[key];
-  const racial = src.abilityBonuses?.[key] ?? 0;
-  const asi = src.asiBonuses?.[key] ?? 0;
-  return (typeof base === "number" ? base : 10) + racial + asi;
+  const stats = extractCharacterStats(src);
+  if (key === "СИЛ" || key.toLowerCase() === "str") return stats.str;
+  if (key === "ЛОВ" || key.toLowerCase() === "dex") return stats.dex;
+  if (key === "ТЕЛ" || key.toLowerCase() === "con") return stats.con;
+  if (key === "ИНТ" || key.toLowerCase() === "int") return stats.int;
+  if (key === "МДР" || key.toLowerCase() === "wis") return stats.wis;
+  if (key === "ХАР" || key.toLowerCase() === "cha") return stats.cha;
+  return 10;
 }
 
 function modifier(score: number): number {
@@ -96,13 +340,31 @@ function clampLevel(level: unknown): number {
 
 export function isSheetCharacter(value: unknown): value is SheetCharacter {
   if (!value || typeof value !== "object") return false;
-  const v = value as Record<string, unknown>;
-  // Ключевой признак формата — характеристики русскими ключами.
-  return (
-    typeof v.abilityScores === "object" &&
-    v.abilityScores !== null &&
-    ABILITY_KEYS.some((k) => k in (v.abilityScores as Record<string, unknown>))
-  );
+  const v = value as Record<string, any>;
+  const nested = v.data || v.character || v.characterSnapshot || v;
+
+  // 1. Русские ключи в abilityScores
+  const scores = nested.abilityScores || v.abilityScores;
+  if (scores && typeof scores === "object") {
+    if (ABILITY_KEYS.some((k) => k in scores)) return true;
+    if (["str", "dex", "con", "STR", "DEX", "CON"].some((k) => k in scores)) return true;
+  }
+  // 2. Прямые ключи str, dex, con
+  if (
+    ("str" in nested && "dex" in nested) ||
+    ("STR" in nested && "DEX" in nested) ||
+    ("str" in v && "dex" in v)
+  ) {
+    return true;
+  }
+  // 3. Лист с именем и классом/уровнем
+  if (
+    (typeof v.name === "string" || typeof nested.name === "string") &&
+    (v.className || v.class || nested.className || nested.class)
+  ) {
+    return true;
+  }
+  return false;
 }
 
 export interface MappedCharacter {
@@ -134,34 +396,22 @@ export interface MappedCharacter {
 
 /** Приводит лист персонажа с сайта к строке таблицы Character. */
 export function mapSheetToCharacter(
-  src: SheetCharacter,
+  src: SheetCharacter | Record<string, any>,
   type: string = "player"
 ): MappedCharacter {
-  const level = clampLevel(src.level);
-  const str = totalScore(src, "СИЛ");
-  const dex = totalScore(src, "ЛОВ");
-  const con = totalScore(src, "ТЕЛ");
-  const int = totalScore(src, "ИНТ");
-  const wis = totalScore(src, "МДР");
-  const cha = totalScore(src, "ХАР");
-
-  // На сайте hpMax может быть null (поле не заполнено) — тогда прикидываем по
-  // кости хитов, иначе персонаж создастся с дефолтными 10 хитами.
-  const hitDieMatch = (src.hitDice || "").match(/[dк](\d+)/i);
-  const hitDie = hitDieMatch ? parseInt(hitDieMatch[1], 10) : 8;
-  const fallbackHp = hitDie + modifier(con) + (level - 1) * (Math.ceil((1 + hitDie) / 2) + modifier(con));
-  const hpMax = typeof src.hpMax === "number" && src.hpMax > 0 ? src.hpMax : Math.max(1, fallbackHp);
-  const hpCurrent =
-    typeof src.hpCurrent === "number" && src.hpCurrent > 0 ? Math.min(src.hpCurrent, hpMax) : hpMax;
-
-  const ac =
-    typeof src.armorClass === "number" && src.armorClass > 0
-      ? src.armorClass
-      : typeof src.calculatedAC === "number" && src.calculatedAC > 0
-      ? src.calculatedAC
-      : typeof src.ac === "number" && src.ac > 0
-      ? src.ac
-      : 10 + modifier(dex);
+  const unwrapped: Record<string, any> = (src as any)?.data || (src as any)?.character || src;
+  const level = clampLevel(unwrapped.level || (src as any).level);
+  const stats = extractCharacterStats(src);
+  const str = stats.str;
+  const dex = stats.dex;
+  const con = stats.con;
+  const int = stats.int;
+  const wis = stats.wis;
+  const cha = stats.cha;
+  const hpMax = stats.hpMax;
+  const hpCurrent = stats.hpCurrent;
+  const ac = stats.ac;
+  const speed = stats.speed;
 
   const inventory: string[] = [];
   for (const line of (src.equipment || "").split("\n")) {
@@ -178,10 +428,14 @@ export function mapSheetToCharacter(
   if (coins.length) inventory.push(`Деньги: ${coins.join(", ")}`);
   if (src.treasure?.trim()) inventory.push(`Сокровища: ${src.treasure.trim()}`);
 
-  const spells: string[] = [...(src.cantrips || []).filter(Boolean).map((c) => `${c} (заговор)`)];
-  for (const [lvl, list] of Object.entries(src.spellsByLevel || {})) {
-    for (const spell of list || []) {
-      if (spell?.name) spells.push(`${spell.name} (${lvl} ур.${spell.prepared ? ", подготовлено" : ""})`);
+  const srcSheet = src as SheetCharacter;
+  const spells: string[] = [...(srcSheet.cantrips || []).filter(Boolean).map((c) => `${c} (заговор)`)];
+  const spellsByLevel = (srcSheet.spellsByLevel || {}) as Record<string, Array<{ name?: string; prepared?: boolean }>>;
+  for (const [lvl, list] of Object.entries(spellsByLevel)) {
+    if (Array.isArray(list)) {
+      for (const spell of list) {
+        if (spell?.name) spells.push(`${spell.name} (${lvl} ур.${spell.prepared ? ", подготовлено" : ""})`);
+      }
     }
   }
 
@@ -211,9 +465,10 @@ export function mapSheetToCharacter(
       `Магия: ${src.spellcastingClass || "—"}${src.spellcastingAbility ? ` (${src.spellcastingAbility})` : ""}`
     );
   }
-  const slots = Object.entries(src.spellSlots || {})
-    .filter(([, s]) => (s?.totalSlots ?? 0) > 0)
-    .map(([lvl, s]) => `${lvl} ур.: ${s.totalSlots}`);
+  const spellSlots = (srcSheet.spellSlots || {}) as Record<string, { totalSlots?: number; expendedSlots?: number }>;
+  const slots = Object.entries(spellSlots)
+    .filter(([, s]) => ((s as any)?.totalSlots ?? 0) > 0)
+    .map(([lvl, s]) => `${lvl} ур.: ${(s as any).totalSlots}`);
   if (slots.length) notes.push(`Ячейки заклинаний: ${slots.join(", ")}`);
 
   const appearanceParts = [

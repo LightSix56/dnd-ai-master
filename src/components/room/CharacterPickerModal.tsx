@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { validateCharacterForRoom } from "@/lib/room/validation";
+import { getArchetypeAbilityScores } from "@/lib/dnd/import-character";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -138,6 +139,16 @@ export function formatCampaignCharacterForPicker(
       hpMax: char.hpMax,
       hpCurrent: char.hpCurrent,
       armorClass: char.ac,
+      str: (char as any).str,
+      dex: (char as any).dex,
+      con: (char as any).con,
+      int: (char as any).int,
+      wis: (char as any).wis,
+      cha: (char as any).cha,
+      speed: (char as any).speed,
+      inventory: (char as any).inventory,
+      spells: (char as any).spells,
+      notes: (char as any).notes,
     },
     isSelectable,
     reason: isAssigned && !isOwnedByMe ? "Персонаж уже занят другим игроком" : undefined,
@@ -203,10 +214,11 @@ function calculateBaseStats(className: string, level: number) {
     baseAc = 15;
   }
 
-  const conMod = 2;
+  const scores = getArchetypeAbilityScores(className);
+  const conMod = Math.floor((scores.con - 10) / 2);
   const hpMax = hitDie + conMod + Math.max(0, level - 1) * (Math.floor(hitDie / 2) + 1 + conMod);
 
-  return { hpMax, ac: baseAc };
+  return { ...scores, hpMax, ac: baseAc };
 }
 
 export function CharacterPickerModal({
@@ -371,7 +383,7 @@ export function CharacterPickerModal({
     setError(null);
 
     try {
-      const { hpMax, ac } = calculateBaseStats(newClass, startingLevel);
+      const { hpMax, ac, str, dex, con, int, wis, cha } = calculateBaseStats(newClass, startingLevel);
 
       // 1. Создаем персонажа в кампании
       const createRes = await fetch("/api/character", {
@@ -387,6 +399,12 @@ export function CharacterPickerModal({
           hpMax,
           hpCurrent: hpMax,
           ac,
+          str,
+          dex,
+          con,
+          int,
+          wis,
+          cha,
         }),
       });
 
@@ -415,6 +433,12 @@ export function CharacterPickerModal({
           hpMax: char.hpMax,
           hpCurrent: char.hpCurrent,
           armorClass: char.ac,
+          str: char.str || str,
+          dex: char.dex || dex,
+          con: char.con || con,
+          int: char.int || int,
+          wis: char.wis || wis,
+          cha: char.cha || cha,
         },
         isSelectable: true,
       };

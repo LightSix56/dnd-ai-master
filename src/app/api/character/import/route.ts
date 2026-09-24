@@ -119,9 +119,14 @@ export async function POST(req: Request) {
     }
 
     // Повторный импорт того же персонажа обновляет запись, а не плодит дубликаты.
-    const existing = await db.character.findFirst({
-      where: { campaignId: activeCampaignId, name: mapped.name },
+    const allCampaignChars = await db.character.findMany({
+      where: { campaignId: activeCampaignId },
     });
+    const sheetId = (sheet as any)?.id || (body as any)?.id;
+    const normalizedName = mapped.name.trim().toLowerCase();
+    const existing = allCampaignChars.find(
+      (c) => (sheetId && c.id === sheetId) || c.name.trim().toLowerCase() === normalizedName
+    );
 
     const saved = existing
       ? await db.character.update({ where: { id: existing.id }, data: mapped })

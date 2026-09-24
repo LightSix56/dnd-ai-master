@@ -1,6 +1,7 @@
 // API: управление персонажами
 import { db } from "@/lib/db";
 import { proficiencyBonus } from "@/lib/dnd/dice";
+import { getArchetypeAbilityScores } from "@/lib/dnd/import-character";
 
 export async function GET(req: Request) {
   try {
@@ -153,22 +154,69 @@ export async function POST(req: Request) {
       return Response.json({ error: "campaignId required" }, { status: 400 });
     }
 
+    const name = String(data.name || "Безымянный").trim();
+    const className = data.class || data.className;
+    const fallbackStats = getArchetypeAbilityScores(className);
+
+    const str = typeof data.str === "number" && data.str > 0 ? data.str : fallbackStats.str;
+    const dex = typeof data.dex === "number" && data.dex > 0 ? data.dex : fallbackStats.dex;
+    const con = typeof data.con === "number" && data.con > 0 ? data.con : fallbackStats.con;
+    const int = typeof data.int === "number" && data.int > 0 ? data.int : fallbackStats.int;
+    const wis = typeof data.wis === "number" && data.wis > 0 ? data.wis : fallbackStats.wis;
+    const cha = typeof data.cha === "number" && data.cha > 0 ? data.cha : fallbackStats.cha;
+
+    // Check if character already exists by ID or case-insensitive name
+    const allChars = await db.character.findMany({
+      where: { campaignId },
+    });
+    const normalizedName = name.toLowerCase();
+    const existing = allChars.find(
+      (c) => (data.id && c.id === data.id) || c.name.trim().toLowerCase() === normalizedName
+    );
+
+    if (existing) {
+      const updated = await db.character.update({
+        where: { id: existing.id },
+        data: {
+          name,
+          type: data.type || existing.type,
+          race: data.race || existing.race,
+          class: className || existing.class,
+          subclass: data.subclass || existing.subclass,
+          level: data.level || existing.level,
+          background: data.background || existing.background,
+          str,
+          dex,
+          con,
+          int,
+          wis,
+          cha,
+          hpMax: data.hpMax || existing.hpMax,
+          hpCurrent: data.hpCurrent ?? data.hpMax ?? existing.hpCurrent,
+          ac: data.ac || existing.ac,
+          speed: data.speed || existing.speed,
+          notes: data.notes || existing.notes,
+        },
+      });
+      return Response.json({ character: updated, updated: true });
+    }
+
     const char = await db.character.create({
       data: {
         campaignId,
-        name: data.name,
+        name,
         type: data.type || "player",
         race: data.race,
-        class: data.class,
+        class: className,
         subclass: data.subclass,
         level: data.level || 1,
         background: data.background,
-        str: data.str || 10,
-        dex: data.dex || 10,
-        con: data.con || 10,
-        int: data.int || 10,
-        wis: data.wis || 10,
-        cha: data.cha || 10,
+        str,
+        dex,
+        con,
+        int,
+        wis,
+        cha,
         hpMax: data.hpMax || 10,
         hpCurrent: data.hpCurrent ?? data.hpMax ?? 10,
         ac: data.ac || 10,

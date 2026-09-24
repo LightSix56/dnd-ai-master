@@ -18,6 +18,7 @@ import {
   type PartyAwareAct1,
   type StartingSituation,
 } from "@/lib/ai/party-arc-generator";
+import { extractCharacterStats } from "@/lib/dnd/import-character";
 import type { AuthMode } from "@/lib/ai/client";
 import { v5 as uuidv5, validate as isUuid } from "uuid";
 
@@ -241,7 +242,7 @@ export class RoomService {
       throw new Error("Комната не найдена.");
     }
 
-    if (roomData.status !== "lobby" && roomData.status !== "active") {
+    if (!["lobby", "active", "in_campaign", "in_progress"].includes(roomData.status)) {
       throw new Error(`Невозможно присоединиться к комнате со статусом "${roomData.status}".`);
     }
 
@@ -299,22 +300,63 @@ export class RoomService {
     const campaignId = (roomData.campaign_settings as any)?.campaignId;
     if (campaignId) {
       try {
-        const snap = input.characterSnapshot as any;
-        const name = (snap?.name || snap?.characterSnapshot?.name || "Герой").trim();
-        const existing = await db.character.findFirst({
-          where: { campaignId, name },
+        const snapObj = input.characterSnapshot as any;
+        const name = (snapObj?.name || snapObj?.characterSnapshot?.name || "Герой").trim();
+        const stats = extractCharacterStats(snapObj);
+        const targetId = input.characterId || snapObj?.id || snapObj?.campaignCharacterId;
+
+        const allCampChars = await db.character.findMany({
+          where: { campaignId },
         });
-        if (!existing) {
+        const normalizedName = name.toLowerCase();
+        const existing = allCampChars.find(
+          (c) => (targetId && c.id === targetId) || c.name.trim().toLowerCase() === normalizedName
+        );
+
+        if (existing) {
+          await db.character.update({
+            where: { id: existing.id },
+            data: {
+              name: name || existing.name,
+              type: "player",
+              race: snapObj?.race || snapObj?.characterSnapshot?.race || existing.race,
+              class: snapObj?.className || snapObj?.class || snapObj?.characterSnapshot?.className || existing.class,
+              subclass: snapObj?.subclass || snapObj?.characterSnapshot?.subclass || existing.subclass,
+              level: snapObj?.level || snapObj?.characterSnapshot?.level || existing.level,
+              str: stats.str,
+              dex: stats.dex,
+              con: stats.con,
+              int: stats.int,
+              wis: stats.wis,
+              cha: stats.cha,
+              hpMax: stats.hpMax,
+              hpCurrent: stats.hpCurrent,
+              ac: stats.ac,
+              speed: stats.speed,
+              notes: JSON.stringify(snapObj),
+            },
+          });
+        } else {
           await db.character.create({
             data: {
               campaignId,
               name,
               type: "player",
-              race: snap?.race || snap?.characterSnapshot?.race || null,
-              class: snap?.className || snap?.class || snap?.characterSnapshot?.className || null,
-              subclass: snap?.subclass || snap?.characterSnapshot?.subclass || null,
-              level: snap?.level || snap?.characterSnapshot?.level || roomData.starting_level || 1,
-              notes: JSON.stringify(snap),
+              race: snapObj?.race || snapObj?.characterSnapshot?.race || null,
+              class: snapObj?.className || snapObj?.class || snapObj?.characterSnapshot?.className || null,
+              subclass: snapObj?.subclass || snapObj?.characterSnapshot?.subclass || null,
+              level: snapObj?.level || snapObj?.characterSnapshot?.level || roomData.starting_level || 1,
+              str: stats.str,
+              dex: stats.dex,
+              con: stats.con,
+              int: stats.int,
+              wis: stats.wis,
+              cha: stats.cha,
+              hpMax: stats.hpMax,
+              hpCurrent: stats.hpCurrent,
+              ac: stats.ac,
+              speed: stats.speed,
+              notes: JSON.stringify(snapObj),
             },
           });
         }
@@ -528,6 +570,15 @@ export class RoomService {
       campaignId = campaign.id;
 
       for (const m of party) {
+        const part = roomWithParticipants.participants.find(
+          (p) =>
+            p.characterId === m.id ||
+            (p.characterSnapshot as any)?.id === m.id ||
+            (p.characterSnapshot as any)?.name?.trim().toLowerCase() === m.name.trim().toLowerCase()
+        );
+        const snap = part?.characterSnapshot || m;
+        const stats = extractCharacterStats(snap);
+
         await db.character.create({
           data: {
             campaignId: campaign.id,
@@ -537,7 +588,17 @@ export class RoomService {
             class: m.className || null,
             subclass: m.subclass || null,
             level: m.level,
-            notes: JSON.stringify(m),
+            str: stats.str,
+            dex: stats.dex,
+            con: stats.con,
+            int: stats.int,
+            wis: stats.wis,
+            cha: stats.cha,
+            hpMax: stats.hpMax,
+            hpCurrent: stats.hpCurrent,
+            ac: stats.ac,
+            speed: stats.speed,
+            notes: JSON.stringify(snap),
           },
         });
       }

@@ -52,6 +52,16 @@ export async function GET(
             hpCurrent: c.hpCurrent,
             hpMax: c.hpMax,
             ac: c.ac,
+            str: c.str,
+            dex: c.dex,
+            con: c.con,
+            int: c.int,
+            wis: c.wis,
+            cha: c.cha,
+            speed: c.speed,
+            inventory: c.inventory,
+            spells: c.spells,
+            notes: c.notes,
             assignedTo: assignedParticipant
               ? {
                   userId: assignedParticipant.userId,
