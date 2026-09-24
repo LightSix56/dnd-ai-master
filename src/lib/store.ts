@@ -39,6 +39,7 @@ export interface Character {
 
 export interface Campaign {
   id: string;
+  userId?: string | null;
   name: string;
   description?: string | null;
   setting: string;

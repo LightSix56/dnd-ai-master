@@ -5,14 +5,14 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
 }
 
 // Игровая кампания (одна активная за раз, но можно несколько)
 model Campaign {
   id          String   @id @default(cuid())
+  userId      String?  // ID владельца кампании из auth.users
   name        String
   description String?
   setting     String   @default("Forgotten Realms")
@@ -48,6 +48,8 @@ model Campaign {
   chatMessages  ChatMessage[]
   summaries     Summary[]
   combats       Combat[]
+
+  @@index([userId])
 }
 
 // Персонаж — игрок или NPC

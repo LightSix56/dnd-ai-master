@@ -409,19 +409,24 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
 
   const refreshActiveCampaign = useCallback(async () => {
     try {
-      const res = await fetch("/api/campaign/active");
+      const token = getAuthToken();
+      const res = await fetch("/api/campaign/active", {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
       if (res.ok) {
         const data = await res.json();
-        setActiveCampaign(data.campaign);
+        setActiveCampaign(data.campaign || null);
         if (data.campaign) {
           setCharacters(data.campaign.characters || []);
           refreshMemory(data.campaign.id);
+        } else {
+          setCharacters([]);
         }
       }
     } catch (e) {
       console.error(e);
     }
-  }, [setActiveCampaign, setCharacters, refreshMemory]);
+  }, [getAuthToken, setActiveCampaign, setCharacters, refreshMemory]);
 
   const refreshData = useCallback(async () => {
     await refreshActiveCampaign();
@@ -923,9 +928,13 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
     }
     setCreatingInProgress(true);
     try {
+      const token = getAuthToken();
       const res = await fetch("/api/campaign", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({
           name: newCampaignName.trim(),
           startingLevel: newCampaignStartingLevel,
@@ -1158,9 +1167,12 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
     return () => clearInterval(timer);
   }, [activeCampaign?.id, arcState?.status, loadArcState]);
 
-  async function loadCampaignsList() {
+  const loadCampaignsList = useCallback(async () => {
     try {
-      const res = await fetch("/api/campaign/list");
+      const token = getAuthToken();
+      const res = await fetch("/api/campaign/list", {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
       if (res.ok) {
         const data = await res.json();
         setCampaignsList(data.campaigns || []);
@@ -1168,14 +1180,18 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
     } catch (e) {
       console.error(e);
     }
-  }
+  }, [getAuthToken]);
 
-  async function activateCampaign(campaignId: string) {
+  const activateCampaign = useCallback(async (campaignId: string) => {
     setActivatingId(campaignId);
     try {
+      const token = getAuthToken();
       const res = await fetch("/api/campaign/activate", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({ campaignId }),
       });
       if (res.ok) {
@@ -1190,9 +1206,9 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
     } finally {
       setActivatingId(null);
     }
-  }
+  }, [getAuthToken, refreshActiveCampaign]);
 
-  async function deleteCampaign(campaignId: string, campaignName: string) {
+  const deleteCampaign = useCallback(async (campaignId: string, campaignName: string) => {
     // Используем confirm через window — простой и надёжный способ
     const confirmed = window.confirm(
       `Удалить кампанию "${campaignName}"?\n\n` +
@@ -1203,9 +1219,13 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
 
     setDeletingId(campaignId);
     try {
+      const token = getAuthToken();
       const res = await fetch("/api/campaign/delete", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({ campaignId }),
       });
       if (res.ok) {
@@ -1226,7 +1246,7 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
     } finally {
       setDeletingId(null);
     }
-  }
+  }, [getAuthToken, loadCampaignsList, activeCampaign, refreshActiveCampaign]);
 
   async function deleteCharacter(character: { id: string; name: string }) {
     const confirmed = window.confirm(
@@ -3375,6 +3395,7 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
             setCreatingCampaign(true);
           }}
           onClose={() => setShowCampaignList(false)}
+          isLoggedIn={Boolean(user)}
         />
       )}
 
@@ -4221,6 +4242,7 @@ function CampaignListModal({
   onDelete,
   onCreate,
   onClose,
+  isLoggedIn = true,
 }: {
   campaigns: Campaign[];
   activeCampaignId?: string;
@@ -4230,6 +4252,7 @@ function CampaignListModal({
   onDelete: (id: string, name: string) => void;
   onCreate: () => void;
   onClose: () => void;
+  isLoggedIn?: boolean;
 }) {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
@@ -4241,6 +4264,11 @@ function CampaignListModal({
               ✕
             </Button>
           </CardTitle>
+          {!isLoggedIn && (
+            <p className="text-xs text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded p-2 mt-2">
+              💡 Войдите в аккаунт, чтобы сохранять свои кампании в профиле и изолировать их от других игроков.
+            </p>
+          )}
         </CardHeader>
         <CardContent className="flex-1 overflow-y-auto space-y-3">
           {campaigns.length === 0 ? (

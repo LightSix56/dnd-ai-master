@@ -1,9 +1,14 @@
-// API: список всех кампаний
+// API: список кампаний с изоляцией по аккаунту
 import { db } from "@/lib/db";
+import { getAuthUserFromRequest } from "@/lib/supabase/client";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { user } = await getAuthUserFromRequest(request);
+    const userIdFilter = user ? user.id : null;
+
     const campaigns = await db.campaign.findMany({
+      where: { userId: userIdFilter },
       orderBy: { updatedAt: "desc" },
       include: {
         _count: {

@@ -1,9 +1,14 @@
-// API для управления кампаниями
+// API для управления кампаниями с изоляцией по пользователям
 import { db } from "@/lib/db";
+import { getAuthUserFromRequest } from "@/lib/supabase/client";
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
+    const { user } = await getAuthUserFromRequest(req);
+    const userIdFilter = user ? user.id : null;
+
     const campaigns = await db.campaign.findMany({
+      where: { userId: userIdFilter },
       orderBy: { updatedAt: "desc" },
       include: {
         _count: {
@@ -25,6 +30,9 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
+    const { user } = await getAuthUserFromRequest(req);
+    const userId = user ? user.id : null;
+
     const body = await req.json();
     const {
       name,
@@ -58,15 +66,16 @@ export async function POST(req: Request) {
     const to = Math.max(from, clampLevel(levelTo ?? from + 4, from + 4));
 
     if (makeActive) {
-      // Снимаем флаг активности с других кампаний
+      // Снимаем флаг активности только с кампаний текущего пользователя
       await db.campaign.updateMany({
-        where: { isActive: true },
+        where: { userId, isActive: true },
         data: { isActive: false },
       });
     }
 
     const campaign = await db.campaign.create({
       data: {
+        userId,
         name: name.trim(),
         description: description?.trim() || null,
         setting,
@@ -97,11 +106,23 @@ export async function POST(req: Request) {
 
 export async function PATCH(req: Request) {
   try {
+    const { user } = await getAuthUserFromRequest(req);
     const body = await req.json();
     const { id, setting, tone, difficulty, dmStyle, worldDescription, customDmNotes, partyTies } = body;
     if (!id) {
       return Response.json({ error: "id is required" }, { status: 400 });
     }
+
+    const existing = await db.campaign.findUnique({ where: { id } });
+    if (!existing) {
+      return Response.json({ error: "Campaign not found" }, { status: 404 });
+    }
+
+    // Защита: нельзя менять чужую кампанию
+    if (existing.userId && user && existing.userId !== user.id) {
+      return Response.json({ error: "Доступ запрещён" }, { status: 403 });
+    }
+
     const updated = await db.campaign.update({
       where: { id },
       data: {
@@ -120,4 +141,3 @@ export async function PATCH(req: Request) {
     return Response.json({ error: "Failed to update campaign" }, { status: 500 });
   }
 }
-

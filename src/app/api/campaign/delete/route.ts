@@ -1,8 +1,10 @@
-// API: удалить кампанию по id (вместе со всеми связанными данными)
+// API: удалить кампанию по id с проверкой владельца
 import { db } from "@/lib/db";
+import { getAuthUserFromRequest } from "@/lib/supabase/client";
 
 export async function POST(req: Request) {
   try {
+    const { user } = await getAuthUserFromRequest(req);
     const { campaignId }: { campaignId: string } = await req.json();
     if (!campaignId) {
       return Response.json({ error: "campaignId required" }, { status: 400 });
@@ -14,15 +16,21 @@ export async function POST(req: Request) {
       return Response.json({ error: "Campaign not found" }, { status: 404 });
     }
 
+    // Защита: нельзя удалить чужую кампанию
+    if (existing.userId && user && existing.userId !== user.id) {
+      return Response.json({ error: "Доступ запрещён: нельзя удалить чужую кампанию" }, { status: 403 });
+    }
+
     const wasActive = existing.isActive;
 
     // Удаляем кампанию — каскадно удалятся characters, events, memories, chatMessages, summaries
     // (задано через onDelete: Cascade в схеме)
     await db.campaign.delete({ where: { id: campaignId } });
 
-    // Если удалили активную — попробуем активировать последнюю из оставшихся
+    // Если удалили активную — активируем последнюю из оставшихся кампаний этого же пользователя
     if (wasActive) {
       const latest = await db.campaign.findFirst({
+        where: { userId: existing.userId },
         orderBy: { updatedAt: "desc" },
       });
       if (latest) {

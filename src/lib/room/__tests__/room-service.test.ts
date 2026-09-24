@@ -132,4 +132,88 @@ describe("RoomService (Phase 1)", () => {
       /Для этой кампании требуется ровно 1 уровень/
     );
   });
+
+  it("maps non-UUID characterId (e.g. CUID) to a valid UUID and syncs with characters table", async () => {
+    const upsertCharacterMock = vi.fn().mockResolvedValue({ data: null, error: null });
+    const upsertParticipantMock = vi.fn().mockReturnValue({
+      select: vi.fn().mockReturnValue({
+        single: vi.fn().mockResolvedValue({
+          data: {
+            id: "p-uuid-1",
+            room_id: "room-uuid-1",
+            user_id: "user-player-2",
+            character_id: "1381c3be-9182-56da-a1dd-4b7b972e7f52",
+            character_snapshot: {
+              id: "cmufapu7o0001le04i0hbr71x",
+              name: "Воин Гром",
+              level: 1,
+            },
+            is_host: false,
+            is_ready: false,
+            joined_at: new Date().toISOString(),
+          },
+          error: null,
+        }),
+      }),
+    });
+
+    const mockClient = {
+      from: vi.fn((table: string) => {
+        if (table === "rooms") {
+          return {
+            select: vi.fn().mockReturnValue({
+              eq: vi.fn().mockReturnValue({
+                single: vi.fn().mockResolvedValue({
+                  data: {
+                    id: "room-uuid-1",
+                    starting_level: 1,
+                    status: "lobby",
+                    campaign_settings: {},
+                  },
+                  error: null,
+                }),
+              }),
+            }),
+          };
+        }
+        if (table === "characters") {
+          return {
+            upsert: upsertCharacterMock,
+          };
+        }
+        if (table === "room_participants") {
+          return {
+            upsert: upsertParticipantMock,
+          };
+        }
+        return {};
+      }),
+    } as any;
+
+    const service = new RoomService(mockClient);
+    const cuid = "cmufapu7o0001le04i0hbr71x";
+    const result = await service.joinRoom({
+      roomId: "room-uuid-1",
+      userId: "user-player-2",
+      characterId: cuid,
+      characterSnapshot: {
+        id: cuid,
+        name: "Воин Гром",
+        level: 1,
+      },
+      isHost: false,
+    });
+
+    expect(upsertCharacterMock).toHaveBeenCalled();
+    const charCallArg = upsertCharacterMock.mock.calls[0][0];
+    // character_id in characters table must be a valid UUID
+    expect(charCallArg.id).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i);
+
+    expect(upsertParticipantMock).toHaveBeenCalled();
+    const partCallArg = upsertParticipantMock.mock.calls[0][0];
+    expect(partCallArg.character_id).toBe(charCallArg.id);
+
+    // Mapped participant should keep the original characterId for campaign matching
+    expect(result.characterId).toBe(cuid);
+  });
 });

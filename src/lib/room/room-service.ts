@@ -19,6 +19,9 @@ import {
   type StartingSituation,
 } from "@/lib/ai/party-arc-generator";
 import type { AuthMode } from "@/lib/ai/client";
+import { v5 as uuidv5, validate as isUuid } from "uuid";
+
+const CAMPAIGN_CHAR_NAMESPACE = "6ba7b810-9dad-11d1-80b4-00c04fd430c8";
 
 export interface StartRoomCampaignInput {
   title: string;
@@ -58,12 +61,13 @@ function mapRoomFromDb(row: Record<string, any>): Room {
 }
 
 function mapParticipantFromDb(row: Record<string, any>): RoomParticipant {
+  const snap = row.character_snapshot || {};
   return {
     id: row.id,
     roomId: row.room_id,
     userId: row.user_id,
-    characterId: row.character_id,
-    characterSnapshot: row.character_snapshot || {},
+    characterId: snap.id || snap.campaignCharacterId || row.character_id,
+    characterSnapshot: snap,
     isHost: Boolean(row.is_host),
     isReady: Boolean(row.is_ready),
     joinedAt: row.joined_at,
@@ -232,6 +236,29 @@ export class RoomService {
       throw new Error(validation.error || "Уровень персонажа не соответствует кампании.");
     }
 
+    // 2.5. Гарантируем валидный UUID для Supabase и регистрируем в таблице characters
+    const targetCharacterId = isUuid(input.characterId)
+      ? input.characterId
+      : uuidv5(input.characterId || `char_${input.userId}`, CAMPAIGN_CHAR_NAMESPACE);
+
+    const snap = input.characterSnapshot as any;
+    const charName = (snap?.name || "Герой").trim();
+    const { error: charSyncError } = await this.client
+      .from("characters")
+      .upsert(
+        {
+          id: targetCharacterId,
+          user_id: input.userId,
+          name: charName,
+          data: input.characterSnapshot,
+        },
+        { onConflict: "id" }
+      );
+
+    if (charSyncError) {
+      console.warn("[RoomService.joinRoom] Warning syncing character to Supabase characters table:", charSyncError.message);
+    }
+
     // 3. Добавляем или обновляем запись участника (1 игрок = 1 персонаж в комнате)
     const { data: participantData, error: partError } = await this.client
       .from("room_participants")
@@ -239,7 +266,7 @@ export class RoomService {
         {
           room_id: input.roomId,
           user_id: input.userId,
-          character_id: input.characterId,
+          character_id: targetCharacterId,
           character_snapshot: input.characterSnapshot,
           is_host: Boolean(input.isHost),
           is_ready: false,
