@@ -18,6 +18,7 @@ CREATE SCHEMA IF NOT EXISTS "public";
 -- CreateTable
 CREATE TABLE "Campaign" (
     "id" TEXT NOT NULL,
+    "userId" TEXT,
     "name" TEXT NOT NULL,
     "description" TEXT,
     "setting" TEXT NOT NULL DEFAULT 'Forgotten Realms',
@@ -273,6 +274,9 @@ CREATE TABLE "AbilityLibrary" (
 
     CONSTRAINT "AbilityLibrary_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE INDEX "Campaign_userId_idx" ON "Campaign"("userId");
 
 -- CreateIndex
 CREATE INDEX "Character_campaignId_idx" ON "Character"("campaignId");
