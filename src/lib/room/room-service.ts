@@ -587,6 +587,10 @@ export class RoomService {
       return mapTurnFromDb(newTurn);
     }
 
+    if (activeTurn.playerInputs?.[userId]?.actionText?.trim()) {
+      throw new Error("Сказанного не вернёшь: вы уже отправили действие в этом раунде");
+    }
+
     const updatedInputs = {
       ...activeTurn.playerInputs,
       [userId]: input,

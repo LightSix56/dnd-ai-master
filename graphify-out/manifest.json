@@ -18678,9 +18678,9 @@
     "semantic_hash": ""
   },
   "src/lib/room/room-service.ts": {
-    "mtime": 1790234146.770131,
-    "seen": 1790234593.551021,
-    "ast_hash": "a82e29f6143c6f8efac7360f1f207a10",
+    "mtime": 1790237403.4786873,
+    "seen": 1790237849.3173516,
+    "ast_hash": "01a7ea641d84732d2e1cb61cfe31b84b",
     "semantic_hash": ""
   },
   "src/lib/room/types.ts": {
@@ -18798,21 +18798,21 @@
     "semantic_hash": ""
   },
   "src/app/api/room/[code]/turn/resolve/route.ts": {
-    "mtime": 1790080342.8798378,
-    "seen": 1790080503.1911273,
-    "ast_hash": "840d06626c8d5b74369f3d5e23567da2",
+    "mtime": 1790237565.0439527,
+    "seen": 1790237848.0997527,
+    "ast_hash": "74c0c22c4c86f6b823587f655a6fac28",
     "semantic_hash": ""
   },
   "src/app/api/room/[code]/turn/route.ts": {
-    "mtime": 1790079196.9625661,
-    "seen": 1790079711.4574485,
-    "ast_hash": "4e33db191700aca6a4c66a2eb88c24b1",
+    "mtime": 1790237548.3542843,
+    "seen": 1790237848.0997596,
+    "ast_hash": "579bf8ccd24cc46c580cdcc5b35e0ad6",
     "semantic_hash": ""
   },
   "src/app/api/room/__tests__/turn-routes.test.ts": {
-    "mtime": 1790079227.0964396,
-    "seen": 1790079711.4581468,
-    "ast_hash": "f6a7c23c72cfef9f3a12df464fee974e",
+    "mtime": 1790237717.000897,
+    "seen": 1790237848.1006358,
+    "ast_hash": "df98723778f2b7037b4e6f7696ec9a2e",
     "semantic_hash": ""
   },
   "src/components/room/CoopTurnBar.tsx": {
@@ -19431,6 +19431,30 @@
     "mtime": 1790235848.7317348,
     "seen": 1790236380.5109975,
     "ast_hash": "2833924a8d5e73f17942e40ecfd861f4",
+    "semantic_hash": ""
+  },
+  "src/app/api/room/__tests__/cooperative-turn.test.ts": {
+    "mtime": 1790237502.291182,
+    "seen": 1790237848.1000605,
+    "ast_hash": "53cac0a898c367dc7ad1509ae23ea5d6",
+    "semantic_hash": ""
+  },
+  "src/lib/room/resolve-turn-helper.ts": {
+    "mtime": 1790237474.6187906,
+    "seen": 1790237849.317346,
+    "ast_hash": "611f0cc15b86d89cf765a5e542e0d189",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-09-24-cooperative-party-turns.md": {
+    "mtime": 1790237246.3769987,
+    "seen": 1790237849.3379161,
+    "ast_hash": "e825df88286b984b9ad7886d58286f85",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-09-24-cooperative-party-turns-design.md": {
+    "mtime": 1790236970.7990677,
+    "seen": 1790237849.3383596,
+    "ast_hash": "065d4304950ae495f347c09776e9ef5a",
     "semantic_hash": ""
   }
 }

@@ -10,6 +10,18 @@ vi.mock("@/lib/supabase/client", () => {
   };
 });
 
+vi.mock("ai", () => ({
+  generateText: vi.fn().mockResolvedValue({ text: "Мастер описывает исход раунда." }),
+}));
+
+vi.mock("@/lib/db", () => ({
+  db: {
+    chatMessage: {
+      create: vi.fn().mockResolvedValue({}),
+    },
+  },
+}));
+
 vi.mock("@/lib/room/room-service", () => {
   return {
     RoomService: vi.fn().mockImplementation(() => ({
@@ -129,7 +141,7 @@ describe("Room Turn API Routes (Phase 4)", () => {
       expect(res.status).toBe(403);
     });
 
-    it("submits action and returns updated turn", async () => {
+    it("submits action and returns updated turn when party is not fully ready", async () => {
       vi.mocked(getAuthUserFromRequest).mockResolvedValueOnce({
         user: { id: "user-1" } as any,
         error: null,
@@ -159,6 +171,10 @@ describe("Room Turn API Routes (Phase 4)", () => {
               userId: "user-1",
               characterSnapshot: { name: "Торин", className: "Воин" },
             },
+            {
+              userId: "user-2",
+              characterSnapshot: { name: "Гэндальф", className: "Волшебник" },
+            },
           ],
         }),
         submitPlayerAction: vi.fn().mockResolvedValue(mockTurn),
@@ -175,7 +191,82 @@ describe("Room Turn API Routes (Phase 4)", () => {
 
       expect(res.status).toBe(200);
       const json = await res.json();
+      expect(json.resolved).toBe(false);
       expect(json.turn.playerInputs["user-1"].characterName).toBe("Торин");
+      expect(json.readiness.isAllReady).toBe(false);
+      expect(json.readiness.readyCount).toBe(1);
+      expect(json.readiness.totalCount).toBe(2);
+    });
+
+    it("auto-resolves turn when all participants have submitted actions", async () => {
+      vi.mocked(getAuthUserFromRequest).mockResolvedValueOnce({
+        user: { id: "user-1" } as any,
+        error: null,
+      });
+
+      const mockTurn = {
+        id: "turn-1",
+        roomId: "room-1",
+        roundNumber: 1,
+        status: "waiting",
+        playerInputs: {
+          "user-1": {
+            userId: "user-1",
+            characterName: "Торин",
+            actionText: "Атакую мечом",
+            submittedAt: 12345,
+          },
+        },
+      };
+
+      const mockCompleted = {
+        id: "turn-1",
+        roundNumber: 1,
+        status: "completed",
+        dmResponse: "Мастер описывает исход раунда.",
+      };
+      const mockNext = {
+        id: "turn-2",
+        roundNumber: 2,
+        status: "waiting",
+        playerInputs: {},
+      };
+
+      const mockService = {
+        getRoomByCode: vi.fn().mockResolvedValue({
+          id: "room-1",
+          code: "DRAGON-1",
+          participants: [
+            {
+              userId: "user-1",
+              characterSnapshot: { name: "Торин", className: "Воин" },
+            },
+          ],
+        }),
+        submitPlayerAction: vi.fn().mockResolvedValue(mockTurn),
+        resolveRoomTurn: vi.fn().mockImplementation((_roomId, narrative) =>
+          Promise.resolve({
+            completedTurn: { ...mockCompleted, dmResponse: narrative },
+            nextTurn: mockNext,
+          })
+        ),
+      };
+      vi.mocked(RoomService).mockImplementation(function () {
+        return mockService as any;
+      });
+
+      const req = new Request("http://localhost/api/room/DRAGON-1/turn", {
+        method: "POST",
+        body: JSON.stringify({ actionText: "Атакую мечом", apiKey: "test-key" }),
+      });
+      const res = await submitTurnAction(req, { params: Promise.resolve({ code: "DRAGON-1" }) });
+
+      expect(res.status).toBe(200);
+      const json = await res.json();
+      expect(json.resolved).toBe(true);
+      expect(json.completedTurn.status).toBe("completed");
+      expect(json.nextTurn.roundNumber).toBe(2);
+      expect(json.dmResponse).toBe("Мастер описывает исход раунда.");
     });
   });
 

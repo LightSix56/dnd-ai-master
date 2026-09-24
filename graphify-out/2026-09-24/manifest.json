@@ -234,9 +234,9 @@
     "semantic_hash": ""
   },
   "src/components/dnd/DnDApp.tsx": {
-    "mtime": 1790234993.4378731,
-    "seen": 1790235227.9256954,
-    "ast_hash": "358bf6050d0655830a438567401e5ddf",
+    "mtime": 1790236256.5742564,
+    "seen": 1790236380.5097413,
+    "ast_hash": "9dac5595faf164c808e860a095041234",
     "semantic_hash": ""
   },
   "src/components/dnd/ModelPickerModal.tsx": {
@@ -18654,9 +18654,9 @@
     "semantic_hash": ""
   },
   "src/lib/room/__tests__/code-gen.test.ts": {
-    "mtime": 1790075739.795535,
-    "seen": 1790076067.8775198,
-    "ast_hash": "d01e665b492b7c0c8e44c977e22c093e",
+    "mtime": 1790236094.6691885,
+    "seen": 1790236381.7388034,
+    "ast_hash": "d81619279fb4aff15d86cf5e4aa6dbe3",
     "semantic_hash": ""
   },
   "src/lib/room/__tests__/room-service.test.ts": {
@@ -18672,9 +18672,9 @@
     "semantic_hash": ""
   },
   "src/lib/room/code-gen.ts": {
-    "mtime": 1790075755.877274,
-    "seen": 1790076067.8775356,
-    "ast_hash": "2778523764bb50c81ac7b09bb90de366",
+    "mtime": 1790236088.496731,
+    "seen": 1790236381.7400017,
+    "ast_hash": "6017ca15f35eb3dc4d98811ee7486e71",
     "semantic_hash": ""
   },
   "src/lib/room/room-service.ts": {
@@ -18714,9 +18714,9 @@
     "semantic_hash": ""
   },
   "src/app/room/[code]/page.tsx": {
-    "mtime": 1790233663.186805,
-    "seen": 1790234592.371341,
-    "ast_hash": "780bbc5cc65233a388a6d096af7bce8e",
+    "mtime": 1790235886.5527565,
+    "seen": 1790236380.5034711,
+    "ast_hash": "01044116e5a9d225b15192caefdf196c",
     "semantic_hash": ""
   },
   "src/components/auth/SupabaseAuthModal.tsx": {
@@ -19425,6 +19425,12 @@
     "mtime": 1790024929.7512476,
     "seen": 1790234593.5558126,
     "ast_hash": "ef11b826b4ba30f6ade89a2b6bc3e768",
+    "semantic_hash": ""
+  },
+  "src/components/room/JoinRoomModal.tsx": {
+    "mtime": 1790235848.7317348,
+    "seen": 1790236380.5109975,
+    "ast_hash": "2833924a8d5e73f17942e40ecfd861f4",
     "semantic_hash": ""
   }
 }

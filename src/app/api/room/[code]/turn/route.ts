@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { getAuthUserFromRequest } from "@/lib/supabase/client";
 import { RoomService } from "@/lib/room/room-service";
-import type { PlayerTurnInput } from "@/lib/room/turn-batcher";
+import { calculateTurnReadiness, type PlayerTurnInput } from "@/lib/room/turn-batcher";
+import { resolveActiveRoomTurnHelper } from "@/lib/room/resolve-turn-helper";
 
 export async function GET(
   _request: Request,
@@ -21,7 +22,10 @@ export async function GET(
     }
 
     const turn = await roomService.getActiveTurn(room.id);
-    return NextResponse.json({ turn }, { status: 200 });
+    const readiness = turn
+      ? calculateTurnReadiness(room.participants || [], turn.playerInputs)
+      : null;
+    return NextResponse.json({ turn, readiness }, { status: 200 });
   } catch (err: any) {
     console.error("[API /api/room/[code]/turn GET] Error:", err);
     return NextResponse.json(
@@ -76,7 +80,38 @@ export async function POST(
     };
 
     const turn = await roomService.submitPlayerAction(room.id, user.id, input);
-    return NextResponse.json({ success: true, turn }, { status: 200 });
+
+    const readiness = calculateTurnReadiness(room.participants || [], turn.playerInputs);
+    if (readiness.isAllReady) {
+      // Автоматический старт генерации мира
+      const resolveResult = await resolveActiveRoomTurnHelper(room, turn, {
+        apiKey: body.apiKey,
+        model: body.model,
+        authMode: body.authMode,
+        baseURL: body.baseURL,
+        roomService,
+      });
+      return NextResponse.json(
+        {
+          success: true,
+          resolved: true,
+          dmResponse: resolveResult.dmResponse,
+          completedTurn: resolveResult.completedTurn,
+          nextTurn: resolveResult.nextTurn,
+        },
+        { status: 200 }
+      );
+    }
+
+    return NextResponse.json(
+      {
+        success: true,
+        resolved: false,
+        turn,
+        readiness,
+      },
+      { status: 200 }
+    );
   } catch (err: any) {
     console.error("[API /api/room/[code]/turn POST] Error:", err);
     return NextResponse.json(
