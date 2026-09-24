@@ -6,7 +6,7 @@ import { useSupabaseAuth } from "./useSupabaseAuth";
 import type { RoomWithParticipants, RoomParticipant, RoomTurn } from "@/lib/room/types";
 
 export function useRoomRealtime(roomCode: string, initialRoom?: RoomWithParticipants | null) {
-  const { user, getAuthToken } = useSupabaseAuth();
+  const { user, getAuthToken, signInAsGuest } = useSupabaseAuth();
   const [room, setRoom] = useState<RoomWithParticipants | null>(initialRoom || null);
   const [activeTurn, setActiveTurn] = useState<RoomTurn | null>(null);
   const [typingUsers, setTypingUsers] = useState<Record<string, { characterName: string; timestamp: number }>>({});
@@ -56,6 +56,15 @@ export function useRoomRealtime(roomCode: string, initialRoom?: RoomWithParticip
   useEffect(() => {
     fetchRoom();
   }, [fetchRoom]);
+
+  // Периодический опрос (fallback polling) на случай задержки или потери соединения с Realtime WebSockets
+  useEffect(() => {
+    if (!roomCode) return;
+    const interval = setInterval(() => {
+      fetchRoom();
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [roomCode, fetchRoom]);
 
   // Периодическая очистка устаревших статусов набора текста (> 6 секунд)
   useEffect(() => {
@@ -194,9 +203,14 @@ export function useRoomRealtime(roomCode: string, initialRoom?: RoomWithParticip
 
   const submitAction = useCallback(
     async (actionText: string) => {
-      if (!roomCode || !user) return false;
+      if (!roomCode) return false;
       try {
-        const token = getAuthToken();
+        let token = getAuthToken();
+        if (!token) {
+          const guestRes = await signInAsGuest();
+          token = guestRes.session?.access_token || null;
+        }
+
         const res = await fetch(`/api/room/${roomCode}/turn`, {
           method: "POST",
           headers: {
@@ -207,7 +221,9 @@ export function useRoomRealtime(roomCode: string, initialRoom?: RoomWithParticip
         });
         if (res.ok) {
           const data = await res.json();
-          if (data.turn) {
+          if (data.nextTurn) {
+            setActiveTurn(data.nextTurn);
+          } else if (data.turn) {
             setActiveTurn(data.turn);
           }
           sendTypingStatus(false);
@@ -219,7 +235,7 @@ export function useRoomRealtime(roomCode: string, initialRoom?: RoomWithParticip
         return false;
       }
     },
-    [roomCode, user, getAuthToken, sendTypingStatus]
+    [roomCode, getAuthToken, signInAsGuest, sendTypingStatus]
   );
 
   const resolveTurn = useCallback(

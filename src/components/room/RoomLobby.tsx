@@ -256,7 +256,8 @@ export function RoomLobby({
             <div className="flex items-center gap-2 text-base font-semibold text-zinc-900 dark:text-zinc-100">
               <CheckCircle2 className="size-5 text-emerald-600 dark:text-emerald-400" />
               <span>
-                {(room.storyArc as any)?.act1?.title ||
+                {(room.storyArc as any)?.title ||
+                  (room.storyArc as any)?.act?.name ||
                   (room.campaignSettings as any)?.title ||
                   "Акт 1: Начало приключения"}
               </span>
@@ -289,13 +290,14 @@ export function RoomLobby({
                 </div>
                 <div className="whitespace-pre-line text-zinc-900 dark:text-zinc-100">{activeTurn.dmResponse}</div>
               </div>
-            ) : (room.storyArc as any)?.act1?.synopsis ? (
+            ) : ((room.storyArc as any)?.premise || (room.storyArc as any)?.act?.summary) ? (
               <div className="rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 p-3.5">
                 <div className="mb-1 text-xs font-semibold uppercase tracking-wider text-zinc-500">
-                  Вводная сцена Акта 1:
+                  Вводная сцена: {(room.storyArc as any)?.act?.name || "Акт 1"}
                 </div>
                 <p className="whitespace-pre-line text-zinc-900 dark:text-zinc-100">
-                  {(room.storyArc as any)?.act1?.synopsis}
+                  {(room.storyArc as any)?.premise}
+                  {Boolean((room.storyArc as any)?.act?.summary) && `\n\n${(room.storyArc as any)?.act?.summary}`}
                 </p>
               </div>
             ) : (

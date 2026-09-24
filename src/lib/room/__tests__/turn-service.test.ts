@@ -140,4 +140,45 @@ describe("RoomService - Turn management", () => {
     expect(result.nextTurn.roundNumber).toBe(2);
     expect(result.nextTurn.status).toBe("waiting");
   });
+
+  it("locks active turn for resolving atomically and prevents double locking", async () => {
+    let currentStatus = "waiting";
+    mockSupabase = {
+      from: vi.fn((table: string) => {
+        if (table === "room_turns") {
+          return {
+            update: vi.fn((patch: any) => ({
+              eq: vi.fn((col1: string, val1: any) => ({
+                eq: vi.fn((col2: string, val2: any) => ({
+                  select: vi.fn(() => ({
+                    maybeSingle: vi.fn().mockImplementation(async () => {
+                      if (val1 === "turn-1" && col2 === "status" && val2 === currentStatus) {
+                        currentStatus = patch.status;
+                        return { data: { id: "turn-1" }, error: null };
+                      }
+                      return { data: null, error: null };
+                    }),
+                  })),
+                })),
+              })),
+            })),
+          };
+        }
+        return {};
+      }),
+    };
+
+    const service = new RoomService(mockSupabase as any);
+
+    // Первый запрос должен захватить блокировку
+    const lockedFirst = await service.lockTurnForResolving("turn-1");
+    expect(lockedFirst).toBe(true);
+
+    // Второй параллельный запрос видит status="resolving", блокировка отклоняется
+    const lockedSecond = await service.lockTurnForResolving("turn-1");
+    expect(lockedSecond).toBe(false);
+
+    // Разблокировка возвращает статус в waiting
+    await service.unlockTurnFromResolving("turn-1");
+  });
 });

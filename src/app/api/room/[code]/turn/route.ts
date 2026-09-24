@@ -83,24 +83,44 @@ export async function POST(
 
     const readiness = calculateTurnReadiness(room.participants || [], turn.playerInputs);
     if (readiness.isAllReady) {
-      // Автоматический старт генерации мира
-      const resolveResult = await resolveActiveRoomTurnHelper(room, turn, {
-        apiKey: body.apiKey,
-        model: body.model,
-        authMode: body.authMode,
-        baseURL: body.baseURL,
-        roomService,
-      });
-      return NextResponse.json(
-        {
-          success: true,
-          resolved: true,
-          dmResponse: resolveResult.dmResponse,
-          completedTurn: resolveResult.completedTurn,
-          nextTurn: resolveResult.nextTurn,
-        },
-        { status: 200 }
-      );
+      const locked = await roomService.lockTurnForResolving(turn.id);
+      if (locked) {
+        try {
+          // Автоматический старт генерации мира
+          const resolveResult = await resolveActiveRoomTurnHelper(room, turn, {
+            apiKey: body.apiKey,
+            model: body.model,
+            authMode: body.authMode,
+            baseURL: body.baseURL,
+            roomService,
+          });
+          return NextResponse.json(
+            {
+              success: true,
+              resolved: true,
+              dmResponse: resolveResult.dmResponse,
+              completedTurn: resolveResult.completedTurn,
+              nextTurn: resolveResult.nextTurn,
+            },
+            { status: 200 }
+          );
+        } catch (resolveErr) {
+          await roomService.unlockTurnFromResolving(turn.id);
+          throw resolveErr;
+        }
+      } else {
+        // Другой параллельный запрос уже выполняет генерацию этого раунда
+        return NextResponse.json(
+          {
+            success: true,
+            resolved: false,
+            resolving: true,
+            turn: { ...turn, status: "resolving" },
+            readiness,
+          },
+          { status: 200 }
+        );
+      }
     }
 
     return NextResponse.json(

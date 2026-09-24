@@ -30,6 +30,8 @@ vi.mock("@/lib/room/room-service", () => {
       getActiveTurn: vi.fn(),
       submitPlayerAction: vi.fn(),
       resolveRoomTurn: vi.fn(),
+      lockTurnForResolving: vi.fn().mockResolvedValue(true),
+      unlockTurnFromResolving: vi.fn().mockResolvedValue(undefined),
     })),
   };
 });
@@ -251,6 +253,8 @@ describe("Room Turn API Routes (Phase 4)", () => {
             nextTurn: mockNext,
           })
         ),
+        lockTurnForResolving: vi.fn().mockResolvedValue(true),
+        unlockTurnFromResolving: vi.fn().mockResolvedValue(undefined),
       };
       vi.mocked(RoomService).mockImplementation(function () {
         return mockService as any;
@@ -334,6 +338,8 @@ describe("Room Turn API Routes (Phase 4)", () => {
           completedTurn: mockCompleted,
           nextTurn: mockNext,
         }),
+        lockTurnForResolving: vi.fn().mockResolvedValue(true),
+        unlockTurnFromResolving: vi.fn().mockResolvedValue(undefined),
       };
       vi.mocked(RoomService).mockImplementation(function () {
         return mockService as any;
@@ -399,6 +405,8 @@ describe("Room Turn API Routes (Phase 4)", () => {
           completedTurn: mockCompleted,
           nextTurn: mockNext,
         }),
+        lockTurnForResolving: vi.fn().mockResolvedValue(true),
+        unlockTurnFromResolving: vi.fn().mockResolvedValue(undefined),
       };
       vi.mocked(RoomService).mockImplementation(function () {
         return mockService as any;

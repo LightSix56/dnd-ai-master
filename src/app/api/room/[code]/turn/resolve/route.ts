@@ -39,16 +39,30 @@ export async function POST(
 
     const body = await request.json().catch(() => ({}));
 
-    const result = await resolveActiveRoomTurnHelper(room, activeTurn, {
-      dmResponse: body.dmResponse,
-      gmWhisperDirective: body.gmWhisperDirective,
-      afkCharacters: body.afkCharacters,
-      apiKey: body.apiKey,
-      model: body.model,
-      authMode: body.authMode,
-      baseURL: body.baseURL,
-      roomService,
-    });
+    const locked = await roomService.lockTurnForResolving(activeTurn.id);
+    if (!locked) {
+      return NextResponse.json(
+        { error: "Раунд уже находится в процессе обработки ИИ-Мастером" },
+        { status: 409 }
+      );
+    }
+
+    let result;
+    try {
+      result = await resolveActiveRoomTurnHelper(room, activeTurn, {
+        dmResponse: body.dmResponse,
+        gmWhisperDirective: body.gmWhisperDirective,
+        afkCharacters: body.afkCharacters,
+        apiKey: body.apiKey,
+        model: body.model,
+        authMode: body.authMode,
+        baseURL: body.baseURL,
+        roomService,
+      });
+    } catch (resolveErr) {
+      await roomService.unlockTurnFromResolving(activeTurn.id);
+      throw resolveErr;
+    }
 
     return NextResponse.json(
       {

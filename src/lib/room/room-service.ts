@@ -481,6 +481,17 @@ export class RoomService {
       };
     }
 
+    // Формируем вводное описание мира и приключения от ИИ-Мастера
+    const openingNarrative = [
+      `📖 **${arc.title}**`,
+      arc.premise ? `${arc.premise}` : "",
+      arc.act ? `**${arc.act.name}: ${arc.act.goal}**\n${arc.act.summary}` : "",
+      arc.act?.scenes?.[0]?.description ? `📍 *${arc.act.scenes[0].description}*` : "",
+      "Что предпринимают ваши персонажи?",
+    ]
+      .filter(Boolean)
+      .join("\n\n");
+
     let campaignId = "";
     try {
       const campaign = await db.campaign.create({
@@ -515,6 +526,15 @@ export class RoomService {
           },
         });
       }
+
+      await db.chatMessage.create({
+        data: {
+          campaignId: campaign.id,
+          role: "assistant",
+          content: openingNarrative,
+          turn: 0,
+        },
+      });
     } catch (dbErr) {
       console.warn("[room-service] Failed to create local campaign in SQLite, fallback generated ID:", dbErr);
       campaignId = `camp_${Date.now()}`;
@@ -534,6 +554,7 @@ export class RoomService {
           startingSituation: input.startingSituation,
           levelTo: input.levelTo,
           customDmNotes: input.customDmNotes,
+          openingNarrative,
         },
         story_arc: arc,
         updated_at: new Date().toISOString(),
@@ -555,7 +576,7 @@ export class RoomService {
         round_number: 1,
         status: "waiting",
         player_inputs: {},
-        dm_response: null,
+        dm_response: openingNarrative,
       });
     } catch (turnErr) {
       console.warn("[room-service] Не удалось создать начальный раунд:", turnErr);
@@ -637,6 +658,37 @@ export class RoomService {
     }
 
     return mapTurnFromDb(data);
+  }
+
+  /**
+   * Атомарно блокирует раунд для генерации ответа ДМ (waiting -> resolving).
+   * Возвращает true, если блокировка успешно захвачена текущим запросом,
+   * и false, если другой параллельный запрос уже выполняет генерацию.
+   */
+  async lockTurnForResolving(turnId: string): Promise<boolean> {
+    const { data, error } = await this.client
+      .from("room_turns")
+      .update({ status: "resolving" })
+      .eq("id", turnId)
+      .eq("status", "waiting")
+      .select("id")
+      .maybeSingle();
+
+    if (error || !data) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * Снимает блокировку в случае сбоя генерации (resolving -> waiting)
+   */
+  async unlockTurnFromResolving(turnId: string): Promise<void> {
+    await this.client
+      .from("room_turns")
+      .update({ status: "waiting" })
+      .eq("id", turnId)
+      .eq("status", "resolving");
   }
 
   /**
