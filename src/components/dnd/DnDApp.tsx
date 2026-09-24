@@ -82,6 +82,10 @@ import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { rollDie } from "@/lib/dnd/d20-helper";
 import { formatRubles, formatTokens, type CampaignAiStats } from "@/lib/ai/cost";
 import { toast } from "sonner";
+import {
+  shouldSyncCampaignSettings,
+  shouldAutoScrollChat,
+} from "./scroll-and-sync-helpers";
 
 interface ChatMessage {
   id: string;
@@ -335,6 +339,8 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
   }>>([]);
   const [loadingModels, setLoadingModels] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const syncedCampaignIdRef = useRef<string | null>(null);
+  const prevMessagesLengthRef = useRef<number>(0);
 
   // Состояние боковой панели (ширина и сворачивание)
   const [sidebarWidth, setSidebarWidth] = useState<number>(() => {
@@ -914,6 +920,8 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
     const campaignId = activeCampaign?.id;
     if (!campaignId || loadedHistoryFor.current === campaignId) return;
     loadedHistoryFor.current = campaignId;
+    didInitialScroll.current = false;
+    prevMessagesLengthRef.current = 0;
 
     let cancelled = false;
     (async () => {
@@ -999,15 +1007,52 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
     localStorage.setItem("ai_auth_mode", authMode);
   }, [authMode, isMounted]);
 
-  // Автоскролл вниз. Восстановленную историю прокручиваем мгновенно: плавная
-  // анимация через сотню сообщений тянулась бы несколько секунд.
+  // Автоскролл чата. Использует изолированный скролл внутри ScrollArea-viewport,
+  // не сбивая положение внешней страницы. Скроллит только при первой загрузке или при
+  // поступлении новых сообщений, если пользователь находится у нижней границы.
   const didInitialScroll = useRef(false);
   useEffect(() => {
-    if (messages.length === 0) return;
-    messagesEndRef.current?.scrollIntoView({
-      behavior: didInitialScroll.current ? "smooth" : "auto",
+    const viewport = messagesEndRef.current?.closest<HTMLElement>(
+      '[data-slot="scroll-area-viewport"]'
+    );
+
+    if (messages.length === 0) {
+      if (viewport && viewport.scrollTop !== 0) {
+        viewport.scrollTop = 0;
+      }
+      prevMessagesLengthRef.current = 0;
+      return;
+    }
+
+    const threshold = 160;
+    const isNearBottom = viewport
+      ? viewport.scrollHeight - viewport.scrollTop - viewport.clientHeight <= threshold
+      : true;
+
+    const isInitial = !didInitialScroll.current;
+
+    const shouldScroll = shouldAutoScrollChat({
+      messagesCount: messages.length,
+      prevMessagesCount: prevMessagesLengthRef.current,
+      isInitial,
+      isNearBottom,
     });
-    didInitialScroll.current = true;
+
+    if (shouldScroll) {
+      if (viewport) {
+        viewport.scrollTo({
+          top: viewport.scrollHeight,
+          behavior: isInitial ? "auto" : "smooth",
+        });
+      } else {
+        messagesEndRef.current?.scrollIntoView({
+          behavior: isInitial ? "auto" : "smooth",
+        });
+      }
+      didInitialScroll.current = true;
+    }
+
+    prevMessagesLengthRef.current = messages.length;
   }, [messages]);
 
   async function createCampaign() {
@@ -1151,10 +1196,18 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
     }
   }, []);
 
-  // Состояние истории при смене кампании
+  // Состояние истории при смене кампании (защищено от сброса при периодическом опросе)
   useEffect(() => {
     const campaignId = activeCampaign?.id;
-    if (!campaignId) return;
+    if (!campaignId) {
+      syncedCampaignIdRef.current = null;
+      return;
+    }
+
+    if (!shouldSyncCampaignSettings(syncedCampaignIdRef.current, campaignId)) {
+      return;
+    }
+    syncedCampaignIdRef.current = campaignId;
 
     setShowStoryConfig(false);
     if (activeCampaign.setting) setNewCampaignSetting(activeCampaign.setting);

@@ -234,9 +234,9 @@
     "semantic_hash": ""
   },
   "src/components/dnd/DnDApp.tsx": {
-    "mtime": 1790274991.1793725,
-    "seen": 1790275179.700297,
-    "ast_hash": "23fcac58d34eff91676c1bfb17163d30",
+    "mtime": 1790278777.678839,
+    "seen": 1790278838.146608,
+    "ast_hash": "5790d3114aa7297edf81e85d4f79174f",
     "semantic_hash": ""
   },
   "src/components/dnd/ModelPickerModal.tsx": {
@@ -19569,6 +19569,18 @@
     "mtime": 1790275112.5401094,
     "seen": 1790275180.2067277,
     "ast_hash": "451b5fdebae3c0694abd104c12dd4893",
+    "semantic_hash": ""
+  },
+  "src/components/dnd/__tests__/campaign-settings-sync.test.ts": {
+    "mtime": 1790278439.2804737,
+    "seen": 1790278838.1467314,
+    "ast_hash": "6c1568c0cb53eaa71facdfef49b3d823",
+    "semantic_hash": ""
+  },
+  "src/components/dnd/scroll-and-sync-helpers.ts": {
+    "mtime": 1790278453.0460775,
+    "seen": 1790278838.1467328,
+    "ast_hash": "8c9cc2be5357483bffc9dd460fe10e59",
     "semantic_hash": ""
   }
 }

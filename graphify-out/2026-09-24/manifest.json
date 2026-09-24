@@ -96,9 +96,9 @@
     "semantic_hash": ""
   },
   "src/app/api/chat/route.ts": {
-    "mtime": 1790261485.3820386,
-    "seen": 1790262056.8621893,
-    "ast_hash": "41dab2c07374d2e560c71d2ff668f916",
+    "mtime": 1790274520.058778,
+    "seen": 1790275179.6921425,
+    "ast_hash": "3df1e7789c90adf3079aa7e4e8ed25d4",
     "semantic_hash": ""
   },
   "src/app/api/combat/action/route.ts": {
@@ -234,9 +234,9 @@
     "semantic_hash": ""
   },
   "src/components/dnd/DnDApp.tsx": {
-    "mtime": 1790263424.578983,
-    "seen": 1790263922.0947847,
-    "ast_hash": "a286d0e36b0c7e74c734390928a9d64b",
+    "mtime": 1790274991.1793725,
+    "seen": 1790275179.700297,
+    "ast_hash": "23fcac58d34eff91676c1bfb17163d30",
     "semantic_hash": ""
   },
   "src/components/dnd/ModelPickerModal.tsx": {
@@ -582,15 +582,15 @@
     "semantic_hash": ""
   },
   "src/lib/ai/system-prompt.ts": {
-    "mtime": 1790160347.0926707,
-    "seen": 1790160983.5010662,
-    "ast_hash": "6baa9c2729848b76035dac038c205696",
+    "mtime": 1790274552.6345348,
+    "seen": 1790275180.1925714,
+    "ast_hash": "0e2568f6d7b99a0608b02b700eda5963",
     "semantic_hash": ""
   },
   "src/lib/ai/tools.ts": {
-    "mtime": 1790160620.6955094,
-    "seen": 1790160983.50107,
-    "ast_hash": "50d2ebe99cb6973cc4cd619d1054920e",
+    "mtime": 1790274512.3590603,
+    "seen": 1790275180.1925747,
+    "ast_hash": "d3a4047b60373b345e9b0f2d608aae9d",
     "semantic_hash": ""
   },
   "src/lib/combat/bot.ts": {
@@ -18810,9 +18810,9 @@
     "semantic_hash": ""
   },
   "src/app/api/room/__tests__/turn-routes.test.ts": {
-    "mtime": 1790263768.6784048,
-    "seen": 1790263922.0908656,
-    "ast_hash": "604c35209164a0df946de1b3b0a1077b",
+    "mtime": 1790274615.098166,
+    "seen": 1790275179.6966162,
+    "ast_hash": "4d97aef52930cb7fc1431b18f09ee097",
     "semantic_hash": ""
   },
   "src/components/room/CoopTurnBar.tsx": {
@@ -19440,9 +19440,9 @@
     "semantic_hash": ""
   },
   "src/lib/room/resolve-turn-helper.ts": {
-    "mtime": 1790261867.8068287,
-    "seen": 1790262058.0332468,
-    "ast_hash": "6fbc9426e622deec1de8e7a41f29f47f",
+    "mtime": 1790275040.7144523,
+    "seen": 1790275180.207392,
+    "ast_hash": "d5e06d78b8010750d01d00176322c579",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-24-cooperative-party-turns.md": {
@@ -19458,15 +19458,15 @@
     "semantic_hash": ""
   },
   "src/components/room/PartyTurnBar.tsx": {
-    "mtime": 1790238351.986583,
-    "seen": 1790238474.5356238,
-    "ast_hash": "6c9331bbb03026ac1c806843bdfd7aa2",
+    "mtime": 1790274876.5843127,
+    "seen": 1790275179.7011147,
+    "ast_hash": "b3d286f06b282be4bf86eaa829a903ec",
     "semantic_hash": ""
   },
   "src/components/room/__tests__/PartyTurnBar.test.tsx": {
-    "mtime": 1790238323.609653,
-    "seen": 1790238474.53646,
-    "ast_hash": "21fb32efcb8f4cb5760731740f78e16f",
+    "mtime": 1790274865.7389321,
+    "seen": 1790275179.7014062,
+    "ast_hash": "d7e26304e2c936a5a7babb6c3fadf4d6",
     "semantic_hash": ""
   },
   "src/app/api/campaign/__tests__/campaign-user-isolation.test.ts": {
@@ -19494,9 +19494,9 @@
     "semantic_hash": ""
   },
   "src/lib/ai/caching/frozen-prefix.ts": {
-    "mtime": 1790260322.9558568,
-    "seen": 1790260441.0515492,
-    "ast_hash": "15b8434cc7ef11717108ba985745cc2c",
+    "mtime": 1790274258.5453598,
+    "seen": 1790275180.191179,
+    "ast_hash": "dc928267bf2fcd33e7096bda937cea81",
     "semantic_hash": ""
   },
   "src/lib/ai/caching/index.ts": {
@@ -19518,9 +19518,9 @@
     "semantic_hash": ""
   },
   "src/app/api/chat/__tests__/chat-caching.test.ts": {
-    "mtime": 1790261355.6160414,
-    "seen": 1790262056.8615985,
-    "ast_hash": "d6e1b5ea1d2cf35657d70aee30418117",
+    "mtime": 1790274566.4984698,
+    "seen": 1790275179.6918192,
+    "ast_hash": "19f8aa0f33532a4b80f7c859909f7d45",
     "semantic_hash": ""
   },
   "src/lib/ai/caching/__tests__/milestone-compactor.test.ts": {
@@ -19563,6 +19563,12 @@
     "mtime": 1790263292.2279112,
     "seen": 1790263922.6447043,
     "ast_hash": "f27c3affd701697737dbc18924f7efc0",
+    "semantic_hash": ""
+  },
+  "src/lib/room/__tests__/room-combat-tool.test.ts": {
+    "mtime": 1790275112.5401094,
+    "seen": 1790275180.2067277,
+    "ast_hash": "451b5fdebae3c0694abd104c12dd4893",
     "semantic_hash": ""
   }
 }
