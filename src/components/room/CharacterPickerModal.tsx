@@ -217,7 +217,7 @@ export function CharacterPickerModal({
   onSelect,
   onClose,
 }: CharacterPickerModalProps) {
-  const { user, getAuthToken } = useSupabaseAuth();
+  const { user, getAuthToken, signInAsGuest } = useSupabaseAuth();
   const [activeTab, setActiveTab] = useState<"campaign" | "account" | "create">("campaign");
 
   // Персонажи кампании (уже добавленные в отряд)
@@ -316,7 +316,16 @@ export function CharacterPickerModal({
     setError(null);
 
     try {
-      const token = getAuthToken();
+      let token = getAuthToken();
+      if (!token) {
+        const guestRes = await signInAsGuest(card.name ? `Игрок (${card.name})` : undefined);
+        if (guestRes.session?.access_token) {
+          token = guestRes.session.access_token;
+        } else {
+          throw new Error("Не удалось пройти быструю авторизацию для подключения к комнате");
+        }
+      }
+
       const res = await fetch(`/api/room/${encodeURIComponent(roomCode)}/join`, {
         method: "POST",
         headers: {
@@ -411,7 +420,14 @@ export function CharacterPickerModal({
       };
 
       // 2. Сразу присоединяемся к комнате с новым персонажем
-      const token = getAuthToken();
+      let token = getAuthToken();
+      if (!token) {
+        const guestRes = await signInAsGuest(trimmed ? `Игрок (${trimmed})` : undefined);
+        if (guestRes.session?.access_token) {
+          token = guestRes.session.access_token;
+        }
+      }
+
       const joinRes = await fetch(`/api/room/${encodeURIComponent(roomCode)}/join`, {
         method: "POST",
         headers: {

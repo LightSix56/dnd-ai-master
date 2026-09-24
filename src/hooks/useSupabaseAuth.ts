@@ -212,6 +212,40 @@ export function useSupabaseAuth() {
     }
   }, []);
 
+  const signInAsGuest = useCallback(async (customName?: string) => {
+    setError(null);
+    setLoading(true);
+    try {
+      const res = await fetch("/api/auth/guest-login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: customName }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Не удалось создать гостевой аккаунт");
+      }
+
+      const supabase = getSupabaseBrowserClient();
+      const { data: sessionData, error: otpError } = await supabase.auth.verifyOtp({
+        token_hash: data.token_hash,
+        type: "magiclink",
+      });
+
+      if (otpError) throw otpError;
+
+      setSession(sessionData.session);
+      setUser(sessionData.user);
+      return { user: sessionData.user, session: sessionData.session, error: null };
+    } catch (err: any) {
+      const message = err?.message || "Ошибка гостевого входа";
+      setError(message);
+      return { user: null, session: null, error: message };
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   const getAuthToken = useCallback(() => {
     return session?.access_token || null;
   }, [session]);
@@ -224,6 +258,7 @@ export function useSupabaseAuth() {
     signInWithPassword,
     signInWithGoogle,
     instantSignIn,
+    signInAsGuest,
     signUp,
     signOut,
     getAuthToken,

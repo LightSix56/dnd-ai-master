@@ -261,7 +261,7 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
   const [showJoinRoomModal, setShowJoinRoomModal] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
-  const { user, signOut: supabaseSignOut, getAuthToken } = useSupabaseAuth();
+  const { user, signOut: supabaseSignOut, getAuthToken, signInAsGuest } = useSupabaseAuth();
   const [accountCharacters, setAccountCharacters] = useState<Array<{
     id: string;
     name: string;
@@ -580,11 +580,13 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
             await refreshActiveCampaign(campId);
           }
 
-          // Если пользователь авторизован, но ещё не в отряде комнаты со снапшотом героя — предлагаем выбрать персонажа
-          const isParticipant = roomObj.participants.some(
-            (p: any) => p.userId === user?.id && p.characterSnapshot
-          );
-          if (user && !isParticipant) {
+          // Если пользователь ещё не в отряде комнаты со снапшотом героя — предлагаем выбрать персонажа
+          const isParticipant = user
+            ? roomObj.participants.some(
+                (p: any) => p.userId === user.id && p.characterSnapshot
+              )
+            : false;
+          if (!isParticipant) {
             setShowPicker(true);
           }
         } else {
@@ -1454,7 +1456,30 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
     // Если активна сетевая комната стола: кооперативный пошаговый цикл отряда
     if (activeRoom) {
       const userMessage = input.trim();
-      const myId = user?.id;
+      let myId = user?.id;
+
+      let token = getAuthToken();
+      if (!token) {
+        const guestRes = await signInAsGuest();
+        if (guestRes.session?.access_token) {
+          token = guestRes.session.access_token;
+          myId = guestRes.user?.id;
+        } else {
+          toast.error("Для отправки действий в сетевой комнате требуется авторизация");
+          setShowAuthModal(true);
+          return;
+        }
+      }
+
+      // Проверка: привязан ли персонаж пользователя к столу
+      const isParticipant = Boolean(
+        myId && activeRoom.participants?.some((p: any) => p.userId === myId && p.characterSnapshot)
+      );
+      if (!isParticipant) {
+        toast.info("Сначала выберите или создайте своего персонажа для этой комнаты");
+        setShowPicker(true);
+        return;
+      }
 
       // Проверка: действие уже отправлено в текущем раунде («Сказанного не вернёшь»)
       if (myId && activeRoomTurn?.playerInputs?.[myId]) {
@@ -1464,7 +1489,6 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
 
       setSubmittingTurn(true);
       try {
-        const token = getAuthToken();
         const res = await fetch(`/api/room/${encodeURIComponent(activeRoom.code)}/turn`, {
           method: "POST",
           headers: {
