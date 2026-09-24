@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import { generateText } from "ai";
 import { GET as getTurn, POST as submitTurnAction } from "../[code]/turn/route";
 import { POST as resolveTurnPost } from "../[code]/turn/resolve/route";
 
@@ -350,6 +351,73 @@ describe("Room Turn API Routes (Phase 4)", () => {
       const json = await res.json();
       expect(json.completedTurn.status).toBe("completed");
       expect(json.nextTurn.roundNumber).toBe(2);
+    });
+
+    it("automatically identifies AFK participants who have not submitted their action", async () => {
+      vi.mocked(getAuthUserFromRequest).mockResolvedValueOnce({
+        user: { id: "host-1" } as any,
+        error: null,
+      });
+
+      const mockCompleted = {
+        id: "turn-1",
+        roundNumber: 1,
+        status: "completed",
+        dmResponse: "Мастер описывает исход раунда.",
+      };
+      const mockNext = {
+        id: "turn-2",
+        roundNumber: 2,
+        status: "waiting",
+        playerInputs: {},
+      };
+
+      const mockService = {
+        getRoomByCode: vi.fn().mockResolvedValue({
+          id: "room-1",
+          code: "DRAGON-1",
+          hostUserId: "host-1",
+          participants: [
+            {
+              userId: "host-1",
+              characterSnapshot: { name: "Торин", className: "Воин" },
+            },
+            {
+              userId: "player-2",
+              characterSnapshot: { name: "Эльронд", className: "Маг" },
+            },
+          ],
+        }),
+        getActiveTurn: vi.fn().mockResolvedValue({
+          id: "turn-1",
+          roundNumber: 1,
+          playerInputs: {
+            "host-1": { userId: "host-1", characterName: "Торин", actionText: "Атакую топором", submittedAt: 100 },
+          },
+        }),
+        resolveRoomTurn: vi.fn().mockResolvedValue({
+          completedTurn: mockCompleted,
+          nextTurn: mockNext,
+        }),
+      };
+      vi.mocked(RoomService).mockImplementation(function () {
+        return mockService as any;
+      });
+
+      const req = new Request("http://localhost/api/room/DRAGON-1/turn/resolve", {
+        method: "POST",
+        body: JSON.stringify({ apiKey: "test-key" }),
+      });
+      const res = await resolveTurnPost(req, { params: Promise.resolve({ code: "DRAGON-1" }) });
+
+      expect(res.status).toBe(200);
+      const json = await res.json();
+      expect(json.completedTurn.status).toBe("completed");
+
+      // Verify that generateText was called with a prompt mentioning AFK defensive stance for Эльронд
+      const calls = vi.mocked(generateText).mock.calls;
+      const lastCall = calls[calls.length - 1];
+      expect(lastCall[0].prompt).toContain("Эльронд (Маг) [В ожидании/защитная стойка]");
     });
   });
 });

@@ -35,13 +35,31 @@ export async function resolveActiveRoomTurnHelper(
 ): Promise<ResolveActiveRoomTurnResult> {
   const roomService = options?.roomService || new RoomService();
 
-  let narrative = typeof options?.dmResponse === "string" ? options.dmResponse.trim() : "";
+  let afkCharacters = options?.afkCharacters;
+  if (!afkCharacters && "participants" in room && Array.isArray(room.participants)) {
+    const activeParticipants = room.participants.filter(
+      (p) => Boolean(p.characterSnapshot && ((p.characterSnapshot as any).name || (p.characterSnapshot as any).characterName))
+    );
+    const submittedUserIds = new Set(Object.keys(activeTurn.playerInputs || {}));
+    const pending = activeParticipants.filter((p) => !submittedUserIds.has(p.userId));
+    if (pending.length > 0) {
+      afkCharacters = pending.map((p) => {
+        const snap = p.characterSnapshot as any;
+        return {
+          name: snap?.name || snap?.characterName || "Герой",
+          className: snap?.className || snap?.class,
+        };
+      });
+    }
+  }
 
   const prompt = bundleTurnInputs(activeTurn.playerInputs || {}, {
     roundNumber: activeTurn.roundNumber,
     gmWhisperDirective: options?.gmWhisperDirective,
-    afkCharacters: options?.afkCharacters,
+    afkCharacters,
   });
+
+  let narrative = typeof options?.dmResponse === "string" ? options.dmResponse.trim() : "";
 
   if (!narrative) {
     const cleanKey = (options?.apiKey || process.env.AI_API_KEY || "").trim();
