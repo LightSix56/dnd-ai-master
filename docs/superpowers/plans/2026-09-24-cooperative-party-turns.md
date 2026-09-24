@@ -129,15 +129,15 @@ git commit -m "feat(room): lock turn resubmission and auto-resolve on party read
 - Consumes: `RoomService.getRoomByCode()`, `RoomService.getActiveTurn()`, `bundleTurnInputs()`
 - Produces: `POST /api/room/[code]/turn/resolve` handles missing player actions as `afkCharacters`.
 
-- [ ] **Step 1: Написать тест на принудительную отправку с AFK-игроками**
+- [x] **Step 1: Написать тест на принудительную отправку с AFK-игроками**
 
 Проверить, что когда хост вызывает `/turn/resolve`, а игрок 2 не сдал заявку, игрок 2 попадает в `afkCharacters` с описанием «В ожидании/защитная стойка».
 
-- [ ] **Step 2: Запустить тест и убедиться в поведении**
+- [x] **Step 2: Запустить тест и убедиться в поведении**
 
 Run: `npx vitest run src/app/api/room/__tests__/turn-routes.test.ts`
 
-- [ ] **Step 3: Обновить логику резолвинга в `resolve/route.ts`**
+- [x] **Step 3: Обновить логику резолвинга в `resolve/route.ts`**
 
 Автоматически вычислять:
 ```ts
@@ -150,12 +150,12 @@ const afkCharacters = pending.map((p) => ({
 ```
 Передавать `afkCharacters` в `bundleTurnInputs`.
 
-- [ ] **Step 4: Запустить тесты vitest**
+- [x] **Step 4: Запустить тесты vitest**
 
 Run: `npx vitest run src/app/api/room/__tests__/`  
 Expected: All PASS
 
-- [ ] **Step 5: Коммит**
+- [x] **Step 5: Коммит**
 
 ```bash
 git add src/app/api/room/[code]/turn/resolve/route.ts
