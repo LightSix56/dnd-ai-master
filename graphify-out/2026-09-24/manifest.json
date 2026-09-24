@@ -19480,5 +19480,41 @@
     "seen": 1790255764.8716009,
     "ast_hash": "fc7b197491ba00eb61ae6942ce69c166",
     "semantic_hash": ""
+  },
+  "src/lib/ai/caching/__tests__/caching-zones.test.ts": {
+    "mtime": 1790260227.9103673,
+    "seen": 1790260441.0515385,
+    "ast_hash": "ff8f0a56d16798394f0d810bc89679fe",
+    "semantic_hash": ""
+  },
+  "src/lib/ai/caching/ephemeral-tail.ts": {
+    "mtime": 1790260311.190419,
+    "seen": 1790260441.0515451,
+    "ast_hash": "11c1028adc7c0792779e518feb84bcf8",
+    "semantic_hash": ""
+  },
+  "src/lib/ai/caching/frozen-prefix.ts": {
+    "mtime": 1790260322.9558568,
+    "seen": 1790260441.0515492,
+    "ast_hash": "15b8434cc7ef11717108ba985745cc2c",
+    "semantic_hash": ""
+  },
+  "src/lib/ai/caching/index.ts": {
+    "mtime": 1790260272.5995796,
+    "seen": 1790260441.0515535,
+    "ast_hash": "1d8e90b623bb280e1cf2453a1c20204e",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-09-24-prompt-caching-architecture.md": {
+    "mtime": 1790260067.129507,
+    "seen": 1790260441.1084752,
+    "ast_hash": "3ba6f13cf173bf51a4ad4d9f855ca529",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-09-24-prompt-caching-architecture-design.md": {
+    "mtime": 1790260001.892577,
+    "seen": 1790260441.1090584,
+    "ast_hash": "678c22fb9d97502de93bd0ef75cf2e40",
+    "semantic_hash": ""
   }
 }

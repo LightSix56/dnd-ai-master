@@ -88,17 +88,17 @@
 **Interfaces:**
 - Consumes: `buildFrozenRoomSystemPrompt`, `bundleTurnInputs`.
 
-- [ ] **Step 1: Write tests in `src/app/api/room/__tests__/cooperative-turn.test.ts`**
+- [x] **Step 1: Write tests in `src/app/api/room/__tests__/cooperative-turn.test.ts`**
 Verify that room turns resolve with frozen system prompts and party state injected into the turn batch prompt.
 
-- [ ] **Step 2: Update `src/lib/room/resolve-turn-helper.ts`**
+- [x] **Step 2: Update `src/lib/room/resolve-turn-helper.ts`**
 - Remove dynamic HP from the `system` variable.
 - Ensure party member classes and levels stay in `system`, while dynamic HP and statuses are injected into the prompt tail via `bundleTurnInputs`.
 
-- [ ] **Step 3: Run Vitest room tests**
+- [x] **Step 3: Run Vitest room tests**
 Run: `npx vitest run src/app/api/room/__tests__/`
 
-- [ ] **Step 4: Git commit**
+- [x] **Step 4: Git commit**
 ```powershell
 $env:HTTPS_PROXY=""; $env:HTTP_PROXY=""; git add src/lib/room/resolve-turn-helper.ts; git commit -m "refactor(room): apply frozen prefix caching to multiplayer cooperative round resolution"
 ```

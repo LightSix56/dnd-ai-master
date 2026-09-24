@@ -1,8 +1,19 @@
 import { describe, it, expect, vi } from "vitest";
 import { RoomService } from "@/lib/room/room-service";
 import { calculateTurnReadiness, type PlayerTurnInput } from "@/lib/room/turn-batcher";
-import { resolveActiveRoomTurnHelper } from "@/lib/room/resolve-turn-helper";
+import {
+  resolveActiveRoomTurnHelper,
+  buildFrozenRoomSystemPrompt,
+} from "@/lib/room/resolve-turn-helper";
 import type { RoomWithParticipants, RoomTurn } from "@/lib/room/types";
+
+vi.mock("ai", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("ai")>();
+  return {
+    ...actual,
+    generateText: vi.fn().mockResolvedValue({ text: "Ведущий красочно описывает последствия раунда." }),
+  };
+});
 
 describe("Cooperative Turn Logic", () => {
   it("rejects duplicate submission from the same user in active round", async () => {
@@ -197,6 +208,139 @@ describe("Cooperative Turn Logic", () => {
     } finally {
       process.env.AI_API_KEY = originalKey;
     }
+  });
+
+  it("resolves active room turns with frozen system prompt and dynamic state injected into prompt tail across rounds", async () => {
+    const { generateText } = await import("ai");
+    const mockGenerateText = vi.mocked(generateText);
+    mockGenerateText.mockClear();
+
+    const room: RoomWithParticipants = {
+      id: "room-frozen-1",
+      code: "FROZ",
+      name: "Поход в Подземелье",
+      hostUserId: "host-1",
+      status: "active",
+      startingLevel: 2,
+      maxLevel: 6,
+      partyBond: "established",
+      campaignSettings: {
+        title: "Поход в Подземелье",
+        setting: "Забытые Королевства",
+        tone: "героический",
+        difficulty: "normal",
+      },
+      storyArc: {
+        act: {
+          name: "Катакомбы",
+          goal: "Найти артефакт",
+        },
+      },
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      participants: [
+        {
+          id: "part-1",
+          roomId: "room-frozen-1",
+          userId: "user-1",
+          characterId: "char-1",
+          characterSnapshot: {
+            name: "Гимли",
+            race: "Дворф",
+            className: "Воин",
+            level: 2,
+            hpCurrent: 20,
+            hpMax: 20,
+          },
+          isHost: true,
+          isReady: true,
+          joinedAt: new Date().toISOString(),
+        },
+      ],
+    };
+
+    const turn1: RoomTurn = {
+      id: "turn-1",
+      roomId: "room-frozen-1",
+      roundNumber: 1,
+      status: "waiting",
+      playerInputs: {
+        "user-1": {
+          userId: "user-1",
+          characterName: "Гимли",
+          actionText: "Бросаюсь на скелета",
+          submittedAt: 100,
+        },
+      },
+      createdAt: new Date().toISOString(),
+    };
+
+    const mockRoomService = {
+      resolveRoomTurn: vi.fn().mockImplementation((_roomId, narrative) => ({
+        completedTurn: { ...turn1, status: "completed", dmResponse: narrative },
+        nextTurn: { id: "turn-2", roomId: "room-frozen-1", roundNumber: 2, status: "waiting", playerInputs: {}, createdAt: new Date().toISOString() },
+      })),
+    } as unknown as RoomService;
+
+    // Раунд 1
+    await resolveActiveRoomTurnHelper(room, turn1, {
+      apiKey: "test-ai-key",
+      roomService: mockRoomService,
+    });
+
+    // Раунд 2 (Гимли ранен: HP 8/20, состояние "ранен")
+    const damagedRoom: RoomWithParticipants = {
+      ...room,
+      participants: [
+        {
+          ...room.participants[0],
+          characterSnapshot: {
+            ...room.participants[0].characterSnapshot,
+            hpCurrent: 8,
+            condition: "ранен",
+          },
+        },
+      ],
+    };
+
+    const turn2: RoomTurn = {
+      id: "turn-2",
+      roomId: "room-frozen-1",
+      roundNumber: 2,
+      status: "waiting",
+      playerInputs: {
+        "user-1": {
+          userId: "user-1",
+          characterName: "Гимли",
+          actionText: "Защищаюсь щитом",
+          submittedAt: 200,
+        },
+      },
+      createdAt: new Date().toISOString(),
+    };
+
+    await resolveActiveRoomTurnHelper(damagedRoom, turn2, {
+      apiKey: "test-ai-key",
+      roomService: mockRoomService,
+    });
+
+    expect(mockGenerateText).toHaveBeenCalledTimes(2);
+
+    const call1 = mockGenerateText.mock.calls[0][0] as any;
+    const call2 = mockGenerateText.mock.calls[1][0] as any;
+
+    // Системный промпт должен быть 100% идентичен (KV-кэш)
+    expect(call1.system).toBe(call2.system);
+    expect(call1.system).not.toContain("раунде 1");
+    expect(call1.system).not.toContain("раунде 2");
+    expect(call1.system).not.toContain("8/20");
+    expect(call1.system).not.toContain("ранен");
+
+    // Динамический срез раунда должен быть в prompt
+    expect(call1.prompt).toContain("Раунд 1");
+    expect(call2.prompt).toContain("Раунд 2");
+    expect(call2.prompt).toContain("8/20");
+    expect(call2.prompt).toContain("ранен");
   });
 });
 

@@ -9,10 +9,20 @@ export interface PlayerTurnInput {
   submittedAt: number;
 }
 
+export interface CharacterTurnStatus {
+  name: string;
+  hpCurrent?: number;
+  hpMax?: number;
+  hpTemp?: number;
+  condition?: string;
+  ac?: number;
+}
+
 export interface BundleTurnOptions {
   roundNumber?: number;
   gmWhisperDirective?: string;
   afkCharacters?: Array<{ name: string; className?: string }>;
+  partyStatus?: Array<CharacterTurnStatus>;
 }
 
 export interface TurnReadinessResult {
@@ -63,6 +73,22 @@ export function bundleTurnInputs(
         `- ${afk.name}${cls} [В ожидании/защитная стойка]: держит позицию и прикрывает тыл отряда.`
       );
     }
+  }
+
+  // Динамический срез состояния отряда (HP, временные статусы, AC) для изоляции от префикса кэша
+  if (options?.partyStatus && options.partyStatus.length > 0) {
+    const formatted = options.partyStatus.map((p) => {
+      const parts: string[] = [];
+      if (p.hpCurrent !== undefined && p.hpMax !== undefined) {
+        parts.push(`HP ${p.hpCurrent}/${p.hpMax}${p.hpTemp ? `+${p.hpTemp}` : ""}`);
+      } else if (p.hpCurrent !== undefined) {
+        parts.push(`HP ${p.hpCurrent}`);
+      }
+      if (p.condition) parts.push(p.condition);
+      if (p.ac !== undefined) parts.push(`AC ${p.ac}`);
+      return parts.length > 0 ? `${p.name} (${parts.join(", ")})` : p.name;
+    });
+    lines.push(`[Состояние участников]: ${formatted.join(", ")}`);
   }
 
   // Скрытая директива Человека-ДМа
