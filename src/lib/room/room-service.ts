@@ -168,6 +168,21 @@ export class RoomService {
   }
 
   /**
+   * Удаляет участника комнаты по ID кампании и ID персонажа
+   */
+  async removeParticipantByCharacter(campaignId: string, characterId: string): Promise<boolean> {
+    if (!campaignId || !characterId) return false;
+    const activeRoom = await this.getActiveRoomByCampaignId(campaignId);
+    if (!activeRoom) return false;
+    const { error } = await this.client
+      .from("room_participants")
+      .delete()
+      .eq("room_id", activeRoom.id)
+      .or(`character_id.eq.${characterId}`);
+    return !error;
+  }
+
+  /**
    * Получает комнату по коду (с участниками)
    */
   async getRoomByCode(code: string): Promise<RoomWithParticipants | null> {

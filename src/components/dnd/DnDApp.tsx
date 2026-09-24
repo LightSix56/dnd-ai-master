@@ -145,18 +145,47 @@ interface ArcState {
 function getMessageText(m: {
   role: string;
   content?: string;
-  parts?: Array<{ type: string; text?: string }>;
+  parts?: Array<{ type: string; text?: string; reasoning?: string; [key: string]: unknown }>;
 }): string {
   // Вариант 1: старый формат (content — строка)
-  if (typeof m.content === "string" && m.content.length > 0) {
+  if (typeof m.content === "string" && m.content.trim().length > 0) {
     return m.content;
   }
   // Вариант 2: новый формат (parts — массив объектов { type: 'text', text: '...' })
   if (Array.isArray(m.parts)) {
-    return m.parts
+    const text = m.parts
       .filter((p) => p.type === "text" && typeof p.text === "string")
       .map((p) => p.text as string)
       .join("");
+    if (text.trim().length > 0) return text;
+
+    // Резерв 1: reasoning-токены модели
+    const reasoning = m.parts
+      .filter((p) => p.type === "reasoning" && (typeof p.text === "string" || typeof p.reasoning === "string"))
+      .map((p) => p.text || (p as any).reasoning)
+      .join("");
+    if (reasoning.trim().length > 0) return reasoning;
+
+    // Резерв 2: если в сообщении ассистента только вызовы инструментов мастера
+    if (m.role === "assistant") {
+      const toolParts = m.parts.filter(
+        (p) => p.type === "tool-call" || p.type === "tool-invocation" || p.type === "tool-result"
+      );
+      if (toolParts.length > 0) {
+        const hasCombat = toolParts.some(
+          (p: any) => p.toolName === "start_combat" || p.toolInvocation?.toolName === "start_combat"
+        );
+        if (hasCombat) {
+          return "⚔️ Мастер начинает тактический бой! Враги вступают в сражение.";
+        }
+        const hasDice = toolParts.some(
+          (p: any) => p.toolName === "roll_dice" || p.toolInvocation?.toolName === "roll_dice"
+        );
+        if (hasDice) {
+          return "🎲 Мастер совершает бросок кубиков проверки...";
+        }
+      }
+    }
   }
   return "";
 }
@@ -1567,6 +1596,15 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
                 const chatData = await chatRes.json();
                 if (Array.isArray(chatData.messages) && chatData.messages.length > 0) {
                   setMessages(chatData.messages);
+                } else if (data.dmResponse) {
+                  setMessages((prev) => [
+                    ...prev,
+                    {
+                      id: `turn_${data.completedTurn?.id || Date.now()}`,
+                      role: "assistant",
+                      parts: [{ type: "text", text: data.dmResponse }],
+                    } as any,
+                  ]);
                 }
               }
             }
@@ -1641,6 +1679,15 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
             const chatData = await chatRes.json();
             if (Array.isArray(chatData.messages) && chatData.messages.length > 0) {
               setMessages(chatData.messages);
+            } else if (data.dmResponse) {
+              setMessages((prev) => [
+                ...prev,
+                {
+                  id: `turn_${data.completedTurn?.id || Date.now()}`,
+                  role: "assistant",
+                  parts: [{ type: "text", text: data.dmResponse }],
+                } as any,
+              ]);
             }
           }
         }

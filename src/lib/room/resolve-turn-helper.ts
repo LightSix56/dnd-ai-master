@@ -214,17 +214,15 @@ export async function resolveActiveRoomTurnHelper(
           temperature: 0.7,
         });
 
-        capturedSteps = res.steps || [];
-        narrative = res.text.trim();
+        const rawSteps = await res.steps;
+        capturedSteps = Array.isArray(rawSteps) ? rawSteps : [];
 
-        if (!narrative && capturedSteps.length > 0) {
-          for (const s of capturedSteps) {
-            if (s.text && s.text.trim()) {
-              narrative = s.text.trim();
-              break;
-            }
-          }
-        }
+        // Извлекаем текст из всех шагов модели (включая шаги с вызовом инструментов)
+        const stepTexts = capturedSteps
+          .map((s: any) => (typeof s.text === "string" ? s.text.trim() : ""))
+          .filter(Boolean);
+
+        narrative = stepTexts.join("\n\n") || (typeof res.text === "string" ? res.text.trim() : "");
 
         if (!narrative) {
           const hadCombat = capturedSteps.some((s: any) =>
@@ -262,7 +260,7 @@ export async function resolveActiveRoomTurnHelper(
         data: {
           campaignId,
           role: "assistant",
-          content: narrative,
+          content: narrative || `Мастер оценивает действия отряда в раунде ${activeTurn.roundNumber}...`,
           turn: activeTurn.roundNumber,
           toolCalls: allToolCalls.length > 0 ? JSON.stringify(allToolCalls) : null,
           toolResults: allToolResults.length > 0 ? JSON.stringify(allToolResults) : null,

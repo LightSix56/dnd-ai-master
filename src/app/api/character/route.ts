@@ -27,8 +27,9 @@ export async function GET(req: Request) {
   }
 }
 
-// Удаление персонажа: убирает его и из контекста сцены (он собирается из
-// db.character), поэтому ошибочно созданный NPC перестаёт есть токены сразу.
+import { RoomService } from "@/lib/room/room-service";
+
+// Удаление персонажа: полностью вычищает все следы (память, бойцы, события, личные зацепки сюжета)
 export async function DELETE(req: Request) {
   try {
     const url = new URL(req.url);
@@ -43,9 +44,100 @@ export async function DELETE(req: Request) {
       return Response.json({ error: "Персонаж не найден" }, { status: 404 });
     }
 
+    const { campaignId, name: charName } = character;
+
+    // 1. Удаляем самого персонажа
     await db.character.delete({ where: { id } });
 
-    return Response.json({ ok: true, name: character.name });
+    // 2. Безвозвратно удаляем все следы из долгосрочной памяти (Memory)
+    await db.memory.deleteMany({
+      where: {
+        campaignId,
+        OR: [
+          { subject: { contains: charName } },
+          {
+            AND: [
+              { category: { in: ["character", "relationship"] } },
+              { content: { contains: charName } },
+            ],
+          },
+        ],
+      },
+    });
+
+    // 3. Удаляем бойца из тактической сетки боя (Combatant)
+    await db.combatant.deleteMany({
+      where: {
+        OR: [
+          { characterId: id },
+          {
+            AND: [
+              { name: charName },
+              { combat: { campaignId } },
+            ],
+          },
+        ],
+      },
+    });
+
+    // 4. Очищаем события игры (GameEvent), связанные с этим персонажем
+    await db.gameEvent.deleteMany({
+      where: {
+        campaignId,
+        OR: [
+          { participants: { contains: id } },
+          { description: { contains: charName } },
+        ],
+      },
+    });
+
+    // 5. Очищаем сюжетные зацепки (personalHooks) из сюжетной арки кампании
+    try {
+      const campaign = await db.campaign.findUnique({ where: { id: campaignId } });
+      if (campaign?.storyArc) {
+        const arc = typeof campaign.storyArc === "string" ? JSON.parse(campaign.storyArc) : campaign.storyArc;
+        let modified = false;
+
+        if (Array.isArray(arc?.acts)) {
+          for (const act of arc.acts) {
+            if (Array.isArray(act.personalHooks)) {
+              const prevLen = act.personalHooks.length;
+              act.personalHooks = act.personalHooks.filter((h: any) => h.characterName !== charName);
+              if (act.personalHooks.length !== prevLen) modified = true;
+            }
+          }
+        }
+        if (Array.isArray(arc?.act?.personalHooks)) {
+          const prevLen = arc.act.personalHooks.length;
+          arc.act.personalHooks = arc.act.personalHooks.filter((h: any) => h.characterName !== charName);
+          if (arc.act.personalHooks.length !== prevLen) modified = true;
+        }
+
+        if (modified) {
+          await db.campaign.update({
+            where: { id: campaignId },
+            data: { storyArc: JSON.stringify(arc) },
+          });
+        }
+      }
+    } catch (arcErr) {
+      console.warn("[character DELETE] Failed to clean personalHooks from storyArc:", arcErr);
+    }
+
+    // 6. Очищаем участника комнаты мультиплеера в Supabase (если комната открыта и Supabase настроен)
+    if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      try {
+        const roomService = new RoomService();
+        await Promise.race([
+          roomService.removeParticipantByCharacter(campaignId, id),
+          new Promise((_, reject) => setTimeout(() => reject(new Error("Supabase timeout")), 800)),
+        ]);
+      } catch (roomErr) {
+        console.warn("[character DELETE] Failed or timed out purging room participant:", roomErr);
+      }
+    }
+
+    return Response.json({ ok: true, name: charName });
   } catch (error) {
     console.error("[character] DELETE error:", error);
     return Response.json({ error: "Failed to delete character" }, { status: 500 });

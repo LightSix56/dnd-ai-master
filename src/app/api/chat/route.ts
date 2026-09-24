@@ -24,9 +24,10 @@ import { createClient } from "@/lib/ai/client";
 
 export function cleanAssistantNarrative(rawText: string): string {
   if (!rawText) return rawText;
-  return rawText
-    .replace(/\s*(?:Вступительная сцена развёрнута|Жду твоего решения,? мастер|Ключевые NPC созданы|Служебный отчёт|Техническая операция завершена)[\s\S]*$/i, "")
+  const cleaned = rawText
+    .replace(/(?<=[.?!]|\s|\n---)\s*(?:Вступительная сцена развёрнута|Жду твоего решения,? мастер|Ключевые NPC созданы|Служебный отчёт|Техническая операция завершена)[\s\S]*$/i, "")
     .trim();
+  return cleaned || rawText.trim();
 }
 import { parseStoryArc } from "@/lib/ai/story-arc";
 import { compactHistory } from "@/lib/ai/compact";
