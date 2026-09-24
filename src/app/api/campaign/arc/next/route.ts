@@ -1,3 +1,4 @@
+import { after } from "next/server";
 import { db } from "@/lib/db";
 import { generateNextChapter, parseStoryArc, type ArcProgress } from "@/lib/ai/story-arc";
 import { resolveDmModel } from "@/lib/ai/models";
@@ -65,8 +66,8 @@ export async function POST(req: Request) {
       },
     });
 
-    // Фоновая генерация следующего акта
-    void (async () => {
+    // Фоновая генерация следующего акта (на Vercel через after)
+    after(async () => {
       try {
         const nextChapter = await generateNextChapter({
           campaignId,
@@ -122,7 +123,7 @@ export async function POST(req: Request) {
           })
           .catch((e) => console.error("[arc/next] не удалось записать статус ошибки:", e));
       }
-    })();
+    });
 
     return Response.json({ started: true, nextActNumber });
   } catch (error) {

@@ -5,6 +5,7 @@
 // POST не ждёт результат: он помечает кампанию как "generating" и возвращается
 // сразу, а работа идёт фоном с записью прогресса в БД. UI опрашивает GET.
 
+import { after } from "next/server";
 import { db } from "@/lib/db";
 import {
   generateStoryArc,
@@ -82,7 +83,11 @@ export async function POST(req: Request) {
     if (!campaign) {
       return Response.json({ error: "Кампания не найдена" }, { status: 404 });
     }
-    if (campaign.arcStatus === "generating" && !force) {
+    const isStuck =
+      campaign.arcStatus === "generating" &&
+      Date.now() - new Date(campaign.updatedAt).getTime() > 3 * 60 * 1000;
+
+    if (campaign.arcStatus === "generating" && !force && !isStuck) {
       return Response.json({ error: "Генерация уже идёт" }, { status: 409 });
     }
     if (campaign.arcStatus === "ready" && !force) {
@@ -117,9 +122,9 @@ export async function POST(req: Request) {
       },
     });
 
-    // Фоновая работа: ответ клиенту уходит сразу, генерация продолжается.
+    // Фоновая работа: на Vercel используем after(), чтобы функция не замораживалась после отправки ответа.
     // Ошибки обязательно пишем в БД — иначе UI будет вечно ждать "generating".
-    void (async () => {
+    after(async () => {
       try {
         const players = await db.character.findMany({
           where: { campaignId, type: "player" },
@@ -213,7 +218,7 @@ export async function POST(req: Request) {
           })
           .catch((e) => console.error("[arc] не удалось записать статус ошибки:", e));
       }
-    })();
+    });
 
     return Response.json({ started: true, model: arcModel, actsTotal });
   } catch (error) {

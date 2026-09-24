@@ -6,7 +6,7 @@
 
 export const DEFAULT_DM_MODEL = "deepseek/deepseek-v4.1-flash";
 export const DEFAULT_CHEAP_MODEL = "deepseek/deepseek-v4-flash";
-export const DEFAULT_STORY_MODEL = "deepseek/deepseek-v4.1-flash";
+export const DEFAULT_STORY_MODEL = "google/gemini-2.5-flash-lite";
 
 // Обратная совместимость
 export const CHEAP_MODEL = DEFAULT_CHEAP_MODEL;
