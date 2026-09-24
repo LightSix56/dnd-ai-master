@@ -73,6 +73,7 @@ import { ModelPickerModal } from "./ModelPickerModal";
 import { CostStatsModal } from "./CostStatsModal";
 import { D20RollModal } from "./D20RollModal";
 import { CreateRoomModal } from "@/components/room/CreateRoomModal";
+import { JoinRoomModal } from "@/components/room/JoinRoomModal";
 import { CharacterPickerModal } from "@/components/room/CharacterPickerModal";
 import { SupabaseAuthModal } from "@/components/auth/SupabaseAuthModal";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
@@ -255,6 +256,7 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
   const [showCostModal, setShowCostModal] = useState(false);
   const [showD20Modal, setShowD20Modal] = useState(false);
   const [showCreateRoom, setShowCreateRoom] = useState(false);
+  const [showJoinRoomModal, setShowJoinRoomModal] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
   const { user, signOut: supabaseSignOut, getAuthToken } = useSupabaseAuth();
@@ -505,7 +507,7 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
           setSidebarTab("room");
 
           // Если у комнаты есть привязанная кампания, активируем её для игрока
-          const campId = data.room.campaignId || data.room.campaignSettings?.campaignId;
+          const campId = data.room.campaignId || data.room.campaignSettings?.campaignId || data.room.campaign_settings?.campaignId;
           if (campId) {
             try {
               await fetch("/api/campaign/activate", {
@@ -518,6 +520,14 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
             }
             refreshActiveCampaign();
           }
+
+          // Если пользователь авторизован, но ещё не в отряде комнаты со снапшотом героя — предлагаем выбрать персонажа
+          const isParticipant = roomObj.participants.some(
+            (p: any) => p.userId === user?.id && p.characterSnapshot
+          );
+          if (user && !isParticipant) {
+            setShowPicker(true);
+          }
         } else {
           toast.error(`Сетевая комната "${cleanCode}" не найдена`);
         }
@@ -527,7 +537,52 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
         toast.error("Не удалось загрузить данные сетевой комнаты");
       })
       .finally(() => setLoadingRoom(false));
-  }, [initialRoomCode, refreshActiveCampaign]);
+  }, [initialRoomCode, refreshActiveCampaign, user]);
+
+  const handleRoomJoined = useCallback(
+    async (room: any, participants: any[]) => {
+      const roomObj = {
+        ...room,
+        participants: participants || room.participants || [],
+      };
+      setActiveRoom(roomObj);
+      setSidebarTab("room");
+
+      // Обновляем адресную строку браузера без перезагрузки
+      try {
+        if (typeof window !== "undefined" && room.code) {
+          window.history.pushState({}, "", `/room/${encodeURIComponent(room.code)}`);
+        }
+      } catch {}
+
+      // Если к комнате привязана кампания, активируем её
+      const campId = room.campaignId || room.campaignSettings?.campaignId || room.campaign_settings?.campaignId;
+      if (campId) {
+        try {
+          await fetch("/api/campaign/activate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ campaignId: campId }),
+          });
+          await refreshActiveCampaign();
+        } catch (e) {
+          console.error("Не удалось активировать кампанию комнаты:", e);
+        }
+      }
+
+      // Проверяем, есть ли текущий пользователь среди участников комнаты с персонажем
+      const isParticipant = (participants || room.participants || []).some(
+        (p: any) => p.userId === user?.id && p.characterSnapshot
+      );
+
+      if (user && !isParticipant) {
+        setShowPicker(true);
+      } else if (!user) {
+        toast.info("Войдите в аккаунт, чтобы привязать своего героя к столу");
+      }
+    },
+    [user, refreshActiveCampaign]
+  );
 
   async function openCampaignForFriends() {
     if (!activeCampaign) return;
@@ -1441,6 +1496,17 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
             )}
           </div>
           <div className="flex items-center gap-2">
+            {/* 0. Кнопка «Войти по коду» */}
+            <button
+              type="button"
+              onClick={() => setShowJoinRoomModal(true)}
+              className="shrink-0 h-8 px-2.5 sm:px-3 rounded-md text-xs font-medium border border-border bg-background hover:bg-accent text-foreground transition shadow-xs flex items-center cursor-pointer"
+              title="Присоединиться к сетевой комнате по коду"
+            >
+              <Radio className="size-3.5 mr-1.5 shrink-0 text-emerald-500 animate-pulse" />
+              <span>Войти по коду</span>
+            </button>
+
             {/* 1. Кнопка «Кампании» */}
             <button
               type="button"
@@ -1505,47 +1571,293 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
         {/* Chat area */}
         <main className="flex-1 flex flex-col min-w-0 min-h-0">
           {!activeCampaign ? (
-            <div className="flex-1 flex items-center justify-center p-8">
-              <Card className="max-w-lg w-full">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Sparkles className="size-5 text-amber-500" />
-                    Добро пожаловать, странник
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-sm text-muted-foreground">
-                    Это AI Dungeon Master для D&D 5e. Нейросеть будет вести твою
-                    кампанию, бросать кубики, помнить персонажей и события.
-                  </p>
-                  <div className="flex flex-col gap-2">
-                    <Button onClick={() => setCreatingCampaign(true)} size="lg">
-                      <Plus className="size-4 mr-2" />
-                      Создать новую кампанию
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="lg"
-                      onClick={() => {
-                        loadCampaignsList();
-                        setShowCampaignList(true);
-                      }}
-                    >
-                      <BookOpen className="size-4 mr-2" />
-                      Выбрать из существующих
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => openSetup()}
-                    >
-                      <Settings className="size-4 mr-2" />
-                      Открыть настройки API
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+            activeRoom ? (
+              <div className="flex-1 overflow-y-auto p-4 sm:p-8 flex items-center justify-center">
+                <Card className="max-w-2xl w-full border border-border bg-card shadow-lg font-sans">
+                  <CardHeader className="pb-3 border-b border-border/40">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-2.5">
+                        <div className="flex size-10 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                          <Radio className="size-5 animate-pulse" />
+                        </div>
+                        <div>
+                          <CardTitle className="text-lg sm:text-xl font-bold tracking-tight text-foreground">
+                            {activeRoom.name || "Сетевая комната стола"}
+                          </CardTitle>
+                          <p className="text-xs text-muted-foreground mt-0.5">
+                            Сетевое лобби стола • Ожидание ведущего или других игроков
+                          </p>
+                        </div>
+                      </div>
+                      <Badge variant="outline" className="text-xs text-emerald-600 border-emerald-500/30 font-medium">
+                        {activeRoom.status === "active" ? "Игра идёт" : "В лобби"}
+                      </Badge>
+                    </div>
+                  </CardHeader>
+
+                  <CardContent className="space-y-5 pt-4">
+                    {/* Блок с кодом комнаты и ссылкой */}
+                    <div className="rounded-lg border border-border bg-muted/30 p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      <div className="space-y-1">
+                        <div className="text-xs text-muted-foreground font-medium">Код стола для друзей:</div>
+                        <div className="font-mono text-xl sm:text-2xl font-bold tracking-widest text-foreground select-all">
+                          {activeRoom.code}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={copyRoomLink}
+                          className="gap-1.5 text-xs h-9 cursor-pointer"
+                        >
+                          <Copy className="size-3.5" />
+                          <span>Копировать ссылку</span>
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Текущий статус персонажа пользователя */}
+                    {(() => {
+                      const currentParticipant = activeRoom.participants?.find(
+                        (p: any) => p.userId === user?.id
+                      );
+
+                      if (!user) {
+                        return (
+                          <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-4 text-xs space-y-2.5">
+                            <div className="flex items-center gap-2 text-amber-800 dark:text-amber-300 font-semibold text-sm">
+                              <LogIn className="size-4 shrink-0" />
+                              <span>Вы вошли как гость без аккаунта</span>
+                            </div>
+                            <p className="text-muted-foreground text-xs leading-relaxed">
+                              Чтобы присоединиться к отряду своим персонажем и видеть броски кубиков от своего имени, войдите в аккаунт через Google или почту.
+                            </p>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => setShowAuthModal(true)}
+                              className="border-amber-500/40 text-amber-900 dark:text-amber-200 hover:bg-amber-500/10 cursor-pointer"
+                            >
+                              Войти в аккаунт
+                            </Button>
+                          </div>
+                        );
+                      }
+
+                      if (!currentParticipant) {
+                        return (
+                          <div className="rounded-lg border border-primary/30 bg-primary/5 p-4 text-xs space-y-2.5">
+                            <div className="flex items-center gap-2 text-foreground font-semibold text-sm">
+                              <User className="size-4 text-primary shrink-0" />
+                              <span>Вы за столом, но герой ещё не выбран!</span>
+                            </div>
+                            <p className="text-muted-foreground text-xs leading-relaxed">
+                              Выберите своего персонажа из листа персонажей или создайте нового под уровень стола ({activeRoom.startingLevel || 1} ур.).
+                            </p>
+                            <Button
+                              size="sm"
+                              onClick={() => setShowPicker(true)}
+                              className="cursor-pointer gap-1.5"
+                            >
+                              <Plus className="size-3.5" />
+                              Выбрать персонажа
+                            </Button>
+                          </div>
+                        );
+                      }
+
+                      const charSnap = currentParticipant.characterSnapshot || {};
+                      return (
+                        <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-4 flex items-center justify-between gap-3">
+                          <div className="flex items-center gap-3 min-w-0">
+                            {charSnap.portraitUrl ? (
+                              <img
+                                src={charSnap.portraitUrl}
+                                alt={charSnap.name || "Герой"}
+                                className="size-11 rounded-full object-cover border border-emerald-500/30 shrink-0"
+                              />
+                            ) : (
+                              <div className="size-11 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-700 dark:text-emerald-300 font-bold border border-emerald-500/30 shrink-0">
+                                <User className="size-5" />
+                              </div>
+                            )}
+                            <div className="min-w-0">
+                              <div className="text-[11px] text-emerald-700 dark:text-emerald-400 font-medium">
+                                Ваш герой в игре:
+                              </div>
+                              <div className="font-semibold text-sm text-foreground truncate">
+                                {charSnap.name || "Герой"}
+                              </div>
+                              <div className="text-xs text-muted-foreground">
+                                {charSnap.race || ""} {charSnap.className || "Искатель приключений"} • {charSnap.level || activeRoom.startingLevel || 1} ур.
+                              </div>
+                            </div>
+                          </div>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setShowPicker(true)}
+                            className="shrink-0 text-xs h-8 cursor-pointer"
+                          >
+                            Сменить
+                          </Button>
+                        </div>
+                      );
+                    })()}
+
+                    {/* Список участников за столом */}
+                    <div className="space-y-2">
+                      <div className="text-xs font-semibold text-muted-foreground flex items-center justify-between">
+                        <span>Участники за столом ({activeRoom.participants?.length || 0})</span>
+                        <span className="text-[11px] text-muted-foreground font-normal">
+                          Стартовый уровень: {activeRoom.startingLevel || 1}
+                        </span>
+                      </div>
+                      {(!activeRoom.participants || activeRoom.participants.length === 0) ? (
+                        <div className="text-center text-xs text-muted-foreground py-6 border border-dashed rounded-lg">
+                          Пока никто не подключился. Поделитесь кодом комнаты!
+                        </div>
+                      ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                          {activeRoom.participants.map((p: any) => {
+                            const snap = p.characterSnapshot || {};
+                            const isMe = user?.id && p.userId === user.id;
+                            return (
+                              <div
+                                key={p.id || p.userId}
+                                className={`p-2.5 rounded-lg border flex items-center gap-2.5 ${
+                                  isMe ? "border-emerald-500/40 bg-emerald-500/5" : "border-border bg-card"
+                                }`}
+                              >
+                                {snap.portraitUrl ? (
+                                  <img
+                                    src={snap.portraitUrl}
+                                    alt={snap.name || "Герой"}
+                                    className="size-8 rounded-full object-cover border border-border shrink-0"
+                                  />
+                                ) : (
+                                  <div className="size-8 rounded-full bg-muted flex items-center justify-center text-muted-foreground shrink-0 border border-border">
+                                    <User className="size-4" />
+                                  </div>
+                                )}
+                                <div className="min-w-0 flex-1">
+                                  <div className="flex items-center gap-1.5">
+                                    <span className="font-semibold text-xs text-foreground truncate">
+                                      {snap.name || "Безымянный"}
+                                    </span>
+                                    {p.isHost && (
+                                      <span title="Ведущий комнаты">
+                                        <Crown className="size-3 text-amber-500 fill-amber-500 shrink-0" />
+                                      </span>
+                                    )}
+                                    {isMe && (
+                                      <Badge variant="outline" className="text-[9px] px-1 py-0 h-3.5 text-emerald-600 border-emerald-500/40">
+                                        Вы
+                                      </Badge>
+                                    )}
+                                  </div>
+                                  <div className="text-[11px] text-muted-foreground truncate">
+                                    {snap.className || "Персонаж"} • {snap.level || activeRoom.startingLevel || 1} ур.
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Действия стола */}
+                    <div className="pt-2 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-2.5">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={leaveRoom}
+                        className="text-xs text-muted-foreground hover:text-destructive cursor-pointer w-full sm:w-auto"
+                      >
+                        <LogOut className="size-3.5 mr-1.5" />
+                        Покинуть комнату
+                      </Button>
+
+                      <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setCreatingCampaign(true)}
+                          className="text-xs cursor-pointer w-full sm:w-auto"
+                        >
+                          <Plus className="size-3.5 mr-1.5" />
+                          Создать приключение
+                        </Button>
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            loadCampaignsList();
+                            setShowCampaignList(true);
+                          }}
+                          className="text-xs cursor-pointer w-full sm:w-auto"
+                        >
+                          <BookOpen className="size-3.5 mr-1.5" />
+                          Выбрать кампанию
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            ) : (
+              <div className="flex-1 flex items-center justify-center p-8">
+                <Card className="max-w-lg w-full">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Sparkles className="size-5 text-amber-500" />
+                      Добро пожаловать, странник
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <p className="text-sm text-muted-foreground">
+                      Это AI Dungeon Master для D&D 5e. Нейросеть будет вести твою
+                      кампанию, бросать кубики, помнить персонажей и события.
+                    </p>
+                    <div className="flex flex-col gap-2">
+                      <Button onClick={() => setCreatingCampaign(true)} size="lg">
+                        <Plus className="size-4 mr-2" />
+                        Создать новую кампанию
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="lg"
+                        onClick={() => setShowJoinRoomModal(true)}
+                        className="border-emerald-500/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/10 cursor-pointer"
+                      >
+                        <Radio className="size-4 mr-2 text-emerald-500 animate-pulse" />
+                        Присоединиться к комнате по коду
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="lg"
+                        onClick={() => {
+                          loadCampaignsList();
+                          setShowCampaignList(true);
+                        }}
+                      >
+                        <BookOpen className="size-4 mr-2" />
+                        Выбрать из существующих
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => openSetup()}
+                      >
+                        <Settings className="size-4 mr-2" />
+                        Открыть настройки API
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )
           ) : (
             <>
               {/* Прогресс генерации истории. Играть можно и не дожидаясь, но
@@ -2244,19 +2556,19 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
         </main>
 
         {/* Sidebar */}
-        {activeCampaign && (
+        {(activeCampaign || activeRoom) && (
           sidebarCollapsed ? (
             <aside
               onClick={toggleSidebar}
               className="hidden md:flex flex-col items-center py-4 border-l bg-card/40 hover:bg-card/70 transition-colors cursor-pointer w-10 text-muted-foreground hover:text-foreground group select-none relative"
-              title="Развернуть боковую панель (Персы, Память, Журнал)"
+              title="Развернуть боковую панель (Персы, Сеть, Память, Журнал)"
             >
               <div className="p-1.5 rounded group-hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 mb-3 transition">
                 <PanelRightOpen className="size-4" />
               </div>
               <div className="flex-1 flex items-center justify-center">
                 <span className="[writing-mode:vertical-rl] rotate-180 text-xs font-medium tracking-wider uppercase opacity-70 group-hover:opacity-100 flex items-center gap-2">
-                  <Users className="size-3 rotate-90 inline" /> Персы &bull; Память
+                  <Users className="size-3 rotate-90 inline" /> {activeRoom ? "Сеть • Персы" : "Персы • Память"}
                 </span>
               </div>
             </aside>
@@ -2276,7 +2588,7 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
 
               <Tabs value={sidebarTab} onValueChange={setSidebarTab} className="flex-1 flex flex-col min-h-0">
                 <div className="flex items-center gap-1 mx-2 mt-2">
-                  <TabsList className={`grid ${activeRoom ? "grid-cols-4" : "grid-cols-3"} flex-1`}>
+                  <TabsList className={`grid ${activeCampaign ? (activeRoom ? "grid-cols-4" : "grid-cols-3") : (activeRoom ? "grid-cols-2" : "grid-cols-3")} flex-1`}>
                     <TabsTrigger value="characters" className="text-xs">
                       <Users className="size-3 mr-1" />
                       Персы
@@ -2292,14 +2604,18 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
                         )}
                       </TabsTrigger>
                     )}
-                    <TabsTrigger value="memory" className="text-xs">
-                      <Brain className="size-3 mr-1" />
-                      Память
-                    </TabsTrigger>
-                    <TabsTrigger value="events" className="text-xs">
-                      <Scroll className="size-3 mr-1" />
-                      Журнал
-                    </TabsTrigger>
+                    {activeCampaign && (
+                      <>
+                        <TabsTrigger value="memory" className="text-xs">
+                          <Brain className="size-3 mr-1" />
+                          Память
+                        </TabsTrigger>
+                        <TabsTrigger value="events" className="text-xs">
+                          <Scroll className="size-3 mr-1" />
+                          Журнал
+                        </TabsTrigger>
+                      </>
+                    )}
                   </TabsList>
                   <button
                     type="button"
@@ -2893,6 +3209,13 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
       <CreateRoomModal
         isOpen={showCreateRoom}
         onClose={() => setShowCreateRoom(false)}
+      />
+
+      {/* Multiplayer Join Room modal */}
+      <JoinRoomModal
+        isOpen={showJoinRoomModal}
+        onClose={() => setShowJoinRoomModal(false)}
+        onJoined={handleRoomJoined}
       />
 
       {/* Character Picker for Multiplayer Room */}

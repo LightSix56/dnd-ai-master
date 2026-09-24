@@ -59,8 +59,13 @@ export function generateRoomCode(): string {
  */
 export function normalizeRoomCode(raw: string): string {
   if (!raw) return "";
-  return raw
-    .trim()
+  let clean = raw.trim();
+  // Поддержка вставки ссылки вида https://.../room/DRAGON-42 или /room/DRAGON-42
+  const urlMatch = clean.match(/\/room\/([a-zA-Z0-9_\-]+)/i);
+  if (urlMatch) {
+    clean = urlMatch[1];
+  }
+  return clean
     .toUpperCase()
     .replace(/[\s_]+/g, "-")
     .replace(/-+/g, "-");

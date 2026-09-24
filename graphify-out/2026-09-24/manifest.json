@@ -234,9 +234,9 @@
     "semantic_hash": ""
   },
   "src/components/dnd/DnDApp.tsx": {
-    "mtime": 1790234440.6050868,
-    "seen": 1790234592.3774562,
-    "ast_hash": "45ebfd317365904c9c3da9d79ef9b056",
+    "mtime": 1790234993.4378731,
+    "seen": 1790235227.9256954,
+    "ast_hash": "358bf6050d0655830a438567401e5ddf",
     "semantic_hash": ""
   },
   "src/components/dnd/ModelPickerModal.tsx": {
@@ -18723,12 +18723,6 @@
     "mtime": 1790186109.2048411,
     "seen": 1790186223.7221758,
     "ast_hash": "67cb2e518a81ae4e90af8ffd9334f548",
-    "semantic_hash": ""
-  },
-  "src/components/dnd-icons.tsx": {
-    "mtime": 1789307339.2162797,
-    "seen": 1790077015.8850396,
-    "ast_hash": "f4380c1005b8031a1f4217c9e6019b72",
     "semantic_hash": ""
   },
   "src/components/room/CharacterPickerModal.tsx": {

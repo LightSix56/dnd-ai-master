@@ -1,11 +1,14 @@
 "use client";
 
-import React, { use } from "react";
+import React from "react";
+import { useParams } from "next/navigation";
 import { DnDApp } from "@/components/dnd/DnDApp";
 
-export default function RoomPage(props: { params: Promise<{ code: string }> }) {
-  const params = use(props.params);
-  const roomCode = params.code?.toUpperCase();
+export default function RoomPage() {
+  const params = useParams();
+  const rawCode = typeof params?.code === "string" ? params.code : Array.isArray(params?.code) ? params.code[0] : "";
+  const roomCode = rawCode ? decodeURIComponent(rawCode).trim().toUpperCase() : undefined;
 
   return <DnDApp initialRoomCode={roomCode} />;
 }
+
