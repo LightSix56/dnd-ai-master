@@ -31,30 +31,35 @@ export function applyStatusToNotes(oldNotes: string | null | undefined, newStatu
   return clean ? `${statusTag}\n${clean}` : statusTag;
 }
 
+export const newNpcSchema = z.object({
+  name: z.string(),
+  type: z.enum(["npc", "enemy", "companion"]).default("npc"),
+  location: z.string().nullable().optional(),
+  status: z.string().nullable().optional(),
+  race: z.string().nullable().optional(),
+  class: z.string().nullable().optional(),
+});
+
 export const sceneUpdateSchema = z.object({
-  currentLocation: z.string().optional(),
-  updates: z.array(
-    z.object({
-      id: z.string(),
-      inScene: z.boolean(),
-      status: z.string().optional(),
-      characterInsight: z.string().optional(),
-      location: z.string().optional(),
-      hpDelta: z.number().optional().default(0),
-      relationDelta: z.number().optional().default(0),
-    })
-  ),
+  currentLocation: z.string().nullable().optional(),
+  updates: z
+    .array(
+      z.object({
+        id: z.string(),
+        inScene: z.boolean(),
+        status: z.string().nullable().optional(),
+        characterInsight: z.string().nullable().optional(),
+        location: z.string().nullable().optional(),
+        hpDelta: z.number().optional().default(0),
+        relationDelta: z.number().optional().default(0),
+      })
+    )
+    .default([]),
   newNpc: z
-    .object({
-      name: z.string(),
-      type: z.enum(["npc", "enemy", "companion"]).default("npc"),
-      location: z.string().optional(),
-      status: z.string().optional(),
-      race: z.string().optional(),
-      class: z.string().optional(),
-    })
+    .union([newNpcSchema, z.array(newNpcSchema)])
     .nullable()
     .optional(),
+  newNpcs: z.array(newNpcSchema).optional().default([]),
   characterMemory: z
     .object({
       characterName: z.string(),
@@ -135,7 +140,19 @@ ${charSummary}
    - "location": актуальная локация (например: "Подвалы Док-Уорда", "За железной дверью подвала", "Зал таверны").
    - "hpDelta": 0 (или отрицательное/положительное число, если в этом ходе персонаж получил урон или лечение).
    - "relationDelta": число от -25 до +25 (+5..+20 если игрок помог, проявил сочувствие/откровенность или защитил персонажа; -5..-20 если угрожал, хамил, напал или обманул; 0 если отношение не изменилось).
-3. "newNpc": создать нового NPC ТОЛЬКО если в тексте появился новый сюжетный именной персонаж или явный противник. Фоновый шум и безымянных прохожих ("курица", "гости", "официантка") ИГНОРИРОВАТЬ (ставить null)!
+3. "newNpcs": список новых сюжетных персонажей (соратников/спутников игрока, именных NPC или сюжетных противников), появившихся в тексте. Фоновый шум и безымянных прохожих ("толпа", "курица", "гости", "прохожие") ИГНОРИРОВАТЬ!
+   Если появились соратники или NPC — добавь их в массив:
+   [
+     {
+       "name": "Имя персонажа",
+       "type": "companion" (для спутников/соратников игрока) | "npc" (для нейтральных/мирных) | "enemy" (для врагов),
+       "race": "раса если известна",
+       "class": "класс если известен",
+       "location": "локация",
+       "status": "актуальное состояние/действие"
+     }
+   ]
+   Если новых персонажей нет — передай пустой массив [].
 4. "characterMemory": если в ходе хода выяснилась важная новая деталь о герое (его тайна, прошлое, клятва, важное личное решение), верни объект: { "characterName": "имя персонажа", "insight": "краткая суть факта", "importance": 8 }. Если ничего принципиально нового не раскрыто — null.
 
 Верни СТРОГО JSON следующей структуры (ключи строго на английском):
@@ -152,13 +169,13 @@ ${charSummary}
       "relationDelta": 0
     }
   ],
-  "newNpc": null,
+  "newNpcs": [],
   "characterMemory": null
 }`;
 
   try {
     const client = createClient(apiKey, authMode, baseURL);
-    const modelToUse = resolveCheapModel(cheapModel);
+    const modelToUse = cheapModel ? resolveCheapModel(cheapModel) : "google/gemini-2.5-flash-lite";
 
     const result = await generateText({
       model: client.chat(modelToUse),
@@ -174,7 +191,7 @@ ${charSummary}
       return null;
     }
 
-    const { updates, newNpc, currentLocation, characterMemory } = validated.data;
+    const { updates, newNpc, newNpcs, currentLocation, characterMemory } = validated.data;
 
     // Применяем обновления персонажей в БД
     for (const u of updates) {
@@ -238,24 +255,58 @@ ${charSummary}
       });
     }
 
-    // Создаем нового сюжетного NPC, если модель его выделила
-    if (newNpc && newNpc.name) {
+    // Собираем всех новых NPC/спутников (поддерживаем массив newNpcs, а также массив или одиночный объект newNpc)
+    const npcsToCreate: Array<z.infer<typeof newNpcSchema>> = [];
+    if (Array.isArray(newNpc)) {
+      npcsToCreate.push(...newNpc);
+    } else if (newNpc && typeof newNpc === "object" && (newNpc as any).name) {
+      npcsToCreate.push(newNpc as any);
+    }
+    if (Array.isArray(newNpcs)) {
+      npcsToCreate.push(...newNpcs);
+    }
+
+    for (const npc of npcsToCreate) {
+      if (!npc.name) continue;
       const alreadyExists = characters.some(
-        (c) => c.name.toLowerCase() === newNpc.name.toLowerCase()
+        (c) => c.name.toLowerCase() === npc.name.toLowerCase()
       );
       if (!alreadyExists) {
-        await db.character.create({
+        const isCompanion = npc.type === "companion";
+        const isEnemy = npc.type === "enemy";
+        const defaultHp = isCompanion ? 12 : isEnemy ? 11 : 10;
+        const defaultAc = isCompanion ? 14 : isEnemy ? 12 : 10;
+
+        const created = await db.character.create({
           data: {
             campaignId,
-            name: newNpc.name,
-            type: newNpc.type || "npc",
-            race: newNpc.race || null,
-            class: newNpc.class || null,
-            location: newNpc.location || currentLocation || null,
+            name: npc.name,
+            type: npc.type || "npc",
+            race: npc.race || null,
+            class: npc.class || null,
+            hpCurrent: defaultHp,
+            hpMax: defaultHp,
+            ac: defaultAc,
+            speed: 30,
+            profBonus: 2,
+            location: npc.location || currentLocation || null,
             inScene: true,
-            notes: newNpc.status ? `[Статус: ${newNpc.status}]` : null,
+            notes: npc.status ? `[Статус: ${npc.status}]` : null,
           },
         });
+        characters.push({
+          id: created.id,
+          name: created.name,
+          type: created.type,
+          location: created.location,
+          inScene: created.inScene,
+          hpCurrent: created.hpCurrent,
+          hpMax: created.hpMax,
+          notes: created.notes,
+          isAlive: created.isAlive,
+          relation: created.relation,
+        });
+        console.log(`[SceneSync] Создан новый персонаж: "${npc.name}" (${npc.type})`);
       }
     }
 

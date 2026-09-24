@@ -8,6 +8,7 @@
 //  3. Батчевые инструменты — меньше шагов, а каждый шаг переотправляет весь промпт.
 //  4. prepareStep уводит служебные шаги на дешёвую модель, рассказ оставляя дорогой.
 
+import { after } from "next/server";
 import {
   streamText,
   convertToModelMessages,
@@ -314,28 +315,31 @@ export async function POST(req: Request) {
           `[DM] Ответ сохранён. Инструментов: ${toolCalls?.length || 0}. Символов: ${cleanedText.length}. Токенов: вход ${inTokens} (кеш ${cachedTokens}) / выход ${outTokens}. Стоимость: ~${costRub.toFixed(4)} ₽`
         );
 
-        // Фоновая синхронизация состояния сцены и NPC (дешевая модель, без задержки игрока)
-        if (activeCampaignId && cleanedText) {
-          void syncSceneState({
-            campaignId: activeCampaignId,
-            playerMessage: playerMessageText,
-            assistantResponse: cleanedText,
-            apiKey: userApiKey,
-            authMode,
-            baseURL,
-            cheapModel: cheapModelName,
-          });
-        }
-
-        // Свёртка истории — после ответа, чтобы не задерживать игрока.
-        // Ошибки внутри проглатываются: это фоновая оптимизация.
+        // Фоновая синхронизация состояния сцены, NPC и свёртки истории (на Vercel через after)
         if (activeCampaignId) {
-          void compactHistory({
-            campaignId: activeCampaignId,
-            apiKey: userApiKey,
-            authMode,
-            cheapModel: cheapModelName,
-            baseURL,
+          after(async () => {
+            try {
+              if (cleanedText) {
+                await syncSceneState({
+                  campaignId: activeCampaignId,
+                  playerMessage: playerMessageText,
+                  assistantResponse: cleanedText,
+                  apiKey: cleanKey,
+                  authMode,
+                  baseURL,
+                  cheapModel: cheapModelName,
+                });
+              }
+              await compactHistory({
+                campaignId: activeCampaignId,
+                apiKey: cleanKey,
+                authMode,
+                cheapModel: cheapModelName,
+                baseURL,
+              });
+            } catch (err) {
+              console.error("[chat background error]", err);
+            }
           });
         }
       },

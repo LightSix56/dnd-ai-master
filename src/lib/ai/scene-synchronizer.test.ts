@@ -97,3 +97,62 @@ test("sceneUpdateSchema supports characterInsight and characterMemory", () => {
   }
 });
 
+test("sceneUpdateSchema supports null characterInsight, null status, and array of newNpc", () => {
+  const sample = {
+    currentLocation: "Доки Южного района",
+    updates: [
+      {
+        id: "char-1",
+        inScene: true,
+        status: null,
+        characterInsight: null,
+      },
+    ],
+    newNpc: [
+      {
+        name: "Гуннар Каменный Кулак",
+        type: "companion",
+        race: "Человек (северянин)",
+        class: "Воин",
+        location: "Доки",
+        status: "прикрывает левый фланг",
+      },
+      {
+        name: "Каэлин",
+        type: "companion",
+        race: "Полуэльф",
+        class: "Следопыт",
+        location: "Доки",
+        status: "лук наготове",
+      },
+    ],
+  };
+
+  const parsed = sceneUpdateSchema.safeParse(sample);
+  assert.equal(parsed.success, true);
+  if (parsed.success) {
+    assert.equal(Array.isArray(parsed.data.newNpc), true);
+    assert.equal((parsed.data.newNpc as any[])?.length, 2);
+  }
+});
+
+test("sceneUpdateSchema supports newNpcs array with companions", () => {
+  const sample = {
+    currentLocation: "Доки",
+    updates: [],
+    newNpcs: [
+      {
+        name: "Гуннар",
+        type: "companion",
+      },
+    ],
+  };
+
+  const parsed = sceneUpdateSchema.safeParse(sample);
+  assert.equal(parsed.success, true);
+  if (parsed.success) {
+    assert.equal(parsed.data.newNpcs?.length, 1);
+    assert.equal(parsed.data.newNpcs?.[0].name, "Гуннар");
+  }
+});
+
