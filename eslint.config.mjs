@@ -12,6 +12,8 @@ const eslintConfig = [
       "react-hooks/rules-of-hooks": "off",
       "react-hooks/set-state-in-effect": "off",
       "react-hooks/unsupported-syntax": "off",
+      "react-hooks/purity": "off",
+      "react-hooks/immutability": "off",
       "react/no-unescaped-entities": "off",
       "@next/next/no-img-element": "off",
       "prefer-const": "off",
@@ -21,6 +23,7 @@ const eslintConfig = [
   {
     ignores: [
       "BATTLE/**",
+      "scratch/**",
       "node_modules/**",
       ".next/**",
       "out/**",

@@ -175,11 +175,17 @@ export async function POST(req: NextRequest) {
     const race = cj.race || "";
     const profBonus = proficiencyBonus(level);
 
-    // Характеристики и спасброски
+    // Характеристики и спасброски: суммируем базу, расовые бонусы и ASI
     const abilityScores = cj.abilityScores || cj.attributes || cj.stats || {};
+    const abilityBonuses = cj.abilityBonuses || {};
+    const asiBonuses = cj.asiBonuses || {};
+
     const abilityMods: Record<string, number> = {};
     for (const [ru, en] of Object.entries(ABILITY_RU_TO_EN)) {
-      abilityMods[en] = abilityModifier(abilityScores[ru] ?? abilityScores[en] ?? 10);
+      const base = Number(abilityScores[ru] ?? abilityScores[en] ?? 10);
+      const bonus = Number(abilityBonuses[ru] ?? abilityBonuses[en] ?? 0);
+      const asi = Number(asiBonuses[ru] ?? asiBonuses[en] ?? 0);
+      abilityMods[en] = abilityModifier(base + bonus + asi);
     }
 
     const savesProf = cj.savingThrowProficiencies || {};
@@ -216,10 +222,22 @@ export async function POST(req: NextRequest) {
     // ============ ЗАКЛИНАНИЯ ============
     const spellSlotsRaw = cj.spellSlots || {};
     const slots: Record<number, { max: number; used: number }> = {};
-    for (const [levelStr, max] of Object.entries(spellSlotsRaw)) {
+    for (const [levelStr, rawSlot] of Object.entries(spellSlotsRaw)) {
       const lvl = parseInt(levelStr, 10);
-      if (lvl >= 1 && lvl <= 9 && typeof max === "number" && max > 0) {
-        slots[lvl] = { max, used: 0 };
+      if (lvl >= 1 && lvl <= 9) {
+        const total =
+          typeof rawSlot === "number"
+            ? rawSlot
+            : typeof (rawSlot as any)?.totalSlots === "number"
+            ? (rawSlot as any).totalSlots
+            : 0;
+        const used =
+          typeof (rawSlot as any)?.expendedSlots === "number"
+            ? (rawSlot as any).expendedSlots
+            : 0;
+        if (total > 0) {
+          slots[lvl] = { max: total, used };
+        }
       }
     }
 

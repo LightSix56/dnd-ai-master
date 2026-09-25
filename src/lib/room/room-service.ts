@@ -259,6 +259,11 @@ export class RoomService {
 
     const snap = input.characterSnapshot as any;
     const charName = (snap?.name || "Герой").trim();
+    // Preserve flat CharacterData structure so dnd5e-character-sheet is not corrupted by outer wrapper
+    const cleanData = (snap?.data && typeof snap.data === "object" && (snap.data.abilityScores || snap.data.className))
+      ? snap.data
+      : input.characterSnapshot;
+
     const { error: charSyncError } = await this.client
       .from("characters")
       .upsert(
@@ -266,7 +271,7 @@ export class RoomService {
           id: targetCharacterId,
           user_id: input.userId,
           name: charName,
-          data: input.characterSnapshot,
+          data: cleanData,
         },
         { onConflict: "id" }
       );

@@ -749,6 +749,150 @@ function resolveEnemyAttacks(enemy: EnemyInput): Attack[] {
   ];
 }
 
+const CLASS_DEFAULT_SAVING_THROWS: Record<string, string[]> = {
+  варвар: ["STR", "CON"],
+  barbarian: ["STR", "CON"],
+  бард: ["DEX", "CHA"],
+  bard: ["DEX", "CHA"],
+  жрец: ["WIS", "CHA"],
+  cleric: ["WIS", "CHA"],
+  друид: ["INT", "WIS"],
+  druid: ["INT", "WIS"],
+  воин: ["STR", "CON"],
+  fighter: ["STR", "CON"],
+  монах: ["STR", "DEX"],
+  monk: ["STR", "DEX"],
+  паладин: ["WIS", "CHA"],
+  paladin: ["WIS", "CHA"],
+  следопыт: ["STR", "DEX"],
+  ranger: ["STR", "DEX"],
+  плут: ["DEX", "INT"],
+  вор: ["DEX", "INT"],
+  rogue: ["DEX", "INT"],
+  чародей: ["CON", "CHA"],
+  sorcerer: ["CON", "CHA"],
+  колдун: ["WIS", "CHA"],
+  warlock: ["WIS", "CHA"],
+  волшебник: ["INT", "WIS"],
+  маг: ["INT", "WIS"],
+  wizard: ["INT", "WIS"],
+  изобретатель: ["CON", "INT"],
+  artificer: ["CON", "INT"],
+};
+
+export function resolveSavingThrowProficiencies(
+  className: string,
+  notes?: string | null
+): Record<string, boolean> {
+  const result: Record<string, boolean> = {
+    STR: false,
+    DEX: false,
+    CON: false,
+    INT: false,
+    WIS: false,
+    CHA: false,
+  };
+
+  if (notes) {
+    const match = notes.match(/Спасброски:\s*([^\n\r]+)/i);
+    if (match) {
+      const ruToEn: Record<string, string> = {
+        СИЛ: "STR",
+        ЛОВ: "DEX",
+        ТЕЛ: "CON",
+        ИНТ: "INT",
+        МДР: "WIS",
+        ХАР: "CHA",
+      };
+      for (const [ru, en] of Object.entries(ruToEn)) {
+        if (match[1].includes(ru) || match[1].includes(en)) {
+          result[en] = true;
+        }
+      }
+      if (Object.values(result).some(Boolean)) {
+        return result;
+      }
+    }
+  }
+
+  const lowerClass = (className || "").trim().toLowerCase();
+  for (const [cls, stats] of Object.entries(CLASS_DEFAULT_SAVING_THROWS)) {
+    if (lowerClass.includes(cls)) {
+      for (const st of stats) {
+        result[st] = true;
+      }
+      return result;
+    }
+  }
+
+  return result;
+}
+
+export function resolveSpellDataForCombatant(
+  char: { class?: string | null; level: number; spells?: string | null; notes?: string | null },
+  intMod: number,
+  wisMod: number,
+  chaMod: number,
+  profBonus: number
+): string {
+  const lowerClass = (char.class || "").trim().toLowerCase();
+  const isCaster = /волшеб|маг|wizard|чародей|sorcerer|колдун|warlock|жрец|cleric|друид|druid|бард|bard|паладин|paladin|следопыт|ranger|изобретатель|artificer/i.test(lowerClass);
+
+  if (!isCaster) {
+    return "{}";
+  }
+
+  const isInt = /волшеб|маг|wizard|изобретатель|artificer/i.test(lowerClass);
+  const isWis = /жрец|cleric|друид|druid|следопыт|ranger/i.test(lowerClass);
+  const castAbility = isInt ? "INT" : isWis ? "WIS" : "CHA";
+  const castMod = isInt ? intMod : isWis ? wisMod : chaMod;
+
+  const slots: Record<number, { max: number; used: number }> = {};
+
+  if (char.notes) {
+    const slotMatches = char.notes.matchAll(/(\d+)\s*ур\.:\s*(\d+)/gi);
+    for (const m of slotMatches) {
+      const lvl = parseInt(m[1], 10);
+      const count = parseInt(m[2], 10);
+      if (lvl >= 1 && lvl <= 9 && count > 0) {
+        slots[lvl] = { max: count, used: 0 };
+      }
+    }
+  }
+
+  if (Object.keys(slots).length === 0) {
+    const lvl = Math.max(1, char.level || 1);
+    if (/паладин|paladin|следопыт|ranger/i.test(lowerClass)) {
+      if (lvl >= 2) slots[1] = { max: 2, used: 0 };
+      if (lvl >= 3) slots[1] = { max: 3, used: 0 };
+      if (lvl >= 5) { slots[1] = { max: 4, used: 0 }; slots[2] = { max: 2, used: 0 }; }
+    } else if (/колдун|warlock/i.test(lowerClass)) {
+      const pactSlots = lvl >= 11 ? 3 : lvl >= 2 ? 2 : 1;
+      const pactLevel = Math.min(5, Math.ceil(lvl / 2));
+      slots[pactLevel] = { max: pactSlots, used: 0 };
+    } else {
+      if (lvl === 1) slots[1] = { max: 2, used: 0 };
+      else if (lvl === 2) slots[1] = { max: 3, used: 0 };
+      else if (lvl >= 3) {
+        slots[1] = { max: 4, used: 0 };
+        slots[2] = { max: lvl >= 4 ? 3 : 2, used: 0 };
+        if (lvl >= 5) slots[3] = { max: 2, used: 0 };
+      }
+    }
+  }
+
+  const spellData = {
+    slots,
+    known: [],
+    prepared: [],
+    spellcastingAbility: castAbility,
+    spellSaveDC: 8 + profBonus + castMod,
+    spellAttackBonus: profBonus + castMod,
+  };
+
+  return JSON.stringify(spellData);
+}
+
 /**
  * Создаёт полный тактический бой из сюжетного энкаунтера
  */
@@ -1187,15 +1331,301 @@ export async function createTacticalEncounter({
         },
       ];
     } else {
-      charAttacks.push({
-        id: `atk_p_${char.id}_weapon`,
-        name: "Оружие",
-        attackBonus: strMod + proficiencyBonus(char.level),
-        damage: [{ dice: "1d8", mod: strMod, type: "slashing" }],
-        kind: "melee",
-        range: { normal: 5 },
-        actionCost: "action",
-      });
+      const lowerClass = (char.class || "").trim().toLowerCase();
+      const prof = char.profBonus || proficiencyBonus(char.level);
+
+      if (/волшеб|маг|wizard|чародей|sorcerer/i.test(lowerClass)) {
+        const spellMod = intMod >= chaMod ? intMod : chaMod;
+        charAttacks = [
+          {
+            id: `atk_p_${char.id}_firebolt`,
+            name: "Огненный снаряд",
+            attackBonus: spellMod + prof,
+            damage: [{ dice: char.level >= 5 ? "2d10" : "1d10", mod: 0, type: "fire" }],
+            kind: "ranged",
+            range: { normal: 120 },
+            actionCost: "action",
+          },
+          {
+            id: `atk_p_${char.id}_dagger`,
+            name: "Кинжал",
+            attackBonus: dexMod + prof,
+            damage: [{ dice: "1d4", mod: dexMod, type: "piercing" }],
+            kind: "melee",
+            range: { normal: 5 },
+            actionCost: "action",
+          },
+        ];
+      } else if (/колдун|warlock/i.test(lowerClass)) {
+        charAttacks = [
+          {
+            id: `atk_p_${char.id}_eldritch_blast`,
+            name: "Мистический заряд",
+            attackBonus: chaMod + prof,
+            damage: [{ dice: char.level >= 5 ? "2d10" : "1d10", mod: 0, type: "force" }],
+            kind: "ranged",
+            range: { normal: 120 },
+            actionCost: "action",
+          },
+          {
+            id: `atk_p_${char.id}_dagger`,
+            name: "Кинжал",
+            attackBonus: dexMod + prof,
+            damage: [{ dice: "1d4", mod: dexMod, type: "piercing" }],
+            kind: "melee",
+            range: { normal: 5 },
+            actionCost: "action",
+          },
+        ];
+      } else if (/жрец|cleric|друид|druid/i.test(lowerClass)) {
+        charAttacks = [
+          {
+            id: `atk_p_${char.id}_sacred_flame`,
+            name: "Священное пламя",
+            attackBonus: wisMod + prof,
+            damage: [{ dice: char.level >= 5 ? "2d8" : "1d8", mod: 0, type: "radiant" }],
+            kind: "ranged",
+            range: { normal: 60 },
+            actionCost: "action",
+          },
+          {
+            id: `atk_p_${char.id}_mace`,
+            name: "Булава",
+            attackBonus: (strMod >= dexMod ? strMod : dexMod) + prof,
+            damage: [{ dice: "1d6", mod: strMod >= dexMod ? strMod : dexMod, type: "bludgeoning" }],
+            kind: "melee",
+            range: { normal: 5 },
+            actionCost: "action",
+          },
+        ];
+      } else if (/паладин|paladin/i.test(lowerClass)) {
+        charAttacks = [
+          {
+            id: `atk_p_${char.id}_longsword`,
+            name: "Длинный меч",
+            attackBonus: strMod + prof,
+            damage: [{ dice: "1d8", mod: strMod, type: "slashing" }],
+            kind: "melee",
+            range: { normal: 5 },
+            actionCost: "action",
+          },
+          {
+            id: `atk_p_${char.id}_javelin`,
+            name: "Дротик",
+            attackBonus: strMod + prof,
+            damage: [{ dice: "1d6", mod: strMod, type: "piercing" }],
+            kind: "ranged",
+            range: { normal: 30, long: 120 },
+            actionCost: "action",
+          },
+        ];
+        charAbilities = [
+          {
+            id: `abl_p_${char.id}_divine_smite`,
+            name: "Божественная кара",
+            source: "Паладин 2",
+            usesMax: 3,
+            usesUsed: 0,
+            refresh: "long_rest",
+            parameters: {
+              name: "Божественная кара",
+              type: "ability",
+              actionCost: "bonus",
+              range: { type: "self" },
+              damage: [{ dice: "2d8", mod: 0, type: "radiant" }],
+              targeting: "self",
+              description: "Нанести дополнительный урон излучением при попадании рукопашной атакой.",
+            },
+          },
+        ];
+      } else if (/плут|rogue/i.test(lowerClass)) {
+        charAttacks = [
+          {
+            id: `atk_p_${char.id}_rapier`,
+            name: "Рапира",
+            attackBonus: dexMod + prof,
+            damage: [{ dice: "1d8", mod: dexMod, type: "piercing" }],
+            kind: "melee",
+            range: { normal: 5 },
+            actionCost: "action",
+          },
+          {
+            id: `atk_p_${char.id}_shortbow`,
+            name: "Короткий лук",
+            attackBonus: dexMod + prof,
+            damage: [{ dice: "1d6", mod: dexMod, type: "piercing" }],
+            kind: "ranged",
+            range: { normal: 80, long: 320 },
+            actionCost: "action",
+          },
+        ];
+        charAbilities = [
+          {
+            id: `abl_p_${char.id}_dash`,
+            name: "Хитрое действие: Рывок",
+            source: "Плут 2",
+            usesMax: 0,
+            usesUsed: 0,
+            refresh: "none",
+            parameters: {
+              name: "Хитрое действие: Рывок",
+              type: "ability",
+              actionCost: "bonus",
+              range: { type: "self" },
+              damage: [],
+              selfEffects: [{ condition: "dashing", durationRounds: 1 }],
+              targeting: "self",
+              description: "Бонусным действием совершить Рывок.",
+            },
+          },
+          {
+            id: `abl_p_${char.id}_disengage`,
+            name: "Хитрое действие: Отход",
+            source: "Плут 2",
+            usesMax: 0,
+            usesUsed: 0,
+            refresh: "none",
+            parameters: {
+              name: "Хитрое действие: Отход",
+              type: "ability",
+              actionCost: "bonus",
+              range: { type: "self" },
+              damage: [],
+              selfEffects: [{ condition: "disengaged", durationRounds: 1 }],
+              targeting: "self",
+              description: "Бонусным действием совершить Отход.",
+            },
+          },
+        ];
+      } else if (/следопыт|ranger/i.test(lowerClass)) {
+        charAttacks = [
+          {
+            id: `atk_p_${char.id}_longbow`,
+            name: "Длинный лук",
+            attackBonus: dexMod + prof,
+            damage: [{ dice: "1d8", mod: dexMod, type: "piercing" }],
+            kind: "ranged",
+            range: { normal: 150, long: 600 },
+            actionCost: "action",
+          },
+          {
+            id: `atk_p_${char.id}_shortswords`,
+            name: "Короткий меч",
+            attackBonus: dexMod + prof,
+            damage: [{ dice: "1d6", mod: dexMod, type: "piercing" }],
+            kind: "melee",
+            range: { normal: 5 },
+            actionCost: "action",
+          },
+        ];
+      } else if (/варвар|barbarian/i.test(lowerClass)) {
+        charAttacks = [
+          {
+            id: `atk_p_${char.id}_greataxe`,
+            name: "Секира",
+            attackBonus: strMod + prof,
+            damage: [{ dice: "1d12", mod: strMod, type: "slashing" }],
+            kind: "melee",
+            range: { normal: 5 },
+            actionCost: "action",
+          },
+          {
+            id: `atk_p_${char.id}_javelin`,
+            name: "Дротик",
+            attackBonus: strMod + prof,
+            damage: [{ dice: "1d6", mod: strMod, type: "piercing" }],
+            kind: "ranged",
+            range: { normal: 30, long: 120 },
+            actionCost: "action",
+          },
+        ];
+        charAbilities = [
+          {
+            id: `abl_p_${char.id}_rage`,
+            name: "Ярость",
+            source: "Варвар 1",
+            usesMax: 2,
+            usesUsed: 0,
+            refresh: "long_rest",
+            parameters: {
+              name: "Ярость",
+              type: "ability",
+              actionCost: "bonus",
+              range: { type: "self" },
+              damage: [],
+              selfEffects: [{ condition: "raging", durationRounds: 10 }],
+              targeting: "self",
+              description: "Впасть в боевую ярость (+2 к урону рукопашным оружием, сопротивление дробящему, колющему и рубящему урону).",
+            },
+          },
+        ];
+      } else if (/монах|monk/i.test(lowerClass)) {
+        const martialMod = dexMod >= strMod ? dexMod : strMod;
+        charAttacks = [
+          {
+            id: `atk_p_${char.id}_unarmed`,
+            name: "Безоружный удар",
+            attackBonus: martialMod + prof,
+            damage: [{ dice: "1d4", mod: martialMod, type: "bludgeoning" }],
+            kind: "melee",
+            range: { normal: 5 },
+            actionCost: "action",
+          },
+          {
+            id: `atk_p_${char.id}_quarterstaff`,
+            name: "Боевой посох",
+            attackBonus: martialMod + prof,
+            damage: [{ dice: "1d8", mod: martialMod, type: "bludgeoning" }],
+            kind: "melee",
+            range: { normal: 5 },
+            actionCost: "action",
+          },
+        ];
+      } else if (/бард|bard/i.test(lowerClass)) {
+        charAttacks = [
+          {
+            id: `atk_p_${char.id}_vicious_mockery`,
+            name: "Злая насмешка",
+            attackBonus: chaMod + prof,
+            damage: [{ dice: char.level >= 5 ? "2d4" : "1d4", mod: 0, type: "psychic" }],
+            kind: "ranged",
+            range: { normal: 60 },
+            actionCost: "action",
+          },
+          {
+            id: `atk_p_${char.id}_rapier`,
+            name: "Рапира",
+            attackBonus: dexMod + prof,
+            damage: [{ dice: "1d8", mod: dexMod, type: "piercing" }],
+            kind: "melee",
+            range: { normal: 5 },
+            actionCost: "action",
+          },
+        ];
+      } else {
+        const useDex = dexMod > strMod;
+        const mainMod = useDex ? dexMod : strMod;
+        charAttacks = [
+          {
+            id: `atk_p_${char.id}_weapon_main`,
+            name: useDex ? "Короткий меч" : "Боевой топор",
+            attackBonus: mainMod + prof,
+            damage: [{ dice: useDex ? "1d6" : "1d8", mod: mainMod, type: useDex ? "piercing" : "slashing" }],
+            kind: "melee",
+            range: { normal: 5 },
+            actionCost: "action",
+          },
+          {
+            id: `atk_p_${char.id}_weapon_ranged`,
+            name: useDex ? "Короткий лук" : "Дротик",
+            attackBonus: (useDex ? dexMod : strMod) + prof,
+            damage: [{ dice: "1d6", mod: useDex ? dexMod : strMod, type: "piercing" }],
+            kind: "ranged",
+            range: { normal: useDex ? 80 : 30, long: useDex ? 320 : 120 },
+            actionCost: "action",
+          },
+        ];
+      }
     }
 
     let posX = allyStartX + Math.floor(allyIndex / 4);
@@ -1285,6 +1715,13 @@ export async function createTacticalEncounter({
           ]
         : [];
 
+    const charProfBonus = char.profBonus || proficiencyBonus(char.level);
+    const profSaves = resolveSavingThrowProficiencies(char.class || "", char.notes);
+    const resolvedSpells =
+      char.spells && char.spells !== "{}" && char.spells.length > 2
+        ? char.spells
+        : resolveSpellDataForCombatant(char, intMod, wisMod, chaMod, charProfBonus);
+
     const combatant = await db.combatant.create({
       data: {
         combatId: combat.id,
@@ -1307,18 +1744,18 @@ export async function createTacticalEncounter({
         size: "medium",
         attacks: JSON.stringify(charAttacks),
         hotbar: JSON.stringify(hotbarItems),
-        spells: char.spells || "{}",
+        spells: resolvedSpells,
         abilities: JSON.stringify(charAbilities),
         abilityMods: JSON.stringify({ STR: strMod, DEX: dexMod, CON: conMod, INT: intMod, WIS: wisMod, CHA: chaMod }),
         saves: JSON.stringify({
-          STR: { prof: false, mod: strMod },
-          DEX: { prof: false, mod: dexMod },
-          CON: { prof: false, mod: conMod },
-          INT: { prof: false, mod: intMod },
-          WIS: { prof: false, mod: wisMod },
-          CHA: { prof: false, mod: chaMod },
+          STR: { prof: !!profSaves.STR, mod: strMod + (profSaves.STR ? charProfBonus : 0) },
+          DEX: { prof: !!profSaves.DEX, mod: dexMod + (profSaves.DEX ? charProfBonus : 0) },
+          CON: { prof: !!profSaves.CON, mod: conMod + (profSaves.CON ? charProfBonus : 0) },
+          INT: { prof: !!profSaves.INT, mod: intMod + (profSaves.INT ? charProfBonus : 0) },
+          WIS: { prof: !!profSaves.WIS, mod: wisMod + (profSaves.WIS ? charProfBonus : 0) },
+          CHA: { prof: !!profSaves.CHA, mod: chaMod + (profSaves.CHA ? charProfBonus : 0) },
         }),
-        profBonus: char.profBonus,
+        profBonus: charProfBonus,
         isAIControlled: false,
         potions: JSON.stringify(combatPotions),
       },
