@@ -70,9 +70,11 @@ export async function POST(
         completedTurn: result.completedTurn,
         nextTurn: result.nextTurn,
         dmResponse: result.dmResponse,
+        stats: result.stats,
       },
       { status: 200 }
     );
+
   } catch (err: any) {
     console.error("[API /api/room/[code]/turn/resolve POST] Error:", err);
     return NextResponse.json(

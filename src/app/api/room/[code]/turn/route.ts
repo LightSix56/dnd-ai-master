@@ -101,9 +101,11 @@ export async function POST(
               dmResponse: resolveResult.dmResponse,
               completedTurn: resolveResult.completedTurn,
               nextTurn: resolveResult.nextTurn,
+              stats: resolveResult.stats,
             },
             { status: 200 }
           );
+
         } catch (resolveErr) {
           await roomService.unlockTurnFromResolving(turn.id);
           throw resolveErr;

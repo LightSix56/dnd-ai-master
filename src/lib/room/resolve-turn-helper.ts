@@ -7,6 +7,18 @@ import { RoomService } from "./room-service";
 import type { Room, RoomParticipant, RoomTurn, RoomWithParticipants } from "./types";
 import { dmTools, buildToolsContext } from "@/lib/ai/tools";
 import { getDeterministicTools } from "@/lib/ai/caching";
+import { calculateCostRub, type TokenUsage } from "@/lib/ai/cost";
+
+export interface RoomTurnStats {
+  model: string;
+  usage: {
+    inputTokens: number;
+    outputTokens: number;
+    cachedTokens: number;
+    totalTokens: number;
+  };
+  costRub: number;
+}
 
 export interface ResolveActiveRoomTurnOptions {
   dmResponse?: string;
@@ -24,6 +36,7 @@ export interface ResolveActiveRoomTurnResult {
   completedTurn: RoomTurn;
   nextTurn: RoomTurn;
   dmResponse: string;
+  stats?: RoomTurnStats;
 }
 
 /**
@@ -192,6 +205,7 @@ export async function resolveActiveRoomTurnHelper(
 
   let narrative = typeof options?.dmResponse === "string" ? options.dmResponse.trim() : "";
   let capturedSteps: any[] = [];
+  let statsPayload: RoomTurnStats | undefined = undefined;
 
   if (!narrative) {
     const cleanKey = (options?.apiKey || process.env.AI_API_KEY || "").trim();
@@ -228,6 +242,31 @@ export async function resolveActiveRoomTurnHelper(
         const rawSteps = await res.steps;
         capturedSteps = Array.isArray(rawSteps) ? rawSteps : [];
 
+        // Извлекаем расход токенов и рассчитываем стоимость
+        const usage = res.usage || (res as any).totalUsage;
+        const inTokens = usage?.inputTokens ?? usage?.promptTokens ?? 0;
+        const outTokens = usage?.outputTokens ?? usage?.completionTokens ?? 0;
+        const cachedTokens = usage?.inputTokenDetails?.cacheReadTokens ?? (usage as any)?.cachedTokens ?? 0;
+        const totalTokens = usage?.totalTokens ?? (inTokens + outTokens);
+
+        const costRub = calculateCostRub(aiModel, {
+          inputTokens: inTokens,
+          outputTokens: outTokens,
+          cachedTokens,
+          totalTokens,
+        });
+
+        statsPayload = {
+          model: aiModel,
+          usage: {
+            inputTokens: inTokens,
+            outputTokens: outTokens,
+            cachedTokens,
+            totalTokens,
+          },
+          costRub,
+        };
+
         // Извлекаем текст из всех шагов модели (включая шаги после вызова инструментов)
         const stepTexts = capturedSteps
           .map((s: any) => (typeof s.text === "string" ? s.text.trim() : ""))
@@ -261,6 +300,17 @@ export async function resolveActiveRoomTurnHelper(
       const allToolCalls = capturedSteps.flatMap((s: any) => s.toolCalls || []);
       const allToolResults = capturedSteps.flatMap((s: any) => s.toolResults || []);
 
+      let serializedResults: string | null = null;
+      try {
+        serializedResults = JSON.stringify({
+          calls: allToolCalls || [],
+          results: allToolResults || [],
+          ...(statsPayload ? { _stats: statsPayload } : {}),
+        });
+      } catch {
+        serializedResults = allToolResults.length > 0 ? JSON.stringify(allToolResults) : null;
+      }
+
       await db.chatMessage.create({
         data: {
           campaignId,
@@ -276,7 +326,7 @@ export async function resolveActiveRoomTurnHelper(
           content: narrative,
           turn: activeTurn.roundNumber,
           toolCalls: allToolCalls.length > 0 ? JSON.stringify(allToolCalls) : null,
-          toolResults: allToolResults.length > 0 ? JSON.stringify(allToolResults) : null,
+          toolResults: serializedResults,
         },
       });
     } catch (dbErr) {
@@ -288,5 +338,7 @@ export async function resolveActiveRoomTurnHelper(
     completedTurn: result.completedTurn,
     nextTurn: result.nextTurn,
     dmResponse: narrative,
+    stats: statsPayload,
   };
 }
+

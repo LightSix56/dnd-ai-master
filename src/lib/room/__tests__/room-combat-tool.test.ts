@@ -176,4 +176,33 @@ describe("Room System Prompt - Anti-Chinese & Tactical Combat Rules", () => {
     expect(callArgs.stopWhen).toBeDefined();
     expect(callArgs.maxSteps).toBe(3);
   });
+
+  it("calculates token usage, cost and persists _stats to chatMessage", async () => {
+    const { db } = await import("@/lib/db");
+    const mockRoomService = {
+      resolveRoomTurn: vi.fn().mockResolvedValue({
+        completedTurn: { ...mockTurn, status: "completed" },
+        nextTurn: { ...mockTurn, id: "turn-2", roundNumber: 2, status: "waiting", playerInputs: {} },
+      }),
+    };
+
+    const res = await resolveActiveRoomTurnHelper(mockRoom, mockTurn, {
+      apiKey: "sk-test",
+      roomService: mockRoomService as any,
+    });
+
+    expect(res.stats).toBeDefined();
+    expect(res.stats?.usage).toBeDefined();
+    expect(res.stats?.costRub).toBeDefined();
+
+    expect(db.chatMessage.create).toHaveBeenCalled();
+    const assistantCall = vi.mocked(db.chatMessage.create).mock.calls.find(
+      (c: any) => c[0]?.data?.role === "assistant"
+    );
+    expect(assistantCall).toBeDefined();
+    const toolResults = JSON.parse((assistantCall as any)[0].data.toolResults || "{}");
+    expect(toolResults._stats).toBeDefined();
+    expect(toolResults._stats.costRub).toBeDefined();
+  });
 });
+
