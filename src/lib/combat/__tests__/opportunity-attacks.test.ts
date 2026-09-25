@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { CombatState, moveCombatant } from "../engine";
 import { decideBotTurn } from "../bot";
 import type { Combatant, Attack } from "../types";
@@ -197,7 +197,12 @@ describe("Opportunity Attacks & Reactions Enhancement", () => {
 
     const state = createTestCombatState([mover, enemy]);
 
-    moveCombatant(state, mover.id, { x: 2, y: 4 }, { skipTurnCheck: true });
+    const randomSpy = vi.spyOn(Math, "random").mockReturnValue(0.5);
+    try {
+      moveCombatant(state, mover.id, { x: 2, y: 4 }, { skipTurnCheck: true });
+    } finally {
+      randomSpy.mockRestore();
+    }
 
     const updatedMover = state.require("mover");
     expect(updatedMover.hpCurrent).toBeLessThanOrEqual(0);

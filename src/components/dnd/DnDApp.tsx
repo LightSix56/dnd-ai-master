@@ -1606,7 +1606,25 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
                     } as any,
                   ]);
                 }
+              } else if (data.dmResponse) {
+                setMessages((prev) => [
+                  ...prev,
+                  {
+                    id: `turn_${data.completedTurn?.id || Date.now()}`,
+                    role: "assistant",
+                    parts: [{ type: "text", text: data.dmResponse }],
+                  } as any,
+                ]);
               }
+            } else if (data.dmResponse) {
+              setMessages((prev) => [
+                ...prev,
+                {
+                  id: `turn_${data.completedTurn?.id || Date.now()}`,
+                  role: "assistant",
+                  parts: [{ type: "text", text: data.dmResponse }],
+                } as any,
+              ]);
             }
           } catch {}
         } else {
@@ -1689,7 +1707,25 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
                 } as any,
               ]);
             }
+          } else if (data.dmResponse) {
+            setMessages((prev) => [
+              ...prev,
+              {
+                id: `turn_${data.completedTurn?.id || Date.now()}`,
+                role: "assistant",
+                parts: [{ type: "text", text: data.dmResponse }],
+              } as any,
+            ]);
           }
+        } else if (data.dmResponse) {
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: `turn_${data.completedTurn?.id || Date.now()}`,
+              role: "assistant",
+              parts: [{ type: "text", text: data.dmResponse }],
+            } as any,
+          ]);
         }
       } catch {}
     } catch (err: any) {

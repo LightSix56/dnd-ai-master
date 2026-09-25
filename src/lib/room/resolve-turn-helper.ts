@@ -1,4 +1,4 @@
-import { generateText } from "ai";
+import { generateText, stepCountIs } from "ai";
 import { bundleTurnInputs, type CharacterTurnStatus } from "./turn-batcher";
 import { createClient, type AuthMode } from "@/lib/ai/client";
 import { resolveDmModel } from "@/lib/ai/models";
@@ -174,7 +174,10 @@ export async function resolveActiveRoomTurnHelper(
     partyStatus,
   });
 
-  let campaignId = room.campaignId || (room.campaignSettings as any)?.campaignId;
+  let campaignId =
+    room.campaignId ||
+    (room.campaignSettings as any)?.campaignId ||
+    (room as any)?.campaign_settings?.campaignId;
   if (!campaignId) {
     try {
       const activeCamp = await db.campaign.findFirst({
@@ -200,24 +203,32 @@ export async function resolveActiveRoomTurnHelper(
 
         const system = buildFrozenRoomSystemPrompt(room);
 
+        const availableTools = campaignId
+          ? getDeterministicTools(dmTools)
+          : getDeterministicTools({
+              roll_dice: dmTools.roll_dice,
+              calculate: dmTools.calculate,
+              search_web: dmTools.search_web,
+              fetch_page: dmTools.fetch_page,
+              start_combat: dmTools.start_combat,
+              get_combat_status: dmTools.get_combat_status,
+            });
+
         const res = await (generateText as any)({
           model: client.chat(aiModel),
           system,
           prompt,
-          ...(campaignId
-            ? {
-                tools: getDeterministicTools(dmTools),
-                toolsContext: buildToolsContext(campaignId),
-                maxSteps: 3,
-              }
-            : {}),
+          tools: availableTools,
+          ...(campaignId ? { toolsContext: buildToolsContext(campaignId) } : {}),
+          stopWhen: stepCountIs(4),
+          maxSteps: 3,
           temperature: 0.7,
         });
 
         const rawSteps = await res.steps;
         capturedSteps = Array.isArray(rawSteps) ? rawSteps : [];
 
-        // Извлекаем текст из всех шагов модели (включая шаги с вызовом инструментов)
+        // Извлекаем текст из всех шагов модели (включая шаги после вызова инструментов)
         const stepTexts = capturedSteps
           .map((s: any) => (typeof s.text === "string" ? s.text.trim() : ""))
           .filter(Boolean);
@@ -230,14 +241,16 @@ export async function resolveActiveRoomTurnHelper(
           );
           if (hadCombat) {
             narrative = "⚔️ Внимание, к оружию! Враги окружают отряд, воздух наполняется боевыми кличами — переходим к тактической сетке боя!";
+          } else {
+            narrative = "Действия отряда вызывают немедленный отклик окружающего мира. Обстановка стремительно меняется — герои заявляют о себе, и мир вокруг реагирует на их вызов. Что вы делаете дальше?";
           }
         }
       } catch (aiErr: any) {
         console.error("[resolveActiveRoomTurnHelper] AI call failed, fallback:", aiErr);
-        narrative = `Мастер оценивает действия отряда в раунде ${activeTurn.roundNumber}...`;
+        narrative = `⚠️ Ошибка связи с ИИ при описании раунда ${activeTurn.roundNumber}: ${aiErr?.message || "таймаут сервиса"}. Вы можете нажать «Отправить ход сейчас», чтобы повторить генерацию.`;
       }
     } else {
-      narrative = `Мастер оценивает действия отряда в раунде ${activeTurn.roundNumber}...`;
+      narrative = `⚠️ Не задан API-ключ ИИ для описания раунда ${activeTurn.roundNumber}. Укажите ключ в настройках и нажмите «Отправить ход сейчас».`;
     }
   }
 
@@ -260,7 +273,7 @@ export async function resolveActiveRoomTurnHelper(
         data: {
           campaignId,
           role: "assistant",
-          content: narrative || `Мастер оценивает действия отряда в раунде ${activeTurn.roundNumber}...`,
+          content: narrative,
           turn: activeTurn.roundNumber,
           toolCalls: allToolCalls.length > 0 ? JSON.stringify(allToolCalls) : null,
           toolResults: allToolResults.length > 0 ? JSON.stringify(allToolResults) : null,

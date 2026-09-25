@@ -202,7 +202,7 @@ describe("Cooperative Turn Logic", () => {
         roomService: mockRoomService,
       });
 
-      expect(result.dmResponse).toBe("Мастер оценивает действия отряда в раунде 3...");
+      expect(result.dmResponse).toContain("Не задан API-ключ ИИ");
       expect(result.completedTurn.status).toBe("completed");
       expect(result.nextTurn.roundNumber).toBe(4);
     } finally {
@@ -342,5 +342,148 @@ describe("Cooperative Turn Logic", () => {
     expect(call2.prompt).toContain("8/20");
     expect(call2.prompt).toContain("ранен");
   });
+
+  it("passes stopWhen to generateText and extracts narrative from subsequent steps when step 0 contains only tool calls", async () => {
+    const { generateText } = await import("ai");
+    const mockGenerateText = vi.mocked(generateText);
+
+    mockGenerateText.mockResolvedValueOnce({
+      text: "",
+      steps: [
+        {
+          text: "",
+          toolCalls: [{ toolName: "start_combat", args: {} }],
+        },
+        {
+          text: "Твоё «ОРУ» ещё звенит, когда улица взрывается движением!",
+          toolCalls: [],
+        },
+      ],
+    } as any);
+
+    const room: RoomWithParticipants = {
+      id: "room-step-test",
+      code: "STEPS",
+      name: "Тестовая комната",
+      hostUserId: "user-1",
+      status: "active",
+      startingLevel: 1,
+      maxLevel: 5,
+      partyBond: "strangers",
+      campaignSettings: {},
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      participants: [
+        {
+          id: "p1",
+          roomId: "room-step-test",
+          userId: "user-1",
+          characterId: "c1",
+          characterSnapshot: { name: "Клык", className: "Варвар", level: 1 },
+          isHost: true,
+          isReady: true,
+          joinedAt: new Date().toISOString(),
+        },
+      ],
+    };
+
+    const turn: RoomTurn = {
+      id: "turn-steps",
+      roomId: "room-step-test",
+      roundNumber: 1,
+      status: "waiting",
+      playerInputs: {
+        "user-1": {
+          userId: "user-1",
+          characterName: "Клык",
+          actionText: "я ору",
+          submittedAt: 100,
+        },
+      },
+      createdAt: new Date().toISOString(),
+    };
+
+    const mockRoomService = {
+      resolveRoomTurn: vi.fn().mockImplementation((_roomId, narrative) => ({
+        completedTurn: { ...turn, status: "completed", dmResponse: narrative },
+        nextTurn: { id: "turn-steps-2", roomId: "room-step-test", roundNumber: 2, status: "waiting", playerInputs: {}, createdAt: new Date().toISOString() },
+      })),
+    } as unknown as RoomService;
+
+    const result = await resolveActiveRoomTurnHelper(room, turn, {
+      apiKey: "test-key",
+      roomService: mockRoomService,
+    });
+
+    const call = mockGenerateText.mock.calls[mockGenerateText.mock.calls.length - 1][0] as any;
+    expect(call.stopWhen).toBeDefined();
+    expect(result.dmResponse).toBe("Твоё «ОРУ» ещё звенит, когда улица взрывается движением!");
+    expect(result.dmResponse).not.toContain("Мастер оценивает действия отряда в раунде 1...");
+  });
+
+  it("never returns hanging loading placeholder when AI throws an error", async () => {
+    const { generateText } = await import("ai");
+    const mockGenerateText = vi.mocked(generateText);
+
+    mockGenerateText.mockRejectedValueOnce(new Error("Polza timeout"));
+
+    const room: RoomWithParticipants = {
+      id: "room-err-test",
+      code: "ERRORS",
+      name: "Тестовая комната",
+      hostUserId: "user-1",
+      status: "active",
+      startingLevel: 1,
+      maxLevel: 5,
+      partyBond: "strangers",
+      campaignSettings: {},
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      participants: [
+        {
+          id: "p1",
+          roomId: "room-err-test",
+          userId: "user-1",
+          characterId: "c1",
+          characterSnapshot: { name: "Клык", className: "Варвар", level: 1 },
+          isHost: true,
+          isReady: true,
+          joinedAt: new Date().toISOString(),
+        },
+      ],
+    };
+
+    const turn: RoomTurn = {
+      id: "turn-err",
+      roomId: "room-err-test",
+      roundNumber: 1,
+      status: "waiting",
+      playerInputs: {
+        "user-1": {
+          userId: "user-1",
+          characterName: "Клык",
+          actionText: "я ору",
+          submittedAt: 100,
+        },
+      },
+      createdAt: new Date().toISOString(),
+    };
+
+    const mockRoomService = {
+      resolveRoomTurn: vi.fn().mockImplementation((_roomId, narrative) => ({
+        completedTurn: { ...turn, status: "completed", dmResponse: narrative },
+        nextTurn: { id: "turn-err-2", roomId: "room-err-test", roundNumber: 2, status: "waiting", playerInputs: {}, createdAt: new Date().toISOString() },
+      })),
+    } as unknown as RoomService;
+
+    const result = await resolveActiveRoomTurnHelper(room, turn, {
+      apiKey: "test-key",
+      roomService: mockRoomService,
+    });
+
+    expect(result.dmResponse).toContain("Ошибка");
+    expect(result.dmResponse).not.toBe("Мастер оценивает действия отряда в раунде 1...");
+  });
 });
+
 

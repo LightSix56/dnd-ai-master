@@ -173,6 +173,7 @@ describe("Room System Prompt - Anti-Chinese & Tactical Combat Rules", () => {
     const callArgs = vi.mocked(generateText).mock.calls[0][0] as any;
     expect(callArgs.tools).toBeDefined();
     expect(callArgs.tools).toHaveProperty("start_combat");
+    expect(callArgs.stopWhen).toBeDefined();
     expect(callArgs.maxSteps).toBe(3);
   });
 });
