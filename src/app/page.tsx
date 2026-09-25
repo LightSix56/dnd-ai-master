@@ -1,7 +1,7 @@
 "use client";
 
-import { DnDApp } from "@/components/dnd/DnDApp";
+import { HomeHubView } from "@/components/home/HomeHubView";
 
 export default function Home() {
-  return <DnDApp />;
+  return <HomeHubView />;
 }
