@@ -2148,7 +2148,9 @@ function CombatantDetails({
           </Badge>
           {combatant.className && (
             <Badge variant="outline" className="text-[10px]">
-              {combatant.className} {combatant.level}
+              {combatant.type === "enemy" || combatant.className.includes("ПО")
+                ? combatant.className
+                : `${combatant.className} ${combatant.level}`}
             </Badge>
           )}
           {combatant.isAIControlled && (

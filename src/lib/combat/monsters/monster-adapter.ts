@@ -39,6 +39,30 @@ export function crToProfBonus(cr: number): number {
   return 9;
 }
 
+export function formatCR(cr: number): string {
+  if (cr === 0.125) return "1/8";
+  if (cr === 0.25) return "1/4";
+  if (cr === 0.5) return "1/2";
+  return String(cr);
+}
+
+export const MONSTER_TYPE_RU: Record<string, string> = {
+  aberration: "аберрация",
+  beast: "зверь",
+  celestial: "небожитель",
+  construct: "конструкция",
+  dragon: "дракон",
+  elemental: "элементаль",
+  fey: "фея",
+  fiend: "исчадие",
+  giant: "великан",
+  humanoid: "гуманоид",
+  monstrosity: "монстр",
+  ooze: "слизь",
+  plant: "растение",
+  undead: "нежить",
+};
+
 function safeId(name: string): string {
   return name
     .toLowerCase()
@@ -308,8 +332,9 @@ export function monsterDefinitionToCombatant(
     conditions: [],
     isHidden: false,
     hasActed: false,
-    className: monster.type,
+    className: `${MONSTER_TYPE_RU[monster.type] || monster.type} • ПО ${formatCR(monster.challengeRating)}`,
     level: Math.max(1, Math.round(monster.challengeRating)),
+    challengeRating: monster.challengeRating,
     size: monster.size,
     movementUsed: 0,
     actionUsed: false,

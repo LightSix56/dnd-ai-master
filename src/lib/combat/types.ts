@@ -64,6 +64,7 @@ export interface Combatant {
   tacticalRole?: TacticalRole;
   suppressRegenerationUntilRound?: number;
   potions?: CombatPotion[];
+  challengeRating?: number;
 }
 
 export interface CombatPotion {
