@@ -234,9 +234,9 @@
     "semantic_hash": ""
   },
   "src/components/dnd/DnDApp.tsx": {
-    "mtime": 1790280347.4917052,
-    "seen": 1790280641.216555,
-    "ast_hash": "61e94e2f235eedd192cc052f25bcb507",
+    "mtime": 1790334299.6543698,
+    "seen": 1790334842.8106315,
+    "ast_hash": "a0c378a3dd928ac73175d02646926257",
     "semantic_hash": ""
   },
   "src/components/dnd/ModelPickerModal.tsx": {
@@ -18888,9 +18888,9 @@
     "semantic_hash": ""
   },
   "src/lib/combat/__tests__/opportunity-attacks.test.ts": {
-    "mtime": 1790091971.5060549,
-    "seen": 1790092531.2633672,
-    "ast_hash": "ecfbed66516af9c1feeaa274ca169ffd",
+    "mtime": 1790334738.2212825,
+    "seen": 1790334843.9486313,
+    "ast_hash": "e933ae001a49ef11f30ae35cdba33b6f",
     "semantic_hash": ""
   },
   "src/lib/combat/rewards/__tests__/loot-generator.test.ts": {
@@ -19434,15 +19434,15 @@
     "semantic_hash": ""
   },
   "src/app/api/room/__tests__/cooperative-turn.test.ts": {
-    "mtime": 1790261811.1632261,
-    "seen": 1790262056.870931,
-    "ast_hash": "313e927d507199f3405412856a83e780",
+    "mtime": 1790334427.2585156,
+    "seen": 1790334842.8022103,
+    "ast_hash": "8057a4ec37d40d5c0108df1bb356e2fa",
     "semantic_hash": ""
   },
   "src/lib/room/resolve-turn-helper.ts": {
-    "mtime": 1790280293.7371404,
-    "seen": 1790280642.462804,
-    "ast_hash": "88a60883c68f6394494f7a5a1afcb8e8",
+    "mtime": 1790334366.2278712,
+    "seen": 1790334843.9786108,
+    "ast_hash": "3444ca9aea21fbb9823587f2a347e670",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-24-cooperative-party-turns.md": {
@@ -19566,9 +19566,9 @@
     "semantic_hash": ""
   },
   "src/lib/room/__tests__/room-combat-tool.test.ts": {
-    "mtime": 1790275112.5401094,
-    "seen": 1790275180.2067277,
-    "ast_hash": "451b5fdebae3c0694abd104c12dd4893",
+    "mtime": 1790334370.6713474,
+    "seen": 1790334843.977096,
+    "ast_hash": "4eca784acef43d9bb06a08f4289eab77",
     "semantic_hash": ""
   },
   "src/components/dnd/__tests__/campaign-settings-sync.test.ts": {

@@ -355,7 +355,12 @@ describe("Opportunity Attacks & Reactions Enhancement", () => {
 
     const state = createTestCombatState([mover, sentinelEnemy]);
 
-    moveCombatant(state, mover.id, { x: 2, y: 4 }, { skipTurnCheck: true });
+    const randomSpy = vi.spyOn(Math, "random").mockReturnValue(0.5);
+    try {
+      moveCombatant(state, mover.id, { x: 2, y: 4 }, { skipTurnCheck: true });
+    } finally {
+      randomSpy.mockRestore();
+    }
 
     const updatedMover = state.require("mover");
     expect(updatedMover.hpCurrent).toBe(45);

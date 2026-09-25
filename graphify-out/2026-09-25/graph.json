@@ -4547,7 +4547,7 @@
       "file_type": "code",
       "norm_label": "handleforceresolveturn()",
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L1636"
+      "source_location": "L1654"
     },
     {
       "id": "src_components_dnd_dndapp_dndapp_handlegeneratestory",
@@ -4559,7 +4559,7 @@
       "file_type": "code",
       "norm_label": "handlegeneratestory()",
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L1702"
+      "source_location": "L1738"
     },
     {
       "id": "src_components_dnd_dndapp_dndapp_handlesubmit",
@@ -4583,7 +4583,7 @@
       "file_type": "code",
       "norm_label": "importfromcode()",
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L1819"
+      "source_location": "L1855"
     },
     {
       "id": "src_components_dnd_dndapp_dndapp_importfromfile",
@@ -4595,7 +4595,7 @@
       "file_type": "code",
       "norm_label": "importfromfile()",
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L1797"
+      "source_location": "L1833"
     },
     {
       "id": "src_components_dnd_dndapp_dndapp_leaveroom",
@@ -4643,7 +4643,7 @@
       "file_type": "code",
       "norm_label": "quickroll()",
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L1761"
+      "source_location": "L1797"
     },
     {
       "id": "src_components_dnd_dndapp_dndapp_startarcgeneration",
@@ -4667,7 +4667,7 @@
       "file_type": "code",
       "norm_label": "startcampaigngame()",
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L1739"
+      "source_location": "L1775"
     },
     {
       "id": "src_components_dnd_dndapp_dndapp_startnextactgeneration",
@@ -11495,7 +11495,7 @@
       "file_type": "code",
       "norm_label": "campaignlistmodal()",
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L4473"
+      "source_location": "L4509"
     },
     {
       "id": "src_components_dnd_dndapp_createcampaignmodal",
@@ -11507,7 +11507,7 @@
       "file_type": "code",
       "norm_label": "createcampaignmodal()",
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L4393"
+      "source_location": "L4429"
     },
     {
       "id": "src_components_dnd_dndapp_emptysubscribe",
@@ -11531,7 +11531,7 @@
       "file_type": "code",
       "norm_label": "eventcard()",
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L4079"
+      "source_location": "L4115"
     },
     {
       "id": "src_components_dnd_dndapp_formatinline",
@@ -11543,7 +11543,7 @@
       "file_type": "code",
       "norm_label": "formatinline()",
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L3982"
+      "source_location": "L4018"
     },
     {
       "id": "src_components_dnd_dndapp_markdownrenderer",
@@ -11555,7 +11555,7 @@
       "file_type": "code",
       "norm_label": "markdownrenderer()",
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L3951"
+      "source_location": "L3987"
     },
     {
       "id": "src_components_dnd_dndapp_memorycard",
@@ -11567,7 +11567,7 @@
       "file_type": "code",
       "norm_label": "memorycard()",
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L4046"
+      "source_location": "L4082"
     },
     {
       "id": "src_components_dnd_dndapp_messagebubble",
@@ -11579,7 +11579,7 @@
       "file_type": "code",
       "norm_label": "messagebubble()",
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L3891"
+      "source_location": "L3927"
     },
     {
       "id": "src_components_dnd_dndapp_setupmodal",
@@ -11591,7 +11591,7 @@
       "file_type": "code",
       "norm_label": "setupmodal()",
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L4120"
+      "source_location": "L4156"
     },
     {
       "id": "src_components_dnd_dndapp_storyarcmodal",
@@ -11603,7 +11603,7 @@
       "file_type": "code",
       "norm_label": "storyarcmodal()",
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L4617"
+      "source_location": "L4653"
     },
     {
       "id": "src_components_dnd_dndapp_useismounted",
@@ -29774,7 +29774,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L1751",
+      "source_location": "L1787",
       "weight": 1.0
     },
     {
@@ -29798,7 +29798,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L2822",
+      "source_location": "L2858",
       "weight": 1.0
     },
     {
@@ -29810,7 +29810,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L2823",
+      "source_location": "L2859",
       "weight": 1.0
     },
     {
@@ -29858,7 +29858,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L1731",
+      "source_location": "L1767",
       "weight": 1.0
     },
     {
@@ -29870,7 +29870,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L3974",
+      "source_location": "L4010",
       "weight": 1.0
     },
     {
@@ -29882,7 +29882,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L3926",
+      "source_location": "L3962",
       "weight": 1.0
     },
     {
@@ -29894,7 +29894,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L3935",
+      "source_location": "L3971",
       "weight": 1.0
     },
     {
@@ -39374,7 +39374,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/lib/room/resolve-turn-helper.ts",
-      "source_location": "L198",
+      "source_location": "L201",
       "weight": 1.0
     },
     {
@@ -39386,7 +39386,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/lib/room/resolve-turn-helper.ts",
-      "source_location": "L199",
+      "source_location": "L202",
       "weight": 1.0
     },
     {
@@ -39398,7 +39398,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/lib/room/resolve-turn-helper.ts",
-      "source_location": "L201",
+      "source_location": "L204",
       "weight": 1.0
     },
     {
@@ -39410,7 +39410,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/lib/room/resolve-turn-helper.ts",
-      "source_location": "L209",
+      "source_location": "L207",
       "weight": 1.0
     },
     {
@@ -39422,7 +39422,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/lib/room/resolve-turn-helper.ts",
-      "source_location": "L210",
+      "source_location": "L222",
       "weight": 1.0
     },
     {
@@ -40070,7 +40070,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L1819",
+      "source_location": "L1855",
       "weight": 1.0
     },
     {
@@ -79763,7 +79763,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L3891",
+      "source_location": "L3927",
       "weight": 1.0
     },
     {
@@ -79774,7 +79774,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L3951",
+      "source_location": "L3987",
       "weight": 1.0
     },
     {
@@ -79785,7 +79785,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L3982",
+      "source_location": "L4018",
       "weight": 1.0
     },
     {
@@ -79796,7 +79796,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L4046",
+      "source_location": "L4082",
       "weight": 1.0
     },
     {
@@ -79807,7 +79807,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L4079",
+      "source_location": "L4115",
       "weight": 1.0
     },
     {
@@ -79818,7 +79818,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L4120",
+      "source_location": "L4156",
       "weight": 1.0
     },
     {
@@ -79829,7 +79829,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L4393",
+      "source_location": "L4429",
       "weight": 1.0
     },
     {
@@ -79840,7 +79840,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L4473",
+      "source_location": "L4509",
       "weight": 1.0
     },
     {
@@ -79851,7 +79851,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L4617",
+      "source_location": "L4653",
       "weight": 1.0
     },
     {
@@ -79939,7 +79939,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L1636",
+      "source_location": "L1654",
       "weight": 1.0
     },
     {
@@ -79950,7 +79950,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L1702",
+      "source_location": "L1738",
       "weight": 1.0
     },
     {
@@ -79961,7 +79961,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L1739",
+      "source_location": "L1775",
       "weight": 1.0
     },
     {
@@ -79972,7 +79972,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L1761",
+      "source_location": "L1797",
       "weight": 1.0
     },
     {
@@ -79983,7 +79983,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/components/dnd/DnDApp.tsx",
-      "source_location": "L1797",
+      "source_location": "L1833",
       "weight": 1.0
     },
     {
@@ -93312,5 +93312,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "eb8e68559738c6ea2a2ee891cc299a811714e2df"
+  "built_at_commit": "1986ba4bfe984b320731ae0fa2311621106c9142"
 }

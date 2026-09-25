@@ -168,9 +168,9 @@
     "semantic_hash": ""
   },
   "src/app/page.tsx": {
-    "mtime": 1785933111.0,
-    "seen": 1789940139.3205676,
-    "ast_hash": "1759650041e544fd21d49b8bf2721c06",
+    "mtime": 1790337424.4684658,
+    "seen": 1790338057.637003,
+    "ast_hash": "6bab88a52e1047b6f6b74a8a2ba4c7be",
     "semantic_hash": ""
   },
   "src/components/combat/AttacksAbilitiesEditor.tsx": {
@@ -234,9 +234,9 @@
     "semantic_hash": ""
   },
   "src/components/dnd/DnDApp.tsx": {
-    "mtime": 1790334299.6543698,
-    "seen": 1790334842.8106315,
-    "ast_hash": "a0c378a3dd928ac73175d02646926257",
+    "mtime": 1790337792.2520065,
+    "seen": 1790338057.642871,
+    "ast_hash": "130a82ae864f0a74adcc44a7725724e5",
     "semantic_hash": ""
   },
   "src/components/dnd/ModelPickerModal.tsx": {
@@ -18888,9 +18888,9 @@
     "semantic_hash": ""
   },
   "src/lib/combat/__tests__/opportunity-attacks.test.ts": {
-    "mtime": 1790334738.2212825,
-    "seen": 1790334843.9486313,
-    "ast_hash": "e933ae001a49ef11f30ae35cdba33b6f",
+    "mtime": 1790337928.5919368,
+    "seen": 1790338058.6919436,
+    "ast_hash": "46734fb7496ff5e2da882dae878976ae",
     "semantic_hash": ""
   },
   "src/lib/combat/rewards/__tests__/loot-generator.test.ts": {
@@ -19593,6 +19593,72 @@
     "mtime": 1790282810.6894975,
     "seen": 1790283330.7763934,
     "ast_hash": "a765cbc0af692f7de70a8cdb61bfa4c3",
+    "semantic_hash": ""
+  },
+  "src/app/campaign/[id]/page.tsx": {
+    "mtime": 1790337664.3893685,
+    "seen": 1790338057.6366808,
+    "ast_hash": "bc8eebf335647bd7d684a7edf06a53cd",
+    "semantic_hash": ""
+  },
+  "src/app/campaign/__tests__/campaign-page.test.tsx": {
+    "mtime": 1790337650.0455265,
+    "seen": 1790338057.6366866,
+    "ast_hash": "3f974179e3417cfa185d919886f97b19",
+    "semantic_hash": ""
+  },
+  "src/app/home/__tests__/redirects.test.tsx": {
+    "mtime": 1790337221.193742,
+    "seen": 1790338057.6366901,
+    "ast_hash": "dc4baa6f51874ea02b609d28fb9c737c",
+    "semantic_hash": ""
+  },
+  "src/app/home/page.tsx": {
+    "mtime": 1790337232.5538957,
+    "seen": 1790338057.6366935,
+    "ast_hash": "a6b9089591654c8d851abf5069628b38",
+    "semantic_hash": ""
+  },
+  "src/app/room/__tests__/room-page.test.tsx": {
+    "mtime": 1790337679.3197124,
+    "seen": 1790338057.637294,
+    "ast_hash": "832dc744601eb99128f2fc3b1cb594a1",
+    "semantic_hash": ""
+  },
+  "src/app/rooms/[code]/page.tsx": {
+    "mtime": 1790337236.0540304,
+    "seen": 1790338057.6372979,
+    "ast_hash": "70725a8828629908ab340a51ccc27c40",
+    "semantic_hash": ""
+  },
+  "src/components/campaign/CreateCampaignModal.tsx": {
+    "mtime": 1790337373.7633505,
+    "seen": 1790338057.637586,
+    "ast_hash": "af7a1dbea0bb1ab47f7ee0d6197a0747",
+    "semantic_hash": ""
+  },
+  "src/components/home/HomeHubView.tsx": {
+    "mtime": 1790337517.3261929,
+    "seen": 1790338057.6437469,
+    "ast_hash": "795b875f02cee4e469666ec5cde01546",
+    "semantic_hash": ""
+  },
+  "src/components/home/__tests__/HomeHubView.test.tsx": {
+    "mtime": 1790337339.8257957,
+    "seen": 1790338057.6437514,
+    "ast_hash": "4b256be9cf9bbb95ce0c44f631daf896",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-09-25-page-routing-architecture.md": {
+    "mtime": 1790337207.7169158,
+    "seen": 1790338058.740414,
+    "ast_hash": "da24575c6a1803fc31f6d30e3088b8a3",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-09-25-page-routing-architecture-design.md": {
+    "mtime": 1790337178.6907516,
+    "seen": 1790338058.741311,
+    "ast_hash": "4e246445dc4a5e42293e1b5b037ba188",
     "semantic_hash": ""
   }
 }

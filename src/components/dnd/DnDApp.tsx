@@ -32,6 +32,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
+import { useRouter } from "next/navigation";
 import {
   Send,
   Dices,
@@ -58,6 +59,7 @@ import {
   Lock,
   Crown,
   User,
+  ArrowLeft,
   X,
   CheckCircle2,
   Radio,
@@ -201,7 +203,14 @@ function getMessageError(m: {
   return errorPart?.errorText || null;
 }
 
-export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
+export function DnDApp({
+  initialRoomCode,
+  initialCampaignId,
+}: {
+  initialRoomCode?: string;
+  initialCampaignId?: string;
+} = {}) {
+  const router = useRouter();
   const [sidebarTab, setSidebarTab] = useState<string>("characters");
   const [input, setInput] = useState("");
   const [showSetup, setShowSetup] = useState(false);
@@ -498,6 +507,7 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
       const token = getAuthToken();
       const targetCampId =
         campaignIdOverride ||
+        initialCampaignId ||
         activeRoomRef.current?.campaignId ||
         activeRoomRef.current?.campaignSettings?.campaignId ||
         activeRoomRef.current?.campaign_settings?.campaignId;
@@ -655,6 +665,12 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
       .finally(() => setLoadingRoom(false));
   }, [initialRoomCode, refreshActiveCampaign, user, getAuthToken]);
 
+  // Инициализация одиночной кампании по ссылке /campaign/[id]
+  useEffect(() => {
+    if (!initialCampaignId) return;
+    refreshActiveCampaign(initialCampaignId);
+  }, [initialCampaignId, refreshActiveCampaign]);
+
   const handleRoomJoined = useCallback(
     async (room: any, participants: any[]) => {
       const roomObj = {
@@ -736,6 +752,7 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
       });
       setSidebarTab("room");
       toast.success(`Комната ${data.room.code} открыта для друзей!`);
+      router.push(`/room/${data.room.code}`);
     } catch (e: any) {
       toast.error(`Ошибка: ${e.message}`);
     } finally {
@@ -769,9 +786,7 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
     if (!activeRoom) return;
     setActiveRoom(null);
     setSidebarTab("characters");
-    if (initialRoomCode && typeof window !== "undefined") {
-      window.history.pushState({}, "", "/");
-    }
+    router.push("/");
     toast.info("Вы вышли из сетевой комнаты");
   }
 
@@ -1866,14 +1881,26 @@ export function DnDApp({ initialRoomCode }: { initialRoomCode?: string } = {}) {
       {/* Header */}
       <header className="border-b bg-card/50 backdrop-blur supports-[backdrop-filter]:bg-card/30 shrink-0">
         <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3 gap-2">
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => router.push("/")}
+              className="gap-1.5 text-xs h-8 px-2 cursor-pointer text-muted-foreground hover:text-foreground"
+              title="Вернуться на главную страницу"
+            >
+              <ArrowLeft className="size-3.5" />
+              <span className="hidden sm:inline">На главную</span>
+            </Button>
             <div className="flex items-center gap-2">
               <div className="size-8 rounded-lg bg-foreground text-background flex items-center justify-center font-bold">
                 <Dices className="size-5" />
               </div>
               <div>
                 <h1 className="text-lg font-bold tracking-tight">AI Dungeon Master</h1>
-                <p className="text-xs text-muted-foreground">D&D 5e Solo Adventure</p>
+                <p className="text-xs text-muted-foreground">
+                  {activeRoom ? `Сетевой стол • ${activeRoom.code}` : "D&D 5e Adventure"}
+                </p>
               </div>
             </div>
             {activeCampaign && (

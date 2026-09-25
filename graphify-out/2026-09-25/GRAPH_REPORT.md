@@ -1,7 +1,7 @@
-# Graph Report - battle+ai  (2026-09-24)
+# Graph Report - battle+ai  (2026-09-25)
 
 ## Corpus Check
-- 3255 files · ~2,028,822 words
+- 3255 files · ~2,029,431 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `eb8e6855`
+- Built from commit: `1986ba4b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
