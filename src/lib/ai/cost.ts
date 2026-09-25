@@ -128,3 +128,37 @@ export function formatTokens(count: number): string {
   if (count >= 1_000) return `${(count / 1_000).toFixed(1)}k`;
   return count.toLocaleString("ru-RU");
 }
+
+/**
+ * Извлекает количество прочитанных из кеша токенов из любого формата ответа
+ * (AI SDK, OpenAI camelCase, OpenAI snake_case или прямой cachedTokens).
+ */
+export function extractCachedTokens(usage: unknown): number {
+  if (!usage || typeof usage !== "object") return 0;
+  const u = usage as Record<string, any>;
+  const val =
+    u.inputTokenDetails?.cacheReadTokens ??
+    u.promptTokensDetails?.cachedTokens ??
+    u.prompt_tokens_details?.cached_tokens ??
+    u.cachedTokens ??
+    u.cached_tokens ??
+    0;
+  return typeof val === "number" && !isNaN(val) ? Math.max(0, val) : 0;
+}
+
+/**
+ * Нормализует объект использования токенов к стандартизированному интерфейсу
+ * с гарантированно заполненными числовыми полями.
+ */
+export function extractTokenUsage(usage: unknown): Required<TokenUsage> {
+  if (!usage || typeof usage !== "object") {
+    return { inputTokens: 0, outputTokens: 0, cachedTokens: 0, totalTokens: 0 };
+  }
+  const u = usage as Record<string, any>;
+  const inputTokens = Math.max(0, Number(u.inputTokens ?? u.promptTokens ?? u.prompt_tokens ?? 0) || 0);
+  const outputTokens = Math.max(0, Number(u.outputTokens ?? u.completionTokens ?? u.completion_tokens ?? 0) || 0);
+  const cachedTokens = extractCachedTokens(u);
+  const totalTokens = Math.max(0, Number(u.totalTokens ?? u.total_tokens ?? (inputTokens + outputTokens)) || 0);
+  return { inputTokens, outputTokens, cachedTokens, totalTokens };
+}
+

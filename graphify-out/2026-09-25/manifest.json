@@ -234,9 +234,9 @@
     "semantic_hash": ""
   },
   "src/components/dnd/DnDApp.tsx": {
-    "mtime": 1790341488.91691,
-    "seen": 1790341748.7723384,
-    "ast_hash": "18b8978f61dd0ad1bf8144972dfc8b85",
+    "mtime": 1790343595.2239816,
+    "seen": 1790343881.9984899,
+    "ast_hash": "249a29095f1505e97e1fc8a658c359b1",
     "semantic_hash": ""
   },
   "src/components/dnd/ModelPickerModal.tsx": {
@@ -18798,15 +18798,15 @@
     "semantic_hash": ""
   },
   "src/app/api/room/[code]/turn/resolve/route.ts": {
-    "mtime": 1790263789.269516,
-    "seen": 1790263922.0902894,
-    "ast_hash": "1bdd08037eebaf35f5fee2b7e95c5ddd",
+    "mtime": 1790343342.8317478,
+    "seen": 1790343881.984969,
+    "ast_hash": "d20cf6df018865d621889638c1712340",
     "semantic_hash": ""
   },
   "src/app/api/room/[code]/turn/route.ts": {
-    "mtime": 1790263578.8883634,
-    "seen": 1790263922.0902927,
-    "ast_hash": "2e5d5f3661c6be40e026aa9f02ad67e1",
+    "mtime": 1790343155.0883162,
+    "seen": 1790343881.984975,
+    "ast_hash": "87dba3dad41a211c0b0f5f16f5227bd9",
     "semantic_hash": ""
   },
   "src/app/api/room/__tests__/turn-routes.test.ts": {
@@ -19440,9 +19440,9 @@
     "semantic_hash": ""
   },
   "src/lib/room/resolve-turn-helper.ts": {
-    "mtime": 1790334366.2278712,
-    "seen": 1790334843.9786108,
-    "ast_hash": "3444ca9aea21fbb9823587f2a347e670",
+    "mtime": 1790343317.0853896,
+    "seen": 1790343883.13746,
+    "ast_hash": "f8f4a3532496d1cae7f12833eb2c7455",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-24-cooperative-party-turns.md": {
@@ -19458,15 +19458,15 @@
     "semantic_hash": ""
   },
   "src/components/room/PartyTurnBar.tsx": {
-    "mtime": 1790274876.5843127,
-    "seen": 1790275179.7011147,
-    "ast_hash": "b3d286f06b282be4bf86eaa829a903ec",
+    "mtime": 1790343429.4446807,
+    "seen": 1790343882.0018964,
+    "ast_hash": "486846039c853f9cbd9e15f1bd72ae83",
     "semantic_hash": ""
   },
   "src/components/room/__tests__/PartyTurnBar.test.tsx": {
-    "mtime": 1790274865.7389321,
-    "seen": 1790275179.7014062,
-    "ast_hash": "d7e26304e2c936a5a7babb6c3fadf4d6",
+    "mtime": 1790343668.4347951,
+    "seen": 1790343882.002486,
+    "ast_hash": "380e7bc07ae695c5e2daee02746ce4e7",
     "semantic_hash": ""
   },
   "src/app/api/campaign/__tests__/campaign-user-isolation.test.ts": {
@@ -19566,9 +19566,9 @@
     "semantic_hash": ""
   },
   "src/lib/room/__tests__/room-combat-tool.test.ts": {
-    "mtime": 1790334370.6713474,
-    "seen": 1790334843.977096,
-    "ast_hash": "4eca784acef43d9bb06a08f4289eab77",
+    "mtime": 1790343201.4859085,
+    "seen": 1790343883.135496,
+    "ast_hash": "6951651eb9b18461644671fedb5ffeda",
     "semantic_hash": ""
   },
   "src/components/dnd/__tests__/campaign-settings-sync.test.ts": {
@@ -19695,6 +19695,18 @@
     "mtime": 1790341454.5991092,
     "seen": 1790341748.7726848,
     "ast_hash": "4c14c5b2597f9f4b78ba40ef64e1575a",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-09-25-room-streaming-and-sync.md": {
+    "mtime": 1790343034.3418941,
+    "seen": 1790343883.160038,
+    "ast_hash": "862d1429ed5f342ffa2377305de3e064",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-09-25-room-streaming-and-sync-design.md": {
+    "mtime": 1790342980.292094,
+    "seen": 1790343883.1621509,
+    "ast_hash": "2cde3aef3dbe176d321bd1a36a6d7989",
     "semantic_hash": ""
   }
 }

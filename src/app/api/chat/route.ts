@@ -33,7 +33,7 @@ import { parseStoryArc } from "@/lib/ai/story-arc";
 import { compactHistory } from "@/lib/ai/compact";
 import { syncSceneState } from "@/lib/ai/scene-synchronizer";
 import { BOOKKEEPING_TOOLS, resolveCheapModel, resolveDmModel } from "@/lib/ai/models";
-import { calculateCostRub } from "@/lib/ai/cost";
+import { calculateCostRub, extractTokenUsage } from "@/lib/ai/cost";
 import { db } from "@/lib/db";
 import {
   buildFrozenSystemPrompt,
@@ -261,35 +261,18 @@ export async function POST(req: Request) {
         text: string;
         toolCalls?: unknown[];
         toolResults?: unknown[];
-        usage?: {
-          inputTokens?: number;
-          outputTokens?: number;
-          totalTokens?: number;
-          inputTokenDetails?: { cacheReadTokens?: number };
-        };
+        usage?: unknown;
       }) => {
-        const inTokens = usage?.inputTokens ?? 0;
-        const outTokens = usage?.outputTokens ?? 0;
-        const cachedTokens = usage?.inputTokenDetails?.cacheReadTokens ?? 0;
-        const totalTokens = usage?.totalTokens ?? (inTokens + outTokens);
-        const costRub = calculateCostRub(selectedModel, {
-          inputTokens: inTokens,
-          outputTokens: outTokens,
-          cachedTokens,
-          totalTokens,
-        });
+        const tokenUsage = extractTokenUsage(usage);
+        const { inputTokens: inTokens, outputTokens: outTokens, cachedTokens, totalTokens } = tokenUsage;
+        const costRub = calculateCostRub(selectedModel, tokenUsage);
 
         const cleanedText = cleanAssistantNarrative(text);
 
         if (activeCampaignId && cleanedText) {
           const statsPayload = {
             model: selectedModel,
-            usage: {
-              inputTokens: inTokens,
-              outputTokens: outTokens,
-              cachedTokens,
-              totalTokens,
-            },
+            usage: tokenUsage,
             costRub,
           };
 
@@ -424,26 +407,12 @@ export async function POST(req: Request) {
         onError: handleStreamError,
         messageMetadata: ({ part }) => {
           if (part.type === "finish") {
-            const u = part.totalUsage;
-            const inTokens = u?.inputTokens ?? 0;
-            const outTokens = u?.outputTokens ?? 0;
-            const cachedTokens = (u as any)?.inputTokenDetails?.cacheReadTokens ?? 0;
-            const totalTokens = u?.totalTokens ?? (inTokens + outTokens);
-            const costRub = calculateCostRub(selectedModel, {
-              inputTokens: inTokens,
-              outputTokens: outTokens,
-              cachedTokens,
-              totalTokens,
-            });
+            const tokenUsage = extractTokenUsage(part.totalUsage);
+            const costRub = calculateCostRub(selectedModel, tokenUsage);
 
             return {
               model: selectedModel,
-              usage: {
-                inputTokens: inTokens,
-                outputTokens: outTokens,
-                cachedTokens,
-                totalTokens,
-              },
+              usage: tokenUsage,
               costRub,
             };
           }

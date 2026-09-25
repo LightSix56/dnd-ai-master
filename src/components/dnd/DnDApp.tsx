@@ -2109,6 +2109,28 @@ export function DnDApp({
               )}
             </button>
 
+            {/* 1.8. Кнопка «Статистика затрат и кеша» */}
+            <button
+              type="button"
+              onClick={() => setShowCostModal(true)}
+              className="shrink-0 h-8 px-2.5 rounded-md text-xs font-medium border border-border bg-background hover:bg-accent text-foreground transition shadow-xs flex items-center gap-1.5 cursor-pointer font-mono"
+              title="Статистика расхода токенов и кеша промпта"
+            >
+              <Coins className="size-3.5 text-amber-500 shrink-0" />
+              <span>~{formatRubles(campaignStats.totalCostRub)}</span>
+              {campaignStats.inputTokens > 0 && (
+                <span
+                  className={`text-[10px] font-semibold px-1 py-0.5 rounded leading-none ${
+                    campaignStats.cachedTokens > 0
+                      ? "text-emerald-700 dark:text-emerald-300 bg-emerald-500/10"
+                      : "text-muted-foreground bg-muted"
+                  }`}
+                >
+                  кеш {Math.round((campaignStats.cachedTokens / campaignStats.inputTokens) * 100)}%
+                </span>
+              )}
+            </button>
+
             {/* 2. Кнопка «Настройки» */}
             <button
               type="button"
@@ -4152,9 +4174,13 @@ function MessageBubble({
           <div className="mt-2.5 pt-1.5 border-t border-border/40 flex items-center justify-between text-[11px] text-muted-foreground font-mono">
             <div className="flex items-center gap-1.5">
               <span>⏱️ {formatTokens(metadata.usage.totalTokens)} токенов</span>
-              {metadata.usage.cachedTokens > 0 && (
-                <span className="text-emerald-600 dark:text-emerald-400 text-[10px]">
+              {metadata.usage.cachedTokens != null && metadata.usage.cachedTokens > 0 ? (
+                <span className="text-emerald-600 dark:text-emerald-400 font-medium text-[10px]">
                   (кеш: {formatTokens(metadata.usage.cachedTokens)})
+                </span>
+              ) : (
+                <span className="text-muted-foreground/60 text-[10px]">
+                  (кеш: 0)
                 </span>
               )}
             </div>

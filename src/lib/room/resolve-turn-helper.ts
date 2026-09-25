@@ -7,7 +7,7 @@ import { RoomService } from "./room-service";
 import type { Room, RoomParticipant, RoomTurn, RoomWithParticipants } from "./types";
 import { dmTools, buildToolsContext } from "@/lib/ai/tools";
 import { getDeterministicTools } from "@/lib/ai/caching";
-import { calculateCostRub, type TokenUsage } from "@/lib/ai/cost";
+import { calculateCostRub, extractTokenUsage, type TokenUsage } from "@/lib/ai/cost";
 
 export interface RoomTurnStats {
   model: string;
@@ -253,27 +253,13 @@ export async function resolveActiveRoomTurnHelper(
           const rawSteps = await res.steps;
           capturedSteps = Array.isArray(rawSteps) ? rawSteps : [];
 
-          const usage = await res.usage;
-          const inTokens = usage?.inputTokens ?? usage?.promptTokens ?? 0;
-          const outTokens = usage?.outputTokens ?? usage?.completionTokens ?? 0;
-          const cachedTokens = usage?.inputTokenDetails?.cacheReadTokens ?? (usage as any)?.cachedTokens ?? 0;
-          const totalTokens = usage?.totalTokens ?? (inTokens + outTokens);
-
-          const costRub = calculateCostRub(aiModel, {
-            inputTokens: inTokens,
-            outputTokens: outTokens,
-            cachedTokens,
-            totalTokens,
-          });
+          const rawUsage = await res.usage;
+          const tokenUsage = extractTokenUsage(rawUsage);
+          const costRub = calculateCostRub(aiModel, tokenUsage);
 
           statsPayload = {
             model: aiModel,
-            usage: {
-              inputTokens: inTokens,
-              outputTokens: outTokens,
-              cachedTokens,
-              totalTokens,
-            },
+            usage: tokenUsage,
             costRub,
           };
 
@@ -300,27 +286,13 @@ export async function resolveActiveRoomTurnHelper(
           capturedSteps = Array.isArray(rawSteps) ? rawSteps : [];
 
           // Извлекаем расход токенов и рассчитываем стоимость
-          const usage = res.usage || (res as any).totalUsage;
-          const inTokens = usage?.inputTokens ?? usage?.promptTokens ?? 0;
-          const outTokens = usage?.outputTokens ?? usage?.completionTokens ?? 0;
-          const cachedTokens = usage?.inputTokenDetails?.cacheReadTokens ?? (usage as any)?.cachedTokens ?? 0;
-          const totalTokens = usage?.totalTokens ?? (inTokens + outTokens);
-
-          const costRub = calculateCostRub(aiModel, {
-            inputTokens: inTokens,
-            outputTokens: outTokens,
-            cachedTokens,
-            totalTokens,
-          });
+          const rawUsage = res.usage || (res as any).totalUsage;
+          const tokenUsage = extractTokenUsage(rawUsage);
+          const costRub = calculateCostRub(aiModel, tokenUsage);
 
           statsPayload = {
             model: aiModel,
-            usage: {
-              inputTokens: inTokens,
-              outputTokens: outTokens,
-              cachedTokens,
-              totalTokens,
-            },
+            usage: tokenUsage,
             costRub,
           };
 
