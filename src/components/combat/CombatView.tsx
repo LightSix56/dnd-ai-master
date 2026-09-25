@@ -97,6 +97,7 @@ export interface CombatEndSummary {
 export interface CombatViewProps {
   combatId?: string;
   campaignId?: string;
+  roomCode?: string;
   onClose: () => void;
   onCombatEnd?: (summary: CombatEndSummary) => void | Promise<void>;
 }
@@ -123,7 +124,7 @@ const LOG_ICONS: Record<LogEntry["kind"], string> = {
   save: "🎲",
 };
 
-export function CombatView({ combatId, campaignId, onClose, onCombatEnd }: CombatViewProps) {
+export function CombatView({ combatId, campaignId, roomCode, onClose, onCombatEnd }: CombatViewProps) {
   const [combat, setCombat] = useState<Combat | null>(null);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
@@ -417,14 +418,43 @@ export function CombatView({ combatId, campaignId, onClose, onCombatEnd }: Comba
 
   const loadCombat = useCallback(async () => {
     try {
-      const url = combatId
-        ? `/api/combat/${combatId}`
-        : campaignId
-        ? `/api/combat/active?campaignId=${campaignId}`
-        : `/api/combat/active`;
-      const res = await fetch(url);
-      if (res.ok) {
-        const data = await res.json();
+      let data: any = null;
+      if (combatId) {
+        const res = await fetch(`/api/combat/${encodeURIComponent(combatId)}`);
+        if (res.ok) {
+          const json = await res.json();
+          if (json?.combat) data = json;
+        }
+      }
+
+      // Fallback: если по combatId не удалось загрузить, пробуем активный бой кампании
+      if (!data?.combat && campaignId) {
+        const res = await fetch(`/api/combat/active?campaignId=${encodeURIComponent(campaignId)}`);
+        if (res.ok) {
+          const json = await res.json();
+          if (json?.combat) data = json;
+        }
+      }
+
+      // Fallback: если нет campaignId или бой не найден, пробуем по roomCode
+      if (!data?.combat && roomCode) {
+        const res = await fetch(`/api/combat/active?roomCode=${encodeURIComponent(roomCode)}`);
+        if (res.ok) {
+          const json = await res.json();
+          if (json?.combat) data = json;
+        }
+      }
+
+      // Общий fallback
+      if (!data?.combat && !combatId && !campaignId && !roomCode) {
+        const res = await fetch(`/api/combat/active`);
+        if (res.ok) {
+          const json = await res.json();
+          if (json?.combat) data = json;
+        }
+      }
+
+      if (data?.combat) {
         setCombat(data.combat);
         const currentPort = typeof window !== "undefined" && window.location.port ? window.location.port : (data.port || 3000);
         if (data.radminIp) {
@@ -435,11 +465,11 @@ export function CombatView({ combatId, campaignId, onClose, onCombatEnd }: Comba
         }
       }
     } catch (e) {
-      console.error(e);
+      console.error("[CombatView loadCombat error]:", e);
     } finally {
       setLoading(false);
     }
-  }, [combatId, campaignId]);
+  }, [combatId, campaignId, roomCode]);
 
   const loadSpellNames = useCallback(async () => {
     try {
@@ -480,7 +510,14 @@ export function CombatView({ combatId, campaignId, onClose, onCombatEnd }: Comba
       if (drawMode || deleteMode || targeting || botRunning) return;
 
       try {
-        const res = await fetch("/api/combat/active", { cache: "no-store" });
+        const pollUrl = combatId
+          ? `/api/combat/${encodeURIComponent(combatId)}`
+          : campaignId
+          ? `/api/combat/active?campaignId=${encodeURIComponent(campaignId)}`
+          : roomCode
+          ? `/api/combat/active?roomCode=${encodeURIComponent(roomCode)}`
+          : "/api/combat/active";
+        const res = await fetch(pollUrl, { cache: "no-store" });
         if (!res.ok || !isSubscribed) return;
         const data = await res.json();
         if (!data.combat) return;
@@ -643,7 +680,12 @@ export function CombatView({ combatId, campaignId, onClose, onCombatEnd }: Comba
       const res = await fetch("/api/combat/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: "Бой", addTestEnemies: true }),
+        body: JSON.stringify({
+          name: "Бой",
+          addTestEnemies: !campaignId,
+          useGenerator: !!campaignId,
+          campaignId: campaignId || undefined,
+        }),
       });
       if (res.ok) {
         const data = await res.json();

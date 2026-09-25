@@ -209,9 +209,11 @@ function getMessageError(m: {
 export function DnDApp({
   initialRoomCode,
   initialCampaignId,
+  initialCombatOpen = false,
 }: {
   initialRoomCode?: string;
   initialCampaignId?: string;
+  initialCombatOpen?: boolean;
 } = {}) {
   const router = useRouter();
   const [sidebarTab, setSidebarTab] = useState<string>("characters");
@@ -222,9 +224,22 @@ export function DnDApp({
   const [showCombatView, setShowCombatView] = useState(false);
   const [activeCombat, setActiveCombat] = useState<{ id: string; name: string; round: number } | null>(null);
 
-  const loadActiveCombat = useCallback(async (campaignId: string) => {
+  const activeRoomRef = useRef<any>(null);
+  const activeCampaignRef = useRef<any>(null);
+
+  const loadActiveCombat = useCallback(async (campaignId?: string, roomCode?: string) => {
     try {
-      const res = await fetch(`/api/combat/active?campaignId=${encodeURIComponent(campaignId)}`);
+      let query = "";
+      const effectiveCampId = campaignId || activeCampaignRef.current?.id || activeRoomRef.current?.campaignId;
+      const effectiveRoomCode = roomCode || activeRoomRef.current?.code || initialRoomCode;
+
+      if (effectiveCampId) {
+        query = `campaignId=${encodeURIComponent(effectiveCampId)}`;
+      } else if (effectiveRoomCode) {
+        query = `roomCode=${encodeURIComponent(effectiveRoomCode)}`;
+      }
+
+      const res = await fetch(`/api/combat/active${query ? `?${query}` : ""}`);
       if (res.ok) {
         const data = await res.json();
         if (data.combat && data.combat.status === "active") {
@@ -240,7 +255,7 @@ export function DnDApp({
     } catch (e) {
       console.error("Failed to load active combat:", e);
     }
-  }, []);
+  }, [initialRoomCode]);
 
   // Параметры создания новой кампании
   const [newCampaignName, setNewCampaignName] = useState("");
@@ -475,8 +490,6 @@ export function DnDApp({
   );
 
   // Сетевая комната активной кампании
-  const activeRoomRef = useRef<any>(null);
-  const activeCampaignRef = useRef<any>(activeCampaign);
   useEffect(() => {
     activeCampaignRef.current = activeCampaign;
   }, [activeCampaign]);
@@ -578,6 +591,59 @@ export function DnDApp({
       turnsCount: prev.turnsCount + 1,
     }));
   }, []);
+
+  // Управление открытием тактического боя и синхронизацией URL
+  const openCombatView = useCallback(() => {
+    setShowCombatView(true);
+    const campId = activeCampaign?.id || activeRoom?.campaignId || undefined;
+    const room = activeRoom?.code || initialRoomCode;
+    loadActiveCombat(campId, room);
+
+    if (typeof window !== "undefined") {
+      if (room) {
+        window.history.replaceState(null, "", `/room/${encodeURIComponent(room)}/battle`);
+      } else {
+        const url = new URL(window.location.href);
+        url.searchParams.set("view", "combat");
+        window.history.replaceState(null, "", url.toString());
+      }
+    }
+  }, [activeCampaign?.id, activeRoom?.campaignId, activeRoom?.code, initialRoomCode, loadActiveCombat]);
+
+  const closeCombatView = useCallback(() => {
+    setShowCombatView(false);
+    const campId = activeCampaign?.id || activeRoom?.campaignId || undefined;
+    const room = activeRoom?.code || initialRoomCode;
+    if (campId || room) {
+      loadActiveCombat(campId, room);
+    }
+
+    if (typeof window !== "undefined") {
+      if (room && window.location.pathname.endsWith("/battle")) {
+        window.history.replaceState(null, "", `/room/${encodeURIComponent(room)}`);
+      } else {
+        const url = new URL(window.location.href);
+        if (url.searchParams.has("view")) {
+          url.searchParams.delete("view");
+          window.history.replaceState(null, "", url.toString());
+        }
+      }
+    }
+  }, [activeCampaign?.id, activeRoom?.campaignId, activeRoom?.code, initialRoomCode, loadActiveCombat]);
+
+  // Автоматическое открытие боевой сетки по URL (?view=combat или /battle) или по initialCombatOpen
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const searchParams = new URLSearchParams(window.location.search);
+    const isCombatParam = searchParams.get("view") === "combat";
+    const isBattlePath = window.location.pathname.endsWith("/battle");
+    if (initialCombatOpen || isCombatParam || isBattlePath) {
+      setShowCombatView(true);
+      const campId = activeCampaign?.id || activeRoom?.campaignId || undefined;
+      const room = activeRoom?.code || initialRoomCode;
+      loadActiveCombat(campId, room);
+    }
+  }, [initialCombatOpen, activeCampaign?.id, activeRoom?.campaignId, activeRoom?.code, initialRoomCode, loadActiveCombat]);
 
   // Подписка на Supabase Realtime канал комнаты для живого стриминга ответа Мастера и статусов
   useEffect(() => {
@@ -2093,12 +2159,7 @@ export function DnDApp({
             {/* 1.5. Кнопка «Тактический бой» */}
             <button
               type="button"
-              onClick={() => {
-                if (activeCampaign?.id) {
-                  loadActiveCombat(activeCampaign.id);
-                }
-                setShowCombatView(true);
-              }}
+              onClick={openCombatView}
               className="shrink-0 h-8 px-3 rounded-md text-xs font-medium border border-rose-500/40 bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 dark:text-rose-300 transition shadow-xs flex items-center cursor-pointer"
               title="Открыть тактический бой и боевую сетку"
             >
@@ -2549,7 +2610,7 @@ export function DnDApp({
                     <Button
                       size="sm"
                       className="bg-rose-600 hover:bg-rose-700 text-white text-xs h-7 gap-1"
-                      onClick={() => setShowCombatView(true)}
+                      onClick={openCombatView}
                     >
                       <Swords className="size-3.5" />
                       Перейти к сетке боя
@@ -3154,7 +3215,7 @@ export function DnDApp({
                       resolving={resolvingTurn || activeRoomTurn?.status === "resolving"}
                       onForceResolve={handleForceResolveTurn}
                       activeCombat={activeCombat}
-                      onOpenCombat={() => setShowCombatView(true)}
+                      onOpenCombat={openCombatView}
                       className="mb-2.5"
                     />
                   )}
@@ -3725,12 +3786,10 @@ export function DnDApp({
         <CombatView
           campaignId={activeCampaign?.id}
           combatId={activeCombat?.id}
-          onClose={() => {
-            setShowCombatView(false);
-            if (activeCampaign?.id) loadActiveCombat(activeCampaign.id);
-          }}
+          roomCode={activeRoom?.code || initialRoomCode}
+          onClose={closeCombatView}
           onCombatEnd={async (summary: CombatEndSummary) => {
-            setShowCombatView(false);
+            closeCombatView();
             setActiveCombat(null);
             await refreshActiveCampaign();
             const surv = summary.survivingCombatants.filter((c) => c.type === "player" || c.type === "companion");

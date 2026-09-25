@@ -1,6 +1,7 @@
 // API: получить активный бой
 import { db } from "@/lib/db";
 import { hydrateCombat } from "@/lib/combat/serialize";
+import { RoomService } from "@/lib/room/room-service";
 import os from "os";
 
 function getLanIps(): { local: string | null; radmin: string | null; all: string[] } {
@@ -50,7 +51,20 @@ function getHostPort(req: Request): number {
 export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
-    const campaignId = url.searchParams.get("campaignId");
+    let campaignId = url.searchParams.get("campaignId");
+    const roomCode = url.searchParams.get("roomCode") || url.searchParams.get("code");
+
+    if (!campaignId && roomCode) {
+      try {
+        const roomService = new RoomService();
+        const room = await roomService.getRoomByCode(roomCode);
+        if (room?.campaignId) {
+          campaignId = room.campaignId;
+        }
+      } catch {
+        // ignore
+      }
+    }
 
     const where: { status: string; campaignId?: string } = { status: "active" };
     if (campaignId) {

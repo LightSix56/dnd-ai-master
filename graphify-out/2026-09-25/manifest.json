@@ -96,9 +96,9 @@
     "semantic_hash": ""
   },
   "src/app/api/chat/route.ts": {
-    "mtime": 1790280512.167093,
-    "seen": 1790280641.1995134,
-    "ast_hash": "d598b641d004d3ae6451b2c5cad39662",
+    "mtime": 1790344690.5929816,
+    "seen": 1790345101.8465822,
+    "ast_hash": "dd95476ed84bd1ed2f47c343bcf6bb58",
     "semantic_hash": ""
   },
   "src/app/api/combat/action/route.ts": {
@@ -234,9 +234,9 @@
     "semantic_hash": ""
   },
   "src/components/dnd/DnDApp.tsx": {
-    "mtime": 1790343595.2239816,
-    "seen": 1790343881.9984899,
-    "ast_hash": "249a29095f1505e97e1fc8a658c359b1",
+    "mtime": 1790344795.3121586,
+    "seen": 1790345101.8669083,
+    "ast_hash": "2b35ffabd5e6e03807e53d18589fcbd6",
     "semantic_hash": ""
   },
   "src/components/dnd/ModelPickerModal.tsx": {
@@ -558,9 +558,9 @@
     "semantic_hash": ""
   },
   "src/lib/ai/cost.ts": {
-    "mtime": 1789936544.566866,
-    "seen": 1789940139.3207133,
-    "ast_hash": "96f3ee6c4504a56f1b6e775b46e645a5",
+    "mtime": 1790344631.5144205,
+    "seen": 1790345103.0188897,
+    "ast_hash": "39ddad8d104d61aec9ab9ebdb088260d",
     "semantic_hash": ""
   },
   "src/lib/ai/models.ts": {
@@ -19440,9 +19440,9 @@
     "semantic_hash": ""
   },
   "src/lib/room/resolve-turn-helper.ts": {
-    "mtime": 1790343317.0853896,
-    "seen": 1790343883.13746,
-    "ast_hash": "f8f4a3532496d1cae7f12833eb2c7455",
+    "mtime": 1790344741.7963424,
+    "seen": 1790345103.0574367,
+    "ast_hash": "ff62b9cb6b5f0d8b3074b09a653f535a",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-24-cooperative-party-turns.md": {
@@ -19707,6 +19707,18 @@
     "mtime": 1790342980.292094,
     "seen": 1790343883.1621509,
     "ast_hash": "2cde3aef3dbe176d321bd1a36a6d7989",
+    "semantic_hash": ""
+  },
+  "src/lib/ai/__tests__/cost.test.ts": {
+    "mtime": 1790344616.9672296,
+    "seen": 1790345103.0156813,
+    "ast_hash": "6bcd478409748d2104112380df3bdfc4",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-09-25-prompt-cache-telemetry.md": {
+    "mtime": 1790344605.6996322,
+    "seen": 1790345103.0765328,
+    "ast_hash": "5b7801a9e74d00c6756b9f7cf5410f81",
     "semantic_hash": ""
   }
 }
