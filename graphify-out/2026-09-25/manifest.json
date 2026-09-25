@@ -108,9 +108,9 @@
     "semantic_hash": ""
   },
   "src/app/api/combat/active/route.ts": {
-    "mtime": 1790184655.3957126,
-    "seen": 1790185056.6430807,
-    "ast_hash": "4baa1b55c57bcdd16cb4dc7890511df3",
+    "mtime": 1790347889.3956387,
+    "seen": 1790348254.5328157,
+    "ast_hash": "7f1c458d4525b740d93e2f85283a0a6b",
     "semantic_hash": ""
   },
   "src/app/api/combat/create/route.ts": {
@@ -186,9 +186,9 @@
     "semantic_hash": ""
   },
   "src/components/combat/CombatView.tsx": {
-    "mtime": 1790187429.941079,
-    "seen": 1790187895.196345,
-    "ast_hash": "b139a546cd00f9352a2a3d9b29055757",
+    "mtime": 1790347936.920434,
+    "seen": 1790348254.5386772,
+    "ast_hash": "10e6ea6cf29dd539286a67e6e3b2703e",
     "semantic_hash": ""
   },
   "src/components/combat/Hotbar.tsx": {
@@ -234,9 +234,9 @@
     "semantic_hash": ""
   },
   "src/components/dnd/DnDApp.tsx": {
-    "mtime": 1790344795.3121586,
-    "seen": 1790345101.8669083,
-    "ast_hash": "2b35ffabd5e6e03807e53d18589fcbd6",
+    "mtime": 1790348143.5429568,
+    "seen": 1790348254.5402594,
+    "ast_hash": "c0b66ee91f6346963e82a2bc3354c699",
     "semantic_hash": ""
   },
   "src/components/dnd/ModelPickerModal.tsx": {
@@ -19719,6 +19719,42 @@
     "mtime": 1790344605.6996322,
     "seen": 1790345103.0765328,
     "ast_hash": "5b7801a9e74d00c6756b9f7cf5410f81",
+    "semantic_hash": ""
+  },
+  "src/app/api/combat/[id]/route.ts": {
+    "mtime": 1790347469.3902833,
+    "seen": 1790348254.5321164,
+    "ast_hash": "4b1831fb20369eb7d92b8a235a073152",
+    "semantic_hash": ""
+  },
+  "src/app/api/combat/__tests__/combat-id-route.test.ts": {
+    "mtime": 1790347452.5372288,
+    "seen": 1790348254.5324028,
+    "ast_hash": "b41e4a1be311c8d3e0fba0c95da1dd26",
+    "semantic_hash": ""
+  },
+  "src/app/room/[code]/battle/page.tsx": {
+    "mtime": 1790348001.0906887,
+    "seen": 1790348254.5374646,
+    "ast_hash": "1bf4a200f97af222b578015f17cb6756",
+    "semantic_hash": ""
+  },
+  "src/app/room/__tests__/room-battle-page.test.tsx": {
+    "mtime": 1790348020.1070044,
+    "seen": 1790348254.5375962,
+    "ast_hash": "4dfdd83c831bd5e495c911b42ba1627e",
+    "semantic_hash": ""
+  },
+  "src/app/rooms/[code]/battle/page.tsx": {
+    "mtime": 1790348004.2706847,
+    "seen": 1790348254.5377269,
+    "ast_hash": "1fb2f480215680f4c42f7478e990415d",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-09-25-combat-binding-and-view-fix.md": {
+    "mtime": 1790347443.872793,
+    "seen": 1790348255.0205266,
+    "ast_hash": "2a1cdade8c88d2c2ba06b4aa65f7ee01",
     "semantic_hash": ""
   }
 }

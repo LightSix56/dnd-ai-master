@@ -1,8 +1,13 @@
 // Процедурный генератор тактических карт и энкаунтеров для AI DM
 import { db } from "@/lib/db";
-import { rollInitiativeForAll, sortByInitiative } from "./initiative";
 import { abilityModifier, proficiencyBonus } from "@/lib/dnd/dice";
-import type { Attack, CombatPotion, CombatantType, CreatureSize, MapElementType } from "./types";
+import { rollInitiativeForAll, sortByInitiative } from "./initiative";
+import type { Attack, CombatPotion, CombatantType, CreatureSize, MapElementType, HotbarItem } from "./types";
+import {
+  extractAttacksFromCharacter,
+  extractSpellsFromCharacter,
+  extractAbilitiesFromCharacter,
+} from "./character-adapter";
 import { ATTACK_LIBRARY } from "./library-data";
 import { generateEncounter } from "./encounters/encounter-generator";
 import type {
@@ -835,62 +840,13 @@ export function resolveSpellDataForCombatant(
   chaMod: number,
   profBonus: number
 ): string {
+  const { spells } = extractSpellsFromCharacter(char, intMod, wisMod, chaMod, profBonus);
   const lowerClass = (char.class || "").trim().toLowerCase();
   const isCaster = /волшеб|маг|wizard|чародей|sorcerer|колдун|warlock|жрец|cleric|друид|druid|бард|bard|паладин|paladin|следопыт|ranger|изобретатель|artificer/i.test(lowerClass);
-
-  if (!isCaster) {
+  if (!isCaster && (!spells.known || spells.known.length === 0) && Object.keys(spells.slots).length === 0) {
     return "{}";
   }
-
-  const isInt = /волшеб|маг|wizard|изобретатель|artificer/i.test(lowerClass);
-  const isWis = /жрец|cleric|друид|druid|следопыт|ranger/i.test(lowerClass);
-  const castAbility = isInt ? "INT" : isWis ? "WIS" : "CHA";
-  const castMod = isInt ? intMod : isWis ? wisMod : chaMod;
-
-  const slots: Record<number, { max: number; used: number }> = {};
-
-  if (char.notes) {
-    const slotMatches = char.notes.matchAll(/(\d+)\s*ур\.:\s*(\d+)/gi);
-    for (const m of slotMatches) {
-      const lvl = parseInt(m[1], 10);
-      const count = parseInt(m[2], 10);
-      if (lvl >= 1 && lvl <= 9 && count > 0) {
-        slots[lvl] = { max: count, used: 0 };
-      }
-    }
-  }
-
-  if (Object.keys(slots).length === 0) {
-    const lvl = Math.max(1, char.level || 1);
-    if (/паладин|paladin|следопыт|ranger/i.test(lowerClass)) {
-      if (lvl >= 2) slots[1] = { max: 2, used: 0 };
-      if (lvl >= 3) slots[1] = { max: 3, used: 0 };
-      if (lvl >= 5) { slots[1] = { max: 4, used: 0 }; slots[2] = { max: 2, used: 0 }; }
-    } else if (/колдун|warlock/i.test(lowerClass)) {
-      const pactSlots = lvl >= 11 ? 3 : lvl >= 2 ? 2 : 1;
-      const pactLevel = Math.min(5, Math.ceil(lvl / 2));
-      slots[pactLevel] = { max: pactSlots, used: 0 };
-    } else {
-      if (lvl === 1) slots[1] = { max: 2, used: 0 };
-      else if (lvl === 2) slots[1] = { max: 3, used: 0 };
-      else if (lvl >= 3) {
-        slots[1] = { max: 4, used: 0 };
-        slots[2] = { max: lvl >= 4 ? 3 : 2, used: 0 };
-        if (lvl >= 5) slots[3] = { max: 2, used: 0 };
-      }
-    }
-  }
-
-  const spellData = {
-    slots,
-    known: [],
-    prepared: [],
-    spellcastingAbility: castAbility,
-    spellSaveDC: 8 + profBonus + castMod,
-    spellAttackBonus: profBonus + castMod,
-  };
-
-  return JSON.stringify(spellData);
+  return JSON.stringify(spells);
 }
 
 /**
@@ -1065,20 +1021,18 @@ export async function createTacticalEncounter({
     const wisMod = abilityModifier(char.wis);
     const chaMod = abilityModifier(char.cha);
 
-    let charAttacks: Attack[] = [];
-    try {
-      if (char.inventory) {
-        const parsed = JSON.parse(char.inventory);
-        if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].attackBonus !== undefined) {
-          charAttacks = parsed;
-        }
-      }
-    } catch {
-      // fallback
-    }
+    const charProfBonus = char.profBonus || proficiencyBonus(char.level);
+    const abilityMods = { STR: strMod, DEX: dexMod, CON: conMod, INT: intMod, WIS: wisMod, CHA: chaMod };
 
-    let charAbilities: any[] = [];
-    if (char.name.includes("Добрун")) {
+    // 1. Атаки: строго из карточки персонажа (если есть — никаких навязанных рапир/секир!)
+    let charAttacks: Attack[] = extractAttacksFromCharacter(char, dexMod, strMod, charProfBonus);
+
+    // 2. Способности персонажа: из библиотечных правил по классу и уровню
+    let charAbilities = extractAbilitiesFromCharacter(char, char.level, charProfBonus, abilityMods);
+
+    // 3. Только если на карточке персонажа нет атак, используем дефолтные пресеты или классовое оружие
+    if (charAttacks.length === 0) {
+      if (char.name.includes("Добрун")) {
       charAttacks = [
         {
           id: `atk_p_${char.id}_axe`,
@@ -1103,10 +1057,9 @@ export async function createTacticalEncounter({
         {
           id: `abl_p_${char.id}_surge`,
           name: "Всплеск действий",
-          source: "Воин 2",
           usesMax: 1,
           usesUsed: 0,
-          refresh: "short_rest",
+          refresh: "short",
           parameters: {
             name: "Всплеск действий",
             type: "ability",
@@ -1121,17 +1074,16 @@ export async function createTacticalEncounter({
         {
           id: `abl_p_${char.id}_wind`,
           name: "Второе дыхание",
-          source: "Воин 1",
           usesMax: 1,
           usesUsed: 0,
-          refresh: "short_rest",
+          refresh: "short",
           parameters: {
             name: "Второе дыхание",
             type: "ability",
             actionCost: "bonus",
             range: { type: "self" },
             damage: [],
-            healing: { dice: "1d10", mod: char.level },
+            selfHeal: { dice: "1d10", mod: char.level },
             targeting: "self",
             description: "Восстановить 1d10 + уровень воина хитов бонусным действием.",
           },
@@ -1162,15 +1114,14 @@ export async function createTacticalEncounter({
         {
           id: `abl_p_${char.id}_bardic`,
           name: "Бард. вдохновение",
-          source: "Бард 1",
           usesMax: Math.max(1, chaMod),
           usesUsed: 0,
-          refresh: "long_rest",
+          refresh: "long",
           parameters: {
             name: "Бард. вдохновение",
             type: "spell",
             actionCost: "bonus",
-            range: { type: "ranged", normal: 60 },
+            range: { type: "ranged", value: 60 },
             damage: [],
             targeting: "ally",
             description: "Дать союзнику кость вдохновения (1к6).",
@@ -1278,7 +1229,6 @@ export async function createTacticalEncounter({
         {
           id: `abl_p_${char.id}_dash`,
           name: "Хитрое действие: Рывок",
-          source: "Плут 2",
           usesMax: 0,
           usesUsed: 0,
           refresh: "none",
@@ -1296,7 +1246,6 @@ export async function createTacticalEncounter({
         {
           id: `abl_p_${char.id}_disengage`,
           name: "Хитрое действие: Отход",
-          source: "Плут 2",
           usesMax: 0,
           usesUsed: 0,
           refresh: "none",
@@ -1314,7 +1263,6 @@ export async function createTacticalEncounter({
         {
           id: `abl_p_${char.id}_hide`,
           name: "Хитрое действие: Скрытность",
-          source: "Плут 2",
           usesMax: 0,
           usesUsed: 0,
           refresh: "none",
@@ -1423,10 +1371,9 @@ export async function createTacticalEncounter({
           {
             id: `abl_p_${char.id}_divine_smite`,
             name: "Божественная кара",
-            source: "Паладин 2",
             usesMax: 3,
             usesUsed: 0,
-            refresh: "long_rest",
+            refresh: "long",
             parameters: {
               name: "Божественная кара",
               type: "ability",
@@ -1463,7 +1410,6 @@ export async function createTacticalEncounter({
           {
             id: `abl_p_${char.id}_dash`,
             name: "Хитрое действие: Рывок",
-            source: "Плут 2",
             usesMax: 0,
             usesUsed: 0,
             refresh: "none",
@@ -1481,7 +1427,6 @@ export async function createTacticalEncounter({
           {
             id: `abl_p_${char.id}_disengage`,
             name: "Хитрое действие: Отход",
-            source: "Плут 2",
             usesMax: 0,
             usesUsed: 0,
             refresh: "none",
@@ -1543,10 +1488,9 @@ export async function createTacticalEncounter({
           {
             id: `abl_p_${char.id}_rage`,
             name: "Ярость",
-            source: "Варвар 1",
             usesMax: 2,
             usesUsed: 0,
-            refresh: "long_rest",
+            refresh: "long",
             parameters: {
               name: "Ярость",
               type: "ability",
@@ -1627,6 +1571,7 @@ export async function createTacticalEncounter({
         ];
       }
     }
+  }
 
     let posX = allyStartX + Math.floor(allyIndex / 4);
     let posY = Math.max(
@@ -1645,10 +1590,24 @@ export async function createTacticalEncounter({
     }
     allyIndex++;
 
-    const hotbarItems = [
+    const { spells: extractedSpells, spellHotbar } = extractSpellsFromCharacter(
+      char,
+      intMod,
+      wisMod,
+      chaMod,
+      charProfBonus
+    );
+
+    const seenHotbarIds = new Set<string>();
+    const hotbarItems: HotbarItem[] = [
       ...charAttacks.map((a) => ({ id: a.id, type: "attack" as const, name: a.name })),
       ...charAbilities.map((ab) => ({ id: ab.id, type: "ability" as const, name: ab.name })),
-    ];
+      ...spellHotbar,
+    ].filter((item) => {
+      if (seenHotbarIds.has(item.id)) return false;
+      seenHotbarIds.add(item.id);
+      return true;
+    });
 
     // Парсим зелья из inventory персонажа
     let parsedPotions: CombatPotion[] = [];
@@ -1715,12 +1674,13 @@ export async function createTacticalEncounter({
           ]
         : [];
 
-    const charProfBonus = char.profBonus || proficiencyBonus(char.level);
     const profSaves = resolveSavingThrowProficiencies(char.class || "", char.notes);
+    const lowerClass = (char.class || "").trim().toLowerCase();
+    const isCaster = /волшеб|маг|wizard|чародей|sorcerer|колдун|warlock|жрец|cleric|друид|druid|бард|bard|паладин|paladin|следопыт|ranger|изобретатель|artificer/i.test(lowerClass);
     const resolvedSpells =
-      char.spells && char.spells !== "{}" && char.spells.length > 2
-        ? char.spells
-        : resolveSpellDataForCombatant(char, intMod, wisMod, chaMod, charProfBonus);
+      !isCaster && (!extractedSpells.known || extractedSpells.known.length === 0) && Object.keys(extractedSpells.slots).length === 0
+        ? "{}"
+        : JSON.stringify(extractedSpells);
 
     const combatant = await db.combatant.create({
       data: {
