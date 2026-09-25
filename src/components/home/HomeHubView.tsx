@@ -9,14 +9,6 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -31,16 +23,20 @@ import {
   Sparkles,
   Loader2,
   Share2,
+  LogIn,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useDnDStore, type Campaign } from "@/lib/store";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { CreateRoomModal } from "@/components/room/CreateRoomModal";
 import { CreateCampaignModal } from "@/components/campaign/CreateCampaignModal";
+import { SetupModal } from "@/components/dnd/SetupModal";
+import { ModelPickerModal } from "@/components/dnd/ModelPickerModal";
+import { SupabaseAuthModal } from "@/components/auth/SupabaseAuthModal";
 
 export function HomeHubView() {
   const router = useRouter();
-  const { user, getAuthToken } = useSupabaseAuth();
+  const { user, getAuthToken, signOut: supabaseSignOut } = useSupabaseAuth();
   const {
     campaigns,
     setCampaigns,
@@ -54,6 +50,7 @@ export function HomeHubView() {
   const [newCampaignLevel, setNewCampaignLevel] = useState(1);
   const [creatingCampaign, setCreatingCampaign] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   // API settings state
   const [apiKey, setApiKey] = useState(() => {
@@ -64,10 +61,96 @@ export function HomeHubView() {
     if (typeof window === "undefined") return "deepseek/deepseek-v4.1-flash";
     return localStorage.getItem("ai_model") || "deepseek/deepseek-v4.1-flash";
   });
+  const [cheapModel, setCheapModel] = useState(() => {
+    if (typeof window === "undefined") return "deepseek/deepseek-v4-flash";
+    return localStorage.getItem("ai_cheap_model") || "deepseek/deepseek-v4-flash";
+  });
+  const [storyModel, setStoryModel] = useState(() => {
+    if (typeof window === "undefined") return "deepseek/deepseek-v4.1-flash";
+    return localStorage.getItem("ai_story_model") || "deepseek/deepseek-v4.1-flash";
+  });
   const [baseURL, setBaseURL] = useState(() => {
     if (typeof window === "undefined") return "https://polza.ai/api/v1";
     return localStorage.getItem("ai_base_url") || "https://polza.ai/api/v1";
   });
+  const [authMode, setAuthMode] = useState<"bearer" | "x-api-key" | "raw">(() => {
+    if (typeof window === "undefined") return "bearer";
+    return (localStorage.getItem("ai_auth_mode") as any) || "bearer";
+  });
+  const [modelsList, setModelsList] = useState<any[]>([]);
+  const [loadingModels, setLoadingModels] = useState(false);
+  const [activePickerRole, setActivePickerRole] = useState<"dm" | "cheap" | "story" | null>(null);
+  const [testingKey, setTestingKey] = useState(false);
+  const [testResult, setTestResult] = useState<{ valid: boolean; message: string } | null>(null);
+
+  const loadModels = useCallback(async (customBaseURL?: string) => {
+    setLoadingModels(true);
+    const targetBase = (customBaseURL ?? baseURL).trim();
+    try {
+      const q = new URLSearchParams();
+      if (targetBase) q.set("baseURL", targetBase);
+      if (apiKey.trim()) q.set("apiKey", apiKey.trim());
+
+      const res = await fetch(`/api/models?${q.toString()}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.models && data.models.length > 0) {
+          setModelsList(data.models);
+        }
+      }
+    } catch (e) {
+      console.error("loadModels error:", e);
+    } finally {
+      setLoadingModels(false);
+    }
+  }, [baseURL, apiKey]);
+
+  const testApiKey = async () => {
+    if (!apiKey.trim()) {
+      setTestResult({ valid: false, message: "Введите API ключ" });
+      return;
+    }
+    setTestingKey(true);
+    setTestResult(null);
+    try {
+      const res = await fetch("/api/test-key", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          apiKey: apiKey.trim(),
+          model: model.trim(),
+          baseURL: baseURL.trim(),
+          authMode,
+        }),
+      });
+      const data = await res.json();
+      if (data.valid) {
+        setTestResult({ valid: true, message: data.message || "✅ Ключ валиден!" });
+        toast.success("API ключ работает!");
+      } else {
+        setTestResult({ valid: false, message: data.error || "Ключ невалиден" });
+        toast.error(data.error || "Ключ невалиден");
+      }
+    } catch (e) {
+      const msg = `Сетевая ошибка: ${(e as Error).message}`;
+      setTestResult({ valid: false, message: msg });
+      toast.error(msg);
+    } finally {
+      setTestingKey(false);
+    }
+  };
+
+  const handleSaveSettings = () => {
+    localStorage.setItem("ai_api_key", apiKey);
+    localStorage.setItem("ai_base_url", baseURL);
+    localStorage.setItem("ai_model", model);
+    localStorage.setItem("ai_cheap_model", cheapModel);
+    localStorage.setItem("ai_story_model", storyModel);
+    localStorage.setItem("ai_auth_mode", authMode);
+    toast.success("Настройки AI сохранены!");
+    setShowSettings(false);
+    setTestResult(null);
+  };
 
   const loadInitialData = useCallback(async () => {
     try {
@@ -193,12 +276,51 @@ export function HomeHubView() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setShowSettings(true)}
+              onClick={() => {
+                setShowSettings(true);
+                if (modelsList.length === 0 && !loadingModels) {
+                  loadModels();
+                }
+              }}
               className="gap-1.5 text-xs h-9 cursor-pointer"
             >
               <Settings className="size-3.5" />
-              <span>Настройки API</span>
+              <span>Настройки</span>
             </Button>
+
+            {user ? (
+              <div className="flex items-center gap-1.5 shrink-0">
+                <div
+                  className="h-9 px-2.5 rounded-md text-xs font-medium border border-border bg-accent/40 text-foreground flex items-center gap-1.5 shadow-xs"
+                  title={`Вы вошли как: ${user.email || "Игрок"}`}
+                >
+                  <div className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                  <span className="max-w-[130px] truncate font-sans">{user.email?.split("@")[0] || "Герой"}</span>
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => supabaseSignOut()}
+                  title="Выйти из аккаунта"
+                  className="h-9 px-2.5 rounded-md text-xs font-medium text-muted-foreground hover:text-destructive cursor-pointer"
+                >
+                  Выйти
+                </Button>
+              </div>
+            ) : (
+              <Button
+                type="button"
+                size="sm"
+                onClick={() => setShowAuthModal(true)}
+                title="Войти в аккаунт через Google или почту"
+                className="h-9 px-3 rounded-md text-xs font-medium gap-1.5 cursor-pointer shadow-xs"
+              >
+                <LogIn className="size-3.5 shrink-0" />
+                <span className="hidden sm:inline">Войти в аккаунт</span>
+                <span className="sm:hidden">Войти</span>
+              </Button>
+            )}
           </div>
         </div>
       </header>
@@ -381,59 +503,68 @@ export function HomeHubView() {
       )}
 
       {/* Модальное окно настроек AI */}
-      <Dialog open={showSettings} onOpenChange={setShowSettings}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>Настройки AI и моделей</DialogTitle>
-            <DialogDescription>
-              Ключ и адрес API сохраняются локально в вашем браузере
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-2">
-            <div className="space-y-1.5">
-              <Label htmlFor="hub-api-key">API Ключ</Label>
-              <Input
-                id="hub-api-key"
-                type="password"
-                value={apiKey}
-                onChange={(e) => setApiKey(e.target.value)}
-                placeholder="sk-..."
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="hub-base-url">API Base URL</Label>
-              <Input
-                id="hub-base-url"
-                value={baseURL}
-                onChange={(e) => setBaseURL(e.target.value)}
-                placeholder="https://polza.ai/api/v1"
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="hub-model">Основная модель Мастера</Label>
-              <Input
-                id="hub-model"
-                value={model}
-                onChange={(e) => setModel(e.target.value)}
-                placeholder="deepseek/deepseek-v4.1-flash"
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button
-              onClick={() => {
-                localStorage.setItem("ai_api_key", apiKey);
-                localStorage.setItem("ai_base_url", baseURL);
-                localStorage.setItem("ai_model", model);
-                toast.success("Настройки сохранены");
-                setShowSettings(false);
-              }}
-            >
-              Сохранить
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {showSettings && (
+        <SetupModal
+          apiKey={apiKey}
+          baseURL={baseURL}
+          model={model}
+          cheapModel={cheapModel}
+          storyModel={storyModel}
+          authMode={authMode}
+          modelsList={modelsList}
+          loadingModels={loadingModels}
+          onApiKey={setApiKey}
+          onBaseURL={setBaseURL}
+          onModel={setModel}
+          onCheapModel={setCheapModel}
+          onStoryModel={setStoryModel}
+          onAuthMode={setAuthMode}
+          onReloadModels={() => loadModels(baseURL)}
+          onOpenModelPicker={(role) => setActivePickerRole(role)}
+          onClose={handleSaveSettings}
+          testingKey={testingKey}
+          testResult={testResult}
+          onTestKey={testApiKey}
+        />
+      )}
+
+      {/* Модальное окно выбора модели из каталога */}
+      {activePickerRole && (
+        <ModelPickerModal
+          isOpen={Boolean(activePickerRole)}
+          onClose={() => setActivePickerRole(null)}
+          selectedModelId={
+            activePickerRole === "dm"
+              ? model
+              : activePickerRole === "cheap"
+              ? cheapModel
+              : storyModel
+          }
+          onSelectModel={(selectedId) => {
+            if (activePickerRole === "dm") setModel(selectedId);
+            else if (activePickerRole === "cheap") setCheapModel(selectedId);
+            else if (activePickerRole === "story") setStoryModel(selectedId);
+          }}
+          modelsList={modelsList}
+          title={
+            activePickerRole === "dm"
+              ? "Выбор модели Ведущего (Основной ДМ)"
+              : activePickerRole === "cheap"
+              ? "Выбор служебной модели (быстрые ответы, механики)"
+              : "Выбор модели генератора сюжета"
+          }
+        />
+      )}
+
+      {/* Supabase Auth Modal */}
+      <SupabaseAuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onAuthSuccess={() => {
+          setShowAuthModal(false);
+          loadInitialData();
+        }}
+      />
     </div>
   );
 }

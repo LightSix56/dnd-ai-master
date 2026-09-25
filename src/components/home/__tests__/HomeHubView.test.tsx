@@ -14,11 +14,15 @@ vi.mock("next/navigation", () => ({
 import { HomeHubView } from "../HomeHubView";
 
 describe("HomeHubView Component", () => {
-  it("renders main dashboard action cards", () => {
+  it("renders main dashboard action cards, settings, and login buttons", () => {
     const html = renderToStaticMarkup(<HomeHubView />);
     expect(html).toContain("Присоединиться к столу");
     expect(html).toContain("Создать сетевой стол");
     expect(html).toContain("Кампании");
     expect(html).toContain("TAVERN-612");
+
+    // Header buttons
+    expect(html).toContain("Настройки");
+    expect(html).toContain("Войти в аккаунт");
   });
 });
