@@ -1,4 +1,4 @@
-import { generateText, stepCountIs } from "ai";
+import { generateText, streamText, stepCountIs } from "ai";
 import { bundleTurnInputs, type CharacterTurnStatus } from "./turn-batcher";
 import { createClient, type AuthMode } from "@/lib/ai/client";
 import { resolveDmModel } from "@/lib/ai/models";
@@ -30,7 +30,10 @@ export interface ResolveActiveRoomTurnOptions {
   authMode?: string;
   baseURL?: string;
   roomService?: RoomService;
+  onChunk?: (delta: string, fullText: string) => void;
+  onStatus?: (status: string) => void;
 }
+
 
 export interface ResolveActiveRoomTurnResult {
   completedTurn: RoomTurn;
@@ -228,51 +231,106 @@ export async function resolveActiveRoomTurnHelper(
               get_combat_status: dmTools.get_combat_status,
             });
 
-        const res = await (generateText as any)({
-          model: client.chat(aiModel),
-          system,
-          prompt,
-          tools: availableTools,
-          ...(campaignId ? { toolsContext: buildToolsContext(campaignId) } : {}),
-          stopWhen: stepCountIs(4),
-          maxSteps: 3,
-          temperature: 0.7,
-        });
+        if (typeof options?.onChunk === "function") {
+          options.onStatus?.("🎲 Мастер оценивает действия отряда...");
+          const res = await (streamText as any)({
+            model: client.chat(aiModel),
+            system,
+            prompt,
+            tools: availableTools,
+            ...(campaignId ? { toolsContext: buildToolsContext(campaignId) } : {}),
+            stopWhen: stepCountIs(4),
+            maxSteps: 3,
+            temperature: 0.7,
+          });
 
-        const rawSteps = await res.steps;
-        capturedSteps = Array.isArray(rawSteps) ? rawSteps : [];
+          let fullStreamText = "";
+          for await (const chunk of res.textStream) {
+            fullStreamText += chunk;
+            options.onChunk(chunk, fullStreamText);
+          }
 
-        // Извлекаем расход токенов и рассчитываем стоимость
-        const usage = res.usage || (res as any).totalUsage;
-        const inTokens = usage?.inputTokens ?? usage?.promptTokens ?? 0;
-        const outTokens = usage?.outputTokens ?? usage?.completionTokens ?? 0;
-        const cachedTokens = usage?.inputTokenDetails?.cacheReadTokens ?? (usage as any)?.cachedTokens ?? 0;
-        const totalTokens = usage?.totalTokens ?? (inTokens + outTokens);
+          const rawSteps = await res.steps;
+          capturedSteps = Array.isArray(rawSteps) ? rawSteps : [];
 
-        const costRub = calculateCostRub(aiModel, {
-          inputTokens: inTokens,
-          outputTokens: outTokens,
-          cachedTokens,
-          totalTokens,
-        });
+          const usage = await res.usage;
+          const inTokens = usage?.inputTokens ?? usage?.promptTokens ?? 0;
+          const outTokens = usage?.outputTokens ?? usage?.completionTokens ?? 0;
+          const cachedTokens = usage?.inputTokenDetails?.cacheReadTokens ?? (usage as any)?.cachedTokens ?? 0;
+          const totalTokens = usage?.totalTokens ?? (inTokens + outTokens);
 
-        statsPayload = {
-          model: aiModel,
-          usage: {
+          const costRub = calculateCostRub(aiModel, {
             inputTokens: inTokens,
             outputTokens: outTokens,
             cachedTokens,
             totalTokens,
-          },
-          costRub,
-        };
+          });
 
-        // Извлекаем текст из всех шагов модели (включая шаги после вызова инструментов)
-        const stepTexts = capturedSteps
-          .map((s: any) => (typeof s.text === "string" ? s.text.trim() : ""))
-          .filter(Boolean);
+          statsPayload = {
+            model: aiModel,
+            usage: {
+              inputTokens: inTokens,
+              outputTokens: outTokens,
+              cachedTokens,
+              totalTokens,
+            },
+            costRub,
+          };
 
-        narrative = stepTexts.join("\n\n") || (typeof res.text === "string" ? res.text.trim() : "");
+          narrative = fullStreamText.trim();
+          if (!narrative) {
+            const stepTexts = capturedSteps
+              .map((s: any) => (typeof s.text === "string" ? s.text.trim() : ""))
+              .filter(Boolean);
+            narrative = stepTexts.join("\n\n");
+          }
+        } else {
+          const res = await (generateText as any)({
+            model: client.chat(aiModel),
+            system,
+            prompt,
+            tools: availableTools,
+            ...(campaignId ? { toolsContext: buildToolsContext(campaignId) } : {}),
+            stopWhen: stepCountIs(4),
+            maxSteps: 3,
+            temperature: 0.7,
+          });
+
+          const rawSteps = await res.steps;
+          capturedSteps = Array.isArray(rawSteps) ? rawSteps : [];
+
+          // Извлекаем расход токенов и рассчитываем стоимость
+          const usage = res.usage || (res as any).totalUsage;
+          const inTokens = usage?.inputTokens ?? usage?.promptTokens ?? 0;
+          const outTokens = usage?.outputTokens ?? usage?.completionTokens ?? 0;
+          const cachedTokens = usage?.inputTokenDetails?.cacheReadTokens ?? (usage as any)?.cachedTokens ?? 0;
+          const totalTokens = usage?.totalTokens ?? (inTokens + outTokens);
+
+          const costRub = calculateCostRub(aiModel, {
+            inputTokens: inTokens,
+            outputTokens: outTokens,
+            cachedTokens,
+            totalTokens,
+          });
+
+          statsPayload = {
+            model: aiModel,
+            usage: {
+              inputTokens: inTokens,
+              outputTokens: outTokens,
+              cachedTokens,
+              totalTokens,
+            },
+            costRub,
+          };
+
+          // Извлекаем текст из всех шагов модели (включая шаги после вызова инструментов)
+          const stepTexts = capturedSteps
+            .map((s: any) => (typeof s.text === "string" ? s.text.trim() : ""))
+            .filter(Boolean);
+
+          narrative = stepTexts.join("\n\n") || (typeof res.text === "string" ? res.text.trim() : "");
+        }
 
         if (!narrative) {
           const hadCombat = capturedSteps.some((s: any) =>
@@ -283,7 +341,11 @@ export async function resolveActiveRoomTurnHelper(
           } else {
             narrative = "Действия отряда вызывают немедленный отклик окружающего мира. Обстановка стремительно меняется — герои заявляют о себе, и мир вокруг реагирует на их вызов. Что вы делаете дальше?";
           }
+          if (options?.onChunk) {
+            options.onChunk(narrative, narrative);
+          }
         }
+
       } catch (aiErr: any) {
         console.error("[resolveActiveRoomTurnHelper] AI call failed, fallback:", aiErr);
         narrative = `⚠️ Ошибка связи с ИИ при описании раунда ${activeTurn.roundNumber}: ${aiErr?.message || "таймаут сервиса"}. Вы можете нажать «Отправить ход сейчас», чтобы повторить генерацию.`;

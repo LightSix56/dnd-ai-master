@@ -47,6 +47,63 @@ export async function POST(
       );
     }
 
+    const wantsStream =
+      Boolean(body.stream) ||
+      request.headers.get("accept")?.includes("text/event-stream") ||
+      new URL(request.url).searchParams.get("stream") === "true";
+
+    if (wantsStream) {
+      const encoder = new TextEncoder();
+      const readable = new ReadableStream({
+        async start(controller) {
+          const sendEvent = (data: any) => {
+            controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
+          };
+
+          try {
+            sendEvent({ type: "status", status: "🎲 Мастер оценивает действия отряда..." });
+
+            const result = await resolveActiveRoomTurnHelper(room, activeTurn, {
+              dmResponse: body.dmResponse,
+              gmWhisperDirective: body.gmWhisperDirective,
+              afkCharacters: body.afkCharacters,
+              apiKey: body.apiKey,
+              model: body.model,
+              authMode: body.authMode,
+              baseURL: body.baseURL,
+              roomService,
+              onStatus: (status) => sendEvent({ type: "status", status }),
+              onChunk: (delta, fullText) => sendEvent({ type: "chunk", delta, fullText }),
+            });
+
+            sendEvent({
+              type: "finish",
+              completedTurn: result.completedTurn,
+              nextTurn: result.nextTurn,
+              dmResponse: result.dmResponse,
+              stats: result.stats,
+            });
+            controller.close();
+          } catch (streamErr: any) {
+            await roomService.unlockTurnFromResolving(activeTurn.id).catch(() => {});
+            sendEvent({
+              type: "error",
+              error: streamErr?.message || "Ошибка генерации хода",
+            });
+            controller.close();
+          }
+        },
+      });
+
+      return new Response(readable, {
+        headers: {
+          "Content-Type": "text/event-stream; charset=utf-8",
+          "Cache-Control": "no-cache, no-transform",
+          Connection: "keep-alive",
+        },
+      });
+    }
+
     let result;
     try {
       result = await resolveActiveRoomTurnHelper(room, activeTurn, {
@@ -74,6 +131,7 @@ export async function POST(
       },
       { status: 200 }
     );
+
 
   } catch (err: any) {
     console.error("[API /api/room/[code]/turn/resolve POST] Error:", err);
