@@ -234,9 +234,9 @@
     "semantic_hash": ""
   },
   "src/components/dnd/DnDApp.tsx": {
-    "mtime": 1790337792.2520065,
-    "seen": 1790338057.642871,
-    "ast_hash": "130a82ae864f0a74adcc44a7725724e5",
+    "mtime": 1790341488.91691,
+    "seen": 1790341748.7723384,
+    "ast_hash": "18b8978f61dd0ad1bf8144972dfc8b85",
     "semantic_hash": ""
   },
   "src/components/dnd/ModelPickerModal.tsx": {
@@ -19638,15 +19638,15 @@
     "semantic_hash": ""
   },
   "src/components/home/HomeHubView.tsx": {
-    "mtime": 1790340974.476101,
-    "seen": 1790341148.0216577,
-    "ast_hash": "e67ac7d0ebdf2f24282953456fc6bdd2",
+    "mtime": 1790341567.362975,
+    "seen": 1790341748.773283,
+    "ast_hash": "8e46ee0252e348653cf7c6d496c98f18",
     "semantic_hash": ""
   },
   "src/components/home/__tests__/HomeHubView.test.tsx": {
-    "mtime": 1790337339.8257957,
-    "seen": 1790338057.6437514,
-    "ast_hash": "4b256be9cf9bbb95ce0c44f631daf896",
+    "mtime": 1790341579.645152,
+    "seen": 1790341748.7732875,
+    "ast_hash": "86d78ee12117d8952a7a308087dda950",
     "semantic_hash": ""
   },
   "docs/superpowers/plans/2026-09-25-page-routing-architecture.md": {
@@ -19689,6 +19689,12 @@
     "mtime": 1790340949.3229048,
     "seen": 1790341147.9977007,
     "ast_hash": "4fcf5bc2c40e7977024d5601bee8110a",
+    "semantic_hash": ""
+  },
+  "src/components/dnd/SetupModal.tsx": {
+    "mtime": 1790341454.5991092,
+    "seen": 1790341748.7726848,
+    "ast_hash": "4c14c5b2597f9f4b78ba40ef64e1575a",
     "semantic_hash": ""
   }
 }

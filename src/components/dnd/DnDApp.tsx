@@ -82,7 +82,9 @@ import { PartyTurnBar } from "@/components/room/PartyTurnBar";
 import type { RoomTurn } from "@/lib/room/types";
 import { SupabaseAuthModal } from "@/components/auth/SupabaseAuthModal";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
+import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { rollDie } from "@/lib/dnd/d20-helper";
+
 import { formatRubles, formatTokens, type CampaignAiStats } from "@/lib/ai/cost";
 import { toast } from "sonner";
 import {
@@ -558,6 +560,77 @@ export function DnDApp({
   const [activeRoomTurn, setActiveRoomTurn] = useState<RoomTurn | null>(null);
   const [submittingTurn, setSubmittingTurn] = useState(false);
   const [resolvingTurn, setResolvingTurn] = useState(false);
+  const [streamingDmText, setStreamingDmText] = useState<string | null>(null);
+  const [dmStatusText, setDmStatusText] = useState<string | null>(null);
+  const roomChannelRef = useRef<any>(null);
+
+  // Хелпер обновления статистики расходов кампании при завершении хода
+  const applyTurnStats = useCallback((stats: any) => {
+    if (!stats?.usage) return;
+    const u = stats.usage;
+    const cost = stats.costRub ?? 0;
+    setCampaignStats((prev) => ({
+      totalCostRub: Number((prev.totalCostRub + cost).toFixed(4)),
+      totalTokens: prev.totalTokens + (u.totalTokens || 0),
+      inputTokens: prev.inputTokens + (u.inputTokens || 0),
+      outputTokens: prev.outputTokens + (u.outputTokens || 0),
+      cachedTokens: prev.cachedTokens + (u.cachedTokens || 0),
+      turnsCount: prev.turnsCount + 1,
+    }));
+  }, []);
+
+  // Подписка на Supabase Realtime канал комнаты для живого стриминга ответа Мастера и статусов
+  useEffect(() => {
+    if (!activeRoom?.id) {
+      if (roomChannelRef.current) {
+        getSupabaseBrowserClient().removeChannel(roomChannelRef.current);
+        roomChannelRef.current = null;
+      }
+      return;
+    }
+
+    const supabase = getSupabaseBrowserClient();
+    const channelName = `room:${activeRoom.id}`;
+    const channel = supabase
+      .channel(channelName)
+      .on("broadcast", { event: "dm_stream" }, ({ payload }: any) => {
+        if (!payload) return;
+
+        if (payload.type === "status") {
+          setDmStatusText(payload.status || "🎲 Мастер оценивает действия отряда...");
+        } else if (payload.type === "chunk") {
+          setStreamingDmText(payload.text || "");
+          setDmStatusText(null);
+        } else if (payload.type === "finish") {
+          setStreamingDmText(null);
+          setDmStatusText(null);
+          if (payload.fullText) {
+            const newMsg = {
+              id: `turn_${payload.turnId || Date.now()}`,
+              role: "assistant" as const,
+              parts: [{ type: "text" as const, text: payload.fullText }],
+              ...(payload.stats ? { metadata: payload.stats } : {}),
+            };
+            setMessages((prev) => {
+              const exists = prev.some((m) => m.id === newMsg.id);
+              return exists ? prev : [...prev, newMsg as any];
+            });
+          }
+          if (payload.stats) {
+            applyTurnStats(payload.stats);
+          }
+        }
+      })
+      .subscribe();
+
+    roomChannelRef.current = channel;
+
+    return () => {
+      supabase.removeChannel(channel);
+      roomChannelRef.current = null;
+    };
+  }, [activeRoom?.id, applyTurnStats]);
+
 
   // Синхронизация активного раунда при входе или смене комнаты
   useEffect(() => {
@@ -1599,56 +1672,46 @@ export function DnDApp({
           if (data.nextTurn) {
             setActiveRoomTurn(data.nextTurn);
           }
+          if (data.stats) {
+            applyTurnStats(data.stats);
+          }
+          if (data.dmResponse) {
+            const newMsg = {
+              id: `turn_${data.completedTurn?.id || Date.now()}`,
+              role: "assistant" as const,
+              parts: [{ type: "text" as const, text: data.dmResponse }],
+              ...(data.stats ? { metadata: data.stats } : {}),
+            };
+            setMessages((prev) => {
+              const exists = prev.some((m) => m.id === newMsg.id);
+              return exists ? prev : [...prev, newMsg as any];
+            });
+
+            roomChannelRef.current?.send({
+              type: "broadcast",
+              event: "dm_stream",
+              payload: {
+                type: "finish",
+                turnId: data.completedTurn?.id,
+                fullText: data.dmResponse,
+                stats: data.stats,
+                round: activeRoomTurn?.roundNumber,
+              },
+            });
+          }
           const targetCampId = campaignId || activeCampaign?.id || activeRoom.campaignId;
           if (targetCampId) {
             refreshActiveCampaign(targetCampId);
             loadActiveCombat(targetCampId);
             setTimeout(() => loadActiveCombat(targetCampId), 3000);
           }
-          try {
-            if (targetCampId) {
-              const chatRes = await fetch(`/api/chat/history?campaignId=${encodeURIComponent(targetCampId)}`);
-              if (chatRes.ok) {
-                const chatData = await chatRes.json();
-                if (Array.isArray(chatData.messages) && chatData.messages.length > 0) {
-                  setMessages(chatData.messages);
-                } else if (data.dmResponse) {
-                  setMessages((prev) => [
-                    ...prev,
-                    {
-                      id: `turn_${data.completedTurn?.id || Date.now()}`,
-                      role: "assistant",
-                      parts: [{ type: "text", text: data.dmResponse }],
-                    } as any,
-                  ]);
-                }
-              } else if (data.dmResponse) {
-                setMessages((prev) => [
-                  ...prev,
-                  {
-                    id: `turn_${data.completedTurn?.id || Date.now()}`,
-                    role: "assistant",
-                    parts: [{ type: "text", text: data.dmResponse }],
-                  } as any,
-                ]);
-              }
-            } else if (data.dmResponse) {
-              setMessages((prev) => [
-                ...prev,
-                {
-                  id: `turn_${data.completedTurn?.id || Date.now()}`,
-                  role: "assistant",
-                  parts: [{ type: "text", text: data.dmResponse }],
-                } as any,
-              ]);
-            }
-          } catch {}
         } else {
           toast.success("Заявка принята! Ожидаем остальных игроков отряда...");
           if (data.turn) {
             setActiveRoomTurn(data.turn);
           }
         }
+
       } catch (err: any) {
         toast.error(err?.message || "Ошибка отправки действия");
       } finally {
@@ -1676,12 +1739,14 @@ export function DnDApp({
       activeRoom.campaign_settings?.campaignId;
 
     setResolvingTurn(true);
+    setDmStatusText("🎲 Мастер оценивает действия отряда...");
     try {
       const token = getAuthToken();
-      const res = await fetch(`/api/room/${encodeURIComponent(activeRoom.code)}/turn/resolve`, {
+      const res = await fetch(`/api/room/${encodeURIComponent(activeRoom.code)}/turn/resolve?stream=true`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Accept: "text/event-stream, application/json",
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify({
@@ -1689,67 +1754,151 @@ export function DnDApp({
           model,
           authMode,
           baseURL,
+          stream: true,
         }),
       });
 
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Не удалось завершить раунд");
-      }
+      const contentType = res.headers.get("content-type") || "";
 
-      toast.success("Ход отправлен Мастеру!");
-      if (data.nextTurn) {
-        setActiveRoomTurn(data.nextTurn);
-      }
-      if (targetCampId) {
-        refreshActiveCampaign(targetCampId);
-        loadActiveCombat(targetCampId);
-        setTimeout(() => loadActiveCombat(targetCampId), 3000);
-      }
-      try {
-        if (targetCampId) {
-          const chatRes = await fetch(`/api/chat/history?campaignId=${encodeURIComponent(targetCampId)}`);
-          if (chatRes.ok) {
-            const chatData = await chatRes.json();
-            if (Array.isArray(chatData.messages) && chatData.messages.length > 0) {
-              setMessages(chatData.messages);
-            } else if (data.dmResponse) {
-              setMessages((prev) => [
-                ...prev,
-                {
-                  id: `turn_${data.completedTurn?.id || Date.now()}`,
-                  role: "assistant",
-                  parts: [{ type: "text", text: data.dmResponse }],
-                } as any,
-              ]);
+      if (contentType.includes("text/event-stream") && res.body) {
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder("utf-8");
+        let buffer = "";
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          const parts = buffer.split("\n\n");
+          buffer = parts.pop() || "";
+
+          for (const part of parts) {
+            const trimmed = part.trim();
+            if (!trimmed.startsWith("data:")) continue;
+            const jsonStr = trimmed.slice(5).trim();
+            if (!jsonStr) continue;
+
+            try {
+              const event = JSON.parse(jsonStr);
+              if (event.type === "status") {
+                setDmStatusText(event.status);
+                roomChannelRef.current?.send({
+                  type: "broadcast",
+                  event: "dm_stream",
+                  payload: { type: "status", status: event.status },
+                });
+              } else if (event.type === "chunk") {
+                setStreamingDmText(event.fullText);
+                setDmStatusText(null);
+                roomChannelRef.current?.send({
+                  type: "broadcast",
+                  event: "dm_stream",
+                  payload: { type: "chunk", text: event.fullText, round: activeRoomTurn?.roundNumber },
+                });
+              } else if (event.type === "finish") {
+                setStreamingDmText(null);
+                setDmStatusText(null);
+
+                roomChannelRef.current?.send({
+                  type: "broadcast",
+                  event: "dm_stream",
+                  payload: {
+                    type: "finish",
+                    turnId: event.completedTurn?.id,
+                    fullText: event.dmResponse,
+                    stats: event.stats,
+                    round: activeRoomTurn?.roundNumber,
+                  },
+                });
+
+                if (event.nextTurn) {
+                  setActiveRoomTurn(event.nextTurn);
+                }
+                if (event.stats) {
+                  applyTurnStats(event.stats);
+                }
+
+                if (event.dmResponse) {
+                  const newMsg = {
+                    id: `turn_${event.completedTurn?.id || Date.now()}`,
+                    role: "assistant" as const,
+                    parts: [{ type: "text" as const, text: event.dmResponse }],
+                    ...(event.stats ? { metadata: event.stats } : {}),
+                  };
+                  setMessages((prev) => {
+                    const exists = prev.some((m) => m.id === newMsg.id);
+                    return exists ? prev : [...prev, newMsg as any];
+                  });
+                }
+
+                if (targetCampId) {
+                  refreshActiveCampaign(targetCampId);
+                  loadActiveCombat(targetCampId);
+                  setTimeout(() => loadActiveCombat(targetCampId), 3000);
+                }
+                toast.success("Ход отправлен Мастеру!");
+              } else if (event.type === "error") {
+                throw new Error(event.error || "Ошибка генерации");
+              }
+            } catch (pErr: any) {
+              if (pErr.message && pErr.message !== "Unexpected end of JSON input") {
+                console.warn("[handleForceResolveTurn] stream event error:", pErr);
+              }
             }
-          } else if (data.dmResponse) {
-            setMessages((prev) => [
-              ...prev,
-              {
-                id: `turn_${data.completedTurn?.id || Date.now()}`,
-                role: "assistant",
-                parts: [{ type: "text", text: data.dmResponse }],
-              } as any,
-            ]);
           }
-        } else if (data.dmResponse) {
-          setMessages((prev) => [
-            ...prev,
-            {
-              id: `turn_${data.completedTurn?.id || Date.now()}`,
-              role: "assistant",
-              parts: [{ type: "text", text: data.dmResponse }],
-            } as any,
-          ]);
         }
-      } catch {}
+      } else {
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || "Не удалось завершить раунд");
+        }
+
+        toast.success("Ход отправлен Мастеру!");
+        if (data.nextTurn) {
+          setActiveRoomTurn(data.nextTurn);
+        }
+        if (data.stats) {
+          applyTurnStats(data.stats);
+        }
+        if (data.dmResponse) {
+          const newMsg = {
+            id: `turn_${data.completedTurn?.id || Date.now()}`,
+            role: "assistant" as const,
+            parts: [{ type: "text" as const, text: data.dmResponse }],
+            ...(data.stats ? { metadata: data.stats } : {}),
+          };
+          setMessages((prev) => {
+            const exists = prev.some((m) => m.id === newMsg.id);
+            return exists ? prev : [...prev, newMsg as any];
+          });
+
+          roomChannelRef.current?.send({
+            type: "broadcast",
+            event: "dm_stream",
+            payload: {
+              type: "finish",
+              turnId: data.completedTurn?.id,
+              fullText: data.dmResponse,
+              stats: data.stats,
+              round: activeRoomTurn?.roundNumber,
+            },
+          });
+        }
+        if (targetCampId) {
+          refreshActiveCampaign(targetCampId);
+          loadActiveCombat(targetCampId);
+          setTimeout(() => loadActiveCombat(targetCampId), 3000);
+        }
+      }
     } catch (err: any) {
       toast.error(err?.message || "Ошибка завершения раунда");
     } finally {
       setResolvingTurn(false);
+      setStreamingDmText(null);
+      setDmStatusText(null);
     }
   }
+
 
   async function handleGenerateStory() {
     if (!activeCampaign) return;
@@ -2896,12 +3045,27 @@ export function DnDApp({
                       />
                     );
                   })}
-                  {isLoading && (
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground pl-2">
-                      <Loader2 className="size-4 animate-spin" />
-                      Мастер обдумывает...
+                  {/* Индикатор статуса и стриминга Мастера для всех участников (одиночная игра и комната) */}
+                  {(isLoading || resolvingTurn || activeRoomTurn?.status === "resolving" || streamingDmText) && (
+                    <div className="flex flex-col gap-2">
+                      {streamingDmText ? (
+                        <MessageBubble
+                          role="assistant"
+                          content={streamingDmText}
+                          metadata={null}
+                        />
+                      ) : (
+                        <div className="flex items-center gap-2.5 text-xs sm:text-sm text-amber-700 dark:text-amber-300 bg-amber-500/10 border border-amber-500/20 rounded-xl px-3.5 py-2.5 max-w-[85%] animate-pulse">
+                          <Loader2 className="size-4 animate-spin text-amber-600 dark:text-amber-400 shrink-0" />
+                          <Dices className="size-4 text-amber-600 dark:text-amber-400 shrink-0" />
+                          <span className="font-medium">
+                            {dmStatusText || "Мастер оценивает действия отряда и описывает события мира..."}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   )}
+
                   {error && !messages.some((m) => getMessageError(m)) && (
                     <div className="text-sm text-red-600 bg-red-500/10 border border-red-500/30 rounded-md p-3">
                       {error.message || "Произошла ошибка. Проверьте API-ключ в настройках."}

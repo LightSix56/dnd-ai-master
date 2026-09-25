@@ -156,7 +156,7 @@ describe("PartyTurnBar", () => {
     expect(allReadyHtml).not.toContain("Отправить ход сейчас");
   });
 
-  it("отрисовывает индикатор «Мастер оценивает действия отряда...», когда resolving === true", () => {
+  it("во время resolving === true скрывает кнопку «Отправить ход сейчас»", () => {
     const html = renderToStaticMarkup(
       <PartyTurnBar
         roomTurn={mockRoomTurn}
@@ -167,10 +167,11 @@ describe("PartyTurnBar", () => {
       />
     );
 
-    expect(html).toContain("Мастер оценивает действия отряда и описывает события мира...");
-    // Кнопка принудительного хода не должна показываться во время resolving
+    // Статус вынесен в чат, а в панели отряда кнопка отправки скрыта
     expect(html).not.toContain("Отправить ход сейчас");
+    expect(html).not.toContain("Мастер оценивает действия отряда и описывает события мира...");
   });
+
 
   it("отображает кнопку перехода к сетке боя при наличии activeCombat", () => {
     const html = renderToStaticMarkup(

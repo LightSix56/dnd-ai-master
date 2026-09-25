@@ -103,16 +103,8 @@ export function PartyTurnBar({
       </CardHeader>
 
       <CardContent className="p-4 flex flex-col gap-3">
-        {/* Баннер разрешения хода Мастером */}
-        {resolving && (
-          <div className="flex items-center gap-2 rounded-lg bg-amber-50 border border-amber-200/80 px-3.5 py-2.5 text-xs font-medium text-amber-800 dark:bg-amber-950/30 dark:border-amber-900/50 dark:text-amber-300">
-            <Loader2 className="size-4 animate-spin text-amber-600 dark:text-amber-400 shrink-0" />
-            <Sparkles className="size-4 text-amber-500 shrink-0" />
-            <span>✨ Мастер оценивает действия отряда и описывает события мира...</span>
-          </div>
-        )}
-
         {/* Сетка участников */}
+
         {activeParticipants.length === 0 ? (
           <div className="py-4 text-center text-xs text-muted-foreground">
             В отряде пока нет активных персонажей
