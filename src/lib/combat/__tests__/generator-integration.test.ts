@@ -122,4 +122,48 @@ describe("createTacticalEncounter with generateEncounter pipeline", () => {
     expect(encounter).toBeDefined();
     expect(encounter.enemyNames).toContain("Черный рыцарь");
   });
+
+  it("automatically resolves guards passed by name into authentic D&D 5e Guards with Spears and CR 1/8", async () => {
+    const encounter = await createTacticalEncounter({
+      campaignId,
+      name: "Стычка со стражей у ворот",
+      enemies: [
+        { name: "Стражник 1" },
+        { name: "Стражник 2" },
+        { name: "Стражник 3" },
+      ],
+    });
+
+    expect(encounter).toBeDefined();
+    expect(encounter.enemyNames).toEqual(["Стражник 1", "Стражник 2", "Стражник 3"]);
+    // Authentic D&D 5e Guard: 25 XP each => 3 * 25 = 75 XP
+    expect(encounter.awardedXP).toBe(75);
+
+    const combat = await db.combat.findUnique({
+      where: { id: encounter.combatId },
+      include: { combatants: true },
+    });
+
+    const guardCombatants = combat!.combatants.filter((c) => c.type === "enemy");
+    expect(guardCombatants.length).toBe(3);
+
+    for (const guard of guardCombatants) {
+      // Authentic Guard stats
+      expect(guard.hpMax).toBe(11);
+      expect(guard.ac).toBe(16);
+      expect(guard.className).toContain("ПО 1/8");
+
+      const attacks = JSON.parse(guard.attacks);
+      expect(attacks.length).toBeGreaterThan(0);
+      const attackNames = attacks.map((a: any) => a.name);
+      expect(attackNames).toContain("Копьё");
+      expect(attackNames).not.toContain("Скимитар");
+
+      const spear = attacks.find((a: any) => a.name === "Копьё");
+      expect(spear.damage[0].dice).toBe("1d6");
+      expect(spear.damage[0].mod).toBe(1);
+      expect(spear.damage[0].type).toBe("piercing");
+    }
+  });
 });
+

@@ -826,6 +826,7 @@ export const startCombatTool = tool({
       "open_field",
     ]).default("dungeon").describe("Тип окружения для тактической карты (legacy)"),
     difficulty: z.enum(["easy", "medium", "hard", "deadly"]).default("medium").describe("Сложность энкаунтера по DMG p. 82"),
+    storyFaction: z.string().optional().describe("Фракция или тип врагов (например: 'городская стража', 'стражники', 'бандиты', 'гоблины', 'культисты', 'нежить'). Генератор подберет аутентичных сбалансированных монстров по правилам DMG p. 82"),
     archetype: z.enum(["solo_boss", "boss_minions", "tactical_squad", "horde", "ambush_duo", "any"]).optional().describe("Тактический архетип отряда врагов"),
     isActClimax: z.boolean().optional().describe("Является ли бой кульминацией акта (боссфайт)"),
     mapPresetId: z.string().optional().describe("ID конкретного тактического пресета карты (опционально)"),
@@ -834,21 +835,22 @@ export const startCombatTool = tool({
     mapDescription: z.string().optional().describe("Краткое описание поля боя и препятствий"),
     enemies: z.array(
       z.object({
-        name: z.string().describe("Имя врага (например: 'Гоблин-лучник', 'Орк-воин', 'Пещерный паук')"),
-        hpMax: z.number().int().min(1).describe("Максимальное HP врага"),
-        ac: z.number().int().min(5).max(30).describe("Класс доспеха (Armor Class)"),
+        name: z.string().describe("Имя врага (например: 'Стражник 1', 'Гоблин', 'Орк', 'Пещерный паук')"),
+        monsterSlug: z.string().optional().describe("Slug монстра из бестиария, например '442-guard', '4-goblin'"),
+        hpMax: z.number().int().min(1).optional().describe("Максимальное HP врага (опционально, для существ из бестиария подтягивается автоматически, например Страж = 11)"),
+        ac: z.number().int().min(5).max(30).optional().describe("Класс доспеха AC (опционально, для существ из бестиария подтягивается автоматически, например Страж = 16)"),
         speed: z.number().int().min(10).max(60).default(30).describe("Скорость в футах"),
-        dexMod: z.number().int().default(0).describe("Модификатор ловкости для инициативы"),
-        strMod: z.number().int().default(0),
-        conMod: z.number().int().default(0),
-        intMod: z.number().int().default(0),
-        wisMod: z.number().int().default(0),
-        chaMod: z.number().int().default(0),
+        dexMod: z.number().int().optional().describe("Модификатор ловкости для инициативы"),
+        strMod: z.number().int().optional(),
+        conMod: z.number().int().optional(),
+        intMod: z.number().int().optional(),
+        wisMod: z.number().int().optional(),
+        chaMod: z.number().int().optional(),
         size: z.enum(["small", "medium", "large", "huge"]).default("medium"),
         color: z.string().default("#ef4444"),
         attacks: z.array(
           z.object({
-            name: z.string().describe("Название атаки (например: 'Скимитар', 'Короткий лук', 'Укус')"),
+            name: z.string().describe("Название атаки"),
             kind: z.enum(["melee", "ranged", "spell"]).default("melee"),
             attackBonus: z.number().int().default(3).describe("Бонус к броску атаки (например +4)"),
             damageDice: z.string().describe("Кубик урона, например '1d6+2', '2d6+3', '1d8'"),
@@ -856,12 +858,12 @@ export const startCombatTool = tool({
             rangeNormal: z.number().int().default(5),
             rangeLong: z.number().int().optional(),
           })
-        ).min(1).describe("Список атак врага"),
+        ).optional().describe("Список атак врага (ОПЦИОНАЛЬНО: для существ из бестиария автоматически загрузятся их аутентичные атаки D&D 5e: копья, арбалеты, заклинания)"),
       })
-    ).optional().describe("Ручной список врагов (опционально, если не задан — сгенерируется из бестиария по сложности)"),
+    ).optional().describe("Список конкретных врагов. ВАЖНО: для стандартных существ (стражники, бандиты, гоблины, скелеты и т.д.) достаточно передать только имена [{ name: 'Стражник 1' }, { name: 'Стражник 2' }] — система автоматически загрузит из бестиария аутентичные характеристики, оружие (копья, щиты, AC 16), способности и XP!"),
   }),
   contextSchema: campaignContextSchema,
-  execute: async ({ name, biome, environment, difficulty, archetype, isActClimax, mapPresetId, gridWidth, gridHeight, mapDescription, enemies }, { context }) => {
+  execute: async ({ name, biome, environment, difficulty, storyFaction, archetype, isActClimax, mapPresetId, gridWidth, gridHeight, mapDescription, enemies }, { context }) => {
     let campaignId = context?.campaignId;
     if (!campaignId) {
       const active = await db.campaign.findFirst({
@@ -883,6 +885,7 @@ export const startCombatTool = tool({
       environment,
       biome: biome || environment,
       difficulty,
+      storyFaction: storyFaction ? { name: storyFaction } : undefined,
       archetype,
       isActClimax,
       mapPresetId,

@@ -147,18 +147,20 @@ export function getBiomeCandidatePool(
       }
     }
 
-    // 1b: Faction creature types & tags
+    // 1b: Faction creature types & tags/name keywords
     const factionTypes = faction.creatureTypes && faction.creatureTypes.length > 0
       ? new Set(faction.creatureTypes)
       : null;
-    const factionTags = faction.tags && faction.tags.length > 0
-      ? faction.tags
-      : null;
+    const factionKeywords = [
+      ...(faction.tags || []),
+      ...(faction.name ? faction.name.toLowerCase().split(/\s+/).filter((w) => w.length >= 3) : []),
+    ];
+    const hasFactionKeywords = factionKeywords.length > 0;
 
-    if (factionTypes || factionTags) {
+    if (factionTypes || hasFactionKeywords) {
       for (const entry of manifest) {
         const matchesType = factionTypes ? factionTypes.has(entry.type) : false;
-        const matchesTag = factionTags ? entryMatchesKeywords(entry, factionTags) : false;
+        const matchesTag = hasFactionKeywords ? entryMatchesKeywords(entry, factionKeywords) : false;
 
         if (matchesType || matchesTag) {
           addEntry(entry);

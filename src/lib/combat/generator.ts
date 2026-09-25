@@ -18,6 +18,7 @@ import type {
   GeneratedEncounter,
 } from "./encounters/types";
 import { resolveBattlemapForNarrative } from "./maps/open-map-service";
+import { resolveMonsterCombatant } from "./monsters/bestiary-resolver";
 
 export type EnvironmentType =
   | "dungeon"
@@ -39,8 +40,9 @@ export interface GeneratedMapElement {
 
 export interface EnemyInput {
   name: string;
-  hpMax: number;
-  ac: number;
+  monsterSlug?: string;
+  hpMax?: number;
+  ac?: number;
   speed?: number;
   dexMod?: number;
   strMod?: number;
@@ -1772,63 +1774,53 @@ export async function createTacticalEncounter({
   } else if (enemies && enemies.length > 0) {
     const enemyStartX = effectiveGridWidth - 3;
     let enemyIndex = 0;
+    let totalMonstersXP = 0;
 
     for (const e of enemies) {
-      const dexMod = e.dexMod ?? 0;
-      const strMod = e.strMod ?? 1;
-      const conMod = e.conMod ?? 1;
-      const intMod = e.intMod ?? -1;
-      const wisMod = e.wisMod ?? 0;
-      const chaMod = e.chaMod ?? -1;
+      const resolved = resolveMonsterCombatant(e);
+      const c = resolved.combatantData;
 
+      const dexMod = c.dexMod ?? 0;
       const posX = e.position?.x ?? Math.max(1, enemyStartX - (enemyIndex > 3 ? 2 : 0));
       const posY = e.position?.y ?? Math.max(1, Math.min(effectiveGridHeight - 2, centerY + (enemyIndex % 2 === 0 ? -Math.floor(enemyIndex / 2) : Math.ceil(enemyIndex / 2))));
       enemyIndex++;
 
-      const attacks = resolveEnemyAttacks(e);
-
       const combatant = await db.combatant.create({
         data: {
           combatId: combat.id,
-          name: e.name,
+          name: c.name || e.name,
           type: "enemy",
-          color: e.color || "#ef4444",
+          color: c.color || e.color || "#ef4444",
           x: posX,
           y: posY,
-          hpMax: e.hpMax,
-          hpCurrent: e.hpMax,
+          hpMax: c.hpMax || 11,
+          hpCurrent: c.hpCurrent || c.hpMax || 11,
           hpTemp: 0,
-          ac: e.ac,
-          speed: e.speed || 30,
+          ac: c.ac || 10,
+          speed: c.speed || 30,
           dexMod,
           initiative: 0,
           initiativeTiebreak: Math.floor(Math.random() * 1_000_000),
-          className: "",
-          level: 1,
-          size: e.size || "medium",
-          attacks: JSON.stringify(attacks),
-          hotbar: JSON.stringify(attacks.map((a) => ({ id: a.id, type: "attack", name: a.name }))),
-          spells: "{}",
-          abilities: "[]",
-          abilityMods: JSON.stringify({ STR: strMod, DEX: dexMod, CON: conMod, INT: intMod, WIS: wisMod, CHA: chaMod }),
-          saves: JSON.stringify({
-            STR: { prof: false, mod: strMod },
-            DEX: { prof: false, mod: dexMod },
-            CON: { prof: false, mod: conMod },
-            INT: { prof: false, mod: intMod },
-            WIS: { prof: false, mod: wisMod },
-            CHA: { prof: false, mod: chaMod },
-          }),
-          profBonus: 2,
+          className: c.className || "враг",
+          level: c.level || 1,
+          size: c.size || "medium",
+          attacks: JSON.stringify(c.attacks || []),
+          hotbar: JSON.stringify(c.hotbar || []),
+          spells: JSON.stringify(c.spells || {}),
+          abilities: JSON.stringify(c.abilities || []),
+          abilityMods: JSON.stringify(c.abilityMods || { STR: 0, DEX: dexMod, CON: 0, INT: 0, WIS: 0, CHA: 0 }),
+          saves: JSON.stringify(c.saves || {}),
+          profBonus: c.profBonus || 2,
           isAIControlled: true,
         },
       });
 
       createdCombatantIds.push({ id: combatant.id, dexMod });
-      enemyNames.push(e.name);
+      enemyNames.push(c.name || e.name);
+      totalMonstersXP += resolved.xp;
     }
 
-    awardedXP = enemies.reduce((sum, e) => sum + (e.hpMax * 5), 0);
+    awardedXP = totalMonstersXP;
     xpPerPlayer = Math.floor(awardedXP / Math.max(1, partyCharacters.length || 1));
   }
 

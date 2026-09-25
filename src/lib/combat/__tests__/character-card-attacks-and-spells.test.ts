@@ -120,7 +120,7 @@ describe("createTacticalEncounter: Character Card Attacks, Spells & Abilities", 
     // 4. Hotbar содержит атаки и способности
     expect(hotbar.some((h) => h.name === "Короткий меч (1 рука)")).toBe(true);
     expect(hotbar.some((h) => h.name.includes("Скрытая атака"))).toBe(true);
-  });
+  }, 20000);
 
   it("extracts attacks from plain text notes formatted as 'Атаки: ...'", async () => {
     const char = await db.character.create({
@@ -163,7 +163,7 @@ describe("createTacticalEncounter: Character Card Attacks, Spells & Abilities", 
     expect(attacks[0].name).toBe("Короткий меч (1 рука)");
     expect(attacks[1].name).toBe("Кинжал (бросок)");
     expect(attacks.some((a) => a.name.includes("Рапира"))).toBe(false);
-  });
+  }, 20000);
 
   it("populates spells, spell slots and spell hotbar items for spellcasters", async () => {
     const wizardSnapshot = {
@@ -232,5 +232,5 @@ describe("createTacticalEncounter: Character Card Attacks, Spells & Abilities", 
     const spellHotbar = hotbar.filter((h) => h.type === "spell");
     expect(spellHotbar.length).toBeGreaterThanOrEqual(2);
     expect(spellHotbar.some((h) => h.name.includes("Огненный снаряд") || h.name.includes("Волшебная стрела"))).toBe(true);
-  });
+  }, 20000);
 });

@@ -17,6 +17,7 @@ import type { MonsterDefinition, MonsterAction } from "./types";
 
 export interface MonsterAdapterOptions {
   id?: string;
+  name?: string;
   characterId?: string | null;
   combatId?: string;
   type?: CombatantType;
@@ -315,7 +316,7 @@ export function monsterDefinitionToCombatant(
   return {
     id: combatantId,
     characterId: options.characterId || null,
-    name: monster.name,
+    name: options.name || monster.name,
     type: combatantType,
     color: options.color || (combatantType === "player" ? "#3b82f6" : "#ef4444"),
     x: options.x ?? 0,
