@@ -34,11 +34,13 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useDnDStore, type Campaign } from "@/lib/store";
+import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { CreateRoomModal } from "@/components/room/CreateRoomModal";
 import { CreateCampaignModal } from "@/components/campaign/CreateCampaignModal";
 
 export function HomeHubView() {
   const router = useRouter();
+  const { user, getAuthToken } = useSupabaseAuth();
   const {
     campaigns,
     setCampaigns,
@@ -69,15 +71,20 @@ export function HomeHubView() {
 
   const loadInitialData = useCallback(async () => {
     try {
-      const campRes = await fetch("/api/campaign/all").catch(() => null);
+      const token = getAuthToken();
+      const campRes = await fetch("/api/campaign", {
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      }).catch(() => null);
       if (campRes && campRes.ok) {
-        const data = await campRes.json();
+        const data = await campRes.json().catch(() => null);
         if (Array.isArray(data?.campaigns)) {
           setCampaigns(data.campaigns);
         }
       }
     } catch {}
-  }, [setCampaigns]);
+  }, [setCampaigns, getAuthToken]);
 
   useEffect(() => {
     loadInitialData();
@@ -100,21 +107,28 @@ export function HomeHubView() {
     if (!newCampaignName.trim()) return;
     setCreatingCampaign(true);
     try {
-      const res = await fetch("/api/campaign/create", {
+      const token = getAuthToken();
+      const res = await fetch("/api/campaign", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({
           name: newCampaignName.trim(),
           startingLevel: newCampaignLevel,
+          levelFrom: newCampaignLevel,
+          levelTo: Math.min(20, newCampaignLevel + 4),
           setting: "Forgotten Realms",
           tone: "heroic",
           difficulty: "normal",
           language: "ru",
+          makeActive: true,
         }),
       });
-      const data = await res.json();
-      if (!res.ok || !data.campaign) {
-        toast.error(data?.error || "Ошибка при создании кампании");
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.campaign) {
+        toast.error(data?.error || `Ошибка при создании кампании (код ${res.status})`);
         return;
       }
       toast.success("Кампания успешно создана!");
@@ -133,18 +147,22 @@ export function HomeHubView() {
   // Открыть стол для кампании
   const handleOpenRoomForCampaign = async (camp: Campaign) => {
     try {
+      const token = getAuthToken();
       const res = await fetch("/api/room/create", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({
           campaignId: camp.id,
           name: `Стол: ${camp.name}`,
           startingLevel: camp.startingLevel || camp.levelFrom || 1,
         }),
       });
-      const data = await res.json();
-      if (!res.ok || !data.room) {
-        toast.error(data?.error || "Не удалось создать комнату стола");
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.room) {
+        toast.error(data?.error || `Не удалось создать комнату стола (код ${res.status})`);
         return;
       }
       toast.success(`Сетевой стол создан! Код: ${data.room.code}`);

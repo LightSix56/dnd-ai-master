@@ -19638,9 +19638,9 @@
     "semantic_hash": ""
   },
   "src/components/home/HomeHubView.tsx": {
-    "mtime": 1790337517.3261929,
-    "seen": 1790338057.6437469,
-    "ast_hash": "795b875f02cee4e469666ec5cde01546",
+    "mtime": 1790340974.476101,
+    "seen": 1790341148.0216577,
+    "ast_hash": "e67ac7d0ebdf2f24282953456fc6bdd2",
     "semantic_hash": ""
   },
   "src/components/home/__tests__/HomeHubView.test.tsx": {
@@ -19671,6 +19671,24 @@
     "mtime": 1790340170.2259922,
     "seen": 1790340482.9723625,
     "ast_hash": "2e23464f0f224ef2e8a4e7d56246802f",
+    "semantic_hash": ""
+  },
+  "src/app/api/campaign/__tests__/campaign-aliases-and-creation.test.ts": {
+    "mtime": 1790340982.7036893,
+    "seen": 1790341147.9960325,
+    "ast_hash": "1ad143604f62fe8bbb0630b5278ab1c1",
+    "semantic_hash": ""
+  },
+  "src/app/api/campaign/all/route.ts": {
+    "mtime": 1790340956.5090826,
+    "seen": 1790341147.9970324,
+    "ast_hash": "4b151916dc7dd57ab2439adf0df9c5a3",
+    "semantic_hash": ""
+  },
+  "src/app/api/campaign/create/route.ts": {
+    "mtime": 1790340949.3229048,
+    "seen": 1790341147.9977007,
+    "ast_hash": "4fcf5bc2c40e7977024d5601bee8110a",
     "semantic_hash": ""
   }
 }
