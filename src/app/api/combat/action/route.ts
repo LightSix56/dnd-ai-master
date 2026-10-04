@@ -36,6 +36,12 @@ import { buildTurnOrder } from "@/lib/combat/initiative";
 import { getSpellDefinition } from "@/lib/combat/library-data";
 import { awardCombatVictoryXP } from "@/lib/combat/xp-award";
 
+/** Версия боя (Combat.updatedAt) на момент загрузки — для защиты от одновременных запросов */
+const loadedVersion = new WeakMap<CombatState, Date>();
+
+/** Бой изменён параллельным запросом: клиент должен повторить действие на свежем состоянии */
+class ConflictError extends Error {}
+
 /** Загружает бой из БД в снимок движка */
 async function loadState(combatId: string): Promise<CombatState> {
   const row = await db.combat.findUnique({
@@ -43,31 +49,51 @@ async function loadState(combatId: string): Promise<CombatState> {
     include: { combatants: true, mapElements: true },
   });
   if (!row) throw new EngineError("Бой не найден");
-  return new CombatState(hydrateCombat(row));
+  const state = new CombatState(hydrateCombat(row));
+  loadedVersion.set(state, row.updatedAt);
+  return state;
 }
 
-/** Записывает в БД только то, что изменилось */
+/**
+ * Записывает в БД только то, что изменилось — одной транзакцией.
+ * Если между загрузкой и записью бой успел изменить другой запрос (два игрока в комнате
+ * нажали одновременно), запись отклоняется: иначе второй запрос молча затёр бы первый.
+ */
 async function saveState(combatId: string, state: CombatState): Promise<void> {
-  for (const id of state.dirtyIds) {
-    const c = state.get(id);
-    if (!c) continue;
-    await db.combatant.update({ where: { id }, data: dehydrateCombatant(c) as any });
-  }
-  // Сбежавшие с поля боя бойцы удаляются и из БД
-  if (state.removedIds.length > 0) {
-    await db.combatant.deleteMany({ where: { id: { in: state.removedIds }, combatId } });
-  }
-  if (state.isCombatDirty) {
-    await db.combat.update({
-      where: { id: combatId },
-      data: {
-        round: state.round,
-        currentTurnIndex: state.currentTurnIndex,
-        turnOrder: JSON.stringify(state.turnOrder),
-        log: JSON.stringify(state.log),
-      },
+  const dirtyIds = state.dirtyIds.filter((id) => state.get(id));
+  const removedIds = state.removedIds;
+  if (dirtyIds.length === 0 && removedIds.length === 0 && !state.isCombatDirty) return;
+
+  const version = loadedVersion.get(state);
+  const combatData = {
+    round: state.round,
+    currentTurnIndex: state.currentTurnIndex,
+    turnOrder: JSON.stringify(state.turnOrder),
+    log: JSON.stringify(state.log),
+  };
+
+  await db.$transaction(async (tx) => {
+    // Строка боя обновляется всегда: это и сохранение, и проверка версии, и её продвижение
+    const guard = await tx.combat.updateMany({
+      where: version ? { id: combatId, updatedAt: version } : { id: combatId },
+      data: combatData,
     });
-  }
+    if (guard.count === 0) {
+      throw new ConflictError("Состояние боя только что изменилось — повторите действие");
+    }
+    for (const id of dirtyIds) {
+      const c = state.get(id);
+      if (!c) continue;
+      await tx.combatant.update({ where: { id }, data: dehydrateCombatant(c) as any });
+    }
+    // Сбежавшие с поля боя бойцы удаляются и из БД
+    if (removedIds.length > 0) {
+      await tx.combatant.deleteMany({ where: { id: { in: removedIds }, combatId } });
+    }
+  });
+
+  const fresh = await db.combat.findUnique({ where: { id: combatId }, select: { updatedAt: true } });
+  if (fresh) loadedVersion.set(state, fresh.updatedAt);
 }
 
 /** Ответ после любого действия: свежий бой + служебные поля */
@@ -972,6 +998,9 @@ export async function POST(req: Request) {
     // Нарушение правил — это ошибка запроса, а не сбой сервера
     if (error instanceof EngineError) {
       return Response.json({ error: error.message }, { status: 400 });
+    }
+    if (error instanceof ConflictError) {
+      return Response.json({ error: error.message, conflict: true }, { status: 409 });
     }
     console.error("[combat/action] error:", error);
     return Response.json(
