@@ -9,7 +9,7 @@
 //  - пункты «• …», которые летописец дописывает в notes, когда герой раскрывает новую черту.
 // Раньше notes шли в промпт как есть, и кэш сбрасывался на каждом ходу почти с самого начала.
 
-import { summarizeSheetMechanics, unwrapSheet } from "@/lib/dnd/import-character";
+import { sheetFromNotes, summarizeSheetMechanics, unwrapSheet } from "@/lib/dnd/import-character";
 import { buildSystemPrompt, type CampaignContext, type PlayerSummary } from "../system-prompt";
 
 const STATUS_TAG = /\[(?:Статус|Состояние):\s*[^\]]*\]/gi;
@@ -52,7 +52,8 @@ function dossierFromSheetJson(raw: string): string | null {
   } catch {
     return null;
   }
-  const full = unwrapSheet<Record<string, any>>(sheet);
+  // лист может лежать глубже — внутри карточки героя кампании
+  const full = sheetFromNotes(raw) ?? unwrapSheet<Record<string, any>>(sheet);
   const nested: Record<string, unknown> = full;
   const parts: string[] = [];
 

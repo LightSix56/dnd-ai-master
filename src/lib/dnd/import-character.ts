@@ -2,6 +2,7 @@
 // Там характеристики хранятся русскими ключами (СИЛ/ЛОВ/...) и разбиты на три
 // слагаемых: базовое значение + расовый бонус + бонусы за уровни (ASI).
 
+import { resolveSheetAttacks } from "@/lib/dnd/sheet-attacks";
 import { proficiencyBonus } from "@/lib/dnd/dice";
 
 const ABILITY_KEYS = ["СИЛ", "ЛОВ", "ТЕЛ", "ИНТ", "МДР", "ХАР"] as const;
@@ -124,16 +125,26 @@ export function hasSheetData(raw: unknown): boolean {
 }
 
 /** Лист персонажа из поля notes, если там лежит JSON (так сохраняют сетевые комнаты); иначе null */
-export function sheetFromNotes(notes?: string | null): Record<string, any> | null {
-  if (!notes || typeof notes !== "string") return null;
-  const trimmed = notes.trimStart();
-  if (!trimmed.startsWith("{")) return null;
+export function sheetFromNotes(notes?: string | null, depth = 0): Record<string, any> | null {
+  if (!notes || typeof notes !== "string" || depth > 6) return null;
+  // Перед JSON может стоять тег статуса или строки летописца — ищем начало объекта
+  const start = notes.indexOf("{");
+  if (start < 0) return null;
+  const head = notes.slice(0, start).trim();
+  if (head && !/^(\[[^\]]*\]|•[^\n]*|\s)+$/.test(head)) return null;
+  let parsed: unknown;
   try {
-    const parsed = JSON.parse(trimmed);
-    return parsed && typeof parsed === "object" ? unwrapSheet(parsed) : null;
+    parsed = JSON.parse(notes.slice(start));
   } catch {
     return null;
   }
+  if (!parsed || typeof parsed !== "object") return null;
+  const sheet = unwrapSheet<Record<string, any>>(parsed);
+  if (looksLikeSheet(sheet)) return sheet;
+  // Карточка героя кампании, сохранённая поверх листа: настоящий лист лежит глубже,
+  // в её собственном поле notes (так накапливалось при повторных входах в комнату)
+  const inner = sheetFromNotes((parsed as Record<string, any>).notes, depth + 1);
+  return inner ?? sheet;
 }
 
 /**
@@ -159,9 +170,9 @@ export function summarizeSheetMechanics(sheetLike: unknown): string[] {
   const skills = [...skillNames].map((name) => (sheet.skillExpertise?.[name] ? `${name} (компетенция)` : name));
   if (skills.length) lines.push(`Навыки: ${skills.join(", ")}`);
 
-  const attacks = (Array.isArray(sheet.attacks) ? sheet.attacks : [])
-    .filter((a: any) => typeof a?.name === "string" && a.name.trim())
-    .map((a: any) => `${a.name} ${a.attackBonus || ""} ${a.damageAndType || ""}`.replace(/\s+/g, " ").trim());
+  const attacks = resolveSheetAttacks(sheet).map((a) =>
+    `${a.name} ${a.attackBonus} ${a.damageAndType}`.replace(/\s+/g, " ").trim()
+  );
   if (attacks.length) lines.push(`Атаки: ${attacks.join("; ")}`);
 
   return lines;
@@ -552,9 +563,10 @@ export function mapSheetToCharacter(
     .map(([skill]) => (src.skillExpertise?.[skill] ? `${skill} (компетенция)` : skill));
   if (skills.length) notes.push(`Навыки: ${skills.join(", ")}`);
 
-  const attacks = (src.attacks || [])
-    .filter((a) => a?.name?.trim())
-    .map((a) => `${a.name} ${a.attackBonus || ""} ${a.damageAndType || ""}`.replace(/\s+/g, " ").trim());
+  // Атаки — как их показывает сайт листа: по оружию в руках и снаряжению, а не только из поля attacks
+  const attacks = resolveSheetAttacks(src).map((a) =>
+    `${a.name} ${a.attackBonus} ${a.damageAndType}`.replace(/\s+/g, " ").trim()
+  );
   if (attacks.length) notes.push(`Атаки: ${attacks.join("; ")}`);
 
   if (src.spellcastingClass?.trim() || src.spellcastingAbility?.trim()) {

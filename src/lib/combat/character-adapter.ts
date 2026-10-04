@@ -2,7 +2,8 @@
 // Адаптер извлечения атак, заклинаний и способностей из карточки персонажа для боевого режима.
 // Гарантирует: на тактическую карту встают ТОЛЬКО атаки из листа персонажа (без навязанных рапир/секир).
 
-import { unwrapSheet } from "@/lib/dnd/import-character";
+import { sheetFromNotes, unwrapSheet } from "@/lib/dnd/import-character";
+import { resolveSheetAttacks } from "@/lib/dnd/sheet-attacks";
 import type {
   Attack,
   CombatAbility,
@@ -86,9 +87,15 @@ export function parseDamageString(damageStr: string): DamageRoll[] {
   const parsed = parts.map((part) => {
     const trimmed = part.trim();
     const diceMatch = trimmed.match(/(\d*)\s*[кkd]\s*(\d+)/i);
-    const dice = diceMatch ? `${diceMatch[1] || 1}d${diceMatch[2]}` : "1d6";
+    // Фиксированный урон без кости («1 дробящий» у безоружного удара): раньше превращался в 1d6
+    const flatMatch = !diceMatch ? trimmed.match(/^(\d+)(?!\s*[кkd]\s*\d)/i) : null;
+    const dice = diceMatch ? `${diceMatch[1] || 1}d${diceMatch[2]}` : flatMatch ? "1d1" : "1d6";
     const modMatch = trimmed.match(/([+-]\s*\d+)/);
-    const mod = modMatch ? parseInt(modMatch[1].replace(/\s/g, ""), 10) : 0;
+    const mod = flatMatch
+      ? Math.max(0, parseInt(flatMatch[1], 10) - 1)
+      : modMatch
+      ? parseInt(modMatch[1].replace(/\s/g, ""), 10)
+      : 0;
 
     let type = "";
     const lower = trimmed.toLowerCase();
@@ -204,10 +211,12 @@ function collectRawAttacks(char: Record<string, any>): any[] {
   // 1. Попытка прочесть JSON из notes (сохраняется при входе в сетевую комнату и импорте)
   if (char.notes && typeof char.notes === "string") {
     try {
-      const parsedNotes = JSON.parse(char.notes);
-      // Лист может лежать в любой обёртке (data, rawSheet, character…) — достаём его единообразно
-      const list = unwrapSheet(parsedNotes).attacks;
-      if (Array.isArray(list) && list.length > 0) {
+      // Лист может лежать в любой обёртке и на любой глубине — достаём его единообразно.
+      // Атаки считаем так же, как сайт листа: по оружию в руках и снаряжению.
+      const sheet = sheetFromNotes(char.notes);
+      if (!sheet) throw new Error("not a sheet");
+      const list = resolveSheetAttacks(sheet);
+      if (list.length > 0) {
         return list;
       }
     } catch {
@@ -319,7 +328,7 @@ export function extractSpellsFromCharacter(
   let sheetObj: any = null;
   if (char.notes && typeof char.notes === "string") {
     try {
-      sheetObj = unwrapSheet(JSON.parse(char.notes));
+      sheetObj = sheetFromNotes(char.notes) ?? unwrapSheet(JSON.parse(char.notes));
     } catch {
       sheetObj = null;
     }

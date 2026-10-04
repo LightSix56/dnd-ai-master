@@ -1,3 +1,4 @@
+import { resolveSheetAttacks } from "@/lib/dnd/sheet-attacks";
 import { sheetFromNotes } from "@/lib/dnd/import-character";
 import type { Character } from "@/lib/store";
 
@@ -107,7 +108,7 @@ export function parseCharacterProficiencies(
     for (const [skill, has] of Object.entries(sheet.skillExpertise || {})) {
       if (has) skills.set(skill.trim(), "expertise");
     }
-    for (const atk of Array.isArray(sheet.attacks) ? sheet.attacks : []) {
+    for (const atk of resolveSheetAttacks(sheet)) {
       const name = String(atk?.name || "").trim();
       if (!name) continue;
       const bonusMatch = String(atk?.attackBonus ?? "").match(/[+-]?\d+/);
