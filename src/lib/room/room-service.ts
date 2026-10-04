@@ -90,10 +90,17 @@ function mapTurnFromDb(row: Record<string, any>): RoomTurn {
 /** Нарушение правил комнаты: роуты отдают такие ошибки как 409, а не как сбой сервера */
 export class RoomRuleError extends Error {}
 
-/** Через сколько секунд блокировка «мастер думает» считается зависшей и может быть перехвачена */
-export const STALE_RESOLVE_LOCK_SECONDS = 150;
+/**
+ * Через сколько секунд без «пульса» блокировка «мастер думает» считается зависшей.
+ * Пока мастер пишет, функция обновляет метку каждые RESOLVE_HEARTBEAT_SECONDS; если метка
+ * старше этого порога — функция убита (таймаут, сбой), и раунд можно перехватить.
+ */
+export const STALE_RESOLVE_LOCK_SECONDS = 50;
+export const RESOLVE_HEARTBEAT_SECONDS = 15;
 
 export class RoomService {
+  private broadcastChannels = new Map<string, any>();
+
   private client: SupabaseClient;
 
   constructor(client?: SupabaseClient) {
@@ -851,6 +858,43 @@ export class RoomService {
     }
   }
 
+  /** «Пульс» генерации: пока метка свежая, раунд никто не перехватит */
+  async touchResolvingLock(turnId: string): Promise<void> {
+    try {
+      await this.client
+        .from("room_turns")
+        .update({ resolving_started_at: new Date().toISOString() })
+        .eq("id", turnId)
+        .eq("status", "resolving");
+    } catch {
+      // пульс не критичен
+    }
+  }
+
+  /**
+   * Рассылает игрокам комнаты ход работы мастера (статус, текст по мере написания, итог).
+   * Клиенты слушают событие dm_stream канала room:<id>. Сбой рассылки игру не останавливает:
+   * итог раунда клиенты всё равно получат опросом.
+   */
+  async broadcastDmStream(roomId: string, payload: Record<string, unknown>): Promise<void> {
+    try {
+      const client = this.client as any;
+      if (typeof client?.channel !== "function") return;
+      let channel = this.broadcastChannels.get(roomId);
+      if (!channel) {
+        channel = client.channel(`room:${roomId}`);
+        this.broadcastChannels.set(roomId, channel);
+      }
+      if (typeof channel.httpSend === "function") {
+        await channel.httpSend("dm_stream", payload);
+      } else {
+        await channel.send({ type: "broadcast", event: "dm_stream", payload });
+      }
+    } catch (e) {
+      console.warn("[RoomService] рассылка dm_stream не удалась:", (e as Error)?.message);
+    }
+  }
+
   /**
    * Снимает блокировку в случае сбоя генерации (resolving -> waiting)
    */
@@ -867,11 +911,31 @@ export class RoomService {
    */
   async resolveRoomTurn(
     roomId: string,
-    dmResponse: string
-  ): Promise<{ completedTurn: RoomTurn; nextTurn: RoomTurn }> {
+    dmResponse: string,
+    expectedTurnId?: string
+  ): Promise<{ completedTurn: RoomTurn; nextTurn: RoomTurn; alreadyCompleted?: boolean }> {
     const activeTurn = await this.getActiveTurn(roomId);
     if (!activeTurn) {
       throw new Error("Нет активного раунда для завершения");
+    }
+
+    // Раунд, который мы описывали, уже закрыт другим запросом (перехват зависшей блокировки,
+    // пока первая функция всё же дописала ответ). Последний раунд комнаты — уже следующий:
+    // закрывать его нашим текстом нельзя, иначе пропадёт целый раунд заявок.
+    if (expectedTurnId && activeTurn.id !== expectedTurnId) {
+      const { data: doneRow } = await this.client
+        .from("room_turns")
+        .select("*")
+        .eq("id", expectedTurnId)
+        .maybeSingle();
+      return {
+        completedTurn: doneRow ? mapTurnFromDb(doneRow) : activeTurn,
+        nextTurn: activeTurn,
+        alreadyCompleted: true,
+      };
+    }
+    if (expectedTurnId && activeTurn.status === "completed") {
+      throw new Error("Раунд уже завершён");
     }
 
     const { data: completedData, error: completeError } = await this.client

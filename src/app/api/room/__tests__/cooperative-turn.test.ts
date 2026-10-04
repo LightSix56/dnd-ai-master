@@ -159,7 +159,11 @@ describe("Cooperative Turn Logic", () => {
     expect(result.dmResponse).toBe("Удар сокрушает преграду.");
     expect(result.completedTurn.status).toBe("completed");
     expect(result.nextTurn.roundNumber).toBe(2);
-    expect(mockRoomService.resolveRoomTurn).toHaveBeenCalledWith("room-1", "Удар сокрушает преграду.");
+    expect(mockRoomService.resolveRoomTurn).toHaveBeenCalledWith(
+      "room-1",
+      "Удар сокрушает преграду.",
+      expect.anything()
+    );
   });
 
   it("keeps the round open (does not resolve it with a stub) when no API key is provided", async () => {

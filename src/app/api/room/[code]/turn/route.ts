@@ -6,7 +6,9 @@ import { resolveActiveRoomTurnHelper } from "@/lib/room/resolve-turn-helper";
 
 // Последний ход раунда запускает генерацию ответа мастера в этом же запросе —
 // стандартного лимита времени функции на это может не хватить.
-export const maxDuration = 120;
+// Генерация раунда ограничена 240 с внутри помощника; запас нужен, чтобы функция успела
+// сама вернуть раунд в ожидание, а не была оборвана платформой.
+export const maxDuration = 300;
 
 export async function GET(
   _request: Request,

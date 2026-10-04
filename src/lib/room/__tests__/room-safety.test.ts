@@ -121,6 +121,51 @@ describe("блокировка раунда на время ответа мас�
   });
 });
 
+describe("завершение раунда после перехвата блокировки", () => {
+  const row = (id: string, round: number, status: string) => ({
+    id,
+    room_id: "room-1",
+    round_number: round,
+    status,
+    player_inputs: {},
+    dm_response: status === "completed" ? "Ответ первого запроса" : null,
+    created_at: "2026-01-01T00:00:00Z",
+  });
+
+  it("не закрывает следующий раунд, если описанный раунд уже завершён другим запросом", async () => {
+    const log: Array<[string, unknown[]]> = [];
+    const client: any = chain({ data: null, error: null }, log);
+    // последний раунд комнаты — уже второй (waiting); первый завершён
+    client.single = vi.fn().mockResolvedValue({ data: row("turn-2", 2, "waiting"), error: null });
+    client.maybeSingle = vi.fn().mockResolvedValue({ data: row("turn-1", 1, "completed"), error: null });
+    const service = new RoomService(client);
+
+    const res = await service.resolveRoomTurn("room-1", "Запоздавший ответ", "turn-1");
+
+    expect(res.alreadyCompleted).toBe(true);
+    expect(res.completedTurn.id).toBe("turn-1");
+    expect(res.nextTurn.id).toBe("turn-2");
+    expect(log.some(([m]) => m === "update")).toBe(false);
+    expect(log.some(([m]) => m === "insert")).toBe(false);
+  });
+
+  it("пульс обновляет метку только у раунда в обработке", async () => {
+    const log: Array<[string, unknown[]]> = [];
+    const service = new RoomService(chain({ data: null, error: null }, log) as any);
+    await service.touchResolvingLock("turn-1");
+    expect(log.find(([m]) => m === "update")?.[1][0]).toHaveProperty("resolving_started_at");
+    expect(log.filter(([m]) => m === "eq").map(([, a]) => a)).toEqual([
+      ["id", "turn-1"],
+      ["status", "resolving"],
+    ]);
+  });
+
+  it("рассылка без канала (нет соединения) не бросает ошибку", async () => {
+    const service = new RoomService({} as any);
+    await expect(service.broadcastDmStream("room-1", { type: "status" })).resolves.toBeUndefined();
+  });
+});
+
 describe("вход в комнату", () => {
   it("нельзя взять персонажа, которого уже выбрал другой игрок", async () => {
     const client: any = chain({ data: { id: "room-1", starting_level: 1, status: "lobby", campaign_settings: {} }, error: null });

@@ -589,6 +589,15 @@ export function DnDApp({
   const [streamingDmText, setStreamingDmText] = useState<string | null>(null);
   const [dmStatusText, setDmStatusText] = useState<string | null>(null);
   const roomChannelRef = useRef<any>(null);
+  // Когда в последний раз приходил текст/статус от мастера и с какого момента раунд «думает»
+  const lastDmStreamAtRef = useRef(0);
+  const resolvingWatchRef = useRef<{ turnId: string; since: number; lastAttempt: number } | null>(null);
+  const forceResolveRef = useRef<((opts?: { silent?: boolean }) => Promise<void>) | null>(null);
+  const turnBusyRef = useRef(false);
+  // Текст мастера, показанный по рассылке, держим до прихода сообщения из истории
+  const pendingStreamClearRef = useRef(false);
+  const loadArcStateRef = useRef<((campaignId: string) => Promise<unknown>) | null>(null);
+  const arcStatusRef = useRef<string | null>(null);
 
   // Хелпер обновления статистики расходов кампании при завершении хода
   const applyTurnStats = useCallback((stats: any) => {
@@ -674,15 +683,35 @@ export function DnDApp({
       .channel(channelName)
       .on("broadcast", { event: "dm_stream" }, ({ payload }: any) => {
         if (!payload) return;
+        lastDmStreamAtRef.current = Date.now();
 
         if (payload.type === "status") {
           setDmStatusText(payload.status || "🎲 Мастер оценивает действия отряда...");
         } else if (payload.type === "chunk") {
+          pendingStreamClearRef.current = false;
           setStreamingDmText(payload.text || "");
           setDmStatusText(null);
-        } else if (payload.type === "finish") {
+        } else if (payload.type === "error") {
           setStreamingDmText(null);
           setDmStatusText(null);
+        } else if (payload.type === "finish") {
+          setDmStatusText(null);
+          if (!payload.fullText) {
+            // Ведущий дописал ответ в личном чате: сам текст придёт из истории при ближайшем
+            // опросе. До этого оставляем показанное, чтобы ответ не «мигал».
+            pendingStreamClearRef.current = true;
+            setTimeout(() => {
+              if (pendingStreamClearRef.current) {
+                pendingStreamClearRef.current = false;
+                setStreamingDmText(null);
+              }
+            }, 12000);
+            return;
+          }
+          setStreamingDmText(null);
+          if (payload.nextTurn?.id) {
+            setActiveRoomTurn(payload.nextTurn);
+          }
           if (payload.fullText) {
             const newMsg = {
               id: `turn_${payload.turnId || Date.now()}`,
@@ -1018,6 +1047,41 @@ export function DnDApp({
   // Алиасы для совместимости со старым кодом
   const isLoading = status === "submitted" || status === "streaming";
 
+  // Ведущий ведёт сцену через личный чат (вступление, реплики вне раунда). Остальные игроки
+  // комнаты раньше видели такой ответ только целиком и с задержкой — рассылаем его по мере написания.
+  const lastChatBroadcastRef = useRef(0);
+  const wasChatLoadingRef = useRef(false);
+  useEffect(() => {
+    const channel = roomChannelRef.current;
+    if (!activeRoom?.id || !channel) return;
+    if (isLoading && !wasChatLoadingRef.current) {
+      channel.send({
+        type: "broadcast",
+        event: "dm_stream",
+        payload: { type: "status", status: "🎲 Мастер описывает сцену..." },
+      });
+    } else if (!isLoading && wasChatLoadingRef.current) {
+      channel.send({ type: "broadcast", event: "dm_stream", payload: { type: "finish" } });
+    }
+    wasChatLoadingRef.current = isLoading;
+  }, [isLoading, activeRoom?.id]);
+
+  useEffect(() => {
+    const channel = roomChannelRef.current;
+    if (!activeRoom?.id || !channel || !isLoading) return;
+    const last = messages[messages.length - 1] as any;
+    if (!last || last.role !== "assistant") return;
+    const text = (last.parts ?? [])
+      .filter((p: any) => p?.type === "text" && typeof p.text === "string")
+      .map((p: any) => p.text)
+      .join("");
+    if (!text.trim()) return;
+    const now = Date.now();
+    if (now - lastChatBroadcastRef.current < 700) return;
+    lastChatBroadcastRef.current = now;
+    channel.send({ type: "broadcast", event: "dm_stream", payload: { type: "chunk", text } });
+  }, [messages, isLoading, activeRoom?.id]);
+
   // Загружаем активную кампанию при старте
   useEffect(() => {
     refreshActiveCampaign();
@@ -1071,9 +1135,37 @@ export function DnDApp({
           const turnData = await turnRes.json();
           if (turnData?.turn) {
             setActiveRoomTurn(turnData.turn);
+
+            // Раунд завис в «мастер думает»: функция, писавшая ответ, оборвалась. Если давно
+            // нет ни текста, ни статуса — просим сервер перезапустить генерацию. Сервер сам
+            // решает, свободен ли раунд (живую генерацию он не перехватит).
+            const t = turnData.turn;
+            if (t.status === "resolving") {
+              const watch = resolvingWatchRef.current;
+              if (!watch || watch.turnId !== t.id) {
+                resolvingWatchRef.current = { turnId: t.id, since: Date.now(), lastAttempt: 0 };
+              } else {
+                const quietFor = Date.now() - Math.max(watch.since, lastDmStreamAtRef.current);
+                if (
+                  quietFor > 70_000 &&
+                  Date.now() - watch.lastAttempt > 45_000 &&
+                  !turnBusyRef.current
+                ) {
+                  watch.lastAttempt = Date.now();
+                  void forceResolveRef.current?.({ silent: true });
+                }
+              }
+            } else {
+              resolvingWatchRef.current = null;
+            }
           }
         }
       } catch {}
+
+      // 1.2 Игрок (не ведущий) сам сюжет не генерирует — подтягиваем его состояние с сервера
+      if (currentCampId && arcStatusRef.current !== "ready") {
+        void loadArcStateRef.current?.(currentCampId);
+      }
 
       // 2. Обновляем состояние персонажей кампании и активного боя
       if (currentCampId) {
@@ -1099,6 +1191,10 @@ export function DnDApp({
                 }
                 return prev;
               });
+              if (pendingStreamClearRef.current) {
+                pendingStreamClearRef.current = false;
+                setStreamingDmText(null);
+              }
             }
           }
         } catch {}
@@ -1392,6 +1488,9 @@ export function DnDApp({
       return null;
     }
   }, []);
+
+  loadArcStateRef.current = loadArcState;
+  arcStatusRef.current = arcState?.status ?? null;
 
   // Состояние истории при смене кампании (защищено от сброса при периодическом опросе)
   useEffect(() => {
@@ -1815,8 +1914,9 @@ export function DnDApp({
     await sendMessage({ text: userMessage });
   }
 
-  async function handleForceResolveTurn() {
+  async function handleForceResolveTurn(opts?: { silent?: boolean }) {
     if (!activeRoom) return;
+    const silent = Boolean(opts?.silent);
     const targetCampId =
       activeCampaign?.id ||
       activeRoom.campaignId ||
@@ -1867,19 +1967,9 @@ export function DnDApp({
               const event = JSON.parse(jsonStr);
               if (event.type === "status") {
                 setDmStatusText(event.status);
-                roomChannelRef.current?.send({
-                  type: "broadcast",
-                  event: "dm_stream",
-                  payload: { type: "status", status: event.status },
-                });
               } else if (event.type === "chunk") {
                 setStreamingDmText(event.fullText);
                 setDmStatusText(null);
-                roomChannelRef.current?.send({
-                  type: "broadcast",
-                  event: "dm_stream",
-                  payload: { type: "chunk", text: event.fullText, round: activeRoomTurn?.roundNumber },
-                });
               } else if (event.type === "finish") {
                 setStreamingDmText(null);
                 setDmStatusText(null);
@@ -1921,7 +2011,7 @@ export function DnDApp({
                   loadActiveCombat(targetCampId);
                   setTimeout(() => loadActiveCombat(targetCampId), 3000);
                 }
-                toast.success("Ход отправлен Мастеру!");
+                if (!silent) toast.success("Ход отправлен Мастеру!");
               } else if (event.type === "error") {
                 throw new Error(event.error || "Ошибка генерации");
               }
@@ -1976,7 +2066,9 @@ export function DnDApp({
         }
       }
     } catch (err: any) {
-      toast.error(err?.message || "Ошибка завершения раунда");
+      // Тихий режим — автоматическая попытка оживить зависший раунд: отказ «раунд уже
+      // обрабатывается» здесь нормален и игроку не интересен
+      if (!silent) toast.error(err?.message || "Ошибка завершения раунда");
     } finally {
       setResolvingTurn(false);
       setStreamingDmText(null);
@@ -2110,6 +2202,11 @@ export function DnDApp({
     }
     await runImport({ shareCode: code });
   }
+
+  forceResolveRef.current = handleForceResolveTurn;
+  turnBusyRef.current = submittingTurn || resolvingTurn;
+  // Игрок сетевой комнаты, но не её ведущий: сюжет настраивает и кампанию начинает ведущий
+  const isRoomGuest = Boolean(activeRoom && activeRoom.hostUserId !== user?.id);
 
   return (
     <div className="h-screen flex flex-col bg-background max-w-full overflow-x-hidden">
@@ -2914,7 +3011,7 @@ export function DnDApp({
                             </p>
                           </CardContent>
                         </Card>
-                      ) : arcState?.status === "ready" && arcState.arc && !showStoryConfig ? (
+                      ) : arcState?.status === "ready" && arcState.arc && (!showStoryConfig || isRoomGuest) ? (
                         /* Карточка: Сюжет готов, кнопка НАЧАТЬ КАМПАНИЮ */
                         <Card className="border-border bg-card/60">
                           <CardHeader className="pb-3">
@@ -2932,16 +3029,18 @@ export function DnDApp({
                                   {arcState.arc.title}
                                 </CardTitle>
                               </div>
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => setShowStoryConfig(true)}
-                                className="text-xs h-7 text-muted-foreground hover:text-foreground cursor-pointer"
-                              >
-                                <Settings className="size-3.5 mr-1" />
-                                Перенастроить
-                              </Button>
+                              {!isRoomGuest && (
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => setShowStoryConfig(true)}
+                                  className="text-xs h-7 text-muted-foreground hover:text-foreground cursor-pointer"
+                                >
+                                  <Settings className="size-3.5 mr-1" />
+                                  Перенастроить
+                                </Button>
+                              )}
                             </div>
                           </CardHeader>
                           <CardContent className="space-y-4">
@@ -2961,27 +3060,51 @@ export function DnDApp({
                               <div className="text-xs text-muted-foreground">
                                 Отряд из {playerCharacters.length} {playerCharacters.length === 1 ? "героя" : "героев"} готов к началу игры.
                               </div>
-                              <Button
-                                type="button"
-                                size="lg"
-                                onClick={startCampaignGame}
-                                disabled={isLoading}
-                                className="w-full sm:w-auto h-11 px-7 text-sm font-bold bg-gradient-to-r from-amber-600 via-amber-700 to-amber-800 hover:from-amber-500 hover:to-amber-700 text-amber-50 border border-amber-600/60 shadow-md flex items-center justify-center gap-2 cursor-pointer"
-                              >
-                                {isLoading ? (
-                                  <>
-                                    <Loader2 className="size-4 animate-spin" />
-                                    Мастер открывает сцену...
-                                  </>
-                                ) : (
-                                  <>
-                                    <Sparkles className="size-4" />
-                                    ⚔️ НАЧАТЬ КАМПАНИЮ
-                                  </>
-                                )}
-                              </Button>
+                              {isRoomGuest ? (
+                                <div className="flex items-center gap-2 text-xs font-medium text-amber-700 dark:text-amber-300">
+                                  <Loader2 className="size-3.5 animate-spin" />
+                                  Ждём, когда ведущий начнёт кампанию
+                                </div>
+                              ) : (
+                                <Button
+                                  type="button"
+                                  size="lg"
+                                  onClick={startCampaignGame}
+                                  disabled={isLoading}
+                                  className="w-full sm:w-auto h-11 px-7 text-sm font-bold bg-gradient-to-r from-amber-600 via-amber-700 to-amber-800 hover:from-amber-500 hover:to-amber-700 text-amber-50 border border-amber-600/60 shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                                >
+                                  {isLoading ? (
+                                    <>
+                                      <Loader2 className="size-4 animate-spin" />
+                                      Мастер открывает сцену...
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Sparkles className="size-4" />
+                                      ⚔️ НАЧАТЬ КАМПАНИЮ
+                                    </>
+                                  )}
+                                </Button>
+                              )}
                             </div>
                           </CardContent>
+                        </Card>
+                      ) : isRoomGuest ? (
+                        /* Игрок комнаты: сюжет настраивает ведущий */
+                        <Card className="border-border bg-card/60">
+                          <CardHeader className="pb-3">
+                            <div className="flex items-center gap-2.5">
+                              <Loader2 className="size-5 animate-spin text-amber-500" />
+                              <div>
+                                <CardTitle className="text-base font-semibold">
+                                  Ведущий настраивает сюжет приключения
+                                </CardTitle>
+                                <CardDescription className="text-xs text-muted-foreground mt-0.5">
+                                  Как только сюжет будет готов, он появится здесь, а кампанию начнёт ведущий.
+                                </CardDescription>
+                              </div>
+                            </div>
+                          </CardHeader>
                         </Card>
                       ) : (
                         /* Карточка: Настройка параметров сюжета и кнопка Сгенерировать сюжет */

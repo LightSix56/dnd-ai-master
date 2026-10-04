@@ -46,7 +46,8 @@ import {
   buildDmHistory,
 } from "@/lib/ai/caching";
 
-export const maxDuration = 60;
+// 60 с не хватало: ход с несколькими шагами обрывался платформой до записи в базу
+export const maxDuration = 300;
 
 // Шагов теперь нужно меньше: броски, обновления и записи батчатся.
 const MAX_STEPS = 6;

@@ -2,8 +2,11 @@ import { NextResponse } from "next/server";
 import { getAuthUserFromRequest } from "@/lib/supabase/client";
 import { RoomService } from "@/lib/room/room-service";
 import { resolveActiveRoomTurnHelper } from "@/lib/room/resolve-turn-helper";
+import { calculateTurnReadiness } from "@/lib/room/turn-batcher";
 
-export const maxDuration = 120;
+// Генерация раунда ограничена 240 с внутри помощника; запас нужен, чтобы функция успела
+// сама вернуть раунд в ожидание, а не была оборвана платформой.
+export const maxDuration = 300;
 
 export async function POST(
   request: Request,
@@ -27,16 +30,26 @@ export async function POST(
       return NextResponse.json({ error: "Комната не найдена" }, { status: 404 });
     }
 
-    if (room.hostUserId !== user.id) {
-      return NextResponse.json(
-        { error: "Только Ведущий (Host) может завершить раунд" },
-        { status: 403 }
-      );
+    // Досрочно завершить раунд может только ведущий. Но если все заявки уже поданы, а мастер
+    // так и не ответил (функция оборвалась), запустить генерацию заново вправе любой участник:
+    // иначе раунд зависает, когда ведущий отошёл.
+    const isHost = room.hostUserId === user.id;
+    const notHostError = NextResponse.json(
+      { error: "Только Ведущий (Host) может завершить раунд" },
+      { status: 403 }
+    );
+    if (!isHost && !room.participants?.some((p) => p.userId === user.id)) {
+      return notHostError;
     }
 
     const activeTurn = await roomService.getActiveTurn(room.id);
     if (!activeTurn) {
       return NextResponse.json({ error: "Нет активного раунда" }, { status: 404 });
+    }
+
+    if (!isHost) {
+      const readiness = calculateTurnReadiness(room.participants || [], activeTurn.playerInputs);
+      if (!readiness.isAllReady) return notHostError;
     }
 
     const body = await request.json().catch(() => ({}));

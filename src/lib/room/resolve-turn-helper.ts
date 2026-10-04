@@ -1,9 +1,9 @@
 import { generateText, streamText, stepCountIs } from "ai";
 import { bundleTurnInputs, type CharacterTurnStatus } from "./turn-batcher";
 import { createClient, type AuthMode } from "@/lib/ai/client";
-import { resolveDmModel } from "@/lib/ai/models";
+import { BOOKKEEPING_TOOLS, resolveDmModel } from "@/lib/ai/models";
 import { db } from "@/lib/db";
-import { RoomService } from "./room-service";
+import { RoomService, RESOLVE_HEARTBEAT_SECONDS } from "./room-service";
 import type { Room, RoomParticipant, RoomTurn, RoomWithParticipants } from "./types";
 import { dmTools, buildToolsContext } from "@/lib/ai/tools";
 import { getDeterministicTools, buildDmHistory, buildFrozenSystemPrompt } from "@/lib/ai/caching";
@@ -152,6 +152,38 @@ export async function buildRoomDmSystemPrompt(
   return buildFrozenRoomSystemPrompt(room);
 }
 
+/** Сколько шагов (ответ + вызовы инструментов) даём мастеру на один раунд */
+const ROOM_MAX_STEPS = 4;
+
+/**
+ * Предел времени на генерацию раунда. Должен быть меньше maxDuration маршрутов (300 с):
+ * тогда функция успевает сама вернуть раунд в ожидание, а не обрывается платформой
+ * с раундом, навсегда застрявшим в «мастер думает».
+ */
+const ROOM_GENERATION_TIMEOUT_MS = 240_000;
+
+/** Как часто рассылать игрокам текст по мере написания */
+const BROADCAST_INTERVAL_MS = 700;
+
+type StepLike = { text?: string; toolCalls?: Array<{ toolName: string }> };
+
+/**
+ * Условия остановки хода мастера. Каждый шаг заново отправляет весь контекст, поэтому лишние
+ * шаги «бухгалтерии» после готового рассказа — это десятки секунд: раунд из трёх-четырёх
+ * шагов не укладывался в лимит функции и зависал.
+ */
+const roomStopWhen = [
+  stepCountIs(ROOM_MAX_STEPS),
+  ({ steps }: { steps: StepLike[] }) => {
+    const last = steps[steps.length - 1];
+    const calls = last?.toolCalls ?? [];
+    const allBookkeeping =
+      calls.length > 0 && calls.every((c) => (BOOKKEEPING_TOOLS as readonly string[]).includes(c.toolName));
+    const hasNarrative = steps.some((st) => typeof st?.text === "string" && st.text.trim().length > 0);
+    return allBookkeeping && hasNarrative;
+  },
+];
+
 /** Мастер не смог описать раунд: раунд не завершается, ведущий может повторить генерацию */
 export class RoomTurnGenerationError extends Error {}
 
@@ -166,6 +198,22 @@ export async function resolveActiveRoomTurnHelper(
   options?: ResolveActiveRoomTurnOptions
 ): Promise<ResolveActiveRoomTurnResult> {
   const roomService = options?.roomService || new RoomService();
+
+  // Рассылка хода работы мастера всем игрокам комнаты и «пульс» блокировки раунда.
+  // Оба необязательны: у подменённого сервиса (тесты) этих методов может не быть.
+  const svc = roomService as Partial<Pick<RoomService, "broadcastDmStream" | "touchResolvingLock">>;
+  const canBroadcast = typeof svc.broadcastDmStream === "function";
+  const broadcast = (payload: Record<string, unknown>): Promise<void> =>
+    canBroadcast
+      ? roomService.broadcastDmStream(room.id, { ...payload, turnId: activeTurn.id, round: activeTurn.roundNumber })
+      : Promise.resolve();
+  const heartbeat =
+    typeof svc.touchResolvingLock === "function"
+      ? setInterval(() => void roomService.touchResolvingLock(activeTurn.id), RESOLVE_HEARTBEAT_SECONDS * 1000)
+      : null;
+  const stopHeartbeat = () => {
+    if (heartbeat) clearInterval(heartbeat);
+  };
 
   const participants: RoomParticipant[] =
     "participants" in room && Array.isArray(room.participants)
@@ -268,23 +316,41 @@ export async function resolveActiveRoomTurnHelper(
               get_combat_status: dmTools.get_combat_status,
             });
 
-        if (typeof options?.onChunk === "function") {
-          options.onStatus?.("🎲 Мастер оценивает действия отряда...");
+        if (typeof options?.onChunk === "function" || canBroadcast) {
+          let streamError: unknown = null;
+          const status = "🎲 Мастер оценивает действия отряда...";
+          options?.onStatus?.(status);
+          void broadcast({ type: "status", status });
+
           const res = await (streamText as any)({
             model: client.chat(aiModel),
             system,
             ...turnInput,
             tools: availableTools,
             ...(campaignId ? { toolsContext: buildToolsContext(campaignId) } : {}),
-            stopWhen: stepCountIs(4),
-            maxSteps: 3,
+            stopWhen: roomStopWhen,
             temperature: 0.7,
+            abortSignal: AbortSignal.timeout(ROOM_GENERATION_TIMEOUT_MS),
+            // Ошибку потока SDK не бросает, а отдаёт сюда: без этого сбой провайдера
+            // выглядел как «пустой ответ» и раунд закрывался заглушкой
+            onError: (event: { error: unknown }) => {
+              streamError = event.error;
+            },
           });
 
           let fullStreamText = "";
+          let lastBroadcastAt = 0;
           for await (const chunk of res.textStream) {
             fullStreamText += chunk;
-            options.onChunk(chunk, fullStreamText);
+            options?.onChunk?.(chunk, fullStreamText);
+            const now = Date.now();
+            if (now - lastBroadcastAt >= BROADCAST_INTERVAL_MS) {
+              lastBroadcastAt = now;
+              void broadcast({ type: "chunk", text: fullStreamText });
+            }
+          }
+          if (streamError && !fullStreamText.trim()) {
+            throw streamError instanceof Error ? streamError : new Error(String(streamError));
           }
 
           const rawSteps = await res.steps;
@@ -314,9 +380,9 @@ export async function resolveActiveRoomTurnHelper(
             ...turnInput,
             tools: availableTools,
             ...(campaignId ? { toolsContext: buildToolsContext(campaignId) } : {}),
-            stopWhen: stepCountIs(4),
-            maxSteps: 3,
+            stopWhen: roomStopWhen,
             temperature: 0.7,
+            abortSignal: AbortSignal.timeout(ROOM_GENERATION_TIMEOUT_MS),
           });
 
           const rawSteps = await res.steps;
@@ -359,18 +425,46 @@ export async function resolveActiveRoomTurnHelper(
         // Раунд НЕ завершаем: раньше сюда подставлялась заглушка, раунд закрывался, и заявки
         // игроков пропадали — «повторить генерацию» было уже не с чем.
         console.error("[resolveActiveRoomTurnHelper] AI call failed:", aiErr);
+        stopHeartbeat();
+        void broadcast({ type: "error", error: aiErr?.message || "Мастер не ответил" });
         throw new RoomTurnGenerationError(
           `Мастер не смог описать раунд ${activeTurn.roundNumber}: ${aiErr?.message || "таймаут сервиса"}. Заявки игроков сохранены — ведущий может повторить генерацию.`
         );
       }
     } else {
+      stopHeartbeat();
       throw new RoomTurnGenerationError(
         `Не задан API-ключ ИИ для описания раунда ${activeTurn.roundNumber}. Заявки игроков сохранены — укажите ключ в настройках и завершите раунд ещё раз.`
       );
     }
   }
 
-  const result = await roomService.resolveRoomTurn(room.id, narrative);
+  stopHeartbeat();
+  let result: Awaited<ReturnType<RoomService["resolveRoomTurn"]>>;
+  try {
+    result = await roomService.resolveRoomTurn(room.id, narrative, activeTurn.id);
+  } catch (completeErr) {
+    void broadcast({ type: "error", error: (completeErr as Error)?.message || "Не удалось завершить раунд" });
+    throw completeErr;
+  }
+
+  // Раунд уже закрыл другой запрос (перехват зависшей блокировки): его ответ и остаётся
+  // в истории, свой не дублируем.
+  if (result.alreadyCompleted) {
+    return {
+      completedTurn: result.completedTurn,
+      nextTurn: result.nextTurn,
+      dmResponse: result.completedTurn.dmResponse || narrative,
+      stats: statsPayload,
+    };
+  }
+
+  await broadcast({
+    type: "finish",
+    fullText: narrative,
+    stats: statsPayload,
+    nextTurn: result.nextTurn,
+  });
 
   if (campaignId) {
     try {
