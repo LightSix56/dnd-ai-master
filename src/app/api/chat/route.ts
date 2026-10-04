@@ -9,6 +9,7 @@
 //  3. Изменчивый срез сцены (caching/ephemeral-tail.ts) — в хвосте последнего сообщения игрока.
 // Всё, что совпало с прошлым запросом, провайдер читает из кэша по цене в десятки раз ниже.
 
+import { denyCampaignAccess, getRequestUserId } from "@/lib/auth/campaign-access";
 import { after } from "next/server";
 import {
   streamText,
@@ -116,12 +117,16 @@ export async function POST(req: Request) {
     // Определяем активную кампанию
     let activeCampaignId = campaignId;
     if (!activeCampaignId) {
+      // Без явного id — активная кампания самого пользователя, а не «любая активная в базе»
       const active = await db.campaign.findFirst({
-        where: { isActive: true },
+        where: { isActive: true, userId: await getRequestUserId(req) },
         orderBy: { updatedAt: "desc" },
       });
       activeCampaignId = active?.id;
     }
+
+    const denied = await denyCampaignAccess(req, activeCampaignId);
+    if (denied) return denied;
 
     // Последнее действие/реплика игрока: идёт в запрос и в контекст фонового летописца
     const lastUiUserMessage = [...messages].reverse().find((m) => m.role === "user");

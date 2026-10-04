@@ -1,4 +1,5 @@
 // API: импорт персонажа из генератора листа — файлом JSON или по share-коду с сайта.
+import { denyCampaignAccess, getRequestUserId } from "@/lib/auth/campaign-access";
 import { db } from "@/lib/db";
 import {
   isSheetCharacter,
@@ -55,10 +56,12 @@ export async function POST(req: Request) {
       character?: unknown;
     } = body;
 
+    // Без явного id берём активную кампанию самого пользователя, а не «любую активную в базе»
+    const requestUserId = await getRequestUserId(req);
     let campaign = campaignId
       ? await db.campaign.findUnique({ where: { id: campaignId } })
       : await db.campaign.findFirst({
-          where: { isActive: true },
+          where: { isActive: true, userId: requestUserId },
           orderBy: { updatedAt: "desc" },
         });
 
@@ -69,6 +72,8 @@ export async function POST(req: Request) {
       );
     }
     const activeCampaignId = campaign.id;
+    const denied = await denyCampaignAccess(req, activeCampaignId);
+    if (denied) return denied;
 
     let sheet: SheetCharacter;
     if (shareCode) {

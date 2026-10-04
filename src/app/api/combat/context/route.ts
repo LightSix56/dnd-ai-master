@@ -1,4 +1,5 @@
 // API: Получение полного тактического контекста боя для ИИ-Мастера и игроков.
+import { denyCampaignAccess } from "@/lib/auth/campaign-access";
 import { db } from "@/lib/db";
 import { hydrateCombat } from "@/lib/combat/serialize";
 import { CombatState } from "@/lib/combat/engine";
@@ -30,6 +31,8 @@ export async function GET(req: Request) {
     if (!row) {
       return Response.json({ error: "Активный бой не найден" }, { status: 404 });
     }
+    const denied = await denyCampaignAccess(req, row.campaignId);
+    if (denied) return denied;
 
     const state = new CombatState(hydrateCombat(row));
     const activeId = state.turnOrder[state.currentTurnIndex];

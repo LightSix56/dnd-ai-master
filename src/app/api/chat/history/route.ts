@@ -1,5 +1,6 @@
 // API: история чата кампании — сообщения пишутся в /api/chat, но без этого
 // маршрута никто их не читал, и после перезагрузки страницы диалог пропадал.
+import { denyCampaignAccess } from "@/lib/auth/campaign-access";
 import { db } from "@/lib/db";
 
 const MAX_MESSAGES = 200;
@@ -12,6 +13,8 @@ export async function GET(req: Request) {
     if (!campaignId) {
       return Response.json({ error: "campaignId required" }, { status: 400 });
     }
+    const denied = await denyCampaignAccess(req, campaignId);
+    if (denied) return denied;
 
     // Берём последние сообщения, а не первые: при длинной кампании интересен хвост.
     const rows = await db.chatMessage.findMany({

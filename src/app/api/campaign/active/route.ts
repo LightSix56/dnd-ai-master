@@ -1,4 +1,5 @@
 // API: получить активную кампанию текущего пользователя
+import { denyCampaignAccess } from "@/lib/auth/campaign-access";
 import { db } from "@/lib/db";
 import { getAuthUserFromRequest } from "@/lib/supabase/client";
 
@@ -12,6 +13,9 @@ export async function GET(request: Request) {
 
     // Если запрошена конкретная кампания (например, привязанная к сетевой комнате)
     if (requestedCampaignId) {
+      const denied = await denyCampaignAccess(request, requestedCampaignId);
+      if (denied) return denied;
+
       const target = await db.campaign.findUnique({
         where: { id: requestedCampaignId },
         include: {
@@ -32,6 +36,9 @@ export async function GET(request: Request) {
         return Response.json({ campaign: target });
       }
     }
+
+    // Без входа «своей» активной кампании нет
+    if (!user) return Response.json({ campaign: null, authRequired: true });
 
     let active = await db.campaign.findFirst({
       where: { userId: userIdFilter, isActive: true },

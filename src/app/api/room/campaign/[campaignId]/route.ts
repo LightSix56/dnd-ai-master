@@ -1,8 +1,9 @@
+import { denyCampaignAccess } from "@/lib/auth/campaign-access";
 import { NextResponse } from "next/server";
 import { RoomService } from "@/lib/room/room-service";
 
 export async function GET(
-  _req: Request,
+  req: Request,
   props: { params: Promise<{ campaignId: string }> }
 ) {
   try {
@@ -11,6 +12,8 @@ export async function GET(
     if (!campaignId) {
       return NextResponse.json({ error: "campaignId is required" }, { status: 400 });
     }
+    const denied = await denyCampaignAccess(req, campaignId);
+    if (denied) return denied;
 
     const roomService = new RoomService();
     const room = await roomService.getActiveRoomByCampaignId(campaignId);
@@ -25,7 +28,7 @@ export async function GET(
 }
 
 export async function DELETE(
-  _req: Request,
+  req: Request,
   props: { params: Promise<{ campaignId: string }> }
 ) {
   try {
@@ -34,6 +37,8 @@ export async function DELETE(
     if (!campaignId) {
       return NextResponse.json({ error: "campaignId is required" }, { status: 400 });
     }
+    const denied = await denyCampaignAccess(req, campaignId);
+    if (denied) return denied;
 
     const roomService = new RoomService();
     const success = await roomService.closeRoomByCampaignId(campaignId);

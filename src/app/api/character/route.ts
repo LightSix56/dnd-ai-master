@@ -1,4 +1,5 @@
 // API: управление персонажами
+import { denyCampaignAccess } from "@/lib/auth/campaign-access";
 import { db } from "@/lib/db";
 import { proficiencyBonus } from "@/lib/dnd/dice";
 import { getArchetypeAbilityScores } from "@/lib/dnd/import-character";
@@ -12,6 +13,8 @@ export async function GET(req: Request) {
     if (!campaignId) {
       return Response.json({ error: "campaignId required" }, { status: 400 });
     }
+    const denied = await denyCampaignAccess(req, campaignId);
+    if (denied) return denied;
 
     const where: Record<string, unknown> = { campaignId };
     if (type && type !== "all") where.type = type;
@@ -46,6 +49,8 @@ export async function DELETE(req: Request) {
     }
 
     const { campaignId, name: charName } = character;
+    const denied = await denyCampaignAccess(req, campaignId);
+    if (denied) return denied;
 
     // 1. Удаляем самого персонажа
     await db.character.delete({ where: { id } });
@@ -153,6 +158,8 @@ export async function POST(req: Request) {
     if (!campaignId) {
       return Response.json({ error: "campaignId required" }, { status: 400 });
     }
+    const denied = await denyCampaignAccess(req, campaignId);
+    if (denied) return denied;
 
     const name = String(data.name || "Безымянный").trim();
     const className = data.class || data.className;
@@ -258,6 +265,12 @@ export async function PATCH(req: Request) {
     if (relation !== undefined) data.relation = relation;
     if (inventory !== undefined) {
       data.inventory = typeof inventory === "string" ? inventory : JSON.stringify(inventory);
+    }
+
+    const target = await db.character.findUnique({ where: { id }, select: { campaignId: true } });
+    if (target) {
+      const denied = await denyCampaignAccess(req, target.campaignId);
+      if (denied) return denied;
     }
 
     const updated = await db.character.update({

@@ -1,3 +1,4 @@
+import { denyCampaignAccess } from "@/lib/auth/campaign-access";
 import { NextResponse } from "next/server";
 import { getAuthUserFromRequest } from "@/lib/supabase/client";
 import { RoomService } from "@/lib/room/room-service";
@@ -23,6 +24,11 @@ export async function POST(request: Request) {
         { status: 401 }
       );
     }
+
+    // Открыть стол для кампании может только тот, у кого есть к ней доступ: иначе чужую
+    // кампанию можно было бы «захватить», создав для неё комнату и став её ведущим
+    const denied = await denyCampaignAccess(request, campaignId);
+    if (denied) return denied;
 
     if (typeof body.name === "string" && !body.name.trim()) {
       return NextResponse.json({ error: "Необходимо указать название комнаты" }, { status: 400 });

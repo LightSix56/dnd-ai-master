@@ -1,4 +1,5 @@
 // API: получить факты памяти и события для UI
+import { denyCampaignAccess } from "@/lib/auth/campaign-access";
 import { db } from "@/lib/db";
 
 export async function GET(req: Request) {
@@ -9,6 +10,8 @@ export async function GET(req: Request) {
     if (!campaignId) {
       return Response.json({ error: "campaignId required" }, { status: 400 });
     }
+    const denied = await denyCampaignAccess(req, campaignId);
+    if (denied) return denied;
 
     const [memories, events] = await Promise.all([
       db.memory.findMany({

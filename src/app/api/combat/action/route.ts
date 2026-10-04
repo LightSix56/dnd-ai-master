@@ -2,6 +2,7 @@
 // Роут только валидирует вход, вызывает движок и сохраняет изменения —
 // вся боевая логика живёт в lib/combat/engine.ts.
 
+import { denyCombatAccess } from "@/lib/auth/campaign-access";
 import { db } from "@/lib/db";
 import {
   CombatState,
@@ -170,6 +171,10 @@ export async function POST(req: Request) {
     if (!combatId) {
       return Response.json({ error: "combatId required" }, { status: 400 });
     }
+
+    // Бой кампании доступен её владельцу и участникам её сетевой комнаты
+    const accessDenied = await denyCombatAccess(req, combatId);
+    if (accessDenied) return accessDenied;
 
     // В сетевой комнате игрок не может ходить за героя другого игрока
     const denied = await checkCombatControl(req, combatId, action, body as Record<string, unknown>);

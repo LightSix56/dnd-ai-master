@@ -1,3 +1,4 @@
+import { denyCampaignAccess } from "@/lib/auth/campaign-access";
 import { after } from "next/server";
 import { db } from "@/lib/db";
 import { generateNextChapter, parseStoryArc, type ArcProgress } from "@/lib/ai/story-arc";
@@ -26,6 +27,9 @@ export async function POST(req: Request) {
     if (!campaignId) {
       return Response.json({ error: "campaignId required" }, { status: 400 });
     }
+
+    const denied = await denyCampaignAccess(req, campaignId);
+    if (denied) return denied;
 
     const campaign = await db.campaign.findUnique({ where: { id: campaignId } });
     if (!campaign) {

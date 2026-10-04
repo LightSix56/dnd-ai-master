@@ -5,6 +5,7 @@
 // POST не ждёт результат: он помечает кампанию как "generating" и возвращается
 // сразу, а работа идёт фоном с записью прогресса в БД. UI опрашивает GET.
 
+import { denyCampaignAccess } from "@/lib/auth/campaign-access";
 import { after } from "next/server";
 import { db } from "@/lib/db";
 import {
@@ -25,6 +26,8 @@ export async function GET(req: Request) {
     if (!campaignId) {
       return Response.json({ error: "campaignId required" }, { status: 400 });
     }
+    const denied = await denyCampaignAccess(req, campaignId);
+    if (denied) return denied;
 
     const campaign = await db.campaign.findUnique({
       where: { id: campaignId },
@@ -78,6 +81,8 @@ export async function POST(req: Request) {
     if (!campaignId) {
       return Response.json({ error: "campaignId required" }, { status: 400 });
     }
+    const denied = await denyCampaignAccess(req, campaignId);
+    if (denied) return denied;
 
     const campaign = await db.campaign.findUnique({ where: { id: campaignId } });
     if (!campaign) {

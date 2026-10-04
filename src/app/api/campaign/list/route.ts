@@ -5,7 +5,9 @@ import { getAuthUserFromRequest } from "@/lib/supabase/client";
 export async function GET(request: Request) {
   try {
     const { user } = await getAuthUserFromRequest(request);
-    const userIdFilter = user ? user.id : null;
+    // Без входа в аккаунт кампаний не показываем: раньше все «ничьи» кампании были видны любому гостю сайта
+    if (!user) return Response.json({ campaigns: [], authRequired: true });
+    const userIdFilter = user.id;
 
     const campaigns = await db.campaign.findMany({
       where: { userId: userIdFilter },

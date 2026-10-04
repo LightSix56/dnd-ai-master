@@ -1,9 +1,10 @@
+import { denyCampaignAccess } from "@/lib/auth/campaign-access";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { hydrateCombat } from "@/lib/combat/serialize";
 
 export async function GET(
-  _request: Request,
+  request: Request,
   props: { params: Promise<{ id: string }> | { id: string } }
 ) {
   try {
@@ -25,6 +26,9 @@ export async function GET(
     if (!row) {
       return NextResponse.json({ error: "Бой не найден", combat: null }, { status: 404 });
     }
+
+    const denied = await denyCampaignAccess(request, row.campaignId);
+    if (denied) return denied;
 
     const combat = hydrateCombat(row as any);
     return NextResponse.json({ combat });

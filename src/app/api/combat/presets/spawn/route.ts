@@ -1,3 +1,4 @@
+import { denyCampaignAccess } from "@/lib/auth/campaign-access";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { DEFAULT_PRESETS, createCombatantFromPreset } from "@/lib/combat/preset-data";
@@ -25,6 +26,8 @@ export async function POST(req: NextRequest) {
     if (!combat) {
       return NextResponse.json({ error: "Бой не найден" }, { status: 404 });
     }
+    const denied = await denyCampaignAccess(req, combat.campaignId);
+    if (denied) return denied;
 
     // Проверяем, не является ли запрос спавном монстра из бестиария 2,875 существ
     let monsterDef: any = null;

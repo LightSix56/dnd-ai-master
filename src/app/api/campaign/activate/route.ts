@@ -1,4 +1,5 @@
 // API: активировать кампанию по id с учетом владельца
+import { denyCampaignAccess } from "@/lib/auth/campaign-access";
 import { db } from "@/lib/db";
 import { getAuthUserFromRequest } from "@/lib/supabase/client";
 
@@ -7,7 +8,7 @@ export async function POST(req: Request) {
     const { user } = await getAuthUserFromRequest(req);
     const userId = user ? user.id : null;
 
-    const { campaignId, roomCode }: { campaignId: string; roomCode?: string } = await req.json();
+    const { campaignId }: { campaignId: string; roomCode?: string } = await req.json();
     if (!campaignId) {
       return Response.json({ error: "campaignId required" }, { status: 400 });
     }
@@ -18,24 +19,24 @@ export async function POST(req: Request) {
       return Response.json({ error: "Campaign not found" }, { status: 404 });
     }
 
-    // Защита: нельзя активировать чужую кампанию (кроме случая подключения к сетевой комнате стола)
+    // Доступ: владелец или участник сетевой комнаты этой кампании
+    const denied = await denyCampaignAccess(req, campaignId);
+    if (denied) return denied;
+
+    // Участник комнаты получает кампанию стола, но «активной» у себя её не делает
     if (existing.userId && (!user || existing.userId !== user.id)) {
-      if (roomCode) {
-        // Участник сетевой комнаты подключается к кампании стола
-        const campaign = await db.campaign.findUnique({
-          where: { id: campaignId },
-          include: {
-            characters: {
-              orderBy: [{ type: "asc" }, { name: "asc" }],
-            },
-            _count: {
-              select: { events: true, memories: true, chatMessages: true },
-            },
+      const campaign = await db.campaign.findUnique({
+        where: { id: campaignId },
+        include: {
+          characters: {
+            orderBy: [{ type: "asc" }, { name: "asc" }],
           },
-        });
-        return Response.json({ campaign });
-      }
-      return Response.json({ error: "Доступ запрещён: это кампания другого пользователя" }, { status: 403 });
+          _count: {
+            select: { events: true, memories: true, chatMessages: true },
+          },
+        },
+      });
+      return Response.json({ campaign });
     }
 
     // Снимаем активность только с кампаний текущего пользователя

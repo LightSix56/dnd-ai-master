@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     }
 
     // Защита: нельзя удалить чужую кампанию
-    if (existing.userId && user && existing.userId !== user.id) {
+    if (existing.userId && existing.userId !== user?.id) {
       return Response.json({ error: "Доступ запрещён: нельзя удалить чужую кампанию" }, { status: 403 });
     }
 

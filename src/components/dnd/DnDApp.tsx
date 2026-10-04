@@ -340,6 +340,7 @@ export function DnDApp({
   const [showCreateRoom, setShowCreateRoom] = useState(false);
   const [showJoinRoomModal, setShowJoinRoomModal] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const accessDeniedShownRef = useRef<number | null>(null);
   const [showPicker, setShowPicker] = useState(false);
   const { user, signOut: supabaseSignOut, getAuthToken, signInAsGuest } = useSupabaseAuth();
   const [accountCharacters, setAccountCharacters] = useState<Array<{
@@ -546,6 +547,18 @@ export function DnDApp({
           activeCampaignRef.current = null;
           setActiveCampaign(null);
           setCharacters([]);
+        }
+      } else if (res.status === 401 || res.status === 403) {
+        // Кампания чужая или вход не выполнен: не показываем её содержимое
+        const data = await res.json().catch(() => null);
+        activeCampaignRef.current = null;
+        setActiveCampaign(null);
+        setCharacters([]);
+        // В лобби комнаты гость ещё не участник — отказ там ожидаем, не шумим
+        if (!activeRoomRef.current && accessDeniedShownRef.current !== res.status) {
+          accessDeniedShownRef.current = res.status;
+          toast.error(data?.error || "Нет доступа к этой кампании");
+          if (res.status === 401) setShowAuthModal(true);
         }
       }
     } catch (e) {

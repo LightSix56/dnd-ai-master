@@ -48,10 +48,12 @@ import { GET as getActiveCampaign } from "../active/route";
 import { POST as activateCampaign } from "../activate/route";
 import { POST as deleteCampaign } from "../delete/route";
 import { POST as createCampaign, GET as getCampaignBase } from "../route";
+import { resetCampaignAccessCaches } from "@/lib/auth/campaign-access";
 
 describe("Campaign User Isolation API", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    resetCampaignAccessCaches();
   });
 
   describe("GET /api/campaign/list", () => {
@@ -85,7 +87,7 @@ describe("Campaign User Isolation API", () => {
       expect(data.campaigns[0].name).toBe("Alpha's Campaign");
     });
 
-    it("returns unassigned/guest campaigns if user is unauthenticated", async () => {
+    it("returns no campaigns if user is unauthenticated", async () => {
       const { __mocks } = await import("@/lib/supabase/client") as any;
       const { __dbMocks } = await import("@/lib/db") as any;
 
@@ -94,19 +96,13 @@ describe("Campaign User Isolation API", () => {
         error: "No auth header",
       });
 
-      __dbMocks.campaignFindManyMock.mockResolvedValueOnce([
-        { id: "c-guest", name: "Guest Campaign", userId: null },
-      ]);
-
       const req = new Request("http://localhost:3000/api/campaign/list");
       const res = await getCampaignList(req);
       expect(res.status).toBe(200);
-
-      expect(__dbMocks.campaignFindManyMock).toHaveBeenCalledWith(
-        expect.objectContaining({
-          where: { userId: null },
-        })
-      );
+      const json = await res.json();
+      expect(json.campaigns).toEqual([]);
+      // Кампании без владельца гостю больше не отдаются
+      expect(__dbMocks.campaignFindManyMock).not.toHaveBeenCalled();
     });
   });
 
@@ -245,12 +241,12 @@ describe("Campaign User Isolation API", () => {
       const { __mocks } = await import("@/lib/supabase/client") as any;
       const { __dbMocks } = await import("@/lib/db") as any;
 
-      __mocks.getAuthUserFromRequestMock.mockResolvedValueOnce({
+      __mocks.getAuthUserFromRequestMock.mockResolvedValue({
         user: { id: "user-intruder" },
         error: null,
       });
 
-      __dbMocks.campaignFindUniqueMock.mockResolvedValueOnce({
+      __dbMocks.campaignFindUniqueMock.mockResolvedValue({
         id: "c-victim",
         name: "Victim Campaign",
         userId: "user-victim",
@@ -269,6 +265,9 @@ describe("Campaign User Isolation API", () => {
       expect(res.status).toBe(403);
       const json = await res.json();
       expect(json.error).toMatch(/доступ запрещён/i);
+      // Постоянные заглушки этого теста не должны протекать в соседние
+      __mocks.getAuthUserFromRequestMock.mockReset();
+      __dbMocks.campaignFindUniqueMock.mockReset();
     });
   });
 

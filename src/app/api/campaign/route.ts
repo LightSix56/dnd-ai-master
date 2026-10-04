@@ -1,11 +1,14 @@
 // API для управления кампаниями с изоляцией по пользователям
+import { denyCampaignAccess } from "@/lib/auth/campaign-access";
 import { db } from "@/lib/db";
 import { getAuthUserFromRequest } from "@/lib/supabase/client";
 
 export async function GET(req: Request) {
   try {
     const { user } = await getAuthUserFromRequest(req);
-    const userIdFilter = user ? user.id : null;
+    // Без входа в аккаунт кампаний не показываем: раньше все «ничьи» кампании были видны любому гостю сайта
+    if (!user) return Response.json({ campaigns: [], authRequired: true });
+    const userIdFilter = user.id;
 
     const campaigns = await db.campaign.findMany({
       where: { userId: userIdFilter },
@@ -31,7 +34,13 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const { user } = await getAuthUserFromRequest(req);
-    const userId = user ? user.id : null;
+    if (!user) {
+      return Response.json(
+        { error: "Войдите в аккаунт, чтобы создать кампанию.", authRequired: true },
+        { status: 401 }
+      );
+    }
+    const userId = user.id;
 
     const body = await req.json();
     const {
@@ -106,7 +115,6 @@ export async function POST(req: Request) {
 
 export async function PATCH(req: Request) {
   try {
-    const { user } = await getAuthUserFromRequest(req);
     const body = await req.json();
     const { id, setting, tone, difficulty, dmStyle, worldDescription, customDmNotes, partyTies } = body;
     if (!id) {
@@ -118,10 +126,9 @@ export async function PATCH(req: Request) {
       return Response.json({ error: "Campaign not found" }, { status: 404 });
     }
 
-    // Защита: нельзя менять чужую кампанию
-    if (existing.userId && user && existing.userId !== user.id) {
-      return Response.json({ error: "Доступ запрещён" }, { status: 403 });
-    }
+    // Менять кампанию может владелец или участник её сетевой комнаты
+    const denied = await denyCampaignAccess(req, id);
+    if (denied) return denied;
 
     const updated = await db.campaign.update({
       where: { id },

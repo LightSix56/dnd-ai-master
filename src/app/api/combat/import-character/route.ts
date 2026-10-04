@@ -2,6 +2,7 @@
 // Парсит боевые характеристики, определяет тип каждой атаки и её дальность,
 // подтягивает классовые способности и заклинания из библиотеки.
 
+import { denyCampaignAccess } from "@/lib/auth/campaign-access";
 import { db } from "@/lib/db";
 import { NextRequest } from "next/server";
 import { TYPE_COLORS, type Attack, type CombatAbility } from "@/lib/combat/types";
@@ -162,6 +163,8 @@ export async function POST(req: NextRequest) {
 
     const combat = await db.combat.findUnique({ where: { id: combatId } });
     if (!combat) return Response.json({ error: "Бой не найден" }, { status: 404 });
+    const denied = await denyCampaignAccess(req, combat.campaignId);
+    if (denied) return denied;
 
     const cj = characterJson;
 

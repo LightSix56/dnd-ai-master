@@ -584,6 +584,8 @@ export class RoomService {
     try {
       const campaign = await db.campaign.create({
         data: {
+          // Владелец кампании стола — ведущий: без владельца она была бы доступна кому угодно по id
+          userId: roomWithParticipants.hostUserId || null,
           name: input.title,
           setting: input.setting,
           tone: input.tone,

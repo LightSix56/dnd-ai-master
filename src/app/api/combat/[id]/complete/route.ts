@@ -1,3 +1,4 @@
+import { denyCampaignAccess } from "@/lib/auth/campaign-access";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { generateCombatLoot } from "@/lib/combat/rewards/loot-generator";
@@ -53,6 +54,9 @@ export async function POST(
         { status: 404 }
       );
     }
+
+    const accessDenied = await denyCampaignAccess(request, combat.campaignId);
+    if (accessDenied) return accessDenied;
 
     let body: any = {};
     try {

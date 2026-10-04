@@ -185,6 +185,16 @@ export function HomeHubView() {
     router.push(`/room/${encodeURIComponent(clean)}`);
   };
 
+  // Кампании привязаны к аккаунту: без входа создавать и видеть их нельзя
+  const openCreateCampaign = () => {
+    if (!user) {
+      toast.info("Войдите в аккаунт, чтобы создать кампанию");
+      setShowAuthModal(true);
+      return;
+    }
+    setShowCreateCampaign(true);
+  };
+
   // Создание новой кампании
   const handleCreateCampaign = async () => {
     if (!newCampaignName.trim()) return;
@@ -405,7 +415,7 @@ export function HomeHubView() {
             </div>
             <Button
               size="sm"
-              onClick={() => setShowCreateCampaign(true)}
+              onClick={openCreateCampaign}
               className="gap-1.5 text-xs cursor-pointer"
             >
               <Plus className="size-3.5" />
@@ -419,19 +429,23 @@ export function HomeHubView() {
                 <Sparkles className="size-6 text-amber-500" />
               </div>
               <div className="space-y-1">
-                <h3 className="text-sm font-semibold">У вас пока нет созданных кампаний</h3>
+                <h3 className="text-sm font-semibold">
+                  {user ? "У вас пока нет созданных кампаний" : "Войдите, чтобы увидеть свои кампании"}
+                </h3>
                 <p className="text-xs text-muted-foreground max-w-md mx-auto">
-                  Создайте новую кампанию для одиночной игры с ИИ-Мастером или откройте сетевой стол для игры с друзьями.
+                  {user
+                    ? "Создайте новую кампанию для одиночной игры с ИИ-Мастером или откройте сетевой стол для игры с друзьями."
+                    : "Кампании привязаны к аккаунту и видны только их владельцу. Войти в сетевой стол по коду можно и без своих кампаний."}
                 </p>
               </div>
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setShowCreateCampaign(true)}
+                onClick={openCreateCampaign}
                 className="text-xs cursor-pointer"
               >
                 <Plus className="size-3.5 mr-1" />
-                Создать первое приключение
+                {user ? "Создать первое приключение" : "Войти в аккаунт"}
               </Button>
             </Card>
           ) : (

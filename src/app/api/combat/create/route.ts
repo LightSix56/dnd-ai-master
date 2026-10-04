@@ -1,4 +1,5 @@
 // API: создать новый бой — с тестовыми врагами
+import { denyCampaignAccess } from "@/lib/auth/campaign-access";
 import { db } from "@/lib/db";
 import { hydrateCombat } from "@/lib/combat/serialize";
 import { createTacticalEncounter } from "@/lib/combat/generator";
@@ -106,6 +107,9 @@ export async function POST(req: Request) {
       enemies,
       useGenerator,
     } = body;
+
+    const denied = await denyCampaignAccess(req, campaignId);
+    if (denied) return denied;
 
     // Если запрошена процедурная генерация или указан биом / пресет / сложность
     if (useGenerator || biome || difficulty || mapPresetId || (campaignId && !addTestEnemies)) {
