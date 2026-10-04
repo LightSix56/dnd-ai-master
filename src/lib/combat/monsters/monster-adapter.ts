@@ -14,6 +14,53 @@ import type {
   DamageRoll,
 } from "../types";
 import type { MonsterDefinition, MonsterAction } from "./types";
+import srdMonsters from "../srd/data/monsters.json";
+
+interface SrdDefenses {
+  damageResistances?: string[];
+  damageImmunities?: string[];
+  damageVulnerabilities?: string[];
+  conditionImmunities?: string[];
+}
+
+const SRD_DEFENSES_BY_NAME: Map<string, SrdDefenses> = new Map(
+  (srdMonsters as Array<SrdDefenses & { nameEn?: string }>)
+    .filter((m) => m.nameEn)
+    .map((m) => [String(m.nameEn).trim().toLowerCase(), m])
+);
+
+const PHYSICAL_TYPES = ["bludgeoning", "piercing", "slashing"];
+const NONMAGICAL_PHYSICAL = "bludgeoning, piercing, and slashing from nonmagical attacks";
+
+/**
+ * Сопротивления и иммунитеты монстра.
+ * В компендиуме сопротивления и иммунитеты к состояниям не распарсены (пусты у всех существ),
+ * а оговорка «от немагического оружия» потеряна. Поэтому:
+ *  1) пустые поля дозаполняются из SRD-набора по английскому имени;
+ *  2) иммунитет сразу к дробящему, колющему и рубящему трактуется как «от немагических атак» —
+ *     в 5e такая тройка без оговорки не встречается (оборотни, големы и т.п.).
+ */
+export function resolveMonsterDefenses(monster: MonsterDefinition): Required<SrdDefenses> {
+  const srd = SRD_DEFENSES_BY_NAME.get((monster.nameEn || "").trim().toLowerCase());
+  const pick = (own: string[] | undefined, fallback: string[] | undefined): string[] =>
+    own && own.length > 0 ? [...own] : [...(fallback ?? [])];
+  const normalizePhysical = (list: string[]): string[] => {
+    const lower = list.map((v) => v.toLowerCase());
+    if (!PHYSICAL_TYPES.every((t) => lower.includes(t))) return list;
+    return [...list.filter((v) => !PHYSICAL_TYPES.includes(v.toLowerCase())), NONMAGICAL_PHYSICAL];
+  };
+
+  const ownImmunities = monster.damageImmunities || [];
+  const immunities =
+    ownImmunities.length > 0 ? normalizePhysical(ownImmunities) : [...(srd?.damageImmunities ?? [])];
+
+  return {
+    damageResistances: pick(monster.damageResistances, srd?.damageResistances),
+    damageImmunities: immunities,
+    damageVulnerabilities: pick(monster.damageVulnerabilities, srd?.damageVulnerabilities),
+    conditionImmunities: pick(monster.conditionImmunities, srd?.conditionImmunities).map((v) => v.toLowerCase()),
+  };
+}
 
 export interface MonsterAdapterOptions {
   id?: string;
@@ -373,10 +420,7 @@ export function monsterDefinitionToCombatant(
     profBonus,
     isAIControlled:
       options.isAIControlled !== undefined ? options.isAIControlled : true,
-    damageResistances: monster.damageResistances || [],
-    damageImmunities: monster.damageImmunities || [],
-    damageVulnerabilities: monster.damageVulnerabilities || [],
-    conditionImmunities: monster.conditionImmunities || [],
+    ...resolveMonsterDefenses(monster),
     multiattack,
     legendaryState,
     rechargeAbilities,

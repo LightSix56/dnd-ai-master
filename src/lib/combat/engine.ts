@@ -19,6 +19,7 @@ import {
   rollDamage,
   rollDeathSave,
   rollSave,
+  type DamagePart,
 } from "./rules";
 import {
   buildTurnOrder,
@@ -28,6 +29,7 @@ import {
 } from "./initiative";
 import {
   computeVisibilityStatus,
+  hasCoverBetween,
   determineFacingTowards,
   findOpportunityAttackers,
   findPath,
@@ -41,7 +43,7 @@ import {
 } from "./movement";
 import { cantripDiceMultiplier, sneakAttackDice } from "./library-data";
 import { getBeastFormById } from "./beast-forms";
-import { triggerAILegendaryActions } from "./legendary";
+import { checkLegendaryResistance, triggerAILegendaryActions } from "./legendary";
 import {
   CONDITION_EFFECTS,
   isHostile,
@@ -84,6 +86,7 @@ export class CombatState {
 
   private dirty = new Set<string>();
   private combatDirty = false;
+  private removed = new Set<string>();
 
   constructor(combat: Combat) {
     this.id = combat.id;
@@ -125,6 +128,65 @@ export class CombatState {
     return this.combatDirty;
   }
 
+  /** Бойцы, покинувшие бой (сбежали) — роут удаляет их строки из БД */
+  get removedIds(): string[] {
+    return [...this.removed];
+  }
+
+  /** Убирает бойца из боя и очереди ходов, сохраняя «чей сейчас ход» */
+  removeCombatant(id: string): void {
+    const currentId = this.turnOrder[this.currentTurnIndex];
+    const removedIdx = this.turnOrder.indexOf(id);
+    this.combatants = this.combatants.filter((c) => c.id !== id);
+    this.turnOrder = this.turnOrder.filter((t) => t !== id);
+    if (currentId && currentId !== id) {
+      const idx = this.turnOrder.indexOf(currentId);
+      if (idx >= 0) this.currentTurnIndex = idx;
+    } else if (removedIdx >= 0) {
+      // Ушёл тот, чей был ход: индекс ставим на предыдущего, чтобы endTurn передал ход следующему
+      this.currentTurnIndex =
+        this.turnOrder.length === 0
+          ? 0
+          : (removedIdx - 1 + this.turnOrder.length) % this.turnOrder.length;
+    }
+    this.dirty.delete(id);
+    this.removed.add(id);
+    this.combatDirty = true;
+  }
+
+  /** Снимок для отката: действие, упавшее с EngineError, не должно оставлять следов */
+  snapshot(): CombatSnapshot {
+    return {
+      combatants: structuredClone(this.combatants),
+      turnOrder: [...this.turnOrder],
+      currentTurnIndex: this.currentTurnIndex,
+      round: this.round,
+      log: [...this.log],
+      dirty: new Set(this.dirty),
+      removed: new Set(this.removed),
+      combatDirty: this.combatDirty,
+    };
+  }
+
+  /** Откат к снимку. Объекты бойцов сохраняют идентичность — ссылки у вызывающих остаются живыми */
+  restore(snap: CombatSnapshot): void {
+    const live = new Map(this.combatants.map((c) => [c.id, c]));
+    this.combatants = snap.combatants.map((saved) => {
+      const target = live.get(saved.id);
+      if (!target) return saved;
+      for (const key of Object.keys(target)) delete (target as unknown as Record<string, unknown>)[key];
+      Object.assign(target, saved);
+      return target;
+    });
+    this.turnOrder = [...snap.turnOrder];
+    this.currentTurnIndex = snap.currentTurnIndex;
+    this.round = snap.round;
+    this.log = [...snap.log];
+    this.dirty = new Set(snap.dirty);
+    this.removed = new Set(snap.removed);
+    this.combatDirty = snap.combatDirty;
+  }
+
   /** Боец, чей сейчас ход */
   current(): Combatant | null {
     const id = this.turnOrder[this.currentTurnIndex];
@@ -139,8 +201,32 @@ export class CombatState {
   }
 }
 
+export interface CombatSnapshot {
+  combatants: Combatant[];
+  turnOrder: string[];
+  currentTurnIndex: number;
+  round: number;
+  log: LogEntry[];
+  dirty: Set<string>;
+  removed: Set<string>;
+  combatDirty: boolean;
+}
+
 /** Ошибка правил: роут превращает её в 400, а не в 500 */
 export class EngineError extends Error {}
+
+/** Выполняет операцию атомарно: при любой ошибке состояние боя возвращается к исходному */
+function atomic<T>(state: CombatState, fn: () => T): T {
+  // Тесты иногда передают упрощённый объект вместо CombatState — для него откат недоступен
+  if (typeof state.snapshot !== "function" || typeof state.restore !== "function") return fn();
+  const snap = state.snapshot();
+  try {
+    return fn();
+  } catch (e) {
+    state.restore(snap);
+    throw e;
+  }
+}
 
 function assertTurn(state: CombatState, id: string): void {
   const current = state.current();
@@ -184,6 +270,8 @@ export function dealDamage(
     attackerId?: string;
     isMagicalAttack?: boolean;
     isCritical?: boolean;
+    /** Урон по типам; сумма частей должна равняться amount. Без него весь урон считается типом damageType */
+    parts?: DamagePart[];
   } = {}
 ): void {
   const target = state.require(targetId);
@@ -207,46 +295,68 @@ export function dealDamage(
     }
   }
 
-  let actualAmount = amount;
-  if (opts.damageType) {
-    const type = opts.damageType.toLowerCase();
+  // Сопротивления, иммунитеты и уязвимости считаются по каждому типу урона отдельно:
+  // укус «колющий + яд» по цели с сопротивлением яду режет только ядовитую часть.
+  const partsTotal = (opts.parts ?? []).reduce((sum, p) => sum + p.amount, 0);
+  const parts: DamagePart[] =
+    opts.parts && opts.parts.length > 0 && partsTotal === amount
+      ? opts.parts
+      : [{ amount, type: opts.damageType ?? "", magical: opts.isMagicalAttack }];
+
+  const matchesTyped = (entry: string, type: string, isPhysical: boolean, isNonmagical: boolean): boolean => {
+    const lower = entry.toLowerCase();
+    const nonmagicalOnly =
+      lower.includes("немагическ") ||
+      lower.includes("nonmagical") ||
+      lower.includes("non-magical") ||
+      lower.includes("non magical");
+    if (nonmagicalOnly) {
+      if (!isPhysical || !isNonmagical) return false;
+      // «piercing and slashing from nonmagical weapons» — только перечисленные типы
+      const listed = ["bludgeoning", "piercing", "slashing"].filter((t) => lower.includes(t));
+      return listed.length === 0 || listed.some((t) => type.includes(t)) || !/^[a-z]/.test(type);
+    }
+    return lower === type;
+  };
+
+  let actualAmount = 0;
+  for (const part of parts) {
+    if (part.amount <= 0) continue;
+    const type = (part.type || "").toLowerCase();
+    if (!type) {
+      actualAmount += part.amount;
+      continue;
+    }
     const isPhysical = ["slashing", "piercing", "bludgeoning", "рубящий", "колющий", "дробящий"].some((p) =>
       type.includes(p)
     );
-    const isNonmagical = opts.isAttack && !opts.isMagicalAttack;
+    const isNonmagical = !!opts.isAttack && !(part.magical ?? opts.isMagicalAttack);
 
     // Подавление регенерации уроном огнем или кислотой
     if (type.includes("fire") || type.includes("огонь") || type.includes("acid") || type.includes("кислот")) {
       target.suppressRegenerationUntilRound = state.round + 1;
+      state.mark(targetId);
     }
 
-    const hasImmunity = target.damageImmunities?.some((imm) => {
-      const immLower = imm.toLowerCase();
-      if (immLower === type) return true;
-      if (isPhysical && isNonmagical && (immLower.includes("немагическ") || immLower.includes("nonmagical"))) return true;
-      return false;
-    });
-
-    if (hasImmunity) {
-      state.addLog(`${target.name} имеет иммунитет к урону «${opts.damageType}» (0 урона)`, "system", target.name);
-      return;
+    if (target.damageImmunities?.some((imm) => matchesTyped(imm, type, isPhysical, isNonmagical))) {
+      state.addLog(`${target.name} имеет иммунитет к урону «${part.type}» (0 урона)`, "system", target.name);
+      continue;
     }
 
-    const hasResistance = target.damageResistances?.some((res) => {
-      const resLower = res.toLowerCase();
-      if (resLower === type) return true;
-      if (isPhysical && isNonmagical && (resLower.includes("немагическ") || resLower.includes("nonmagical"))) return true;
-      return false;
-    });
-
-    if (hasResistance) {
-      actualAmount = Math.floor(actualAmount / 2);
-      state.addLog(`${target.name} имеет сопротивление к «${opts.damageType}» (урон: ${amount} → ${actualAmount})`, "system", target.name);
-    } else if (target.damageVulnerabilities?.some((vuln) => vuln.toLowerCase() === type)) {
-      actualAmount = actualAmount * 2;
-      state.addLog(`${target.name} имеет уязвимость к «${opts.damageType}» (урон удвоен: ${amount} → ${actualAmount})`, "system", target.name);
+    if (target.damageResistances?.some((res) => matchesTyped(res, type, isPhysical, isNonmagical))) {
+      const halved = Math.floor(part.amount / 2);
+      state.addLog(`${target.name} имеет сопротивление к «${part.type}» (урон: ${part.amount} → ${halved})`, "system", target.name);
+      actualAmount += halved;
+    } else if (target.damageVulnerabilities?.some((vuln) => matchesTyped(vuln, type, isPhysical, isNonmagical))) {
+      const doubled = part.amount * 2;
+      state.addLog(`${target.name} имеет уязвимость к «${part.type}» (урон удвоен: ${part.amount} → ${doubled})`, "system", target.name);
+      actualAmount += doubled;
+    } else {
+      actualAmount += part.amount;
     }
   }
+
+  if (actualAmount <= 0) return;
 
   // Невероятное уклонение (Плут 5 ур): реакцией уполовинивает урон от атаки
   const hasUncannyDodge =
@@ -412,8 +522,18 @@ export function dealDamage(
 function dropConcentrationEffects(state: CombatState, casterId: string): void {
   for (const c of state.combatants) {
     const before = c.conditions.length;
-    c.conditions = c.conditions.filter((cond) => cond.source !== casterId);
-    if (c.conditions.length !== before) state.mark(c.id);
+    // Снимаем только то, что держалось концентрацией: собственные «Уклонение», «Помощь»,
+    // «Доспех Агатиса» заклинателя от потери концентрации пропадать не должны
+    const dropped = c.conditions.filter((cond) => cond.source === casterId && cond.concentration);
+    c.conditions = c.conditions.filter((cond) => !(cond.source === casterId && cond.concentration));
+    if (c.conditions.length !== before) {
+      state.mark(c.id);
+      for (const cond of dropped) {
+        if (cond.type === "shillelagh") c.attacks = c.attacks.filter((a) => a.id !== "shillelagh_attack");
+        if (cond.type === "flame_blade") c.attacks = c.attacks.filter((a) => a.id !== "flame_blade_attack");
+        if (cond.type === "shadow_blade") c.attacks = c.attacks.filter((a) => a.id !== "shadow_blade_attack");
+      }
+    }
 
     if (c.id === casterId) {
       const beforeAb = c.abilities.length;
@@ -564,6 +684,7 @@ export function applyEffect(
       saveType: effect.saveType,
       saveDC: effect.saveDC,
       value: effect.value,
+      ...(effect.concentration ? { concentration: true } : {}),
     },
   ];
 
@@ -658,6 +779,31 @@ export interface AttackOutcome {
   attack?: Attack;
 }
 
+/**
+ * Бонус к КД цели от укрытия (PHB: половинное +2, три четверти +5).
+ * Считается по элементам карты и существам на линии между атакующим и целью.
+ */
+function attackCoverBonus(state: CombatState, attacker: Combatant, target: Combatant): number {
+  const others = state.combatants.filter((c) => c.id !== attacker.id && c.id !== target.id);
+  const cover = hasCoverBetween(attacker, target, state.mapElements, others);
+  if (cover === "three_quarters") return 5;
+  if (cover === "half") return 2;
+  return 0;
+}
+
+/** Ключ текущего хода: Скрытая атака доступна один раз за ход (в т.ч. реакцией в чужой ход) */
+function turnKey(state: CombatState): string {
+  return `${state.round}:${state.currentTurnIndex}`;
+}
+
+function markSneakAttackUsed(state: CombatState, attacker: Combatant): void {
+  attacker.conditions = [
+    ...attacker.conditions.filter((c) => c.type !== "sneak_used"),
+    { type: "sneak_used", source: turnKey(state) },
+  ];
+  state.mark(attacker.id);
+}
+
 /** Есть ли дееспособный союзник атакующего вплотную (5 фт / 1 клетка) к цели — условие Скрытой атаки */
 function allyAdjacentTo(state: CombatState, attacker: Combatant, target: Combatant): boolean {
   return state.combatants.some(
@@ -690,6 +836,9 @@ function findSneakAttack(
 
   const ability = attacker.abilities.find((a) => a.name.startsWith("Скрытая атака") || a.id === "sneak_attack");
   if (ability && ability.usesMax > 0 && ability.usesUsed >= ability.usesMax) return null;
+
+  // Один раз за ход — даже если плут определён по классу и способности с лимитом у него нет
+  if (attacker.conditions.some((c) => c.type === "sneak_used" && c.source === turnKey(state))) return null;
 
   // 1. По правилам D&D 5e: при наличии Помехи Скрытая атака НЕ работает ни при каких условиях
   if (hasDisadvantage) return null;
@@ -736,6 +885,8 @@ export function performAttack(
   const reach = checkReach(attacker, target, attack, state.mapElements);
   if (!reach.ok) throw new EngineError(reach.reason ?? "Цель недосягаема");
 
+  const coverBonus = attackCoverBonus(state, attacker, target);
+
   const isDualAttack =
     attack.actionCost === "action+bonus" ||
     (attack.damage.length >= 2 &&
@@ -779,6 +930,7 @@ export function performAttack(
       manualDisadvantage: opts.manualDisadvantage,
       distanceFt: reach.distanceFt,
       allCombatants: state.combatants,
+      coverBonus,
     });
 
     let extra1 = "";
@@ -798,9 +950,11 @@ export function performAttack(
           res1.crit
         );
         res1.damage += bonus.total;
+      res1.damageParts.push({ amount: bonus.total, type: res1.damageParts[0]?.type ?? "piercing", magical: res1.damageParts[0]?.magical });
         if (sneak.ability) {
           sneak.ability.usesUsed += 1;
         }
+        markSneakAttackUsed(state, attacker);
         sneakUsedOn1 = true;
         extra1 += `, скрытая атака ${sneak.dice}${res1.crit ? " (удвоена критом)" : ""} = ${bonus.total}`;
       }
@@ -811,6 +965,7 @@ export function performAttack(
       if (mark) {
         const bonus = rollDamage([{ dice: "1d6", mod: 0, type: "force" }], res1.crit);
         res1.damage += bonus.total;
+      res1.damageParts.push({ amount: bonus.total, type: res1.damageParts[0]?.type ?? "piercing", magical: res1.damageParts[0]?.magical });
         extra1 += `, метка охотника 1к6 = ${bonus.total}`;
       }
     }
@@ -835,6 +990,7 @@ export function performAttack(
       manualDisadvantage: opts.manualDisadvantage,
       distanceFt: reach.distanceFt,
       allCombatants: state.combatants,
+      coverBonus,
     });
 
     let extra2 = "";
@@ -855,9 +1011,11 @@ export function performAttack(
             res2.crit
           );
           res2.damage += bonus.total;
+      res2.damageParts.push({ amount: bonus.total, type: res2.damageParts[0]?.type ?? "piercing", magical: res2.damageParts[0]?.magical });
           if (sneak.ability) {
             sneak.ability.usesUsed += 1;
           }
+          markSneakAttackUsed(state, attacker);
           extra2 += `, скрытая атака ${sneak.dice}${res2.crit ? " (удвоена критом)" : ""} = ${bonus.total}`;
         }
       }
@@ -868,6 +1026,7 @@ export function performAttack(
       if (mark) {
         const bonus = rollDamage([{ dice: "1d6", mod: 0, type: "force" }], res2.crit);
         res2.damage += bonus.total;
+      res2.damageParts.push({ amount: bonus.total, type: res2.damageParts[0]?.type ?? "piercing", magical: res2.damageParts[0]?.magical });
         extra2 += `, метка охотника 1к6 = ${bonus.total}`;
       }
     }
@@ -904,6 +1063,8 @@ export function performAttack(
     if (res1.hit && res1.damage > 0) {
       dealDamage(state, targetId, res1.damage, {
         damageType: dmg1[0]?.type,
+        parts: res1.damageParts,
+        isCritical: res1.crit,
         isAttack: true,
         attackerId: attacker.id,
         source: attacker.id,
@@ -912,6 +1073,8 @@ export function performAttack(
     if (res2.hit && res2.damage > 0) {
       dealDamage(state, targetId, res2.damage, {
         damageType: dmg2[0]?.type,
+        parts: res2.damageParts,
+        isCritical: res2.crit,
         isAttack: true,
         attackerId: attacker.id,
         source: attacker.id,
@@ -933,6 +1096,7 @@ export function performAttack(
     manualDisadvantage: opts.manualDisadvantage,
     distanceFt: reach.distanceFt,
     allCombatants: state.combatants,
+    coverBonus,
   });
 
   let extraText = "";
@@ -948,9 +1112,11 @@ export function performAttack(
     if (sneak) {
       const bonus = rollDamage([{ dice: sneak.dice, mod: 0, type: attack.damage[0]?.type ?? "piercing" }], resolution.crit);
       resolution.damage += bonus.total;
+      resolution.damageParts.push({ amount: bonus.total, type: resolution.damageParts[0]?.type ?? "piercing", magical: resolution.damageParts[0]?.magical });
       if (sneak.ability) {
         sneak.ability.usesUsed += 1;
       }
+      markSneakAttackUsed(state, attacker);
       extraText += `, скрытая атака ${sneak.dice}${resolution.crit ? " (удвоена критом)" : ""} = ${bonus.total}`;
     }
 
@@ -961,6 +1127,7 @@ export function performAttack(
     if (mark) {
       const bonus = rollDamage([{ dice: "1d6", mod: 0, type: "force" }], resolution.crit);
       resolution.damage += bonus.total;
+      resolution.damageParts.push({ amount: bonus.total, type: resolution.damageParts[0]?.type ?? "piercing", magical: resolution.damageParts[0]?.magical });
       extraText += `, метка охотника 1к6 = ${bonus.total}`;
     }
 
@@ -970,6 +1137,8 @@ export function performAttack(
       const diceCount = absorbCond.value ?? 1;
       const bonus = rollDamage([{ dice: `${diceCount}d6`, mod: 0, type: "elemental" }], resolution.crit);
       resolution.damage += bonus.total;
+      resolution.damageParts.push({ amount: bonus.total, type: resolution.damageParts[0]?.type ?? "piercing", magical: resolution.damageParts[0]?.magical });
+      resolution.damageParts[resolution.damageParts.length - 1] = { amount: bonus.total, type: "fire", magical: true };
       extraText += `, поглощение стихий ${diceCount}к6 = ${bonus.total}`;
       attacker.conditions = attacker.conditions.filter((c) => c.type !== "absorb_elements");
     }
@@ -1014,6 +1183,8 @@ export function performAttack(
   if (resolution.hit && resolution.damage > 0) {
     dealDamage(state, targetId, resolution.damage, {
       damageType: attack.damage[0]?.type,
+      parts: resolution.damageParts,
+      isCritical: resolution.crit,
       isAttack: true,
       attackerId: attacker.id,
       source: attacker.id,
@@ -1185,6 +1356,8 @@ export function moveCombatant(
     if (resolution.hit && resolution.damage > 0) {
       dealDamage(state, mover.id, resolution.damage, {
         damageType: melee.damage[0]?.type,
+        parts: resolution.damageParts,
+        isCritical: resolution.crit,
         isAttack: true,
         attackerId: attacker.id,
         source: attacker.id,
@@ -1385,12 +1558,27 @@ function resolveTargets(
       state.gridHeight
     );
     const keys = new Set(cells.map((c) => `${c.x},${c.y}`));
+    const isHealingAoe = params.damage?.[0]?.type === "healing";
+    const dealsDamage = (params.damage?.length ?? 0) > 0 && !isHealingAoe;
     return state.combatants.filter((c) => {
-      if (c.hpCurrent <= 0) return false;
       if (!keys.has(`${c.x},${c.y}`)) return false;
-      // Без friendlyFire союзники в область не попадают
-      if (!params.friendlyFire && !isHostile(caster.type, c.type) && c.id !== caster.id) {
-        return false;
+      const isDead = c.conditions.some((cond) => cond.type === "dead");
+      const friendly = !isHostile(caster.type, c.type);
+
+      // Лечащая область действует на своих (включая лежащих без сознания), а не на врагов
+      if (isHealingAoe) return friendly && !isDead && (c.hpCurrent > 0 || c.type !== "enemy");
+
+      if (c.hpCurrent <= 0) {
+        // Лежащий без сознания персонаж в области урона получает провал спасброска от смерти;
+        // мёртвые и поверженные враги — нет
+        const downedCharacter =
+          dealsDamage && c.type !== "enemy" && !isDead && c.conditions.some((cond) => cond.type === "unconscious");
+        if (!downedCharacter) return false;
+      }
+      // Без friendlyFire союзники в область не попадают — и сам заклинатель тоже, если это урон
+      if (!params.friendlyFire && friendly) {
+        if (c.id !== caster.id) return false;
+        if (dealsDamage) return false;
       }
       return true;
     });
@@ -1427,6 +1615,25 @@ function checkSpellRange(
       throw new EngineError("Цель скрыта от вашего взгляда и не может быть выбрана точечной целью заклинания");
     }
   }
+}
+
+/**
+ * Спасбросок против заклинания/способности: учитывает «Сопротивление магии» (isSpell)
+ * и Легендарное сопротивление — босс превращает провал в успех, пока есть заряды.
+ */
+function rollEffectSave(
+  state: CombatState,
+  target: Combatant,
+  ability: AbilityKey,
+  dc: number,
+  isSpell: boolean,
+  label: string
+) {
+  const save = rollSave(target, ability, dc, { isSpell });
+  if (!save.success && checkLegendaryResistance(target, state, label)) {
+    return { ...save, success: true, text: `${save.text} → успех (Легендарное сопротивление)` };
+  }
+  return save;
 }
 
 /** Отталкивает существо от источника на указанное число клеток */
@@ -1514,7 +1721,7 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
     );
 
     for (const target of affected) {
-      const save = rollSave(target, "CON", saveDC);
+      const save = rollEffectSave(state, target, "CON", saveDC, true, "Громовой шаг");
       state.addLog(`${target.name}: ${save.text} против «Громового шага»`, "save", target.name);
       const dmgRoll = rollDamage([{ dice, mod: 0, type: "thunder", save: "half" }], false, {
         halfOnSave: save.success,
@@ -1569,7 +1776,7 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
         params.saveDC ||
         caster.spells.spellSaveDC ||
         8 + (caster.abilityMods[fallbackAbility] ?? 0) + caster.profBonus;
-      const save = rollSave(target, "CON", saveDC);
+      const save = rollEffectSave(state, target, "CON", saveDC, true, "Вихрь искривления");
       saved = save.success;
       state.addLog(`${target.name}: ${save.text} против «Вихря искривления»`, "save", target.name);
     }
@@ -1678,6 +1885,8 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
     let totalDamage = resolution.damage;
     dealDamage(state, target.id, resolution.damage, {
       damageType: meleeWeapon.damage[0]?.type,
+      parts: resolution.damageParts,
+      isCritical: resolution.crit,
       isAttack: true,
       attackerId: caster.id,
       source: caster.id,
@@ -1766,6 +1975,8 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
     let totalDamage = resolution.damage;
     dealDamage(state, target.id, resolution.damage, {
       damageType: meleeWeapon.damage[0]?.type,
+      parts: resolution.damageParts,
+      isCritical: resolution.crit,
       isAttack: true,
       attackerId: caster.id,
       source: caster.id,
@@ -1876,6 +2087,8 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
     if (attackResolution.hit && attackResolution.damage > 0) {
       dealDamage(state, target.id, attackResolution.damage, {
         damageType: "piercing",
+        isMagicalAttack: true,
+        isCritical: attackResolution.crit,
         isAttack: true,
         attackerId: caster.id,
         source: caster.id,
@@ -1895,7 +2108,7 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
     ];
 
     for (const victim of aoeTargets) {
-      const save = rollSave(victim, "DEX", saveDC);
+      const save = rollEffectSave(state, victim, "DEX", saveDC, true, "Ледяной кинжал");
       state.addLog(`${victim.name}: ${save.text} (Взрыв осколка ледяного кинжала)`, "save", victim.name);
       if (!save.success) {
         const coldDmg = rollDice(coldDice).total;
@@ -1925,12 +2138,11 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
   }
 
   // Телепортация (Теневой шаг, Туманный шаг, Шаг сквозь тень, Телепорт)
-  const isTeleportAction =
-    ctx.label.toLowerCase().includes("шаг") ||
-    ctx.label.toLowerCase().includes("телепорт") ||
-    ctx.label.toLowerCase().includes("teleport") ||
-    params.name?.toLowerCase().includes("шаг") ||
-    params.name?.toLowerCase().includes("teleport");
+  // Только известные телепорты: раньше любая способность со словом «шаг» в названии
+  // (например «Шаг ветра» монаха) превращалась в телепортацию.
+  const TELEPORT_NAME =
+    /(туманн\S* шаг|теневой шаг|шаг сквозь тень|шаг тени|дал[её]кий шаг|фейский шаг|телепорт|teleport|misty step|shadow step|far step|fey step)/i;
+  const isTeleportAction = TELEPORT_NAME.test(ctx.label || "") || TELEPORT_NAME.test(params.name || "");
 
   if (isTeleportAction) {
     if (!ctx.center) {
@@ -1978,6 +2190,20 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
     return { targets: [], text: `${caster.name} телепортируется на ${dist} фт` };
   }
 
+  // Старая концентрация обрывается ДО наложения новых эффектов: раньше сброс шёл после
+  // и стирал эффекты только что сотворённого заклинания.
+  if (params.concentration && caster.concentration) {
+    state.addLog(
+      `${caster.name} прекращает концентрацию на «${caster.concentration.spellName}»`,
+      "system",
+      caster.name
+    );
+    caster.concentration = null;
+    dropConcentrationEffects(state, caster.id);
+  }
+  const concFlag = params.concentration ? { concentration: true } : {};
+  const isSpellAction = params.type === "spell";
+
   const targets = resolveTargets(state, caster, params, ctx.targetIds, ctx.center);
   const damage = prepareDamage(params, caster, slotLevel);
   // Если у бойца не задана СЛ (лист без магии, ручное создание) — считаем от статов,
@@ -2003,6 +2229,8 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
     let saved: boolean | undefined;
     let hit: boolean | undefined;
     let amount = 0;
+    let amountParts: DamagePart[] | undefined;
+    let crit = false;
 
     const isTollTheDead = actLower.includes("погребальный звон") || actLower.includes("toll the dead");
     let targetDamage = damage;
@@ -2011,7 +2239,7 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
       const dice = target.hpCurrent < target.hpMax ? `${mult}d12` : `${mult}d8`;
       targetDamage = [{ dice, mod: 0, type: "necrotic", save: "none" as const }];
 
-      const save = rollSave(target, "WIS", saveDC);
+      const save = rollEffectSave(state, target, "WIS", saveDC, true, "Погребальный звон");
       saved = save.success;
       state.addLog(`${target.name}: ${save.text} против «Погребального звона»`, "save", target.name);
       if (!save.success) {
@@ -2020,16 +2248,20 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
         amount = 0;
       }
     } else if (params.saveType) {
-      const save = rollSave(target, params.saveType as AbilityKey, saveDC);
+      const save = rollEffectSave(state, target, params.saveType as AbilityKey, saveDC, isSpellAction, ctx.label);
       saved = save.success;
       state.addLog(`${target.name}: ${save.text}`, "save", target.name);
       if (damage.length > 0) {
         const halfOnSave = damage.some((d) => d.save === "half");
         const noSave = damage.some((d) => d.save === "none");
         if (noSave) {
-          amount = rollDamage(damage, false).total;
+          const rolled = rollDamage(damage, false);
+          amount = rolled.total;
+          amountParts = rolled.parts;
         } else if (!save.success || halfOnSave) {
-          amount = rollDamage(damage, false, { halfOnSave: save.success && halfOnSave }).total;
+          const rolled = rollDamage(damage, false, { halfOnSave: save.success && halfOnSave });
+          amount = rolled.total;
+          amountParts = rolled.parts;
         }
       }
     } else if (params.attackType && attackBonus && !isHealing) {
@@ -2049,9 +2281,13 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
       );
       hit = resolution.hit;
       amount = resolution.damage;
+      amountParts = resolution.damageParts;
+      crit = resolution.crit;
       state.addLog(`${caster.name} → ${target.name}: ${resolution.text}`, "spell", caster.name);
     } else if (targetDamage.length > 0) {
-      amount = rollDamage(targetDamage, false).total;
+      const rolled = rollDamage(targetDamage, false);
+      amount = rolled.total;
+      amountParts = rolled.parts;
     }
 
     if (amount > 0) {
@@ -2074,6 +2310,9 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
         }
         dealDamage(state, target.id, amount, {
           damageType: targetDamage[0]?.type,
+          parts: amountParts,
+          isMagicalAttack: isSpellAction,
+          isCritical: crit,
           isAttack: params.attackType !== undefined,
           attackerId: caster.id,
           source: caster.id,
@@ -2091,7 +2330,7 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
     const effectApplies = saved === undefined ? hit !== false : !saved;
     if (effectApplies) {
       for (const eff of params.effects ?? []) {
-        applyEffect(state, target.id, eff, caster.id);
+        applyEffect(state, target.id, { ...eff, ...concFlag }, caster.id);
       }
       
       // Специфические эффекты перемещения
@@ -2134,7 +2373,7 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
 
   // Эффекты на себя
   for (const eff of params.selfEffects ?? []) {
-    applyEffect(state, caster.id, eff, caster.id);
+    applyEffect(state, caster.id, { ...eff, ...concFlag }, caster.id);
   }
 
   if (params.name === "Выход из панциря" || ctx.label === "Выход из панциря") {
@@ -2165,14 +2404,6 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
 
   // Концентрация: новая заменяет старую
   if (params.concentration) {
-    if (caster.concentration) {
-      state.addLog(
-        `${caster.name} прекращает концентрацию на «${caster.concentration.spellName}»`,
-        "system",
-        caster.name
-      );
-      dropConcentrationEffects(state, caster.id);
-    }
     const rounds = params.duration ? Math.max(1, Math.ceil(parseInt(params.duration, 10) / 6)) : 10;
     caster.concentration = {
       spellId: ctx.label,
@@ -2185,7 +2416,7 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
     if (actionLabel.includes("раскален") || actionLabel.includes("heat metal")) {
       const targetId = targets[0]?.id;
       if (targetId) {
-        applyEffect(state, targetId, { condition: "heat_metal", durationRounds: rounds }, caster.id);
+        applyEffect(state, targetId, { condition: "heat_metal", durationRounds: rounds, concentration: true }, caster.id);
       }
       const hasHeatAbility = caster.abilities.some((a) => a.id === "heat_metal_burn");
       if (!hasHeatAbility) {
@@ -2262,7 +2493,25 @@ export interface SpellDefinitionLike {
   parameters: ActionParameters;
 }
 
+/**
+ * Сотворение заклинания. Атомарно: если цель вне дальности/видимости и т.п.,
+ * ячейка и действие не тратятся (важно для пакетных ходов ИИ-мастера).
+ */
 export function castSpell(
+  state: CombatState,
+  casterId: string,
+  spell: SpellDefinitionLike,
+  opts: {
+    targetIds?: string[];
+    center?: Cell | null;
+    slotLevel?: number;
+    skipTurnCheck?: boolean;
+  } = {}
+): CastResult {
+  return atomic(state, () => castSpellUnsafe(state, casterId, spell, opts));
+}
+
+function castSpellUnsafe(
   state: CombatState,
   casterId: string,
   spell: SpellDefinitionLike,
@@ -2327,7 +2576,17 @@ export function castSpell(
   return result;
 }
 
+/** Применение способности. Атомарно, как и castSpell. */
 export function useAbility(
+  state: CombatState,
+  combatantId: string,
+  abilityId: string,
+  opts: { targetIds?: string[]; center?: Cell | null; skipTurnCheck?: boolean } = {}
+): CastResult {
+  return atomic(state, () => useAbilityUnsafe(state, combatantId, abilityId, opts));
+}
+
+function useAbilityUnsafe(
   state: CombatState,
   combatantId: string,
   abilityId: string,
@@ -2645,6 +2904,62 @@ export function syncTurnOrder(state: CombatState): void {
   state.markCombat();
 }
 
+/** Персонаж (не монстр) при 0 HP, который ещё борется за жизнь */
+export function needsDeathSave(c: Combatant): boolean {
+  return (
+    c.hpCurrent <= 0 &&
+    c.type !== "enemy" &&
+    c.conditions.some((cond) => cond.type === "unconscious" || cond.type === "death_save") &&
+    !c.conditions.some((cond) => cond.type === "stable" || cond.type === "dead")
+  );
+}
+
+/** Спасбросок от смерти: единая реализация для начала хода и для ручного броска из роута */
+export function performDeathSave(state: CombatState, combatantId: string): void {
+  const c = state.require(combatantId);
+  if (c.hpCurrent > 0 || c.conditions.some((cond) => cond.type === "stable" || cond.type === "dead")) return;
+  const ds = rollDeathSave(c);
+  state.addLog(`${c.name}: ${ds.text}`, "save", c.name);
+  if (ds.criticalSuccess) {
+    c.hpCurrent = 1;
+    c.conditions = c.conditions.filter(
+      (cond) => cond.type !== "unconscious" && cond.type !== "death_save"
+    );
+    state.addLog(`${c.name} восстанавливает 1 HP и приходит в себя!`, "system", c.name);
+  } else {
+    const dsCond = c.conditions.find((cond) => cond.type === "death_save");
+    let successes = dsCond?.duration ?? 0;
+    let failures = dsCond?.value ?? 0;
+    if (ds.success) successes += 1;
+    else failures += ds.criticalFailure ? 2 : 1;
+
+    if (failures >= 3) {
+      c.conditions = [
+        ...c.conditions.filter((cond) => cond.type !== "death_save"),
+        { type: "dead" },
+      ];
+      state.addLog(`💀 ${c.name} погибает (3 проваленных спасброска от смерти)!`, "damage", c.name);
+    } else if (successes >= 3) {
+      c.conditions = [
+        ...c.conditions.filter((cond) => cond.type !== "death_save"),
+        { type: "stable" },
+      ];
+      state.addLog(`🛡️ ${c.name} стабилизируется (3 успешных спасброска от смерти)!`, "system", c.name);
+    } else {
+      c.conditions = [
+        ...c.conditions.filter((cond) => cond.type !== "death_save"),
+        { type: "death_save", duration: successes, value: failures },
+      ];
+      state.addLog(
+        `${c.name}: спасброски от смерти: ${successes}/3 успехов, ${failures}/3 провалов`,
+        "system",
+        c.name
+      );
+    }
+  }
+  state.mark(c.id);
+}
+
 /** Начало хода: сброс ресурсов, спасброски от смерти, урон от состояний */
 export function startTurn(state: CombatState): void {
   const c = state.current();
@@ -2659,7 +2974,7 @@ export function startTurn(state: CombatState): void {
   c.extraActions = 0;
   c.hasActed = false;
   // Реакция «Щит» держится до начала следующего хода носителя
-  c.conditions = c.conditions.filter((cond) => cond.type !== "shielded");
+  c.conditions = c.conditions.filter((cond) => cond.type !== "shielded" && cond.type !== "sneak_used");
   // Способности, обновляющиеся каждый ход (Скрытая атака)
   c.abilities = c.abilities.map((a) => (a.refresh === "turn" ? { ...a, usesUsed: 0 } : a));
 
@@ -2689,7 +3004,9 @@ export function startTurn(state: CombatState): void {
       return n.includes("регенерация") || n.includes("regeneration");
     });
     if (regenTrait) {
-      if ((c.suppressRegenerationUntilRound || 0) <= state.round) {
+      // Флаг ставится уроном огнём/кислотой и гасит ровно одну — ближайшую — регенерацию.
+      // Сравнение с номером раунда пропускало урон, нанесённый после хода монстра.
+      if (!c.suppressRegenerationUntilRound) {
         const match = regenTrait.description.match(/(\d+)\s*(хит|hp|жизн)/i) || regenTrait.description.match(/(\d+)/);
         const regenAmount = match ? parseInt(match[1], 10) : 10;
         const healed = Math.min(c.hpMax - c.hpCurrent, regenAmount);
@@ -2697,6 +3014,7 @@ export function startTurn(state: CombatState): void {
         state.addLog(`💚 ${c.name} восстанавливает ${healed} HP благодаря Регенерации (${c.hpCurrent}/${c.hpMax})`, "ability", c.name);
       } else {
         state.addLog(`🔥 Регенерация ${c.name} временно подавлена уроном огнём или кислотой!`, "system", c.name);
+        c.suppressRegenerationUntilRound = 0;
       }
     }
   }
@@ -2706,50 +3024,7 @@ export function startTurn(state: CombatState): void {
   state.addLog(`— Ход ${c.name} (раунд ${state.round}) —`, "turn", c.name);
 
   // Спасбросок от смерти при 0 HP (если не стабилизирован и не погиб)
-  if (
-    c.hpCurrent <= 0 &&
-    !c.conditions.some((cond) => cond.type === "stable" || cond.type === "dead")
-  ) {
-    const ds = rollDeathSave(c);
-    state.addLog(`${c.name}: ${ds.text}`, "save", c.name);
-    if (ds.criticalSuccess) {
-      c.hpCurrent = 1;
-      c.conditions = c.conditions.filter(
-        (cond) => cond.type !== "unconscious" && cond.type !== "death_save"
-      );
-      state.addLog(`${c.name} восстанавливает 1 HP и приходит в себя!`, "system", c.name);
-    } else {
-      const dsCond = c.conditions.find((cond) => cond.type === "death_save");
-      let successes = dsCond?.duration ?? 0;
-      let failures = dsCond?.value ?? 0;
-      if (ds.success) successes += 1;
-      else failures += ds.criticalFailure ? 2 : 1;
-
-      if (failures >= 3) {
-        c.conditions = [
-          ...c.conditions.filter((cond) => cond.type !== "death_save"),
-          { type: "dead" },
-        ];
-        state.addLog(`💀 ${c.name} погибает (3 проваленных спасброска от смерти)!`, "damage", c.name);
-      } else if (successes >= 3) {
-        c.conditions = [
-          ...c.conditions.filter((cond) => cond.type !== "death_save"),
-          { type: "stable" },
-        ];
-        state.addLog(`🛡️ ${c.name} стабилизируется (3 успешных спасброска от смерти)!`, "system", c.name);
-      } else {
-        c.conditions = [
-          ...c.conditions.filter((cond) => cond.type !== "death_save"),
-          { type: "death_save", duration: successes, value: failures },
-        ];
-        state.addLog(
-          `${c.name}: спасброски от смерти: ${successes}/3 успехов, ${failures}/3 провалов`,
-          "system",
-          c.name
-        );
-      }
-    }
-  }
+  if (needsDeathSave(c)) performDeathSave(state, c.id);
 
   // Урон от состояний вроде «Горит»
   for (const cond of [...c.conditions]) {
@@ -2773,7 +3048,7 @@ export function startTurn(state: CombatState): void {
 }
 
 /** Конец хода: спасброски на снятие эффектов (Save Ends), тикают таймеры */
-export function endTurn(state: CombatState): { nextId: string | null } {
+export function endTurn(state: CombatState, depth = 0): { nextId: string | null } {
   const current = state.current();
   if (current) {
     current.hasActed = true;
@@ -2801,9 +3076,12 @@ export function endTurn(state: CombatState): { nextId: string | null } {
     current.conditions = current.conditions
       .filter((cond) => cond.type !== "surprised")
       .map((cond) =>
-        cond.duration !== undefined ? { ...cond, duration: cond.duration - 1 } : cond
+        // death_save хранит счётчик успехов в duration — это не таймер, его не тикаем
+        cond.duration !== undefined && cond.type !== "death_save"
+          ? { ...cond, duration: cond.duration - 1 }
+          : cond
       )
-      .filter((cond) => cond.duration === undefined || cond.duration > 0);
+      .filter((cond) => cond.type === "death_save" || cond.duration === undefined || cond.duration > 0);
     state.mark(current.id);
 
     if (current.concentration) {
@@ -2827,11 +3105,14 @@ export function endTurn(state: CombatState): { nextId: string | null } {
     triggerAILegendaryActions(state, current.id);
   }
 
+  // Персонаж при 0 HP ход не пропускает: в начале хода он бросает спасбросок от смерти.
+  // Раньше очередь перескакивала через него, и спасброски не бросались никогда.
   const next = getNextTurn(
     state.turnOrder,
     state.combatants,
     state.currentTurnIndex,
-    state.round
+    state.round,
+    (c) => c.hpCurrent > 0 || needsDeathSave(c)
   );
 
   const newRound = next.nextRound > state.round;
@@ -2844,7 +3125,15 @@ export function endTurn(state: CombatState): { nextId: string | null } {
   }
 
   startTurn(state);
-  return { nextId: next.nextId };
+
+  // Если боец после спасброска всё ещё без сознания, действовать ему нечем — ход идёт дальше.
+  // Ограничение глубины страхует от зацикливания, когда на ногах не осталось никого.
+  const now = state.current();
+  if (now && now.hpCurrent <= 0 && next.nextId && depth < state.turnOrder.length) {
+    const anyoneStanding = state.combatants.some((c) => c.hpCurrent > 0);
+    if (anyoneStanding) return endTurn(state, depth + 1);
+  }
+  return { nextId: state.current()?.id ?? next.nextId };
 }
 
 /** Бой закончен, если у одной из сторон не осталось стоящих на ногах */
@@ -3101,9 +3390,24 @@ export function shoveCombatant(
     throw new EngineError(`${target.name} слишком велик(а), чтобы сдвинуть его толчком`);
   }
 
-  // Встречная проверка: Атлетика толкающего против Атлетики или Акробатики цели
-  const shoverMod = (shover as any).strMod ?? shover.dexMod ?? 0;
-  const targetMod = Math.max((target as any).strMod ?? 0, target.dexMod ?? 0);
+  if (target.hpCurrent <= 0) throw new EngineError(`${target.name} уже выведен из боя`);
+
+  // Толчок заменяет одну атаку действия «Атака» — проверяем, что она доступна
+  const shoveAsAttack: Attack = {
+    id: "shove",
+    name: "Толчок",
+    attackBonus: 0,
+    damage: [],
+    kind: "melee",
+    range: { normal: 5 },
+    actionCost: "action",
+  };
+  const pay = canPayForAttack(shover, shoveAsAttack);
+  if (!pay.ok) throw new EngineError(pay.reason ?? "Нельзя совершить толчок");
+
+  // Встречная проверка: Атлетика (СИЛ) толкающего против Атлетики (СИЛ) или Акробатики (ЛОВ) цели
+  const shoverMod = shover.abilityMods?.STR ?? 0;
+  const targetMod = Math.max(target.abilityMods?.STR ?? 0, target.abilityMods?.DEX ?? target.dexMod ?? 0);
 
   const shoverRoll = rollD20(shoverMod).total;
   const targetRoll = rollD20(targetMod).total;
@@ -3111,10 +3415,7 @@ export function shoveCombatant(
   const success = shoverRoll >= targetRoll;
 
   // Экономика действий: толчок заменяет одну атаку
-  shover.attacksMadeThisAction += 1;
-  if (shover.attacksMadeThisAction >= shover.attacksPerAction) {
-    shover.actionUsed = true;
-  }
+  Object.assign(shover, payForAttack(shover, shoveAsAttack));
   state.mark(shover.id);
 
   if (!success) {

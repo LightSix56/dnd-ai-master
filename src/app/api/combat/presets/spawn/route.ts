@@ -3,6 +3,8 @@ import { db } from "@/lib/db";
 import { DEFAULT_PRESETS, createCombatantFromPreset } from "@/lib/combat/preset-data";
 import { loadDefaultManifest, loadMonsterDefinition } from "@/lib/combat/encounters/encounter-generator";
 import { monsterDefinitionToCombatant } from "@/lib/combat/monsters/monster-adapter";
+import { packMonsterData } from "@/lib/combat/serialize";
+import { reconcileTurnOrder } from "@/lib/combat/initiative";
 import type { CharacterPreset, Combatant } from "@/lib/combat/types";
 
 export async function POST(req: NextRequest) {
@@ -183,6 +185,7 @@ export async function POST(req: NextRequest) {
           saves: JSON.stringify(template.saves || {}),
           abilityMods: JSON.stringify(template.abilityMods || {}),
           profBonus: template.profBonus || 2,
+          monsterData: packMonsterData(template),
           isAIControlled: template.isAIControlled ?? true,
         },
       });
@@ -206,10 +209,19 @@ export async function POST(req: NextRequest) {
       actor: "DM",
     });
 
+    // Новые бойцы встают в очередь по инициативе, а не в конец; текущий ход остаётся у того же бойца
+    const allRows = await db.combatant.findMany({ where: { combatId } });
+    const previousOrder: string[] = JSON.parse(combat.turnOrder || "[]");
+    const reconciled =
+      previousOrder.length > 0
+        ? reconcileTurnOrder(previousOrder, allRows, combat.currentTurnIndex)
+        : { turnOrder: newTurnOrderIds, currentTurnIndex: combat.currentTurnIndex };
+
     await db.combat.update({
       where: { id: combatId },
       data: {
-        turnOrder: JSON.stringify(newTurnOrderIds),
+        turnOrder: JSON.stringify(reconciled.turnOrder),
+        currentTurnIndex: reconciled.currentTurnIndex,
         log: JSON.stringify(log),
       },
     });

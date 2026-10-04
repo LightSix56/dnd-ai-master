@@ -114,14 +114,20 @@ export function getNextTurn<T extends { id: string; hpCurrent: number }>(
   turnOrder: string[],
   combatants: T[],
   currentTurnIndex: number,
-  currentRound: number
+  currentRound: number,
+  /** Кто получает ход. По умолчанию — только бойцы с HP > 0 */
+  takesTurn?: (c: T) => boolean
 ): NextTurnResult {
   if (turnOrder.length === 0) {
     return { nextIndex: 0, nextRound: currentRound, nextId: null, wrapped: false };
   }
 
   const byId = new Map(combatants.map((c) => [c.id, c]));
-  const isAlive = (id: string) => (byId.get(id)?.hpCurrent ?? 0) > 0;
+  const isAlive = (id: string) => {
+    const c = byId.get(id);
+    if (!c) return false;
+    return takesTurn ? takesTurn(c) : c.hpCurrent > 0;
+  };
 
   if (!turnOrder.some(isAlive)) {
     return {

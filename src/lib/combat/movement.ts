@@ -528,6 +528,7 @@ export function hasCoverBetween(
 ): "none" | "half" | "three_quarters" {
   const line = getLineCells(from, to);
   let coverCount = 0;
+  let creatureCover = false;
   for (const cell of line) {
     if (cell.x === from.x && cell.y === from.y) continue;
     if (cell.x === to.x && cell.y === to.y) continue;
@@ -537,15 +538,15 @@ export function hasCoverBetween(
         coverCount++;
       }
     }
-    // Другие существа на линии создают полуукрытие (правило 5e)
+    // Другие существа на линии создают полуукрытие (правило 5e) — сколько бы их ни было
     for (const c of combatants) {
       if (c.hpCurrent > 0 && c.x === cell.x && c.y === cell.y) {
-        coverCount++;
+        creatureCover = true;
       }
     }
   }
   if (coverCount >= 2) return "three_quarters";
-  if (coverCount >= 1) return "half";
+  if (coverCount >= 1 || creatureCover) return "half";
   return "none";
 }
 

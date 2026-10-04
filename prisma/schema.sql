@@ -208,6 +208,7 @@ CREATE TABLE "Combatant" (
     "profBonus" INTEGER NOT NULL DEFAULT 2,
     "isAIControlled" BOOLEAN NOT NULL DEFAULT false,
     "potions" TEXT NOT NULL DEFAULT '[]',
+    "monsterData" TEXT NOT NULL DEFAULT '{}',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

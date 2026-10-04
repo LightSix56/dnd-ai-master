@@ -13,7 +13,65 @@ import type {
   LogEntry,
   MapElement,
   SpellData,
+  LegendaryState,
+  MonsterCombatTrait,
+  MonsterMultiattack,
+  RechargeAbility,
+  TacticalRole,
 } from "./types";
+
+/** Поля монстра, которые хранятся одной JSON-колонкой Combatant.monsterData */
+export interface MonsterData {
+  damageResistances?: string[];
+  damageImmunities?: string[];
+  damageVulnerabilities?: string[];
+  conditionImmunities?: string[];
+  multiattack?: MonsterMultiattack | null;
+  legendaryState?: LegendaryState | null;
+  rechargeAbilities?: RechargeAbility[];
+  monsterTraits?: MonsterCombatTrait[];
+  tacticalRole?: TacticalRole;
+  suppressRegenerationUntilRound?: number;
+  challengeRating?: number;
+}
+
+const MONSTER_DATA_KEYS: (keyof MonsterData)[] = [
+  "damageResistances",
+  "damageImmunities",
+  "damageVulnerabilities",
+  "conditionImmunities",
+  "multiattack",
+  "legendaryState",
+  "rechargeAbilities",
+  "monsterTraits",
+  "tacticalRole",
+  "suppressRegenerationUntilRound",
+  "challengeRating",
+];
+
+/** Собирает JSON для колонки monsterData из объекта бойца (пустые поля пропускаются) */
+export function packMonsterData(c: Partial<Combatant>): string {
+  const out: Record<string, unknown> = {};
+  for (const key of MONSTER_DATA_KEYS) {
+    const v = c[key];
+    if (v === undefined || v === null) continue;
+    if (Array.isArray(v) && v.length === 0) continue;
+    out[key] = v;
+  }
+  return JSON.stringify(out);
+}
+
+function unpackMonsterData(raw: unknown): MonsterData {
+  const parsed = safeParse<MonsterData>(raw, {});
+  const out: MonsterData = {};
+  if (!parsed || typeof parsed !== "object") return out;
+  for (const key of MONSTER_DATA_KEYS) {
+    if (parsed[key] !== undefined && parsed[key] !== null) {
+      (out as Record<string, unknown>)[key] = parsed[key];
+    }
+  }
+  return out;
+}
 
 export function safeParse<T>(value: unknown, fallback: T): T {
   if (value === null || value === undefined || value === "") return fallback;
@@ -62,6 +120,7 @@ export function normalizeAttack(raw: Record<string, unknown>, index = 0): Attack
           save: d.save,
           noCrit: d.noCrit,
           temp: d.temp,
+          magical: d.magical,
         }))
       : [],
     kind,
@@ -72,6 +131,7 @@ export function normalizeAttack(raw: Record<string, unknown>, index = 0): Attack
     thrown: raw.thrown as boolean | undefined,
     versatile: raw.versatile as string | undefined,
     usesSpellAttack: raw.usesSpellAttack as boolean | undefined,
+    magical: raw.magical as boolean | undefined,
   };
 }
 
@@ -93,6 +153,7 @@ export function hydrateCombatant(row: Record<string, any>): Combatant {
 
   return {
     id: row.id,
+    characterId: row.characterId ?? null,
     name: row.name,
     type: row.type,
     color: row.color,
@@ -131,6 +192,7 @@ export function hydrateCombatant(row: Record<string, any>): Combatant {
     profBonus: row.profBonus ?? 2,
     isAIControlled: !!row.isAIControlled,
     potions: safeParse<CombatPotion[]>(row.potions, []),
+    ...unpackMonsterData(row.monsterData),
   };
 }
 
@@ -175,6 +237,7 @@ export function dehydrateCombatant(c: Combatant): Record<string, unknown> {
     profBonus: c.profBonus,
     isAIControlled: c.isAIControlled,
     potions: JSON.stringify(c.potions ?? []),
+    monsterData: packMonsterData(c),
   };
 }
 

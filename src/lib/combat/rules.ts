@@ -430,9 +430,17 @@ export function rollDeathSave(c: Combatant): DeathSaveResult {
 
 // ============ УРОН ============
 
+/** Часть урона одного типа — сопротивления и иммунитеты применяются к каждой части отдельно */
+export interface DamagePart {
+  amount: number;
+  type: string;
+  magical?: boolean;
+}
+
 export interface DamageResult {
   total: number;
   breakdown: string[];
+  parts: DamagePart[];
 }
 
 /**
@@ -445,6 +453,7 @@ export function rollDamage(
 ): DamageResult {
   let total = 0;
   const breakdown: string[] = [];
+  const parts: DamagePart[] = [];
 
   const allDamage = [...damage];
   if (options.extraDice) {
@@ -474,6 +483,7 @@ export function rollDamage(
 
     if (sum < 0) sum = 0;
     total += sum;
+    parts.push({ amount: sum, type: dmg.type, magical: dmg.magical });
     breakdown.push(
       `${dmg.dice || "—"}${doubleDice ? "×2" : ""}${dmg.mod ? (dmg.mod > 0 ? `+${dmg.mod}` : dmg.mod) : ""} = ${sum} (${dmg.type})`
     );
@@ -482,9 +492,16 @@ export function rollDamage(
   if (options.halfOnSave) {
     total = Math.floor(total / 2);
     breakdown.push(`половина при успешном спасброске → ${total}`);
+    // Делим части так, чтобы их сумма совпала с округлённым итогом
+    let left = total;
+    for (let i = 0; i < parts.length; i++) {
+      const half = i === parts.length - 1 ? left : Math.min(left, Math.floor(parts[i].amount / 2));
+      parts[i] = { ...parts[i], amount: half };
+      left -= half;
+    }
   }
 
-  return { total, breakdown };
+  return { total, breakdown, parts };
 }
 
 /**
@@ -533,6 +550,8 @@ export interface AttackResolution {
   roll: D20Roll;
   targetAC: number;
   damage: number;
+  /** Урон по типам (для сопротивлений/иммунитетов) */
+  damageParts: DamagePart[];
   damageBreakdown: string[];
   advantageReasons: string[];
   text: string;
@@ -552,6 +571,8 @@ export function resolveAttack(
     distanceFt?: number;
     extraDamageDice?: string;
     allCombatants?: Combatant[];
+    /** Бонус к КД цели от укрытия: 2 (половинное) или 5 (три четверти) */
+    coverBonus?: number;
   } = {}
 ): AttackResolution {
   // Эффект Дубинки (Shillelagh): посох/дубинка атакуют от Мудрости и наносят 1d8+МУД урона
@@ -592,7 +613,8 @@ export function resolveAttack(
     advResult.disadvantage
   );
 
-  const targetAC = effectiveAC(target);
+  const coverBonus = options.coverBonus ?? 0;
+  const targetAC = effectiveAC(target) + coverBonus;
   const natCrit = roll.natural === 20;
   const fumble = roll.natural === 1;
   const inMeleeRange = (options.distanceFt ?? 5) <= 5;
@@ -612,13 +634,18 @@ export function resolveAttack(
 
   let damage = 0;
   let damageBreakdown: string[] = [];
+  let damageParts: DamagePart[] = [];
   if (hit) {
-    const dmg = rollDamage(attack.damage, crit, { extraDice: options.extraDamageDice });
+    // attackToUse, а не attack: иначе зачарование «Дубинка» меняло бросок атаки, но не урон
+    const dmg = rollDamage(attackToUse.damage, crit, { extraDice: options.extraDamageDice });
     damage = dmg.total;
     damageBreakdown = dmg.breakdown;
+    const weaponMagical = !!attackToUse.magical || attackToUse.kind === "spell" || attackToUse !== attack;
+    damageParts = dmg.parts.map((p) => ({ ...p, magical: p.magical || weaponMagical }));
   }
 
   let text = `${attack.name}: ${formatD20Roll(roll)} против КД ${targetAC}`;
+  if (coverBonus > 0) text += ` (укрытие +${coverBonus})`;
   if (crit) {
     if (isAssassin && isSurprised && !natCrit) text += " — АВТО-КРИТ (Ликвидация: застигнут врасплох)!";
     else if (isHelpless && !natCrit) text += " — АВТО-КРИТ (беспомощная цель в 5 фт)!";
@@ -636,6 +663,7 @@ export function resolveAttack(
     roll,
     targetAC,
     damage,
+    damageParts,
     damageBreakdown,
     advantageReasons: advResult.reasons,
     text,

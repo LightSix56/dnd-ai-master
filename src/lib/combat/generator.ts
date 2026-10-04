@@ -8,7 +8,7 @@ import {
   extractSpellsFromCharacter,
   extractAbilitiesFromCharacter,
 } from "./character-adapter";
-import { ATTACK_LIBRARY } from "./library-data";
+import { ATTACK_LIBRARY, attacksPerAction } from "./library-data";
 import { generateEncounter } from "./encounters/encounter-generator";
 import type {
   StoryFactionContext,
@@ -19,6 +19,7 @@ import type {
 } from "./encounters/types";
 import { resolveBattlemapForNarrative } from "./maps/open-map-service";
 import { resolveMonsterCombatant } from "./monsters/bestiary-resolver";
+import { packMonsterData } from "./serialize";
 
 export type EnvironmentType =
   | "dungeon"
@@ -941,15 +942,12 @@ export async function createTacticalEncounter({
       currentTurnIndex: 0,
       turnOrder: "[]",
       log: JSON.stringify([
+        // Формат LogEntry движка (round/actor/text/kind) — иначе запись не читается клиентом как системная
         {
-          id: `log_start_${Date.now()}`,
           round: 1,
-          turnIndex: 0,
-          actorId: "system",
-          actorName: "Мастер",
-          type: "system",
+          actor: "Мастер",
+          kind: "system",
           text: `⚔️ Начало боя: ${name}${mapDescription ? ` (${mapDescription})` : ""}. Бросок инициативы!`,
-          timestamp: Date.now(),
         },
       ]),
     },
@@ -1718,6 +1716,7 @@ export async function createTacticalEncounter({
           CHA: { prof: !!profSaves.CHA, mod: chaMod + (profSaves.CHA ? charProfBonus : 0) },
         }),
         profBonus: charProfBonus,
+        attacksPerAction: attacksPerAction(char.class || "", char.level || 1),
         isAIControlled: false,
         potions: JSON.stringify(combatPotions),
       },
@@ -1761,6 +1760,8 @@ export async function createTacticalEncounter({
           abilityMods: JSON.stringify(c.abilityMods || {}),
           saves: JSON.stringify(c.saves || {}),
           profBonus: c.profBonus || 2,
+          attacksPerAction: c.attacksPerAction || 1,
+          monsterData: packMonsterData(c),
           isAIControlled: true,
         },
       });
@@ -1811,6 +1812,8 @@ export async function createTacticalEncounter({
           abilityMods: JSON.stringify(c.abilityMods || { STR: 0, DEX: dexMod, CON: 0, INT: 0, WIS: 0, CHA: 0 }),
           saves: JSON.stringify(c.saves || {}),
           profBonus: c.profBonus || 2,
+          attacksPerAction: c.attacksPerAction || 1,
+          monsterData: packMonsterData(c),
           isAIControlled: true,
         },
       });

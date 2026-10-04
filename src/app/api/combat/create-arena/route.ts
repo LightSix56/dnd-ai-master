@@ -1,5 +1,6 @@
 // API: Создать готовую тестовую арену с Магом 3-го круга, Друидом и стихийным ландшафтом
 import { db } from "@/lib/db";
+import { packMonsterData } from "@/lib/combat/serialize";
 import { hydrateCombat } from "@/lib/combat/serialize";
 import { CAMPAIGN_HEROES_PRESETS, createCombatantFromPreset } from "@/lib/combat/preset-data";
 import { getSRDMonster } from "@/lib/combat/srd/adapter";
@@ -154,6 +155,7 @@ export async function POST() {
           saves: JSON.stringify(c.saves || {}),
           abilityMods: JSON.stringify(c.abilityMods || {}),
           profBonus: c.profBonus || 2,
+          monsterData: packMonsterData(c),
           isAIControlled: c.isAIControlled || false,
         },
       });

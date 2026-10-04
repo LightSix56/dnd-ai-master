@@ -26,12 +26,13 @@ import {
   transformWildShape,
   revertWildShape,
   drinkPotion,
+  performDeathSave,
+  shoveCombatant,
 } from "@/lib/combat/engine";
 import { runBotTurn, isBotTurn } from "@/lib/combat/bot";
 import { hydrateCombat, dehydrateCombatant, safeParse } from "@/lib/combat/serialize";
 import { TYPE_COLORS, type ActionParameters, type Cell } from "@/lib/combat/types";
 import { buildTurnOrder } from "@/lib/combat/initiative";
-import { rollDeathSave } from "@/lib/combat/rules";
 import { getSpellDefinition } from "@/lib/combat/library-data";
 import { awardCombatVictoryXP } from "@/lib/combat/xp-award";
 
@@ -51,6 +52,10 @@ async function saveState(combatId: string, state: CombatState): Promise<void> {
     const c = state.get(id);
     if (!c) continue;
     await db.combatant.update({ where: { id }, data: dehydrateCombatant(c) as any });
+  }
+  // Сбежавшие с поля боя бойцы удаляются и из БД
+  if (state.removedIds.length > 0) {
+    await db.combatant.deleteMany({ where: { id: { in: state.removedIds }, combatId } });
   }
   if (state.isCombatDirty) {
     await db.combat.update({
@@ -505,12 +510,28 @@ export async function POST(req: Request) {
       if (c.actionUsed && c.extraActions <= 0) {
         return Response.json({ error: "Действие уже использовано" }, { status: 400 });
       }
-      c.actionUsed = true;
+      if (c.actionUsed && c.extraActions > 0) {
+        c.extraActions -= 1;
+      } else {
+        c.actionUsed = true;
+      }
       c.attacksMadeThisAction = c.attacksPerAction;
       state.mark(combatantId);
       applyEffect(state, targetId, { condition: "helped", durationRounds: 1 }, combatantId);
       await saveState(combatId, state);
       return respond(combatId);
+    }
+
+    if (action === "shove") {
+      const {
+        combatantId,
+        targetId,
+        shoveType = "prone",
+      }: { combatantId: string; targetId: string; shoveType?: "push" | "prone" } = body;
+      const state = await loadState(combatId);
+      const result = shoveCombatant(state, combatantId, targetId, shoveType === "push" ? "push" : "prone");
+      await saveState(combatId, state);
+      return respond(combatId, { result, outcome: checkCombatOver(state) });
     }
 
     if (action === "hide") {
@@ -672,46 +693,7 @@ export async function POST(req: Request) {
         c.hpCurrent <= 0 &&
         !c.conditions.some((cond) => cond.type === "dead" || cond.type === "stable")
       ) {
-        const ds = rollDeathSave(c);
-        state.addLog(`${c.name}: ${ds.text}`, "save", c.name);
-        if (ds.criticalSuccess) {
-          c.hpCurrent = 1;
-          c.conditions = c.conditions.filter(
-            (cond) => cond.type !== "unconscious" && cond.type !== "death_save"
-          );
-          state.addLog(`${c.name} восстанавливает 1 HP и приходит в себя!`, "system", c.name);
-        } else {
-          const dsCond = c.conditions.find((cond) => cond.type === "death_save");
-          let successes = dsCond?.duration ?? 0;
-          let failures = dsCond?.value ?? 0;
-          if (ds.success) successes += 1;
-          else failures += ds.criticalFailure ? 2 : 1;
-
-          if (failures >= 3) {
-            c.conditions = [
-              ...c.conditions.filter((cond) => cond.type !== "death_save"),
-              { type: "dead" },
-            ];
-            state.addLog(`💀 ${c.name} погибает (3 проваленных спасброска от смерти)!`, "damage", c.name);
-          } else if (successes >= 3) {
-            c.conditions = [
-              ...c.conditions.filter((cond) => cond.type !== "death_save"),
-              { type: "stable" },
-            ];
-            state.addLog(`🛡️ ${c.name} стабилизируется (3 успешных спасброска от смерти)!`, "system", c.name);
-          } else {
-            c.conditions = [
-              ...c.conditions.filter((cond) => cond.type !== "death_save"),
-              { type: "death_save", duration: successes, value: failures },
-            ];
-            state.addLog(
-              `${c.name}: спасброски от смерти: ${successes}/3 успехов, ${failures}/3 провалов`,
-              "system",
-              c.name
-            );
-          }
-        }
-        state.mark(c.id);
+        performDeathSave(state, c.id);
         await saveState(combatId, state);
       }
       return respond(combatId, { outcome: checkCombatOver(state) });

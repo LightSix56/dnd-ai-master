@@ -856,11 +856,10 @@ export function runBotTurn(state: CombatState, actorOverride?: Combatant): BotTu
         actor.y >= state.gridHeight - 1
       ) {
         actor.hpCurrent = 0;
-        state.combatants = state.combatants.filter((c) => c.id !== actor.id);
-        state.turnOrder = state.turnOrder.filter((id) => id !== actor.id);
         state.addLog(`${actor.name} скрывается в чаще и покидает поле боя!`, "system", actor.name);
-        state.markCombat();
-        state.mark(actor.id);
+        // removeCombatant помечает бойца на удаление из БД: раньше он исчезал только из памяти,
+        // оставался «живым» в базе, и бой не мог завершиться
+        state.removeCombatant(actor.id);
         syncOverride();
         return true;
       }

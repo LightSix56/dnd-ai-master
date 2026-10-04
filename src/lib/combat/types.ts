@@ -138,6 +138,8 @@ export interface Condition {
   // Служебные поля для механики
   value?: number; // например, бонус AC от Щита
   targetId?: string; // для "helping" — кому помогает
+  /** Эффект держится концентрацией source и снимается при её потере */
+  concentration?: boolean;
 }
 
 export interface HotbarItem {
@@ -233,6 +235,8 @@ export interface AppliedEffect {
   saveType?: AbilityKey;
   saveDC?: number;
   value?: number;
+  /** Эффект держится концентрацией заклинателя */
+  concentration?: boolean;
 }
 
 export interface ActionParameters {
@@ -512,6 +516,11 @@ export const CONDITION_EFFECTS: Record<string, {
   hunters_mark: {
     name: "Метка охотника",
     description: "Доп. урон 1к6 от отметившего",
+    effects: {},
+  },
+  sneak_used: {
+    name: "Скрытая атака использована",
+    description: "Скрытая атака уже применена в этом ходу",
     effects: {},
   },
   sneak_ready: {
