@@ -419,6 +419,54 @@ export function DnDApp({
     return false;
   });
   const isResizingSidebarRef = useRef(false);
+  const roomTabOpenedForRef = useRef<string | null>(null);
+
+  // Высота нижней панели (кубики, заявки раунда, поле ввода). null — по содержимому.
+  // Читаем сохранённое значение после монтирования, чтобы серверная разметка совпала с клиентской.
+  const [inputPanelHeight, setInputPanelHeight] = useState<number | null>(null);
+  const inputPanelRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    try {
+      const saved = parseInt(localStorage.getItem("dnd_input_panel_height") || "", 10);
+      if (!isNaN(saved) && saved >= 110) setInputPanelHeight(saved);
+    } catch {}
+  }, []);
+
+  const handleStartInputPanelResize = useCallback((e: React.PointerEvent) => {
+    e.preventDefault();
+    const panel = inputPanelRef.current;
+    if (!panel) return;
+    const bottom = panel.getBoundingClientRect().bottom;
+    document.body.style.cursor = "row-resize";
+    document.body.style.userSelect = "none";
+    let latest: number | null = null;
+
+    const onMove = (ev: PointerEvent) => {
+      const max = Math.round(window.innerHeight * 0.7);
+      latest = Math.min(max, Math.max(110, Math.round(bottom - ev.clientY)));
+      setInputPanelHeight(latest);
+    };
+    const onUp = () => {
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      if (latest !== null) {
+        try {
+          localStorage.setItem("dnd_input_panel_height", String(latest));
+        } catch {}
+      }
+    };
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+  }, []);
+
+  const resetInputPanelHeight = useCallback(() => {
+    setInputPanelHeight(null);
+    try {
+      localStorage.removeItem("dnd_input_panel_height");
+    } catch {}
+  }, []);
 
   const toggleSidebar = useCallback(() => {
     setSidebarCollapsed((prev) => {
@@ -806,7 +854,13 @@ export function DnDApp({
             participants: data.participants || data.room.participants || [],
           };
           setActiveRoom(roomObj);
-          setSidebarTab("room");
+          // Вкладку «Сеть» открываем один раз при входе в комнату. Этот эффект перезапускается
+          // при каждом обновлении токена сессии — раньше он каждый раз перебрасывал игрока
+          // на «Сеть» с той вкладки, которую тот выбрал сам.
+          if (roomTabOpenedForRef.current !== cleanCode) {
+            roomTabOpenedForRef.current = cleanCode;
+            setSidebarTab("room");
+          }
 
           // Если у комнаты есть привязанная кампания, активируем её для игрока
           const campId = data.room.campaignId || data.room.campaignSettings?.campaignId || data.room.campaign_settings?.campaignId;
@@ -3301,7 +3355,22 @@ export function DnDApp({
               </ScrollArea>
 
               {/* Input area */}
-              <div className="border-t bg-card/30 backdrop-blur p-4">
+              <div
+                ref={inputPanelRef}
+                style={inputPanelHeight ? { height: `${inputPanelHeight}px` } : undefined}
+                className={`relative border-t bg-card/30 backdrop-blur p-4 shrink-0 ${
+                  inputPanelHeight ? "overflow-y-auto" : ""
+                }`}
+              >
+                {/* Полоска для изменения высоты: потянуть мышью, двойной клик — вернуть как было */}
+                <div
+                  onPointerDown={handleStartInputPanelResize}
+                  onDoubleClick={resetInputPanelHeight}
+                  title="Потяните, чтобы изменить высоту панели. Двойной клик — вернуть исходную."
+                  className="group sticky top-0 -mt-4 -mx-4 mb-1 h-3 z-10 flex items-center justify-center cursor-row-resize touch-none select-none"
+                >
+                  <div className="h-1 w-12 rounded-full bg-amber-500/25 group-hover:bg-amber-500/60 group-active:bg-amber-500 transition-colors" />
+                </div>
                 <div className="max-w-3xl mx-auto">
                   {/* Quick dice */}
                   <div className="flex gap-1.5 mb-2 flex-wrap items-center">
