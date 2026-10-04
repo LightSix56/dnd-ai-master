@@ -3,6 +3,8 @@ import { getAuthUserFromRequest } from "@/lib/supabase/client";
 import { RoomService } from "@/lib/room/room-service";
 import { resolveActiveRoomTurnHelper } from "@/lib/room/resolve-turn-helper";
 
+export const maxDuration = 120;
+
 export async function POST(
   request: Request,
   props: { params: Promise<{ code: string }> }

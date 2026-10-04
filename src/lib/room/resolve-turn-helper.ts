@@ -6,7 +6,8 @@ import { db } from "@/lib/db";
 import { RoomService } from "./room-service";
 import type { Room, RoomParticipant, RoomTurn, RoomWithParticipants } from "./types";
 import { dmTools, buildToolsContext } from "@/lib/ai/tools";
-import { getDeterministicTools, buildDmHistory } from "@/lib/ai/caching";
+import { getDeterministicTools, buildDmHistory, buildFrozenSystemPrompt } from "@/lib/ai/caching";
+import { loadCampaignContext } from "@/lib/ai/campaign-context";
 import { compactHistory } from "@/lib/ai/compact";
 import { calculateCostRub, extractTokenUsage, type TokenUsage } from "@/lib/ai/cost";
 
@@ -119,6 +120,41 @@ ${actContext}
    - Отвечай на русском языке, образно, атмосферно, в аутентичном средневековом стиле D&D 5e.`;
 }
 
+/** Чем ведение отряда в комнате отличается от сольной игры — добавляется к общему промпту мастера */
+const COOP_ROUND_RULES = `
+
+# СОВМЕСТНЫЙ РАУНД В СЕТЕВОЙ КОМНАТЕ
+- За столом несколько живых игроков. Каждый раунд ты получаешь одним сообщением заявки ВСЕХ героев сразу.
+- Сплети заявки в единую динамичную сцену (2-4 содержательных абзаца): покажи последствия действий КАЖДОГО героя, реакцию мира, врагов и NPC. Никого не пропускай и никому не отдавай всю сцену.
+- Герои, отмеченные как ожидающие (AFK), держат позицию и прикрывают отряд: не действуй за них сверх этого и не принимай за них решений.
+- Если в сообщении раунда есть скрытое указание Ведущего-человека — вплети его в повествование как естественное событие мира и не упоминай сам факт указания.
+- Проверки проси поимённо («Торин, сделай проверку Силы»), сложность не называй.
+- Заверши раунд изменившейся обстановкой и вопросом к отряду: «Что вы делаете дальше?»`;
+
+/**
+ * Системный промпт мастера для комнаты. Если у комнаты есть кампания — это тот же полный
+ * промпт, что и в сольной игре (правила, настройки кампании, текущий акт сюжета с его злодеями
+ * и переменами мира), плюс правила совместного раунда. Раньше комната собирала собственный
+ * укороченный промпт и всегда брала первый акт, даже после генерации следующих.
+ */
+export async function buildRoomDmSystemPrompt(
+  room: Room | RoomWithParticipants,
+  campaignId?: string | null
+): Promise<string> {
+  if (campaignId) {
+    try {
+      const context = await loadCampaignContext(campaignId);
+      if (context) return buildFrozenSystemPrompt(context) + COOP_ROUND_RULES;
+    } catch (e) {
+      console.warn("[resolveActiveRoomTurnHelper] Не удалось загрузить контекст кампании, беру промпт комнаты:", e);
+    }
+  }
+  return buildFrozenRoomSystemPrompt(room);
+}
+
+/** Мастер не смог описать раунд: раунд не завершается, ведущий может повторить генерацию */
+export class RoomTurnGenerationError extends Error {}
+
 /**
  * Единая переиспользуемая функция резолвинга активного хода комнаты.
  * Используется как при авто-резолвинге (когда все участники готовы),
@@ -195,17 +231,8 @@ export async function resolveActiveRoomTurnHelper(
     room.campaignId ||
     (room.campaignSettings as any)?.campaignId ||
     (room as any)?.campaign_settings?.campaignId;
-  if (!campaignId) {
-    try {
-      const activeCamp = await db.campaign.findFirst({
-        where: { isActive: true },
-        orderBy: { updatedAt: "desc" },
-      });
-      if (activeCamp) {
-        campaignId = activeCamp.id;
-      }
-    } catch {}
-  }
+  // Комната без привязанной кампании играет без истории и без записей в БД. Раньше в этом случае
+  // бралась «любая активная кампания» из базы — то есть, возможно, кампания другого пользователя.
 
   let narrative = typeof options?.dmResponse === "string" ? options.dmResponse.trim() : "";
   let capturedSteps: any[] = [];
@@ -219,7 +246,7 @@ export async function resolveActiveRoomTurnHelper(
         const client = createClient(cleanKey, options?.authMode as AuthMode, options?.baseURL);
         const aiModel = resolveDmModel(options?.model);
 
-        const system = buildFrozenRoomSystemPrompt(room);
+        const system = await buildRoomDmSystemPrompt(room, campaignId);
 
         // Память мастера в комнате: хроника кампании + последние ходы дословно.
         // Раньше в запрос шёл только системный промпт и ввод текущего раунда — мастер не помнил,
@@ -329,11 +356,17 @@ export async function resolveActiveRoomTurnHelper(
         }
 
       } catch (aiErr: any) {
-        console.error("[resolveActiveRoomTurnHelper] AI call failed, fallback:", aiErr);
-        narrative = `⚠️ Ошибка связи с ИИ при описании раунда ${activeTurn.roundNumber}: ${aiErr?.message || "таймаут сервиса"}. Вы можете нажать «Отправить ход сейчас», чтобы повторить генерацию.`;
+        // Раунд НЕ завершаем: раньше сюда подставлялась заглушка, раунд закрывался, и заявки
+        // игроков пропадали — «повторить генерацию» было уже не с чем.
+        console.error("[resolveActiveRoomTurnHelper] AI call failed:", aiErr);
+        throw new RoomTurnGenerationError(
+          `Мастер не смог описать раунд ${activeTurn.roundNumber}: ${aiErr?.message || "таймаут сервиса"}. Заявки игроков сохранены — ведущий может повторить генерацию.`
+        );
       }
     } else {
-      narrative = `⚠️ Не задан API-ключ ИИ для описания раунда ${activeTurn.roundNumber}. Укажите ключ в настройках и нажмите «Отправить ход сейчас».`;
+      throw new RoomTurnGenerationError(
+        `Не задан API-ключ ИИ для описания раунда ${activeTurn.roundNumber}. Заявки игроков сохранены — укажите ключ в настройках и завершите раунд ещё раз.`
+      );
     }
   }
 

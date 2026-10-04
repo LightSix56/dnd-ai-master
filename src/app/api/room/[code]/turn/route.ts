@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
 import { getAuthUserFromRequest } from "@/lib/supabase/client";
-import { RoomService } from "@/lib/room/room-service";
+import { RoomService, RoomRuleError } from "@/lib/room/room-service";
 import { calculateTurnReadiness, type PlayerTurnInput } from "@/lib/room/turn-batcher";
 import { resolveActiveRoomTurnHelper } from "@/lib/room/resolve-turn-helper";
+
+// Последний ход раунда запускает генерацию ответа мастера в этом же запросе —
+// стандартного лимита времени функции на это может не хватить.
+export const maxDuration = 120;
 
 export async function GET(
   _request: Request,
@@ -79,7 +83,16 @@ export async function POST(
       submittedAt: Date.now(),
     };
 
-    const turn = await roomService.submitPlayerAction(room.id, user.id, input);
+    let turn;
+    try {
+      turn = await roomService.submitPlayerAction(room.id, user.id, input);
+    } catch (submitErr) {
+      // Нарушение правил раунда (уже ходил, мастер уже отвечает) — это не сбой сервера
+      if (submitErr instanceof RoomRuleError) {
+        return NextResponse.json({ error: submitErr.message }, { status: 409 });
+      }
+      throw submitErr;
+    }
 
     const readiness = calculateTurnReadiness(room.participants || [], turn.playerInputs);
     if (readiness.isAllReady) {
@@ -107,8 +120,20 @@ export async function POST(
           );
 
         } catch (resolveErr) {
+          // Ход игрока уже записан. Мастер не ответил (нет ключа, сбой провайдера) —
+          // раунд остаётся ждать: ведущий может повторить генерацию кнопкой завершения раунда.
           await roomService.unlockTurnFromResolving(turn.id);
-          throw resolveErr;
+          console.error("[API /api/room/[code]/turn POST] auto-resolve failed:", resolveErr);
+          return NextResponse.json(
+            {
+              success: true,
+              resolved: false,
+              turn,
+              readiness,
+              resolveError: (resolveErr as Error)?.message || "Мастер не смог описать раунд",
+            },
+            { status: 200 }
+          );
         }
       } else {
         // Другой параллельный запрос уже выполняет генерацию этого раунда

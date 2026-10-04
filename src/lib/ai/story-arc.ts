@@ -15,6 +15,8 @@ import { z } from "zod";
 import { createClient, type AuthMode } from "./client";
 import { db } from "@/lib/db";
 import { resolveStoryModel } from "./models";
+import { chronicleFromSummaries } from "./caching/dm-history";
+import { applyStatusToNotes } from "./scene-synchronizer";
 
 // ─── Схемы ───
 
@@ -38,11 +40,20 @@ export const actSchema = z.object({
       location: z.string(),
       description: z.string(),
       encounter: z.string(),
+      sceneType: z.string().optional(),
     })
   ),
   twist: z.string(),
   branches: z.array(z.object({ ifPlayer: z.string(), then: z.string() })),
   rewards: z.string(),
+  // Акт 1 сетевой кампании (party-arc-generator) дополнительно несёт цель кульминации
+  // и личные зацепки героев
+  climaxObjective: z.string().optional(),
+  personalHooks: z.array(z.object({ characterName: z.string(), hook: z.string() })).optional(),
+  // Поля следующих актов: как сдвинулся мир, что стало с известными NPC, кто противостоит героям
+  worldChanges: z.array(z.string()).optional(),
+  npcDevelopments: z.array(z.object({ name: z.string(), change: z.string() })).optional(),
+  enemies: z.array(z.object({ name: z.string(), description: z.string() })).optional(),
 });
 
 export const storyArcSchema = z.object({
@@ -424,10 +435,30 @@ ${describeCampaign(params)}
 
 // ─── Чтение сохранённой арки ───
 
+/**
+ * Приводит сохранённую арку к единому виду. Сетевые кампании хранят арку в формате
+ * party-arc-generator: один акт в поле `act`, намёк на финал в `finaleHint`, без служебных
+ * полей. Без приведения такая арка не читалась: мастер в чате оставался без сюжета,
+ * а кнопка следующего акта отвечала «нет базовой сюжетной арки».
+ */
+export function normalizeArcShape(value: unknown): unknown {
+  if (!value || typeof value !== "object") return value;
+  const obj = { ...(value as Record<string, unknown>) };
+  if (!Array.isArray(obj.acts) && obj.act && typeof obj.act === "object") {
+    obj.acts = [obj.act];
+  }
+  if (typeof obj.finale !== "string") {
+    obj.finale = typeof obj.finaleHint === "string" ? obj.finaleHint : "";
+  }
+  if (typeof obj.generatedAt !== "string") obj.generatedAt = "";
+  if (typeof obj.model !== "string") obj.model = "";
+  return obj;
+}
+
 export function parseStoryArc(raw: string | null | undefined): StoryArc | null {
   if (!raw) return null;
   try {
-    const parsed = storyArcSchema.safeParse(JSON.parse(raw));
+    const parsed = storyArcSchema.safeParse(normalizeArcShape(JSON.parse(raw)));
     return parsed.success ? parsed.data : null;
   } catch {
     return null;
@@ -444,6 +475,11 @@ export function parseArcProgress(raw: string | null | undefined): ArcProgress | 
 }
 
 // ─── Адаптивная эпизодическая генерация следующей главы (Just-in-Time) ───
+
+const nextChapterSchema = z.object({
+  act: actSchema,
+  newVillains: z.array(villainSchema).optional(),
+});
 
 export interface GenerateNextChapterOptions {
   campaignId: string;
@@ -468,6 +504,7 @@ export async function generateNextChapter({
       characters: {
         where: { isAlive: true },
         select: { name: true, type: true, level: true, relation: true, notes: true },
+        orderBy: [{ type: "asc" }, { name: "asc" }],
       },
       memories: {
         where: { isArchived: false },
@@ -510,40 +547,126 @@ export async function generateNextChapter({
       .map((m) => `- [${m.category}] ${m.subject}: ${m.content}`)
       .join("\n") || "нет сохранённых записей";
 
+  // Хроника кампании — самая полная запись того, что реально произошло за столом
+  let chronicle = "";
+  try {
+    const summaries = await db.summary.findMany({
+      where: { campaignId },
+      orderBy: { toTurn: "asc" },
+      select: { content: true, fromTurn: true, toTurn: true },
+    });
+    chronicle = chronicleFromSummaries(summaries);
+  } catch {
+    chronicle = "";
+  }
+
+  // Последние реплики стола: чем на самом деле кончился предыдущий акт
+  let recentTable = "";
+  try {
+    const recent = await db.chatMessage.findMany({
+      where: { campaignId, role: { in: ["user", "assistant"] } },
+      orderBy: { createdAt: "desc" },
+      take: 10,
+      select: { role: true, content: true },
+    });
+    recentTable = recent
+      .reverse()
+      .filter((m) => !(m.role === "assistant" && m.content.trimStart().startsWith("⚠️")))
+      .map((m) => `${m.role === "user" ? "ИГРОКИ" : "МАСТЕР"}: ${m.content.replace(/\s+/g, " ").slice(0, 600)}`)
+      .join("\n");
+  } catch {
+    recentTable = "";
+  }
+
+  const heroes =
+    campaign.characters
+      .filter((c) => c.type === "player")
+      .map((c) => `${c.name} (${c.level} ур.)`)
+      .join(", ") || "герой";
+
+  const knownNpcs =
+    campaign.characters
+      .filter((c) => c.type !== "player")
+      .slice(0, 25)
+      .map((c) => {
+        const attitude = c.type === "enemy" || c.relation <= -30 ? "враг" : c.relation >= 30 || c.type === "companion" ? "союзник" : "нейтрален";
+        return `${c.name} (${attitude})`;
+      })
+      .join(", ") || "нет";
+
+  const previousActs = arc.acts
+    .map((a, i) => `Акт ${i + 1} «${a.name}»: цель — ${a.goal}. Поворот: ${a.twist}`)
+    .join("\n");
+
   const prompt = `Ты — ведущий сценарист эпических кампаний D&D 5e.
-Игрок успешно прошёл предыдущий этап кампании «${arc.title}».
-Сюжет продолжается динамически на основе РЕАЛЬНЫХ выборов и решений игрока!
+Отряд прошёл очередной этап кампании «${arc.title}». Твоя задача — следующий акт.
+Новый акт — это не просто «ещё одно приключение». Пока герои были заняты, мир не стоял на месте:
+злодеи продвинули свои планы, фракции отреагировали на поступки героев, знакомые NPC изменились.
 
 ## Контекст мира и глобальный конфликт
 - Завязка: ${arc.premise}
 - Главная угроза (BBEG): ${arc.mainThreat}
-- Злодеи в кампании: ${arc.villains.map((v) => `${v.name} (${v.role}) - хочет: ${v.motivation}; тайна: ${v.secret}`).join("; ")}
+- Уже известные злодеи: ${arc.villains.map((v) => `${v.name} (${v.role}) — хочет: ${v.motivation}; тайна: ${v.secret}`).join("; ")}
 
-## Реальное состояние кампании
+## Пройденные акты
+${previousActs || "—"}
+
+## Что реально произошло за столом
 - Чем завершился предыдущий акт: «${outcome}»
-- Уровень героев для этой главы: ${actLevelFrom}-${nextLevelTo} (максимальный уровень кампании: ${campaign.levelTo})
-- Союзники игрока: ${allies}
+- Герои: ${heroes}
+- Союзники и спутники: ${allies}
+- Известные NPC: ${knownNpcs}
 - Ключевые решения и факты:
 ${keyFacts}
-
-Сгенерируй НОВУЮ СЛЕДУЮЩУЮ ГЛАВУ (Акт ${actNumber}) на уровни ${actLevelFrom}-${nextLevelTo}.
-Она должна логически вытекать из последствий решений игрока, развивать мир и приближать к разгадке замысла BBEG.
-${isFinale ? `ВАЖНО: Это финальный этап кампании (достигнут ур. ${campaign.levelTo})! Кульминационная сцена 3 обязана быть решающим противостоянием с главным злодеем BBEG (${arc.mainThreat}).` : `Кампания продолжается вплоть до уровня ${campaign.levelTo}. Не раскрывай все карты раньше времени.`}
+${chronicle ? `\n### Хроника кампании\n${chronicle}\n` : ""}${recentTable ? `\n### Последние реплики за столом\n${recentTable}\n` : ""}
+Сгенерируй СЛЕДУЮЩИЙ АКТ (Акт ${actNumber}) на уровни ${actLevelFrom}-${nextLevelTo}.
+Он должен логически вытекать из последствий решений героев, двигать мир вперёд и приближать к разгадке замысла BBEG.
+${isFinale ? `ВАЖНО: Это финальный этап кампании (достигнут ур. ${campaign.levelTo})! Последняя сцена обязана быть решающим противостоянием с главным злодеем BBEG (${arc.mainThreat}).` : `Кампания продолжается вплоть до уровня ${campaign.levelTo}. Не раскрывай все карты раньше времени.`}
 
 Верни JSON РОВНО такой структуры (ключи не переводить):
 {
-  "name": "название нового акта",
-  "levelFrom": ${actLevelFrom},
-  "levelTo": ${nextLevelTo},
-  "goal": "новая цель акта, вытекающая из итогов прошлого",
-  "summary": "развитие сюжета с учётом выборов игрока, 5-8 предложений",
-  "scenes": [{"name": "название сцены", "location": "локация", "description": "описание сцены, 3-5 предложений", "encounter": "энкаунтер под ур. ${actLevelFrom}-${nextLevelTo}"}],
-  "twist": "неожиданный сюжетный поворот",
-  "branches": [{"ifPlayer": "вариант действий игрока", "then": "последствия"}],
-  "rewards": "награды, зацепки и трофеи"
-}`;
+  "act": {
+    "name": "название нового акта",
+    "levelFrom": ${actLevelFrom},
+    "levelTo": ${nextLevelTo},
+    "goal": "новая цель акта, вытекающая из итогов прошлого",
+    "summary": "развитие сюжета с учётом выборов героев, 5-8 предложений",
+    "scenes": [{"name": "название сцены", "location": "локация", "description": "описание сцены, 3-5 предложений", "encounter": "энкаунтер под ур. ${actLevelFrom}-${nextLevelTo}"}],
+    "twist": "неожиданный сюжетный поворот",
+    "branches": [{"ifPlayer": "вариант действий героев", "then": "последствия"}],
+    "rewards": "награды, зацепки и трофеи",
+    "worldChanges": ["как изменился мир, пока шёл прошлый акт: одна перемена — одна строка"],
+    "npcDevelopments": [{"name": "имя уже известного NPC", "change": "что с ним произошло и где он теперь"}],
+    "enemies": [{"name": "тип врагов этого акта", "description": "кто это, чем опасны, как действуют"}]
+  },
+  "newVillains": [
+    {"name": "имя", "role": "роль в этом акте", "motivation": "чего хочет и почему", "secret": "тайна, которую герои узнают не сразу"}
+  ]
+}
 
-  const newAct = await requestJson(client, storyModel, prompt, actSchema, `акт ${actNumber}`);
+Требования:
+- Сцен: 3-4, с нарастанием к кульминации акта. Развилок: 2-3 реальных пути.
+- worldChanges: 2-4 перемены в мире (власть, фракции, места, слухи) — следствия поступков героев и планов злодеев.
+- npcDevelopments: 2-4 записи ТОЛЬКО про NPC из списка известных выше. Новых людей сюда не добавляй.
+- enemies: 2-4 типа рядовых противников акта под уровни ${actLevelFrom}-${nextLevelTo}; желательно существа из бестиария D&D 5e.
+- newVillains: 1-2 НОВЫХ антагониста этого акта (лейтенант BBEG, соперник, предатель). Уже известных злодеев не повторяй; если кто-то из них выжил — он действует в сценах акта.
+- Учитывай тон «${campaign.tone}» и стиль «${campaign.dmStyle}».`;
+
+  const generated = await requestJson(
+    client,
+    storyModel,
+    prompt,
+    nextChapterSchema,
+    `акт ${actNumber}`
+  );
+  const newAct = generated.act;
+
+  // Новые злодеи акта выходят на сцену именно в нём
+  const knownNames = new Set(arc.villains.map((v) => v.name.trim().toLowerCase()));
+  const newVillains = (generated.newVillains ?? [])
+    .filter((v) => v.name.trim() && !knownNames.has(v.name.trim().toLowerCase()))
+    .map((v) => ({ ...v, appearsInAct: actNumber }));
+  arc.villains.push(...newVillains);
 
   // Добавляем новый акт в сюжетную арку кампании
   arc.acts.push(newAct);
@@ -553,6 +676,41 @@ ${isFinale ? `ВАЖНО: Это финальный этап кампании (�
       storyArc: JSON.stringify(arc),
     },
   });
+
+  // Мир двигается не только на бумаге: перемены попадают в память мастера,
+  // а у известных NPC обновляется текущее состояние.
+  try {
+    for (const change of newAct.worldChanges ?? []) {
+      if (!change.trim()) continue;
+      await db.memory.create({
+        data: {
+          campaignId,
+          category: "world",
+          subject: `Мир к началу Акта ${actNumber}`,
+          content: change.trim(),
+          importance: 8,
+        },
+      });
+    }
+
+    const npcRows = await db.character.findMany({
+      where: { campaignId, type: { not: "player" } },
+      select: { id: true, name: true, notes: true },
+    });
+    for (const dev of newAct.npcDevelopments ?? []) {
+      const key = dev.name.trim().toLowerCase();
+      if (!key || !dev.change.trim()) continue;
+      const npc = npcRows.find((c) => c.name.trim().toLowerCase() === key);
+      if (!npc) continue;
+      await db.character.update({
+        where: { id: npc.id },
+        // К началу нового акта NPC не обязательно рядом с героями
+        data: { notes: applyStatusToNotes(npc.notes, dev.change.trim()), inScene: false },
+      });
+    }
+  } catch (e) {
+    console.error("[arc/next] не удалось применить перемены мира:", e);
+  }
 
   return {
     act: newAct,

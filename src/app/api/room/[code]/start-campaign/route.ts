@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { getAuthUserFromRequest } from "@/lib/supabase/client";
 import { startRoomCampaign, type StartRoomCampaignInput } from "@/lib/room/room-service";
 
+// Генерация сюжета под отряд идёт в этом же запросе
+export const maxDuration = 300;
+
 export async function POST(
   request: Request,
   props: { params: Promise<{ code: string }> }
@@ -28,7 +31,9 @@ export async function POST(
     }
 
     const validDifficulties = ["easy", "normal", "hard", "brutal"];
-    const difficulty = validDifficulties.includes(body.difficulty) ? body.difficulty : "normal";
+    // «Смертоносная» в окне настройки приходит как deadly — это тот же уровень, что brutal
+    const requestedDifficulty = body.difficulty === "deadly" ? "brutal" : body.difficulty;
+    const difficulty = validDifficulties.includes(requestedDifficulty) ? requestedDifficulty : "normal";
 
     const validSituations = ["strangers", "established_party", "captives_or_survivors", "patron_contract"];
     const startingSituation = validSituations.includes(body.startingSituation)

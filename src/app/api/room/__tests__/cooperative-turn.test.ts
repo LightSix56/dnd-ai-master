@@ -162,7 +162,7 @@ describe("Cooperative Turn Logic", () => {
     expect(mockRoomService.resolveRoomTurn).toHaveBeenCalledWith("room-1", "Удар сокрушает преграду.");
   });
 
-  it("resolves active room turn with fallback narrative when no API key provided", async () => {
+  it("keeps the round open (does not resolve it with a stub) when no API key is provided", async () => {
     const room: RoomWithParticipants = {
       id: "room-1",
       code: "ABCD",
@@ -198,13 +198,13 @@ describe("Cooperative Turn Logic", () => {
     delete process.env.AI_API_KEY;
 
     try {
-      const result = await resolveActiveRoomTurnHelper(room, activeTurn, {
-        roomService: mockRoomService,
-      });
-
-      expect(result.dmResponse).toContain("Не задан API-ключ ИИ");
-      expect(result.completedTurn.status).toBe("completed");
-      expect(result.nextTurn.roundNumber).toBe(4);
+      // Без ключа раунд не закрывается заглушкой: заявки остаются, ведущий задаёт ключ и повторяет
+      await expect(
+        resolveActiveRoomTurnHelper(room, activeTurn, {
+          roomService: mockRoomService,
+        })
+      ).rejects.toThrow("Не задан API-ключ ИИ");
+      expect(mockRoomService.resolveRoomTurn).not.toHaveBeenCalled();
     } finally {
       process.env.AI_API_KEY = originalKey;
     }
@@ -483,13 +483,14 @@ describe("Cooperative Turn Logic", () => {
       })),
     } as unknown as RoomService;
 
-    const result = await resolveActiveRoomTurnHelper(room, turn, {
-      apiKey: "test-key",
-      roomService: mockRoomService,
-    });
-
-    expect(result.dmResponse).toContain("Ошибка");
-    expect(result.dmResponse).not.toBe("Мастер оценивает действия отряда в раунде 1...");
+    // При сбое ИИ раунд не закрывается заглушкой: заявки игроков остаются, ведущий повторяет генерацию
+    await expect(
+      resolveActiveRoomTurnHelper(room, turn, {
+        apiKey: "test-key",
+        roomService: mockRoomService,
+      })
+    ).rejects.toThrow("Заявки игроков сохранены");
+    expect(mockRoomService.resolveRoomTurn).not.toHaveBeenCalled();
   });
 });
 

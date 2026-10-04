@@ -2,8 +2,39 @@ import { NextResponse } from "next/server";
 import { getSupabaseAdminClient } from "@/lib/supabase/client";
 import { randomBytes } from "crypto";
 
+// Каждый вызов создаёт пользователя в Supabase, поэтому частоту ограничиваем.
+// Счётчик живёт в памяти экземпляра функции: это защита от случайного зацикливания клиента
+// и простого спама, а не полноценный rate limit (экземпляров может быть несколько).
+const GUEST_WINDOW_MS = 60_000;
+const GUEST_MAX_PER_WINDOW = 5;
+const guestHits = new Map<string, number[]>();
+
+function guestRateLimited(request?: Request): boolean {
+  const ip =
+    request?.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    request?.headers.get("x-real-ip") ||
+    "unknown";
+  const now = Date.now();
+  const recent = (guestHits.get(ip) ?? []).filter((t) => now - t < GUEST_WINDOW_MS);
+  if (recent.length >= GUEST_MAX_PER_WINDOW) {
+    guestHits.set(ip, recent);
+    return true;
+  }
+  recent.push(now);
+  guestHits.set(ip, recent);
+  if (guestHits.size > 5000) guestHits.clear();
+  return false;
+}
+
 export async function POST(request?: Request) {
   try {
+    if (guestRateLimited(request)) {
+      return NextResponse.json(
+        { error: "Слишком много гостевых входов подряд. Подождите минуту и попробуйте снова." },
+        { status: 429 }
+      );
+    }
+
     let customName = "";
     if (request) {
       try {

@@ -176,42 +176,6 @@ export function useSupabaseAuth() {
     }
   }, []);
 
-  const instantSignIn = useCallback(async (targetEmail?: string) => {
-    setError(null);
-    setLoading(true);
-    try {
-      const email = targetEmail?.trim();
-      if (!email) throw new Error("Укажите адрес электронной почты");
-      const res = await fetch("/api/auth/instant-login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Не удалось получить токен быстрого входа");
-      }
-
-      const supabase = getSupabaseBrowserClient();
-      const { data: sessionData, error: otpError } = await supabase.auth.verifyOtp({
-        token_hash: data.token_hash,
-        type: "magiclink",
-      });
-
-      if (otpError) throw otpError;
-
-      setSession(sessionData.session);
-      setUser(sessionData.user);
-      return { user: sessionData.user, error: null };
-    } catch (err: any) {
-      const message = err?.message || "Ошибка быстрого входа";
-      setError(message);
-      return { user: null, error: message };
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
   const signInAsGuest = useCallback(async (customName?: string) => {
     setError(null);
     setLoading(true);
@@ -257,7 +221,6 @@ export function useSupabaseAuth() {
     error,
     signInWithPassword,
     signInWithGoogle,
-    instantSignIn,
     signInAsGuest,
     signUp,
     signOut,

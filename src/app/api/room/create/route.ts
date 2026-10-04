@@ -13,13 +13,9 @@ export async function POST(request: Request) {
         ? body.campaignId.trim()
         : undefined;
 
-    const hostUserId =
-      user?.id ||
-      (typeof body.hostUserId === "string" && body.hostUserId.trim()
-        ? body.hostUserId.trim()
-        : campaignId
-        ? `host_campaign_${campaignId}`
-        : null);
+    // Ведущий — только тот, кто подтверждён токеном. Раньше id ведущего можно было передать
+    // в теле запроса и создать комнату от чужого имени.
+    const hostUserId = user?.id || (campaignId ? `host_campaign_${campaignId}` : null);
 
     if (!hostUserId) {
       return NextResponse.json(

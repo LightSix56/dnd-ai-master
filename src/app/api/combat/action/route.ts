@@ -35,6 +35,7 @@ import { TYPE_COLORS, type ActionParameters, type Cell } from "@/lib/combat/type
 import { buildTurnOrder } from "@/lib/combat/initiative";
 import { getSpellDefinition } from "@/lib/combat/library-data";
 import { awardCombatVictoryXP } from "@/lib/combat/xp-award";
+import { checkCombatControl } from "@/lib/room/combat-access";
 
 /** Версия боя (Combat.updatedAt) на момент загрузки — для защиты от одновременных запросов */
 const loadedVersion = new WeakMap<CombatState, Date>();
@@ -168,6 +169,12 @@ export async function POST(req: Request) {
 
     if (!combatId) {
       return Response.json({ error: "combatId required" }, { status: 400 });
+    }
+
+    // В сетевой комнате игрок не может ходить за героя другого игрока
+    const denied = await checkCombatControl(req, combatId, action, body as Record<string, unknown>);
+    if (denied) {
+      return Response.json({ error: denied }, { status: 403 });
     }
 
     // ===================== ЦИКЛ ХОДОВ =====================

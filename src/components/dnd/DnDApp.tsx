@@ -1771,6 +1771,12 @@ export function DnDApp({
             loadActiveCombat(targetCampId);
             setTimeout(() => loadActiveCombat(targetCampId), 3000);
           }
+        } else if (data.resolveError) {
+          // Заявка записана, но мастер не ответил: раунд ждёт повторной генерации ведущим
+          toast.error(`Заявка принята, но мастер не ответил: ${data.resolveError}`);
+          if (data.turn) {
+            setActiveRoomTurn(data.turn);
+          }
         } else {
           toast.success("Заявка принята! Ожидаем остальных игроков отряда...");
           if (data.turn) {

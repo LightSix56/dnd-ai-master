@@ -45,10 +45,13 @@ describe("RoomService - Turn management", () => {
                 })),
               })),
             })),
+            // запись без миграции 003: update ... where id = ? and status = 'waiting'
             update: vi.fn(() => ({
               eq: vi.fn(() => ({
-                select: vi.fn(() => ({
-                  single: vi.fn().mockResolvedValue({ data: updatedTurn, error: null }),
+                eq: vi.fn(() => ({
+                  select: vi.fn(() => ({
+                    maybeSingle: vi.fn().mockResolvedValue({ data: updatedTurn, error: null }),
+                  })),
                 })),
               })),
             })),

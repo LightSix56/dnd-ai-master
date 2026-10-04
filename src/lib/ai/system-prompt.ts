@@ -112,6 +112,23 @@ function buildArcSection(arc: StoryArc, currentActIndex: number): string {
     .join("\n");
   const branches = act.branches.map((b) => `  - Если игрок ${b.ifPlayer} → ${b.then}`).join("\n");
 
+  // Дополнительные блоки акта: есть не у каждого акта, пустые не выводим
+  const extras: string[] = [];
+  if (act.climaxObjective) extras.push(`Кульминация акта: ${act.climaxObjective}`);
+  if (act.worldChanges?.length) {
+    extras.push(`Мир к началу акта (покажи это игрокам через сцены и слухи):\n${act.worldChanges.map((w) => `  - ${w}`).join("\n")}`);
+  }
+  if (act.npcDevelopments?.length) {
+    extras.push(`Что стало со знакомыми NPC:\n${act.npcDevelopments.map((n) => `  - ${n.name}: ${n.change}`).join("\n")}`);
+  }
+  if (act.enemies?.length) {
+    extras.push(`Противники акта (из них собирай столкновения):\n${act.enemies.map((e) => `  - ${e.name}: ${e.description}`).join("\n")}`);
+  }
+  if (act.personalHooks?.length) {
+    extras.push(`Личные зацепки героев:\n${act.personalHooks.map((h) => `  - ${h.characterName}: ${h.hook}`).join("\n")}`);
+  }
+  const actExtras = extras.length > 0 ? `\n${extras.join("\n")}` : "";
+
   // Краткая хроника всех ранее пройденных актов
   const passedActs = arc.acts
     .slice(0, current)
@@ -145,7 +162,7 @@ ${passedActs ? `## ХРОНИКА ПРОЙДЕННЫХ АКТОВ (ПАМЯТЬ 
 
 ## ТЕКУЩИЙ АКТ ${current + 1} из ${arc.acts.length}: «${act.name}» (ур. ${act.levelFrom}-${act.levelTo})
 Цель: ${act.goal}
-${act.summary}
+${act.summary}${actExtras}
 Сцены:
 ${scenes}
 ПОВОРОТ: ${act.twist}

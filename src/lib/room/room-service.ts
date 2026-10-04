@@ -87,6 +87,12 @@ function mapTurnFromDb(row: Record<string, any>): RoomTurn {
   };
 }
 
+/** Нарушение правил комнаты: роуты отдают такие ошибки как 409, а не как сбой сервера */
+export class RoomRuleError extends Error {}
+
+/** Через сколько секунд блокировка «мастер думает» считается зависшей и может быть перехвачена */
+export const STALE_RESOLVE_LOCK_SECONDS = 150;
+
 export class RoomService {
   private client: SupabaseClient;
 
@@ -278,6 +284,26 @@ export class RoomService {
 
     if (charSyncError) {
       console.warn("[RoomService.joinRoom] Warning syncing character to Supabase characters table:", charSyncError.message);
+    }
+
+    // 2.7. Персонаж не должен быть уже занят другим игроком этой комнаты
+    try {
+      const { data: takenBy } = await this.client
+        .from("room_participants")
+        .select("user_id, character_snapshot")
+        .eq("room_id", input.roomId)
+        .neq("user_id", input.userId);
+      const wantedName = charName.toLowerCase();
+      const taken = (Array.isArray(takenBy) ? takenBy : []).find((p: any) => {
+        const otherName = String(p?.character_snapshot?.name || "").trim().toLowerCase();
+        return otherName && otherName === wantedName;
+      });
+      if (taken) {
+        throw new RoomRuleError(`Персонаж «${charName}» уже выбран другим игроком в этой комнате`);
+      }
+    } catch (e) {
+      if (e instanceof RoomRuleError) throw e;
+      // Проверка вспомогательная: её сбой не должен мешать входу
     }
 
     // 3. Добавляем или обновляем запись участника (1 игрок = 1 персонаж в комнате)
@@ -716,8 +742,37 @@ export class RoomService {
       return mapTurnFromDb(newTurn);
     }
 
+    if (activeTurn.status === "resolving") {
+      throw new RoomRuleError("Мастер уже описывает этот раунд — отправьте действие в следующем");
+    }
+    if (activeTurn.status === "completed") {
+      throw new RoomRuleError("Раунд уже завершён — обновите страницу и отправьте действие в новом раунде");
+    }
     if (activeTurn.playerInputs?.[userId]?.actionText?.trim()) {
-      throw new Error("Сказанного не вернёшь: вы уже отправили действие в этом раунде");
+      throw new RoomRuleError("Сказанного не вернёшь: вы уже отправили действие в этом раунде");
+    }
+
+    // Атомарная запись (миграция 003): ход дописывается одной командой UPDATE, поэтому
+    // одновременная отправка двумя игроками больше не затирает чей-то ход.
+    const rpc = (this.client as any).rpc;
+    if (typeof rpc === "function") {
+      const { data: rpcData, error: rpcError } = await rpc.call(this.client, "room_submit_turn_input", {
+        p_turn_id: activeTurn.id,
+        p_user_id: userId,
+        p_input: input,
+      });
+      if (!rpcError) {
+        const row = Array.isArray(rpcData) ? rpcData[0] : rpcData;
+        if (row) return mapTurnFromDb(row);
+        // Ни одной строки: пока мы шли, раунд ушёл в обработку или ход уже записан
+        const fresh = await this.getActiveTurn(roomId);
+        if (fresh?.id === activeTurn.id && fresh.playerInputs?.[userId]) {
+          throw new RoomRuleError("Сказанного не вернёшь: вы уже отправили действие в этом раунде");
+        }
+        throw new RoomRuleError("Мастер уже описывает этот раунд — отправьте действие в следующем");
+      }
+      // Функции в БД ещё нет (миграция не применена) — работаем по-старому
+      console.warn("[RoomService.submitPlayerAction] room_submit_turn_input недоступна, запись без атомарности:", rpcError.message);
     }
 
     const updatedInputs = {
@@ -731,11 +786,15 @@ export class RoomService {
         player_inputs: updatedInputs,
       })
       .eq("id", activeTurn.id)
+      .eq("status", "waiting")
       .select()
-      .single();
+      .maybeSingle();
 
-    if (error || !data) {
-      throw new Error(`Не удалось обновить действие игрока: ${error?.message || "Ошибка обновления"}`);
+    if (error) {
+      throw new Error(`Не удалось обновить действие игрока: ${error.message}`);
+    }
+    if (!data) {
+      throw new RoomRuleError("Мастер уже описывает этот раунд — отправьте действие в следующем");
     }
 
     return mapTurnFromDb(data);
@@ -747,18 +806,47 @@ export class RoomService {
    * и false, если другой параллельный запрос уже выполняет генерацию.
    */
   async lockTurnForResolving(turnId: string): Promise<boolean> {
-    const { data, error } = await this.client
+    const now = new Date().toISOString();
+
+    // Обычный захват: waiting -> resolving, с меткой времени (колонка из миграции 003)
+    let { data, error } = await this.client
       .from("room_turns")
-      .update({ status: "resolving" })
+      .update({ status: "resolving", resolving_started_at: now })
       .eq("id", turnId)
       .eq("status", "waiting")
       .select("id")
       .maybeSingle();
 
-    if (error || !data) {
+    if (error) {
+      // Колонки ещё нет — захватываем без метки времени, как раньше
+      ({ data, error } = await this.client
+        .from("room_turns")
+        .update({ status: "resolving" })
+        .eq("id", turnId)
+        .eq("status", "waiting")
+        .select("id")
+        .maybeSingle());
+      return !error && !!data;
+    }
+    if (data) return true;
+
+    // Перехват зависшей блокировки: функция, начавшая обработку, упала или была убита по
+    // таймауту и не вернула раунд в waiting. Без этого раунд оставался заблокирован навсегда.
+    try {
+      const cutoff = new Date(Date.now() - STALE_RESOLVE_LOCK_SECONDS * 1000).toISOString();
+      const takeover = await this.client
+        .from("room_turns")
+        .update({ resolving_started_at: now })
+        .eq("id", turnId)
+        .eq("status", "resolving")
+        .lt("resolving_started_at", cutoff)
+        .select("id")
+        .maybeSingle();
+
+      return !takeover.error && !!takeover.data;
+    } catch {
       return false;
     }
-    return true;
   }
 
   /**

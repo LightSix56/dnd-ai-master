@@ -20,7 +20,8 @@ import {
   type SystemModelMessage,
 } from "ai";
 import { dmTools, buildToolsContext } from "@/lib/ai/tools";
-import type { CampaignContext, PlayerSummary } from "@/lib/ai/system-prompt";
+import type { CampaignContext } from "@/lib/ai/system-prompt";
+import { loadCampaignContext } from "@/lib/ai/campaign-context";
 import { createClient } from "@/lib/ai/client";
 
 export function cleanAssistantNarrative(rawText: string): string {
@@ -30,7 +31,6 @@ export function cleanAssistantNarrative(rawText: string): string {
     .trim();
   return cleaned || rawText.trim();
 }
-import { parseStoryArc } from "@/lib/ai/story-arc";
 import { compactHistory } from "@/lib/ai/compact";
 import { syncSceneState } from "@/lib/ai/scene-synchronizer";
 import { BOOKKEEPING_TOOLS, resolveCheapModel, resolveDmModel } from "@/lib/ai/models";
@@ -183,57 +183,9 @@ export async function POST(req: Request) {
       }
     }
 
-    let campaignContext: CampaignContext | undefined;
-
-    if (activeCampaignId) {
-      const campaign = await db.campaign.findUnique({
-        where: { id: activeCampaignId },
-      });
-      if (campaign) {
-        const players = await db.character.findMany({
-          where: { campaignId: activeCampaignId, type: "player" },
-          orderBy: { name: "asc" },
-        });
-
-        const partySummaries: PlayerSummary[] = players.map((p) => ({
-          id: p.id,
-          name: p.name,
-          race: p.race,
-          class: p.class,
-          level: p.level,
-          background: p.background,
-          personality: p.personality,
-          bonds: p.bonds,
-          flaws: p.flaws,
-          appearance: p.appearance,
-          notes: p.notes,
-        }));
-
-        campaignContext = {
-          name: campaign.name,
-          setting: campaign.setting,
-          tone: campaign.tone,
-          difficulty: campaign.difficulty,
-          language: campaign.language,
-          dmStyle: campaign.dmStyle,
-          ruleStrictness: campaign.ruleStrictness,
-          startingLevel: campaign.startingLevel,
-          worldDescription: campaign.worldDescription,
-          customDmNotes: campaign.customDmNotes,
-          pvpEnabled: campaign.pvpEnabled,
-          restFrequency: campaign.restFrequency,
-          partyTies: campaign.partyTies,
-          partyMembers: partySummaries,
-          levelFrom: campaign.levelFrom,
-          levelTo: campaign.levelTo,
-          storyArc: parseStoryArc(campaign.storyArc),
-          currentAct: campaign.arcCurrentAct,
-          playerCharacter: players[0]
-            ? `${players[0].name}, ${players[0].race || "?"} ${players[0].class || "?"} ${players[0].level} ур.`
-            : undefined,
-        };
-      }
-    }
+    const campaignContext: CampaignContext | undefined = activeCampaignId
+      ? await loadCampaignContext(activeCampaignId)
+      : undefined;
 
     const selectedModel = resolveDmModel(model);
     const openai = createClient(userApiKey, authMode, baseURL);

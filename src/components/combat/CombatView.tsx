@@ -52,6 +52,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { copyToClipboard } from "@/lib/utils";
+import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { CombatGrid } from "./CombatGrid";
 import { InitiativeTracker } from "./InitiativeTracker";
 import { Hotbar } from "./Hotbar";
@@ -708,9 +709,19 @@ export function CombatView({ combatId, campaignId, roomCode, onClose, onCombatEn
   ): Promise<Record<string, any> | null> {
     if (!combat) return null;
     try {
+      // Токен нужен серверу, чтобы в сетевой комнате отличить владельца героя от других игроков
+      let authHeader: Record<string, string> = {};
+      try {
+        const { data } = await getSupabaseBrowserClient().auth.getSession();
+        if (data.session?.access_token) {
+          authHeader = { Authorization: `Bearer ${data.session.access_token}` };
+        }
+      } catch {
+        // без токена действие отправляется как раньше
+      }
       const res = await fetch("/api/combat/action", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...authHeader },
         body: JSON.stringify({ action, combatId: combat.id, ...payload }),
       });
       const data = await res.json().catch(() => ({}));

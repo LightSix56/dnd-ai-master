@@ -23,7 +23,43 @@ export function stripVolatileNotes(notes?: string | null): string | null {
     .join("\n")
     .replace(/\n{3,}/g, "\n\n")
     .trim();
-  return kept || null;
+  if (!kept) return null;
+  // Сетевые комнаты кладут в notes весь лист персонажа одним JSON (его читает боевой генератор).
+  // В промпт мастера такой лист целиком не нужен — берём из него только текстовое досье.
+  if (kept.startsWith("{")) return dossierFromSheetJson(kept);
+  return kept;
+}
+
+const SHEET_DOSSIER_FIELDS: Array<[string, string]> = [
+  ["backstory", "Предыстория"],
+  ["background", "Происхождение"],
+  ["personalityTraits", "Черты"],
+  ["ideals", "Идеалы"],
+  ["bonds", "Привязанности"],
+  ["flaws", "Слабости"],
+  ["alignment", "Мировоззрение"],
+  ["appearance", "Внешность"],
+];
+
+/** Короткое досье из JSON-листа персонажа; null, если текстовых полей в нём нет */
+function dossierFromSheetJson(raw: string): string | null {
+  let sheet: Record<string, unknown>;
+  try {
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object") return null;
+    sheet = parsed as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+  const nested = sheet.data && typeof sheet.data === "object" ? (sheet.data as Record<string, unknown>) : {};
+  const parts: string[] = [];
+  for (const [key, label] of SHEET_DOSSIER_FIELDS) {
+    const value = sheet[key] ?? nested[key];
+    if (typeof value === "string" && value.trim()) {
+      parts.push(`${label}: ${value.trim().replace(/\s+/g, " ").slice(0, 400)}`);
+    }
+  }
+  return parts.length > 0 ? parts.join("; ") : null;
 }
 
 /** Пункты летописца из заметок («• боится огня») — для ephemeral tail */

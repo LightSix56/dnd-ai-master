@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAuthUserFromRequest } from "@/lib/supabase/client";
-import { RoomService } from "@/lib/room/room-service";
+import { RoomService, RoomRuleError } from "@/lib/room/room-service";
 
 export async function POST(
   request: Request,
@@ -47,7 +47,7 @@ export async function POST(
     return NextResponse.json({ participant }, { status: 200 });
   } catch (err) {
     const msg = (err as Error).message || "Внутренняя ошибка при подключении";
-    const status = msg.includes("требуется ровно") ? 400 : 500;
+    const status = msg.includes("требуется ровно") ? 400 : err instanceof RoomRuleError ? 409 : 500;
     return NextResponse.json({ error: msg }, { status });
   }
 }

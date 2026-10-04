@@ -22,39 +22,18 @@ export function SupabaseAuthModal({
   const {
     signInWithPassword,
     signInWithGoogle,
-    instantSignIn,
     signUp,
     loading,
     error: authHookError,
   } = useSupabaseAuth();
 
-  const [activeTab, setActiveTab] = useState<"instant" | "password" | "signup">("instant");
+  const [activeTab, setActiveTab] = useState<"password" | "signup">("password");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [localError, setLocalError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   if (!isOpen) return null;
-
-  async function handleInstantLogin(targetEmail?: string) {
-    setLocalError(null);
-    setSuccessMessage(null);
-    const chosenEmail = (targetEmail || email).trim();
-    if (!chosenEmail || !chosenEmail.includes("@")) {
-      setLocalError("Укажите адрес электронной почты");
-      return;
-    }
-    const { user, error } = await instantSignIn(chosenEmail);
-    if (error) {
-      setLocalError(error);
-    } else if (user) {
-      setSuccessMessage(`Успешный вход: ${user.email}`);
-      setTimeout(() => {
-        onAuthSuccess?.();
-        onClose();
-      }, 500);
-    }
-  }
 
   async function handlePasswordSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -113,20 +92,6 @@ export function SupabaseAuthModal({
           <button
             type="button"
             onClick={() => {
-              setActiveTab("instant");
-              setLocalError(null);
-            }}
-            className={`flex-1 rounded-md py-1.5 font-medium transition-all cursor-pointer ${
-              activeTab === "instant"
-                ? "bg-white text-zinc-900 shadow-xs dark:bg-zinc-800 dark:text-zinc-100 font-semibold"
-                : "text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-            }`}
-          >
-            Без пароля (Email)
-          </button>
-          <button
-            type="button"
-            onClick={() => {
               setActiveTab("password");
               setLocalError(null);
             }}
@@ -155,34 +120,7 @@ export function SupabaseAuthModal({
         </div>
 
         {/* Формы */}
-        {activeTab === "instant" ? (
-          <div className="space-y-3 text-sm">
-            <div className="rounded-md border border-amber-200/60 bg-amber-50/50 p-2 text-[11px] text-amber-800 dark:border-amber-900/30 dark:bg-amber-950/20 dark:text-amber-300">
-              ⚡ <strong>Мгновенный вход прямо на этом сервере:</strong> введите email вашего аккаунта (тот же, что и на листе персонажа). Вход происходит без редиректов на другие сайты!
-            </div>
-            <div>
-              <label className="mb-1 block text-xs font-medium text-zinc-700 dark:text-zinc-300">
-                Email вашего аккаунта
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="name@example.com"
-                className="w-full rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-500 focus:outline-hidden focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
-              />
-            </div>
-            <button
-              type="button"
-              onClick={() => handleInstantLogin()}
-              disabled={loading || !email.trim()}
-              className="flex w-full items-center justify-center gap-2 rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white shadow-xs hover:bg-zinc-800 active:scale-[0.99] disabled:opacity-50 transition-all cursor-pointer dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
-            >
-              <KeyRound className="size-4" />
-              <span>Войти без пароля</span>
-            </button>
-          </div>
-        ) : (
+        {(
           <form onSubmit={handlePasswordSubmit} className="space-y-3 text-sm">
             <div>
               <label className="mb-1 block text-xs font-medium text-zinc-700 dark:text-zinc-300">
