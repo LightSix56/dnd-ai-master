@@ -78,6 +78,95 @@ export interface SheetCharacter {
   spellSlots?: Record<string, { totalSlots?: number; expendedSlots?: number }>;
 }
 
+/** Похож ли объект на полный лист персонажа (а не на карточку-обёртку вокруг него) */
+function looksLikeSheet(value: unknown): boolean {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+  const v = value as Record<string, any>;
+  return Boolean(
+    (v.abilityScores && typeof v.abilityScores === "object") ||
+      Array.isArray(v.attacks) ||
+      (v.skillProficiencies && typeof v.skillProficiencies === "object")
+  );
+}
+
+/**
+ * Достаёт сам лист персонажа из любой обёртки.
+ *
+ * Лист приходит в разных упаковках: напрямую (файл JSON, код с сайта), как
+ * `{ id, name, level, data: {…лист…} }` (персонаж аккаунта, выбранный в комнате),
+ * как `{ rawSheet }`, `{ character }`, `{ characterSnapshot }`. Раньше большая часть кода
+ * читала атаки, навыки и снаряжение с верхнего уровня — и для обёрнутого листа не находила
+ * ничего: персонаж с пятью атаками оказывался «без атак».
+ */
+export function unwrapSheet<T = Record<string, any>>(raw: unknown): T {
+  if (!raw || typeof raw !== "object") return {} as T;
+  const root = raw as Record<string, any>;
+  if (looksLikeSheet(root)) return root as T;
+  const candidates = [
+    root.data,
+    root.rawSheet,
+    root.character,
+    root.characterSnapshot,
+    root.character?.data,
+    root.characterSnapshot?.data,
+    root.rawSnapshot,
+    root.rawSnapshot?.data,
+  ];
+  for (const c of candidates) {
+    if (looksLikeSheet(c)) return c as T;
+  }
+  return root as T;
+}
+
+/** Есть ли в объекте (или внутри его обёртки) настоящий лист персонажа */
+export function hasSheetData(raw: unknown): boolean {
+  return looksLikeSheet(unwrapSheet(raw));
+}
+
+/** Лист персонажа из поля notes, если там лежит JSON (так сохраняют сетевые комнаты); иначе null */
+export function sheetFromNotes(notes?: string | null): Record<string, any> | null {
+  if (!notes || typeof notes !== "string") return null;
+  const trimmed = notes.trimStart();
+  if (!trimmed.startsWith("{")) return null;
+  try {
+    const parsed = JSON.parse(trimmed);
+    return parsed && typeof parsed === "object" ? unwrapSheet(parsed) : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Читаемая сводка механики героя из листа: спасброски, навыки (с компетенцией), атаки.
+ * Нужна там, где лист лежит одним JSON, а показать или передать надо человеческий текст.
+ */
+export function summarizeSheetMechanics(sheetLike: unknown): string[] {
+  const sheet = unwrapSheet<Record<string, any>>(sheetLike);
+  const lines: string[] = [];
+
+  const saves = Object.entries((sheet.savingThrowProficiencies || {}) as Record<string, boolean>)
+    .filter(([, has]) => has)
+    .map(([ability]) => ability);
+  if (saves.length) lines.push(`Спасброски: ${saves.join(", ")}`);
+
+  const skillNames = new Set<string>();
+  for (const [name, has] of Object.entries((sheet.skillProficiencies || {}) as Record<string, boolean>)) {
+    if (has) skillNames.add(name);
+  }
+  for (const [name, has] of Object.entries((sheet.skillExpertise || {}) as Record<string, boolean>)) {
+    if (has) skillNames.add(name);
+  }
+  const skills = [...skillNames].map((name) => (sheet.skillExpertise?.[name] ? `${name} (компетенция)` : name));
+  if (skills.length) lines.push(`Навыки: ${skills.join(", ")}`);
+
+  const attacks = (Array.isArray(sheet.attacks) ? sheet.attacks : [])
+    .filter((a: any) => typeof a?.name === "string" && a.name.trim())
+    .map((a: any) => `${a.name} ${a.attackBonus || ""} ${a.damageAndType || ""}`.replace(/\s+/g, " ").trim());
+  if (attacks.length) lines.push(`Атаки: ${attacks.join("; ")}`);
+
+  return lines;
+}
+
 export interface ExtractedStats {
   str: number;
   dex: number;
@@ -399,9 +488,17 @@ export function mapSheetToCharacter(
   src: SheetCharacter | Record<string, any>,
   type: string = "player"
 ): MappedCharacter {
-  const unwrapped: Record<string, any> = (src as any)?.data || (src as any)?.character || src;
-  const level = clampLevel(unwrapped.level || (src as any).level);
-  const stats = extractCharacterStats(src);
+  const wrapper = src;
+  // Всё содержимое берём из самого листа, а не из обёртки вокруг него
+  const unwrapped = unwrapSheet<Record<string, any>>(wrapper);
+  const level = clampLevel(unwrapped.level || (wrapper as any).level);
+  const stats = extractCharacterStats(wrapper);
+  src = {
+    ...unwrapped,
+    name: unwrapped.name || (wrapper as any).name,
+    className: unwrapped.className || unwrapped.class || (wrapper as any).className || (wrapper as any).class,
+    race: unwrapped.race || (wrapper as any).race,
+  } as SheetCharacter;
   const str = stats.str;
   const dex = stats.dex;
   const con = stats.con;
@@ -522,6 +619,7 @@ export interface DerivedMemory {
 
 /** Факты для долгосрочной памяти — чтобы мастер знал персонажа, а не только цифры. */
 export function deriveMemories(src: SheetCharacter, mapped: MappedCharacter): DerivedMemory[] {
+  src = unwrapSheet<SheetCharacter>(src);
   const out: DerivedMemory[] = [];
   const who = mapped.name;
 

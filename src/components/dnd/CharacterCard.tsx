@@ -1,5 +1,6 @@
 "use client";
 
+import { sheetFromNotes, summarizeSheetMechanics } from "@/lib/dnd/import-character";
 import { useState } from "react";
 import { Character } from "@/lib/store";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -116,9 +117,13 @@ export function CharacterCard({
   // Извлекаем качественный статус из заметок (например "[Статус: без сознания, похищен]")
   const statusMatch = character.notes?.match(/\[(?:Статус|Состояние):\s*([^\]]+)\]/i);
   const statusText = statusMatch ? statusMatch[1].trim() : null;
-  const cleanNotes = character.notes
+  const rawNotes = character.notes
     ? character.notes.replace(/\[(?:Статус|Состояние):\s*[^\]]+\]/gi, "").trim()
     : "";
+  // У героев сетевой комнаты в notes лежит весь лист одним JSON — показываем из него
+  // спасброски, навыки и атаки, а не сырой текст JSON
+  const notesSheet = sheetFromNotes(rawNotes);
+  const cleanNotes = notesSheet ? summarizeSheetMechanics(notesSheet).join("\n") : rawNotes;
 
   return (
     <Card className={`transition-all ${!character.isAlive ? "opacity-60 border-destructive/40" : ""} ${!inScene && !isPlayer ? "opacity-75 bg-muted/20 border-dashed" : ""}`}>
@@ -223,7 +228,7 @@ export function CharacterCard({
 
             {/* Нарративное описание / заметка */}
             {cleanNotes && (
-              <p className="text-xs text-muted-foreground leading-relaxed italic bg-muted/30 p-2 rounded border border-border/40">
+              <p className="text-xs text-muted-foreground leading-relaxed italic bg-muted/30 p-2 rounded border border-border/40 whitespace-pre-line">
                 {cleanNotes}
               </p>
             )}

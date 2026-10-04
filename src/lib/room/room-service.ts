@@ -18,7 +18,7 @@ import {
   type PartyAwareAct1,
   type StartingSituation,
 } from "@/lib/ai/party-arc-generator";
-import { extractCharacterStats } from "@/lib/dnd/import-character";
+import { extractCharacterStats, hasSheetData, sheetFromNotes, unwrapSheet } from "@/lib/dnd/import-character";
 import type { AuthMode } from "@/lib/ai/client";
 import { v5 as uuidv5, validate as isUuid } from "uuid";
 
@@ -272,25 +272,80 @@ export class RoomService {
 
     const snap = input.characterSnapshot as any;
     const charName = (snap?.name || "Герой").trim();
-    // Preserve flat CharacterData structure so dnd5e-character-sheet is not corrupted by outer wrapper
-    const cleanData = (snap?.data && typeof snap.data === "object" && (snap.data.abilityScores || snap.data.className))
-      ? snap.data
-      : input.characterSnapshot;
+    // Запись в таблице characters нужна участнику комнаты (внешний ключ), и эту же таблицу
+    // читает сайт с листом персонажа. Поэтому кладём туда только настоящий лист.
+    // Раньше при выборе «героя кампании» сюда попадала урезанная карточка без характеристик —
+    // на сайте листа она выглядела как пустой персонаж со всеми десятками и затирала
+    // настоящий лист, если такой уже был.
+    const snapshotHasSheet = hasSheetData(input.characterSnapshot);
+    let sheetForAccount: Record<string, any> | null = snapshotHasSheet
+      ? unwrapSheet(input.characterSnapshot)
+      : null;
 
-    const { error: charSyncError } = await this.client
-      .from("characters")
-      .upsert(
-        {
-          id: targetCharacterId,
-          user_id: input.userId,
-          name: charName,
-          data: cleanData,
-        },
-        { onConflict: "id" }
-      );
+    let skipCharacterSync = false;
+    if (!sheetForAccount) {
+      try {
+        const { data: existingRow } = await this.client
+          .from("characters")
+          .select("id")
+          .eq("id", targetCharacterId)
+          .maybeSingle();
+        if (existingRow) skipCharacterSync = true;
+      } catch {
+        // не смогли проверить — ниже создадим запись из того, что есть
+      }
+      if (!skipCharacterSync) {
+        // Герой кампании: берём его полный лист из кампании, если он там сохранён
+        try {
+          const lookupId = input.characterId || snap?.id;
+          const campaignHero = lookupId
+            ? await db.character.findUnique({ where: { id: String(lookupId) } })
+            : null;
+          const stored = sheetFromNotes(campaignHero?.notes);
+          if (stored && hasSheetData(stored)) {
+            sheetForAccount = stored;
+          } else {
+            const num = (v: unknown) => (typeof v === "number" && v > 0 ? v : undefined);
+            sheetForAccount = {
+              name: charName,
+              className: snap?.className || snap?.class || campaignHero?.class || "",
+              race: snap?.race || campaignHero?.race || "",
+              level: num(snap?.level) ?? campaignHero?.level ?? roomData.starting_level ?? 1,
+              abilityScores: {
+                СИЛ: num(snap?.str) ?? campaignHero?.str ?? 10,
+                ЛОВ: num(snap?.dex) ?? campaignHero?.dex ?? 10,
+                ТЕЛ: num(snap?.con) ?? campaignHero?.con ?? 10,
+                ИНТ: num(snap?.int) ?? campaignHero?.int ?? 10,
+                МДР: num(snap?.wis) ?? campaignHero?.wis ?? 10,
+                ХАР: num(snap?.cha) ?? campaignHero?.cha ?? 10,
+              },
+              hpMax: num(snap?.hpMax) ?? campaignHero?.hpMax ?? null,
+              armorClass: num(snap?.armorClass) ?? campaignHero?.ac ?? null,
+              speed: num(snap?.speed) ?? campaignHero?.speed ?? 30,
+            };
+          }
+        } catch {
+          sheetForAccount = input.characterSnapshot as Record<string, any>;
+        }
+      }
+    }
 
-    if (charSyncError) {
-      console.warn("[RoomService.joinRoom] Warning syncing character to Supabase characters table:", charSyncError.message);
+    if (!skipCharacterSync) {
+      const { error: charSyncError } = await this.client
+        .from("characters")
+        .upsert(
+          {
+            id: targetCharacterId,
+            user_id: input.userId,
+            name: charName,
+            data: sheetForAccount ?? input.characterSnapshot,
+          },
+          { onConflict: "id" }
+        );
+
+      if (charSyncError) {
+        console.warn("[RoomService.joinRoom] Warning syncing character to Supabase characters table:", charSyncError.message);
+      }
     }
 
     // 2.7. Персонаж не должен быть уже занят другим игроком этой комнаты
@@ -371,7 +426,9 @@ export class RoomService {
               hpCurrent: stats.hpCurrent,
               ac: stats.ac,
               speed: stats.speed,
-              notes: JSON.stringify(snapObj),
+              // Урезанная карточка «героя кампании» не несёт ни атак, ни навыков: ею нельзя
+              // затирать лист, уже сохранённый при импорте героя в кампанию
+              notes: snapshotHasSheet ? JSON.stringify(snapObj) : existing.notes,
             },
           });
         } else {

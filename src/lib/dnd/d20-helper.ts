@@ -1,3 +1,4 @@
+import { sheetFromNotes } from "@/lib/dnd/import-character";
 import type { Character } from "@/lib/store";
 
 export type AbilityKey = "str" | "dex" | "con" | "int" | "wis" | "cha";
@@ -85,10 +86,43 @@ export function parseCharacterProficiencies(
   notes?: string | null,
   className?: string | null
 ): ParsedProficiencies {
-  const text = notes || "";
   const savingThrows = new Set<string>();
   const skills = new Map<string, "proficient" | "expertise">();
   const attacks: ParsedAttack[] = [];
+
+  // Сетевые комнаты сохраняют в notes весь лист персонажа одним JSON. Текстовые шаблоны ниже
+  // в нём ничего не находили: у героя пропадали все атаки, владения и компетенции.
+  const sheet = sheetFromNotes(notes);
+  if (sheet) {
+    for (const [ability, has] of Object.entries(sheet.savingThrowProficiencies || {})) {
+      if (has) savingThrows.add(String(ability).trim().toUpperCase());
+    }
+    if (savingThrows.size === 0 && className) {
+      for (const s of CLASS_SAVING_THROWS[className.toLowerCase().trim()] || []) savingThrows.add(s);
+    }
+    for (const [skill, has] of Object.entries(sheet.skillProficiencies || {})) {
+      if (has) skills.set(skill.trim(), sheet.skillExpertise?.[skill] ? "expertise" : "proficient");
+    }
+    // компетенция без отмеченного владения всё равно означает владение
+    for (const [skill, has] of Object.entries(sheet.skillExpertise || {})) {
+      if (has) skills.set(skill.trim(), "expertise");
+    }
+    for (const atk of Array.isArray(sheet.attacks) ? sheet.attacks : []) {
+      const name = String(atk?.name || "").trim();
+      if (!name) continue;
+      const bonusMatch = String(atk?.attackBonus ?? "").match(/[+-]?\d+/);
+      const bonus = bonusMatch ? parseInt(bonusMatch[0], 10) : 0;
+      attacks.push({
+        name,
+        bonus,
+        notation: `${bonus >= 0 ? "+" : ""}${bonus}`,
+        damageAndType: String(atk?.damageAndType || "").trim() || undefined,
+      });
+    }
+    return { savingThrows, skills, attacks };
+  }
+
+  const text = notes || "";
 
   // 1. Спасброски
   const savesMatch = text.match(/Спасброски:\s*([^\n\r]+)/i);

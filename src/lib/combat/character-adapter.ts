@@ -2,6 +2,7 @@
 // Адаптер извлечения атак, заклинаний и способностей из карточки персонажа для боевого режима.
 // Гарантирует: на тактическую карту встают ТОЛЬКО атаки из листа персонажа (без навязанных рапир/секир).
 
+import { unwrapSheet } from "@/lib/dnd/import-character";
 import type {
   Attack,
   CombatAbility,
@@ -204,11 +205,8 @@ function collectRawAttacks(char: Record<string, any>): any[] {
   if (char.notes && typeof char.notes === "string") {
     try {
       const parsedNotes = JSON.parse(char.notes);
-      const list =
-        parsedNotes.attacks ||
-        parsedNotes.data?.attacks ||
-        parsedNotes.characterSnapshot?.attacks ||
-        parsedNotes.character?.attacks;
+      // Лист может лежать в любой обёртке (data, rawSheet, character…) — достаём его единообразно
+      const list = unwrapSheet(parsedNotes).attacks;
       if (Array.isArray(list) && list.length > 0) {
         return list;
       }
@@ -321,7 +319,7 @@ export function extractSpellsFromCharacter(
   let sheetObj: any = null;
   if (char.notes && typeof char.notes === "string") {
     try {
-      sheetObj = JSON.parse(char.notes);
+      sheetObj = unwrapSheet(JSON.parse(char.notes));
     } catch {
       sheetObj = null;
     }
