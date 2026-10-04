@@ -54,48 +54,50 @@ ORDER BY ca.name, ch.name;
 
 -- ШАГ 2. Удаление --------------------------------------------------------------
 -- Запускайте только после просмотра результатов ШАГА 1.
--- Всё идёт одной транзакцией: при любой ошибке не удалится ничего.
+-- Одна команда: выполняется целиком или не выполняется вовсе. (Первая версия использовала
+-- временную таблицу и не работала в редакторе Supabase, который выполняет команды по отдельности.)
 
-BEGIN;
+DO $$
+DECLARE
+  ids uuid[];
+  n_participants int;
+  n_sheets int;
+  n_heroes int;
+BEGIN
+  SELECT COALESCE(array_agg(s.id), '{}') INTO ids
+  FROM (
+    SELECT c.id,
+           CASE WHEN jsonb_typeof(c.data::jsonb) = 'string'
+                THEN (c.data::jsonb #>> '{}')::jsonb
+                ELSE c.data::jsonb END AS d
+    FROM public.characters c
+  ) s
+  WHERE jsonb_typeof(s.d) = 'object'
+    AND COALESCE(s.d->'abilityScores'->>'СИЛ', '10') = '10'
+    AND COALESCE(s.d->'abilityScores'->>'ЛОВ', '10') = '10'
+    AND COALESCE(s.d->'abilityScores'->>'ТЕЛ', '10') = '10'
+    AND COALESCE(s.d->'abilityScores'->>'ИНТ', '10') = '10'
+    AND COALESCE(s.d->'abilityScores'->>'МДР', '10') = '10'
+    AND COALESCE(s.d->'abilityScores'->>'ХАР', '10') = '10'
+    -- тех, кем играют в незакрытой комнате, не трогаем
+    AND NOT EXISTS (
+      SELECT 1 FROM public.room_participants rp
+      JOIN public.rooms r ON r.id = rp.room_id
+      WHERE rp.character_id = s.id AND r.status <> 'archived'
+    );
 
-CREATE TEMP TABLE _default_stat_sheets ON COMMIT DROP AS
-WITH sheets AS (
-  SELECT c.id,
-         CASE WHEN jsonb_typeof(c.data::jsonb) = 'string'
-              THEN (c.data::jsonb #>> '{}')::jsonb
-              ELSE c.data::jsonb END AS d
-  FROM public.characters c
-)
-SELECT s.id
-FROM sheets s
-WHERE jsonb_typeof(s.d) = 'object'
-  AND COALESCE(s.d->'abilityScores'->>'СИЛ', '10') = '10'
-  AND COALESCE(s.d->'abilityScores'->>'ЛОВ', '10') = '10'
-  AND COALESCE(s.d->'abilityScores'->>'ТЕЛ', '10') = '10'
-  AND COALESCE(s.d->'abilityScores'->>'ИНТ', '10') = '10'
-  AND COALESCE(s.d->'abilityScores'->>'МДР', '10') = '10'
-  AND COALESCE(s.d->'abilityScores'->>'ХАР', '10') = '10'
-  -- тех, кем играют в незакрытой комнате, не трогаем
-  AND NOT EXISTS (
-    SELECT 1 FROM public.room_participants rp
-    JOIN public.rooms r ON r.id = rp.room_id
-    WHERE rp.character_id = s.id AND r.status <> 'archived'
-  );
+  DELETE FROM public.room_participants WHERE character_id = ANY(ids);
+  GET DIAGNOSTICS n_participants = ROW_COUNT;
 
--- 2а. Записи участников закрытых комнат, ссылающиеся на удаляемых персонажей
-DELETE FROM public.room_participants rp
-USING _default_stat_sheets t
-WHERE rp.character_id = t.id;
+  DELETE FROM public.characters WHERE id = ANY(ids);
+  GET DIAGNOSTICS n_sheets = ROW_COUNT;
 
--- 2б. Персонажи аккаунтов
-DELETE FROM public.characters c
-USING _default_stat_sheets t
-WHERE c.id = t.id;
+  DELETE FROM "Character"
+  WHERE type = 'player'
+    AND str = 10 AND dex = 10 AND con = 10
+    AND "int" = 10 AND wis = 10 AND cha = 10;
+  GET DIAGNOSTICS n_heroes = ROW_COUNT;
 
--- 2в. Герои игроков в кампаниях
-DELETE FROM "Character"
-WHERE type = 'player'
-  AND str = 10 AND dex = 10 AND con = 10
-  AND "int" = 10 AND wis = 10 AND cha = 10;
-
-COMMIT;
+  RAISE NOTICE 'Удалено: персонажей аккаунтов %, записей участников закрытых комнат %, героев в кампаниях %',
+    n_sheets, n_participants, n_heroes;
+END $$;
