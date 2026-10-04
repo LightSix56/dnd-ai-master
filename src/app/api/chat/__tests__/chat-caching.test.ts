@@ -403,4 +403,37 @@ describe("Solo Chat Endpoint Prompt Caching Integration", () => {
     expect(extractMessageText(second.messages[second.messages.length - 1])).toContain("сейчас: молится у алтаря");
     expect(extractMessageText(second.messages[second.messages.length - 1])).toContain("замечено: дал обет молчания");
   });
+
+  it("11) a turn that opens with bookkeeping tools and no text is not cut off before the narrative", async () => {
+    await post({ messages: [userMsg("Мастер, опиши вступительную сцену")] });
+    const { stopWhen, prepareStep } = mockStreamText.mock.calls[0][0];
+    const stopOnBookkeeping = stopWhen[1];
+
+    const silentBookkeeping = [{ text: "", toolCalls: [{ toolName: "create_character" }, { toolName: "create_character" }] }];
+    // рассказа ещё нет: ход продолжается и остаётся на модели рассказчика
+    expect(stopOnBookkeeping({ steps: silentBookkeeping })).toBe(false);
+    expect(prepareStep({ steps: silentBookkeeping })).toEqual({});
+
+    const narratedThenBookkeeping = [{ text: "Туман стелется над Громовым Ручьём.", toolCalls: [{ toolName: "record" }] }];
+    // рассказ уже есть: после записи в журнал говорить больше нечего
+    expect(stopOnBookkeeping({ steps: narratedThenBookkeeping })).toBe(true);
+  });
+
+  it("12) every option of the campaign setup dialog has a description in the system prompt", async () => {
+    const { buildSystemPrompt } = await import("@/lib/ai/system-prompt");
+    const base = { name: "К", setting: "Forgotten Realms" };
+    for (const tone of ["heroic", "dark", "mystery", "classic", "lighthearted"]) {
+      expect(buildSystemPrompt({ ...base, tone } as any)).toMatch(new RegExp(`\\*\\*Тон:\\*\\* ${tone} — \\S`));
+    }
+    for (const dmStyle of ["balanced", "narrative", "tactical", "sandbox"]) {
+      expect(buildSystemPrompt({ ...base, tone: "heroic", dmStyle } as any)).toMatch(
+        new RegExp(`\\*\\*Стиль мастера:\\*\\* ${dmStyle} — \\S`)
+      );
+    }
+    for (const difficulty of ["easy", "normal", "hard", "deadly"]) {
+      expect(buildSystemPrompt({ ...base, tone: "heroic", difficulty } as any)).toMatch(
+        new RegExp(`\\*\\*Сложность:\\*\\* ${difficulty} — \\S`)
+      );
+    }
+  });
 });

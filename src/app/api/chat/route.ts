@@ -50,13 +50,20 @@ export const maxDuration = 60;
 // Шагов теперь нужно меньше: броски, обновления и записи батчатся.
 const MAX_STEPS = 6;
 
-// Предохранитель от «простыней»: выходные токены втрое дороже входных. Потолок с запасом —
-// обычный ответ мастера в него не упирается. AI_MAX_OUTPUT_TOKENS=0 снимает ограничение.
+// Необязательный предохранитель от «простыней»: выходные токены втрое дороже входных.
+// Задаётся переменной AI_MAX_OUTPUT_TOKENS.
 function resolveMaxOutputTokens(): number | undefined {
   const raw = process.env.AI_MAX_OUTPUT_TOKENS;
-  if (raw === undefined || raw === "") return 3000;
+  // По умолчанию ограничения нет: у «думающих» моделей лимит съедается рассуждением,
+  // и ответ приходит пустым. Включается только явной настройкой.
+  if (raw === undefined || raw === "") return undefined;
   const n = Number(raw);
   return Number.isFinite(n) && n > 0 ? Math.floor(n) : undefined;
+}
+
+/** Написал ли мастер в этом ходе хоть какой-то текст для игрока */
+function hasNarrative(steps: Array<{ text?: string }>): boolean {
+  return steps.some((s) => typeof s?.text === "string" && s.text.trim().length > 0);
 }
 
 function uiMessageText(m?: UIMessage): string {
@@ -274,15 +281,18 @@ export async function POST(req: Request) {
       messages: modelMessages,
       stopWhen: [
         stepCountIs(MAX_STEPS),
-        ({ steps }: { steps: Array<{ toolCalls?: Array<{ toolName: string }> }> }) => {
+        ({ steps }: { steps: Array<{ text?: string; toolCalls?: Array<{ toolName: string }> }> }) => {
           const lastStep = steps[steps.length - 1];
           const lastCalls = lastStep?.toolCalls ?? [];
-          return (
+          const allBookkeeping =
             lastCalls.length > 0 &&
             lastCalls.every((c) =>
               (BOOKKEEPING_TOOLS as readonly string[]).includes(c.toolName)
-            )
-          );
+            );
+          // Останавливаемся после «бухгалтерии» только если рассказ игроку уже написан.
+          // Иначе мастер, начавший ход с create_character/record без текста (так бывает на
+          // вступительной сцене), обрывался, и игрок получал пустой ответ.
+          return allBookkeeping && hasNarrative(steps);
         },
       ],
       temperature: 0.8,
@@ -291,7 +301,7 @@ export async function POST(req: Request) {
       // она ведёт рассказ и решает, что делать. Но как только она ушла в чистую
       // бухгалтерию (record / update_character / create_character), дальше говорить
       // игроку уже нечего: остаток шага дожимает дешёвая модель с коротким промптом.
-      prepareStep: ({ steps }: { steps: Array<{ toolCalls?: Array<{ toolName: string }> }> }) => {
+      prepareStep: ({ steps }: { steps: Array<{ text?: string; toolCalls?: Array<{ toolName: string }> }> }) => {
         const lastStep = steps[steps.length - 1];
         const lastCalls = lastStep?.toolCalls ?? [];
         if (lastCalls.length === 0) return {};
@@ -300,6 +310,9 @@ export async function POST(req: Request) {
           (BOOKKEEPING_TOOLS as readonly string[]).includes(c.toolName)
         );
         if (!allBookkeeping) return {};
+        // Рассказа ещё нет — следующий шаг должен писать рассказчик, а не служебная модель
+        // с инструкцией «ничего не рассказывай»
+        if (!hasNarrative(steps)) return {};
 
         return {
           model: cheapModelInstance,
