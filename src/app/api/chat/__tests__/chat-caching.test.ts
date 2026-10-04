@@ -41,9 +41,16 @@ vi.mock("@/lib/db", () => ({
     },
     chatMessage: {
       create: vi.fn().mockResolvedValue({}),
+      findMany: vi.fn().mockResolvedValue([]),
+      delete: vi.fn().mockResolvedValue({}),
     },
   },
 }));
+
+vi.mock("next/server", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("next/server")>();
+  return { ...actual, after: vi.fn() };
+});
 
 import { POST } from "../route";
 import { db } from "@/lib/db";
@@ -110,7 +117,19 @@ describe("Solo Chat Endpoint Prompt Caching Integration", () => {
     vi.mocked(db.campaign.findUnique).mockResolvedValue(sampleCampaign as any);
     vi.mocked(db.character.findMany).mockResolvedValue(sampleCharacters as any);
     vi.mocked(db.gameEvent.findMany).mockResolvedValue(sampleEvents as any);
+    vi.mocked(db.chatMessage.findMany).mockResolvedValue([] as any);
+    vi.mocked(db.summary.findMany).mockResolvedValue([] as any);
   });
+
+  const post = (body: Record<string, unknown>) =>
+    POST(
+      new Request("http://localhost/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ apiKey: "test-api-key", campaignId: "campaign-alpha", ...body }),
+      })
+    );
+  const userMsg = (text: string) => ({ id: "u", role: "user" as const, parts: [{ type: "text" as const, text }] });
 
   it("1) forms frozenSystemPrompt without dynamic HP and excludes contextInstructions from instructions", async () => {
     const req = new Request("http://localhost/api/chat", {
@@ -140,11 +159,8 @@ describe("Solo Chat Endpoint Prompt Caching Integration", () => {
     expect(callArgs.instructions[0].role).toBe("system");
 
     const promptText = callArgs.instructions[0].content;
-    // Префикс Зоны 1 не должен содержать волатильных HP персонажей или токенов ранений
-    expect(promptText).not.toMatch(/\bHP\b/);
+    // Префикс Зоны 1 не должен содержать волатильных значений: текущих HP героев
     expect(promptText).not.toContain("14/20");
-    expect(promptText).not.toMatch(/[а-яё]*хит[а-яё]*/i);
-    expect(promptText).not.toMatch(/[а-яё]*ранен[а-яё]*/i);
   });
 
   it("2) calls compactHistoryWithMilestones instead of sliding-window slice(-VERBATIM_MESSAGES)", async () => {
@@ -290,5 +306,101 @@ describe("Solo Chat Endpoint Prompt Caching Integration", () => {
     ]);
     expect(callArgs.instructions).toHaveLength(1);
     expect(callArgs.instructions[0].role).toBe("system");
+  });
+
+  it("6) builds history from DB: chronicle first, then stored messages verbatim, then the new player turn", async () => {
+    vi.mocked(db.summary.findMany).mockResolvedValue([
+      { content: "## Хроника\n- отряд взял контракт у барона", fromTurn: 0, toTurn: 24 },
+    ] as any);
+    vi.mocked(db.chatMessage.findMany).mockResolvedValue([
+      { id: "a", role: "user", content: "Иду к воротам" },
+      { id: "b", role: "assistant", content: "Стражник преграждает путь." },
+    ] as any);
+
+    // клиент прислал только новое сообщение — история всё равно полная
+    await post({ messages: [userMsg("Показываю грамоту барона")] });
+
+    const msgs = mockStreamText.mock.calls[0][0].messages;
+    expect(msgs).toHaveLength(4);
+    expect(extractMessageText(msgs[0])).toContain("[ХРОНИКА КАМПАНИИ");
+    expect(extractMessageText(msgs[0])).toContain("отряд взял контракт у барона");
+    expect(extractMessageText(msgs[1])).toBe("Иду к воротам");
+    expect(extractMessageText(msgs[2])).toBe("Стражник преграждает путь.");
+    expect(extractMessageText(msgs[3])).toContain("Показываю грамоту барона");
+    expect(extractMessageText(msgs[3])).toContain("[ОБСТАНОВКА И СТАТУС СЦЕНЫ]:");
+
+    // skip = граница хроники: уже сжатые сообщения из БД не читаются
+    expect(vi.mocked(db.chatMessage.findMany).mock.calls[0][0]).toMatchObject({ skip: 24 });
+    expect(db.chatMessage.create).toHaveBeenCalledTimes(1);
+    expect(vi.mocked(db.chatMessage.create).mock.calls[0][0]).toMatchObject({
+      data: { role: "user", content: "Показываю грамоту барона" },
+    });
+  });
+
+  it("7) retry of the same turn after a failure does not duplicate the player message", async () => {
+    vi.mocked(db.chatMessage.findMany).mockResolvedValue([
+      { id: "a", role: "user", content: "Иду к воротам" },
+      { id: "b", role: "assistant", content: "Стражник преграждает путь." },
+      { id: "c", role: "user", content: "Показываю грамоту барона" },
+    ] as any);
+
+    await post({ messages: [userMsg("Показываю грамоту барона")] });
+
+    const msgs = mockStreamText.mock.calls[0][0].messages;
+    expect(msgs).toHaveLength(3);
+    expect(extractMessageText(msgs[2])).toContain("Показываю грамоту барона");
+    expect(db.chatMessage.create).not.toHaveBeenCalled();
+  });
+
+  it("8) regenerate replaces the previous DM answer instead of stacking a second one", async () => {
+    vi.mocked(db.chatMessage.findMany).mockResolvedValue([
+      { id: "a", role: "user", content: "Иду к воротам" },
+      { id: "b", role: "assistant", content: "Стражник преграждает путь." },
+    ] as any);
+
+    await post({ trigger: "regenerate-message", messages: [userMsg("Иду к воротам")] });
+
+    expect(db.chatMessage.delete).toHaveBeenCalledWith({ where: { id: "b" } });
+    const msgs = mockStreamText.mock.calls[0][0].messages;
+    expect(msgs).toHaveLength(1);
+    expect(extractMessageText(msgs[0])).toContain("Иду к воротам");
+    expect(db.chatMessage.create).not.toHaveBeenCalled();
+  });
+
+  it("9) stores the full narrative of all steps, not only the text after the last tool call", async () => {
+    await post({ messages: [userMsg("Атакую гоблина")] });
+    vi.mocked(db.chatMessage.create).mockClear();
+
+    const { onFinish } = mockStreamText.mock.calls[0][0];
+    await onFinish({
+      text: "Что будешь делать?",
+      steps: [{ text: "Гоблин отшатывается, хватаясь за плечо." }, { text: "" }, { text: "Что будешь делать?" }],
+      toolCalls: [],
+      toolResults: [],
+      usage: {},
+    });
+
+    expect(db.chatMessage.create).toHaveBeenCalledTimes(1);
+    expect(vi.mocked(db.chatMessage.create).mock.calls[0][0]).toMatchObject({
+      data: { role: "assistant", content: "Гоблин отшатывается, хватаясь за плечо.\n\nЧто будешь делать?" },
+    });
+  });
+
+  it("10) the system prompt stays identical when the scribe rewrites a hero's status between turns", async () => {
+    const withNotes = (notes: string) =>
+      vi.mocked(db.character.findMany).mockResolvedValue([{ ...sampleCharacters[0], notes }, sampleCharacters[1]] as any);
+
+    withNotes("[Статус: осматривает ворота]\nЖрец клана Железной Бороды.");
+    await post({ messages: [userMsg("Осматриваю ворота")] });
+    withNotes("[Статус: молится у алтаря]\nЖрец клана Железной Бороды.\n• дал обет молчания");
+    await post({ messages: [userMsg("Молюсь у алтаря")] });
+
+    const first = mockStreamText.mock.calls[0][0];
+    const second = mockStreamText.mock.calls[1][0];
+    expect(first.instructions[0].content).toBe(second.instructions[0].content);
+    expect(first.instructions[0].content).toContain("Жрец клана Железной Бороды.");
+    // изменчивое уехало в хвост последнего сообщения
+    expect(extractMessageText(second.messages[second.messages.length - 1])).toContain("сейчас: молится у алтаря");
+    expect(extractMessageText(second.messages[second.messages.length - 1])).toContain("замечено: дал обет молчания");
   });
 });

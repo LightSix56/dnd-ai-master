@@ -2,11 +2,12 @@
 // Использует OpenAI-compatible API через Vercel AI SDK
 // Streaming + tools (function calling)
 //
-// Экономия токенов держится на четырёх вещах:
-//  1. Контекст сцены собирается с бюджетом символов (scene-context.ts), а не льётся целиком.
-//  2. История обрезается скользящим окном, старое живёт в сводке (compact.ts).
-//  3. Батчевые инструменты — меньше шагов, а каждый шаг переотправляет весь промпт.
-//  4. prepareStep уводит служебные шаги на дешёвую модель, рассказ оставляя дорогой.
+// Экономия токенов держится на кэше префикса у провайдера. Запрос собран из трёх зон:
+//  1. Замороженный системный промпт (caching/frozen-prefix.ts) — не меняется от хода к ходу.
+//  2. История из БД (caching/dm-history.ts): хроника кампании + последние 16–40 сообщений
+//     дословно. Между обновлениями хроники история только дописывается в конец.
+//  3. Изменчивый срез сцены (caching/ephemeral-tail.ts) — в хвосте последнего сообщения игрока.
+// Всё, что совпало с прошлым запросом, провайдер читает из кэша по цене в десятки раз ниже.
 
 import { after } from "next/server";
 import {
@@ -41,12 +42,30 @@ import {
   compactHistoryWithMilestones,
   fetchEphemeralSceneTail,
   injectEphemeralTailToLastUserMessage,
+  buildDmHistory,
 } from "@/lib/ai/caching";
 
 export const maxDuration = 60;
 
 // Шагов теперь нужно меньше: броски, обновления и записи батчатся.
 const MAX_STEPS = 6;
+
+// Предохранитель от «простыней»: выходные токены втрое дороже входных. Потолок с запасом —
+// обычный ответ мастера в него не упирается. AI_MAX_OUTPUT_TOKENS=0 снимает ограничение.
+function resolveMaxOutputTokens(): number | undefined {
+  const raw = process.env.AI_MAX_OUTPUT_TOKENS;
+  if (raw === undefined || raw === "") return 3000;
+  const n = Number(raw);
+  return Number.isFinite(n) && n > 0 ? Math.floor(n) : undefined;
+}
+
+function uiMessageText(m?: UIMessage): string {
+  if (!m) return "";
+  return (m.parts ?? [])
+    .filter((p): p is { type: "text"; text: string } => p.type === "text")
+    .map((p) => p.text)
+    .join("");
+}
 
 export async function POST(req: Request) {
   try {
@@ -58,6 +77,7 @@ export async function POST(req: Request) {
       apiKey: userApiKey,
       authMode,
       baseURL,
+      trigger,
     }: {
       messages: UIMessage[];
       campaignId?: string;
@@ -66,6 +86,8 @@ export async function POST(req: Request) {
       apiKey?: string;
       authMode?: "bearer" | "x-api-key" | "raw";
       baseURL?: string;
+      // AI SDK присылает "regenerate-message", когда игрок просит переписать последний ответ
+      trigger?: string;
     } = await req.json();
 
     if (!messages || !Array.isArray(messages)) {
@@ -84,19 +106,6 @@ export async function POST(req: Request) {
     // Это нужно потому что useChat в AI SDK 7.x отправляет сообщения в формате parts
     const allModelMessages = await convertToModelMessages(messages);
 
-    // Зона 2: Дискретное сжатие вехами (Append-Only Milestone Compactor)
-    // Предотвращает постоянный сдвиг токенов и сброс KV-кэша префикса
-    const compactedMessages = compactHistoryWithMilestones(allModelMessages);
-
-    // Извлекаем последнее действие/реплику игрока для контекста синхронизатора сцены
-    const lastUserMsg = [...allModelMessages].reverse().find((m) => m.role === "user");
-    const playerMessageText =
-      typeof lastUserMsg?.content === "string"
-        ? lastUserMsg.content
-        : Array.isArray(lastUserMsg?.content)
-        ? (lastUserMsg.content as Array<{ text?: string }>).map((p) => p.text || "").join(" ")
-        : "";
-
     // Определяем активную кампанию
     let activeCampaignId = campaignId;
     if (!activeCampaignId) {
@@ -107,14 +116,63 @@ export async function POST(req: Request) {
       activeCampaignId = active?.id;
     }
 
-    // Зона 3: Ephemeral Tail — волатильный срез сцены (HP, NPC, недавние события)
+    // Последнее действие/реплика игрока: идёт в запрос и в контекст фонового летописца
+    const lastUiUserMessage = [...messages].reverse().find((m) => m.role === "user");
+    const playerMessageText = uiMessageText(lastUiUserMessage);
+
+    // Зона 2: история диалога.
+    // С кампанией — из БД: хроника + дословный хвост. Клиентская история для этого не годится:
+    // после перезагрузки в ней только последние 200 сообщений, и окно ползёт каждый ход.
+    // Без кампании (или если в БД пусто) — как раньше, из присланного клиентом.
+    let historyMessages: ModelMessage[] = [];
+    let skipSaveUserMessage = false;
+    let usingDbHistory = false;
+
+    if (activeCampaignId && playerMessageText) {
+      const history = await buildDmHistory(activeCampaignId);
+      if (history.messages.length > 0 || allModelMessages.length <= 1) {
+        usingDbHistory = true;
+        const prior = [...history.messages];
+
+        // Регенерация: старый ответ мастера заменяется новым — убираем его и из БД, и из истории
+        if (
+          trigger === "regenerate-message" &&
+          history.lastStored?.role === "assistant" &&
+          prior.length > 0 &&
+          prior[prior.length - 1].role === "assistant"
+        ) {
+          try {
+            await db.chatMessage.delete({ where: { id: history.lastStored.id } });
+          } catch (e) {
+            console.warn("[chat] Не удалось удалить заменяемый ответ мастера:", e);
+          }
+          prior.pop();
+        }
+
+        // Повтор того же хода (регенерация или повтор после сбоя): реплика игрока уже есть в БД
+        const lastPrior = prior[prior.length - 1];
+        if (lastPrior && lastPrior.role === "user" && lastPrior.content === playerMessageText) {
+          skipSaveUserMessage = true;
+          historyMessages = prior;
+        } else {
+          historyMessages = [...prior, { role: "user", content: playerMessageText }];
+        }
+      }
+    }
+
+    if (!usingDbHistory) {
+      // Дискретное сжатие вехами по клиентской истории (Append-Only Milestone Compactor)
+      historyMessages = compactHistoryWithMilestones(allModelMessages);
+    }
+
+    // Зона 3: Ephemeral Tail — волатильный срез сцены (HP, NPC, недавние события, память)
     // Инжектируется строго в хвост последнего сообщения пользователя, сохраняя
-    // 100% Cache Hit префикса (Зона 1) и предшествующей истории (Зона 2).
-    let modelMessages: ModelMessage[] = compactedMessages;
+    // кэш префикса (Зона 1) и предшествующей истории (Зона 2).
+    let modelMessages: ModelMessage[] = historyMessages;
     if (activeCampaignId) {
       const ephemeralTail = await fetchEphemeralSceneTail(activeCampaignId);
       if (ephemeralTail) {
-        modelMessages = injectEphemeralTailToLastUserMessage(compactedMessages, ephemeralTail);
+        modelMessages = injectEphemeralTailToLastUserMessage(historyMessages, ephemeralTail);
       }
     }
 
@@ -228,6 +286,7 @@ export async function POST(req: Request) {
         },
       ],
       temperature: 0.8,
+      maxOutputTokens: resolveMaxOutputTokens(),
       // Разделение моделей по ролям. Ход всегда начинается на дорогой модели —
       // она ведёт рассказ и решает, что делать. Но как только она ушла в чистую
       // бухгалтерию (record / update_character / create_character), дальше говорить
@@ -254,11 +313,13 @@ export async function POST(req: Request) {
       },
       onFinish: async ({
         text,
+        steps,
         toolCalls,
         toolResults,
         usage,
       }: {
         text: string;
+        steps?: Array<{ text?: string }>;
         toolCalls?: unknown[];
         toolResults?: unknown[];
         usage?: unknown;
@@ -267,7 +328,13 @@ export async function POST(req: Request) {
         const { inputTokens: inTokens, outputTokens: outTokens, cachedTokens, totalTokens } = tokenUsage;
         const costRub = calculateCostRub(selectedModel, tokenUsage);
 
-        const cleanedText = cleanAssistantNarrative(text);
+        // text — это текст только последнего шага. Если мастер сначала рассказал, а потом вызвал
+        // инструмент, рассказ остался в предыдущих шагах; история в БД должна хранить его целиком.
+        const stepTexts = (steps ?? [])
+          .map((st) => (typeof st?.text === "string" ? st.text.trim() : ""))
+          .filter(Boolean);
+        const fullText = stepTexts.length > 0 ? stepTexts.join("\n\n") : text;
+        const cleanedText = cleanAssistantNarrative(fullText);
 
         if (activeCampaignId && cleanedText) {
           const statsPayload = {
@@ -320,7 +387,7 @@ export async function POST(req: Request) {
                 campaignId: activeCampaignId,
                 apiKey: cleanKey,
                 authMode,
-                cheapModel: cheapModelName,
+                model: selectedModel,
                 baseURL,
               });
             } catch (err) {
@@ -381,22 +448,15 @@ export async function POST(req: Request) {
       return `❌ Ошибка: ${message || "Неизвестная ошибка"}. Проверьте API-ключ в настройках.`;
     };
 
-    // Сохраняем сообщение пользователя в БД (в AI SDK 7.x UIMessage использует parts)
-    const lastUserMessage = [...messages].reverse().find((m) => m.role === "user");
-    if (activeCampaignId && lastUserMessage) {
-      const userText = (lastUserMessage.parts ?? [])
-        .filter((p): p is { type: "text"; text: string } => p.type === "text")
-        .map((p) => p.text)
-        .join("");
-      if (userText) {
-        await db.chatMessage.create({
-          data: {
-            campaignId: activeCampaignId,
-            role: "user",
-            content: userText,
-          },
-        });
-      }
+    // Сохраняем сообщение пользователя в БД (повтор того же хода не дублируем)
+    if (activeCampaignId && playerMessageText && !skipSaveUserMessage) {
+      await db.chatMessage.create({
+        data: {
+          campaignId: activeCampaignId,
+          role: "user",
+          content: playerMessageText,
+        },
+      });
     }
 
     // Один вызов toUIMessageStream: обёртка результата ещё раз через toUIMessageStream({stream})

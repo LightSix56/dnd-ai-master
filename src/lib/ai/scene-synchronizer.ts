@@ -3,6 +3,7 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { createClient, type AuthMode } from "./client";
 import { resolveCheapModel } from "./models";
+import { extractTokenUsage } from "./cost";
 
 // ─── Разбор и извлечение JSON ───
 
@@ -82,6 +83,45 @@ export interface SyncSceneStateParams {
   cheapModel?: string;
 }
 
+/** Ответ короче этого порога — обычно просьба сделать бросок или уточнение: сцена не изменилась */
+export const SYNC_MIN_RESPONSE_CHARS = 140;
+
+/** Сколько персонажей кампании максимум отдаём летописцу за один ход */
+const SYNC_MAX_CHARACTERS = 25;
+
+interface SyncCandidate {
+  name: string;
+  type: string;
+  inScene: boolean;
+}
+
+/**
+ * Кого показывать летописцу. Раньше в запрос шли ВСЕ персонажи кампании, и на каждого
+ * модель обязана была вернуть запись — на длинной кампании это десятки записей за ход,
+ * из которых менялись две-три. Теперь идут только герои, те, кто в сцене, и те, чьё имя
+ * прозвучало в этом ходе.
+ */
+export function selectCharactersForSync<T extends SyncCandidate>(
+  characters: T[],
+  playerMessage: string,
+  assistantResponse: string
+): T[] {
+  const text = `${playerMessage}\n${assistantResponse}`.toLowerCase();
+  const mentioned = (name: string) => {
+    const full = name.trim().toLowerCase();
+    if (full.length >= 3 && text.includes(full)) return true;
+    // Имена склоняются («Гуннара», «Гуннару») — сверяем по основе первого слова
+    const first = full.split(/\s+/)[0] ?? "";
+    const stem = first.length > 5 ? first.slice(0, first.length - 2) : first;
+    return stem.length >= 4 && text.includes(stem);
+  };
+  const picked = characters.filter((c) => c.type === "player" || c.inScene || mentioned(c.name));
+  if (picked.length <= SYNC_MAX_CHARACTERS) return picked;
+  // Переполнение: герои и упомянутые важнее просто присутствующих
+  const rank = (c: T) => (c.type === "player" ? 0 : mentioned(c.name) ? 1 : 2);
+  return [...picked].sort((a, b) => rank(a) - rank(b)).slice(0, SYNC_MAX_CHARACTERS);
+}
+
 export async function syncSceneState({
   campaignId,
   playerMessage,
@@ -93,7 +133,10 @@ export async function syncSceneState({
 }: SyncSceneStateParams): Promise<SceneUpdate | null> {
   if (!campaignId || !assistantResponse.trim()) return null;
 
-  const characters = await db.character.findMany({
+  // Короткий ответ мастера («Сделай проверку Ловкости») сцену не меняет — вызов модели не нужен
+  if (assistantResponse.trim().length < SYNC_MIN_RESPONSE_CHARS) return null;
+
+  const allCharacters = await db.character.findMany({
     where: { campaignId },
     select: {
       id: true,
@@ -109,7 +152,20 @@ export async function syncSceneState({
     },
   });
 
-  if (characters.length === 0) return null;
+  if (allCharacters.length === 0) return null;
+
+  const characters = selectCharactersForSync(allCharacters, playerMessage, assistantResponse);
+
+  // Пока идёт тактический бой, хиты ведёт боевой движок: догадки летописца их не трогают
+  let combatActive = false;
+  try {
+    combatActive = !!(await db.combat.findFirst({
+      where: { campaignId, status: "active" },
+      select: { id: true },
+    }));
+  } catch {
+    combatActive = false;
+  }
 
   const charSummary = characters
     .map((c) => {
@@ -127,12 +183,12 @@ ${playerMessage}
 ## Ответ Мастера:
 ${assistantResponse}
 
-## Список существующих персонажей:
+## Персонажи, которых мог затронуть этот ход:
 ${charSummary}
 
 Инструкции:
 1. "currentLocation": определи, где СЕЙЧАС физически находится игрок (например: "Подвалы Док-Уорда", "Кухня таверны").
-2. Для каждого персонажа из списка верни объект в массив "updates":
+2. В массив "updates" включай ТОЛЬКО тех персонажей из списка, у кого в этом ходе что-то изменилось (появился или покинул сцену, сменил локацию или состояние, получил урон или лечение, изменилось отношение, раскрылась новая черта). Тех, у кого ничего не изменилось, НЕ включай. Если не изменилось ни у кого — верни пустой массив []. Для каждого изменившегося:
    - "id": точный ID персонажа из списка выше.
    - "inScene": true, если персонаж сейчас находится в той же локации/комнате в зоне прямой видимости или прямого контакта/взаимодействия с игроком. false, если персонаж остался в другой комнате/локации, сбежал, скрылся или остался позади. (ВНИМАНИЕ: для игрока всегда true!).
    - "status": краткое конкретное описание актуального физического/сюжетного состояния персонажа (например: "без сознания на полу, сжимает пергамент", "заперся за дверью, хором шепчет заклинание", "замер в оцепенении").
@@ -182,6 +238,7 @@ ${charSummary}
       system: "Ты — бесстрастный системный наблюдатель D&D 5e. Отвечай ТОЛЬКО валидным JSON без маркдаун-оберток и пояснений.",
       prompt,
       temperature: 0.1,
+      maxRetries: 1,
     });
 
     const parsedJson = JSON.parse(extractJson(result.text));
@@ -225,7 +282,7 @@ ${charSummary}
         }
       }
 
-      if (u.hpDelta && u.hpDelta !== 0) {
+      if (u.hpDelta && u.hpDelta !== 0 && !combatActive) {
         updateData.hpCurrent = Math.max(0, Math.min(char.hpMax, char.hpCurrent + u.hpDelta));
       }
 
@@ -244,7 +301,23 @@ ${charSummary}
 
     // Сохраняем сюжетный факт о герое в общую память кампании
     if (characterMemory && characterMemory.characterName && characterMemory.insight) {
-      await db.memory.create({
+      // Один и тот же факт модель любит «открывать» повторно — дубли в память не пишем
+      const insightKey = characterMemory.insight.trim().toLowerCase();
+      let duplicate = false;
+      try {
+        const existing = await db.memory.findMany({
+          where: { campaignId, subject: characterMemory.characterName },
+          select: { content: true },
+          take: 50,
+        });
+        duplicate = (existing ?? []).some((m) => {
+          const c = (m.content || "").trim().toLowerCase();
+          return !!c && (c === insightKey || c.includes(insightKey) || insightKey.includes(c));
+        });
+      } catch {
+        duplicate = false;
+      }
+      if (!duplicate) await db.memory.create({
         data: {
           campaignId,
           category: "character",
@@ -268,7 +341,7 @@ ${charSummary}
 
     for (const npc of npcsToCreate) {
       if (!npc.name) continue;
-      const alreadyExists = characters.some(
+      const alreadyExists = allCharacters.some(
         (c) => c.name.toLowerCase() === npc.name.toLowerCase()
       );
       if (!alreadyExists) {
@@ -294,7 +367,7 @@ ${charSummary}
             notes: npc.status ? `[Статус: ${npc.status}]` : null,
           },
         });
-        characters.push({
+        allCharacters.push({
           id: created.id,
           name: created.name,
           type: created.type,
@@ -310,8 +383,9 @@ ${charSummary}
       }
     }
 
+    const syncUsage = extractTokenUsage(result.usage);
     console.log(
-      `[SceneSync] Синхронизировано персонажей: ${updates.length}. Локация: ${currentLocation || "—"}`
+      `[SceneSync] Показано персонажей: ${characters.length} из ${allCharacters.length}, изменено: ${updates.length}. Локация: ${currentLocation || "—"}. Токенов: вход ${syncUsage.inputTokens} / выход ${syncUsage.outputTokens}`
     );
     return validated.data;
   } catch (error) {

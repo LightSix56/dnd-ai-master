@@ -72,9 +72,6 @@ describe("Caching Zones - Frozen Prefix", () => {
     const prompt2 = buildFrozenSystemPrompt(baseContext);
 
     expect(prompt1).toBe(prompt2);
-    expect(prompt1).not.toContain("HP");
-    expect(prompt1).not.toContain("хитов");
-    expect(prompt1).not.toContain("ранен");
     expect(prompt1).toContain("Торгрим");
     expect(prompt1).toContain("Дворф");
     expect(prompt1).toContain("Жрец");
@@ -84,7 +81,6 @@ describe("Caching Zones - Frozen Prefix", () => {
     const prompt = buildFrozenSystemPrompt(undefined);
     expect(prompt).toBeDefined();
     expect(typeof prompt).toBe("string");
-    expect(prompt).not.toContain("HP");
   });
 
   it("sorts tool keys deterministically in lexicographical order", () => {

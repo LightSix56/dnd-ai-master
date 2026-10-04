@@ -6,7 +6,8 @@ import { db } from "@/lib/db";
 import { RoomService } from "./room-service";
 import type { Room, RoomParticipant, RoomTurn, RoomWithParticipants } from "./types";
 import { dmTools, buildToolsContext } from "@/lib/ai/tools";
-import { getDeterministicTools } from "@/lib/ai/caching";
+import { getDeterministicTools, buildDmHistory } from "@/lib/ai/caching";
+import { compactHistory } from "@/lib/ai/compact";
 import { calculateCostRub, extractTokenUsage, type TokenUsage } from "@/lib/ai/cost";
 
 export interface RoomTurnStats {
@@ -220,6 +221,15 @@ export async function resolveActiveRoomTurnHelper(
 
         const system = buildFrozenRoomSystemPrompt(room);
 
+        // Память мастера в комнате: хроника кампании + последние ходы дословно.
+        // Раньше в запрос шёл только системный промпт и ввод текущего раунда — мастер не помнил,
+        // что было ход назад. История только дописывается в конец, поэтому читается из кэша.
+        const history = campaignId ? await buildDmHistory(campaignId) : null;
+        const turnInput =
+          history && history.messages.length > 0
+            ? { messages: [...history.messages, { role: "user" as const, content: prompt }] }
+            : { prompt };
+
         const availableTools = campaignId
           ? getDeterministicTools(dmTools)
           : getDeterministicTools({
@@ -236,7 +246,7 @@ export async function resolveActiveRoomTurnHelper(
           const res = await (streamText as any)({
             model: client.chat(aiModel),
             system,
-            prompt,
+            ...turnInput,
             tools: availableTools,
             ...(campaignId ? { toolsContext: buildToolsContext(campaignId) } : {}),
             stopWhen: stepCountIs(4),
@@ -274,7 +284,7 @@ export async function resolveActiveRoomTurnHelper(
           const res = await (generateText as any)({
             model: client.chat(aiModel),
             system,
-            prompt,
+            ...turnInput,
             tools: availableTools,
             ...(campaignId ? { toolsContext: buildToolsContext(campaignId) } : {}),
             stopWhen: stepCountIs(4),
@@ -365,6 +375,27 @@ export async function resolveActiveRoomTurnHelper(
       });
     } catch (dbErr) {
       console.warn("[resolveActiveRoomTurnHelper] Failed to save chat messages in SQLite:", dbErr);
+    }
+
+    // Хроника кампании дополняется в фоне, когда за пределами дословного окна накопился блок
+    const compactKey = (options?.apiKey || process.env.AI_API_KEY || "").trim();
+    if (compactKey && !narrative.trimStart().startsWith("⚠️")) {
+      const runCompaction = () =>
+        compactHistory({
+          campaignId,
+          apiKey: compactKey,
+          authMode: options?.authMode as AuthMode,
+          model: options?.model,
+          baseURL: options?.baseURL,
+        }).catch((e) => console.error("[resolveActiveRoomTurnHelper] compaction failed:", e));
+      try {
+        // На Vercel фоновая работа должна быть зарегистрирована через after(), иначе функция
+        // завершится раньше неё. Вне запроса (тесты, скрипты) after() бросает — тогда выполняем сразу.
+        const { after } = await import("next/server");
+        after(runCompaction);
+      } catch {
+        await runCompaction();
+      }
     }
   }
 

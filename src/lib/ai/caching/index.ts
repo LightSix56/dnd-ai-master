@@ -7,4 +7,5 @@
 export * from "./frozen-prefix";
 export * from "./milestone-compactor";
 export * from "./ephemeral-tail";
+export * from "./dm-history";
 

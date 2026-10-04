@@ -7,6 +7,19 @@
 
 import type { ModelMessage } from "ai";
 import { db } from "@/lib/db";
+import { extractNoteInsights } from "./frozen-prefix";
+
+/** Сколько NPC, заметок летописца и фактов памяти помещается в срез сцены */
+const MAX_NPCS_IN_TAIL = 12;
+const MAX_INSIGHTS_PER_HERO = 4;
+const MAX_MEMORIES_IN_TAIL = 8;
+const MEMORY_CHAR_LIMIT = 220;
+
+function statusFromNotes(notes?: string | null): string | undefined {
+  if (!notes) return undefined;
+  const m = notes.match(/\[(?:Статус|Состояние):\s*([^\]]+)\]/i);
+  return m ? m[1].trim() : undefined;
+}
 
 export interface EphemeralPartyMemberState {
   name: string;
@@ -16,6 +29,10 @@ export interface EphemeralPartyMemberState {
   ac?: number;
   location?: string;
   condition?: string;
+  /** Что герой делает прямо сейчас (тег [Статус: …] летописца) */
+  status?: string;
+  /** Черты и факты, замеченные летописцем по ходу игры */
+  insights?: string[];
 }
 
 export interface EphemeralNpcState {
@@ -23,6 +40,8 @@ export interface EphemeralNpcState {
   healthCondition: string;
   relation?: string;
   location?: string;
+  /** Что NPC делает прямо сейчас */
+  status?: string;
 }
 
 export interface EphemeralRecentEvent {
@@ -35,6 +54,8 @@ export interface EphemeralSceneState {
   partyStatus: EphemeralPartyMemberState[];
   npcStatus: EphemeralNpcState[];
   recentEvents: EphemeralRecentEvent[];
+  /** Важные факты долгой памяти, относящиеся к сцене */
+  memories?: string[];
 }
 
 /**
@@ -56,7 +77,11 @@ export function formatSceneSnapshot(state: EphemeralSceneState): string {
   const partyLine =
     partyMembers.length > 0 ? `- Отряд: ${partyMembers.join(", ")}` : `- Отряд: —`;
 
-  const npcs = state.npcStatus.map((npc) => `${npc.name} [${npc.healthCondition}]`);
+  const npcs = state.npcStatus.map((npc) => {
+    let base = `${npc.name} [${npc.healthCondition}]`;
+    if (npc.relation && npc.relation !== "нейтрален") base += ` (${npc.relation})`;
+    return npc.status ? `${base} — ${npc.status}` : base;
+  });
 
   const npcLine = npcs.length > 0 ? `- NPC/Враги: ${npcs.join(", ")}` : `- NPC/Враги: —`;
 
@@ -64,7 +89,26 @@ export function formatSceneSnapshot(state: EphemeralSceneState): string {
   const eventsLine =
     events.length > 0 ? `- Последние события: ${events.join("; ")}` : `- Последние события: —`;
 
-  return `${roundHeader}\n${partyLine}\n${npcLine}\n${eventsLine}`;
+  const lines = [roundHeader, partyLine];
+
+  const heroNotes = state.partyStatus
+    .map((p) => {
+      const bits: string[] = [];
+      if (p.location) bits.push(`где: ${p.location}`);
+      if (p.status) bits.push(`сейчас: ${p.status}`);
+      if (p.insights && p.insights.length > 0) bits.push(`замечено: ${p.insights.join("; ")}`);
+      return bits.length > 0 ? `${p.name} — ${bits.join("; ")}` : "";
+    })
+    .filter(Boolean);
+  if (heroNotes.length > 0) lines.push(`- Герои подробнее: ${heroNotes.join(" | ")}`);
+
+  lines.push(npcLine, eventsLine);
+
+  if (state.memories && state.memories.length > 0) {
+    lines.push(`- Память (важные факты): ${state.memories.join("; ")}`);
+  }
+
+  return lines.join("\n");
 }
 
 /**
@@ -136,7 +180,7 @@ export async function fetchEphemeralSceneTail(
     db.character.findMany({
       where: { campaignId, isAlive: true },
       orderBy: [{ type: "asc" }, { name: "asc" }, { id: "asc" }],
-      take: 20,
+      take: 200,
     }),
     db.gameEvent.findMany({
       where: { campaignId },
@@ -167,8 +211,14 @@ export async function fetchEphemeralSceneTail(
         ac: c.ac,
         location: c.location ?? undefined,
         condition,
+        status: statusFromNotes(c.notes),
+        insights: extractNoteInsights(c.notes).slice(-MAX_INSIGHTS_PER_HERO),
       });
     } else {
+      // В срез идут только те, кто сейчас в сцене: остальные NPC кампании мастеру в этот ход не нужны
+      if (c.inScene === false) continue;
+      if (npcStatus.length >= MAX_NPCS_IN_TAIL) continue;
+
       let healthCondition = "здоров";
       if (c.hpCurrent <= 0) {
         healthCondition = "без сознания";
@@ -192,6 +242,7 @@ export async function fetchEphemeralSceneTail(
         healthCondition,
         relation,
         location: c.location ?? undefined,
+        status: statusFromNotes(c.notes),
       });
     }
   }
@@ -201,12 +252,61 @@ export async function fetchEphemeralSceneTail(
     turn: e.turn,
   }));
 
+  const sceneNames = [...partyStatus.map((p) => p.name), ...npcStatus.map((n) => n.name)];
+  const memories = await fetchRelevantMemories(campaignId, sceneNames);
+
   return formatSceneSnapshot({
     roundNumber,
     partyStatus,
     npcStatus,
     recentEvents,
+    memories,
   });
+}
+
+/**
+ * Факты долгой памяти для среза сцены: сначала о тех, кто сейчас в сцене, затем самые важные.
+ * Раньше память писалась, но читалась только если мастер сам вызывал recall_memories.
+ */
+export async function fetchRelevantMemories(campaignId: string, sceneNames: string[]): Promise<string[]> {
+  try {
+    const rows =
+      (await db.memory.findMany({
+        where: { campaignId, isArchived: false },
+        orderBy: [{ importance: "desc" }, { createdAt: "desc" }, { id: "asc" }],
+        take: 60,
+        select: { subject: true, content: true, importance: true },
+      })) ?? [];
+    if (!Array.isArray(rows) || rows.length === 0) return [];
+
+    const names = sceneNames.map((n) => n.toLowerCase()).filter((n) => n.length >= 3);
+    const aboutScene = (subject: string) => {
+      const s = (subject || "").toLowerCase();
+      if (!s) return false;
+      return names.some((n) => s.includes(n) || n.includes(s) || s.includes(n.split(" ")[0]));
+    };
+
+    const picked: typeof rows = [];
+    for (const r of rows) if (aboutScene(r.subject) && picked.length < MAX_MEMORIES_IN_TAIL) picked.push(r);
+    for (const r of rows) {
+      if (picked.length >= MAX_MEMORIES_IN_TAIL) break;
+      if (r.importance >= 8 && !picked.includes(r)) picked.push(r);
+    }
+
+    const seen = new Set<string>();
+    const out: string[] = [];
+    for (const r of picked) {
+      const text = `${r.subject}: ${r.content}`.replace(/\s+/g, " ").trim();
+      const key = text.toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push(text.length > MEMORY_CHAR_LIMIT ? `${text.slice(0, MEMORY_CHAR_LIMIT - 1)}…` : text);
+    }
+    return out;
+  } catch {
+    // Память — подсказка, а не необходимость: без неё ход всё равно состоится
+    return [];
+  }
 }
 
 // Алиас для обратной совместимости со спецификацией архитектуры

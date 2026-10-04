@@ -324,10 +324,15 @@ describe("Cooperative Turn Logic", () => {
       roomService: mockRoomService,
     });
 
-    expect(mockGenerateText).toHaveBeenCalledTimes(2);
+    // Запросы к мастеру — те, что идут с инструментами. Помимо них возможен фоновый вызов
+    // обновления хроники: тест работает с настоящей БД, и у активной кампании может быть история.
+    const dmCalls = mockGenerateText.mock.calls.map((c) => c[0] as any).filter((c) => c.tools);
+    expect(dmCalls).toHaveLength(2);
 
-    const call1 = mockGenerateText.mock.calls[0][0] as any;
-    const call2 = mockGenerateText.mock.calls[1][0] as any;
+    const [call1, call2] = dmCalls;
+    // Ввод раунда — либо prompt (истории нет), либо последнее сообщение после истории кампании
+    const roundInput = (c: any): string =>
+      typeof c.prompt === "string" ? c.prompt : String(c.messages[c.messages.length - 1].content);
 
     // Системный промпт должен быть 100% идентичен (KV-кэш)
     expect(call1.system).toBe(call2.system);
@@ -337,10 +342,10 @@ describe("Cooperative Turn Logic", () => {
     expect(call1.system).not.toContain("ранен");
 
     // Динамический срез раунда должен быть в prompt
-    expect(call1.prompt).toContain("Раунд 1");
-    expect(call2.prompt).toContain("Раунд 2");
-    expect(call2.prompt).toContain("8/20");
-    expect(call2.prompt).toContain("ранен");
+    expect(roundInput(call1)).toContain("Раунд 1");
+    expect(roundInput(call2)).toContain("Раунд 2");
+    expect(roundInput(call2)).toContain("8/20");
+    expect(roundInput(call2)).toContain("ранен");
   });
 
   it("passes stopWhen to generateText and extracts narrative from subsequent steps when step 0 contains only tool calls", async () => {
@@ -415,7 +420,9 @@ describe("Cooperative Turn Logic", () => {
       roomService: mockRoomService,
     });
 
-    const call = mockGenerateText.mock.calls[mockGenerateText.mock.calls.length - 1][0] as any;
+    // Последний запрос к мастеру (с инструментами); после него возможен фоновый вызов хроники
+    const dmCalls = mockGenerateText.mock.calls.map((c) => c[0] as any).filter((c) => c.tools);
+    const call = dmCalls[dmCalls.length - 1];
     expect(call.stopWhen).toBeDefined();
     expect(result.dmResponse).toBe("Твоё «ОРУ» ещё звенит, когда улица взрывается движением!");
     expect(result.dmResponse).not.toContain("Мастер оценивает действия отряда в раунде 1...");
