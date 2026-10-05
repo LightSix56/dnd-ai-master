@@ -224,3 +224,62 @@ describe("startRoomCampaign: оригиналы становятся верси�
     }
   });
 });
+
+describe("комнаты, начатые до версий: участник привязан к оригиналу", () => {
+  function legacy() {
+    const ctx = setup();
+    // так выглядела комната до версий: участник указывает на оригинал, в строке — снимок,
+    // герой кампании хранит копию характеристик и лист в заметках
+    ctx.supabase.tables.room_participants.push({
+      id: "p-legacy", room_id: ROOM, user_id: HOST, character_id: TOXIN,
+      character_snapshot: { name: "Токсин", level: 1, attacks: [] }, is_host: true, is_ready: false,
+    });
+    state.prisma.character.rows.push({
+      id: "hero-legacy", campaignId: "camp-1", name: "Токсин", type: "player", level: 1,
+      hpCurrent: 4, hpMax: 9, notes: JSON.stringify({ name: "Токсин", level: 1 }), sheetCharacterId: null, sheetLevelSeen: null,
+    });
+    return ctx;
+  }
+
+  it("opening the room moves the participant to a campaign version and links the hero", async () => {
+    const { supabase, service } = legacy();
+
+    const room = await service.getRoomByCode("DRAGON-42");
+
+    const version = versionsOf(supabase, TOXIN)[0];
+    expect(version).toMatchObject({ campaign_id: "camp-1", campaign_name: "Встреча", user_id: HOST });
+    expect(room!.participants[0].characterId).toBe(version.id);
+    expect(supabase.tables.room_participants[0]).toMatchObject({ character_id: version.id, character_snapshot: {} });
+    // тот же герой кампании, без дубля; оригинал не тронут
+    expect(state.prisma.character.rows).toHaveLength(1);
+    expect(state.prisma.character.rows[0]).toMatchObject({ id: "hero-legacy", sheetCharacterId: version.id, sheetLevelSeen: 1 });
+    expect(supabase.tables.characters.find((c) => c.id === TOXIN)).toMatchObject({ data: toxinSheet, revision: 0 });
+  });
+
+  it("opening the room again changes nothing", async () => {
+    const { supabase, service } = legacy();
+    await service.getRoomByCode("DRAGON-42");
+    const writes = supabase.calls.filter((c) => c.op !== "select").length;
+    await service.getRoomByCode("DRAGON-42");
+    expect(supabase.calls.filter((c) => c.op !== "select").length).toBe(writes);
+    expect(versionsOf(supabase, TOXIN)).toHaveLength(1);
+  });
+
+  it("a lobby without a campaign is left alone", async () => {
+    const { supabase, service } = setup({ campaignId: null });
+    supabase.tables.room_participants.push({ id: "p1", room_id: ROOM, user_id: HOST, character_id: TOXIN, character_snapshot: {} });
+    const room = await service.getRoomByCode("DRAGON-42");
+    expect(room!.participants[0].characterId).toBe(TOXIN);
+    expect(supabase.tables.characters).toHaveLength(2);
+  });
+
+  it("a failure to convert one participant does not break opening the room", async () => {
+    const { supabase, service } = legacy();
+    // второй участник привязан к листу, которого уже нет
+    supabase.tables.room_participants.push({ id: "p2", room_id: ROOM, user_id: GUEST, character_id: "99999999-9999-4999-8999-999999999999", character_snapshot: {} });
+    const room = await service.getRoomByCode("DRAGON-42");
+    expect(room!.participants).toHaveLength(2);
+    expect(room!.participants[1].character.missing).toBe(true);
+    expect(versionsOf(supabase, TOXIN)).toHaveLength(1);
+  });
+});
