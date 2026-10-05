@@ -70,8 +70,8 @@ describe("Cooperative Turn Logic", () => {
 
   it("calculates turn readiness: isAllReady becomes true when all participants with character submit actions", () => {
     const participants = [
-      { userId: "user-1", character: { name: "Торин" } },
-      { userId: "user-2", character: { name: "Эльфийка" } },
+      { userId: "user-1", character: { id: "sheet-1", name: "Торин" } },
+      { userId: "user-2", character: { id: "sheet-2", name: "Эльфийка" } },
       { userId: "user-3", character: null },
     ];
 
@@ -248,8 +248,7 @@ describe("Cooperative Turn Logic", () => {
           roomId: "room-frozen-1",
           userId: "user-1",
           characterId: "char-1",
-          character: {
-            name: "Гимли",
+          character: { id: "sheet-3", name: "Гимли",
             race: "Дворф",
             className: "Воин",
             level: 2,
@@ -388,7 +387,7 @@ describe("Cooperative Turn Logic", () => {
           roomId: "room-step-test",
           userId: "user-1",
           characterId: "c1",
-          character: { name: "Клык", className: "Варвар", level: 1 },
+          character: { id: "sheet-4", name: "Клык", className: "Варвар", level: 1 },
           isHost: true,
           isReady: true,
           joinedAt: new Date().toISOString(),
@@ -456,7 +455,7 @@ describe("Cooperative Turn Logic", () => {
           roomId: "room-err-test",
           userId: "user-1",
           characterId: "c1",
-          character: { name: "Клык", className: "Варвар", level: 1 },
+          character: { id: "sheet-5", name: "Клык", className: "Варвар", level: 1 },
           isHost: true,
           isReady: true,
           joinedAt: new Date().toISOString(),

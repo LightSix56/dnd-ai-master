@@ -64,7 +64,7 @@ export async function GET(
             assignedTo: assignedParticipant
               ? {
                   userId: assignedParticipant.userId,
-                  characterName: assignedParticipant.character?.name || c.name,
+                  characterName: c.name,
                 }
               : null,
           };

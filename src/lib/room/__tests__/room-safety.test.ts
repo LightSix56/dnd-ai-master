@@ -7,7 +7,7 @@ const { dbMock } = vi.hoisted(() => ({
     combatant: { findUnique: vi.fn() },
     combat: { findUnique: vi.fn() },
     campaign: { findUnique: vi.fn() },
-    character: { findMany: vi.fn() },
+    character: { id: "sheet-1", findMany: vi.fn() },
   },
 }));
 
@@ -166,25 +166,14 @@ describe("завершение раунда после перехвата бло
   });
 });
 
-describe("вход в комнату", () => {
-  it("нельзя взять персонажа, которого уже выбрал другой игрок", async () => {
-    const client: any = chain({ data: { id: "room-1", starting_level: 1, status: "lobby", campaign_settings: {} }, error: null });
-    // список других участников комнаты
-    client.then = (resolve: (v: unknown) => unknown) =>
-      Promise.resolve({ data: [{ user_id: "u2", character_snapshot: { name: "торин " } }], error: null }).then(resolve);
-    const service = new RoomService(client);
-    await expect(
-      service.joinRoom({ roomId: "room-1", userId: "u1", characterId: "c1", character: { name: "Торин", level: 1 } } as any)
-    ).rejects.toThrow("уже выбран другим игроком");
-  });
-});
+// «Нельзя взять героя, выбранного другим игроком» — в join-versions.test.ts
 
 describe("управление бойцом в бою комнаты", () => {
   const room = {
     hostUserId: "host",
     participants: [
-      { userId: "u1", character: { name: "Торин" } },
-      { userId: "u2", character: { name: "Лира" } },
+      { userId: "u1", character: { id: "sheet-2", name: "Торин" } },
+      { userId: "u2", character: { id: "sheet-3", name: "Лира" } },
     ],
   };
   const roomService = { getActiveRoomByCampaignId: vi.fn(async () => room) } as any;

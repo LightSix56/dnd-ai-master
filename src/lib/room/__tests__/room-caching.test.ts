@@ -60,8 +60,7 @@ describe("Room Prompt Caching & Frozen Prefix Architecture", () => {
         roomId: "room-caching-1",
         userId: "user-thorgrim",
         characterId: "char-1",
-        character: {
-          name: "Торгрим",
+        character: { id: "sheet-1", name: "Торгрим",
           race: "Дворф",
           className: "Жрец",
           level: 3,
@@ -78,8 +77,7 @@ describe("Room Prompt Caching & Frozen Prefix Architecture", () => {
         roomId: "room-caching-1",
         userId: "user-lyra",
         characterId: "char-2",
-        character: {
-          name: "Лира",
+        character: { id: "sheet-2", name: "Лира",
           race: "Эльф",
           className: "Плут",
           level: 3,

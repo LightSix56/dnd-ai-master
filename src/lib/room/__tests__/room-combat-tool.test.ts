@@ -27,8 +27,7 @@ vi.mock("@/lib/db", () => ({
       findUnique: vi.fn(),
       create: vi.fn().mockResolvedValue({ id: "camp-test" }),
     },
-    character: {
-      findMany: vi.fn().mockResolvedValue([]),
+    character: { id: "sheet-1", findMany: vi.fn().mockResolvedValue([]),
     },
     gameEvent: {
       create: vi.fn().mockResolvedValue({ id: "evt-test" }),

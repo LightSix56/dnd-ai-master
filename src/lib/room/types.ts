@@ -45,6 +45,8 @@ export interface ParticipantCharacter {
   hpMax?: number;
   hpCurrent?: number;
   armorClass?: number;
+  /** Состояния героя из листа, одной строкой (для сводки мастеру) */
+  condition?: string;
   /** Лист не найден в базе: герой выбран, но показать и сыграть им нельзя */
   missing?: boolean;
 }

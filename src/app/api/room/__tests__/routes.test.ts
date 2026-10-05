@@ -139,8 +139,9 @@ describe("Room API Routes (Phase 1)", () => {
           {
             id: "part-1",
             user_id: "user-123",
-            character_id: "char-1",
-            character_snapshot: { name: "Торин", level: 1 },
+            // участник привязан к листу героя; герой кампании ссылается на тот же лист
+            character_id: "sheet-1",
+            character_snapshot: {},
           },
         ],
       };
@@ -161,6 +162,7 @@ describe("Room API Routes (Phase 1)", () => {
           campaignId: "camp-1",
           name: "Торин",
           type: "player",
+          sheetCharacterId: "sheet-1",
           race: "Дварф",
           class: "Воин",
           level: 1,

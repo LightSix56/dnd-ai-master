@@ -1,3 +1,4 @@
+import type { Prisma } from "@prisma/client";
 // API: управление персонажами
 import { denyCampaignAccess } from "@/lib/auth/campaign-access";
 import { db } from "@/lib/db";
@@ -275,7 +276,7 @@ export async function PATCH(req: Request) {
 
     const updated = await db.character.update({
       where: { id },
-      data,
+      data: data as Prisma.CharacterUncheckedUpdateInput,
     });
 
     return Response.json({ character: updated });

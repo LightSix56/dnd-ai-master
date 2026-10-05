@@ -379,10 +379,10 @@ export function RoomLobby({
 
                 {/* Аватар и имена */}
                 <div className="mt-3 flex items-center gap-3">
-                  {char && (char as Record<string, unknown>).portraitUrl ? (
+                  {char && char.portraitUrl ? (
                     <img
-                      src={String((char as Record<string, unknown>).portraitUrl)}
-                      alt={char ? String((char as Record<string, unknown>).name || "Персонаж") : "Персонаж"}
+                      src={String(char.portraitUrl)}
+                      alt={char ? String(char.name || "Персонаж") : "Персонаж"}
                       className="h-12 w-12 rounded-full border border-zinc-200 dark:border-zinc-700 object-cover shrink-0"
                     />
                   ) : (
@@ -393,16 +393,16 @@ export function RoomLobby({
 
                   <div className="min-w-0 flex-1">
                     <h3 className="truncate text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-                      {char ? String((char as Record<string, unknown>).name || "Персонаж без имени") : "Выбирает героя..."}
+                      {char ? String(char.name || "Персонаж без имени") : "Выбирает героя..."}
                     </h3>
                     <p className="truncate text-xs text-zinc-500 mt-0.5">
                       {char
-                        ? `${String((char as Record<string, unknown>).race || "Раса не указана")} • ${String((char as Record<string, unknown>).className || "Класс не указан")}`
+                        ? `${String(char.race || "Раса не указана")} • ${String(char.className || "Класс не указан")}`
                         : "Ожидание выбора"}
                     </p>
                     {char && (
                       <span className="inline-block mt-1 rounded bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 text-[10px] font-medium text-zinc-700 dark:text-zinc-300">
-                        {String((char as Record<string, unknown>).level || room.startingLevel)} ур.
+                        {String(char.level || room.startingLevel)} ур.
                       </span>
                     )}
                   </div>
@@ -411,16 +411,16 @@ export function RoomLobby({
                 {/* Параметры героя */}
                 {char && (
                   <div className="mt-3 flex items-center gap-4 border-t border-zinc-100 dark:border-zinc-800 pt-2 text-xs text-zinc-600 dark:text-zinc-400">
-                    {(char as Record<string, unknown>).hpMax !== undefined && (char as Record<string, unknown>).hpMax !== null && (
+                    {char.hpMax !== undefined && char.hpMax !== null && (
                       <div className="flex items-center gap-1">
                         <Heart className="size-3.5 text-zinc-500" />
-                        <span className="font-medium text-zinc-800 dark:text-zinc-200">{String((char as Record<string, unknown>).hpMax)} HP</span>
+                        <span className="font-medium text-zinc-800 dark:text-zinc-200">{String(char.hpMax)} HP</span>
                       </div>
                     )}
-                    {(char as Record<string, unknown>).armorClass !== undefined && (char as Record<string, unknown>).armorClass !== null && (
+                    {char.armorClass !== undefined && char.armorClass !== null && (
                       <div className="flex items-center gap-1">
                         <Shield className="size-3.5 text-zinc-500" />
-                        <span className="font-medium text-zinc-800 dark:text-zinc-200">{String((char as Record<string, unknown>).armorClass)} КД</span>
+                        <span className="font-medium text-zinc-800 dark:text-zinc-200">{String(char.armorClass)} КД</span>
                       </div>
                     )}
                   </div>

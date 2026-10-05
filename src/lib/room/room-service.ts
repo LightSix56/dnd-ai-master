@@ -88,6 +88,10 @@ export function summarizeSheet(characterId: string, row: SheetRow | null | undef
     hpMax: stats.hpMax,
     hpCurrent: Number.isFinite(hp) && hp >= 0 ? Math.min(hp, stats.hpMax) : stats.hpMax,
     armorClass: stats.ac,
+    condition:
+      Array.isArray(sheet.conditions) && sheet.conditions.length > 0
+        ? sheet.conditions.map(String).join(", ")
+        : undefined,
   };
 }
 

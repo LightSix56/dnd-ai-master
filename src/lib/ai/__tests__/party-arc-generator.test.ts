@@ -32,12 +32,12 @@ describe("party-arc-generator", () => {
     },
   ];
 
-  it("extracts party roster correctly from room participant snapshots", () => {
+  it("extracts party roster correctly from participant sheets", () => {
     const rawParticipants = [
       {
         id: "part-1",
         userId: "user-1",
-        character: {
+        sheet: {
           id: "char-1",
           name: "Торин Железностоп",
           race: "Горный дварф",
@@ -50,7 +50,7 @@ describe("party-arc-generator", () => {
       {
         id: "part-2",
         userId: "user-2",
-        character: {
+        sheet: {
           character: {
             name: "Лира Теневой Шаг",
             race: "Лесной эльф",
@@ -65,7 +65,7 @@ describe("party-arc-generator", () => {
       {
         id: "part-3",
         userId: "user-3",
-        character: null, // participant choosing
+        sheet: null, // participant choosing
       },
     ];
 
