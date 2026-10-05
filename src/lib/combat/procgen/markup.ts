@@ -21,6 +21,38 @@ function cellMean(data: Float32Array, fieldW: number, cx: number, cy: number): n
   return sum / (SUB * SUB);
 }
 
+/**
+ * Проходы на картинке непрерывны, но диагональный проход по долям клеток может распасться
+ * на клетки, касающиеся только углом, а срезать углы движок не даёт. Поэтому клетки вдоль
+ * оси каждого прохода становятся полом, а на диагональных шагах добавляется клетка-связка
+ * (та из двух, где пола больше).
+ */
+function carvePassages(layout: CaveLayout, cells: CellKind[][]): void {
+  const open = (x: number, y: number) => {
+    if (cells[y]?.[x] === "wall") cells[y][x] = "floor";
+  };
+  for (const p of layout.passages) {
+    let prev: { x: number; y: number } | null = null;
+    for (let s = 0; s < p.points.length - 1; s++) {
+      const a = p.points[s];
+      const b = p.points[s + 1];
+      const steps = Math.max(1, Math.ceil(Math.hypot(b.x - a.x, b.y - a.y) * 10));
+      for (let i = 0; i <= steps; i++) {
+        const cx = Math.floor(a.x + ((b.x - a.x) * i) / steps);
+        const cy = Math.floor(a.y + ((b.y - a.y) * i) / steps);
+        if (prev && prev.x !== cx && prev.y !== cy) {
+          const viaX = cellMean(layout.floor.data, layout.floor.w, cx, prev.y);
+          const viaY = cellMean(layout.floor.data, layout.floor.w, prev.x, cy);
+          if (viaX >= viaY) open(cx, prev.y);
+          else open(prev.x, cy);
+        }
+        open(cx, cy);
+        prev = { x: cx, y: cy };
+      }
+    }
+  }
+}
+
 /** Сетка `[y][x]`: стена и вода важнее декора, укрытие важнее щебня */
 export function classifyCells(layout: CaveLayout): CellKind[][] {
   const cells: CellKind[][] = [];
@@ -33,6 +65,7 @@ export function classifyCells(layout: CaveLayout): CellKind[][] {
     }
     cells.push(row);
   }
+  carvePassages(layout, cells);
   for (const d of layout.decor) {
     const cx = Math.floor(d.x);
     const cy = Math.floor(d.y);

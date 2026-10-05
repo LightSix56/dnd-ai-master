@@ -8,15 +8,22 @@ import type { CellKind } from "./markup";
 
 const PARTY_CELLS = 12;
 const ENEMY_CELLS = 16;
+/** Враги в начале боя — не ближе стольких шагов пути от партии */
+const MIN_ENEMY_STEPS = 8;
+/** Засада — не ближе стольких шагов пути от партии */
+const MIN_FLANK_STEPS = 4;
 
 /** Расстояния по проходимым клеткам (всё, кроме скалы) от стартовой клетки */
-export function pathDistances(cells: CellKind[][], start: Cell): Map<string, number> {
+export function pathDistances(cells: CellKind[][], start: Cell | Cell[]): Map<string, number> {
   const h = cells.length;
   const w = cells[0].length;
   const dist = new Map<string, number>();
-  if (cells[start.y]?.[start.x] === undefined || cells[start.y][start.x] === "wall") return dist;
-  dist.set(`${start.x},${start.y}`, 0);
-  const queue: Cell[] = [start];
+  const queue: Cell[] = [];
+  for (const s of Array.isArray(start) ? start : [start]) {
+    if (cells[s.y]?.[s.x] === undefined || cells[s.y][s.x] === "wall") continue;
+    dist.set(`${s.x},${s.y}`, 0);
+    queue.push(s);
+  }
   for (let i = 0; i < queue.length; i++) {
     const c = queue[i];
     const d = dist.get(`${c.x},${c.y}`)!;
@@ -81,10 +88,19 @@ export function buildSpawnZones(layout: CaveLayout, cells: CellKind[][]): SpawnZ
 
   const partyStart = anchors[pair[0]]!;
   const enemyStart = anchors[pair[1]]!;
+  // Каждый зал должен быть достижим: иначе нарисованный зал оказался бы отрезан
+  const fromStart = pathDistances(cells, partyStart);
+  if (anchors.some((a) => !a || !fromStart.has(`${a.x},${a.y}`))) return null;
+
   const party = nearestFloor(cells, partyStart, PARTY_CELLS, new Set());
   const taken = new Set(party.map((c) => `${c.x},${c.y}`));
   const enemies = nearestFloor(cells, enemyStart, ENEMY_CELLS, taken);
   if (party.length < 8 || enemies.length < 8) return null;
+
+  // Шагов от ближайшего героя: враги не должны стоять вплотную к партии
+  const fromPartyZone = pathDistances(cells, party);
+  const enemyKeys = new Set(enemies.map((c) => `${c.x},${c.y}`));
+  if (enemies.some((c) => (fromPartyZone.get(`${c.x},${c.y}`) ?? 0) < MIN_ENEMY_STEPS)) return null;
 
   // Ближняя к партии половина отряда — фронт, дальняя — тыл
   const fromParty = pathDistances(cells, partyStart);
@@ -103,7 +119,8 @@ export function buildSpawnZones(layout: CaveLayout, cells: CellKind[][]): SpawnZ
     for (let y = 0; y < cells.length; y++) {
       for (let x = 0; x < cells[0].length; x++) {
         const key = `${x},${y}`;
-        if (cells[y][x] !== "floor" || taken.has(key) || !fromParty.has(key)) continue;
+        if (cells[y][x] !== "floor" || taken.has(key) || enemyKeys.has(key)) continue;
+        if ((fromPartyZone.get(key) ?? -1) < MIN_FLANK_STEPS) continue;
         if (Math.hypot((x + 0.5 - niche.cx) / niche.rx, (y + 0.5 - niche.cy) / niche.ry) <= 1) flank.push({ x, y });
       }
     }

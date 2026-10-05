@@ -64,7 +64,49 @@ describe("generateProcgenMap", () => {
       const fromParty = reachable(grid, party[0]);
       expect(zone(map, "enemy_frontline").some((c) => fromParty.has(`${c.x},${c.y}`)), `seed ${seed}`).toBe(true);
     }
-  });
+  }, 120000);
+
+  it("на 300 зёрнах все залы достижимы, враги не вплотную к партии, засада не у партии", () => {
+    for (let seed = 1; seed <= 300; seed++) {
+      const map = generateProcgenMap("cave", seed);
+      const grid = kindGrid(map);
+      const party = zone(map, "party");
+      // Расстояние от ближайшей клетки партии до каждой клетки карты
+      const dist = new Map<string, number>(party.map((c) => [`${c.x},${c.y}`, 0]));
+      const queue = [...party];
+      for (let i = 0; i < queue.length; i++) {
+        const c = queue[i];
+        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+          const x = c.x + dx;
+          const y = c.y + dy;
+          const key = `${x},${y}`;
+          if (x < 0 || y < 0 || x >= W || y >= H || dist.has(key) || grid[y][x] === "wall") continue;
+          dist.set(key, dist.get(`${c.x},${c.y}`)! + 1);
+          queue.push({ x, y });
+        }
+      }
+      const layout = generateCaveLayout(parseProcgenUrl(map.backgroundUrl)!.seed);
+      for (const room of layout.chambers) {
+        let best = "";
+        let bestD = Infinity;
+        for (let y = 0; y < H; y++) {
+          for (let x = 0; x < W; x++) {
+            const d = Math.hypot(x + 0.5 - room.cx, y + 0.5 - room.cy);
+            if (grid[y][x] !== "wall" && d < bestD) [best, bestD] = [`${x},${y}`, d];
+          }
+        }
+        expect(dist.has(best), `seed ${seed}: зал (${room.cx.toFixed(1)}, ${room.cy.toFixed(1)}) отрезан`).toBe(true);
+      }
+      const enemyKeys = new Set([...zone(map, "enemy_frontline"), ...zone(map, "enemy_backline")].map((c) => `${c.x},${c.y}`));
+      const nearestEnemy = Math.min(...[...enemyKeys].map((k) => dist.get(k) ?? Infinity));
+      expect(nearestEnemy, `seed ${seed}: враги слишком близко`).toBeGreaterThanOrEqual(8);
+      for (const c of zone(map, "ambush_flank")) {
+        const key = `${c.x},${c.y}`;
+        expect(dist.get(key)!, `seed ${seed}: засада у партии`).toBeGreaterThanOrEqual(4);
+        expect(enemyKeys.has(key), `seed ${seed}: засада в зоне врагов`).toBe(false);
+      }
+    }
+  }, 120000);
 
   it("встречается узкое место в одну клетку между стенами", () => {
     let found = false;
