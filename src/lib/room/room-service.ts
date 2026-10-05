@@ -244,7 +244,7 @@ export class RoomService {
 
     if (error || !data) return null;
     const room = mapRoomFromDb(data);
-    const participants = await this.mapParticipants(data.room_participants);
+    const participants = await this.mapParticipants(data.room_participants, room);
 
     return {
       ...room,
@@ -253,7 +253,7 @@ export class RoomService {
   }
 
   /** Участники с краткими сведениями о героях, прочитанными из листов одним запросом */
-  private async mapParticipants(rows: unknown): Promise<RoomParticipant[]> {
+  private async mapParticipants(rows: unknown, room?: Room): Promise<RoomParticipant[]> {
     const list = Array.isArray(rows) ? (rows as Record<string, any>[]) : [];
     if (list.length === 0) return [];
     let sheets: Map<string, SheetRow> | undefined;
@@ -263,7 +263,53 @@ export class RoomService {
       // Комнату всё равно показываем: герои будут помечены «лист недоступен»
       console.warn("[room-service] не удалось прочитать листы участников:", e);
     }
+    if (sheets && room?.campaignId) {
+      await this.moveOriginalsToVersions(list, sheets, room);
+    }
     return list.map((r) => mapParticipantFromDb(r, sheets));
+  }
+
+  /**
+   * В комнате с кампанией участник должен играть версией героя для этой кампании.
+   * К оригиналу он привязан в двух случаях: вошёл в лобби до старта кампании или комната
+   * начата до появления версий. Здесь такие привязки переводятся на версию (один раз):
+   * оригинал не меняется, герой кампании получает ссылку на лист версии.
+   */
+  private async moveOriginalsToVersions(
+    rows: Record<string, any>[],
+    sheets: Map<string, SheetRow>,
+    room: Room
+  ): Promise<void> {
+    const campaignId = room.campaignId as string;
+    const pending = rows.filter((r) => {
+      const sheet = sheets.get(r.character_id);
+      return sheet && !sheet.campaignId;
+    });
+    if (pending.length === 0) return;
+
+    const campaignName = await this.resolveCampaignName(
+      campaignId,
+      (room.campaignSettings || {}) as Record<string, any>,
+      room.name
+    );
+    for (const row of pending) {
+      try {
+        const version = await ensureCampaignVersion(
+          { userId: row.user_id, characterId: row.character_id, campaignId, campaignName },
+          this.client
+        );
+        const { error } = await this.client
+          .from("room_participants")
+          .update({ character_id: version.id, character_snapshot: {} })
+          .eq("id", row.id);
+        if (error) throw new Error(error.message);
+        await this.linkHeroToCampaign(campaignId, version);
+        row.character_id = version.id;
+        sheets.set(version.id, version);
+      } catch (e) {
+        console.warn("[room-service] не удалось перевести участника на версию героя:", e);
+      }
+    }
   }
 
   /**
@@ -304,7 +350,7 @@ export class RoomService {
     }
 
     const room = mapRoomFromDb(data);
-    const participants = await this.mapParticipants(data.room_participants);
+    const participants = await this.mapParticipants(data.room_participants, room);
 
     return {
       ...room,
