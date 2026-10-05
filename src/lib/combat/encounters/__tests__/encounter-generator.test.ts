@@ -79,7 +79,8 @@ describe("Encounter Generator Pipeline", () => {
     expect(encounter.actualXP).toBeGreaterThan(0);
     expect(encounter.adjustedXP).toBeGreaterThan(0);
     expect(encounter.xpPerPlayer).toBe(Math.floor(encounter.actualXP / 4));
-    expect(encounter.mapPreset.id).toBe(dungeonPrisonPreset.id);
+    // Карта всегда собирается генератором; выбранный готовый пресет больше не используется
+    expect(encounter.mapPreset.backgroundUrl).toMatch(/^procgen:cave\?seed=/);
 
     // Verify all enemies have valid grid positions within bounds
     for (const enemy of encounter.enemies) {

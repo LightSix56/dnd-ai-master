@@ -19,7 +19,6 @@ import type {
   PartyMember,
   GeneratedEncounter,
 } from "./encounters/types";
-import { resolveBattlemapForNarrative } from "./maps/open-map-service";
 import { resolveMonsterCombatant } from "./monsters/bestiary-resolver";
 import { packMonsterData } from "./serialize";
 
@@ -960,9 +959,8 @@ export async function createTacticalEncounter({
       gridWidth: effectiveGridWidth,
       gridHeight: effectiveGridHeight,
       cellSize: 40,
-      backgroundUrl:
-        generatedEncounterResult?.mapPreset?.backgroundUrl ||
-        resolveBattlemapForNarrative(name + " " + environment).imageUrl,
+      // Фон — процедурная карта (ссылка procgen:); готовые картинки больше не подставляются
+      backgroundUrl: generatedEncounterResult?.mapPreset?.backgroundUrl ?? null,
       status: "active",
       round: 1,
       currentTurnIndex: 0,
@@ -998,19 +996,18 @@ export async function createTacticalEncounter({
     generatedEncounterResult?.mapPreset?.elements &&
     generatedEncounterResult.mapPreset.elements.length > 0
   ) {
-    for (const el of generatedEncounterResult.mapPreset.elements) {
-      await db.mapElement.create({
-        data: {
-          combatId: combat.id,
-          type: el.type,
-          x: el.x,
-          y: el.y,
-          width: el.width || 1,
-          height: el.height || 1,
-          properties: JSON.stringify(el.properties || {}),
-        },
-      });
-    }
+    // Разметка процедурной карты — одним запросом: на карте десятки элементов
+    await db.mapElement.createMany({
+      data: generatedEncounterResult.mapPreset.elements.map((el) => ({
+        combatId: combat.id,
+        type: el.type,
+        x: el.x,
+        y: el.y,
+        width: el.width || 1,
+        height: el.height || 1,
+        properties: JSON.stringify(el.properties || {}),
+      })),
+    });
   } else {
     const generatedElements = generateTacticalMap(
       environment,

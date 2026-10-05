@@ -22,6 +22,8 @@ export interface EncounterRequest {
   party: PartyMember[];
   difficulty: EncounterDifficulty;
   mapPresetId: string;
+  /** Зерно процедурной карты; без него — случайное */
+  mapSeed?: number;
   biome?: string;
   storyFaction?: StoryFactionContext;
   archetype?: SquadArchetype;

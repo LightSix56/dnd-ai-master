@@ -7,7 +7,7 @@ import type {
   PartyMember,
 } from "./types";
 import type { MonsterDefinition, MonsterManifestEntry } from "../monsters/types";
-import type { TacticalMapPreset, BiomeType } from "../maps/types";
+import type { TacticalMapPreset } from "../maps/types";
 import type { Combatant } from "../types";
 import {
   calculatePartyXPBudget,
@@ -16,11 +16,7 @@ import {
 } from "./xp-calculator";
 import { getBiomeCandidatePool } from "./biome-matcher";
 import { solveSquad } from "./archetype-solver";
-import {
-  getPresetById,
-  getPresetByBiome,
-  ALL_PRESETS,
-} from "../maps/presets";
+import { generateProcgenMap } from "../procgen";
 import {
   assignTacticalSpawns,
   type TacticalRole,
@@ -236,14 +232,9 @@ export async function generateEncounter(
   // 1. Calculate XP budget according to DMG p. 82
   const targetXP = calculatePartyXPBudget(party, request.difficulty);
 
-  // 2. Resolve Tactical Map Preset
-  let mapPreset = getPresetById(request.mapPresetId);
-  if (!mapPreset && request.biome) {
-    mapPreset = getPresetByBiome(request.biome as BiomeType);
-  }
-  if (!mapPreset) {
-    mapPreset = ALL_PRESETS[0];
-  }
+  // 2. Карта боя собирается генератором по зерну; готовые карты больше не используются
+  const mapSeed = request.mapSeed ?? Math.floor(Math.random() * 2 ** 31);
+  const mapPreset: TacticalMapPreset = generateProcgenMap(request.biome || "cave", mapSeed);
 
   const effectiveBiome = request.biome || mapPreset.biome || "dungeon";
 
