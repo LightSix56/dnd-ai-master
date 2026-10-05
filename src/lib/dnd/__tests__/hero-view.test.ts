@@ -162,6 +162,14 @@ describe("withSheets / loadCampaignHeroes", () => {
     expect(heroes[1].sheetMissing).toBe(true);
   });
 
+  it("rows already overlaid by the database client are not read twice", async () => {
+    const c = client();
+    const first = await withSheets([prismaHero], c as any);
+    const second = await withSheets(first, c as any);
+    expect(c.calls).toHaveLength(1);
+    expect(second[0]).toBe(first[0]);
+  });
+
   it("loadCampaignHeroes reads prisma rows of the campaign and overlays sheets", async () => {
     findMany.mockResolvedValue([prismaHero]);
     const heroes = await loadCampaignHeroes("camp-1", { type: "player" }, client() as any);

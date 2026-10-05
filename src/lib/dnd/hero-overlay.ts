@@ -83,7 +83,14 @@ export async function withSheets<T extends Linkable>(
   characters: T[],
   client?: SupabaseClient
 ): Promise<HeroView<T>[]> {
-  const ids = characters.map((c) => c.sheetCharacterId).filter((id): id is string => Boolean(id));
+  // Строки, на которые лист уже наложен (их вернул @/lib/db), второй раз не читаем
+  const done = (c: T) => "sheetMissing" in (c as object);
+  const ids = characters
+    .filter((c) => !done(c))
+    .map((c) => c.sheetCharacterId)
+    .filter((id): id is string => Boolean(id));
   const sheets = ids.length > 0 ? await loadSheets(ids, client) : new Map<string, SheetRow>();
-  return characters.map((c) => overlaySheet(c, c.sheetCharacterId ? sheets.get(c.sheetCharacterId) : null));
+  return characters.map((c) =>
+    done(c) ? (c as HeroView<T>) : overlaySheet(c, c.sheetCharacterId ? sheets.get(c.sheetCharacterId) : null)
+  );
 }
