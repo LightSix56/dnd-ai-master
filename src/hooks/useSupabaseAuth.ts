@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import type { User, Session } from "@supabase/supabase-js";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
+import { consumeRedirectTarget, rememberRedirectTarget } from "./auth-redirect";
 
 export function useSupabaseAuth() {
   const [user, setUser] = useState<User | null>(null);
@@ -50,11 +51,8 @@ export function useSupabaseAuth() {
       setLoading(false);
 
       if (currentSession && typeof window !== "undefined") {
-        const nextTarget = localStorage.getItem("auth_redirect_next");
-        if (nextTarget && nextTarget.startsWith("/") && window.location.pathname !== nextTarget) {
-          localStorage.removeItem("auth_redirect_next");
-          window.location.href = nextTarget;
-        }
+        const nextTarget = consumeRedirectTarget(localStorage, window.location.pathname);
+        if (nextTarget) window.location.href = nextTarget;
       }
     });
 
@@ -70,11 +68,8 @@ export function useSupabaseAuth() {
         if (window.location.hash.includes("access_token")) {
           window.history.replaceState(null, "", window.location.pathname + window.location.search);
         }
-        const nextTarget = localStorage.getItem("auth_redirect_next");
-        if (nextTarget && nextTarget.startsWith("/") && window.location.pathname !== nextTarget) {
-          localStorage.removeItem("auth_redirect_next");
-          window.location.href = nextTarget;
-        }
+        const nextTarget = consumeRedirectTarget(localStorage, window.location.pathname);
+        if (nextTarget) window.location.href = nextTarget;
       }
     });
 
@@ -137,7 +132,7 @@ export function useSupabaseAuth() {
       const currentPath = typeof window !== "undefined" ? window.location.pathname : "/";
       const nextTarget = redirectTo || currentPath;
       if (typeof window !== "undefined") {
-        localStorage.setItem("auth_redirect_next", nextTarget);
+        rememberRedirectTarget(localStorage, nextTarget);
         document.cookie = `auth_redirect_next=${encodeURIComponent(nextTarget)}; path=/; max-age=300; SameSite=Lax`;
       }
       // Чистый URL БЕЗ query-параметров для 100% совпадения с whitelist в Supabase
