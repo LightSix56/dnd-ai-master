@@ -788,9 +788,15 @@ const CLASS_DEFAULT_SAVING_THROWS: Record<string, string[]> = {
   artificer: ["CON", "INT"],
 };
 
+const SHEET_ABILITY_TO_EN: Record<string, string> = {
+  СИЛ: "STR", ЛОВ: "DEX", ТЕЛ: "CON", ИНТ: "INT", МДР: "WIS", ХАР: "CHA",
+  STR: "STR", DEX: "DEX", CON: "CON", INT: "INT", WIS: "WIS", CHA: "CHA",
+};
+
 export function resolveSavingThrowProficiencies(
   className: string,
-  notes?: string | null
+  notes?: string | null,
+  sheet?: Record<string, any> | null
 ): Record<string, boolean> {
   const result: Record<string, boolean> = {
     STR: false,
@@ -800,6 +806,16 @@ export function resolveSavingThrowProficiencies(
     WIS: false,
     CHA: false,
   };
+
+  // Живой лист героя: спасброски отмечены в нём явно
+  const marked = Object.entries((sheet?.savingThrowProficiencies ?? {}) as Record<string, unknown>)
+    .filter(([, has]) => Boolean(has))
+    .map(([ability]) => SHEET_ABILITY_TO_EN[String(ability).trim().toUpperCase()])
+    .filter(Boolean);
+  if (marked.length > 0) {
+    for (const key of marked) result[key] = true;
+    return result;
+  }
 
   if (notes) {
     const match = notes.match(/Спасброски:\s*([^\n\r]+)/i);
@@ -886,6 +902,13 @@ export async function createTacticalEncounter({
         orderBy: [{ type: "asc" }, { createdAt: "asc" }],
       })
     : [];
+
+  // Герой привязан к листу, но лист не читается: в бой его не пускаем — иначе он вышел бы
+  // «пустым» персонажем с десятками во всех характеристиках
+  const lost = partyCharacters.find((c) => (c as { sheetMissing?: boolean }).sheetMissing);
+  if (lost) {
+    throw new Error(`У героя «${lost.name}» недоступен лист персонажа. Выберите героя заново.`);
+  }
 
   const partyMembers: PartyMember[] =
     partyCharacters.length > 0
@@ -1674,7 +1697,7 @@ export async function createTacticalEncounter({
           ]
         : [];
 
-    const profSaves = resolveSavingThrowProficiencies(char.class || "", char.notes);
+    const profSaves = resolveSavingThrowProficiencies(char.class || "", char.notes, (char as { sheet?: Record<string, any> | null }).sheet);
     const lowerClass = (char.class || "").trim().toLowerCase();
     const isCaster = /волшеб|маг|wizard|чародей|sorcerer|колдун|warlock|жрец|cleric|друид|druid|бард|bard|паладин|paladin|следопыт|ranger|изобретатель|artificer/i.test(lowerClass);
     const resolvedSpells =

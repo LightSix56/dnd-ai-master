@@ -28,6 +28,8 @@ export async function loadCampaignContext(campaignId: string): Promise<CampaignC
     flaws: p.flaws,
     appearance: p.appearance,
     notes: p.notes,
+    // db.character накладывает на героя его живой лист (см. src/lib/db.ts)
+    sheet: (p as { sheet?: Record<string, any> | null }).sheet ?? null,
   }));
 
   return {

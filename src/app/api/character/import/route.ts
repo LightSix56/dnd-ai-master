@@ -5,8 +5,11 @@ import {
   isSheetCharacter,
   mapSheetToCharacter,
   deriveMemories,
+  unwrapSheet,
   type SheetCharacter,
 } from "@/lib/dnd/import-character";
+import { splitHeroWrite } from "@/lib/dnd/hero-db-hooks";
+import { applyGameState, createCampaignHeroSheet } from "@/lib/dnd/sheet-store";
 
 export const maxDuration = 30;
 
@@ -133,9 +136,41 @@ export async function POST(req: Request) {
       (c) => (sheetId && c.id === sheetId) || c.name.trim().toLowerCase() === normalizedName
     );
 
-    const saved = existing
-      ? await db.character.update({ where: { id: existing.id }, data: mapped })
-      : await db.character.create({ data: { ...mapped, campaignId: activeCampaignId } });
+    // Герой игрока: лист кладётся в базу листов отдельной версией для этой кампании,
+    // а в кампании остаётся только ссылка на него. Копия характеристик и атак
+    // в строку кампании не пишется — они читаются из листа.
+    let saved;
+    if (type === "player" && requestUserId) {
+      const fullSheet = unwrapSheet<Record<string, any>>(sheet);
+      let sheetCharacterId = existing?.sheetCharacterId ?? null;
+      if (sheetCharacterId) {
+        // Повторный импорт того же героя обновляет его лист
+        await applyGameState(sheetCharacterId, fullSheet);
+      } else {
+        const row = await createCampaignHeroSheet({
+          userId: requestUserId,
+          campaignId: activeCampaignId,
+          campaignName: campaign.name,
+          sheet: fullSheet,
+        });
+        sheetCharacterId = row.id;
+      }
+      const link = {
+        ...splitHeroWrite(mapped as Record<string, unknown>).prismaData,
+        name: mapped.name,
+        notes: null,
+        sheetCharacterId,
+        sheetLevelSeen: mapped.level,
+      };
+      saved = existing
+        ? await db.character.update({ where: { id: existing.id }, data: link })
+        : await db.character.create({ data: { ...(link as typeof mapped), campaignId: activeCampaignId } });
+    } else {
+      // NPC и спутники (и герои кампаний без владельца): листа нет, всё хранится в кампании
+      saved = existing
+        ? await db.character.update({ where: { id: existing.id }, data: mapped })
+        : await db.character.create({ data: { ...mapped, campaignId: activeCampaignId } });
+    }
 
     const memories = deriveMemories(sheet, mapped);
     let savedMemories = 0;

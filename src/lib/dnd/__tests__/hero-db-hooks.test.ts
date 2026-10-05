@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { fakeSupabase } from "@/lib/testing/fake-supabase";
-import { splitHeroWrite, applyHeroSheetWrite, liveHeroRows } from "../hero-db-hooks";
+import { splitHeroWrite, applyHeroSheetWrite, liveHeroRows, liveNestedHeroes, withNestedHeroLink } from "../hero-db-hooks";
 
 const SHEET_ID = "11111111-1111-4111-8111-111111111111";
 
@@ -101,5 +101,32 @@ describe("liveHeroRows", () => {
     expect(await liveHeroRows(null, c as any)).toBeNull();
     expect(await liveHeroRows({ count: 3 } as any, c as any)).toEqual({ count: 3 });
     expect(c.calls).toHaveLength(0);
+  });
+});
+
+describe("кампания, прочитанная вместе с героями", () => {
+  it("heroes nested in a campaign get their live sheet, one database call for all campaigns", async () => {
+    const c = client();
+    const campaigns = await liveNestedHeroes(
+      [
+        { id: "c1", characters: [{ id: "ch-1", name: "Старое", level: 1, sheetCharacterId: SHEET_ID }] },
+        { id: "c2", characters: [{ id: "npc", name: "Трактирщик", level: 1, sheetCharacterId: null }] },
+        { id: "c3" },
+      ],
+      c as any
+    );
+    expect(campaigns[0].characters![0]).toMatchObject({ name: "Токсин", level: 3 });
+    expect(campaigns[1].characters![0]).toMatchObject({ name: "Трактирщик", level: 1 });
+    expect(campaigns[2]).toEqual({ id: "c3" });
+    expect(c.calls).toHaveLength(1);
+  });
+
+  it("a nested select of sheet-owned fields gets the sheet link added", () => {
+    const args = { where: { id: "c1" }, include: { characters: { select: { name: true, level: true } } } };
+    expect(withNestedHeroLink(args).include.characters.select).toEqual({ name: true, level: true, sheetCharacterId: true });
+    const untouched = { where: { id: "c1" }, include: { characters: { select: { relation: true } } } };
+    expect(withNestedHeroLink(untouched)).toEqual(untouched);
+    const plain = { where: { id: "c1" }, include: { characters: true } };
+    expect(withNestedHeroLink(plain)).toEqual(plain);
   });
 });

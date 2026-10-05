@@ -1,5 +1,4 @@
 import { resolveSheetAttacks } from "@/lib/dnd/sheet-attacks";
-import { sheetFromNotes } from "@/lib/dnd/import-character";
 import type { Character } from "@/lib/store";
 
 export type AbilityKey = "str" | "dex" | "con" | "int" | "wis" | "cha";
@@ -82,18 +81,24 @@ const CLASS_SAVING_THROWS: Record<string, string[]> = {
   изобретатель: ["ТЕЛ", "ИНТ"],
 };
 
-/** Парсит заметки персонажа (notes) для извлечения спасбросков, навыков и атак. */
+/** Откуда брать владения: живой лист героя либо текстовые заметки (NPC, герои без листа) */
+export type ProficiencySource = { sheet?: Record<string, any> | null; notes?: string | null };
+
+/**
+ * Спасброски, навыки и атаки персонажа.
+ * У героя с листом всё берётся из листа (его читает сервер из базы при каждом запросе);
+ * у персонажа без листа — из текстовых заметок («Спасброски: …», «Навыки: …», «Атаки: …»).
+ */
 export function parseCharacterProficiencies(
-  notes?: string | null,
+  source?: ProficiencySource | string | null,
   className?: string | null
 ): ParsedProficiencies {
   const savingThrows = new Set<string>();
   const skills = new Map<string, "proficient" | "expertise">();
   const attacks: ParsedAttack[] = [];
 
-  // Сетевые комнаты сохраняют в notes весь лист персонажа одним JSON. Текстовые шаблоны ниже
-  // в нём ничего не находили: у героя пропадали все атаки, владения и компетенции.
-  const sheet = sheetFromNotes(notes);
+  const sheet = source && typeof source === "object" ? source.sheet ?? null : null;
+  const notes = typeof source === "string" ? source : source?.notes;
   if (sheet) {
     for (const [ability, has] of Object.entries(sheet.savingThrowProficiencies || {})) {
       if (has) savingThrows.add(String(ability).trim().toUpperCase());
@@ -188,7 +193,7 @@ export function getSkillBonus(
   skill: SkillDef,
   parsed?: ParsedProficiencies
 ): number {
-  const profs = parsed || parseCharacterProficiencies(character.notes, character.class);
+  const profs = parsed || parseCharacterProficiencies(character, character.class);
   const baseStat = character[skill.ability] ?? 10;
   const baseMod = abilityModifier(baseStat);
   const prof = profs.skills.get(skill.name);
@@ -209,7 +214,7 @@ export function getSaveBonus(
   ability: AbilityKey,
   parsed?: ParsedProficiencies
 ): number {
-  const profs = parsed || parseCharacterProficiencies(character.notes, character.class);
+  const profs = parsed || parseCharacterProficiencies(character, character.class);
   const baseStat = character[ability] ?? 10;
   const baseMod = abilityModifier(baseStat);
   const meta = ABILITY_META_LIST.find((a) => a.key === ability);

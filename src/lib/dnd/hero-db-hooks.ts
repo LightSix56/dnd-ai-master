@@ -21,6 +21,9 @@ const SHEET_BUILD_FIELDS = [
   "race", "class", "subclass", "background",
 ] as const;
 
+/** Все поля строки кампании, значения которых у привязанного героя берутся из листа */
+export const SHEET_FIELDS: readonly string[] = ["name", ...SHEET_STATE_FIELDS, ...SHEET_BUILD_FIELDS];
+
 export interface HeroWriteSplit {
   prismaData: Record<string, unknown>;
   sheetOps: Partial<Record<(typeof SHEET_STATE_FIELDS)[number], NumberOp>>;
@@ -104,4 +107,40 @@ export async function liveHeroRows<T>(result: T, client?: SupabaseClient): Promi
   const byRow = new Map(linkable.map((r, i) => [r, overlaid[i]]));
   const mapped = rows.map((r) => byRow.get(r) ?? r);
   return (isArray ? mapped : mapped[0]) as T;
+}
+
+/**
+ * То же для кампаний, прочитанных вместе с героями (include/select characters):
+ * Prisma не проводит вложенные выборки через перехват модели Character.
+ */
+export async function liveNestedHeroes<T>(result: T, client?: SupabaseClient): Promise<T> {
+  if (!result || typeof result !== "object") return result;
+  const owners = (Array.isArray(result) ? result : [result]) as Array<Record<string, any>>;
+  const withHeroes = owners.filter((o) => o && Array.isArray(o.characters));
+  if (withHeroes.length === 0) return result;
+  const all = withHeroes.flatMap((o) => o.characters as Array<Record<string, any>>);
+  const overlaid = await liveHeroRows(all, client);
+  let offset = 0;
+  for (const owner of withHeroes) {
+    const size = owner.characters.length;
+    owner.characters = overlaid.slice(offset, offset + size);
+    offset += size;
+  }
+  return result;
+}
+
+/** Добавляет ссылку на лист во вложенный select героев, если в нём выбраны поля листа */
+export function withNestedHeroLink<A extends Record<string, any>>(args: A): A {
+  const patch = (container: Record<string, any> | null | undefined) => {
+    const nested = container?.characters;
+    const select = nested && typeof nested === "object" ? nested.select : null;
+    if (!select || select.sheetCharacterId) return container;
+    if (!SHEET_FIELDS.some((field) => select[field])) return container;
+    return { ...container, characters: { ...nested, select: { ...select, sheetCharacterId: true } } };
+  };
+  if (!args) return args;
+  const next: Record<string, any> = { ...args };
+  if (args.include) next.include = patch(args.include);
+  if (args.select) next.select = patch(args.select);
+  return next as A;
 }

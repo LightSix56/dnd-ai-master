@@ -9,7 +9,7 @@
 //  - пункты «• …», которые летописец дописывает в notes, когда герой раскрывает новую черту.
 // Раньше notes шли в промпт как есть, и кэш сбрасывался на каждом ходу почти с самого начала.
 
-import { sheetFromNotes, summarizeSheetMechanics, unwrapSheet } from "@/lib/dnd/import-character";
+import { summarizeSheetMechanics } from "@/lib/dnd/import-character";
 import { buildSystemPrompt, type CampaignContext, type PlayerSummary } from "../system-prompt";
 
 const STATUS_TAG = /\[(?:Статус|Состояние):\s*[^\]]*\]/gi;
@@ -25,9 +25,9 @@ export function stripVolatileNotes(notes?: string | null): string | null {
     .replace(/\n{3,}/g, "\n\n")
     .trim();
   if (!kept) return null;
-  // Сетевые комнаты кладут в notes весь лист персонажа одним JSON (его читает боевой генератор).
-  // В промпт мастера такой лист целиком не нужен — берём из него только текстовое досье.
-  if (kept.startsWith("{")) return dossierFromSheetJson(kept);
+  // Лист персонажа в заметках больше не хранится (он читается из базы). JSON, оставшийся
+  // в заметках старых кампаний, в промпт не пускаем: это не досье, а сырые данные.
+  if (kept.startsWith("{")) return null;
   return kept;
 }
 
@@ -42,30 +42,25 @@ const SHEET_DOSSIER_FIELDS: Array<[string, string]> = [
   ["appearance", "Внешность"],
 ];
 
-/** Короткое досье из JSON-листа персонажа; null, если текстовых полей в нём нет */
-function dossierFromSheetJson(raw: string): string | null {
-  let sheet: Record<string, unknown>;
-  try {
-    const parsed = JSON.parse(raw);
-    if (!parsed || typeof parsed !== "object") return null;
-    sheet = parsed as Record<string, unknown>;
-  } catch {
-    return null;
-  }
-  // лист может лежать глубже — внутри карточки героя кампании
-  const full = sheetFromNotes(raw) ?? unwrapSheet<Record<string, any>>(sheet);
-  const nested: Record<string, unknown> = full;
-  const parts: string[] = [];
-
-  // Механика героя: без неё мастер не знал ни навыков, ни атак персонажа из сетевой комнаты
-  parts.push(...summarizeSheetMechanics(full));
-
+/**
+ * Краткое досье героя из его листа: механика (спасброски, навыки, атаки) и текстовые поля.
+ * Сюда не попадают хиты, ячейки и состояния — они меняются каждый ход и сломали бы кэш промпта.
+ */
+export function dossierFromSheet(sheet?: Record<string, any> | null): string | null {
+  if (!sheet || typeof sheet !== "object") return null;
+  const parts: string[] = [...summarizeSheetMechanics(sheet)];
   for (const [key, label] of SHEET_DOSSIER_FIELDS) {
-    const value = sheet[key] ?? nested[key];
+    const value = sheet[key];
     if (typeof value === "string" && value.trim()) {
       parts.push(`${label}: ${value.trim().replace(/\s+/g, " ").slice(0, 400)}`);
     }
   }
+  return parts.length > 0 ? parts.join("; ") : null;
+}
+
+/** Досье для промпта: из листа героя плюс текстовые заметки мастера о нём */
+function buildDossier(member: PlayerSummary): string | null {
+  const parts = [dossierFromSheet(member.sheet), stripVolatileNotes(member.notes)].filter(Boolean);
   return parts.length > 0 ? parts.join("; ") : null;
 }
 
@@ -98,7 +93,7 @@ function sanitizePartyMembers(members?: PlayerSummary[]): PlayerSummary[] | unde
     bonds: m.bonds,
     flaws: m.flaws,
     appearance: m.appearance,
-    notes: stripVolatileNotes(m.notes),
+    notes: buildDossier(m),
   }));
 }
 

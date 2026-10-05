@@ -1,6 +1,6 @@
 "use client";
 
-import { sheetFromNotes, summarizeSheetMechanics } from "@/lib/dnd/import-character";
+import { summarizeSheetMechanics } from "@/lib/dnd/import-character";
 import { useState } from "react";
 import { Character } from "@/lib/store";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -120,10 +120,15 @@ export function CharacterCard({
   const rawNotes = character.notes
     ? character.notes.replace(/\[(?:Статус|Состояние):\s*[^\]]+\]/gi, "").trim()
     : "";
-  // У героев сетевой комнаты в notes лежит весь лист одним JSON — показываем из него
-  // спасброски, навыки и атаки, а не сырой текст JSON
-  const notesSheet = sheetFromNotes(rawNotes);
-  const cleanNotes = notesSheet ? summarizeSheetMechanics(notesSheet).join("\n") : rawNotes;
+  // У героя с листом показываем спасброски, навыки и атаки из живого листа (он приходит
+  // с сервера, прочитанный из базы) и заметки мастера; у остальных — только заметки.
+  // JSON, оставшийся в заметках старых кампаний, не показываем.
+  const textNotes = rawNotes.startsWith("{") ? "" : rawNotes;
+  const cleanNotes = character.sheetMissing
+    ? "Лист персонажа недоступен. Выберите героя заново."
+    : character.sheet
+      ? [...summarizeSheetMechanics(character.sheet), textNotes].filter(Boolean).join("\n")
+      : textNotes;
 
   return (
     <Card className={`transition-all ${!character.isAlive ? "opacity-60 border-destructive/40" : ""} ${!inScene && !isPlayer ? "opacity-75 bg-muted/20 border-dashed" : ""}`}>

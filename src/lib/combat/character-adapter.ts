@@ -2,7 +2,6 @@
 // Адаптер извлечения атак, заклинаний и способностей из карточки персонажа для боевого режима.
 // Гарантирует: на тактическую карту встают ТОЛЬКО атаки из листа персонажа (без навязанных рапир/секир).
 
-import { sheetFromNotes, unwrapSheet } from "@/lib/dnd/import-character";
 import { resolveSheetAttacks } from "@/lib/dnd/sheet-attacks";
 import type {
   Attack,
@@ -204,22 +203,20 @@ export function detectActionCost(rawName: string): ActionCost {
   return "action";
 }
 
-/** Извлекает сырые атаки из любых полей персонажа (JSON snapshot, notes, inventory) */
+/** Извлекает сырые атаки персонажа: из живого листа героя либо из текстовых заметок и инвентаря */
 function collectRawAttacks(char: Record<string, any>): any[] {
   const attacks: any[] = [];
 
-  // 1. Попытка прочесть JSON из notes (сохраняется при входе в сетевую комнату и импорте)
+  // 1. Живой лист героя (его накладывает @/lib/db при чтении из базы).
+  // Атаки считаем так же, как сайт листа: по оружию в руках и снаряжению.
+  if (char.sheet && typeof char.sheet === "object") {
+    const list = resolveSheetAttacks(char.sheet);
+    if (list.length > 0) return list;
+  }
+
+  // 2. Персонаж без листа: текстовый блок "Атаки:" в заметках
   if (char.notes && typeof char.notes === "string") {
-    try {
-      // Лист может лежать в любой обёртке и на любой глубине — достаём его единообразно.
-      // Атаки считаем так же, как сайт листа: по оружию в руках и снаряжению.
-      const sheet = sheetFromNotes(char.notes);
-      if (!sheet) throw new Error("not a sheet");
-      const list = resolveSheetAttacks(sheet);
-      if (list.length > 0) {
-        return list;
-      }
-    } catch {
+    {
       // notes — это обычный текст, ищем блок "Атаки:"
       const match = char.notes.match(/Атаки:\s*([^\n\r]+)/i);
       if (match && match[1]) {
@@ -325,14 +322,8 @@ export function extractSpellsFromCharacter(
   chaMod: number,
   profBonus: number
 ): { spells: SpellData; spellHotbar: HotbarItem[] } {
-  let sheetObj: any = null;
-  if (char.notes && typeof char.notes === "string") {
-    try {
-      sheetObj = sheetFromNotes(char.notes) ?? unwrapSheet(JSON.parse(char.notes));
-    } catch {
-      sheetObj = null;
-    }
-  }
+  // Живой лист героя; у персонажей без листа — null
+  const sheetObj: any = char.sheet && typeof char.sheet === "object" ? char.sheet : null;
 
   const lowerClass = String(char.class || char.className || "").trim().toLowerCase();
   const isInt = /волшеб|маг|wizard|изобретатель|artificer/i.test(lowerClass);

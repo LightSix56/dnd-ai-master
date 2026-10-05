@@ -16,6 +16,8 @@ export interface PlayerSummary {
   flaws?: string | null;
   appearance?: string | null;
   notes?: string | null;
+  /** Живой лист героя из базы; в промпт попадает только его краткое досье */
+  sheet?: Record<string, any> | null;
 }
 
 export interface CampaignContext {

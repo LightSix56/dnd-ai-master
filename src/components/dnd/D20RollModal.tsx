@@ -73,7 +73,7 @@ export function D20RollModal({
 
   const parsedProfs = useMemo(() => {
     if (!selectedChar) return null;
-    return parseCharacterProficiencies(selectedChar.notes, selectedChar.class);
+    return parseCharacterProficiencies(selectedChar, selectedChar.class);
   }, [selectedChar]);
 
   const filteredSkills = useMemo(() => {

@@ -33,6 +33,11 @@ export interface Character {
   inScene?: boolean;
   relation: number;
   notes?: string | null;
+  /** Живой лист героя из базы (public.characters); у NPC и героев без листа — null */
+  sheet?: Record<string, any> | null;
+  sheetCharacterId?: string | null;
+  /** Герой привязан к листу, но лист не найден */
+  sheetMissing?: boolean;
   createdAt: string;
   updatedAt: string;
 }
