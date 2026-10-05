@@ -127,7 +127,7 @@ export function hasSheetData(raw: unknown): boolean {
  * теперь лист читается только из базы листов, а в заметках остаются статус и записи летописца.
  */
 export function notesWithoutSheetJson(notes?: string | null): string | null {
-  if (!notes || typeof notes !== "string") return notes ?? null;
+  if (!notes || typeof notes !== "string") return null;
   const start = notes.indexOf("{");
   if (start < 0) return notes;
   try {

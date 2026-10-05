@@ -50,7 +50,7 @@ describe("unwrapSheet", () => {
     expect(unwrapSheet(sheet)).toBe(sheet);
     expect(unwrapSheet(accountCard)).toBe(sheet);
     expect(unwrapSheet({ rawSheet: sheet })).toBe(sheet);
-    expect(unwrapSheet({ characterSnapshot: { data: sheet } })).toBe(sheet);
+    expect(unwrapSheet({ character: { data: sheet } })).toBe(sheet);
   });
 
   it("отличает лист от урезанной карточки героя кампании", () => {
