@@ -188,6 +188,24 @@ describe("joinRoom: версии персонажа для кампании", ()
     expect(state.prisma.character.rows[0].sheetCharacterId).toBe(participant.characterId);
   });
 
+  it("an npc of the campaign cannot be taken as a hero", async () => {
+    const { supabase, service } = setup();
+    const npc = await state.prisma.character.create({ data: { campaignId: "camp-1", name: "Трактирщик", type: "npc", level: 1 } });
+    await expect(service.joinRoom({ roomId: ROOM, userId: GUEST, characterId: npc.id })).rejects.toBeInstanceOf(RoomRuleError);
+    expect(supabase.tables.room_participants).toHaveLength(0);
+    expect(state.prisma.character.rows[0].type).toBe("npc");
+  });
+
+  it("a hero whose sheet row was deleted is relinked in place, not duplicated", async () => {
+    const { service } = setup();
+    const hero = await state.prisma.character.create({
+      data: { campaignId: "camp-1", name: "Мира", type: "player", class: "Жрец", level: 1, sheetCharacterId: "99999999-9999-4999-8999-999999999999" },
+    });
+    const participant = await service.joinRoom({ roomId: ROOM, userId: GUEST, characterId: hero.id });
+    expect(state.prisma.character.rows).toHaveLength(1);
+    expect(state.prisma.character.rows[0].sheetCharacterId).toBe(participant.characterId);
+  });
+
   it("a campaign hero already played by someone else cannot be taken", async () => {
     const { service } = setup();
     const first = await service.joinRoom({ roomId: ROOM, userId: HOST, characterId: TOXIN });
@@ -239,7 +257,7 @@ describe("комнаты, начатые до версий: участник п�
       character_snapshot: { name: "Токсин", level: 1, attacks: [] }, is_host: true, is_ready: false,
     });
     state.prisma.character.rows.push({
-      id: "hero-legacy", campaignId: "camp-1", name: "Токсин", type: "player", level: 1,
+      id: "hero-legacy", campaignId: "camp-1", name: "Токсин", type: "player", level: 1, experiencePoints: 850,
       hpCurrent: 4, hpMax: 9, notes: JSON.stringify({ name: "Токсин", level: 1 }), sheetCharacterId: null, sheetLevelSeen: null,
     });
     return ctx;
@@ -257,8 +275,10 @@ describe("комнаты, начатые до версий: участник п�
     // тот же герой кампании, без дубля; оригинал не тронут
     expect(state.prisma.character.rows).toHaveLength(1);
     expect(state.prisma.character.rows[0]).toMatchObject({ id: "hero-legacy", sheetCharacterId: version.id, sheetLevelSeen: 1 });
-    // лист, когда-то скопированный в заметки героя, убран
-    expect(state.prisma.character.rows[0].notes).toBeNull();
+    // опыт и хиты, накопленные в кампании до версий, перенесены в лист версии
+    expect(version.data).toMatchObject({ experiencePoints: 850, hpCurrent: 4, hpMax: 9, name: "Токсин" });
+    // заметки героя не трогаем: до выкладки в основную ветку их ещё читает старая версия сайта
+    expect(state.prisma.character.rows[0].notes).toBe(JSON.stringify({ name: "Токсин", level: 1 }));
     expect(supabase.tables.characters.find((c) => c.id === TOXIN)).toMatchObject({ data: toxinSheet, revision: 0 });
   });
 

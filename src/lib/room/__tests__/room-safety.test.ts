@@ -311,6 +311,8 @@ describe("сюжет в комнате", () => {
     expect(stripVolatileNotes(JSON.stringify({ name: "X", abilityScores: { str: 10 } }))).toBeNull();
     expect(stripVolatileNotes("[Статус: спит]\n" + JSON.stringify({ backstory: "Сирота." }))).toBeNull();
     expect(stripVolatileNotes("[Статус: спит]\nБоится огня")).toBe("Боится огня");
+    // заметка мастера перед старым JSON-листом остаётся, сам JSON — нет
+    expect(stripVolatileNotes("Боится огня\n" + JSON.stringify({ name: "X", abilityScores: { str: 10 } }))).toBe("Боится огня");
     expect(dossierFromSheet({ backstory: "Сирота." })).toBe("Предыстория: Сирота.");
     expect(dossierFromSheet({ name: "X", abilityScores: { str: 10 } })).toBeNull();
     expect(dossierFromSheet(null)).toBeNull();

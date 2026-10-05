@@ -54,6 +54,15 @@ describe("applyHeroSheetWrite", () => {
     expect(c.tables.characters[0].data.hpCurrent).toBe(0);
   });
 
+  it("a sheet without hpMax clamps to the calculated maximum, not to 1", async () => {
+    // так выглядит лист, в котором хиты ни разу не заполняли
+    const c = client({ name: "Клык", className: "Воин", level: 1, hpMax: null, hpCurrent: 0, abilityScores: { ТЕЛ: 14 } });
+    await applyHeroSheetWrite(SHEET_ID, { hpCurrent: 5 }, c as any);
+    expect(c.tables.characters[0].data.hpCurrent).toBe(5);
+    await applyHeroSheetWrite(SHEET_ID, { hpCurrent: 999 }, c as any);
+    expect(c.tables.characters[0].data.hpCurrent).toBe(12); // к10 + 2 за Телосложение
+  });
+
   it("relative hp change is applied to the current sheet value", async () => {
     const c = client();
     await applyHeroSheetWrite(SHEET_ID, { hpCurrent: { decrement: 4 } }, c as any);

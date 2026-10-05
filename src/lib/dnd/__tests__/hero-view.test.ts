@@ -91,6 +91,12 @@ describe("overlaySheet", () => {
     expect(hero.hpCurrent).toBe(0);
   });
 
+  it("a never-filled sheet (no hpMax, hpCurrent 0) starts at full health, not downed", () => {
+    const hero = overlaySheet(prismaHero, sheetRow({ name: "Клык", className: "Воин", level: 1, hpMax: null, hpCurrent: 0, abilityScores: { ТЕЛ: 14 } }));
+    expect(hero.hpMax).toBe(12);
+    expect(hero.hpCurrent).toBe(12);
+  });
+
   it("proficiency bonus follows the sheet level", () => {
     expect(overlaySheet(prismaHero, sheetRow({ ...rogueSheet, level: 5 })).profBonus).toBe(3);
     expect(overlaySheet(prismaHero, sheetRow({ ...rogueSheet, level: 17 })).profBonus).toBe(6);

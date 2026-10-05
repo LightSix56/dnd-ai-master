@@ -8,7 +8,7 @@ vi.mock("@/lib/db", () => ({
 }));
 vi.mock("@/lib/supabase/client", () => ({ getSupabaseAdminClient: () => state.supabase }));
 
-import { combatantToSheetPatch, syncCombatToSheets } from "../combat-sheet-sync";
+import { combatantToSheetPatch, endActiveCombats, syncCombatToSheets } from "../combat-sheet-sync";
 
 const TOXIN = "11111111-1111-4111-8111-111111111111";
 const FANG = "22222222-2222-4222-8222-222222222222";
@@ -73,6 +73,19 @@ describe("combatantToSheetPatch", () => {
   it("hit points are clamped to the sheet maximum and never negative", () => {
     expect(combatantToSheetPatch(combatant({ hpCurrent: 99 }), wizardSheet).hpCurrent).toBe(20);
     expect(combatantToSheetPatch(combatant({ hpCurrent: -4, hpTemp: -1 }), wizardSheet)).toMatchObject({ hpCurrent: 0, hpTemp: 0 });
+  });
+
+  it("a sheet without hpMax clamps to the hero's effective maximum, not to 1", () => {
+    const blank = { ...wizardSheet, hpMax: null };
+    expect(combatantToSheetPatch(combatant({ hpCurrent: 7 }), blank, 24).hpCurrent).toBe(7);
+    expect(combatantToSheetPatch(combatant({ hpCurrent: 30 }), blank, 24).hpCurrent).toBe(24);
+  });
+
+  it("levelled sheet conditions the combat cannot express are kept", () => {
+    const sheet = { ...wizardSheet, conditions: ["exhaustion:2", "poisoned", "custom-curse"] };
+    const patch = combatantToSheetPatch(combatant({ conditions: JSON.stringify([{ type: "prone" }]) }), sheet);
+    // poisoned бой знает и к концу боя его нет — снято; exhaustion:2 и своё состояние бой не ведёт — остаются
+    expect(patch.conditions).toEqual(["exhaustion:2", "custom-curse", "prone"]);
   });
 
   it("broken json in the combatant does not throw", () => {
@@ -159,5 +172,55 @@ describe("syncCombatToSheets", () => {
   it("an unknown combat is reported as skipped", async () => {
     setup([], [], []);
     expect(await syncCombatToSheets("nope")).toEqual({ synced: 0, skipped: true });
+  });
+
+  it("uses the hero's effective maximum when the sheet has no hpMax", async () => {
+    const blank = { name: "Клык", className: "Воин", level: 1, hpMax: null, hpCurrent: 0 };
+    const supabase = setup(
+      [combatant({ characterId: "ch-fang", name: "Клык", hpCurrent: 7, hpMax: 12 })],
+      [{ id: "ch-fang", campaignId: "camp-1", name: "Клык", type: "player", sheetCharacterId: FANG, sheet: blank, hpMax: 12 }],
+      [{ id: FANG, user_id: "u2", name: "Клык (Встреча)", data: blank, revision: 0 }]
+    );
+    await syncCombatToSheets("combat-1");
+    expect(supabase.tables.characters[0].data.hpCurrent).toBe(7);
+  });
+});
+
+describe("endActiveCombats", () => {
+  it("a combat replaced by a new one still writes its results before it is ended", async () => {
+    const supabase = setup(
+      [combatant({ characterId: "ch-toxin", hpCurrent: 0 })],
+      [{ id: "ch-toxin", campaignId: "camp-1", name: "Токсин", type: "player", sheetCharacterId: TOXIN, sheet: wizardSheet, hpMax: 20 }],
+      [{ id: TOXIN, user_id: "u1", name: "Токсин (Встреча)", data: wizardSheet, revision: 0 }]
+    );
+    state.prisma.combat.rows[0].status = "active";
+
+    const ended = await endActiveCombats({ campaignId: "camp-1" });
+
+    expect(ended).toBe(1);
+    expect(state.prisma.combat.rows[0].status).toBe("ended");
+    expect(state.prisma.combat.rows[0].sheetSyncedAt).toBeInstanceOf(Date);
+    expect(supabase.tables.characters[0].data.hpCurrent).toBe(0);
+  });
+
+  it("an earlier ended combat whose results were never written is retried", async () => {
+    const supabase = setup(
+      [combatant({ characterId: "ch-toxin", hpCurrent: 3 })],
+      [{ id: "ch-toxin", campaignId: "camp-1", name: "Токсин", type: "player", sheetCharacterId: TOXIN, sheet: wizardSheet, hpMax: 20 }],
+      [{ id: TOXIN, user_id: "u1", name: "Токсин (Встреча)", data: wizardSheet, revision: 0 }]
+    );
+    // бой уже завершён, но запись итогов тогда не удалась
+    expect(state.prisma.combat.rows[0]).toMatchObject({ status: "ended", sheetSyncedAt: null });
+
+    await endActiveCombats({ campaignId: "camp-1" });
+
+    expect(supabase.tables.characters[0].data.hpCurrent).toBe(3);
+  });
+
+  it("combats of other campaigns are not touched", async () => {
+    setup([], [], []);
+    state.prisma.combat.rows.push({ id: "other", campaignId: "camp-2", status: "active", sheetSyncedAt: null });
+    await endActiveCombats({ campaignId: "camp-1" });
+    expect(state.prisma.combat.rows.find((c: any) => c.id === "other").status).toBe("active");
   });
 });
