@@ -95,7 +95,7 @@ function looksLikeSheet(value: unknown): boolean {
  *
  * Лист приходит в разных упаковках: напрямую (файл JSON, код с сайта), как
  * `{ id, name, level, data: {…лист…} }` (персонаж аккаунта, выбранный в комнате),
- * как `{ rawSheet }`, `{ character }`, `{ characterSnapshot }`. Раньше большая часть кода
+ * как `{ rawSheet }`, `{ character }`. Раньше большая часть кода
  * читала атаки, навыки и снаряжение с верхнего уровня — и для обёрнутого листа не находила
  * ничего: персонаж с пятью атаками оказывался «без атак».
  */
@@ -107,9 +107,7 @@ export function unwrapSheet<T = Record<string, any>>(raw: unknown): T {
     root.data,
     root.rawSheet,
     root.character,
-    root.characterSnapshot,
     root.character?.data,
-    root.characterSnapshot?.data,
     root.rawSnapshot,
     root.rawSnapshot?.data,
   ];
@@ -124,27 +122,22 @@ export function hasSheetData(raw: unknown): boolean {
   return looksLikeSheet(unwrapSheet(raw));
 }
 
-/** Лист персонажа из поля notes, если там лежит JSON (так сохраняют сетевые комнаты); иначе null */
-export function sheetFromNotes(notes?: string | null, depth = 0): Record<string, any> | null {
-  if (!notes || typeof notes !== "string" || depth > 6) return null;
-  // Перед JSON может стоять тег статуса или строки летописца — ищем начало объекта
+/**
+ * Заметки героя без JSON-листа. Раньше сетевые комнаты клали в notes весь лист персонажа;
+ * теперь лист читается только из базы листов, а в заметках остаются статус и записи летописца.
+ */
+export function notesWithoutSheetJson(notes?: string | null): string | null {
+  if (!notes || typeof notes !== "string") return notes ?? null;
   const start = notes.indexOf("{");
-  if (start < 0) return null;
-  const head = notes.slice(0, start).trim();
-  if (head && !/^(\[[^\]]*\]|•[^\n]*|\s)+$/.test(head)) return null;
-  let parsed: unknown;
+  if (start < 0) return notes;
   try {
-    parsed = JSON.parse(notes.slice(start));
+    const parsed = JSON.parse(notes.slice(start));
+    if (!parsed || typeof parsed !== "object") return notes;
   } catch {
-    return null;
+    return notes; // обычный текст с фигурной скобкой
   }
-  if (!parsed || typeof parsed !== "object") return null;
-  const sheet = unwrapSheet<Record<string, any>>(parsed);
-  if (looksLikeSheet(sheet)) return sheet;
-  // Карточка героя кампании, сохранённая поверх листа: настоящий лист лежит глубже,
-  // в её собственном поле notes (так накапливалось при повторных входах в комнату)
-  const inner = sheetFromNotes((parsed as Record<string, any>).notes, depth + 1);
-  return inner ?? sheet;
+  const head = notes.slice(0, start).trim();
+  return head || null;
 }
 
 /**
@@ -267,7 +260,6 @@ export function extractCharacterStats(raw: unknown): ExtractedStats {
   const root = (raw && typeof raw === "object" ? raw : {}) as Record<string, any>;
   const data = (root.data && typeof root.data === "object" ? root.data : {}) as Record<string, any>;
   const rawSheet = (root.rawSheet && typeof root.rawSheet === "object" ? root.rawSheet : {}) as Record<string, any>;
-  const charSnap = (root.characterSnapshot && typeof root.characterSnapshot === "object" ? root.characterSnapshot : {}) as Record<string, any>;
   const charObj = (root.character && typeof root.character === "object" ? root.character : {}) as Record<string, any>;
 
   // Класс и уровень
@@ -276,13 +268,11 @@ export function extractCharacterStats(raw: unknown): ExtractedStats {
     root.class ||
     data.className ||
     data.class ||
-    charSnap.className ||
-    charSnap.class ||
     rawSheet.className ||
     rawSheet.class ||
     "";
   const level = clampLevel(
-    root.level ?? data.level ?? charSnap.level ?? rawSheet.level ?? 1
+    root.level ?? data.level ?? rawSheet.level ?? 1
   );
 
   const fallbackArchetype = getArchetypeAbilityScores(className);
@@ -291,7 +281,6 @@ export function extractCharacterStats(raw: unknown): ExtractedStats {
   const scoreContainers = [
     root.abilityScores,
     data.abilityScores,
-    charSnap.abilityScores,
     rawSheet.abilityScores,
     charObj.abilityScores,
     root.attributes,
@@ -300,21 +289,18 @@ export function extractCharacterStats(raw: unknown): ExtractedStats {
     data.stats,
     root,
     data,
-    charSnap,
     rawSheet,
   ];
 
   const bonusContainers = [
     root.abilityBonuses,
     data.abilityBonuses,
-    charSnap.abilityBonuses,
     rawSheet.abilityBonuses,
   ];
 
   const asiContainers = [
     root.asiBonuses,
     data.asiBonuses,
-    charSnap.asiBonuses,
     rawSheet.asiBonuses,
   ];
 
@@ -365,7 +351,7 @@ export function extractCharacterStats(raw: unknown): ExtractedStats {
 
   // HP
   const hitDieMatch = String(
-    root.hitDice || data.hitDice || charSnap.hitDice || ""
+    root.hitDice || data.hitDice || ""
   ).match(/[dк](\d+)/i);
   let hitDie = hitDieMatch ? parseInt(hitDieMatch[1], 10) : 8;
   if (!hitDieMatch) {
@@ -383,16 +369,13 @@ export function extractCharacterStats(raw: unknown): ExtractedStats {
     root.hpMax ??
     root.maxHp ??
     data.hpMax ??
-    data.maxHp ??
-    charSnap.hpMax ??
-    charSnap.maxHp;
+    data.maxHp;
   const hpMax =
     typeof rawHpMax === "number" && rawHpMax > 0 ? rawHpMax : Math.max(1, calculatedHp);
 
   const rawHpCurrent =
     root.hpCurrent ??
     data.hpCurrent ??
-    charSnap.hpCurrent ??
     root.currentHp ??
     data.currentHp;
   const hpCurrent =
@@ -406,13 +389,11 @@ export function extractCharacterStats(raw: unknown): ExtractedStats {
     root.calculatedAC ??
     data.ac ??
     data.armorClass ??
-    data.calculatedAC ??
-    charSnap.ac ??
-    charSnap.armorClass;
+    data.calculatedAC;
   const ac = typeof rawAc === "number" && rawAc > 0 ? rawAc : 10 + dexMod;
 
   // Speed
-  const rawSpeed = root.speed ?? data.speed ?? charSnap.speed;
+  const rawSpeed = root.speed ?? data.speed;
   const speed = typeof rawSpeed === "number" && rawSpeed > 0 ? rawSpeed : 30;
 
   return { str, dex, con, int, wis, cha, hpMax, hpCurrent, ac, speed };
@@ -441,7 +422,7 @@ function clampLevel(level: unknown): number {
 export function isSheetCharacter(value: unknown): value is SheetCharacter {
   if (!value || typeof value !== "object") return false;
   const v = value as Record<string, any>;
-  const nested = v.data || v.character || v.characterSnapshot || v;
+  const nested = v.data || v.character || v;
 
   // 1. Русские ключи в abilityScores
   const scores = nested.abilityScores || v.abilityScores;

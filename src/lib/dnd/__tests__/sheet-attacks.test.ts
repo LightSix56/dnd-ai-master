@@ -2,7 +2,7 @@
 // он считает их по оружию в руках и снаряжению, а не берёт сохранённое поле attacks.
 import { describe, it, expect } from "vitest";
 import { resolveSheetAttacks } from "../sheet-attacks";
-import { mapSheetToCharacter, sheetFromNotes } from "../import-character";
+import { mapSheetToCharacter } from "../import-character";
 import { parseCharacterProficiencies } from "../d20-helper";
 import { extractAttacksFromCharacter, parseDamageString } from "@/lib/combat/character-adapter";
 
@@ -130,13 +130,9 @@ describe("атаки доходят до окна бросков и до боя"
     expect(parseDamageString("1к6+4 кол")).toEqual([{ dice: "1d6", mod: 4, type: "piercing" }]);
   });
 
-  it("лист находится и внутри карточки героя кампании с вложенными заметками", () => {
-    const inner = `[Статус: насторожен]\n${JSON.stringify(card)}`;
-    const outer = JSON.stringify({ id: "x", name: "Пятно", level: 1, str: 10, dex: 17, notes: inner });
-    const nested = JSON.stringify({ id: "x", name: "Пятно", level: 1, notes: `[Статус: спокоен]\n${outer}` });
-    expect(sheetFromNotes(nested)?.equippedSlots).toBeDefined();
-    // сам лист в заметках больше не читается игрой — только переносом старых героев
-    expect(parseCharacterProficiencies(nested, "Плут").attacks).toHaveLength(0);
-    expect(parseCharacterProficiencies({ sheet: sheetFromNotes(nested) }, "Плут").attacks).toHaveLength(5);
+  it("лист в заметках игрой не читается: атаки берутся только из живого листа", () => {
+    expect(parseCharacterProficiencies(JSON.stringify(card), "Плут").attacks).toHaveLength(0);
+    expect(parseCharacterProficiencies({ notes: JSON.stringify(card) }, "Плут").attacks).toHaveLength(0);
+    expect(parseCharacterProficiencies({ sheet: rogue, notes: "[Статус: насторожен]" }, "Плут").attacks).toHaveLength(5);
   });
 });

@@ -4,7 +4,7 @@ import { describe, it, expect } from "vitest";
 import {
   hasSheetData,
   mapSheetToCharacter,
-  sheetFromNotes,
+  notesWithoutSheetJson,
   summarizeSheetMechanics,
   unwrapSheet,
 } from "../import-character";
@@ -104,7 +104,6 @@ describe("живой лист героя из базы", () => {
     );
     expect(parsed.attacks).toHaveLength(1);
     expect(parsed.skills.get("Запугивание")).toBe("expertise");
-    expect(sheetFromNotes("Спасброски: СИЛ")).toBeNull();
   });
 
   it("мастер получает навыки и атаки героя, а не пустое досье", () => {
@@ -118,8 +117,23 @@ describe("живой лист героя из базы", () => {
   });
 
   it("сводка для карточки героя читаема", () => {
-    const lines = summarizeSheetMechanics(sheetFromNotes(notes));
+    const lines = summarizeSheetMechanics(liveSheet);
     expect(lines).toHaveLength(3);
     expect(lines[2].startsWith("Атаки: Рапира")).toBe(true);
+  });
+});
+
+describe("notesWithoutSheetJson", () => {
+  it("убирает лист, когда-то сохранённый в заметках, и оставляет статус и записи летописца", () => {
+    const json = JSON.stringify(accountCard);
+    expect(notesWithoutSheetJson(json)).toBeNull();
+    expect(notesWithoutSheetJson(`[Статус: ранен]\n• боится огня\n${json}`)).toBe("[Статус: ранен]\n• боится огня");
+  });
+
+  it("обычный текст не трогает, даже с фигурной скобкой", () => {
+    expect(notesWithoutSheetJson("Спасброски: СИЛ")).toBe("Спасброски: СИЛ");
+    expect(notesWithoutSheetJson("Носит амулет {древний}")).toBe("Носит амулет {древний}");
+    expect(notesWithoutSheetJson(null)).toBeNull();
+    expect(notesWithoutSheetJson("")).toBeNull();
   });
 });

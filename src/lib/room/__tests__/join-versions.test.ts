@@ -79,10 +79,14 @@ describe("joinRoom: версии персонажа для кампании", ()
     expect(heroes[0].notes ?? null).toBeNull();
   });
 
-  it("participant upsert never contains a sheet", async () => {
+  it("participant row holds only the sheet id, no copy of the sheet", async () => {
     const { supabase, service } = setup();
     await service.joinRoom({ roomId: ROOM, userId: HOST, characterId: TOXIN });
-    expect(supabase.tables.room_participants[0].character_snapshot).toEqual({});
+    const row = supabase.tables.room_participants[0];
+    expect(Object.keys(row).sort()).toEqual(["character_id", "id", "is_host", "is_ready", "room_id", "user_id"]);
+    const writes = supabase.calls.filter((c) => c.table === "room_participants" && c.op !== "select");
+    expect(JSON.stringify(writes)).not.toContain("character_snapshot");
+    expect(JSON.stringify(writes)).not.toContain("Плут");
   });
 
   it("rejoin reuses the version", async () => {
@@ -249,10 +253,12 @@ describe("комнаты, начатые до версий: участник п�
     const version = versionsOf(supabase, TOXIN)[0];
     expect(version).toMatchObject({ campaign_id: "camp-1", campaign_name: "Встреча", user_id: HOST });
     expect(room!.participants[0].characterId).toBe(version.id);
-    expect(supabase.tables.room_participants[0]).toMatchObject({ character_id: version.id, character_snapshot: {} });
+    expect(supabase.tables.room_participants[0].character_id).toBe(version.id);
     // тот же герой кампании, без дубля; оригинал не тронут
     expect(state.prisma.character.rows).toHaveLength(1);
     expect(state.prisma.character.rows[0]).toMatchObject({ id: "hero-legacy", sheetCharacterId: version.id, sheetLevelSeen: 1 });
+    // лист, когда-то скопированный в заметки героя, убран
+    expect(state.prisma.character.rows[0].notes).toBeNull();
     expect(supabase.tables.characters.find((c) => c.id === TOXIN)).toMatchObject({ data: toxinSheet, revision: 0 });
   });
 

@@ -24,7 +24,6 @@ export interface RoomParticipantRecord {
   room_id: string;
   user_id: string;
   character_id: string;
-  character_snapshot: Record<string, unknown>;
   is_host: boolean;
   is_ready: boolean;
   joined_at: string;

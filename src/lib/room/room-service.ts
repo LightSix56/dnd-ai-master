@@ -19,7 +19,11 @@ import {
   type PartyAwareAct1,
   type StartingSituation,
 } from "@/lib/ai/party-arc-generator";
-import { extractCharacterStats, getArchetypeAbilityScores } from "@/lib/dnd/import-character";
+import {
+  extractCharacterStats,
+  getArchetypeAbilityScores,
+  notesWithoutSheetJson,
+} from "@/lib/dnd/import-character";
 import {
   SheetUnavailableError,
   createCampaignHeroSheet,
@@ -300,7 +304,7 @@ export class RoomService {
         );
         const { error } = await this.client
           .from("room_participants")
-          .update({ character_id: version.id, character_snapshot: {} })
+          .update({ character_id: version.id })
           .eq("id", row.id);
         if (error) throw new Error(error.message);
         await this.linkHeroToCampaign(campaignId, version);
@@ -495,7 +499,7 @@ export class RoomService {
       throw e;
     }
 
-    // 6. Участник комнаты (1 игрок = 1 персонаж). Снимок листа не пишется: колонка очищается.
+    // 6. Участник комнаты (1 игрок = 1 персонаж): хранится только id строки листа.
     const { data: participantData, error: partError } = await this.client
       .from("room_participants")
       .upsert(
@@ -503,7 +507,6 @@ export class RoomService {
           room_id: input.roomId,
           user_id: input.userId,
           character_id: sheet.id,
-          character_snapshot: {},
           is_host: Boolean(input.isHost),
           is_ready: false,
         },
@@ -630,7 +633,14 @@ export class RoomService {
     if (unlinked) {
       await db.character.update({
         where: { id: unlinked.id },
-        data: { name, type: "player", sheetCharacterId: sheet.id, sheetLevelSeen: level },
+        // Лист, когда-то скопированный в заметки героя, убираем: он читается из базы листов
+        data: {
+          name,
+          type: "player",
+          sheetCharacterId: sheet.id,
+          sheetLevelSeen: level,
+          notes: notesWithoutSheetJson(unlinked.notes),
+        },
       });
       return;
     }
@@ -868,7 +878,7 @@ export class RoomService {
         if (version.id !== participant.characterId) {
           const { error: rebindError } = await this.client
             .from("room_participants")
-            .update({ character_id: version.id, character_snapshot: {} })
+            .update({ character_id: version.id })
             .eq("id", participant.id);
           if (rebindError) {
             throw new Error(`Не удалось привязать версию героя: ${rebindError.message}`);
