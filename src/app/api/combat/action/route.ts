@@ -988,9 +988,11 @@ export async function POST(req: Request) {
     }
 
     if (action === "end-combat") {
-      const { outcome } = body as { outcome?: string };
+      // Исход решает сервер по живым бойцам, а не клиент: клиент узнаёт о победе только
+      // из ответов на атаки, и врагов, добитых правкой хитов мастером, он не заметит
+      const outcome = checkCombatOver(await loadState(combatId));
       let xpAward: any = null;
-      if (outcome === "victory" || outcome === "players") {
+      if (outcome === "players") {
         try {
           xpAward = await awardCombatVictoryXP(combatId);
         } catch (e) {
@@ -1004,7 +1006,7 @@ export async function POST(req: Request) {
       } catch (e) {
         console.error("Failed to write combat results to hero sheets:", e);
       }
-      return respond(combatId, { xpAward });
+      return respond(combatId, { xpAward, outcome });
     }
 
     if (action === "delete-combat") {

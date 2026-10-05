@@ -11,6 +11,7 @@ import {
 } from "./character-adapter";
 import { ATTACK_LIBRARY, attacksPerAction } from "./library-data";
 import { generateEncounter } from "./encounters/encounter-generator";
+import { applyLeaderName } from "./encounters/encounter-request";
 import type {
   StoryFactionContext,
   SquadArchetype,
@@ -78,6 +79,8 @@ export interface CreateEncounterParams {
   biome?: string;
   difficulty?: EncounterDifficulty;
   storyFaction?: StoryFactionContext;
+  /** Сюжетное имя вожака сгенерированного отряда (меняется только имя) */
+  leaderName?: string;
   archetype?: SquadArchetype;
   isActClimax?: boolean;
   mapPresetId?: string;
@@ -884,6 +887,7 @@ export async function createTacticalEncounter({
   biome,
   difficulty = "medium",
   storyFaction,
+  leaderName,
   archetype,
   isActClimax,
   mapPresetId,
@@ -940,6 +944,7 @@ export async function createTacticalEncounter({
       isActClimax,
       mapPresetId: mapPresetId || "",
     });
+    applyLeaderName(generatedEncounterResult.enemies, leaderName);
 
     if (generatedEncounterResult.mapPreset) {
       effectiveGridWidth = generatedEncounterResult.mapPreset.gridWidth || gridWidth;

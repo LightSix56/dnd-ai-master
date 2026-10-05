@@ -9,6 +9,7 @@ import { rollDice, abilityModifier, proficiencyBonus } from "@/lib/dnd/dice";
 import { searchDuckDuckGo, fetchPageText } from "@/lib/dnd/search";
 import { parseStoryArc, type StoryAct, generateNextChapter } from "./story-arc";
 import { createTacticalEncounter } from "@/lib/combat/generator";
+import { resolveEncounterDifficulty } from "@/lib/combat/encounters/encounter-request";
 
 // Контекст кампании приходит per-request через toolsContext, а не через глобальное
 // состояние модуля: иначе параллельные запросы перетирают campaignId друг друга.
@@ -810,11 +811,15 @@ export const startCombatTool = tool({
     "Начать тактический пошаговый бой на интерактивной сетке D&D 5e. " +
     "Вызывай этот инструмент ВСЕГДА, когда по сюжету начинается сражение " +
     "(засада, нападение монстров, драка, дуэль, штурм). " +
-    "Инструмент автоматически генерирует тактическую карту с укрытиями и препятствиями, " +
-    "выбирает сбалансированных монстров из бестиария (2,875 существ), " +
-    "расставляет союзников и врагов, бросает инициативу и рассчитывает честный опыт (DMG p. 82).",
+    "Ты называешь только ТИП врагов и (по желанию) сложность и имя вожака. " +
+    "Количество и силу врагов движок подбирает сам из бестиария под уровни и число героев " +
+    "и спутников (DMG p. 82): сколько бы врагов ни было в сюжете, на поле выйдет честный отряд. " +
+    "Инструмент генерирует тактическую карту, расставляет участников, бросает инициативу и считает опыт.",
   inputSchema: z.object({
     name: z.string().describe("Название битвы (например: 'Засада гоблинов на тракте', 'Схватка с пауками в пещере')"),
+    enemyType: z.string().describe("Тип врагов, без количества (например: 'городская стража', 'бандиты', 'головорезы', 'гоблины', 'культисты', 'нежить', 'волки'). Движок подберёт подходящих существ и их число"),
+    leaderName: z.string().optional().describe("Сюжетное имя вожака отряда (например: 'Человек в сером капюшоне'). Меняется только имя: силу вожака движок подбирает под баланс"),
+    difficulty: z.enum(["easy", "medium", "hard", "deadly"]).optional().describe("Сложность столкновения по DMG p. 82. Не указывай — будет сложность кампании"),
     biome: z.string().optional().describe("Биом местности (forest, dungeon, cave, swamp, lava, mountain, snow, coastal, ship, desert, urban или любой из 24 тактических пресетов)"),
     environment: z.enum([
       "dungeon",
@@ -825,52 +830,27 @@ export const startCombatTool = tool({
       "arena",
       "open_field",
     ]).default("dungeon").describe("Тип окружения для тактической карты (legacy)"),
-    difficulty: z.enum(["easy", "medium", "hard", "deadly"]).default("medium").describe("Сложность энкаунтера по DMG p. 82"),
-    storyFaction: z.string().optional().describe("Фракция или тип врагов (например: 'городская стража', 'стражники', 'бандиты', 'гоблины', 'культисты', 'нежить'). Генератор подберет аутентичных сбалансированных монстров по правилам DMG p. 82"),
     archetype: z.enum(["solo_boss", "boss_minions", "tactical_squad", "horde", "ambush_duo", "any"]).optional().describe("Тактический архетип отряда врагов"),
     isActClimax: z.boolean().optional().describe("Является ли бой кульминацией акта (боссфайт)"),
     mapPresetId: z.string().optional().describe("ID конкретного тактического пресета карты (опционально)"),
     gridWidth: z.number().int().min(10).max(50).default(20).describe("Ширина сетки"),
     gridHeight: z.number().int().min(10).max(50).default(15).describe("Высота сетки"),
     mapDescription: z.string().optional().describe("Краткое описание поля боя и препятствий"),
-    enemies: z.array(
-      z.object({
-        name: z.string().describe("Имя врага (например: 'Стражник 1', 'Гоблин', 'Орк', 'Пещерный паук')"),
-        monsterSlug: z.string().optional().describe("Slug монстра из бестиария, например '442-guard', '4-goblin'"),
-        hpMax: z.number().int().min(1).optional().describe("Максимальное HP врага (опционально, для существ из бестиария подтягивается автоматически, например Страж = 11)"),
-        ac: z.number().int().min(5).max(30).optional().describe("Класс доспеха AC (опционально, для существ из бестиария подтягивается автоматически, например Страж = 16)"),
-        speed: z.number().int().min(10).max(60).default(30).describe("Скорость в футах"),
-        dexMod: z.number().int().optional().describe("Модификатор ловкости для инициативы"),
-        strMod: z.number().int().optional(),
-        conMod: z.number().int().optional(),
-        intMod: z.number().int().optional(),
-        wisMod: z.number().int().optional(),
-        chaMod: z.number().int().optional(),
-        size: z.enum(["small", "medium", "large", "huge"]).default("medium"),
-        color: z.string().default("#ef4444"),
-        attacks: z.array(
-          z.object({
-            name: z.string().describe("Название атаки"),
-            kind: z.enum(["melee", "ranged", "spell"]).default("melee"),
-            attackBonus: z.number().int().default(3).describe("Бонус к броску атаки (например +4)"),
-            damageDice: z.string().describe("Кубик урона, например '1d6+2', '2d6+3', '1d8'"),
-            damageType: z.string().default("slashing"),
-            rangeNormal: z.number().int().default(5),
-            rangeLong: z.number().int().optional(),
-          })
-        ).optional().describe("Список атак врага (ОПЦИОНАЛЬНО: для существ из бестиария автоматически загрузятся их аутентичные атаки D&D 5e: копья, арбалеты, заклинания)"),
-      })
-    ).optional().describe("Список конкретных врагов. ВАЖНО: для стандартных существ (стражники, бандиты, гоблины, скелеты и т.д.) достаточно передать только имена [{ name: 'Стражник 1' }, { name: 'Стражник 2' }] — система автоматически загрузит из бестиария аутентичные характеристики, оружие (копья, щиты, AC 16), способности и XP!"),
   }),
   contextSchema: campaignContextSchema,
-  execute: async ({ name, biome, environment, difficulty, storyFaction, archetype, isActClimax, mapPresetId, gridWidth, gridHeight, mapDescription, enemies }, { context }) => {
+  execute: async ({ name, enemyType, leaderName, difficulty, biome, environment, archetype, isActClimax, mapPresetId, gridWidth, gridHeight, mapDescription }, { context }) => {
     let campaignId = context?.campaignId;
-    if (!campaignId) {
+    let campaignDifficulty: string | undefined;
+    if (campaignId) {
+      const campaign = await db.campaign.findUnique({ where: { id: campaignId } });
+      campaignDifficulty = campaign?.difficulty;
+    } else {
       const active = await db.campaign.findFirst({
         where: { isActive: true },
         orderBy: { updatedAt: "desc" },
       });
       campaignId = active?.id;
+      campaignDifficulty = active?.difficulty;
       if (!campaignId) {
         const created = await db.campaign.create({
           data: { name: "Быстрое сражение", isActive: true },
@@ -884,15 +864,15 @@ export const startCombatTool = tool({
       name,
       environment,
       biome: biome || environment,
-      difficulty,
-      storyFaction: storyFaction ? { name: storyFaction } : undefined,
+      difficulty: resolveEncounterDifficulty(difficulty, campaignDifficulty),
+      storyFaction: { name: enemyType },
+      leaderName,
       archetype,
       isActClimax,
       mapPresetId,
       gridWidth,
       gridHeight,
       mapDescription,
-      enemies,
     });
 
     // Записываем событие в историю

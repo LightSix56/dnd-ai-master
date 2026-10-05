@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { calculateAwardedXP } from "./encounters/xp-calculator";
+import { safeParse } from "./serialize";
 
 export const CR_TO_XP_TABLE: Record<string, number> = {
   "0": 10,
@@ -41,6 +42,16 @@ export const CR_TO_XP_TABLE: Record<string, number> = {
   "30": 155000,
 };
 
+/**
+ * Опыт за одного врага. Уровень врага в бою — округлённый CR (не меньше 1), поэтому
+ * существа с CR 0–1/2 по нему стоили бы как CR 1. Точный CR лежит в monsterData.
+ */
+export function enemyXP(enemy: { level: number | null; monsterData?: string | null }): number {
+  const cr = safeParse<{ challengeRating?: number }>(enemy.monsterData, {}).challengeRating;
+  const key = String(typeof cr === "number" ? cr : enemy.level ?? 1);
+  return CR_TO_XP_TABLE[key] ?? Math.max(10, (enemy.level ?? 1) * 200);
+}
+
 export interface AwardCombatXPResult {
   combatId: string;
   totalXP: number;
@@ -65,10 +76,7 @@ export async function awardCombatVictoryXP(combatId: string): Promise<AwardComba
 
   // 1. Собираем всех врагов
   const enemies = combat.combatants.filter((c) => c.type === "enemy");
-  const monstersXP: number[] = enemies.map((e) => {
-    const key = String(e.level ?? 1);
-    return CR_TO_XP_TABLE[key] ?? Math.max(10, (e.level ?? 1) * 200);
-  });
+  const monstersXP: number[] = enemies.map(enemyXP);
 
   // 2. Считаем количество игроков в бою
   const combatPlayers = combat.combatants.filter(

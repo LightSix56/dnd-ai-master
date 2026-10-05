@@ -1055,8 +1055,9 @@ export function CombatView({ combatId, campaignId, roomCode, onClose, onCombatEn
 
   async function endCombat() {
     if (!confirm("Завершить бой? Вернуться к нему будет нельзя.")) return;
-    const isVictory = outcome === "players";
-    const data = await doAction("end-combat", { outcome: isVictory ? "victory" : "ended" });
+    const data = await doAction("end-combat");
+    // Исход боя определяет сервер по живым бойцам
+    const finalOutcome: "players" | "enemies" | null = data ? (data.outcome ?? null) : outcome;
     if (onCombatEnd && combat) {
       const surv = (combat.combatants || []).map((c) => ({
         id: c.id,
@@ -1069,7 +1070,7 @@ export function CombatView({ combatId, campaignId, roomCode, onClose, onCombatEn
         combatId: combat.id,
         name: combat.name,
         rounds: combat.round,
-        outcome: outcome === "players" ? "victory" : outcome === "enemies" ? "defeat" : "ended",
+        outcome: finalOutcome === "players" ? "victory" : finalOutcome === "enemies" ? "defeat" : "ended",
         survivingCombatants: surv,
         awardedXP: data?.xpAward?.totalXP,
         xpPerPlayer: data?.xpAward?.xpPerPlayer,
