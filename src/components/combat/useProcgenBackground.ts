@@ -18,6 +18,8 @@ export function resolveBackgroundHref(url: string | null | undefined): Backgroun
     const parsed = parseProcgenUrl(url);
     return parsed ? { kind: "procgen", seed: parsed.seed } : { kind: "none" };
   }
+  // Готовые карты перенесены в archive/maps: у старых боёв фон пустой, без запроса в 404
+  if (url.startsWith("/maps/")) return { kind: "none" };
   return { kind: "image", href: url };
 }
 

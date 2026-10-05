@@ -29,7 +29,6 @@ import {
   Tag,
   BookOpen,
 } from "lucide-react";
-import { ALL_PRESETS } from "@/lib/combat/maps/presets";
 import type { TacticalMapPreset } from "@/lib/combat/maps/types";
 import { parseUniversalVTT } from "@/lib/combat/maps/uvtt-parser";
 import {
@@ -54,12 +53,13 @@ export function MapPresetsModal({
   combatId,
   onMapApplied,
 }: MapPresetsModalProps) {
-  const [mode, setMode] = useState<TabMode>("presets");
-  const [maps, setMaps] = useState<TacticalMapPreset[]>(ALL_PRESETS);
+  const [mode, setMode] = useState<TabMode>("custom_url");
+  // Только карты, загруженные из .dd2vtt: готовые карты убраны, бой собирает карту сам
+  const [maps, setMaps] = useState<TacticalMapPreset[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<BiomeCategory>("all");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
-  const [selectedMap, setSelectedMap] = useState<TacticalMapPreset | null>(() => ALL_PRESETS[0] || null);
+  const [selectedMap, setSelectedMap] = useState<TacticalMapPreset | null>(null);
   const [applyingId, setApplyingId] = useState<string | null>(null);
 
   // Кастомный ввод URL карты
@@ -68,25 +68,6 @@ export function MapPresetsModal({
   const [customWidth, setCustomWidth] = useState(20);
   const [customHeight, setCustomHeight] = useState(20);
 
-  useEffect(() => {
-    if (isOpen) {
-      // Подгружаем актуальный список с сервера или используем ALL_PRESETS
-      fetch("/api/combat/maps")
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.maps && Array.isArray(data.maps)) {
-            const fullMapList = data.maps.map((m: any) => {
-              const full = ALL_PRESETS.find((p) => p.id === m.id);
-              return full || m;
-            });
-            setMaps(fullMapList);
-          }
-        })
-        .catch(() => {
-          setMaps(ALL_PRESETS);
-        });
-    }
-  }, [isOpen]);
 
   // Преобразование открытых карт каталога в форму TacticalMapPreset
   const openMapsAsPresets = useMemo<TacticalMapPreset[]>(() => {
@@ -321,7 +302,7 @@ export function MapPresetsModal({
                 </Badge>
               </DialogTitle>
               <DialogDescription className="text-xs text-muted-foreground mt-0.5">
-                Готовые тактические поля боя Roll20/VTT из каноничных биомов и открытого доступа
+                В бою карта собирается генератором; здесь можно поставить свою — по ссылке или из файла .dd2vtt
               </DialogDescription>
             </div>
 
@@ -342,25 +323,9 @@ export function MapPresetsModal({
                   }`}
                 >
                   <BookOpen className="size-3.5" />
-                  <span>Биомы (24)</span>
+                  <span>Загруженные</span>
                 </Button>
 
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => {
-                    setMode("open_catalog");
-                    setSelectedCategory("all");
-                  }}
-                  className={`h-7 text-xs px-2.5 rounded-md flex items-center gap-1.5 ${
-                    mode === "open_catalog"
-                      ? "bg-background text-foreground font-semibold shadow-xs"
-                      : "text-muted-foreground hover:text-foreground hover:bg-background/50"
-                  }`}
-                >
-                  <Globe className="size-3.5" />
-                  <span>Открытый доступ (Теги)</span>
-                </Button>
 
                 <Button
                   size="sm"

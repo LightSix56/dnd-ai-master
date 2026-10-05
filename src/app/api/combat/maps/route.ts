@@ -1,36 +1,14 @@
-// API: Каталог 24 тактических пресетов карт и применение карты к бою
-import { ALL_PRESETS, getPresetById } from "@/lib/combat/maps/presets";
+// API: применение своей карты (ссылка или .dd2vtt) к бою
 import { db } from "@/lib/db";
 import { hydrateCombat, hydrateCombatant } from "@/lib/combat/serialize";
 import { assignTacticalSpawns } from "@/lib/combat/maps/spawn-director";
 import type { TacticalMapPreset } from "@/lib/combat/maps/types";
 
 
+// Готовые карты убраны: карта боя собирается генератором (procgen), сюда остаётся
+// только своя карта по ссылке или из файла .dd2vtt
 export async function GET() {
-  try {
-    const maps = ALL_PRESETS.map((p) => ({
-      id: p.id,
-      name: p.name,
-      nameEn: p.nameEn,
-      biome: p.biome,
-      tags: p.tags,
-      gridWidth: p.gridWidth,
-      gridHeight: p.gridHeight,
-      cellSizeFt: p.cellSizeFt,
-      backgroundUrl: p.backgroundUrl || "",
-      description: p.description || "",
-      elementsCount: p.elements?.length || 0,
-      spawnZonesCount: p.spawnZones?.length || 0,
-    }));
-
-    return Response.json({ maps });
-  } catch (error) {
-    console.error("[combat/maps GET] error:", error);
-    return Response.json(
-      { error: "Не удалось загрузить каталог карт", details: error instanceof Error ? error.message : String(error) },
-      { status: 500 }
-    );
-  }
+  return Response.json({ maps: [] });
 }
 
 export async function POST(req: Request) {
@@ -55,15 +33,10 @@ export async function POST(req: Request) {
       backgroundUrl = customMap.backgroundUrl || null;
       elements = customMap.elements || [];
     } else {
-      const preset = getPresetById(mapPresetId);
-      if (!preset) {
-        return Response.json({ error: `Карта с ID '${mapPresetId}' не найдена` }, { status: 404 });
-      }
-      mapName = preset.name;
-      gridWidth = preset.gridWidth;
-      gridHeight = preset.gridHeight;
-      backgroundUrl = preset.backgroundUrl || null;
-      elements = preset.elements || [];
+      return Response.json(
+        { error: "Готовые карты больше не используются: карта боя собирается генератором" },
+        { status: 404 }
+      );
     }
 
     // Удаляем старые элементы карты боя
@@ -115,11 +88,7 @@ export async function POST(req: Request) {
         description: "",
         elements: elements,
         spawnZones:
-          customMap?.spawnZones && customMap.spawnZones.length > 0
-            ? customMap.spawnZones
-            : mapPresetId
-            ? getPresetById(mapPresetId)?.spawnZones || []
-            : [],
+          customMap?.spawnZones && customMap.spawnZones.length > 0 ? customMap.spawnZones : [],
       };
 
       const hydrated = currentCombat.combatants.map((c) => hydrateCombatant(c));

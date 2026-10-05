@@ -34,46 +34,23 @@ describe("Combat API Routes", () => {
   });
 
   describe("GET /api/combat/maps", () => {
-    it("returns catalog of 24 tactical maps with complete metadata", async () => {
+    it("готовых карт больше нет: каталог пуст", async () => {
       const res = await getMaps();
       expect(res.status).toBe(200);
       const data = await res.json();
-      expect(data.maps).toBeDefined();
-      expect(Array.isArray(data.maps)).toBe(true);
-      expect(data.maps.length).toBe(24);
-
-      const firstMap = data.maps[0];
-      expect(firstMap.id).toBeDefined();
-      expect(firstMap.name).toBeDefined();
-      expect(firstMap.biome).toBeDefined();
-      expect(firstMap.gridWidth).toBeGreaterThan(0);
-      expect(firstMap.gridHeight).toBeGreaterThan(0);
+      expect(data.maps).toEqual([]);
     });
   });
 
   describe("POST /api/combat/maps", () => {
-    it("switches combat map preset and updates map elements in DB", async () => {
+    it("готовый пресет больше не применяется к бою", async () => {
       const req = new Request("http://localhost/api/combat/maps", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          combatId,
-          mapPresetId: "preset-lava-cave",
-        }),
+        body: JSON.stringify({ combatId, mapPresetId: "preset-lava-cave" }),
       });
-
       const res = await postMap(req);
-      expect(res.status).toBe(200);
-      const data = await res.json();
-      expect(data.success).toBe(true);
-      expect(data.mapName).toBe("Лавовая пещера");
-      expect(data.combat).toBeDefined();
-      expect(data.combat.gridWidth).toBe(22);
-      expect(data.combat.gridHeight).toBe(18);
-
-      // Verify elements inserted in DB
-      const elementsInDb = await db.mapElement.findMany({ where: { combatId } });
-      expect(elementsInDb.length).toBeGreaterThan(0);
+      expect(res.status).toBe(404);
     });
 
     it("returns 404 for unknown mapPresetId", async () => {
@@ -168,7 +145,7 @@ describe("Combat API Routes", () => {
   });
 
   describe("GET /api/combat/maps/search", () => {
-    it("searches open battlemaps by tag or query", async () => {
+    it("каталог открытых карт пуст", async () => {
       const { GET: getSearchMaps } = await import("../maps/search/route");
       const req = new Request("http://localhost/api/combat/maps/search?q=крипта&tags=dungeon");
       const res = await getSearchMaps(req);
@@ -176,8 +153,7 @@ describe("Combat API Routes", () => {
       const data = await res.json();
       expect(data.maps).toBeDefined();
       expect(Array.isArray(data.maps)).toBe(true);
-      expect(data.maps.length).toBeGreaterThan(0);
-      expect(data.popularTags).toBeDefined();
+      expect(data.maps).toEqual([]);
     });
   });
 });
