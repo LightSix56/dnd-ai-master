@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS public.room_participants (
   room_id UUID NOT NULL REFERENCES public.rooms(id) ON DELETE CASCADE,
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   character_id UUID NOT NULL REFERENCES public.characters(id) ON DELETE RESTRICT,
-  character_snapshot JSONB NOT NULL DEFAULT '{}'::jsonb,
+  character_snapshot JSONB NOT NULL DEFAULT '{}'::jsonb, -- удалена миграцией 008
   is_host BOOLEAN NOT NULL DEFAULT false,
   is_ready BOOLEAN NOT NULL DEFAULT false,
   joined_at TIMESTAMPTZ NOT NULL DEFAULT now(),
