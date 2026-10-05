@@ -153,4 +153,15 @@ describe("Combat Victory XP Progression", () => {
     expect(events[0].description).toContain("325 XP");
     expect(events[0].description).toContain("650 XP");
   });
+
+  it("a repeated end of the same combat does not award experience twice", async () => {
+    await awardCombatVictoryXP(combatId);
+    const second = await awardCombatVictoryXP(combatId);
+
+    expect(second.awardedCharacters).toEqual([]);
+    const char1 = await db.character.findUnique({ where: { id: hero1Id } });
+    expect(char1!.experiencePoints).toBe(100 + 325);
+    const events = await db.gameEvent.findMany({ where: { campaignId, type: "combat" } });
+    expect(events.length).toBe(1);
+  });
 });
