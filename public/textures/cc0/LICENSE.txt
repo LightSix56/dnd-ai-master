@@ -1,0 +1,10 @@
+Textures in this folder are derived from "Top Down Dungeon Pack" by Screaming Brain Studios
+https://opengameart.org/content/top-down-dungeon-pack
+
+License: CC0 1.0 Universal (public domain dedication)
+https://creativecommons.org/publicdomain/zero/1.0/
+
+Plain tiles were cut from the autotile sheets and rescaled:
+- cave-floor-a.png  <- Floors/Floor-Dirt_02-64x64.png
+- cave-floor-b.png  <- Floors/Floor-Dirt_04-64x64.png
+- cave-rock.png     <- Walls/Wall-Stone_02-64x64.png

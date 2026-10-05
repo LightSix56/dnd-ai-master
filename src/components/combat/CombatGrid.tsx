@@ -8,6 +8,7 @@ import { getReachableCells, getAoeCells, computeVisibilityStatus, getFacingVecto
 import { remainingMovement, hasCondition } from "@/lib/combat/rules";
 import { cellKey } from "@/lib/combat/grid";
 import { ELEMENT_COLORS } from "@/lib/combat/types";
+import { useProcgenBackground } from "./useProcgenBackground";
 
 interface CombatGridProps {
   combat: Combat;
@@ -63,6 +64,9 @@ export function CombatGrid({
   const selectedCombatant = combat.combatants.find((c) => c.id === selectedCombatantId) || null;
 
   // Карта видимости («Глаз») для всех бойцов
+  // Фон: процедурную пещеру браузер рисует сам по зерну из ссылки procgen:
+  const backgroundHref = useProcgenBackground(combat.backgroundUrl);
+
   const visibilityMap = useMemo(() => {
     const map = new Map<string, { status: VisibilityStatus; seenBy: string[] }>();
     for (const c of combat.combatants) {
@@ -326,14 +330,16 @@ export function CombatGrid({
         <rect width={totalW} height={totalH} fill="#181411" />
 
         {/* Растровый top-down фон карты */}
-        <image
-          href={combat.backgroundUrl || "/maps/dungeon.png"}
-          x={0}
-          y={0}
-          width={totalW}
-          height={totalH}
-          preserveAspectRatio="none"
-        />
+        {backgroundHref && (
+          <image
+            href={backgroundHref}
+            x={0}
+            y={0}
+            width={totalW}
+            height={totalH}
+            preserveAspectRatio="none"
+          />
+        )}
 
         {/* Полупрозрачная тактическая VTT-сетка поверх арта */}
         {Array.from({ length: W + 1 }).map((_, i) => (
