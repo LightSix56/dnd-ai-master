@@ -1,5 +1,6 @@
 // API: импорт персонажа из генератора листа — файлом JSON или по share-коду с сайта.
 import { denyCampaignAccess, getRequestUserId } from "@/lib/auth/campaign-access";
+import type { Prisma } from "@prisma/client";
 import { db } from "@/lib/db";
 import {
   isSheetCharacter,
@@ -156,15 +157,17 @@ export async function POST(req: Request) {
         sheetCharacterId = row.id;
       }
       const link = {
-        ...splitHeroWrite(mapped as Record<string, unknown>).prismaData,
+        ...splitHeroWrite(mapped as unknown as Record<string, unknown>).prismaData,
         name: mapped.name,
         notes: null,
         sheetCharacterId,
         sheetLevelSeen: mapped.level,
       };
       saved = existing
-        ? await db.character.update({ where: { id: existing.id }, data: link })
-        : await db.character.create({ data: { ...(link as typeof mapped), campaignId: activeCampaignId } });
+        ? await db.character.update({ where: { id: existing.id }, data: link as Prisma.CharacterUncheckedUpdateInput })
+        : await db.character.create({
+            data: { ...link, campaignId: activeCampaignId } as unknown as Prisma.CharacterUncheckedCreateInput,
+          });
     } else {
       // NPC и спутники (и герои кампаний без владельца): листа нет, всё хранится в кампании
       saved = existing

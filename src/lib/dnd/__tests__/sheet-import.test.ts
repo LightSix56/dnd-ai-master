@@ -9,7 +9,7 @@ import {
   unwrapSheet,
 } from "../import-character";
 import { parseCharacterProficiencies } from "../d20-helper";
-import { stripVolatileNotes } from "@/lib/ai/caching/frozen-prefix";
+import { dossierFromSheet, stripVolatileNotes } from "@/lib/ai/caching/frozen-prefix";
 
 const sheet = {
   name: "Пятно",
@@ -77,11 +77,12 @@ describe("mapSheetToCharacter", () => {
   });
 });
 
-describe("лист, сохранённый в notes одним JSON (сетевая комната)", () => {
+describe("живой лист героя из базы", () => {
   const notes = JSON.stringify(accountCard);
+  const liveSheet = unwrapSheet<Record<string, any>>(accountCard);
 
   it("parseCharacterProficiencies находит атаки, владения и компетенции", () => {
-    const parsed = parseCharacterProficiencies(notes, "Плут");
+    const parsed = parseCharacterProficiencies({ sheet: liveSheet }, "Плут");
     expect(parsed.attacks.map((a) => a.name)).toEqual([
       "Рапира",
       "Короткий лук",
@@ -107,11 +108,13 @@ describe("лист, сохранённый в notes одним JSON (сетев�
   });
 
   it("мастер получает навыки и атаки героя, а не пустое досье", () => {
-    const dossier = stripVolatileNotes(notes) || "";
+    const dossier = dossierFromSheet(liveSheet) || "";
     expect(dossier).toContain("Навыки:");
     expect(dossier).toContain("Скрытность (компетенция)");
     expect(dossier).toContain("Рапира +5");
     expect(dossier).not.toContain("{");
+    // а JSON, оставшийся в заметках старых кампаний, в промпт не попадает совсем
+    expect(stripVolatileNotes(notes)).toBeNull();
   });
 
   it("сводка для карточки героя читаема", () => {

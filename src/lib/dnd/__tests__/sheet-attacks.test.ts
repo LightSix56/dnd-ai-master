@@ -91,8 +91,8 @@ describe("resolveSheetAttacks", () => {
 describe("атаки доходят до окна бросков и до боя", () => {
   const card = { id: "abc", name: "Пятно", level: 1, className: "Плут", data: rogue };
 
-  it("окно бросков d20 — лист в JSON", () => {
-    const parsed = parseCharacterProficiencies(JSON.stringify(card), "Плут");
+  it("окно бросков d20 — живой лист героя", () => {
+    const parsed = parseCharacterProficiencies({ sheet: rogue }, "Плут");
     expect(parsed.attacks).toHaveLength(5);
     expect(parsed.attacks.map((a) => a.bonus)).toEqual([5, 5, 5, 5, 2]);
   });
@@ -107,7 +107,7 @@ describe("атаки доходят до окна бросков и до боя"
 
   it("бой — бонусы, урон и стоимость действия", () => {
     const attacks = extractAttacksFromCharacter(
-      { id: "c1", class: "Плут", notes: JSON.stringify(card) },
+      { id: "c1", class: "Плут", sheet: rogue },
       3,
       0,
       2
@@ -135,6 +135,8 @@ describe("атаки доходят до окна бросков и до боя"
     const outer = JSON.stringify({ id: "x", name: "Пятно", level: 1, str: 10, dex: 17, notes: inner });
     const nested = JSON.stringify({ id: "x", name: "Пятно", level: 1, notes: `[Статус: спокоен]\n${outer}` });
     expect(sheetFromNotes(nested)?.equippedSlots).toBeDefined();
-    expect(parseCharacterProficiencies(nested, "Плут").attacks).toHaveLength(5);
+    // сам лист в заметках больше не читается игрой — только переносом старых героев
+    expect(parseCharacterProficiencies(nested, "Плут").attacks).toHaveLength(0);
+    expect(parseCharacterProficiencies({ sheet: sheetFromNotes(nested) }, "Плут").attacks).toHaveLength(5);
   });
 });

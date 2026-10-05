@@ -1,6 +1,15 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { fakeSupabase } from "@/lib/testing/fake-supabase";
+
+// Листы героев лежат в базе листов (Supabase); в тесте её заменяет таблица в памяти
+const sheets = vi.hoisted(() => ({ client: null as any }));
+vi.mock("@/lib/supabase/client", () => ({ getSupabaseAdminClient: () => sheets.client }));
+
 import { createTacticalEncounter } from "../generator";
 import { db } from "@/lib/db";
+
+const ROGUE_SHEET_ID = "11111111-1111-4111-8111-111111111111";
+const WIZARD_SHEET_ID = "22222222-2222-4222-8222-222222222222";
 import { safeParse } from "../serialize";
 import type { Attack, CombatAbility, HotbarItem, SpellData } from "../types";
 
@@ -9,6 +18,7 @@ describe("createTacticalEncounter: Character Card Attacks, Spells & Abilities", 
   let createdCombatIds: string[] = [];
 
   beforeEach(async () => {
+    sheets.client = fakeSupabase({ tables: { characters: [] } });
     const campaign = await db.campaign.create({
       data: {
         name: "Кампания для тестирования атак из листа",
@@ -35,6 +45,10 @@ describe("createTacticalEncounter: Character Card Attacks, Spells & Abilities", 
       name: "Шелест",
       className: "Плут",
       level: 3,
+      abilityScores: { СИЛ: 10, ЛОВ: 16, ТЕЛ: 14, ИНТ: 12, МДР: 12, ХАР: 14 },
+      hpMax: 24,
+      hpCurrent: 24,
+      armorClass: 15,
       attacks: [
         { name: "Короткий меч (1 рука)", attackBonus: "+5", damageAndType: "1к6+3 кол" },
         { name: "Короткий меч (вторая рука)", attackBonus: "+5", damageAndType: "1к6 кол" },
@@ -60,9 +74,11 @@ describe("createTacticalEncounter: Character Card Attacks, Spells & Abilities", 
         ac: 15,
         speed: 30,
         profBonus: 2,
-        notes: JSON.stringify(rogueSnapshot),
+        // в кампании — только ссылка на лист; сам лист читается из базы листов
+        sheetCharacterId: ROGUE_SHEET_ID,
       },
     });
+    sheets.client.tables.characters.push({ id: ROGUE_SHEET_ID, user_id: "u1", name: "Шелест", data: rogueSnapshot, revision: 0 });
 
     const encounter = await createTacticalEncounter({
       campaignId: testCampaignId,
@@ -200,9 +216,10 @@ describe("createTacticalEncounter: Character Card Attacks, Spells & Abilities", 
         ac: 12,
         speed: 30,
         profBonus: 2,
-        notes: JSON.stringify(wizardSnapshot),
+        sheetCharacterId: WIZARD_SHEET_ID,
       },
     });
+    sheets.client.tables.characters.push({ id: WIZARD_SHEET_ID, user_id: "u1", name: "Магистр Люциан", data: wizardSnapshot, revision: 0 });
 
     const encounter = await createTacticalEncounter({
       campaignId: testCampaignId,

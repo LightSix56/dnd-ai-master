@@ -21,7 +21,7 @@ import { RoomService, RoomRuleError, STALE_RESOLVE_LOCK_SECONDS } from "../room-
 import { checkCombatControl, actorIdForAction, resetCombatAccessCaches } from "../combat-access";
 import { buildRoomDmSystemPrompt } from "../resolve-turn-helper";
 import { parseStoryArc } from "@/lib/ai/story-arc";
-import { stripVolatileNotes } from "@/lib/ai/caching/frozen-prefix";
+import { dossierFromSheet, stripVolatileNotes } from "@/lib/ai/caching/frozen-prefix";
 
 /** Цепочка запросов Supabase: запоминает вызовы и отдаёт заданный результат на завершающем шаге */
 function chain(result: unknown, log: Array<[string, unknown[]]> = []) {
@@ -282,7 +282,7 @@ describe("сюжет в комнате", () => {
       arcCurrentAct: 1,
     });
     dbMock.character.findMany.mockResolvedValue([
-      { id: "p1", name: "Торин", race: "Дварф", class: "Воин", level: 2, notes: JSON.stringify({ name: "Торин", backstory: "Вырос в шахтах.", abilityScores: { str: 16 } }) },
+      { id: "p1", name: "Торин", race: "Дварф", class: "Воин", level: 2, notes: "[Статус: бодр]", sheet: { name: "Торин", backstory: "Вырос в шахтах.", abilityScores: { str: 16 } } },
       { id: "p2", name: "Лира", race: "Эльф", class: "Плут", level: 2, notes: null },
     ]);
 
@@ -297,7 +297,7 @@ describe("сюжет в комнате", () => {
     expect(prompt).toContain("СОВМЕСТНЫЙ РАУНД В СЕТЕВОЙ КОМНАТЕ");
     // полный свод правил мастера, как в сольной игре
     expect(prompt).toContain("РАЗДЕЛЕНИЕ ПРАВ НА БРОСКИ");
-    // лист персонажа из notes не вываливается в промпт целиком — только досье
+    // лист персонажа не вываливается в промпт целиком — только досье
     expect(prompt).toContain("Предыстория: Вырос в шахтах.");
     expect(prompt).not.toContain("abilityScores");
   });
@@ -307,8 +307,12 @@ describe("сюжет в комнате", () => {
     expect(prompt).toContain("кооперативную кампанию");
   });
 
-  it("JSON-лист без текстовых полей в промпт не попадает вовсе", () => {
+  it("JSON в заметках в промпт не попадает; досье строится из листа героя", () => {
     expect(stripVolatileNotes(JSON.stringify({ name: "X", abilityScores: { str: 10 } }))).toBeNull();
-    expect(stripVolatileNotes("[Статус: спит]\n" + JSON.stringify({ backstory: "Сирота." }))).toBe("Предыстория: Сирота.");
+    expect(stripVolatileNotes("[Статус: спит]\n" + JSON.stringify({ backstory: "Сирота." }))).toBeNull();
+    expect(stripVolatileNotes("[Статус: спит]\nБоится огня")).toBe("Боится огня");
+    expect(dossierFromSheet({ backstory: "Сирота." })).toBe("Предыстория: Сирота.");
+    expect(dossierFromSheet({ name: "X", abilityScores: { str: 10 } })).toBeNull();
+    expect(dossierFromSheet(null)).toBeNull();
   });
 });
