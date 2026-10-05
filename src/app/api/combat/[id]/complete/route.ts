@@ -2,6 +2,7 @@ import { denyCampaignAccess } from "@/lib/auth/campaign-access";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { generateCombatLoot } from "@/lib/combat/rewards/loot-generator";
+import { syncCombatToSheets } from "@/lib/combat/combat-sheet-sync";
 import type { Combatant } from "@prisma/client";
 
 function isEnemyDefeatedOrFled(enemy: Combatant): boolean {
@@ -130,6 +131,13 @@ export async function POST(
         log: JSON.stringify(combatLog),
       },
     });
+
+    // Хиты, ячейки и состояния героев после боя — в их листы (один раз на бой)
+    try {
+      await syncCombatToSheets(combatId);
+    } catch (e) {
+      console.error("[combat/complete] не удалось записать итоги боя в листы героев:", e);
+    }
 
     return NextResponse.json({
       ok: true,

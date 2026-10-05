@@ -81,6 +81,16 @@ export async function awardCombatVictoryXP(combatId: string): Promise<AwardComba
   const awardedCharacters: Array<{ id: string; name: string; oldXP: number; newXP: number }> = [];
 
   if (combat.campaignId && xpPerPlayer > 0) {
+    // Опыт за один бой начисляется один раз: завершение боя может прийти повторно
+    // (двойной клик, повтор запроса), а опыт пишется прямо в листы героев.
+    const marker = `"combatId":"${combatId}"`;
+    const alreadyAwarded = await db.gameEvent.findFirst({
+      where: { campaignId: combat.campaignId, type: "combat", result: { contains: marker } },
+    });
+    if (alreadyAwarded) {
+      return { combatId, totalXP, xpPerPlayer, awardedCharacters, gameEventId: alreadyAwarded.id };
+    }
+
     const livingCharacters = await db.character.findMany({
       where: {
         campaignId: combat.campaignId,
@@ -111,6 +121,7 @@ export async function awardCombatVictoryXP(combatId: string): Promise<AwardComba
         type: "combat",
         description: `🏁 Победа в тактическом бою «${combat.name}»! Каждый участник отряда получает ${xpPerPlayer} XP (всего ${totalXP} XP за поверженных врагов).`,
         participants: JSON.stringify(livingCharacters.map((c) => c.id)),
+        result: JSON.stringify({ combatId, xpPerPlayer }),
       },
     });
 

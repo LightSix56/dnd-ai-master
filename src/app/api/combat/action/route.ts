@@ -36,6 +36,7 @@ import { TYPE_COLORS, type ActionParameters, type Cell } from "@/lib/combat/type
 import { buildTurnOrder } from "@/lib/combat/initiative";
 import { getSpellDefinition } from "@/lib/combat/library-data";
 import { awardCombatVictoryXP } from "@/lib/combat/xp-award";
+import { syncCombatToSheets } from "@/lib/combat/combat-sheet-sync";
 import { checkCombatControl } from "@/lib/room/combat-access";
 
 /** Версия боя (Combat.updatedAt) на момент загрузки — для защиты от одновременных запросов */
@@ -997,6 +998,12 @@ export async function POST(req: Request) {
         }
       }
       await db.combat.update({ where: { id: combatId }, data: { status: "ended" } });
+      // Хиты, ячейки и состояния героев после боя — в их листы (один раз на бой)
+      try {
+        await syncCombatToSheets(combatId);
+      } catch (e) {
+        console.error("Failed to write combat results to hero sheets:", e);
+      }
       return respond(combatId, { xpAward });
     }
 
