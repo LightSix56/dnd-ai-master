@@ -6,6 +6,7 @@
 // иначе второй вызов затёр бы то, что игрок успел изменить на сайте листа (например, отдых).
 
 import { db } from "@/lib/db";
+import { extractCharacterStats } from "@/lib/dnd/import-character";
 import { applyGameState } from "@/lib/dnd/sheet-store";
 
 /** Состояния, которые знает сайт листа; остальные (служебные эффекты боя) в лист не пишутся */
@@ -39,12 +40,20 @@ function count(value: unknown, fallback = 0): number {
   return Number.isFinite(n) ? n : fallback;
 }
 
-/** Что из состояния бойца записать в лист героя */
+/**
+ * Что из состояния бойца записать в лист героя.
+ * effectiveHpMax — максимум хитов, который видит игра (в листе он может быть не заполнен
+ * и тогда считается по классу и уровню); без него берётся максимум из листа.
+ */
 export function combatantToSheetPatch(
   combatant: CombatantRow,
-  sheet: Record<string, any>
+  sheet: Record<string, any>,
+  effectiveHpMax?: number | null
 ): Record<string, unknown> {
-  const hpMax = Math.max(1, count(sheet?.hpMax, 1));
+  const hpMax = Math.max(
+    1,
+    count(effectiveHpMax) > 0 ? count(effectiveHpMax) : extractCharacterStats(sheet ?? {}).hpMax
+  );
   const patch: Record<string, unknown> = {
     hpCurrent: Math.max(0, Math.min(hpMax, count(combatant.hpCurrent))),
     hpTemp: Math.max(0, count(combatant.hpTemp)),
@@ -60,7 +69,12 @@ export function combatantToSheetPatch(
       if (SHEET_CONDITIONS.has(type)) conditions.add(type);
     }
   }
-  patch.conditions = [...conditions];
+  // Состояния листа, которые бой не ведёт (уровни истощения «exhaustion:2», свои пометки игрока),
+  // остаются как были; известные бою — берутся из боя (в начале боя они в него переносятся).
+  const kept = (Array.isArray(sheet?.conditions) ? sheet.conditions : [])
+    .map((c: unknown) => String(c))
+    .filter((c: string) => !SHEET_CONDITIONS.has(c.trim().toLowerCase()));
+  patch.conditions = [...new Set([...kept, ...conditions])];
 
   // Ячейки: в бою — «потрачено из максимума», в листе — expendedSlots из totalSlots.
   // Число ячеек определяет лист; из боя берём только сколько потрачено.
@@ -111,7 +125,7 @@ export async function syncCombatToSheets(combatId: string): Promise<{ synced: nu
     try {
       if (hero.sheetCharacterId) {
         if (!hero.sheet) throw new Error("лист героя недоступен");
-        await applyGameState(hero.sheetCharacterId, combatantToSheetPatch(combatant, hero.sheet));
+        await applyGameState(hero.sheetCharacterId, combatantToSheetPatch(combatant, hero.sheet, hero.hpMax));
       } else {
         // Персонаж без листа (спутник, герой одиночной игры без аккаунта): его место хранения — кампания
         const hpMax = Math.max(1, count(hero.hpMax, 1));
@@ -134,4 +148,41 @@ export async function syncCombatToSheets(combatId: string): Promise<{ synced: nu
     await db.combat.update({ where: { id: combatId }, data: { sheetSyncedAt: new Date() } });
   }
   return { synced, skipped: false };
+}
+
+/** Состояния листа, которые умеет вести бой — для переноса в бой при его создании */
+export function sheetConditionsForCombat(sheet: Record<string, any> | null | undefined): Array<{ type: string }> {
+  const list = Array.isArray(sheet?.conditions) ? sheet.conditions : [];
+  const known = new Set<string>();
+  for (const item of list) {
+    const type = String(item ?? "").trim().toLowerCase();
+    if (SHEET_CONDITIONS.has(type)) known.add(type);
+  }
+  return [...known].map((type) => ({ type }));
+}
+
+/**
+ * Завершает активные бои (все подходящие под условие) и записывает их итоги в листы героев.
+ * Вызывается везде, где бой заканчивается не кнопкой «Завершить бой»: мастер начал новый бой
+ * поверх старого, бой удалён. Заодно повторяет запись для недавно завершённых боёв,
+ * у которых она в прошлый раз не удалась. Возвращает число завершённых боёв.
+ */
+export async function endActiveCombats(where: { campaignId?: string | null } = {}): Promise<number> {
+  const scope = "campaignId" in where ? { campaignId: where.campaignId ?? null } : {};
+  const active = await db.combat.findMany({ where: { ...scope, status: "active" } });
+  const unsynced = await db.combat.findMany({ where: { ...scope, status: "ended", sheetSyncedAt: null } });
+
+  for (const combat of active) {
+    await db.combat.update({ where: { id: combat.id }, data: { status: "ended" } });
+  }
+  // Не больше нескольких старых боёв за раз: у давних боёв герои могли давно измениться
+  for (const combat of [...active, ...unsynced.slice(-3)]) {
+    if (!combat.campaignId) continue;
+    try {
+      await syncCombatToSheets(combat.id);
+    } catch (e) {
+      console.error("[combat-sheet-sync] не удалось записать итоги боя:", e);
+    }
+  }
+  return active.length;
 }

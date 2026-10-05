@@ -81,14 +81,15 @@ export async function awardCombatVictoryXP(combatId: string): Promise<AwardComba
   const awardedCharacters: Array<{ id: string; name: string; oldXP: number; newXP: number }> = [];
 
   if (combat.campaignId && xpPerPlayer > 0) {
-    // Опыт за один бой начисляется один раз: завершение боя может прийти повторно
-    // (двойной клик, повтор запроса), а опыт пишется прямо в листы героев.
-    const marker = `"combatId":"${combatId}"`;
-    const alreadyAwarded = await db.gameEvent.findFirst({
-      where: { campaignId: combat.campaignId, type: "combat", result: { contains: marker } },
+    // Опыт за один бой начисляется один раз: завершение боя может прийти повторно или
+    // одновременно от двух игроков, а опыт пишется прямо в листы героев. Право начислить
+    // получает тот запрос, который первым поставил отметку (одна атомарная запись).
+    const claim = await db.combat.updateMany({
+      where: { id: combatId, xpAwardedAt: null },
+      data: { xpAwardedAt: new Date() },
     });
-    if (alreadyAwarded) {
-      return { combatId, totalXP, xpPerPlayer, awardedCharacters, gameEventId: alreadyAwarded.id };
+    if (claim.count !== 1) {
+      return { combatId, totalXP, xpPerPlayer, awardedCharacters };
     }
 
     const livingCharacters = await db.character.findMany({
@@ -101,17 +102,21 @@ export async function awardCombatVictoryXP(combatId: string): Promise<AwardComba
 
     for (const char of livingCharacters) {
       const oldXP = char.experiencePoints || 0;
-      const updated = await db.character.update({
-        where: { id: char.id },
-        data: { experiencePoints: { increment: xpPerPlayer } },
-      });
-
-      awardedCharacters.push({
-        id: char.id,
-        name: char.name,
-        oldXP,
-        newXP: updated.experiencePoints,
-      });
+      try {
+        const updated = await db.character.update({
+          where: { id: char.id },
+          data: { experiencePoints: { increment: xpPerPlayer } },
+        });
+        awardedCharacters.push({
+          id: char.id,
+          name: char.name,
+          oldXP,
+          newXP: updated.experiencePoints,
+        });
+      } catch (e) {
+        // Сбой у одного героя не должен лишить опыта остальных
+        console.error(`[xp-award] не удалось начислить опыт герою «${char.name}»:`, e);
+      }
     }
 
     // Фиксируем системное игровое событие в логе кампании

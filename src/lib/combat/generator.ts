@@ -1,4 +1,5 @@
 // Процедурный генератор тактических карт и энкаунтеров для AI DM
+import { endActiveCombats, sheetConditionsForCombat } from "./combat-sheet-sync";
 import { db } from "@/lib/db";
 import { abilityModifier, proficiencyBonus } from "@/lib/dnd/dice";
 import { rollInitiativeForAll, sortByInitiative } from "./initiative";
@@ -887,12 +888,9 @@ export async function createTacticalEncounter({
   isActClimax,
   mapPresetId,
 }: CreateEncounterParams): Promise<TacticalEncounterResult> {
-  // Завершаем старые активные бои в кампании
+  // Завершаем старые активные бои в кампании; их итоги (хиты, ячейки) уходят в листы героев
   if (campaignId) {
-    await db.combat.updateMany({
-      where: { campaignId, status: "active" },
-      data: { status: "ended" },
-    });
+    await endActiveCombats({ campaignId });
   }
 
   // Подтягиваем персонажей игрока и спутников из кампании
@@ -1716,7 +1714,9 @@ export async function createTacticalEncounter({
         y: posY,
         hpMax: char.hpMax,
         hpCurrent: char.hpCurrent,
-        hpTemp: 0,
+        // Временные хиты и состояния героя переходят в бой из листа, а после боя — обратно
+        hpTemp: char.hpTemp || 0,
+        conditions: JSON.stringify(sheetConditionsForCombat((char as { sheet?: Record<string, any> | null }).sheet)),
         ac: char.ac,
         speed: char.speed,
         dexMod,

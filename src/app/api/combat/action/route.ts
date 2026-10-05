@@ -1008,6 +1008,12 @@ export async function POST(req: Request) {
     }
 
     if (action === "delete-combat") {
+      // Перед удалением боя его итоги (хиты, ячейки героев) записываются в листы
+      try {
+        await syncCombatToSheets(combatId);
+      } catch (e) {
+        console.error("Failed to write combat results to hero sheets:", e);
+      }
       await db.combat.delete({ where: { id: combatId } });
       return Response.json({ success: true });
     }

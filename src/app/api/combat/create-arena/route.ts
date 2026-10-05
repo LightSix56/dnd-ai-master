@@ -1,5 +1,6 @@
 // API: Создать готовую тестовую арену с Магом 3-го круга, Друидом и стихийным ландшафтом
 import { db } from "@/lib/db";
+import { endActiveCombats } from "@/lib/combat/combat-sheet-sync";
 import { packMonsterData } from "@/lib/combat/serialize";
 import { hydrateCombat } from "@/lib/combat/serialize";
 import { CAMPAIGN_HEROES_PRESETS, createCombatantFromPreset } from "@/lib/combat/preset-data";
@@ -8,10 +9,7 @@ import { getSRDMonster } from "@/lib/combat/srd/adapter";
 export async function POST() {
   try {
     // 1. Завершаем активные бои
-    await db.combat.updateMany({
-      where: { status: "active" },
-      data: { status: "ended" },
-    });
+    await endActiveCombats();
 
     // 2. Создаем бой
     const combat = await db.combat.create({

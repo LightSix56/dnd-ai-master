@@ -19,13 +19,10 @@ import {
   type PartyAwareAct1,
   type StartingSituation,
 } from "@/lib/ai/party-arc-generator";
-import {
-  extractCharacterStats,
-  getArchetypeAbilityScores,
-  notesWithoutSheetJson,
-} from "@/lib/dnd/import-character";
+import { extractCharacterStats, getArchetypeAbilityScores } from "@/lib/dnd/import-character";
 import {
   SheetUnavailableError,
+  applyGameState,
   createCampaignHeroSheet,
   ensureCampaignVersion,
   isSheetId,
@@ -33,6 +30,7 @@ import {
   loadSheets,
   type SheetRow,
 } from "@/lib/dnd/sheet-store";
+import { currentHitPoints } from "@/lib/dnd/hero-overlay";
 import type { AuthMode } from "@/lib/ai/client";
 
 export interface StartRoomCampaignInput {
@@ -80,7 +78,6 @@ export function summarizeSheet(characterId: string, row: SheetRow | null | undef
   const sheet = row.sheet;
   const stats = extractCharacterStats(sheet);
   const level = Math.trunc(Number(sheet.level));
-  const hp = Math.trunc(Number(sheet.hpCurrent));
   return {
     id: row.id,
     name: String(sheet.name || row.name || "Герой").trim(),
@@ -90,7 +87,7 @@ export function summarizeSheet(characterId: string, row: SheetRow | null | undef
     subclass: sheet.subclass || undefined,
     portraitUrl: row.portraitUrl ?? sheet.portraitUrl ?? null,
     hpMax: stats.hpMax,
-    hpCurrent: Number.isFinite(hp) && hp >= 0 ? Math.min(hp, stats.hpMax) : stats.hpMax,
+    hpCurrent: currentHitPoints(sheet, stats.hpMax),
     armorClass: stats.ac,
     condition:
       Array.isArray(sheet.conditions) && sheet.conditions.length > 0
@@ -307,9 +304,11 @@ export class RoomService {
           .update({ character_id: version.id })
           .eq("id", row.id);
         if (error) throw new Error(error.message);
-        await this.linkHeroToCampaign(campaignId, version);
+        await this.linkHeroToCampaign(campaignId, version, null, true);
         row.character_id = version.id;
-        sheets.set(version.id, version);
+        // после переноса прогресса лист версии изменился — перечитываем
+        const fresh = await loadSheet(version.id, this.client);
+        sheets.set(version.id, fresh ?? version);
       } catch (e) {
         console.warn("[room-service] не удалось перевести участника на версию героя:", e);
       }
@@ -522,7 +521,7 @@ export class RoomService {
     // 7. Герой в базе кампании — только ссылка на лист
     if (campaignId) {
       try {
-        await this.linkHeroToCampaign(campaignId, sheet, pickedHeroId);
+        await this.linkHeroToCampaign(campaignId, sheet, pickedHeroId, true);
       } catch (err) {
         console.warn("[room-service] не удалось привязать героя к кампании:", err);
       }
@@ -568,7 +567,7 @@ export class RoomService {
     const hero = input.characterId
       ? await db.character.findUnique({ where: { id: String(input.characterId) } })
       : null;
-    if (!hero || !campaignId || hero.campaignId !== campaignId) {
+    if (!hero || !campaignId || hero.campaignId !== campaignId || !["player", "companion"].includes(hero.type)) {
       throw new RoomRuleError("Персонаж не найден среди героев этой кампании.");
     }
     if (hero.sheetCharacterId) {
@@ -608,7 +607,8 @@ export class RoomService {
   private async linkHeroToCampaign(
     campaignId: string,
     sheet: SheetRow,
-    pickedHeroId?: string | null
+    pickedHeroId?: string | null,
+    carryCampaignProgress = false
   ): Promise<void> {
     const name = String(sheet.sheet.name || sheet.name || "Герой").trim();
     const level = Math.max(1, Math.trunc(Number(sheet.sheet.level)) || 1);
@@ -622,32 +622,56 @@ export class RoomService {
       return;
     }
 
-    // Герой кампании без листа: выбранный явно либо одноимённый (кампании, начатые до версий)
+    // Герой кампании, которого надо привязать: выбранный явно (в том числе с устаревшей ссылкой
+    // на удалённый лист) либо одноимённый герой без листа (кампании, начатые до версий)
     const lower = name.toLowerCase();
-    const unlinked = heroes.find(
+    const target = heroes.find(
       (c) =>
-        !c.sheetCharacterId &&
-        ((pickedHeroId && c.id === pickedHeroId) ||
-          (["player", "companion"].includes(c.type) && c.name.trim().toLowerCase() === lower))
+        (pickedHeroId && c.id === pickedHeroId) ||
+        (!c.sheetCharacterId &&
+          ["player", "companion"].includes(c.type) &&
+          c.name.trim().toLowerCase() === lower)
     );
-    if (unlinked) {
+    if (target) {
+      // Прогресс, накопленный в кампании до появления версий, лежал в строке героя —
+      // переносим его в лист, иначе герой «потерял бы» заработанный опыт и раны
+      if (!target.sheetCharacterId && carryCampaignProgress) {
+        await this.carryProgressToSheet(target, sheet);
+      }
       await db.character.update({
-        where: { id: unlinked.id },
-        // Лист, когда-то скопированный в заметки героя, убираем: он читается из базы листов
-        data: {
-          name,
-          type: "player",
-          sheetCharacterId: sheet.id,
-          sheetLevelSeen: level,
-          notes: notesWithoutSheetJson(unlinked.notes),
-        },
+        where: { id: target.id },
+        data: { name, type: "player", sheetCharacterId: sheet.id, sheetLevelSeen: level },
       });
       return;
     }
 
-    await db.character.create({
-      data: { campaignId, name, type: "player", sheetCharacterId: sheet.id, sheetLevelSeen: level },
-    });
+    try {
+      await db.character.create({
+        data: { campaignId, name, type: "player", sheetCharacterId: sheet.id, sheetLevelSeen: level },
+      });
+    } catch (e) {
+      // Параллельный запрос уже создал героя с этой ссылкой (уникальный индекс) — это не ошибка
+      if ((e as { code?: string })?.code !== "P2002") throw e;
+    }
+  }
+
+  private async carryProgressToSheet(
+    hero: { experiencePoints?: number | null; hpCurrent?: number | null; hpMax?: number | null },
+    sheet: SheetRow
+  ): Promise<void> {
+    const patch: Record<string, unknown> = {};
+    const heroXp = Math.trunc(Number(hero.experiencePoints)) || 0;
+    const sheetXp = Math.trunc(Number(sheet.sheet.experiencePoints)) || 0;
+    if (heroXp > sheetXp) patch.experiencePoints = heroXp;
+
+    const sheetMax = extractCharacterStats(sheet.sheet).hpMax;
+    const heroHp = Math.trunc(Number(hero.hpCurrent));
+    const heroMax = Math.trunc(Number(hero.hpMax));
+    // Раны переносим, только если герой в кампании действительно был ранен
+    if (Number.isFinite(heroHp) && Number.isFinite(heroMax) && heroHp >= 0 && heroHp < heroMax) {
+      patch.hpCurrent = Math.min(heroHp, sheetMax);
+    }
+    if (Object.keys(patch).length > 0) await applyGameState(sheet.id, patch, this.client);
   }
 
   /**

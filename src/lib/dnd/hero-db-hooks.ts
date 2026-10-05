@@ -7,7 +7,8 @@
 //     лист (уровень, характеристики, максимум хитов, КД), в базу кампании не пишутся вовсе.
 
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { withSheets } from "./hero-overlay";
+import { currentHitPoints, withSheets } from "./hero-overlay";
+import { extractCharacterStats } from "./import-character";
 import { addExperience, applyGameState, loadSheet, SheetUnavailableError } from "./sheet-store";
 
 type NumberOp = number | { increment?: number; decrement?: number; set?: number };
@@ -72,9 +73,10 @@ export async function applyHeroSheetWrite(
   if (needsSheet) {
     const row = await loadSheet(sheetCharacterId, client);
     if (!row) throw new SheetUnavailableError("Лист персонажа не найден. Выберите героя заново.");
-    const hpMax = Math.max(1, num(row.sheet.hpMax, 1));
+    // Максимум — тот же, что видит игра (в листе он может быть не заполнен и считается по классу)
+    const hpMax = Math.max(1, extractCharacterStats(row.sheet).hpMax);
     if (ops.hpCurrent !== undefined) {
-      const current = num(row.sheet.hpCurrent, hpMax);
+      const current = currentHitPoints(row.sheet, hpMax);
       patch.hpCurrent = Math.max(0, Math.min(hpMax, resolve(current, ops.hpCurrent)));
     }
     if (ops.hpTemp !== undefined) {

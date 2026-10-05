@@ -1,5 +1,6 @@
 // API: создать новый бой — с тестовыми врагами
 import { denyCampaignAccess } from "@/lib/auth/campaign-access";
+import { endActiveCombats } from "@/lib/combat/combat-sheet-sync";
 import { db } from "@/lib/db";
 import { hydrateCombat } from "@/lib/combat/serialize";
 import { createTacticalEncounter } from "@/lib/combat/generator";
@@ -137,13 +138,8 @@ export async function POST(req: Request) {
       });
     }
 
-    await db.combat.updateMany({
-      where: {
-        status: "active",
-        campaignId: campaignId || null,
-      },
-      data: { status: "ended" },
-    });
+    // Итоги заменяемого боя (хиты, ячейки) уходят в листы героев
+    await endActiveCombats({ campaignId: campaignId || null });
 
     const combat = await db.combat.create({
       data: {

@@ -34,6 +34,18 @@ function count(value: unknown): number | null {
   return Number.isFinite(n) && n >= 0 ? n : null;
 }
 
+/**
+ * Текущие хиты героя из листа.
+ * 0 — настоящее значение (герой без сознания), но только если в листе задан максимум хитов:
+ * у листа, где хиты ни разу не заполняли (hpMax пуст, hpCurrent 0), герой считается здоровым.
+ */
+export function currentHitPoints(sheet: Record<string, any>, hpMax: number): number {
+  const filled = Number(sheet?.hpMax) > 0;
+  const raw = count(sheet?.hpCurrent);
+  if (!filled || raw === null) return hpMax;
+  return Math.min(raw, hpMax);
+}
+
 /** Накладывает значения листа на строку героя. Исходный объект не меняется. */
 export function overlaySheet<T extends Linkable>(character: T, row: SheetRow | null | undefined): HeroView<T> {
   if (!character.sheetCharacterId) {
@@ -46,9 +58,7 @@ export function overlaySheet<T extends Linkable>(character: T, row: SheetRow | n
   const sheet = row.sheet;
   const stats = extractCharacterStats(sheet);
   const level = Math.max(1, Math.min(20, count(sheet.level) || 1));
-  // extractCharacterStats считает 0 хитов «не задано»; для героя без сознания 0 — настоящее значение
-  const rawHp = count(sheet.hpCurrent);
-  const hpCurrent = rawHp === null ? stats.hpMax : Math.min(rawHp, stats.hpMax);
+  const hpCurrent = currentHitPoints(sheet, stats.hpMax);
   const base = character as Record<string, any>;
 
   return {

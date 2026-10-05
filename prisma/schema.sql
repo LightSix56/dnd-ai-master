@@ -162,6 +162,7 @@ CREATE TABLE "Combat" (
     "backgroundUrl" TEXT,
     "log" TEXT NOT NULL DEFAULT '[]',
     "sheetSyncedAt" TIMESTAMP(3),
+    "xpAwardedAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -290,6 +291,9 @@ CREATE INDEX "Character_type_idx" ON "Character"("type");
 
 -- CreateIndex
 CREATE INDEX "Character_sheetCharacterId_idx" ON "Character"("sheetCharacterId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Character_campaignId_sheetCharacterId_key" ON "Character"("campaignId", "sheetCharacterId");
 
 -- CreateIndex
 CREATE INDEX "GameEvent_campaignId_idx" ON "GameEvent"("campaignId");

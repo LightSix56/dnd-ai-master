@@ -8,7 +8,7 @@
 --   * две служебные функции, которыми сайт мастера точечно пишет в лист
 --     итоги игры (хиты, ячейки, состояния, опыт), не заменяя весь лист;
 --   * в таблицы кампании ("Character", "Combat") — ссылка героя на его лист
---     и отметка «итоги боя записаны в лист».
+--     и отметки «итоги боя записаны в лист» и «опыт за бой начислен».
 --
 -- Ничего не удаляется и не переписывается. Старый код продолжает работать.
 -- Скрипт можно запускать повторно.
@@ -118,30 +118,30 @@ AS $$
 DECLARE
   v_total integer;
 BEGIN
-  UPDATE public.characters c
+  -- Одна инструкция UPDATE без подзапроса: строка блокируется, и параллельная запись
+  -- в тот же лист (итоги боя, сохранение игрока) не теряется.
+  UPDATE public.characters
      SET data = jsonb_set(
-           n.sheet,
+           CASE WHEN jsonb_typeof(data) = 'string' THEN (data #>> '{}')::jsonb ELSE data END,
            '{experiencePoints}',
            to_jsonb(
              GREATEST(
                0,
                COALESCE(
-                 CASE WHEN (n.sheet ->> 'experiencePoints') ~ '^-?[0-9]+$'
-                      THEN (n.sheet ->> 'experiencePoints')::integer END,
+                 CASE
+                   WHEN ((CASE WHEN jsonb_typeof(data) = 'string' THEN (data #>> '{}')::jsonb ELSE data END)
+                           ->> 'experiencePoints') ~ '^-?[0-9]+$'
+                   THEN ((CASE WHEN jsonb_typeof(data) = 'string' THEN (data #>> '{}')::jsonb ELSE data END)
+                           ->> 'experiencePoints')::integer
+                 END,
                  0
                ) + COALESCE(p_amount, 0)
              )
            ),
            true
          )
-    FROM (
-      SELECT id,
-             CASE WHEN jsonb_typeof(data) = 'string' THEN (data #>> '{}')::jsonb ELSE data END AS sheet
-        FROM public.characters
-       WHERE id = p_id
-    ) n
-   WHERE c.id = n.id
-  RETURNING (c.data ->> 'experiencePoints')::integer INTO v_total;
+   WHERE id = p_id
+  RETURNING (data ->> 'experiencePoints')::integer INTO v_total;
 
   IF NOT FOUND THEN
     RAISE EXCEPTION 'add_character_experience: character % not found', p_id;
@@ -175,7 +175,12 @@ ALTER TABLE "Character" ADD COLUMN IF NOT EXISTS "sheetCharacterId" text;
 ALTER TABLE "Character" ADD COLUMN IF NOT EXISTS "sheetLevelSeen" integer;
 CREATE INDEX IF NOT EXISTS "Character_sheetCharacterId_idx" ON "Character" ("sheetCharacterId");
 
+-- Один герой кампании на один лист: иначе опыт за бой начислялся бы ему дважды
+CREATE UNIQUE INDEX IF NOT EXISTS "Character_campaignId_sheetCharacterId_key"
+  ON "Character" ("campaignId", "sheetCharacterId");
+
 ALTER TABLE "Combat" ADD COLUMN IF NOT EXISTS "sheetSyncedAt" timestamp(3);
+ALTER TABLE "Combat" ADD COLUMN IF NOT EXISTS "xpAwardedAt" timestamp(3);
 
 -- =============================================================================
 -- ПРОВЕРКА (выполнить после скрипта, результат — 4 строки):

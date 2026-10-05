@@ -1,6 +1,6 @@
 "use client";
 
-import { summarizeSheetMechanics } from "@/lib/dnd/import-character";
+import { notesWithoutSheetJson, summarizeSheetMechanics } from "@/lib/dnd/import-character";
 import { useState } from "react";
 import { Character } from "@/lib/store";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -123,7 +123,7 @@ export function CharacterCard({
   // У героя с листом показываем спасброски, навыки и атаки из живого листа (он приходит
   // с сервера, прочитанный из базы) и заметки мастера; у остальных — только заметки.
   // JSON, оставшийся в заметках старых кампаний, не показываем.
-  const textNotes = rawNotes.startsWith("{") ? "" : rawNotes;
+  const textNotes = notesWithoutSheetJson(rawNotes) ?? "";
   const cleanNotes = character.sheetMissing
     ? "Лист персонажа недоступен. Выберите героя заново."
     : character.sheet

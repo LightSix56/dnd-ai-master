@@ -102,7 +102,7 @@ export function fakePrisma(seed: FakePrismaSeed = {}) {
     }),
     campaign: fakeModel("campaign", seed.campaign ?? []),
     chatMessage: fakeModel("chatMessage", seed.chatMessage ?? []),
-    combat: fakeModel("combat", seed.combat ?? [], { status: "active", sheetSyncedAt: null }),
+    combat: fakeModel("combat", seed.combat ?? [], { status: "active", sheetSyncedAt: null, xpAwardedAt: null }),
     combatant: fakeModel("combatant", seed.combatant ?? []),
     gameEvent: fakeModel("gameEvent", seed.gameEvent ?? []),
   };

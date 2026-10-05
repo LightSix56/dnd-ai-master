@@ -9,26 +9,25 @@
 //  - пункты «• …», которые летописец дописывает в notes, когда герой раскрывает новую черту.
 // Раньше notes шли в промпт как есть, и кэш сбрасывался на каждом ходу почти с самого начала.
 
-import { summarizeSheetMechanics } from "@/lib/dnd/import-character";
+import { notesWithoutSheetJson, summarizeSheetMechanics } from "@/lib/dnd/import-character";
 import { buildSystemPrompt, type CampaignContext, type PlayerSummary } from "../system-prompt";
 
 const STATUS_TAG = /\[(?:Статус|Состояние):\s*[^\]]*\]/gi;
 
 /** Оставляет от заметок только статичное досье: без тега статуса и без пунктов летописца */
 export function stripVolatileNotes(notes?: string | null): string | null {
-  if (!notes) return null;
-  const kept = notes
+  // Лист персонажа в заметках больше не хранится (он читается из базы). JSON, оставшийся
+  // в заметках старых кампаний, в промпт не пускаем: это не досье, а сырые данные.
+  const text = notesWithoutSheetJson(notes);
+  if (!text) return null;
+  const kept = text
     .replace(STATUS_TAG, "")
     .split("\n")
     .filter((line) => !line.trimStart().startsWith("•"))
     .join("\n")
     .replace(/\n{3,}/g, "\n\n")
     .trim();
-  if (!kept) return null;
-  // Лист персонажа в заметках больше не хранится (он читается из базы). JSON, оставшийся
-  // в заметках старых кампаний, в промпт не пускаем: это не досье, а сырые данные.
-  if (kept.startsWith("{")) return null;
-  return kept;
+  return kept || null;
 }
 
 const SHEET_DOSSIER_FIELDS: Array<[string, string]> = [

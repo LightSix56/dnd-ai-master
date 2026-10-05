@@ -110,6 +110,8 @@ model Character {
   @@index([campaignId])
   @@index([type])
   @@index([sheetCharacterId])
+  // Один герой кампании на один лист: иначе опыт за бой начислялся бы дважды
+  @@unique([campaignId, sheetCharacterId])
 }
 
 // Событие в игре — что произошло, где, когда
@@ -197,6 +199,8 @@ model Combat {
   log         String   @default("[]")
   // Когда итоги боя (хиты, ячейки, состояния, опыт) записаны в листы героев
   sheetSyncedAt DateTime?
+  // Когда за бой начислен опыт (отметка не даёт начислить его дважды)
+  xpAwardedAt   DateTime?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
