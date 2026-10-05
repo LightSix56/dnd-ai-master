@@ -15,6 +15,7 @@ import {
   Zap,
   Loader2,
   Shield,
+  ArrowUpCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -27,6 +28,10 @@ export interface PartyTurnBarProps {
   onForceResolve?: () => void;
   activeCombat?: { id: string; name: string; round: number } | null;
   onOpenCombat?: () => void;
+  /** Герои, выросшие в уровне с тех пор, как мастеру сообщали в последний раз */
+  levelChanges?: Array<{ name: string; toLevel: number }>;
+  onPartyLeveled?: () => void;
+  partyLeveledBusy?: boolean;
   className?: string;
 }
 
@@ -39,6 +44,9 @@ export function PartyTurnBar({
   onForceResolve,
   activeCombat,
   onOpenCombat,
+  levelChanges,
+  onPartyLeveled,
+  partyLeveledBusy,
   className,
 }: PartyTurnBarProps) {
   const readiness = calculateTurnReadiness(
@@ -85,6 +93,27 @@ export function PartyTurnBar({
             >
               <Swords className="size-3.5 mr-1 text-rose-500 animate-pulse" />
               Сетка боя (Раунд {activeCombat.round})
+            </Button>
+          )}
+
+          {onPartyLeveled && levelChanges && levelChanges.length > 0 && (
+            <Button
+              size="sm"
+              onClick={onPartyLeveled}
+              disabled={Boolean(activeCombat) || partyLeveledBusy}
+              className="text-xs h-8 font-medium cursor-pointer bg-gradient-to-r from-amber-600 via-amber-700 to-amber-800 hover:from-amber-500 hover:to-amber-700 text-amber-50 border border-amber-600/60 shadow-xs disabled:opacity-60"
+              title={
+                activeCombat
+                  ? "Сначала завершите бой"
+                  : `Сообщить мастеру о новых уровнях: ${levelChanges.map((c) => `${c.name} — ${c.toLevel} ур.`).join(", ")}`
+              }
+            >
+              {partyLeveledBusy ? (
+                <Loader2 className="size-3.5 mr-1 animate-spin" />
+              ) : (
+                <ArrowUpCircle className="size-3.5 mr-1" />
+              )}
+              Партия прокачалась
             </Button>
           )}
 

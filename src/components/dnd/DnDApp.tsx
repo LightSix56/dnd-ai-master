@@ -223,6 +223,9 @@ export function DnDApp({
   const [showCampaignList, setShowCampaignList] = useState(false);
   const [showCombatView, setShowCombatView] = useState(false);
   const [activeCombat, setActiveCombat] = useState<{ id: string; name: string; round: number } | null>(null);
+  // Герои комнаты, выросшие в уровне с тех пор, как мастеру сообщали в последний раз
+  const [levelChanges, setLevelChanges] = useState<Array<{ name: string; toLevel: number }>>([]);
+  const [partyLeveledBusy, setPartyLeveledBusy] = useState(false);
 
   const activeRoomRef = useRef<any>(null);
   const activeCampaignRef = useRef<any>(null);
@@ -256,6 +259,43 @@ export function DnDApp({
       console.error("Failed to load active combat:", e);
     }
   }, [initialRoomCode]);
+
+  // Проверяем, не вырос ли кто-то из героев комнаты в уровне (уровни читаются из их листов в базе)
+  const loadLevelChanges = useCallback(async () => {
+    const code = activeRoomRef.current?.code;
+    if (!code || !activeRoomRef.current?.campaignId) {
+      setLevelChanges([]);
+      return;
+    }
+    try {
+      const res = await fetch(`/api/room/${encodeURIComponent(code)}/party-leveled`);
+      if (!res.ok) return;
+      const data = await res.json();
+      setLevelChanges(Array.isArray(data.changes) ? data.changes : []);
+    } catch {
+      // сеть недоступна — попробуем на следующем раунде
+    }
+  }, []);
+
+  const handlePartyLeveled = useCallback(async () => {
+    const code = activeRoomRef.current?.code;
+    if (!code) return;
+    setPartyLeveledBusy(true);
+    try {
+      const res = await fetch(`/api/room/${encodeURIComponent(code)}/party-leveled`, { method: "POST" });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        toast.error(data.error || "Не удалось сообщить мастеру");
+        return;
+      }
+      setLevelChanges([]);
+    } catch {
+      toast.error("Не удалось связаться с сервером");
+    } finally {
+      setPartyLeveledBusy(false);
+      void loadLevelChanges();
+    }
+  }, [loadLevelChanges]);
 
   // Параметры создания новой кампании
   const [newCampaignName, setNewCampaignName] = useState("");
@@ -632,6 +672,22 @@ export function DnDApp({
 
   // Совместные раунды комнаты
   const [activeRoomTurn, setActiveRoomTurn] = useState<RoomTurn | null>(null);
+
+  // Уровни героев сверяем при входе в комнату, на каждом новом раунде, после боя
+  // и когда игрок возвращается на вкладку (например, с сайта листа после прокачки)
+  useEffect(() => {
+    if (!activeRoom?.code || !activeRoom?.campaignId) return;
+    void loadLevelChanges();
+    const onFocus = () => {
+      if (document.visibilityState === "visible") void loadLevelChanges();
+    };
+    window.addEventListener("focus", onFocus);
+    document.addEventListener("visibilitychange", onFocus);
+    return () => {
+      window.removeEventListener("focus", onFocus);
+      document.removeEventListener("visibilitychange", onFocus);
+    };
+  }, [activeRoom?.code, activeRoom?.campaignId, activeRoomTurn?.roundNumber, activeCombat?.id, loadLevelChanges]);
   const [submittingTurn, setSubmittingTurn] = useState(false);
   const [resolvingTurn, setResolvingTurn] = useState(false);
   const [streamingDmText, setStreamingDmText] = useState<string | null>(null);
@@ -742,6 +798,12 @@ export function DnDApp({
         } else if (payload.type === "error") {
           setStreamingDmText(null);
           setDmStatusText(null);
+        } else if (payload.type === "party_leveled") {
+          // Кто-то из игроков сообщил мастеру о новых уровнях
+          setLevelChanges([]);
+          toast.success("Партия прокачалась", {
+            description: String(payload.note || "").split("\n").slice(1).join("; ") || undefined,
+          });
         } else if (payload.type === "finish") {
           setDmStatusText(null);
           if (!payload.fullText) {
@@ -3427,6 +3489,9 @@ export function DnDApp({
                       onForceResolve={handleForceResolveTurn}
                       activeCombat={activeCombat}
                       onOpenCombat={openCombatView}
+                      levelChanges={levelChanges}
+                      onPartyLeveled={handlePartyLeveled}
+                      partyLeveledBusy={partyLeveledBusy}
                       className="mb-2.5"
                     />
                   )}
