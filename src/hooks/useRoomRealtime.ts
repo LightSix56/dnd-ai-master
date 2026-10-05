@@ -187,7 +187,7 @@ export function useRoomRealtime(roomCode: string, initialRoom?: RoomWithParticip
   const sendTypingStatus = useCallback(
     (isTyping: boolean) => {
       if (!channelRef.current || !user) return;
-      const charName = currentParticipant?.characterSnapshot?.name || "Герой";
+      const charName = currentParticipant?.character?.name || "Герой";
       channelRef.current.send({
         type: "broadcast",
         event: "typing",

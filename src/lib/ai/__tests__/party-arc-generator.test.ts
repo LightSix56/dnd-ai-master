@@ -37,7 +37,7 @@ describe("party-arc-generator", () => {
       {
         id: "part-1",
         userId: "user-1",
-        characterSnapshot: {
+        character: {
           id: "char-1",
           name: "Торин Железностоп",
           race: "Горный дварф",
@@ -50,7 +50,7 @@ describe("party-arc-generator", () => {
       {
         id: "part-2",
         userId: "user-2",
-        characterSnapshot: {
+        character: {
           character: {
             name: "Лира Теневой Шаг",
             race: "Лесной эльф",
@@ -65,7 +65,7 @@ describe("party-arc-generator", () => {
       {
         id: "part-3",
         userId: "user-3",
-        characterSnapshot: null, // participant choosing
+        character: null, // participant choosing
       },
     ];
 

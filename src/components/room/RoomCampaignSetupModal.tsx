@@ -156,7 +156,7 @@ export function RoomCampaignSetupModal({
     }
   };
 
-  const readyParticipants = participants.filter((p) => p.isReady && p.characterSnapshot);
+  const readyParticipants = participants.filter((p) => p.isReady && p.character);
 
   return (
     <div className="fixed inset-0 z-[350] flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs overflow-y-auto font-sans">
@@ -221,7 +221,7 @@ export function RoomCampaignSetupModal({
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {participants.map((p) => {
-                  const snap = p.characterSnapshot as Record<string, any> | null;
+                  const snap = p.character as Record<string, any> | null;
                   const name = snap?.name || "Персонаж";
                   const cls = snap?.className || snap?.race || "";
                   return (

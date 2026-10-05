@@ -42,7 +42,11 @@ class Query implements PromiseLike<Result> {
     private readonly state: FakeSupabase
   ) {}
 
-  select(_columns?: string) {
+  private embeds: string[] = [];
+
+  select(columns?: string) {
+    // "*, room_participants(*)" — вложенная выборка дочерних строк по room_id
+    this.embeds = [...(columns ?? "").matchAll(/(\w+)\(\*\)/g)].map((m) => m[1]);
     return this;
   }
   insert(payload: Row | Row[]) {
@@ -146,7 +150,15 @@ class Query implements PromiseLike<Result> {
       this.state.tables[this.table] = rows.filter((r) => !affected.includes(r));
     }
 
-    const copies = affected.map((r) => structuredClone(r));
+    const copies = affected.map((r) => {
+      const copy = structuredClone(r);
+      for (const child of this.embeds) {
+        copy[child] = (this.state.tables[child] ?? [])
+          .filter((c) => c.room_id === r.id)
+          .map((c) => structuredClone(c));
+      }
+      return copy;
+    });
     if (this.mode === "many") return { data: copies, error: null };
     if (copies.length === 0) {
       return this.mode === "single"

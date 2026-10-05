@@ -29,21 +29,33 @@ export interface Room {
   updatedAt: string;
 }
 
+/**
+ * Краткие сведения о герое участника. Собираются при чтении из листа в базе
+ * (public.characters) и нигде не хранятся.
+ */
+export interface ParticipantCharacter {
+  /** id строки листа (у героя кампании — его версии для этой кампании) */
+  id: string;
+  name: string;
+  level: number;
+  race?: string;
+  className?: string;
+  subclass?: string;
+  portraitUrl?: string | null;
+  hpMax?: number;
+  hpCurrent?: number;
+  armorClass?: number;
+  /** Лист не найден в базе: герой выбран, но показать и сыграть им нельзя */
+  missing?: boolean;
+}
+
 export interface RoomParticipant {
   id: string;
   roomId: string;
   userId: string;
+  /** id строки листа в public.characters */
   characterId: string;
-  characterSnapshot: {
-    id?: string;
-    name: string;
-    level: number;
-    race?: string;
-    className?: string;
-    subclass?: string;
-    portraitUrl?: string | null;
-    [key: string]: unknown;
-  };
+  character: ParticipantCharacter;
   isHost: boolean;
   isReady: boolean;
   joinedAt: string;
@@ -56,8 +68,13 @@ export interface RoomWithParticipants extends Room {
 export interface JoinRoomInput {
   roomId: string;
   userId: string;
-  characterId: string;
-  characterSnapshot: RoomParticipant["characterSnapshot"];
+  /**
+   * Кем играть: id листа игрока (оригинал или версия этой кампании) либо id героя кампании.
+   * Не нужен, если передан create.
+   */
+  characterId?: string;
+  /** Быстрое создание героя прямо в кампании комнаты */
+  create?: { name: string; race?: string; className?: string };
   isHost?: boolean;
 }
 

@@ -50,7 +50,7 @@ export function PartyTurnBar({
 
   // Участники с созданным персонажем
   const activeParticipants = participants.filter(
-    (p) => Boolean(p.characterSnapshot?.name || p.characterSnapshot)
+    (p) => Boolean(p.character?.name || p.character)
   );
 
   const canForceResolve =
@@ -112,7 +112,7 @@ export function PartyTurnBar({
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {activeParticipants.map((p) => {
-              const char = p.characterSnapshot;
+              const char = p.character;
               const characterName = char?.name || "Герой";
               const classLevelParts = [
                 char?.race,

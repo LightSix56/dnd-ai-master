@@ -79,8 +79,8 @@ export async function POST(
 
     const input: PlayerTurnInput = {
       userId: user.id,
-      characterName: participant.characterSnapshot?.name || "Герой",
-      className: participant.characterSnapshot?.className || undefined,
+      characterName: participant.character?.name || "Герой",
+      className: participant.character?.className || undefined,
       actionText,
       submittedAt: Date.now(),
     };

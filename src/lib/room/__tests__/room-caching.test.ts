@@ -60,7 +60,7 @@ describe("Room Prompt Caching & Frozen Prefix Architecture", () => {
         roomId: "room-caching-1",
         userId: "user-thorgrim",
         characterId: "char-1",
-        characterSnapshot: {
+        character: {
           name: "Торгрим",
           race: "Дворф",
           className: "Жрец",
@@ -78,7 +78,7 @@ describe("Room Prompt Caching & Frozen Prefix Architecture", () => {
         roomId: "room-caching-1",
         userId: "user-lyra",
         characterId: "char-2",
-        characterSnapshot: {
+        character: {
           name: "Лира",
           race: "Эльф",
           className: "Плут",
@@ -104,16 +104,16 @@ describe("Room Prompt Caching & Frozen Prefix Architecture", () => {
       participants: [
         {
           ...baseRoom.participants[0],
-          characterSnapshot: {
-            ...baseRoom.participants[0].characterSnapshot,
+          character: {
+            ...baseRoom.participants[0].character,
             hpCurrent: 12,
             condition: "ранен, кровотечение",
           },
         },
         {
           ...baseRoom.participants[1],
-          characterSnapshot: {
-            ...baseRoom.participants[1].characterSnapshot,
+          character: {
+            ...baseRoom.participants[1].character,
             hpCurrent: 5,
             condition: "отравлен",
           },
@@ -233,8 +233,8 @@ describe("Room Prompt Caching & Frozen Prefix Architecture", () => {
       participants: [
         {
           ...baseRoom.participants[0],
-          characterSnapshot: {
-            ...baseRoom.participants[0].characterSnapshot,
+          character: {
+            ...baseRoom.participants[0].character,
             hpCurrent: 14,
             condition: "тяжело ранен",
           },

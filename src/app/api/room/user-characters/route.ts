@@ -1,6 +1,20 @@
 import { NextResponse } from "next/server";
-import { getAuthUserFromRequest, getSupabaseAdminClient } from "@/lib/supabase/client";
+import { getAuthUserFromRequest } from "@/lib/supabase/client";
 import { filterUserCharactersForRoom } from "@/lib/room/validation";
+import { RoomService } from "@/lib/room/room-service";
+import { listUserSheets, SheetUnavailableError, type SheetRow } from "@/lib/dnd/sheet-store";
+
+/**
+ * Какие листы показать игроку при выборе героя для комнаты.
+ * Оригиналы — всегда. Версии кампаний — только версии кампании ЭТОЙ комнаты;
+ * оригинал, у которого такая версия уже есть, скрывается (играть будут версией).
+ */
+export function sheetsForRoomPicker(rows: SheetRow[], campaignId: string | null): SheetRow[] {
+  const versions = rows.filter((r) => r.campaignId && r.campaignId === campaignId);
+  const replaced = new Set(versions.map((v) => v.sourceCharacterId).filter(Boolean));
+  const originals = rows.filter((r) => !r.campaignId && !replaced.has(r.id));
+  return [...versions, ...originals];
+}
 
 export async function GET(request: Request) {
   try {
@@ -15,33 +29,44 @@ export async function GET(request: Request) {
     const validatedStartingLevel =
       Number.isFinite(startingLevel) && startingLevel >= 1 && startingLevel <= 20 ? startingLevel : 1;
 
-    // Запрашиваем персонажей пользователя из базы данных Supabase
-    const supabase = getSupabaseAdminClient();
-    const { data: characters, error: dbError } = await supabase
-      .from("characters")
-      .select("id, name, data, portrait_url, created_at, updated_at")
-      .eq("user_id", user.id)
-      .order("updated_at", { ascending: false });
-
-    if (dbError) {
-      console.error("[API /api/room/user-characters] DB Error:", dbError);
-      return NextResponse.json(
-        { error: "Не удалось загрузить персонажей из базы данных" },
-        { status: 500 }
-      );
+    let campaignId: string | null = null;
+    const roomCode = url.searchParams.get("roomCode");
+    if (roomCode) {
+      const room = await new RoomService().getRoomByCode(roomCode);
+      campaignId = room?.campaignId ?? null;
     }
 
-    const evaluated = filterUserCharactersForRoom(characters || [], validatedStartingLevel);
+    const rows = sheetsForRoomPicker(await listUserSheets(user.id), campaignId);
+    // Форма строки — как у сайта листа: { id, name, data, portrait_url, campaign_* }
+    const characters = rows.map((r) => ({
+      id: r.id,
+      name: String(r.sheet.name || r.name),
+      data: r.sheet,
+      portrait_url: r.portraitUrl,
+      campaign_id: r.campaignId,
+      campaign_name: r.campaignName,
+      source_character_id: r.sourceCharacterId,
+    }));
+
+    // Версия этой кампании подходит всегда: герой мог вырасти выше стартового уровня стола
+    const versions = characters.filter((c) => c.campaign_id);
+    const evaluated = filterUserCharactersForRoom(
+      characters.filter((c) => !c.campaign_id),
+      validatedStartingLevel
+    );
 
     return NextResponse.json(
       {
         startingLevel: validatedStartingLevel,
-        compliant: evaluated.compliant,
+        compliant: [...versions, ...evaluated.compliant],
         nonCompliant: evaluated.nonCompliant,
       },
       { status: 200 }
     );
   } catch (err) {
+    if (err instanceof SheetUnavailableError) {
+      return NextResponse.json({ error: err.message }, { status: 503 });
+    }
     console.error("[API /api/room/user-characters] Error:", err);
     return NextResponse.json(
       { error: (err as Error).message || "Внутренняя ошибка сервера" },

@@ -68,11 +68,11 @@ describe("Cooperative Turn Logic", () => {
     ).rejects.toThrow("Сказанного не вернёшь: вы уже отправили действие в этом раунде");
   });
 
-  it("calculates turn readiness: isAllReady becomes true when all participants with characterSnapshot submit actions", () => {
+  it("calculates turn readiness: isAllReady becomes true when all participants with character submit actions", () => {
     const participants = [
-      { userId: "user-1", characterSnapshot: { name: "Торин" } },
-      { userId: "user-2", characterSnapshot: { name: "Эльфийка" } },
-      { userId: "user-3", characterSnapshot: null },
+      { userId: "user-1", character: { name: "Торин" } },
+      { userId: "user-2", character: { name: "Эльфийка" } },
+      { userId: "user-3", character: null },
     ];
 
     const playerInputs: Record<string, PlayerTurnInput> = {
@@ -248,7 +248,7 @@ describe("Cooperative Turn Logic", () => {
           roomId: "room-frozen-1",
           userId: "user-1",
           characterId: "char-1",
-          characterSnapshot: {
+          character: {
             name: "Гимли",
             race: "Дворф",
             className: "Воин",
@@ -298,8 +298,8 @@ describe("Cooperative Turn Logic", () => {
       participants: [
         {
           ...room.participants[0],
-          characterSnapshot: {
-            ...room.participants[0].characterSnapshot,
+          character: {
+            ...room.participants[0].character,
             hpCurrent: 8,
             condition: "ранен",
           },
@@ -388,7 +388,7 @@ describe("Cooperative Turn Logic", () => {
           roomId: "room-step-test",
           userId: "user-1",
           characterId: "c1",
-          characterSnapshot: { name: "Клык", className: "Варвар", level: 1 },
+          character: { name: "Клык", className: "Варвар", level: 1 },
           isHost: true,
           isReady: true,
           joinedAt: new Date().toISOString(),
@@ -456,7 +456,7 @@ describe("Cooperative Turn Logic", () => {
           roomId: "room-err-test",
           userId: "user-1",
           characterId: "c1",
-          characterSnapshot: { name: "Клык", className: "Варвар", level: 1 },
+          character: { name: "Клык", className: "Варвар", level: 1 },
           isHost: true,
           isReady: true,
           joinedAt: new Date().toISOString(),

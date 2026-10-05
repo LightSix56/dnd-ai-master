@@ -61,7 +61,7 @@ export function buildFrozenRoomSystemPrompt(room: Room | RoomWithParticipants): 
 
   const partyList = participants
     .map((p) => {
-      const s = (p.characterSnapshot || {}) as any;
+      const s = (p.character || {}) as any;
       const name = s.name || s.characterName || "Герой";
       const race = s.race || "Раса не указана";
       const className = s.className || s.class || "Класс не указан";
@@ -223,13 +223,13 @@ export async function resolveActiveRoomTurnHelper(
   let afkCharacters = options?.afkCharacters;
   if (!afkCharacters && participants.length > 0) {
     const activeParticipants = participants.filter(
-      (p) => Boolean(p.characterSnapshot && ((p.characterSnapshot as any).name || (p.characterSnapshot as any).characterName))
+      (p) => Boolean(p.character && ((p.character as any).name || (p.character as any).characterName))
     );
     const submittedUserIds = new Set(Object.keys(activeTurn.playerInputs || {}));
     const pending = activeParticipants.filter((p) => !submittedUserIds.has(p.userId));
     if (pending.length > 0) {
       afkCharacters = pending.map((p) => {
-        const snap = p.characterSnapshot as any;
+        const snap = p.character as any;
         return {
           name: snap?.name || snap?.characterName || "Герой",
           className: snap?.className || snap?.class,
@@ -243,8 +243,8 @@ export async function resolveActiveRoomTurnHelper(
   if (!partyStatus && participants.length > 0) {
     const extracted: CharacterTurnStatus[] = [];
     for (const p of participants) {
-      if (p.characterSnapshot) {
-        const snap = p.characterSnapshot as any;
+      if (p.character) {
+        const snap = p.character as any;
         const hpCurrent = snap.hpCurrent ?? snap.currentHp ?? snap.hp;
         const hpMax = snap.hpMax ?? snap.maxHp;
         const hpTemp = snap.hpTemp ?? snap.tempHp;

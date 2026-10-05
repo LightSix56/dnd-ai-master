@@ -174,7 +174,7 @@ describe("вход в комнату", () => {
       Promise.resolve({ data: [{ user_id: "u2", character_snapshot: { name: "торин " } }], error: null }).then(resolve);
     const service = new RoomService(client);
     await expect(
-      service.joinRoom({ roomId: "room-1", userId: "u1", characterId: "c1", characterSnapshot: { name: "Торин", level: 1 } } as any)
+      service.joinRoom({ roomId: "room-1", userId: "u1", characterId: "c1", character: { name: "Торин", level: 1 } } as any)
     ).rejects.toThrow("уже выбран другим игроком");
   });
 });
@@ -183,8 +183,8 @@ describe("управление бойцом в бою комнаты", () => {
   const room = {
     hostUserId: "host",
     participants: [
-      { userId: "u1", characterSnapshot: { name: "Торин" } },
-      { userId: "u2", characterSnapshot: { name: "Лира" } },
+      { userId: "u1", character: { name: "Торин" } },
+      { userId: "u2", character: { name: "Лира" } },
     ],
   };
   const roomService = { getActiveRoomByCampaignId: vi.fn(async () => room) } as any;

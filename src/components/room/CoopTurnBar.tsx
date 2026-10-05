@@ -156,7 +156,7 @@ export function CoopTurnBar({
           <div className="flex flex-wrap items-center gap-1.5">
             {participants.map((p) => {
               const ready = Boolean(activeTurn?.playerInputs?.[p.userId]);
-              const charName = p.characterSnapshot?.name || "Герой";
+              const charName = p.character?.name || "Герой";
               return (
                 <span
                   key={p.id}
@@ -237,7 +237,7 @@ export function CoopTurnBar({
                 Не все готовы (
                 {participants
                   .filter((p) => readiness.pendingUserIds.includes(p.userId))
-                  .map((p) => p.characterSnapshot?.name || "Герой")
+                  .map((p) => p.character?.name || "Герой")
                   .join(", ")}
                 )
               </span>

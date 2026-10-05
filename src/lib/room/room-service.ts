@@ -4,6 +4,7 @@ import { validateCharacterForRoom } from "./validation";
 import type {
   CreateRoomInput,
   JoinRoomInput,
+  ParticipantCharacter,
   Room,
   RoomParticipant,
   RoomWithParticipants,
@@ -18,11 +19,17 @@ import {
   type PartyAwareAct1,
   type StartingSituation,
 } from "@/lib/ai/party-arc-generator";
-import { extractCharacterStats, hasSheetData, sheetFromNotes, unwrapSheet } from "@/lib/dnd/import-character";
+import { extractCharacterStats, getArchetypeAbilityScores } from "@/lib/dnd/import-character";
+import {
+  SheetUnavailableError,
+  createCampaignHeroSheet,
+  ensureCampaignVersion,
+  isSheetId,
+  loadSheet,
+  loadSheets,
+  type SheetRow,
+} from "@/lib/dnd/sheet-store";
 import type { AuthMode } from "@/lib/ai/client";
-import { v5 as uuidv5, validate as isUuid } from "uuid";
-
-const CAMPAIGN_CHAR_NAMESPACE = "6ba7b810-9dad-11d1-80b4-00c04fd430c8";
 
 export interface StartRoomCampaignInput {
   title: string;
@@ -61,18 +68,80 @@ function mapRoomFromDb(row: Record<string, any>): Room {
   };
 }
 
-function mapParticipantFromDb(row: Record<string, any>): RoomParticipant {
-  const snap = row.character_snapshot || {};
+/** Краткие сведения о герое участника — из его листа в базе; ничего не хранится */
+export function summarizeSheet(characterId: string, row: SheetRow | null | undefined): ParticipantCharacter {
+  if (!row) {
+    return { id: characterId, name: "Лист недоступен", level: 1, missing: true };
+  }
+  const sheet = row.sheet;
+  const stats = extractCharacterStats(sheet);
+  const level = Math.trunc(Number(sheet.level));
+  const hp = Math.trunc(Number(sheet.hpCurrent));
+  return {
+    id: row.id,
+    name: String(sheet.name || row.name || "Герой").trim(),
+    level: Number.isFinite(level) && level >= 1 ? level : 1,
+    race: sheet.race || undefined,
+    className: sheet.className || sheet.class || undefined,
+    subclass: sheet.subclass || undefined,
+    portraitUrl: row.portraitUrl ?? sheet.portraitUrl ?? null,
+    hpMax: stats.hpMax,
+    hpCurrent: Number.isFinite(hp) && hp >= 0 ? Math.min(hp, stats.hpMax) : stats.hpMax,
+    armorClass: stats.ac,
+  };
+}
+
+function mapParticipantFromDb(
+  row: Record<string, any>,
+  sheets?: Map<string, SheetRow>
+): RoomParticipant {
   return {
     id: row.id,
     roomId: row.room_id,
     userId: row.user_id,
-    characterId: snap.id || snap.campaignCharacterId || row.character_id,
-    characterSnapshot: snap,
+    characterId: row.character_id,
+    character: summarizeSheet(row.character_id, sheets?.get(row.character_id)),
     isHost: Boolean(row.is_host),
     isReady: Boolean(row.is_ready),
     joinedAt: row.joined_at,
   };
+}
+
+/** Стартовый лист героя, созданного прямо в комнате или взятого из героев кампании без листа */
+function buildStarterSheet(input: {
+  name: string;
+  race?: string | null;
+  className?: string | null;
+  subclass?: string | null;
+  level: number;
+  scores?: { str: number; dex: number; con: number; int: number; wis: number; cha: number };
+  hpMax?: number | null;
+  hpCurrent?: number | null;
+  armorClass?: number | null;
+  speed?: number | null;
+}): Record<string, any> {
+  const scores = input.scores ?? getArchetypeAbilityScores(input.className);
+  const sheet: Record<string, any> = {
+    name: input.name.trim(),
+    race: input.race || "",
+    className: input.className || "",
+    subclass: input.subclass || "",
+    level: input.level,
+    experiencePoints: 0,
+    abilityScores: {
+      СИЛ: scores.str, ЛОВ: scores.dex, ТЕЛ: scores.con, ИНТ: scores.int, МДР: scores.wis, ХАР: scores.cha,
+    },
+    speed: input.speed && input.speed > 0 ? input.speed : 30,
+  };
+  if (input.armorClass && input.armorClass > 0) sheet.armorClass = input.armorClass;
+  // Хиты: заданные явно либо расчётные по классу и уровню
+  const stats = extractCharacterStats({ ...sheet, hpMax: input.hpMax ?? undefined });
+  sheet.hpMax = stats.hpMax;
+  sheet.hpCurrent =
+    typeof input.hpCurrent === "number" && input.hpCurrent >= 0 ? Math.min(input.hpCurrent, stats.hpMax) : stats.hpMax;
+  sheet.hpTemp = 0;
+  if (!sheet.armorClass) sheet.armorClass = stats.ac;
+  return sheet;
 }
 
 function mapTurnFromDb(row: Record<string, any>): RoomTurn {
@@ -171,9 +240,7 @@ export class RoomService {
 
     if (error || !data) return null;
     const room = mapRoomFromDb(data);
-    const participants = Array.isArray(data.room_participants)
-      ? data.room_participants.map(mapParticipantFromDb)
-      : [];
+    const participants = await this.mapParticipants(data.room_participants);
 
     return {
       ...room,
@@ -181,18 +248,39 @@ export class RoomService {
     };
   }
 
+  /** Участники с краткими сведениями о героях, прочитанными из листов одним запросом */
+  private async mapParticipants(rows: unknown): Promise<RoomParticipant[]> {
+    const list = Array.isArray(rows) ? (rows as Record<string, any>[]) : [];
+    if (list.length === 0) return [];
+    let sheets: Map<string, SheetRow> | undefined;
+    try {
+      sheets = await loadSheets(list.map((r) => r.character_id), this.client);
+    } catch (e) {
+      // Комнату всё равно показываем: герои будут помечены «лист недоступен»
+      console.warn("[room-service] не удалось прочитать листы участников:", e);
+    }
+    return list.map((r) => mapParticipantFromDb(r, sheets));
+  }
+
   /**
-   * Удаляет участника комнаты по ID кампании и ID персонажа
+   * Удаляет участника комнаты по ID кампании и ID героя кампании
    */
   async removeParticipantByCharacter(campaignId: string, characterId: string): Promise<boolean> {
     if (!campaignId || !characterId) return false;
     const activeRoom = await this.getActiveRoomByCampaignId(campaignId);
     if (!activeRoom) return false;
+    // Участник привязан к листу героя, а не к строке кампании
+    const hero = await db.character.findUnique({
+      where: { id: characterId },
+      select: { sheetCharacterId: true },
+    });
+    const sheetId = hero?.sheetCharacterId || (isSheetId(characterId) ? characterId : null);
+    if (!sheetId) return false;
     const { error } = await this.client
       .from("room_participants")
       .delete()
       .eq("room_id", activeRoom.id)
-      .or(`character_id.eq.${characterId}`);
+      .eq("character_id", sheetId);
     return !error;
   }
 
@@ -212,9 +300,7 @@ export class RoomService {
     }
 
     const room = mapRoomFromDb(data);
-    const participants = Array.isArray(data.room_participants)
-      ? data.room_participants.map(mapParticipantFromDb)
-      : [];
+    const participants = await this.mapParticipants(data.room_participants);
 
     return {
       ...room,
@@ -240,14 +326,17 @@ export class RoomService {
   }
 
   /**
-   * Подключает игрока к комнате с выбранным персонажем
-   * СТРОГО валидирует уровень персонажа
+   * Подключает игрока к комнате с выбранным персонажем.
+   *
+   * Лист героя не копируется: участнику записывается только id строки листа.
+   * Если у комнаты уже есть кампания, для героя берётся (или создаётся) его версия
+   * для этой кампании — оригинал и другие кампании не меняются.
    */
   async joinRoom(input: JoinRoomInput): Promise<RoomParticipant> {
-    // 1. Проверяем существование комнаты и стартовый уровень
+    // 1. Комната
     const { data: roomData, error: roomError } = await this.client
       .from("rooms")
-      .select("id, starting_level, status, campaign_settings")
+      .select("id, name, starting_level, status, campaign_settings")
       .eq("id", input.roomId)
       .single();
 
@@ -259,124 +348,112 @@ export class RoomService {
       throw new Error(`Невозможно присоединиться к комнате со статусом "${roomData.status}".`);
     }
 
-    // 2. Строгая валидация уровня персонажа
-    const validation = validateCharacterForRoom(input.characterSnapshot, roomData.starting_level);
-    if (!validation.valid) {
-      throw new Error(validation.error || "Уровень персонажа не соответствует кампании.");
-    }
+    const settings = (roomData.campaign_settings || {}) as Record<string, any>;
+    const campaignId: string | null = settings.campaignId || null;
+    const campaignName = campaignId ? await this.resolveCampaignName(campaignId, settings, roomData.name) : "";
 
-    // 2.5. Гарантируем валидный UUID для Supabase и регистрируем в таблице characters
-    const targetCharacterId = isUuid(input.characterId)
-      ? input.characterId
-      : uuidv5(input.characterId || `char_${input.userId}`, CAMPAIGN_CHAR_NAMESPACE);
-
-    const snap = input.characterSnapshot as any;
-    const charName = (snap?.name || "Герой").trim();
-    // Запись в таблице characters нужна участнику комнаты (внешний ключ), и эту же таблицу
-    // читает сайт с листом персонажа. Поэтому кладём туда только настоящий лист.
-    // Раньше при выборе «героя кампании» сюда попадала урезанная карточка без характеристик —
-    // на сайте листа она выглядела как пустой персонаж со всеми десятками и затирала
-    // настоящий лист, если такой уже был.
-    const snapshotHasSheet = hasSheetData(input.characterSnapshot);
-    let sheetForAccount: Record<string, any> | null = snapshotHasSheet
-      ? unwrapSheet(input.characterSnapshot)
-      : null;
-
-    let skipCharacterSync = false;
-    if (!sheetForAccount) {
-      try {
-        const { data: existingRow } = await this.client
-          .from("characters")
-          .select("id")
-          .eq("id", targetCharacterId)
-          .maybeSingle();
-        if (existingRow) skipCharacterSync = true;
-      } catch {
-        // не смогли проверить — ниже создадим запись из того, что есть
+    let sheet: SheetRow;
+    /** Герой кампании, которого выбрали по его id (вкладка «Герои кампании») */
+    let pickedHeroId: string | null = null;
+    try {
+      // 2. Лист героя
+      if (input.create) {
+        if (!campaignId) {
+          throw new RoomRuleError("Создать героя можно после того, как ведущий начнёт кампанию.");
+        }
+        const name = (input.create.name || "").trim();
+        if (!name) throw new RoomRuleError("Укажите имя персонажа");
+        sheet = await createCampaignHeroSheet(
+          {
+            userId: input.userId,
+            campaignId,
+            campaignName,
+            sheet: buildStarterSheet({
+              name,
+              race: input.create.race,
+              className: input.create.className,
+              level: roomData.starting_level || 1,
+            }),
+          },
+          this.client
+        );
+      } else if (isSheetId(input.characterId)) {
+        const picked = await loadSheet(input.characterId, this.client);
+        if (!picked || picked.userId !== input.userId) {
+          throw new RoomRuleError("Персонаж не найден среди ваших героев.");
+        }
+        sheet = picked;
+      } else {
+        const adopted = await this.sheetForCampaignHero(input, campaignId, campaignName);
+        sheet = adopted.sheet;
+        pickedHeroId = adopted.heroId;
       }
-      if (!skipCharacterSync) {
-        // Герой кампании: берём его полный лист из кампании, если он там сохранён
-        try {
-          const lookupId = input.characterId || snap?.id;
-          const campaignHero = lookupId
-            ? await db.character.findUnique({ where: { id: String(lookupId) } })
+
+      if (sheet.campaignId && sheet.campaignId !== campaignId) {
+        throw new RoomRuleError(
+          "Это версия персонажа для другой кампании. Выберите оригинал — для этой кампании будет создана своя версия."
+        );
+      }
+
+      // 3. Уровень. Версия этой кампании уже играет за этим столом и могла вырасти — её не проверяем.
+      const existingVersion =
+        sheet.campaignId === campaignId && campaignId
+          ? sheet
+          : campaignId
+            ? await this.findExistingVersion(sheet.id, campaignId)
             : null;
-          const stored = sheetFromNotes(campaignHero?.notes);
-          if (stored && hasSheetData(stored)) {
-            sheetForAccount = stored;
-          } else {
-            const num = (v: unknown) => (typeof v === "number" && v > 0 ? v : undefined);
-            sheetForAccount = {
-              name: charName,
-              className: snap?.className || snap?.class || campaignHero?.class || "",
-              race: snap?.race || campaignHero?.race || "",
-              level: num(snap?.level) ?? campaignHero?.level ?? roomData.starting_level ?? 1,
-              abilityScores: {
-                СИЛ: num(snap?.str) ?? campaignHero?.str ?? 10,
-                ЛОВ: num(snap?.dex) ?? campaignHero?.dex ?? 10,
-                ТЕЛ: num(snap?.con) ?? campaignHero?.con ?? 10,
-                ИНТ: num(snap?.int) ?? campaignHero?.int ?? 10,
-                МДР: num(snap?.wis) ?? campaignHero?.wis ?? 10,
-                ХАР: num(snap?.cha) ?? campaignHero?.cha ?? 10,
-              },
-              hpMax: num(snap?.hpMax) ?? campaignHero?.hpMax ?? null,
-              armorClass: num(snap?.armorClass) ?? campaignHero?.ac ?? null,
-              speed: num(snap?.speed) ?? campaignHero?.speed ?? 30,
-            };
-          }
-        } catch {
-          sheetForAccount = input.characterSnapshot as Record<string, any>;
+      if (!existingVersion) {
+        const validation = validateCharacterForRoom(
+          { name: String(sheet.sheet.name || sheet.name), level: Number(sheet.sheet.level) },
+          roomData.starting_level
+        );
+        if (!validation.valid) {
+          throw new Error(validation.error || "Уровень персонажа не соответствует кампании.");
         }
       }
-    }
 
-    if (!skipCharacterSync) {
-      const { error: charSyncError } = await this.client
-        .from("characters")
-        .upsert(
-          {
-            id: targetCharacterId,
-            user_id: input.userId,
-            name: charName,
-            data: sheetForAccount ?? input.characterSnapshot,
-          },
-          { onConflict: "id" }
-        );
-
-      if (charSyncError) {
-        console.warn("[RoomService.joinRoom] Warning syncing character to Supabase characters table:", charSyncError.message);
-      }
-    }
-
-    // 2.7. Персонаж не должен быть уже занят другим игроком этой комнаты
-    try {
-      const { data: takenBy } = await this.client
+      // 4. Имя героя не должно совпадать с героем другого игрока этой комнаты
+      const heroName = String((existingVersion ?? sheet).sheet.name || sheet.name || "Герой").trim();
+      const { data: others } = await this.client
         .from("room_participants")
-        .select("user_id, character_snapshot")
+        .select("user_id, character_id")
         .eq("room_id", input.roomId)
         .neq("user_id", input.userId);
-      const wantedName = charName.toLowerCase();
-      const taken = (Array.isArray(takenBy) ? takenBy : []).find((p: any) => {
-        const otherName = String(p?.character_snapshot?.name || "").trim().toLowerCase();
-        return otherName && otherName === wantedName;
-      });
-      if (taken) {
-        throw new RoomRuleError(`Персонаж «${charName}» уже выбран другим игроком в этой комнате`);
+      const otherRows = Array.isArray(others) ? others : [];
+      if (otherRows.length > 0) {
+        const otherSheets = await loadSheets(otherRows.map((p: any) => p.character_id), this.client);
+        const wanted = heroName.toLowerCase();
+        for (const other of otherSheets.values()) {
+          const otherName = String(other.sheet.name || other.name || "").trim().toLowerCase();
+          if (otherName && otherName === wanted) {
+            throw new RoomRuleError(`Персонаж «${heroName}» уже выбран другим игроком в этой комнате`);
+          }
+        }
+      }
+
+      // 5. Версия для кампании
+      if (campaignId) {
+        sheet =
+          existingVersion ??
+          (await ensureCampaignVersion(
+            { userId: input.userId, characterId: sheet.id, campaignId, campaignName },
+            this.client
+          ));
       }
     } catch (e) {
-      if (e instanceof RoomRuleError) throw e;
-      // Проверка вспомогательная: её сбой не должен мешать входу
+      if (e instanceof SheetUnavailableError) throw new RoomRuleError(e.message);
+      throw e;
     }
 
-    // 3. Добавляем или обновляем запись участника (1 игрок = 1 персонаж в комнате)
+    // 6. Участник комнаты (1 игрок = 1 персонаж). Снимок листа не пишется: колонка очищается.
     const { data: participantData, error: partError } = await this.client
       .from("room_participants")
       .upsert(
         {
           room_id: input.roomId,
           user_id: input.userId,
-          character_id: targetCharacterId,
-          character_snapshot: input.characterSnapshot,
+          character_id: sheet.id,
+          character_snapshot: {},
           is_host: Boolean(input.isHost),
           is_ready: false,
         },
@@ -389,78 +466,128 @@ export class RoomService {
       throw new Error(`Ошибка подключения к комнате: ${partError?.message || "Сбой записи"}`);
     }
 
-    // 4. Если кампания уже активна, добавляем/обновляем персонажа в кампании
-    const campaignId = (roomData.campaign_settings as any)?.campaignId;
+    // 7. Герой в базе кампании — только ссылка на лист
     if (campaignId) {
       try {
-        const snapObj = input.characterSnapshot as any;
-        const name = (snapObj?.name || snapObj?.characterSnapshot?.name || "Герой").trim();
-        const stats = extractCharacterStats(snapObj);
-        const targetId = input.characterId || snapObj?.id || snapObj?.campaignCharacterId;
-
-        const allCampChars = await db.character.findMany({
-          where: { campaignId },
-        });
-        const normalizedName = name.toLowerCase();
-        const existing = allCampChars.find(
-          (c) => (targetId && c.id === targetId) || c.name.trim().toLowerCase() === normalizedName
-        );
-
-        if (existing) {
-          await db.character.update({
-            where: { id: existing.id },
-            data: {
-              name: name || existing.name,
-              type: "player",
-              race: snapObj?.race || snapObj?.characterSnapshot?.race || existing.race,
-              class: snapObj?.className || snapObj?.class || snapObj?.characterSnapshot?.className || existing.class,
-              subclass: snapObj?.subclass || snapObj?.characterSnapshot?.subclass || existing.subclass,
-              level: snapObj?.level || snapObj?.characterSnapshot?.level || existing.level,
-              str: stats.str,
-              dex: stats.dex,
-              con: stats.con,
-              int: stats.int,
-              wis: stats.wis,
-              cha: stats.cha,
-              hpMax: stats.hpMax,
-              hpCurrent: stats.hpCurrent,
-              ac: stats.ac,
-              speed: stats.speed,
-              // Урезанная карточка «героя кампании» не несёт ни атак, ни навыков: ею нельзя
-              // затирать лист, уже сохранённый при импорте героя в кампанию
-              notes: snapshotHasSheet ? JSON.stringify(snapObj) : existing.notes,
-            },
-          });
-        } else {
-          await db.character.create({
-            data: {
-              campaignId,
-              name,
-              type: "player",
-              race: snapObj?.race || snapObj?.characterSnapshot?.race || null,
-              class: snapObj?.className || snapObj?.class || snapObj?.characterSnapshot?.className || null,
-              subclass: snapObj?.subclass || snapObj?.characterSnapshot?.subclass || null,
-              level: snapObj?.level || snapObj?.characterSnapshot?.level || roomData.starting_level || 1,
-              str: stats.str,
-              dex: stats.dex,
-              con: stats.con,
-              int: stats.int,
-              wis: stats.wis,
-              cha: stats.cha,
-              hpMax: stats.hpMax,
-              hpCurrent: stats.hpCurrent,
-              ac: stats.ac,
-              speed: stats.speed,
-              notes: JSON.stringify(snapObj),
-            },
-          });
-        }
+        await this.linkHeroToCampaign(campaignId, sheet, pickedHeroId);
       } catch (err) {
-        console.warn("[room-service] Failed to sync participant to campaign db.character:", err);
+        console.warn("[room-service] не удалось привязать героя к кампании:", err);
       }
     }
 
-    return mapParticipantFromDb(participantData);
+    return mapParticipantFromDb(participantData, new Map([[sheet.id, sheet]]));
+  }
+
+  private async resolveCampaignName(
+    campaignId: string,
+    settings: Record<string, any>,
+    roomName?: string | null
+  ): Promise<string> {
+    try {
+      const campaign = await db.campaign.findUnique({ where: { id: campaignId }, select: { name: true } });
+      if (campaign?.name) return campaign.name;
+    } catch {
+      // название возьмём из настроек комнаты
+    }
+    return String(settings.title || roomName || "Кампания");
+  }
+
+  private async findExistingVersion(sourceCharacterId: string, campaignId: string): Promise<SheetRow | null> {
+    const { data } = await this.client
+      .from("characters")
+      .select("id")
+      .eq("source_character_id", sourceCharacterId)
+      .eq("campaign_id", campaignId)
+      .maybeSingle();
+    return data?.id ? loadSheet(data.id, this.client) : null;
+  }
+
+  /**
+   * Игрок выбрал героя кампании по его id. Если у героя уже есть лист — играть им может
+   * только владелец листа. Если листа нет (герой создан мастером) — лист создаётся
+   * из сведений о герое и закрепляется за игроком.
+   */
+  private async sheetForCampaignHero(
+    input: JoinRoomInput,
+    campaignId: string | null,
+    campaignName: string
+  ): Promise<{ sheet: SheetRow; heroId: string }> {
+    const hero = input.characterId
+      ? await db.character.findUnique({ where: { id: String(input.characterId) } })
+      : null;
+    if (!hero || !campaignId || hero.campaignId !== campaignId) {
+      throw new RoomRuleError("Персонаж не найден среди героев этой кампании.");
+    }
+    if (hero.sheetCharacterId) {
+      const linked = await loadSheet(hero.sheetCharacterId, this.client);
+      if (linked && linked.userId !== input.userId) {
+        throw new RoomRuleError(`Персонаж «${hero.name}» уже занят другим игроком`);
+      }
+      if (linked) return { sheet: linked, heroId: hero.id };
+    }
+    const sheet = await createCampaignHeroSheet(
+      {
+        userId: input.userId,
+        campaignId,
+        campaignName,
+        sheet: buildStarterSheet({
+          name: hero.name,
+          race: hero.race,
+          className: hero.class,
+          subclass: hero.subclass,
+          level: hero.level || 1,
+          scores: { str: hero.str, dex: hero.dex, con: hero.con, int: hero.int, wis: hero.wis, cha: hero.cha },
+          hpMax: hero.hpMax,
+          hpCurrent: hero.hpCurrent,
+          armorClass: hero.ac,
+          speed: hero.speed,
+        }),
+      },
+      this.client
+    );
+    return { sheet, heroId: hero.id };
+  }
+
+  /**
+   * Строка героя в базе кампании: хранит ссылку на лист и то, что относится к самой игре.
+   * Характеристики, хиты и лист сюда не копируются — они читаются из листа.
+   */
+  private async linkHeroToCampaign(
+    campaignId: string,
+    sheet: SheetRow,
+    pickedHeroId?: string | null
+  ): Promise<void> {
+    const name = String(sheet.sheet.name || sheet.name || "Герой").trim();
+    const level = Math.max(1, Math.trunc(Number(sheet.sheet.level)) || 1);
+    const heroes = await db.character.findMany({ where: { campaignId } });
+
+    const linked = heroes.find((c) => c.sheetCharacterId === sheet.id);
+    if (linked) {
+      if (linked.name !== name || linked.type !== "player") {
+        await db.character.update({ where: { id: linked.id }, data: { name, type: "player" } });
+      }
+      return;
+    }
+
+    // Герой кампании без листа: выбранный явно либо одноимённый (кампании, начатые до версий)
+    const lower = name.toLowerCase();
+    const unlinked = heroes.find(
+      (c) =>
+        !c.sheetCharacterId &&
+        ((pickedHeroId && c.id === pickedHeroId) ||
+          (["player", "companion"].includes(c.type) && c.name.trim().toLowerCase() === lower))
+    );
+    if (unlinked) {
+      await db.character.update({
+        where: { id: unlinked.id },
+        data: { name, type: "player", sheetCharacterId: sheet.id, sheetLevelSeen: level },
+      });
+      return;
+    }
+
+    await db.character.create({
+      data: { campaignId, name, type: "player", sheetCharacterId: sheet.id, sheetLevelSeen: level },
+    });
   }
 
   /**
@@ -513,7 +640,16 @@ export class RoomService {
       }
     }
 
-    const party = extractPartyRosterFromParticipants(roomWithParticipants.participants);
+    // Отряд — из живых листов участников
+    const participantSheets = await loadSheets(
+      roomWithParticipants.participants.map((p) => p.characterId),
+      this.client
+    );
+    const party = extractPartyRosterFromParticipants(
+      roomWithParticipants.participants
+        .filter((p) => participantSheets.has(p.characterId))
+        .map((p) => ({ id: p.characterId, userId: p.userId, sheet: participantSheets.get(p.characterId)!.sheet }))
+    );
     if (party.length === 0) {
       throw new Error("В комнате нет ни одного выбранного персонажа");
     }
@@ -666,38 +802,29 @@ export class RoomService {
       });
       campaignId = campaign.id;
 
-      for (const m of party) {
-        const part = roomWithParticipants.participants.find(
-          (p) =>
-            p.characterId === m.id ||
-            (p.characterSnapshot as any)?.id === m.id ||
-            (p.characterSnapshot as any)?.name?.trim().toLowerCase() === m.name.trim().toLowerCase()
-        );
-        const snap = part?.characterSnapshot || m;
-        const stats = extractCharacterStats(snap);
-
-        await db.character.create({
-          data: {
+      // Каждому герою — своя версия для этой кампании; оригиналы остаются как были
+      for (const participant of roomWithParticipants.participants) {
+        const original = participantSheets.get(participant.characterId);
+        if (!original) continue;
+        const version = await ensureCampaignVersion(
+          {
+            userId: participant.userId,
+            characterId: original.id,
             campaignId: campaign.id,
-            name: m.name,
-            type: "player",
-            race: m.race || null,
-            class: m.className || null,
-            subclass: m.subclass || null,
-            level: m.level,
-            str: stats.str,
-            dex: stats.dex,
-            con: stats.con,
-            int: stats.int,
-            wis: stats.wis,
-            cha: stats.cha,
-            hpMax: stats.hpMax,
-            hpCurrent: stats.hpCurrent,
-            ac: stats.ac,
-            speed: stats.speed,
-            notes: JSON.stringify(snap),
+            campaignName: input.title,
           },
-        });
+          this.client
+        );
+        if (version.id !== participant.characterId) {
+          const { error: rebindError } = await this.client
+            .from("room_participants")
+            .update({ character_id: version.id, character_snapshot: {} })
+            .eq("id", participant.id);
+          if (rebindError) {
+            throw new Error(`Не удалось привязать версию героя: ${rebindError.message}`);
+          }
+        }
+        await this.linkHeroToCampaign(campaign.id, version);
       }
 
       await db.chatMessage.create({

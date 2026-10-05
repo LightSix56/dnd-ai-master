@@ -884,7 +884,7 @@ export function DnDApp({
           // Если пользователь ещё не в отряде комнаты со снапшотом героя — предлагаем выбрать персонажа
           const isParticipant = user
             ? roomObj.participants.some(
-                (p: any) => p.userId === user.id && p.characterSnapshot
+                (p: any) => p.userId === user.id && p.character
               )
             : false;
           if (!isParticipant) {
@@ -944,7 +944,7 @@ export function DnDApp({
 
       // Проверяем, есть ли текущий пользователь среди участников комнаты с персонажем
       const isParticipant = (participants || room.participants || []).some(
-        (p: any) => p.userId === user?.id && p.characterSnapshot
+        (p: any) => p.userId === user?.id && p.character
       );
 
       if (user && !isParticipant) {
@@ -1861,7 +1861,7 @@ export function DnDApp({
 
       // Проверка: привязан ли персонаж пользователя к столу
       const isParticipant = Boolean(
-        myId && activeRoom.participants?.some((p: any) => p.userId === myId && p.characterSnapshot)
+        myId && activeRoom.participants?.some((p: any) => p.userId === myId && p.character)
       );
       if (!isParticipant) {
         toast.info("Сначала выберите или создайте своего персонажа для этой комнаты");
@@ -2516,7 +2516,7 @@ export function DnDApp({
                         );
                       }
 
-                      const charSnap = currentParticipant.characterSnapshot || {};
+                      const charSnap = currentParticipant.character || {};
                       return (
                         <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-4 flex items-center justify-between gap-3">
                           <div className="flex items-center gap-3 min-w-0">
@@ -2570,7 +2570,7 @@ export function DnDApp({
                       ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                           {activeRoom.participants.map((p: any) => {
-                            const snap = p.characterSnapshot || {};
+                            const snap = p.character || {};
                             const isMe = user?.id && p.userId === user.id;
                             return (
                               <div
@@ -3790,7 +3790,7 @@ export function DnDApp({
                           );
                         }
 
-                        const charSnap = currentParticipant.characterSnapshot || {};
+                        const charSnap = currentParticipant.character || {};
                         return (
                           <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-2.5 text-xs flex items-center justify-between gap-2">
                             <div className="min-w-0">
@@ -3839,7 +3839,7 @@ export function DnDApp({
                           </div>
                         ) : (
                           activeRoom.participants.map((p: any) => {
-                            const snap = p.characterSnapshot || {};
+                            const snap = p.character || {};
                             const isMe = user?.id && p.userId === user.id;
 
                             return (

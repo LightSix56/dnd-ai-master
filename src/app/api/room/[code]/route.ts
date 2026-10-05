@@ -35,12 +35,10 @@ export async function GET(
 
         const participants = room.participants || [];
         campaignCharacters = chars.map((c) => {
-          const assignedParticipant = participants.find(
-            (p) =>
-              p.characterId === c.id ||
-              (p.characterSnapshot as any)?.id === c.id ||
-              (p.characterSnapshot as any)?.name?.trim().toLowerCase() === c.name.trim().toLowerCase()
-          );
+          // Герой занят, если его лист выбран участником комнаты
+          const assignedParticipant = c.sheetCharacterId
+            ? participants.find((p) => p.characterId === c.sheetCharacterId)
+            : undefined;
 
           return {
             id: c.id,
@@ -62,10 +60,11 @@ export async function GET(
             inventory: c.inventory,
             spells: c.spells,
             notes: c.notes,
+            sheetCharacterId: c.sheetCharacterId,
             assignedTo: assignedParticipant
               ? {
                   userId: assignedParticipant.userId,
-                  characterName: (assignedParticipant.characterSnapshot as any)?.name || c.name,
+                  characterName: assignedParticipant.character?.name || c.name,
                 }
               : null,
           };

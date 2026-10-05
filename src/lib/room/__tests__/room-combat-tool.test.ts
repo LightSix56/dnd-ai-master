@@ -85,7 +85,7 @@ describe("Room System Prompt - Anti-Chinese & Tactical Combat Rules", () => {
         isHost: true,
         isReady: true,
         joinedAt: new Date().toISOString(),
-        characterSnapshot: {
+        character: {
           id: "c1",
           name: "Ник",
           className: "Плут",
@@ -100,7 +100,7 @@ describe("Room System Prompt - Anti-Chinese & Tactical Combat Rules", () => {
         isHost: false,
         isReady: true,
         joinedAt: new Date().toISOString(),
-        characterSnapshot: {
+        character: {
           id: "c2",
           name: "Ли齿 (Клык)",
           className: "Варвар",

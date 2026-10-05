@@ -91,7 +91,7 @@ export async function checkCombatControl(
 
     const actor = await db.combatant.findUnique({
       where: { id: actorId },
-      select: { name: true, type: true, combatId: true },
+      select: { name: true, type: true, combatId: true, characterId: true },
     });
     if (!actor || actor.combatId !== combatId || actor.type !== "player") return null;
 
@@ -105,10 +105,21 @@ export async function checkCombatControl(
     const me = room.participants.find((p) => p.userId === userId);
     if (!me) return null;
 
+    // Владелец бойца — участник, чей лист привязан к герою; для героев без листа — по имени
+    let ownerSheetId: string | null = null;
+    if (actor.characterId) {
+      const hero = await db.character.findUnique({
+        where: { id: actor.characterId },
+        select: { sheetCharacterId: true },
+      });
+      ownerSheetId = hero?.sheetCharacterId ?? null;
+    }
     const actorName = actor.name.trim().toLowerCase();
-    const owner = room.participants.find(
-      (p) => String((p.characterSnapshot as { name?: string } | null)?.name || "").trim().toLowerCase() === actorName
-    );
+    const owner = ownerSheetId
+      ? room.participants.find((p) => p.characterId === ownerSheetId)
+      : room.participants.find(
+          (p) => String(p.character?.name || "").trim().toLowerCase() === actorName
+        );
     if (owner && owner.userId !== userId) {
       return `«${actor.name}» — персонаж другого игрока. Управлять им может только его владелец или ведущий.`;
     }

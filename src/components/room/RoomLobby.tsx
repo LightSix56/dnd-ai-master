@@ -141,7 +141,7 @@ export function RoomLobby({
         delete next[user.id];
       } else {
         next[user.id] = {
-          characterName: currentParticipant?.characterSnapshot?.name || user.email || "Игрок",
+          characterName: currentParticipant?.character?.name || user.email || "Игрок",
           timestamp: Date.now(),
         };
       }
@@ -337,7 +337,7 @@ export function RoomLobby({
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
           {participants.map((p) => {
-            const char = p.characterSnapshot;
+            const char = p.character;
             const isMe = p.userId === user?.id;
 
             return (
@@ -451,7 +451,7 @@ export function RoomLobby({
             ) : currentParticipant ? (
               <span>
                 Вы играете за героя:{" "}
-                <strong className="text-zinc-900 dark:text-zinc-100 font-medium">{currentParticipant.characterSnapshot.name}</strong>{" "}
+                <strong className="text-zinc-900 dark:text-zinc-100 font-medium">{currentParticipant.character.name}</strong>{" "}
                 ({currentParticipant.isReady ? "Готов к походу ✓" : "Готовность не подтверждена ⏳"})
               </span>
             ) : (

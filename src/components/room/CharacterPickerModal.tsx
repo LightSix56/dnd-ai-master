@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { validateCharacterForRoom } from "@/lib/room/validation";
-import { getArchetypeAbilityScores } from "@/lib/dnd/import-character";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -40,7 +39,8 @@ export interface FormattedCharacterCard {
   portraitUrl?: string | null;
   hpMax?: number;
   armorClass?: number;
-  rawSnapshot: Record<string, unknown>;
+  /** Версия этого героя для кампании комнаты (а не оригинал) */
+  campaignName?: string | null;
   isSelectable: boolean;
   reason?: string;
 }
@@ -65,7 +65,10 @@ export function formatCharacterCardForPicker(
   const hpMax = data.hpMax ?? data.maxHp;
   const armorClass = data.armorClass ?? data.calculatedAC ?? data.ac;
 
-  const validation = validateCharacterForRoom({ name, level }, startingLevel);
+  // Версия этой кампании уже играет за столом и могла вырасти в уровне — её не проверяем
+  const validation = raw.campaign_id
+    ? { valid: true as const, error: undefined }
+    : validateCharacterForRoom({ name, level }, startingLevel);
 
   return {
     id: raw.id || `char-${Math.random()}`,
@@ -77,18 +80,7 @@ export function formatCharacterCardForPicker(
     portraitUrl,
     hpMax,
     armorClass,
-    rawSnapshot: {
-      id: raw.id,
-      name,
-      level,
-      className,
-      race,
-      subclass,
-      portraitUrl,
-      hpMax,
-      armorClass,
-      data,
-    },
+    campaignName: raw.campaign_id ? raw.campaign_name || "без названия" : null,
     isSelectable: validation.valid,
     reason: validation.error,
   };
@@ -129,27 +121,6 @@ export function formatCampaignCharacterForPicker(
     portraitUrl: null,
     hpMax: char.hpMax,
     armorClass: char.ac,
-    rawSnapshot: {
-      id: char.id,
-      name,
-      level,
-      className,
-      race,
-      subclass: char.subclass,
-      hpMax: char.hpMax,
-      hpCurrent: char.hpCurrent,
-      armorClass: char.ac,
-      str: (char as any).str,
-      dex: (char as any).dex,
-      con: (char as any).con,
-      int: (char as any).int,
-      wis: (char as any).wis,
-      cha: (char as any).cha,
-      speed: (char as any).speed,
-      inventory: (char as any).inventory,
-      spells: (char as any).spells,
-      notes: (char as any).notes,
-    },
     isSelectable,
     reason: isAssigned && !isOwnedByMe ? "Персонаж уже занят другим игроком" : undefined,
     isAssigned,
@@ -192,34 +163,6 @@ const DND_RACES = [
   "Полуэльф",
   "Полуорк",
 ];
-
-function calculateBaseStats(className: string, level: number) {
-  let hitDie = 8;
-  let baseAc = 12;
-
-  if (className === "Варвар") {
-    hitDie = 12;
-    baseAc = 14;
-  } else if (["Воин", "Паладин", "Следопыт"].includes(className)) {
-    hitDie = 10;
-    baseAc = 16;
-  } else if (["Волшебник", "Чародей"].includes(className)) {
-    hitDie = 6;
-    baseAc = 11;
-  } else if (className === "Плут") {
-    hitDie = 8;
-    baseAc = 14;
-  } else if (["Жрец", "Друид"].includes(className)) {
-    hitDie = 8;
-    baseAc = 15;
-  }
-
-  const scores = getArchetypeAbilityScores(className);
-  const conMod = Math.floor((scores.con - 10) / 2);
-  const hpMax = hitDie + conMod + Math.max(0, level - 1) * (Math.floor(hitDie / 2) + 1 + conMod);
-
-  return { ...scores, hpMax, ac: baseAc };
-}
 
 export function CharacterPickerModal({
   isOpen,
@@ -293,9 +236,10 @@ export function CharacterPickerModal({
     setLoadingAccount(true);
     try {
       const token = getAuthToken();
-      const res = await fetch(`/api/room/user-characters?startingLevel=${startingLevel}`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
+      const res = await fetch(
+        `/api/room/user-characters?startingLevel=${startingLevel}&roomCode=${encodeURIComponent(roomCode)}`,
+        { headers: token ? { Authorization: `Bearer ${token}` } : {} }
+      );
 
       if (res.ok) {
         const json = await res.json();
@@ -344,10 +288,8 @@ export function CharacterPickerModal({
           "Content-Type": "application/json",
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify({
-          characterId: card.id,
-          characterSnapshot: card.rawSnapshot,
-        }),
+        // Сервер сам читает лист из базы; из браузера уходит только выбор героя
+        body: JSON.stringify({ characterId: card.id }),
       });
 
       if (!res.ok) {
@@ -383,67 +325,6 @@ export function CharacterPickerModal({
     setError(null);
 
     try {
-      const { hpMax, ac, str, dex, con, int, wis, cha } = calculateBaseStats(newClass, startingLevel);
-
-      // 1. Создаем персонажа в кампании
-      const createRes = await fetch("/api/character", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          campaignId: campId,
-          name: trimmed,
-          race: newRace,
-          class: newClass,
-          level: startingLevel,
-          type: "player",
-          hpMax,
-          hpCurrent: hpMax,
-          ac,
-          str,
-          dex,
-          con,
-          int,
-          wis,
-          cha,
-        }),
-      });
-
-      if (!createRes.ok) {
-        const createErr = await createRes.json().catch(() => ({}));
-        throw new Error(createErr.error || "Не удалось создать персонажа");
-      }
-
-      const createData = await createRes.json();
-      const char = createData.character;
-
-      const formattedCard: FormattedCharacterCard = {
-        id: char.id,
-        name: char.name,
-        level: char.level,
-        className: char.class,
-        race: char.race,
-        hpMax: char.hpMax,
-        armorClass: char.ac,
-        rawSnapshot: {
-          id: char.id,
-          name: char.name,
-          level: char.level,
-          className: char.class,
-          race: char.race,
-          hpMax: char.hpMax,
-          hpCurrent: char.hpCurrent,
-          armorClass: char.ac,
-          str: char.str || str,
-          dex: char.dex || dex,
-          con: char.con || con,
-          int: char.int || int,
-          wis: char.wis || wis,
-          cha: char.cha || cha,
-        },
-        isSelectable: true,
-      };
-
-      // 2. Сразу присоединяемся к комнате с новым персонажем
       let token = getAuthToken();
       if (!token) {
         const guestRes = await signInAsGuest(trimmed ? `Игрок (${trimmed})` : undefined);
@@ -452,22 +333,32 @@ export function CharacterPickerModal({
         }
       }
 
+      // Сервер создаёт лист героя сразу как версию для кампании комнаты и привязывает к игроку
       const joinRes = await fetch(`/api/room/${encodeURIComponent(roomCode)}/join`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify({
-          characterId: char.id,
-          characterSnapshot: formattedCard.rawSnapshot,
-        }),
+        body: JSON.stringify({ create: { name: trimmed, race: newRace, className: newClass } }),
       });
 
+      const joinData = await joinRes.json().catch(() => ({}));
       if (!joinRes.ok) {
-        const joinErr = await joinRes.json().catch(() => ({}));
-        throw new Error(joinErr.error || "Персонаж создан, но не удалось привязать к комнате");
+        throw new Error(joinData.error || "Не удалось создать персонажа");
       }
+
+      const created = joinData.participant?.character || {};
+      const formattedCard: FormattedCharacterCard = {
+        id: joinData.participant?.characterId || created.id || trimmed,
+        name: created.name || trimmed,
+        level: created.level || startingLevel,
+        className: created.className || newClass,
+        race: created.race || newRace,
+        hpMax: created.hpMax,
+        armorClass: created.armorClass,
+        isSelectable: true,
+      };
 
       toast.success(`Герой ${trimmed} создан и выбран!`);
       onSelect(formattedCard);
@@ -766,6 +657,14 @@ export function CharacterPickerModal({
                             {card.race} • {card.className}
                             {card.subclass ? ` (${card.subclass})` : ""}
                           </p>
+                          {card.campaignName && (
+                            <span
+                              className="mt-1 inline-flex items-center rounded border border-amber-500/40 bg-amber-500/10 px-1.5 py-0.5 text-[10px] font-medium text-amber-800 dark:text-amber-300"
+                              title="Отдельная копия героя для этой кампании. Оригинал не меняется."
+                            >
+                              Версия этой кампании
+                            </span>
+                          )}
                         </div>
                       </div>
 

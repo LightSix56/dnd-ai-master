@@ -176,11 +176,11 @@ describe("Room Turn API Routes (Phase 4)", () => {
           participants: [
             {
               userId: "user-1",
-              characterSnapshot: { name: "Торин", className: "Воин" },
+              character: { name: "Торин", className: "Воин" },
             },
             {
               userId: "user-2",
-              characterSnapshot: { name: "Гэндальф", className: "Волшебник" },
+              character: { name: "Гэндальф", className: "Волшебник" },
             },
           ],
         }),
@@ -246,7 +246,7 @@ describe("Room Turn API Routes (Phase 4)", () => {
           participants: [
             {
               userId: "user-1",
-              characterSnapshot: { name: "Торин", className: "Воин" },
+              character: { name: "Торин", className: "Воин" },
             },
           ],
         }),
@@ -390,11 +390,11 @@ describe("Room Turn API Routes (Phase 4)", () => {
           participants: [
             {
               userId: "host-1",
-              characterSnapshot: { name: "Торин", className: "Воин" },
+              character: { name: "Торин", className: "Воин" },
             },
             {
               userId: "player-2",
-              characterSnapshot: { name: "Эльронд", className: "Маг" },
+              character: { name: "Эльронд", className: "Маг" },
             },
           ],
         }),

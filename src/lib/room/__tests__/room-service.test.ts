@@ -94,7 +94,7 @@ describe("RoomService (Phase 1)", () => {
     expect(result).not.toBeNull();
     expect(result?.code).toBe("DRAGON-42");
     expect(result?.participants).toHaveLength(1);
-    expect(result?.participants[0].characterSnapshot.name).toBe("Кроуг");
+    expect(result?.participants[0].character.name).toBe("Кроуг");
   });
 
   it("validates character level when joining a room and rejects mismatched level", async () => {
@@ -122,7 +122,7 @@ describe("RoomService (Phase 1)", () => {
       roomId: "room-uuid-1",
       userId: "user-player-2",
       characterId: "char-invalid-5",
-      characterSnapshot: {
+      character: {
         name: "Высокоуровневый Герой",
         level: 5,
       },
@@ -196,7 +196,7 @@ describe("RoomService (Phase 1)", () => {
       roomId: "room-uuid-1",
       userId: "user-player-2",
       characterId: cuid,
-      characterSnapshot: {
+      character: {
         id: cuid,
         name: "Воин Гром",
         level: 1,

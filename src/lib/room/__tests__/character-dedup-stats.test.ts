@@ -198,7 +198,7 @@ describe("Character De-duplication and Stat Preservation", () => {
         roomId: "room-join-1",
         userId: "u1",
         characterId: "c1",
-        characterSnapshot: {
+        character: {
           id: "c1",
           name: "Кроуг Могучий",
           level: 1,
@@ -282,7 +282,7 @@ describe("Character De-duplication and Stat Preservation", () => {
         roomId: "room-join-2",
         userId: "u2",
         characterId: existing.id,
-        characterSnapshot: {
+        character: {
           name: "  кроуг могучий  ",
           level: 1,
           className: "Варвар",

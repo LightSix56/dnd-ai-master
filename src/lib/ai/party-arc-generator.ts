@@ -117,21 +117,21 @@ export const partyAwareAct1Schema = z.object({
 export type PartyAwareAct1 = z.infer<typeof partyAwareAct1Schema>;
 
 /**
- * Extracts normalized character data from room participant snapshots.
+ * Состав отряда для генерации сюжета — из листов персонажей участников.
  */
 export function extractPartyRosterFromParticipants(
   participants: Array<{
     id: string;
     userId: string;
-    characterSnapshot?: Record<string, unknown> | null;
+    sheet?: Record<string, unknown> | null;
   }>
 ): PartyRosterMember[] {
   const result: PartyRosterMember[] = [];
 
   for (const p of participants) {
-    if (!p.characterSnapshot) continue;
+    if (!p.sheet) continue;
 
-    const snap = p.characterSnapshot as Record<string, any>;
+    const snap = p.sheet as Record<string, any>;
     const nestedChar = snap.character || snap.data || snap;
 
     const name =

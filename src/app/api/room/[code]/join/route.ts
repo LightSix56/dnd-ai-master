@@ -18,15 +18,21 @@ export async function POST(
       return NextResponse.json({ error: "Код комнаты не указан" }, { status: 400 });
     }
 
+    // Клиент присылает только то, КЕМ играть: id листа либо данные для быстрого создания.
+    // Сам лист сервер читает из базы — присланным из браузера данным о герое не доверяем.
     const body = await request.json().catch(() => ({}));
-    const characterSnapshot = body.characterSnapshot;
-    const characterId = body.characterId || characterSnapshot?.id || `char_${Date.now()}`;
+    const characterId = typeof body.characterId === "string" ? body.characterId.trim() : "";
+    const create =
+      body.create && typeof body.create === "object" && typeof body.create.name === "string"
+        ? {
+            name: String(body.create.name).slice(0, 80),
+            race: typeof body.create.race === "string" ? body.create.race.slice(0, 60) : undefined,
+            className: typeof body.create.className === "string" ? body.create.className.slice(0, 60) : undefined,
+          }
+        : undefined;
 
-    if (!characterSnapshot) {
-      return NextResponse.json(
-        { error: "Необходимо передать characterSnapshot" },
-        { status: 400 }
-      );
+    if (!characterId && !create) {
+      return NextResponse.json({ error: "Не выбран персонаж" }, { status: 400 });
     }
 
     const roomService = new RoomService();
@@ -39,8 +45,8 @@ export async function POST(
     const participant = await roomService.joinRoom({
       roomId: room.id,
       userId: user.id,
-      characterId,
-      characterSnapshot,
+      characterId: characterId || undefined,
+      create,
       isHost,
     });
 

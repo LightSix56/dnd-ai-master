@@ -107,10 +107,10 @@ export function bundleTurnInputs(
  * Рассчитывает статус готовности совместного хода участников комнаты.
  */
 export function calculateTurnReadiness(
-  participants: Array<{ userId: string; characterSnapshot?: Record<string, unknown> | null }>,
+  participants: Array<{ userId: string; character?: unknown }>,
   playerInputs: Record<string, PlayerTurnInput>
 ): TurnReadinessResult {
-  const activeParticipants = participants.filter((p) => Boolean(p.characterSnapshot));
+  const activeParticipants = participants.filter((p) => Boolean(p.character));
   const totalCount = activeParticipants.length;
 
   const readyUserIds: string[] = [];

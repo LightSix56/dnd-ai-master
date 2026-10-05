@@ -11,7 +11,7 @@ describe("PartyTurnBar", () => {
       roomId: "room-1",
       userId: "user-1",
       characterId: "char-1",
-      characterSnapshot: {
+      character: {
         id: "char-1",
         name: "Торин Дубощит",
         level: 3,
@@ -27,7 +27,7 @@ describe("PartyTurnBar", () => {
       roomId: "room-1",
       userId: "user-2",
       characterId: "char-2",
-      characterSnapshot: {
+      character: {
         id: "char-2",
         name: "Гэндальф Серый",
         level: 5,

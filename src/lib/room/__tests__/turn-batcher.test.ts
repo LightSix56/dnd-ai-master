@@ -55,9 +55,9 @@ describe("turn-batcher", () => {
 
   it("calculates turn readiness correctly based on room participants and inputs", () => {
     const participants = [
-      { userId: "user-1", characterSnapshot: { name: "Торин" } },
-      { userId: "user-2", characterSnapshot: { name: "Лира" } },
-      { userId: "user-3", characterSnapshot: { name: "Кроуг" } },
+      { userId: "user-1", character: { name: "Торин" } },
+      { userId: "user-2", character: { name: "Лира" } },
+      { userId: "user-3", character: { name: "Кроуг" } },
     ];
 
     const partialInputs: Record<string, PlayerTurnInput> = {
