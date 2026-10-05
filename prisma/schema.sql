@@ -82,6 +82,8 @@ CREATE TABLE "Character" (
     "inScene" BOOLEAN NOT NULL DEFAULT true,
     "relation" INTEGER NOT NULL DEFAULT 0,
     "notes" TEXT,
+    "sheetCharacterId" TEXT,
+    "sheetLevelSeen" INTEGER,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -159,6 +161,7 @@ CREATE TABLE "Combat" (
     "cellSize" INTEGER NOT NULL DEFAULT 40,
     "backgroundUrl" TEXT,
     "log" TEXT NOT NULL DEFAULT '[]',
+    "sheetSyncedAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -284,6 +287,9 @@ CREATE INDEX "Character_campaignId_idx" ON "Character"("campaignId");
 
 -- CreateIndex
 CREATE INDEX "Character_type_idx" ON "Character"("type");
+
+-- CreateIndex
+CREATE INDEX "Character_sheetCharacterId_idx" ON "Character"("sheetCharacterId");
 
 -- CreateIndex
 CREATE INDEX "GameEvent_campaignId_idx" ON "GameEvent"("campaignId");

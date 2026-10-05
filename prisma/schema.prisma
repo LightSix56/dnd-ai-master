@@ -97,11 +97,19 @@ model Character {
   relation     Int      @default(0) // отношение к игроку: -100..+100
   notes        String? // свободные заметки мастера
 
+  // Лист персонажа игрока живёт в Supabase (public.characters) — здесь только ссылка на
+  // его версию для этой кампании. У героя со ссылкой уровень, характеристики, хиты, КД и опыт
+  // всегда читаются из листа; одноимённые колонки выше для него не используются.
+  sheetCharacterId String?
+  // Уровень героя, о котором мастеру уже сообщили («Партия прокачалась»)
+  sheetLevelSeen   Int?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([campaignId])
   @@index([type])
+  @@index([sheetCharacterId])
 }
 
 // Событие в игре — что произошло, где, когда
@@ -187,6 +195,8 @@ model Combat {
   cellSize    Int      @default(40)
   backgroundUrl String?
   log         String   @default("[]")
+  // Когда итоги боя (хиты, ячейки, состояния, опыт) записаны в листы героев
+  sheetSyncedAt DateTime?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

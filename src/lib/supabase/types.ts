@@ -55,4 +55,11 @@ export interface SupabaseCharacterRecord {
   portrait_url?: string | null;
   created_at: string;
   updated_at: string;
+  /** Счётчик изменений строки (увеличивает триггер базы) */
+  revision: number;
+  /** Заполнено у версии персонажа для кампании */
+  campaign_id: string | null;
+  campaign_name: string | null;
+  /** Оригинал, с которого сделана версия */
+  source_character_id: string | null;
 }
