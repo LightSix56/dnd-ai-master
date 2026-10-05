@@ -52,14 +52,12 @@ Supabase** (проект `npcayouvvwjaqxqgxqxc`, eu-central-1).
 - В `main` — только по просьбе пользователя (слияние `dev` → `main`).
 - Перед пушем в PowerShell очистить прокси: `$env:HTTPS_PROXY=""; $env:HTTP_PROXY=""`.
 
-## Дизайн (тёплая янтарная средневековая тема)
+## Дизайн (простая чёрно-белая тема shadcn/ui)
 
-- Главные кнопки — янтарно-кожаный градиент:
-  `bg-gradient-to-r from-amber-600 via-amber-700 to-amber-800 hover:from-amber-500 hover:to-amber-700 text-amber-50 border border-amber-600/60 shadow-xs`.
-- Второстепенные — тёплая рамка:
-  `border border-amber-500/25 dark:border-amber-500/20 bg-background/80 hover:bg-amber-500/10 hover:border-amber-500/40 text-foreground hover:text-amber-800 dark:hover:text-amber-300 shadow-xs`.
-- Иконки — `text-amber-600 dark:text-amber-400`. Кнопки и плашки в хедере — `h-8`, `flex items-center`.
-- ❌ Чёрные/серые кнопки (`bg-primary`, `bg-black`, `bg-zinc-900`, голый `variant="default"`/`"outline"`).
+- Интерфейс — стандартная нейтральная тема shadcn/ui: белый фон, тёмная основная кнопка, серые рамки; есть тёмный режим (`.dark` в `globals.css`).
+- Собирать из готовых компонентов `src/components/ui/` (`Button`, `Card`, `Dialog`, `Input`…) с их вариантами (`default`, `outline`, `ghost`…).
+- Цвета — через токены темы (`bg-background`, `text-foreground`, `bg-primary`, `border`, `text-muted-foreground`), а не жёстко заданные значения: так работает тёмный режим.
+- Пергаментная тема — только на сайте листа, сюда её не переносить.
 
 ## Гидратация
 
