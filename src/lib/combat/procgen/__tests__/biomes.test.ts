@@ -4,7 +4,7 @@ import type { ProcgenBiome } from "../layout";
 import type { TacticalMapPreset } from "../../maps/types";
 
 /** Биомы со своими генераторами — пополняется по мере появления генераторов */
-export const BIOMES_UNDER_TEST: ProcgenBiome[] = ["lava", "dungeon", "tavern"];
+export const BIOMES_UNDER_TEST: ProcgenBiome[] = ["lava", "dungeon", "tavern", "forest", "swamp", "desert", "snow", "mountain", "coastal"];
 
 const W = 24;
 const H = 16;

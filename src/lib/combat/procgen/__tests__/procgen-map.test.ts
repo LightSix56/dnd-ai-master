@@ -38,8 +38,8 @@ const zone = (map: TacticalMapPreset, name: string) => map.spawnZones.find((z) =
 
 describe("generateProcgenMap", () => {
   it("одно зерно — одна карта, фон — ссылка procgen", () => {
-    const a = generateProcgenMap("forest_ambush", 7);
-    const b = generateProcgenMap("forest_ambush", 7);
+    const a = generateProcgenMap("cave", 7);
+    const b = generateProcgenMap("cave", 7);
     expect(a.elements).toEqual(b.elements);
     expect(a.spawnZones).toEqual(b.spawnZones);
     const parsed = parseProcgenUrl(a.backgroundUrl);

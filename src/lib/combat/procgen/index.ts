@@ -11,6 +11,7 @@ import { buildAreaZones } from "./areas";
 import type { ProcgenBiome, ProcgenLayout } from "./layout";
 import { generateLavaLayout } from "./gen-lava";
 import { generateDungeonLayout } from "./gen-dungeon";
+import { generateOutdoorLayout } from "./gen-outdoor";
 
 const VERSION = 1;
 const MAX_ATTEMPTS = 20;
@@ -31,6 +32,12 @@ export const GENERATORS: Partial<Record<ProcgenBiome, (seed: number) => ProcgenL
   lava: generateLavaLayout,
   dungeon: (seed) => generateDungeonLayout(seed, "dungeon"),
   tavern: (seed) => generateDungeonLayout(seed, "tavern"),
+  forest: (seed) => generateOutdoorLayout(seed, "forest"),
+  swamp: (seed) => generateOutdoorLayout(seed, "swamp"),
+  desert: (seed) => generateOutdoorLayout(seed, "desert"),
+  snow: (seed) => generateOutdoorLayout(seed, "snow"),
+  mountain: (seed) => generateOutdoorLayout(seed, "mountain"),
+  coastal: (seed) => generateOutdoorLayout(seed, "coastal"),
 };
 
 /** Какой старый биом пресета соответствует процедурному — для подбора монстров без биома в запросе */

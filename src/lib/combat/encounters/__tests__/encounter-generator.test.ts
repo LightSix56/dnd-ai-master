@@ -80,7 +80,7 @@ describe("Encounter Generator Pipeline", () => {
     expect(encounter.adjustedXP).toBeGreaterThan(0);
     expect(encounter.xpPerPlayer).toBe(Math.floor(encounter.actualXP / 4));
     // Карта всегда собирается генератором; выбранный готовый пресет больше не используется
-    expect(encounter.mapPreset.backgroundUrl).toMatch(/^procgen:cave\?seed=/);
+    expect(encounter.mapPreset.backgroundUrl).toMatch(/^procgen:dungeon\?seed=/);
 
     // Verify all enemies have valid grid positions within bounds
     for (const enemy of encounter.enemies) {

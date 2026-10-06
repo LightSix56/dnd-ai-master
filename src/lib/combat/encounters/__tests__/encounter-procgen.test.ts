@@ -15,7 +15,7 @@ describe("generateEncounter: карта собирается генератор�
     });
 
     const map = encounter.mapPreset;
-    expect(map.backgroundUrl).toMatch(/^procgen:cave\?seed=\d+&v=1$/);
+    expect(map.backgroundUrl).toMatch(/^procgen:forest\?seed=\d+&v=1$/);
 
     const wall = new Set<string>();
     for (const el of map.elements.filter((e) => e.type === "wall")) {
