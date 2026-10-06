@@ -471,6 +471,34 @@ export function DnDApp({
   // Читаем сохранённое значение после монтирования, чтобы серверная разметка совпала с клиентской.
   const [inputPanelHeight, setInputPanelHeight] = useState<number | null>(null);
   const inputPanelRef = useRef<HTMLDivElement | null>(null);
+  // Сколько панель занимает в полном виде. Если её сжали ниже — заявки отряда
+  // переходят в компактный вид, а не прячутся за прокруткой.
+  // Элемент — в состоянии, а не в ref: панель появляется не сразу, и замер должен начаться, когда она смонтируется
+  const [inputPanelContentEl, setInputPanelContentEl] = useState<HTMLDivElement | null>(null);
+  const [fullInputPanelHeight, setFullInputPanelHeight] = useState<number | null>(null);
+  const compactInputPanel =
+    inputPanelHeight !== null && fullInputPanelHeight !== null && inputPanelHeight < fullInputPanelHeight;
+  // Ниже компактного вида панель не сжимается: иначе снова появится прокрутка
+  const minInputPanelHeightRef = useRef(110);
+  useEffect(() => {
+    const el = inputPanelContentEl;
+    if (!el || typeof ResizeObserver === "undefined") return;
+    const measure = () => {
+      // + отступы p-4 сверху и снизу и рамка
+      const height = Math.ceil(el.offsetHeight) + 33;
+      if (compactInputPanel) {
+        minInputPanelHeightRef.current = Math.max(110, height);
+        // сохранённая высота могла оказаться ниже компактного вида
+        setInputPanelHeight((prev) => (prev !== null && prev < height ? height : prev));
+      } else {
+        setFullInputPanelHeight(height);
+      }
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [inputPanelContentEl, compactInputPanel]);
   useEffect(() => {
     try {
       const saved = parseInt(localStorage.getItem("dnd_input_panel_height") || "", 10);
@@ -489,7 +517,7 @@ export function DnDApp({
 
     const onMove = (ev: PointerEvent) => {
       const max = Math.round(window.innerHeight * 0.7);
-      latest = Math.min(max, Math.max(110, Math.round(bottom - ev.clientY)));
+      latest = Math.min(max, Math.max(minInputPanelHeightRef.current, Math.round(bottom - ev.clientY)));
       setInputPanelHeight(latest);
     };
     const onUp = () => {
@@ -3507,20 +3535,20 @@ export function DnDApp({
               <div
                 ref={inputPanelRef}
                 style={inputPanelHeight ? { height: `${inputPanelHeight}px` } : undefined}
-                className={`relative border-t bg-card/30 backdrop-blur p-4 shrink-0 ${
-                  inputPanelHeight ? "overflow-y-auto" : ""
-                }`}
+                className="relative border-t bg-card/30 backdrop-blur shrink-0 flex flex-col"
               >
-                {/* Полоска для изменения высоты: потянуть мышью, двойной клик — вернуть как было */}
+                {/* Полоска для изменения высоты — на верхней границе панели, вне прокрутки, поэтому
+                    не наезжает на кнопки. Потянуть мышью, двойной клик — вернуть как было. */}
                 <div
                   onPointerDown={handleStartInputPanelResize}
                   onDoubleClick={resetInputPanelHeight}
                   title="Потяните, чтобы изменить высоту панели. Двойной клик — вернуть исходную."
-                  className="group sticky top-0 -mt-4 -mx-4 mb-1 h-3 z-10 flex items-center justify-center cursor-row-resize touch-none select-none"
+                  className="group absolute -top-1.5 inset-x-0 h-3 z-20 flex items-center justify-center cursor-row-resize touch-none select-none"
                 >
                   <div className="h-1 w-12 rounded-full bg-amber-500/25 group-hover:bg-amber-500/60 group-active:bg-amber-500 transition-colors" />
                 </div>
-                <div className="max-w-3xl mx-auto">
+                <div className={`p-4 ${inputPanelHeight ? "flex-1 min-h-0 overflow-y-auto" : ""}`}>
+                <div ref={setInputPanelContentEl} className="max-w-3xl mx-auto">
                   {/* Quick dice */}
                   <div className="flex gap-1.5 mb-2 flex-wrap items-center">
                     <Button
@@ -3579,13 +3607,14 @@ export function DnDApp({
                       levelChanges={levelChanges}
                       onPartyLeveled={handlePartyLeveled}
                       partyLeveledBusy={partyLeveledBusy}
-                      className="mb-2.5"
+                      compact={compactInputPanel}
+                      className={compactInputPanel ? "mb-1.5" : "mb-2.5"}
                     />
                   )}
 
                   {/* Если игрок уже отправил действие в этом раунде («Сказанного не вернёшь») */}
                   {activeRoom && user?.id && activeRoomTurn?.playerInputs?.[user.id] ? (
-                    <div className="rounded-xl border border-emerald-500/30 bg-emerald-50/80 dark:bg-emerald-950/30 p-3.5 flex items-center justify-between gap-3 text-sm shadow-xs">
+                    <div className={`rounded-xl border border-emerald-500/30 bg-emerald-50/80 dark:bg-emerald-950/30 flex items-center justify-between gap-3 text-sm shadow-xs ${compactInputPanel ? "p-2" : "p-3.5"}`}>
                       <div className="flex items-center gap-2.5 text-emerald-900 dark:text-emerald-100 min-w-0">
                         <CheckCircle2 className="size-5 shrink-0 text-emerald-600 dark:text-emerald-400" />
                         <div className="min-w-0">
@@ -3595,9 +3624,11 @@ export function DnDApp({
                           <div className="text-xs italic text-emerald-950/90 dark:text-emerald-200/90 mt-0.5 truncate">
                             «{activeRoomTurn.playerInputs[user.id].actionText}»
                           </div>
-                          <div className="text-[11px] text-muted-foreground mt-1">
-                            Сказанного не вернёшь — ожидаем остальных участников отряда...
-                          </div>
+                          {!compactInputPanel && (
+                            <div className="text-[11px] text-muted-foreground mt-1">
+                              Сказанного не вернёшь — ожидаем остальных участников отряда...
+                            </div>
+                          )}
                         </div>
                       </div>
                       <Badge variant="outline" className="shrink-0 bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-200 border-emerald-300 text-xs font-medium">
@@ -3666,6 +3697,7 @@ export function DnDApp({
                       </div>
                     </form>
                   )}
+                </div>
                 </div>
               </div>
             </>

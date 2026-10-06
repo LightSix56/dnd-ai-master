@@ -32,6 +32,8 @@ export interface PartyTurnBarProps {
   levelChanges?: Array<{ name: string; toLevel: number }>;
   onPartyLeveled?: () => void;
   partyLeveledBusy?: boolean;
+  /** Панель сжата: карточки в одну строку, без цитат — чтобы поместиться без прокрутки */
+  compact?: boolean;
   className?: string;
 }
 
@@ -47,6 +49,7 @@ export function PartyTurnBar({
   levelChanges,
   onPartyLeveled,
   partyLeveledBusy,
+  compact = false,
   className,
 }: PartyTurnBarProps) {
   const readiness = calculateTurnReadiness(
@@ -72,12 +75,22 @@ export function PartyTurnBar({
       )}
     >
       {/* Заголовок панели */}
-      <CardHeader className="py-3 px-4 flex flex-row items-center justify-between space-y-0 border-b border-border/50 bg-zinc-50/50 dark:bg-zinc-900/50">
-        <div className="flex items-center gap-2">
-          <div className="flex size-7 items-center justify-center rounded-md bg-primary/10 text-primary">
-            <Swords className="size-4" />
+      <CardHeader
+        className={cn(
+          "flex flex-row items-center justify-between space-y-0 border-b border-border/50 bg-zinc-50/50 dark:bg-zinc-900/50",
+          compact ? "py-1.5 px-3" : "py-3 px-4"
+        )}
+      >
+        <div className="flex items-center gap-2 min-w-0">
+          <div
+            className={cn(
+              "flex items-center justify-center rounded-md bg-primary/10 text-primary shrink-0",
+              compact ? "size-5" : "size-7"
+            )}
+          >
+            <Swords className={compact ? "size-3" : "size-4"} />
           </div>
-          <span className="font-semibold text-sm text-foreground">
+          <span className={cn("font-semibold text-foreground truncate", compact ? "text-xs" : "text-sm")}>
             Раунд {roundNumber} • Заявки отряда ({readyCount}/{totalCount})
           </span>
         </div>
@@ -131,12 +144,40 @@ export function PartyTurnBar({
         </div>
       </CardHeader>
 
-      <CardContent className="p-4 flex flex-col gap-3">
+      <CardContent className={cn("flex flex-col", compact ? "p-2 gap-1.5" : "p-4 gap-3")}>
         {/* Сетка участников */}
 
         {activeParticipants.length === 0 ? (
-          <div className="py-4 text-center text-xs text-muted-foreground">
+          <div className={cn("text-center text-xs text-muted-foreground", compact ? "py-1" : "py-4")}>
             В отряде пока нет активных персонажей
+          </div>
+        ) : compact ? (
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+            {activeParticipants.map((p) => {
+              const characterName = p.character?.name || "Герой";
+              const playerInput = roomTurn?.playerInputs?.[p.userId];
+              const hasSubmitted = Boolean(playerInput?.actionText?.trim());
+              const isCurrentUser = p.userId === currentUserId;
+              return (
+                <div
+                  key={p.id || p.userId}
+                  title={hasSubmitted && playerInput ? `«${playerInput.actionText}»` : "Ожидает хода игрока..."}
+                  className={cn(
+                    "flex items-center gap-1.5 rounded-md border px-2 py-1 bg-card min-w-0",
+                    isCurrentUser ? "border-primary/30 ring-1 ring-primary/10" : "border-border/60"
+                  )}
+                >
+                  {hasSubmitted ? (
+                    <CheckCircle2 className="size-3.5 shrink-0 text-emerald-600" aria-label="Готов" />
+                  ) : (
+                    <Clock className="size-3.5 shrink-0 text-zinc-500" aria-label="Обдумывает" />
+                  )}
+                  <span className="text-xs font-medium text-foreground truncate">{characterName}</span>
+                  {p.isHost && <Shield className="size-3 shrink-0 text-amber-600 dark:text-amber-400" />}
+                  {isCurrentUser && <span className="text-[10px] text-muted-foreground shrink-0">(Вы)</span>}
+                </div>
+              );
+            })}
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
