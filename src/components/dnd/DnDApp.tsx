@@ -651,6 +651,15 @@ export function DnDApp({
         activeRoomRef.current?.campaignId ||
         activeRoomRef.current?.campaignSettings?.campaignId ||
         activeRoomRef.current?.campaign_settings?.campaignId;
+      if (!targetCampId && initialRoomCode) {
+        // Страница комнаты: кампания — только та, что привязана к комнате. Без неё показываем
+        // лобби, а не последнюю активную кампанию игрока: раньше она подменяла лобби своим чатом
+        // (в том числе оставшись в памяти после перехода с другой страницы)
+        activeCampaignRef.current = null;
+        setActiveCampaign(null);
+        setCharacters([]);
+        return;
+      }
       const url = targetCampId
         ? `/api/campaign/active?campaignId=${encodeURIComponent(targetCampId)}`
         : "/api/campaign/active";
@@ -687,7 +696,7 @@ export function DnDApp({
     } catch (e) {
       console.error(e);
     }
-  }, [getAuthToken, setActiveCampaign, setCharacters, refreshMemory]);
+  }, [getAuthToken, setActiveCampaign, setCharacters, refreshMemory, initialRoomCode]);
 
   const refreshData = useCallback(async () => {
     await refreshActiveCampaign();
