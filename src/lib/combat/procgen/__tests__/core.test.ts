@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { resolveProcgenBiome, PROCGEN_BIOMES } from "../biomes";
 import { formatProcgenUrl, parseProcgenUrl } from "../index";
-import { classifyLayout } from "../classify";
+import { classifyLayout, clearPathObstacles } from "../classify";
 import { buildAreaZones } from "../areas";
 import { Field, SUB } from "../field";
 import type { ProcgenLayout, Decor } from "../layout";
@@ -47,6 +47,51 @@ describe("resolveProcgenBiome", () => {
   });
 });
 
+describe("resolveProcgenBiome: свободные описания мастера", () => {
+  it.each([
+    ["ice cave", "cave"],
+    ["sea cave", "cave"],
+    ["mountain cave", "cave"],
+    ["forest cave", "cave"],
+    ["lava cave", "lava"],
+    ["road", "forest"],
+    ["plains", "forest"],
+    ["grassland", "forest"],
+    ["river crossing", "forest"],
+    ["countryside", "forest"],
+    ["лес", "forest"],
+    ["город", "urban"],
+    ["пещера", "cave"],
+    ["болото", "swamp"],
+    ["пустыня", "desert"],
+    ["таверна", "tavern"],
+    ["подземелье", "dungeon"],
+    ["горы", "mountain"],
+    ["побережье", "coastal"],
+    ["снежная равнина", "snow"],
+    ["лава", "lava"],
+    ["mine_tracks", "cave"],
+    ["snowy_mountain", "snow"],
+  ])("%s → %s", (name, expected) => {
+    expect(resolveProcgenBiome(name)).toBe(expected);
+  });
+
+  it.each([
+    ["police office", "snow"],
+    ["justice hall", "snow"],
+    ["research lab", "coastal"],
+    ["dice den", "snow"],
+    ["inner sanctum", "tavern"],
+    ["secret passage", "mountain"],
+    ["astral portal", "coastal"],
+    ["garden fence", "swamp"],
+    ["лавка торговца", "lava"],
+    ["морозный перевал", "coastal"],
+  ])("«%s» не попадает в %s по куску слова", (name, wrong) => {
+    expect(resolveProcgenBiome(name)).not.toBe(wrong);
+  });
+});
+
 describe("procgen-ссылки всех биомов", () => {
   it("ссылка разбирается обратно для каждого биома", () => {
     for (const biome of PROCGEN_BIOMES) {
@@ -58,7 +103,7 @@ describe("procgen-ссылки всех биомов", () => {
 });
 
 describe("classifyLayout", () => {
-  it("декор и жидкость дают свои типы клеток, путь снимает препятствие", () => {
+  it("декор и жидкость дают свои типы клеток, препятствие с оси пути убирается из плана", () => {
     const decor: Decor[] = [
       { kind: "table", x: 1, y: 1, r: 0.4, w: 2, h: 1 },
       { kind: "tree", x: 4.5, y: 1.5, r: 0.4 },
@@ -66,7 +111,9 @@ describe("classifyLayout", () => {
     ];
     const lava = plan(6, 4, { biome: "lava", decor, paths: [[{ x: 0.5, y: 2.5 }, { x: 5.5, y: 2.5 }]] });
     fillCell(lava.liquid, 0, 3, 1);
-    const cells = classifyLayout(lava);
+    const cleared = clearPathObstacles(lava);
+    expect(cleared.decor.map((d) => d.kind)).toEqual(["table", "tree"]);
+    const cells = classifyLayout(cleared);
     expect(cells[1][1]).toBe("cover");
     expect(cells[1][2]).toBe("cover");
     expect(cells[1][4]).toBe("obstacle");

@@ -18,25 +18,35 @@ export const PROCGEN_BIOMES: ProcgenBiome[] = [
   "urban",
 ];
 
-/** Порядок важен: первое совпадение побеждает (snowy_mountain — снег, lava_cave — лава) */
-const KEYWORDS: [ProcgenBiome, RegExp][] = [
-  ["lava", /lava|volcan|magma|forge|foundry/],
-  ["tavern", /tavern|inn\b|pub/],
-  ["snow", /snow|ice|frost|tundra/],
-  ["swamp", /swamp|bog|marsh/],
-  ["desert", /desert|dune|pyramid|sand/],
-  ["coastal", /coast|ship|dock|harbor|harbour|sea|beach|shore/],
-  ["urban", /urban|city|street|town|village/],
-  ["mountain", /mountain|chasm|cliff|bridge|hill/],
-  ["forest", /forest|wood|bandit|spider|jungle|open_field|field/],
-  ["dungeon", /dungeon|prison|crypt|tomb|sewer|tower|castle|temple|graveyard|arena|ruin/],
-  ["cave", /cave|underdark|mine|cavern/],
+/**
+ * Начала слов, по которым узнаётся биом. Название делится на слова, и слово подходит,
+ * если начинается с одного из них — так «office» не превращается в снег из-за «ice».
+ * Порядок важен: первое подходящее правило побеждает. Лава и пещера идут первыми, чтобы
+ * «ice cave» или «sea cave» остались пещерой; «snowy_mountain» — снег, «город» — не горы.
+ */
+const STEMS: [ProcgenBiome, string[]][] = [
+  ["lava", ["lava", "volcan", "magma", "forge", "foundry", "лава", "лавов", "вулкан", "магм"]],
+  ["cave", ["cave", "cavern", "underdark", "grotto", "mine", "пещер", "грот", "шахт"]],
+  ["tavern", ["tavern", "=inn", "=inns", "pub", "таверн", "трактир", "корчм"]],
+  ["snow", ["snow", "=ice", "=icy", "frost", "tundra", "glacier", "winter", "снег", "снеж", "лёд", "=лед", "ледян", "ледник", "мороз", "зим", "тундр"]],
+  ["swamp", ["swamp", "bog", "marsh", "=fen", "=fens", "болот", "топь", "трясин"]],
+  ["desert", ["desert", "dune", "pyramid", "sand", "oasis", "пустын", "бархан", "пирамид", "песк", "песок", "оазис"]],
+  ["coastal", ["coast", "ship", "dock", "harbor", "harbour", "=sea", "=seas", "seaside", "beach", "shore", "pier", "=port", "=ports", "берег", "побереж", "корабл", "пристан", "=порт", "море", "морск", "залив", "пляж"]],
+  ["urban", ["urban", "city", "street", "town", "village", "market", "square", "alley", "город", "улиц", "деревн", "сел", "рын", "площад", "переул"]],
+  ["mountain", ["mountain", "chasm", "cliff", "bridge", "hill", "peak", "=pass", "гор", "ущел", "скал", "перевал", "утёс", "утес", "мост", "холм"]],
+  ["forest", ["forest", "wood", "bandit", "spider", "jungle", "field", "battlefield", "road", "plain", "grass", "meadow", "river", "farm", "country", "лес", "рощ", "чащ", "дорог", "тракт", "поле", "полян", "луг", "рек", "равнин", "ферм"]],
+  ["dungeon", ["dungeon", "prison", "jail", "crypt", "tomb", "sewer", "tower", "castle", "temple", "graveyard", "arena", "ruin", "hall", "house", "office", "lab", "library", "manor", "mansion", "building", "подземел", "тюрь", "склеп", "гробниц", "канализ", "башн", "замк", "замок", "храм", "кладбищ", "арен", "руин", "здани", "зал", "особняк", "библиотек"]],
 ];
 
 export function resolveProcgenBiome(name: string | null | undefined): ProcgenBiome {
-  const key = (name ?? "").trim().toLowerCase();
-  if ((PROCGEN_BIOMES as string[]).includes(key)) return key as ProcgenBiome;
-  return KEYWORDS.find(([, re]) => re.test(key))?.[0] ?? "cave";
+  const words = (name ?? "").toLowerCase().split(/[^\p{L}]+/u).filter(Boolean);
+  if (words.length === 1 && (PROCGEN_BIOMES as string[]).includes(words[0])) return words[0] as ProcgenBiome;
+  // «=слово» — только точное совпадение: inn не должен ловить inner, port — portal
+  const matches = (w: string, stem: string) => (stem.startsWith("=") ? w === stem.slice(1) : w.startsWith(stem));
+  for (const [biome, stems] of STEMS) {
+    if (words.some((w) => stems.some((stem) => matches(w, stem)))) return biome;
+  }
+  return "cave";
 }
 
 /** Какая жидкость на картах биома */

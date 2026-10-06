@@ -6,7 +6,7 @@ import { generateCaveLayout } from "./cave";
 import { classifyCells, mergeToElements } from "./markup";
 import { buildSpawnZones } from "./zones";
 import { BIOME_NAMES, PROCGEN_BIOMES, resolveProcgenBiome } from "./biomes";
-import { classifyLayout } from "./classify";
+import { classifyLayout, clearPathObstacles } from "./classify";
 import { buildAreaZones } from "./areas";
 import type { ProcgenBiome, ProcgenLayout } from "./layout";
 import { generateLavaLayout, caveToLayout } from "./gen-lava";
@@ -29,7 +29,7 @@ export function parseProcgenUrl(url: string | null | undefined): { biome: Procge
 }
 
 /** Генераторы общих планов; пещера идёт своим путём (её план и разметка зафиксированы v1) */
-export const GENERATORS: Partial<Record<ProcgenBiome, (seed: number) => ProcgenLayout>> = {
+const RAW_GENERATORS: Partial<Record<ProcgenBiome, (seed: number) => ProcgenLayout>> = {
   lava: generateLavaLayout,
   dungeon: (seed) => generateDungeonLayout(seed, "dungeon"),
   tavern: (seed) => generateDungeonLayout(seed, "tavern"),
@@ -41,6 +41,11 @@ export const GENERATORS: Partial<Record<ProcgenBiome, (seed: number) => ProcgenL
   coastal: (seed) => generateOutdoorLayout(seed, "coastal"),
   urban: generateCityLayout,
 };
+
+/** Готовые генераторы: с осей путей убраны непроходимые объекты (картинка = разметка) */
+export const GENERATORS: Partial<Record<ProcgenBiome, (seed: number) => ProcgenLayout>> = Object.fromEntries(
+  Object.entries(RAW_GENERATORS).map(([biome, generate]) => [biome, (seed: number) => clearPathObstacles(generate(seed))])
+);
 
 /** Какой старый биом пресета соответствует процедурному — для подбора монстров без биома в запросе */
 const PRESET_BIOME: Record<ProcgenBiome, BiomeType> = {

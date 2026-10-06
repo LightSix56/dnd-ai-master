@@ -22,16 +22,16 @@ function fingerprint(biome: ProcgenBiome, seed: number): string {
 }
 
 const GOLDEN: Partial<Record<ProcgenBiome, Record<number, string>>> = {
-  lava: { 1: "3d539f7e", 42: "31311bcd", [-7]: "6c0980b1" },
-  dungeon: { 1: "361db4e0", 42: "d0b7f70e", [-7]: "e2c12683" },
-  tavern: { 1: "a04c82ac", 42: "5c6fcd47", [-7]: "8d5be85a" },
+  lava: { 1: "3d539f7e", 42: "b64dfc65", [-7]: "57a8f1c8" },
+  dungeon: { 1: "361db4e0", 42: "5e72cf99", [-7]: "73117b20" },
+  tavern: { 1: "bf4ebca4", 42: "d0307a3d", [-7]: "19e1743" },
   forest: { 1: "7f210730", 42: "c7e698fc", [-7]: "773f1119" },
   swamp: { 1: "4c443db", 42: "361ff01b", [-7]: "449d6871" },
   desert: { 1: "54f7be2d", 42: "64a867f", [-7]: "2cf004c2" },
   snow: { 1: "e053ebc1", 42: "a6616f7e", [-7]: "21b8b70b" },
   mountain: { 1: "a22775a4", 42: "1b8d4302", [-7]: "84eaf2dc" },
   coastal: { 1: "b5d973c1", 42: "699796dc", [-7]: "f90e156a" },
-  urban: { 1: "5194136", 42: "e431d07", [-7]: "46eb2f52" },
+  urban: { 1: "5194136", 42: "7944e336", [-7]: "6c07c670" },
 };
 
 describe.each(Object.entries(GOLDEN) as [ProcgenBiome, Record<number, string>][])("procgen v=1: %s не меняется", (biome, seeds) => {
