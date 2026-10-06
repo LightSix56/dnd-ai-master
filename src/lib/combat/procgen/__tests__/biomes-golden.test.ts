@@ -31,6 +31,7 @@ const GOLDEN: Partial<Record<ProcgenBiome, Record<number, string>>> = {
   snow: { 1: "e053ebc1", 42: "a6616f7e", [-7]: "21b8b70b" },
   mountain: { 1: "a22775a4", 42: "1b8d4302", [-7]: "84eaf2dc" },
   coastal: { 1: "b5d973c1", 42: "699796dc", [-7]: "f90e156a" },
+  urban: { 1: "5194136", 42: "e431d07", [-7]: "46eb2f52" },
 };
 
 describe.each(Object.entries(GOLDEN) as [ProcgenBiome, Record<number, string>][])("procgen v=1: %s не меняется", (biome, seeds) => {
