@@ -481,7 +481,9 @@ export function HomeHubView() {
                 >
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between gap-2">
-                      <CardTitle className="text-base font-bold truncate">{camp.name}</CardTitle>
+                      <CardTitle className="text-base font-bold min-w-0 line-clamp-2 break-words" title={camp.name}>
+                        {camp.name}
+                      </CardTitle>
                       <Badge variant="outline" className="text-[11px] shrink-0">
                         {camp.startingLevel || camp.levelFrom || 1} ур.
                       </Badge>
