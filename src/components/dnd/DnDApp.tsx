@@ -79,6 +79,7 @@ import { D20RollModal } from "./D20RollModal";
 import { CreateRoomModal } from "@/components/room/CreateRoomModal";
 import { JoinRoomModal } from "@/components/room/JoinRoomModal";
 import { CharacterPickerModal } from "@/components/room/CharacterPickerModal";
+import { RoomCampaignSetupModal, type CampaignSetupFormValues } from "@/components/room/RoomCampaignSetupModal";
 import { PartyTurnBar } from "@/components/room/PartyTurnBar";
 import type { RoomTurn } from "@/lib/room/types";
 import { SupabaseAuthModal } from "@/components/auth/SupabaseAuthModal";
@@ -1092,6 +1093,51 @@ export function DnDApp({
       toast.error(`Ошибка: ${e.message}`);
     } finally {
       setLoadingRoom(false);
+    }
+  }
+
+  const [showRoomCampaignSetup, setShowRoomCampaignSetup] = useState(false);
+  const [startingRoomCampaign, setStartingRoomCampaign] = useState(false);
+
+  /**
+   * Ведущий запускает приключение стола: сервер генерирует сюжет под отряд, создаёт сетевую
+   * кампанию и привязывает её к комнате. Игроки подхватят кампанию при ближайшем опросе комнаты.
+   * Ошибки показывает окно настройки — поэтому они пробрасываются дальше.
+   */
+  async function startRoomCampaignFromLobby(values: CampaignSetupFormValues) {
+    if (!activeRoom) return;
+    setStartingRoomCampaign(true);
+    try {
+      const token = getAuthToken();
+      const res = await fetch(`/api/room/${encodeURIComponent(activeRoom.code)}/start-campaign`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({ ...values, model, apiKey, authMode, baseURL }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data?.campaignId) {
+        throw new Error(data?.error || "Не удалось запустить приключение");
+      }
+
+      setShowRoomCampaignSetup(false);
+      setActiveRoom((prev: any) =>
+        prev ? { ...prev, ...data.room, participants: prev.participants || [] } : prev
+      );
+      await fetch("/api/campaign/activate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({ campaignId: data.campaignId, roomCode: activeRoom.code }),
+      }).catch(() => {});
+      await refreshActiveCampaign(data.campaignId);
+      toast.success("Приключение началось!");
+    } finally {
+      setStartingRoomCampaign(false);
     }
   }
 
@@ -2811,25 +2857,16 @@ export function DnDApp({
 
                       {Boolean(user?.id && activeRoom.hostUserId === user.id) ? (
                         <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                          {/* Приключение стола создаётся через комнату: сюжет под отряд, кампания сетевая
+                              и привязана к комнате. Одиночную кампанию сюда не подключить — раньше кнопка
+                              «Выбрать кампанию» запускала её только у ведущего, а игроки оставались в лобби. */}
                           <Button
-                            variant="outline"
                             size="sm"
-                            onClick={() => setCreatingCampaign(true)}
+                            onClick={() => setShowRoomCampaignSetup(true)}
                             className="text-xs cursor-pointer w-full sm:w-auto"
                           >
                             <Plus className="size-3.5 mr-1.5" />
                             Создать приключение
-                          </Button>
-                          <Button
-                            size="sm"
-                            onClick={() => {
-                              loadCampaignsList();
-                              setShowCampaignList(true);
-                            }}
-                            className="text-xs cursor-pointer w-full sm:w-auto"
-                          >
-                            <BookOpen className="size-3.5 mr-1.5" />
-                            Выбрать кампанию
                           </Button>
                         </div>
                       ) : (
@@ -4323,6 +4360,18 @@ export function DnDApp({
           onStartingLevel={setNewCampaignStartingLevel}
           onCreate={createCampaign}
           onClose={() => setCreatingCampaign(false)}
+        />
+      )}
+
+      {/* Настройка приключения сетевого стола */}
+      {showRoomCampaignSetup && activeRoom && (
+        <RoomCampaignSetupModal
+          isOpen={showRoomCampaignSetup}
+          onClose={() => setShowRoomCampaignSetup(false)}
+          room={activeRoom as any}
+          participants={activeRoom.participants || []}
+          onStartCampaign={startRoomCampaignFromLobby}
+          isGenerating={startingRoomCampaign}
         />
       )}
 
