@@ -29,6 +29,7 @@ import {
   drinkPotion,
   performDeathSave,
   shoveCombatant,
+  toggleDoor,
 } from "@/lib/combat/engine";
 import { runBotTurn, isBotTurn } from "@/lib/combat/bot";
 import { hydrateCombat, dehydrateCombatant, safeParse } from "@/lib/combat/serialize";
@@ -88,6 +89,12 @@ async function saveState(combatId: string, state: CombatState): Promise<void> {
       const c = state.get(id);
       if (!c) continue;
       await tx.combatant.update({ where: { id }, data: dehydrateCombatant(c) as any });
+    }
+    // Открытые и закрытые по ходу боя двери
+    for (const id of state.dirtyElementIds) {
+      const el = state.mapElements.find((e) => e.id === id);
+      if (!el) continue;
+      await tx.mapElement.update({ where: { id }, data: { properties: JSON.stringify(el.properties ?? {}) } });
     }
     // Сбежавшие с поля боя бойцы удаляются и из БД
     if (removedIds.length > 0) {
@@ -839,14 +846,12 @@ export async function POST(req: Request) {
 
     if (action === "toggle-door") {
       const { elementId }: { elementId: string } = body;
-      const el = await db.mapElement.findUnique({ where: { id: elementId } });
-      if (!el) return Response.json({ error: "Элемент не найден" }, { status: 404 });
-      const props = safeParse<Record<string, unknown>>(el.properties, {});
-      props.isOpen = !props.isOpen;
-      await db.mapElement.update({
-        where: { id: elementId },
-        data: { properties: JSON.stringify(props) },
-      });
+      const state = await loadState(combatId);
+      if (!state.mapElements.some((e) => e.id === elementId)) {
+        return Response.json({ error: "Элемент не найден" }, { status: 404 });
+      }
+      toggleDoor(state, elementId);
+      await saveState(combatId, state);
       return respond(combatId);
     }
 

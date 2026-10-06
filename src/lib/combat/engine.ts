@@ -85,6 +85,7 @@ export class CombatState {
   gridHeight: number;
 
   private dirty = new Set<string>();
+  private dirtyElements = new Set<string>();
   private combatDirty = false;
   private removed = new Set<string>();
 
@@ -118,6 +119,16 @@ export class CombatState {
 
   markCombat(): void {
     this.combatDirty = true;
+  }
+
+  /** Элемент карты изменён (дверь открыта или закрыта) — роут сохранит его */
+  markElement(id: string): void {
+    this.dirtyElements.add(id);
+    this.combatDirty = true;
+  }
+
+  get dirtyElementIds(): string[] {
+    return [...this.dirtyElements];
   }
 
   get dirtyIds(): string[] {
@@ -1297,7 +1308,7 @@ export function moveCombatant(
   state: CombatState,
   combatantId: string,
   target: Cell,
-  opts: { skipTurnCheck?: boolean } = {}
+  opts: { skipTurnCheck?: boolean; avoidHazards?: boolean } = {}
 ): MoveOutcome {
   if (!opts.skipTurnCheck) assertTurn(state, combatantId);
 
@@ -1307,6 +1318,11 @@ export function moveCombatant(
   }
 
   const budget = remainingMovement(mover);
+  // Бот не идёт через лаву, если сам в ней не стоит
+  const avoid =
+    opts.avoidHazards && !isLavaTerrain(mover, state.mapElements)
+      ? (cell: Cell) => isLavaTerrain(cell, state.mapElements)
+      : undefined;
   const result = findPath(
     mover,
     target,
@@ -1314,7 +1330,8 @@ export function moveCombatant(
     state.mapElements,
     state.combatants,
     state.gridWidth,
-    state.gridHeight
+    state.gridHeight,
+    avoid
   );
   if (!result.ok) throw new EngineError(result.reason ?? "Путь не найден");
 
@@ -3325,13 +3342,17 @@ export function toggleDoor(
   }
 
   const newState = !props.isOpen;
+  if (!newState) {
+    const blocker = state.combatants.find((c) => c.hpCurrent > 0 && c.x >= element.x && c.x < element.x + element.width && c.y >= element.y && c.y < element.y + element.height);
+    if (blocker) throw new EngineError(`В дверном проёме стоит ${blocker.name} — дверь не закрыть`);
+  }
   element.properties = {
     ...props,
     isOpen: newState,
     label: newState ? "Дверь (открыта)" : "Дверь (закрыта)",
   };
 
-  state.markCombat();
+  state.markElement(element.id);
   const actorName = opts.actorId ? state.get(opts.actorId)?.name : undefined;
   const logText = actorName
     ? `${actorName} ${newState ? "открывает" : "закрывает"} дверь`

@@ -130,7 +130,9 @@ export function computeReachable(
   gridW: number,
   gridH: number,
   ignoreCombatantId?: string,
-  mover?: Combatant
+  mover?: Combatant,
+  /** Клетки, в которые нельзя входить (боты обходят лаву) */
+  avoid?: (cell: Cell) => boolean
 ): Map<string, ReachableNode> {
   const startKey = cellKey(start);
   const nodes = new Map<string, ReachableNode>([[startKey, { cost: 0, from: null }]]);
@@ -154,6 +156,7 @@ export function computeReachable(
       const next: Cell = { x: cell.x + dx, y: cell.y + dy };
       if (!isInBounds(next, gridW, gridH)) continue;
       if (isCellBlocked(next, mapElements, combatants, ignoreCombatantId)) continue;
+      if (avoid?.(next)) continue;
 
       // Нельзя срезать угол стены или препятствия по диагонали (D&D 5e corner rule)
       if (dx !== 0 && dy !== 0) {
@@ -224,7 +227,8 @@ export function findPath(
   mapElements: MapElement[],
   combatants: Combatant[],
   gridW: number,
-  gridH: number
+  gridH: number,
+  avoid?: (cell: Cell) => boolean
 ): PathResult {
   if (!isInBounds(target, gridW, gridH)) {
     return { ok: false, path: [], costFt: 0, reason: "Клетка за пределами карты" };
@@ -244,7 +248,8 @@ export function findPath(
     gridW,
     gridH,
     combatant.id,
-    combatant
+    combatant,
+    avoid
   );
 
   const targetKey = cellKey(target);

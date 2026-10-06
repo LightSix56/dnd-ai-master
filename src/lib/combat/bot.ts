@@ -18,6 +18,7 @@ import {
   attemptHide,
   standUp,
   setFacing,
+  toggleDoor,
 } from "./engine";
 import {
   canPayForAttack,
@@ -45,6 +46,21 @@ import {
   type MapElement,
 } from "./types";
 import { getSpellDefinition } from "./library-data";
+import {
+  adjacentTo,
+  bestFiringPosition,
+  bestHidingCell,
+  botReachable,
+  distancesTo,
+  doorOnRouteTo,
+  exposure,
+  isClosedDoor,
+  livingHostiles,
+  meleeThreatsReaching,
+  nearestMeleeThreatFt,
+  parseKey,
+  visibilityAt,
+} from "./bot-tactics";
 import {
   checkMoraleTrigger,
   resolveMoraleCheck,
@@ -199,6 +215,14 @@ function evaluateTargetScore(
     if (isTargetRangedOrCaster && dist <= 40) {
       score -= 15;
     }
+    // Авангард прикрывает своих стрелков и магов: враг рядом с ними — в приоритете
+    const threatensBackline = allAllies.some(
+      (a) =>
+        a.hpCurrent > 0 &&
+        (a.tacticalRole === "backline" || ["ranged", "caster"].includes(getBotArchetype(a))) &&
+        distanceFt(a, target) <= 10
+    );
+    if (threatensBackline) score -= 15;
   } else if (archetype === "ranged" || archetype === "caster") {
     // Стрелки и маги любят мягкие цели с низким КД
     if (target.ac <= 13) {
@@ -252,15 +276,7 @@ function findApproachCell(
   const budget = remainingMovement(actor);
   if (budget <= 0) return null;
 
-  const nodes = computeReachable(
-    { x: actor.x, y: actor.y },
-    budget,
-    state.mapElements,
-    state.combatants,
-    state.gridWidth,
-    state.gridHeight,
-    actor.id
-  );
+  const nodes = botReachable(state, actor, budget);
 
   let best: { cell: Cell; cost: number } | null = null;
   for (const [key, node] of nodes) {
@@ -274,7 +290,7 @@ function findApproachCell(
   return best?.cell ?? null;
 }
 
-/** Находит достижимую клетку, максимально приближающую бота к цели */
+/** Достижимая клетка, ближе всего к цели по пути в обход стен (а не по прямой) */
 function findClosestCellTowardsTarget(
   state: CombatState,
   actor: Combatant,
@@ -283,26 +299,232 @@ function findClosestCellTowardsTarget(
   const budget = remainingMovement(actor);
   if (budget <= 0) return null;
 
-  const nodes = computeReachable(
-    { x: actor.x, y: actor.y },
-    budget,
-    state.mapElements,
-    state.combatants,
-    state.gridWidth,
-    state.gridHeight,
-    actor.id
-  );
-
+  const nodes = botReachable(state, actor, budget);
+  const toTarget = distancesTo(state, { x: target.x, y: target.y });
   let best: { cell: Cell; dist: number; cost: number } | null = null;
   for (const [key, node] of nodes) {
     if (node.cost === 0) continue;
-    const [x, y] = key.split(",").map(Number);
-    const dist = distanceFt({ x, y }, target);
+    const cell = parseKey(key);
+    // Путь до цели; если цель отрезана (дверь, стена) — расстояние по прямой
+    const dist = toTarget.get(key)?.cost ?? 1000 + distanceFt(cell, target);
     if (!best || dist < best.dist || (dist === best.dist && node.cost < best.cost)) {
-      best = { cell: { x, y }, dist, cost: node.cost };
+      best = { cell, dist, cost: node.cost };
     }
   }
   return best?.cell ?? null;
+}
+
+/** Плут с «Хитрым действием» (бонусные Отход, Рывок, Засада) */
+function hasCunningAction(c: Combatant): boolean {
+  const cls = c.className?.toLowerCase() ?? "";
+  return ((cls.includes("плут") || cls.includes("rogue")) && c.level >= 2) || c.abilities.some((a) => a.name.includes("Хитрое действие"));
+}
+
+/** Воюет издалека: стрелок, маг или плут с луком/арбалетом */
+function prefersRanged(c: Combatant, archetype: BotArchetype): boolean {
+  if (archetype === "ranged" || archetype === "caster") return true;
+  if (archetype !== "rogue") return false;
+  const ranged = c.attacks.some((a) => a.kind === "ranged");
+  const melee = c.attacks.some((a) => a.kind === "melee");
+  return ranged && (!melee || c.dexMod >= (c.abilityMods?.STR ?? 0));
+}
+
+/** Свободное взаимодействие с предметом — одно за ход; второе стоит действия */
+interface TurnBudget {
+  interactionUsed: boolean;
+}
+
+function spendInteraction(state: CombatState, actor: Combatant, budget: TurnBudget): boolean {
+  if (!budget.interactionUsed) {
+    budget.interactionUsed = true;
+    return true;
+  }
+  if (actor.actionUsed) return false;
+  actor.actionUsed = true;
+  state.mark(actor.id);
+  return true;
+}
+
+/** Цель за закрытой дверью: дойти до двери и открыть её */
+function tryOpenDoorOnRoute(state: CombatState, actor: Combatant, target: Combatant, budget: TurnBudget): BotStep[] {
+  const steps: BotStep[] = [];
+  for (let guard = 0; guard < 3; guard++) {
+    const route = doorOnRouteTo(state, actor, target);
+    if (!route) break;
+    if (!adjacentTo(actor, route.door)) {
+      // Идём по маршруту к двери настолько далеко, насколько хватит движения
+      const nodes = botReachable(state, actor, remainingMovement(actor));
+      const reachable = [...route.path].reverse().find((c) => nodes.has(`${c.x},${c.y}`));
+      if (!reachable || (reachable.x === actor.x && reachable.y === actor.y)) break;
+      try {
+        const move = moveCombatant(state, actor.id, reachable, { skipTurnCheck: true, avoidHazards: true });
+        actor.facing = determineFacingTowards(actor, route.door);
+        state.mark(actor.id);
+        steps.push({ kind: "move", text: `${actor.name} идёт к двери (${move.costFt} фт)` });
+        for (const oa of move.opportunityAttacks) steps.push({ kind: "attack", text: oa.text });
+      } catch (e) {
+        if (!(e instanceof EngineError)) throw e;
+        break;
+      }
+    }
+    if (!adjacentTo(actor, route.door) || actor.hpCurrent <= 0) break;
+    if (!spendInteraction(state, actor, budget)) break;
+    try {
+      toggleDoor(state, route.door.id, { actorId: actor.id });
+      steps.push({ kind: "ability", text: `${actor.name} открывает дверь` });
+    } catch (e) {
+      if (!(e instanceof EngineError)) throw e;
+      break;
+    }
+  }
+  return steps;
+}
+
+/**
+ * Раненый стрелок или маг захлопывает соседнюю дверь, если это отрезает от него
+ * вражеских ближников.
+ */
+function tryCloseDoorBehind(state: CombatState, actor: Combatant, budget: TurnBudget): BotStep | null {
+  if (budget.interactionUsed) return null;
+  const doors = state.mapElements.filter(
+    (el) =>
+      el.type === "door" &&
+      !isClosedDoor(el) &&
+      adjacentTo(actor, el) &&
+      !state.combatants.some((c) => c.hpCurrent > 0 && c.x >= el.x && c.x < el.x + el.width && c.y >= el.y && c.y < el.y + el.height)
+  );
+  if (doors.length === 0) return null;
+  const before = meleeThreatsReaching(state, actor, state.mapElements);
+  if (before === 0) return null;
+  for (const door of doors) {
+    const closed = state.mapElements.map((el) =>
+      el.id === door.id ? { ...el, properties: { ...((el.properties as object) ?? {}), isOpen: false } } : el
+    );
+    if (meleeThreatsReaching(state, actor, closed) < before) {
+      try {
+        toggleDoor(state, door.id, { actorId: actor.id });
+        budget.interactionUsed = true;
+        return { kind: "ability", text: `${actor.name} захлопывает дверь перед преследователями` };
+      } catch (e) {
+        if (!(e instanceof EngineError)) throw e;
+      }
+    }
+  }
+  return null;
+}
+
+/** Стрелок/маг: до атаки встать туда, откуда цель достаётся, а сам он — за укрытием */
+function tryTakeFiringPosition(state: CombatState, actor: Combatant, targets: Combatant[], archetype: BotArchetype): BotStep | null {
+  const budget = remainingMovement(actor);
+  if (budget <= 0 || targets.length === 0) return null;
+  const attack =
+    bestAttack(actor, ["ranged"]) ??
+    (archetype === "caster"
+      ? ({ id: "spell-range", name: "Заклинание", attackBonus: 0, damage: [], kind: "ranged", range: { normal: 60 }, actionCost: "action" } as Attack)
+      : null);
+  if (!attack) return null;
+  const best = bestFiringPosition(state, actor, targets, attack, budget);
+  if (!best || (best.cell.x === actor.x && best.cell.y === actor.y)) return null;
+  try {
+    const move = moveCombatant(state, actor.id, best.cell, { skipTurnCheck: true, avoidHazards: true });
+    actor.facing = determineFacingTowards(actor, best.target);
+    state.mark(actor.id);
+    const covered = exposure(state, actor, actor) < 3 ? " за укрытием" : "";
+    return { kind: "move", text: `${actor.name} занимает позицию для стрельбы${covered} (${move.costFt} фт)` };
+  } catch (e) {
+    if (!(e instanceof EngineError)) throw e;
+    return null;
+  }
+}
+
+/**
+ * Плут после удара: уходит из поля зрения и прячется. Если стоит вплотную к врагу —
+ * «Хитрое действие: Отход»; спрятаться в этот ход уже нечем, просто отходит в укрытие.
+ */
+function tryRogueVanish(state: CombatState, actor: Combatant): BotStep[] {
+  const steps: BotStep[] = [];
+  if (!hasCunningAction(actor) || actor.bonusActionUsed || actor.hpCurrent <= 0) return steps;
+  const budget = remainingMovement(actor);
+  if (budget <= 0) return steps;
+  const engaged = livingHostiles(state, actor).some((e) => distanceFt(actor, e) <= 5);
+
+  if (engaged) {
+    actor.conditions = [...actor.conditions.filter((c) => c.type !== "disengaging"), { type: "disengaging", duration: 1 }];
+    actor.bonusActionUsed = true;
+    state.mark(actor.id);
+    steps.push({ kind: "ability", text: `${actor.name} использует «Хитрое действие: Отход»` });
+    const spot = bestHidingCell(state, actor, budget)?.cell ?? safestCell(state, actor, budget);
+    if (spot && (spot.x !== actor.x || spot.y !== actor.y)) {
+      try {
+        const move = moveCombatant(state, actor.id, spot, { skipTurnCheck: true, avoidHazards: true });
+        steps.push({ kind: "move", text: `${actor.name} отступает в тень (${move.costFt} фт)` });
+      } catch (e) {
+        if (!(e instanceof EngineError)) throw e;
+      }
+    }
+    return steps;
+  }
+
+  const spot = bestHidingCell(state, actor, budget);
+  if (!spot) return steps;
+  if (spot.cell.x !== actor.x || spot.cell.y !== actor.y) {
+    try {
+      const move = moveCombatant(state, actor.id, spot.cell, { skipTurnCheck: true, avoidHazards: true });
+      steps.push({ kind: "move", text: `${actor.name} уходит за укрытие (${move.costFt} фт)` });
+    } catch (e) {
+      if (!(e instanceof EngineError)) throw e;
+      return steps;
+    }
+  }
+  if (visibilityAt(state, actor, actor) === "visible") return steps;
+  try {
+    steps.push({ kind: "ability", text: attemptHide(state, actor.id, { skipTurnCheck: true }).text });
+  } catch (e) {
+    if (!(e instanceof EngineError)) throw e;
+  }
+  return steps;
+}
+
+/** Самая прикрытая клетка, куда можно дойти (не вплотную к врагам) */
+function safestCell(state: CombatState, actor: Combatant, budget: number): Cell | null {
+  let best: { cell: Cell; score: number } | null = null;
+  for (const [key, node] of botReachable(state, actor, budget)) {
+    const cell = parseKey(key);
+    const melee = nearestMeleeThreatFt(state, actor, cell);
+    if (melee <= 5) continue;
+    const score = exposure(state, actor, cell) * 10 + (melee < 15 ? (15 - melee) * 2 : 0) + node.cost * 0.1;
+    if (!best || score < best.score) best = { cell, score };
+  }
+  return best?.cell ?? null;
+}
+
+/** Остаток движения стрелка — в самую прикрытую клетку, откуда цели всё ещё видны */
+function tryTakeCoverAtEndOfTurn(state: CombatState, actor: Combatant, targets: Combatant[]): BotStep | null {
+  const budget = remainingMovement(actor);
+  if (budget <= 0) return null;
+  const score = (cell: Cell, cost: number) => {
+    const melee = nearestMeleeThreatFt(state, actor, cell);
+    const seesTarget = targets.some((t) => t.hpCurrent > 0 && hasLineOfSight(cell, t, state.mapElements));
+    return exposure(state, actor, cell) * 10 + (melee < 15 ? (15 - melee) * 2 : 0) + (seesTarget ? 0 : 3) + cost * 0.1;
+  };
+  const current = score(actor, 0);
+  let best: { cell: Cell; score: number } | null = null;
+  for (const [key, node] of botReachable(state, actor, budget)) {
+    if (node.cost === 0) continue;
+    const cell = parseKey(key);
+    const s = score(cell, node.cost);
+    if (!best || s < best.score) best = { cell, score: s };
+  }
+  if (!best || best.score >= current - 1) return null;
+  try {
+    const move = moveCombatant(state, actor.id, best.cell, { skipTurnCheck: true, avoidHazards: true });
+    if (targets[0]) actor.facing = determineFacingTowards(actor, targets[0]);
+    state.mark(actor.id);
+    return { kind: "move", text: `${actor.name} смещается за укрытие (${move.costFt} фт)` };
+  } catch (e) {
+    if (!(e instanceof EngineError)) throw e;
+    return null;
+  }
 }
 
 /** Направления для осмотра: влево и вправо на ±90° от начального взгляда */
@@ -569,15 +791,7 @@ function tryPreAttackBuffsAndHealing(
         (teleportAbility.usesMax === 0 || teleportAbility.usesUsed < teleportAbility.usesMax)
       ) {
         const teleportRange = teleportAbility.parameters?.range?.value ?? 30;
-        const nodes = computeReachable(
-          { x: actor.x, y: actor.y },
-          teleportRange,
-          state.mapElements,
-          state.combatants,
-          state.gridWidth,
-          state.gridHeight,
-          actor.id
-        );
+        const nodes = botReachable(state, actor, teleportRange);
         let bestTeleportCell: Cell | null = null;
         let bestDist = 999;
         for (const [key] of nodes) {
@@ -610,13 +824,22 @@ function tryPreAttackBuffsAndHealing(
 
     // Скрытность для Плута (Cunning Action: Hide)
     // Прячемся только если НЕ стоим в упор к врагу (так как в упор 5 фт стрелять всё равно с помехой)
+    // Прячется плут-стрелок (выстрел из скрытности — с преимуществом); плут-ближник
+    // прячется после удара (tryRogueVanish). На виду спрятаться нельзя — даже не пытаемся.
     const isInMeleeThreat = primeTarget && distanceFt(actor, primeTarget) <= 5;
-    if (archetype === "rogue" && !actor.isHidden && !isInMeleeThreat) {
-      const hideRes = attemptHide(state, actor.id, { skipTurnCheck: true });
-      if (hideRes.success) {
-        actor.bonusActionUsed = true;
-        state.mark(actor.id);
+    if (
+      archetype === "rogue" &&
+      prefersRanged(actor, archetype) &&
+      hasCunningAction(actor) &&
+      !actor.isHidden &&
+      !isInMeleeThreat &&
+      visibilityAt(state, actor, actor) !== "visible"
+    ) {
+      try {
+        const hideRes = attemptHide(state, actor.id, { skipTurnCheck: true });
         return { kind: "ability", text: hideRes.text };
+      } catch (e) {
+        if (!(e instanceof EngineError)) throw e;
       }
     }
   }
@@ -654,15 +877,7 @@ function tryRangedKiting(
     }
   }
 
-  const nodes = computeReachable(
-    { x: actor.x, y: actor.y },
-    budget,
-    state.mapElements,
-    state.combatants,
-    state.gridWidth,
-    state.gridHeight,
-    actor.id
-  );
+  const nodes = botReachable(state, actor, budget);
 
   let bestKite: { cell: Cell; dist: number; cost: number } | null = null;
   const nearestEnemy = adjacentEnemies[0];
@@ -725,71 +940,12 @@ function tryRangedKiting(
     }
 
     try {
-      const move = moveCombatant(state, actor.id, bestKite.cell, { skipTurnCheck: true });
+      const move = moveCombatant(state, actor.id, bestKite.cell, { skipTurnCheck: true, avoidHazards: true });
       actor.facing = determineFacingTowards(actor, nearestEnemy);
       state.mark(actor.id);
       return {
         kind: "move",
         text: `${actor.name} разрывает дистанцию ближнего боя (${move.costFt} фт)`,
-      };
-    } catch {
-      return null;
-    }
-  }
-  return null;
-}
-
-/** Использование укрытия в конце хода для стрелков/магов */
-function tryTakeCoverAtEndOfTurn(
-  state: CombatState,
-  actor: Combatant,
-  targets: Combatant[]
-): BotStep | null {
-  const budget = remainingMovement(actor);
-  if (budget <= 0) return null;
-
-  const covers = state.mapElements.filter((el) => el.type === "cover");
-  if (covers.length === 0) return null;
-
-  const nodes = computeReachable(
-    { x: actor.x, y: actor.y },
-    budget,
-    state.mapElements,
-    state.combatants,
-    state.gridWidth,
-    state.gridHeight,
-    actor.id
-  );
-
-  let bestCoverCell: { cell: Cell; cost: number } | null = null;
-
-  for (const [key, node] of nodes) {
-    if (node.cost === 0) continue;
-    const [x, y] = key.split(",").map(Number);
-    const isAdjacentToCover = covers.some(
-      (cov) => Math.abs(x - cov.x) <= 1 && Math.abs(y - cov.y) <= 1
-    );
-    if (!isAdjacentToCover) continue;
-
-    const probe = { ...actor, x, y };
-    const canSeeTarget = targets.some((t) => hasLineOfSight(probe, t, state.mapElements));
-    if (!canSeeTarget) continue;
-
-    if (!bestCoverCell || node.cost < bestCoverCell.cost) {
-      bestCoverCell = { cell: { x, y }, cost: node.cost };
-    }
-  }
-
-  if (bestCoverCell) {
-    try {
-      const move = moveCombatant(state, actor.id, bestCoverCell.cell, { skipTurnCheck: true });
-      if (targets[0]) {
-        actor.facing = determineFacingTowards(actor, targets[0]);
-        state.mark(actor.id);
-      }
-      return {
-        kind: "move",
-        text: `${actor.name} смещается за укрытие (${move.costFt} фт)`,
       };
     } catch {
       return null;
@@ -879,7 +1035,7 @@ export function runBotTurn(state: CombatState, actorOverride?: Combatant): BotTu
     const moveCell = findClosestCellTowardsTarget(state, actor, dest);
     if (moveCell) {
       try {
-        const move = moveCombatant(state, actor.id, moveCell, { skipTurnCheck: true });
+        const move = moveCombatant(state, actor.id, moveCell, { skipTurnCheck: true, avoidHazards: true });
         actor.facing = determineFacingTowards(actor, dest);
         state.mark(actor.id);
         syncOverride();
@@ -900,7 +1056,7 @@ export function runBotTurn(state: CombatState, actorOverride?: Combatant): BotTu
       const moveCell2 = findClosestCellTowardsTarget(state, actor, dest);
       if (moveCell2) {
         try {
-          const move2 = moveCombatant(state, actor.id, moveCell2, { skipTurnCheck: true });
+          const move2 = moveCombatant(state, actor.id, moveCell2, { skipTurnCheck: true, avoidHazards: true });
           actor.facing = determineFacingTowards(actor, dest);
           state.mark(actor.id);
           syncOverride();
@@ -928,7 +1084,7 @@ export function runBotTurn(state: CombatState, actorOverride?: Combatant): BotTu
       const dashCell = findClosestCellTowardsTarget(state, actor, dest);
       if (dashCell) {
         try {
-          const dashMove = moveCombatant(state, actor.id, dashCell, { skipTurnCheck: true });
+          const dashMove = moveCombatant(state, actor.id, dashCell, { skipTurnCheck: true, avoidHazards: true });
           actor.facing = determineFacingTowards(actor, dest);
           state.mark(actor.id);
           syncOverride();
@@ -950,6 +1106,7 @@ export function runBotTurn(state: CombatState, actorOverride?: Combatant): BotTu
   }
 
   const archetype = getBotArchetype(actor);
+  const turnBudget: TurnBudget = { interactionUsed: false };
   const initialFacing = actor.facing || (actor.type === "enemy" ? "W" : "E");
   let enemies = hostilesOf(state, actor);
   const allies = alliesOf(state, actor);
@@ -1002,15 +1159,7 @@ export function runBotTurn(state: CombatState, actorOverride?: Combatant): BotTu
     } else {
       const budget = remainingMovement(actor);
       if (budget > 0) {
-        const nodes = computeReachable(
-          { x: actor.x, y: actor.y },
-          budget,
-          state.mapElements,
-          state.combatants,
-          state.gridWidth,
-          state.gridHeight,
-          actor.id
-        );
+        const nodes = botReachable(state, actor, budget);
 
         let candidates: Cell[] = [];
         for (const [key, node] of nodes) {
@@ -1037,7 +1186,7 @@ export function runBotTurn(state: CombatState, actorOverride?: Combatant): BotTu
 
           const randomCell = candidates[Math.floor(Math.random() * candidates.length)];
           try {
-            const move = moveCombatant(state, actor.id, randomCell, { skipTurnCheck: true });
+            const move = moveCombatant(state, actor.id, randomCell, { skipTurnCheck: true, avoidHazards: true });
             const smartFacing = pickWeightedFacing(actor, allLivingHostiles);
             actor.facing = smartFacing;
             state.mark(actor.id);
@@ -1080,17 +1229,21 @@ export function runBotTurn(state: CombatState, actorOverride?: Combatant): BotTu
       evaluateTargetScore(actor, b, allies, archetype)
   );
   const primeTarget = targets[0];
+  const shooter = prefersRanged(actor, archetype);
 
-  // 4. Кайтинг при угрозе в упор для стрелков/магов/плутов с дальним оружием ДО атак
-  const hasRangedWeapons = actor.attacks.some((a) => a.kind === "ranged");
-  if (
-    archetype === "ranged" ||
-    archetype === "caster" ||
-    (archetype === "rogue" && hasRangedWeapons) ||
-    actor.tacticalRole === "backline"
-  ) {
+  // 3.5. Цель за закрытой дверью: дойти и открыть (стрелку — если не по кому стрелять)
+  if (primeTarget && (!shooter || !targets.some((t) => hasLineOfSight(actor, t, state.mapElements)))) {
+    steps.push(...tryOpenDoorOnRoute(state, actor, primeTarget, turnBudget));
+  }
+
+  // 4. Стрелки и маги: из упора — отход, иначе позиция для стрельбы за укрытием
+  if (shooter || actor.tacticalRole === "backline") {
     const kited = tryRangedKiting(state, actor, enemies, steps);
     if (kited) steps.push(kited);
+    else if (shooter) {
+      const position = tryTakeFiringPosition(state, actor, targets, archetype);
+      if (position) steps.push(position);
+    }
   }
 
   // 5. Бонусные баффы и подготовка перед атакой (Лечение, Ярость, Метка, Скрытность)
@@ -1156,7 +1309,7 @@ export function runBotTurn(state: CombatState, actorOverride?: Combatant): BotTu
           const cell = findApproachCell(state, actor, t, sampleAttack);
           if (!cell) continue;
           try {
-            const move = moveCombatant(state, actor.id, cell, { skipTurnCheck: true });
+            const move = moveCombatant(state, actor.id, cell, { skipTurnCheck: true, avoidHazards: true });
             actor.facing = determineFacingTowards(actor, t);
             state.mark(actor.id);
             steps.push({
@@ -1230,7 +1383,7 @@ export function runBotTurn(state: CombatState, actorOverride?: Combatant): BotTu
         const cell = findApproachCell(state, actor, t, attack);
         if (!cell) continue;
         try {
-          const move = moveCombatant(state, actor.id, cell, { skipTurnCheck: true });
+          const move = moveCombatant(state, actor.id, cell, { skipTurnCheck: true, avoidHazards: true });
           actor.facing = determineFacingTowards(actor, t);
           state.mark(actor.id);
           steps.push({
@@ -1253,7 +1406,7 @@ export function runBotTurn(state: CombatState, actorOverride?: Combatant): BotTu
           const closeCell = findClosestCellTowardsTarget(state, actor, topTarget);
           if (closeCell) {
             try {
-              const move = moveCombatant(state, actor.id, closeCell, { skipTurnCheck: true });
+              const move = moveCombatant(state, actor.id, closeCell, { skipTurnCheck: true, avoidHazards: true });
               actor.facing = determineFacingTowards(actor, topTarget);
               state.mark(actor.id);
               steps.push({
@@ -1287,7 +1440,7 @@ export function runBotTurn(state: CombatState, actorOverride?: Combatant): BotTu
             const dashCell = findClosestCellTowardsTarget(state, actor, topTarget);
             if (dashCell) {
               try {
-                const move = moveCombatant(state, actor.id, dashCell, { skipTurnCheck: true });
+                const move = moveCombatant(state, actor.id, dashCell, { skipTurnCheck: true, avoidHazards: true });
                 steps.push({
                   kind: "move",
                   text: `${actor.name} на рывке приближается к ${topTarget.name} (${move.costFt} фт)`,
@@ -1357,12 +1510,26 @@ export function runBotTurn(state: CombatState, actorOverride?: Combatant): BotTu
     }
   }
 
-  // 9. Использование укрытия в конце хода для стрелков/магов
-  if (archetype === "ranged" || archetype === "caster") {
+  // 9. Конец хода: плут уходит и прячется, стрелки и маги — за укрытие,
+  //    раненый захлопывает дверь перед вражескими ближниками
+  const vanished = archetype === "rogue" && actor.hpCurrent > 0 ? tryRogueVanish(state, actor) : [];
+  steps.push(...vanished);
+  if (shooter && vanished.length === 0 && actor.hpCurrent > 0) {
     const coverStep = tryTakeCoverAtEndOfTurn(state, actor, targets);
     if (coverStep) steps.push(coverStep);
   }
+  if (actor.hpCurrent > 0 && (shooter || actor.hpCurrent <= actor.hpMax / 2)) {
+    const doorStep = tryCloseDoorBehind(state, actor, turnBudget);
+    if (doorStep) steps.push(doorStep);
+  }
 
+  if (steps.length === 0 && !actor.actionUsed) {
+    // Проход перекрыт (чаще всего своими же в узком коридоре) — хотя бы не подставляться
+    actor.conditions = [...actor.conditions.filter((c) => c.type !== "dodging"), { type: "dodging", duration: 1 }];
+    actor.actionUsed = true;
+    state.mark(actor.id);
+    steps.push({ kind: "ability", text: `${actor.name} не может пробиться к врагу и уходит в глухую оборону (Уклонение)` });
+  }
   if (steps.length === 0) {
     steps.push({ kind: "skip", text: `${actor.name} ничего не смог сделать` });
   }
