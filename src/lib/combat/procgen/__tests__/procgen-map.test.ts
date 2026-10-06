@@ -153,7 +153,7 @@ describe("procgen-ссылки", () => {
   it("разбирает свою ссылку и отвергает чужие", () => {
     expect(formatProcgenUrl(12)).toBe("procgen:cave?seed=12&v=1");
     expect(parseProcgenUrl("procgen:cave?seed=12&v=1")).toEqual({ biome: "cave", seed: 12, version: 1 });
-    for (const bad of ["procgen:cave?v=1", "procgen:forest?seed=1&v=1", "procgen:cave?seed=1&v=2", "/maps/cave.jpg", undefined, null, ""]) {
+    for (const bad of ["procgen:cave?v=1", "procgen:volcano?seed=1&v=1", "procgen:cave?seed=1&v=2", "/maps/cave.jpg", undefined, null, ""]) {
       expect(parseProcgenUrl(bad as string | undefined)).toBeNull();
     }
   });

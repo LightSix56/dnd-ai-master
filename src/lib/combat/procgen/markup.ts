@@ -6,14 +6,14 @@ import type { MapElement } from "../types";
 import type { CaveLayout } from "./cave";
 import { SUB } from "./field";
 
-export type CellKind = "floor" | "wall" | "water" | "cover" | "difficult";
+export type CellKind = "floor" | "wall" | "water" | "lava" | "cover" | "difficult" | "obstacle";
 
 /** Доля пола в клетке, ниже которой клетка — скала */
-const WALL_BELOW_FLOOR = 0.5;
+export const WALL_BELOW_FLOOR = 0.5;
 /** Доля воды в клетке, начиная с которой клетка — вода */
-const WATER_FROM = 0.35;
+export const WATER_FROM = 0.35;
 
-function cellMean(data: Float32Array, fieldW: number, cx: number, cy: number): number {
+export function cellMean(data: Float32Array, fieldW: number, cx: number, cy: number): number {
   let sum = 0;
   for (let y = cy * SUB; y < (cy + 1) * SUB; y++) {
     for (let x = cx * SUB; x < (cx + 1) * SUB; x++) sum += data[y * fieldW + x];
@@ -80,12 +80,14 @@ export function classifyCells(layout: CaveLayout): CellKind[][] {
 const PROPERTIES: Record<Exclude<CellKind, "floor">, MapElement["properties"]> = {
   wall: { label: "Скала" },
   water: { label: "Подземное озеро" },
+  lava: { label: "Лава" },
+  obstacle: { label: "Препятствие" },
   cover: { label: "Валун", coverBonus: 2 },
   difficult: { label: "Щебень" },
 };
 
 /** Склеивает клетки одного типа в прямоугольники: сначала вдоль строки, затем вниз */
-export function mergeToElements(cells: CellKind[][]): MapElement[] {
+export function mergeToElements(cells: CellKind[][], labels: Partial<Record<CellKind, string>> = {}): MapElement[] {
   const h = cells.length;
   const w = cells[0]?.length ?? 0;
   const used = cells.map((row) => row.map(() => false));
@@ -103,7 +105,7 @@ export function mergeToElements(cells: CellKind[][]): MapElement[] {
       };
       while (y + height < h && rowMatches(y + height)) height++;
       for (let yy = y; yy < y + height; yy++) for (let xx = x; xx < x + width; xx++) used[yy][xx] = true;
-      elements.push({ id: `pg-${kind}-${x}-${y}`, type: kind, x, y, width, height, properties: { ...PROPERTIES[kind] } });
+      elements.push({ id: `pg-${kind}-${x}-${y}`, type: kind, x, y, width, height, properties: { ...PROPERTIES[kind], ...(labels[kind] ? { label: labels[kind] } : {}) } });
     }
   }
   return elements;

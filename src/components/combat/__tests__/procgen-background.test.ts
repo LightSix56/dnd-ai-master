@@ -16,7 +16,7 @@ describe("resolveBackgroundHref", () => {
   });
 
   it("битая ссылка procgen и пустой фон — без картинки", () => {
-    for (const url of ["procgen:cave?v=1", "procgen:forest?seed=1&v=1", "", undefined, null]) {
+    for (const url of ["procgen:cave?v=1", "procgen:volcano?seed=1&v=1", "", undefined, null]) {
       expect(resolveBackgroundHref(url)).toEqual({ kind: "none" });
     }
   });

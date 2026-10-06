@@ -5,25 +5,44 @@ import type { BiomeType, TacticalMapPreset } from "../maps/types";
 import { generateCaveLayout } from "./cave";
 import { classifyCells, mergeToElements } from "./markup";
 import { buildSpawnZones } from "./zones";
+import { BIOME_NAMES, PROCGEN_BIOMES, resolveProcgenBiome } from "./biomes";
+import { classifyLayout } from "./classify";
+import { buildAreaZones } from "./areas";
+import type { ProcgenBiome, ProcgenLayout } from "./layout";
 
 const VERSION = 1;
 const MAX_ATTEMPTS = 20;
 
-export function formatProcgenUrl(seed: number): string {
-  return `procgen:cave?seed=${seed}&v=${VERSION}`;
+export function formatProcgenUrl(seed: number, biome: ProcgenBiome = "cave"): string {
+  return `procgen:${biome}?seed=${seed}&v=${VERSION}`;
 }
 
-export function parseProcgenUrl(url: string | null | undefined): { biome: "cave"; seed: number; version: 1 } | null {
-  const match = /^procgen:cave\?seed=(-?\d+)&v=(\d+)$/.exec(url ?? "");
-  if (!match || Number(match[2]) !== VERSION) return null;
-  return { biome: "cave", seed: Number(match[1]), version: VERSION };
+export function parseProcgenUrl(url: string | null | undefined): { biome: ProcgenBiome; seed: number; version: 1 } | null {
+  const match = /^procgen:([a-z]+)\?seed=(-?\d+)&v=(\d+)$/.exec(url ?? "");
+  if (!match || Number(match[3]) !== VERSION) return null;
+  if (!(PROCGEN_BIOMES as string[]).includes(match[1])) return null;
+  return { biome: match[1] as ProcgenBiome, seed: Number(match[2]), version: VERSION };
 }
 
-/**
- * Собирает карту по зерну. Пока любой биом получает пещеру; биом нужен только для
- * подбора монстров. Если на зерне партия не может дойти до врагов, берётся следующее.
- */
-export function generateProcgenMap(_biome: BiomeType | string, seed: number): TacticalMapPreset {
+/** Генераторы общих планов; пещера идёт своим путём (её план и разметка зафиксированы v1) */
+export const GENERATORS: Partial<Record<ProcgenBiome, (seed: number) => ProcgenLayout>> = {};
+
+/** Какой старый биом пресета соответствует процедурному — для подбора монстров без биома в запросе */
+const PRESET_BIOME: Record<ProcgenBiome, BiomeType> = {
+  cave: "underdark_mushrooms",
+  lava: "lava_cave",
+  dungeon: "dungeon_prison",
+  tavern: "tavern",
+  forest: "forest_ambush",
+  swamp: "swamp_bog",
+  desert: "desert_dunes",
+  snow: "snowy_mountain",
+  mountain: "bridge_chasm",
+  coastal: "docks_harbor",
+  urban: "city_street",
+};
+
+function generateCaveMap(seed: number): TacticalMapPreset {
   for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
     const s = seed + attempt;
     const layout = generateCaveLayout(s);
@@ -46,4 +65,37 @@ export function generateProcgenMap(_biome: BiomeType | string, seed: number): Ta
     };
   }
   throw new Error("Не удалось собрать карту пещеры");
+}
+
+/**
+ * Собирает карту биома по зерну. Если на зерне партия не может дойти до врагов или зоны
+ * не помещаются, берётся следующее зерно.
+ */
+export function generateProcgenMap(biomeName: BiomeType | string, seed: number): TacticalMapPreset {
+  const biome = resolveProcgenBiome(biomeName);
+  const generate = GENERATORS[biome];
+  if (!generate) return generateCaveMap(seed);
+
+  for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+    const s = seed + attempt;
+    const layout = generate(s);
+    const cells = classifyLayout(layout);
+    const spawnZones = buildAreaZones(layout, cells);
+    if (!spawnZones) continue;
+    return {
+      id: `procgen-${biome}-${s}`,
+      name: BIOME_NAMES[biome],
+      nameEn: biome,
+      biome: PRESET_BIOME[biome],
+      tags: [biome, "procgen"],
+      gridWidth: layout.width,
+      gridHeight: layout.height,
+      cellSizeFt: 5,
+      backgroundUrl: formatProcgenUrl(s, biome),
+      elements: mergeToElements(cells, { water: "Вода" }),
+      spawnZones,
+      description: `${BIOME_NAMES[biome]}: карта собрана генератором.`,
+    };
+  }
+  throw new Error(`Не удалось собрать карту: ${BIOME_NAMES[biome]}`);
 }

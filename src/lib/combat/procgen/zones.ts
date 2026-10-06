@@ -1,9 +1,10 @@
-// Зоны появления на процедурной карте: партия — в одном зале, враги — в самом дальнем
-// от неё по пути зале, засада — в нише.
+// Зоны появления на процедурной карте: партия — в одной области (зал, комната, край
+// карты), враги — в самой дальней от неё по пути, засада — в боковых областях (ниши).
 
 import type { Cell } from "../types";
 import type { SpawnZoneDefinition } from "../maps/types";
-import type { CaveLayout, Chamber } from "./cave";
+import type { CaveLayout } from "./cave";
+import type { Area } from "./layout";
 import type { CellKind } from "./markup";
 
 const PARTY_CELLS = 12;
@@ -13,14 +14,17 @@ const MIN_ENEMY_STEPS = 8;
 /** Засада — не ближе стольких шагов пути от партии */
 const MIN_FLANK_STEPS = 4;
 
-/** Расстояния по проходимым клеткам (всё, кроме скалы) от стартовой клетки */
+/** Непроходимые клетки: стена и препятствие */
+const blocked = (kind: CellKind | undefined) => kind === "wall" || kind === "obstacle";
+
+/** Расстояния по проходимым клеткам от стартовых клеток */
 export function pathDistances(cells: CellKind[][], start: Cell | Cell[]): Map<string, number> {
   const h = cells.length;
   const w = cells[0].length;
   const dist = new Map<string, number>();
   const queue: Cell[] = [];
   for (const s of Array.isArray(start) ? start : [start]) {
-    if (cells[s.y]?.[s.x] === undefined || cells[s.y][s.x] === "wall") continue;
+    if (cells[s.y]?.[s.x] === undefined || blocked(cells[s.y][s.x])) continue;
     dist.set(`${s.x},${s.y}`, 0);
     queue.push(s);
   }
@@ -31,7 +35,7 @@ export function pathDistances(cells: CellKind[][], start: Cell | Cell[]): Map<st
       const x = c.x + dx;
       const y = c.y + dy;
       const key = `${x},${y}`;
-      if (x < 0 || y < 0 || x >= w || y >= h || dist.has(key) || cells[y][x] === "wall") continue;
+      if (x < 0 || y < 0 || x >= w || y >= h || dist.has(key) || blocked(cells[y][x])) continue;
       dist.set(key, d + 1);
       queue.push({ x, y });
     }
@@ -39,8 +43,8 @@ export function pathDistances(cells: CellKind[][], start: Cell | Cell[]): Map<st
   return dist;
 }
 
-/** Ближайшая к центру зала клетка, на которой можно стоять */
-function anchor(cells: CellKind[][], room: Chamber): Cell | null {
+/** Ближайшая к центру области клетка, на которой можно стоять */
+function anchor(cells: CellKind[][], room: Area): Cell | null {
   let best: Cell | null = null;
   let bestD = Infinity;
   for (let y = 0; y < cells.length; y++) {
@@ -69,7 +73,12 @@ function nearestFloor(cells: CellKind[][], start: Cell, count: number, taken: Se
  * или зонам не хватает места.
  */
 export function buildSpawnZones(layout: CaveLayout, cells: CellKind[][]): SpawnZoneDefinition[] | null {
-  const anchors = layout.chambers.map((room) => anchor(cells, room));
+  return buildZonesFromAreas(layout.chambers, layout.niches, cells);
+}
+
+/** То же для любых областей: залы и ниши пещеры, комнаты, края открытой карты */
+export function buildZonesFromAreas(areas: Area[], flankAreas: Area[], cells: CellKind[][]): SpawnZoneDefinition[] | null {
+  const anchors = areas.map((room) => anchor(cells, room));
   // Пара залов, самых далёких друг от друга по пути
   let pair: [number, number] | null = null;
   let farthest = -1;
@@ -115,7 +124,7 @@ export function buildSpawnZones(layout: CaveLayout, cells: CellKind[][]): SpawnZ
   ];
 
   const flank: Cell[] = [];
-  for (const niche of layout.niches) {
+  for (const niche of flankAreas) {
     for (let y = 0; y < cells.length; y++) {
       for (let x = 0; x < cells[0].length; x++) {
         const key = `${x},${y}`;
