@@ -2,8 +2,13 @@ import { describe, it, expect } from "vitest";
 import { resolveBackgroundHref } from "../useProcgenBackground";
 
 describe("resolveBackgroundHref", () => {
-  it("процедурная пещера рисуется по зерну", () => {
-    expect(resolveBackgroundHref("procgen:cave?seed=3&v=1")).toEqual({ kind: "procgen", seed: 3 });
+  it("процедурная карта любого биома рисуется по своей ссылке", () => {
+    expect(resolveBackgroundHref("procgen:forest?seed=1&v=1")).toEqual({ kind: "procgen", url: "procgen:forest?seed=1&v=1" });
+    expect(resolveBackgroundHref("procgen:urban?seed=-4&v=1")).toEqual({ kind: "procgen", url: "procgen:urban?seed=-4&v=1" });
+  });
+
+  it("старые бои с пещерой рисуются как раньше", () => {
+    expect(resolveBackgroundHref("procgen:cave?seed=3&v=1")).toEqual({ kind: "procgen", url: "procgen:cave?seed=3&v=1" });
   });
 
   it("обычная картинка отдаётся как есть", () => {

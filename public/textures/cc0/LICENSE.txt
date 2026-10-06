@@ -8,3 +8,13 @@ Plain tiles were cut from the autotile sheets and rescaled:
 - cave-floor-a.png  <- Floors/Floor-Dirt_02-64x64.png
 - cave-floor-b.png  <- Floors/Floor-Dirt_04-64x64.png
 - cave-rock.png     <- Walls/Wall-Stone_02-64x64.png
+- grass-a.png       <- Floors/Floor-Grass_01-64x64.png
+- grass-b.png       <- Floors/Floor-Grass_02-64x64.png
+- sand-a.png        <- Floors/Floor-Sand_01 64x64.png
+- sand-b.png        <- Floors/Floor-Sand_03-64x64.png
+- stone-tiles.png   <- Floors/Floor-Stone_01-64x64.png
+- wood-floor.png    <- Floors/Floor-Wood_01-64x64.png
+- dirt-path.png     <- Floors/Floor-Dirt_01-64x64.png
+- brick.png         <- Walls/Wall - Brick 3 64x64.png
+- roof.png          <- Walls/Wall-Brick_04-64x64.png
+- cobble.png        <- Walls/Wall-Stone_01-64x64.png

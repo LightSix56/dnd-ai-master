@@ -1,29 +1,26 @@
 "use client";
 
-// Фон боя: обычная картинка — как есть; ссылка procgen: — пещера, которую браузер
-// рисует сам по зерну. У всех игроков комнаты зерно одно, значит и карта одна.
+// Фон боя: обычная картинка — как есть; ссылка procgen: — карту биома браузер рисует сам
+// по зерну. У всех игроков комнаты зерно одно, значит и карта одна.
 
 import { useEffect, useState } from "react";
-import { parseProcgenUrl } from "@/lib/combat/procgen";
-import { generateCaveLayout } from "@/lib/combat/procgen/cave";
-import { renderCaveToCanvas, type CaveTextures } from "@/lib/combat/procgen/render-cave";
+import { layoutForUrl, parseProcgenUrl } from "@/lib/combat/procgen";
+import { renderMapToCanvas, type MapTextures } from "@/lib/combat/procgen/render-map";
+import { TEXTURE_FILES, type TextureKey } from "@/lib/combat/procgen/palettes";
 
 const CELL_PX = 70;
 
-export type BackgroundSource = { kind: "procgen"; seed: number } | { kind: "image"; href: string } | { kind: "none" };
+export type BackgroundSource = { kind: "procgen"; url: string } | { kind: "image"; href: string } | { kind: "none" };
 
 export function resolveBackgroundHref(url: string | null | undefined): BackgroundSource {
   if (!url) return { kind: "none" };
-  if (url.startsWith("procgen:")) {
-    const parsed = parseProcgenUrl(url);
-    return parsed ? { kind: "procgen", seed: parsed.seed } : { kind: "none" };
-  }
+  if (url.startsWith("procgen:")) return parseProcgenUrl(url) ? { kind: "procgen", url } : { kind: "none" };
   // Готовые карты перенесены в archive/maps: у старых боёв фон пустой, без запроса в 404
   if (url.startsWith("/maps/")) return { kind: "none" };
   return { kind: "image", href: url };
 }
 
-let texturesPromise: Promise<CaveTextures> | null = null;
+let texturesPromise: Promise<MapTextures> | null = null;
 
 function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -34,45 +31,59 @@ function loadImage(src: string): Promise<HTMLImageElement> {
   });
 }
 
-function loadTextures(): Promise<CaveTextures> {
-  texturesPromise ??= Promise.all([
-    loadImage("/textures/cc0/cave-floor-a.png"),
-    loadImage("/textures/cc0/cave-floor-b.png"),
-    loadImage("/textures/cc0/cave-rock.png"),
-  ]).then(([floorA, floorB, rock]) => ({ floorA, floorB, rock }));
+function loadTextures(): Promise<MapTextures> {
+  const entries = Object.entries(TEXTURE_FILES) as [TextureKey, string][];
+  texturesPromise ??= Promise.all(entries.map(([, src]) => loadImage(src))).then(
+    (images) => Object.fromEntries(entries.map(([key], i) => [key, images[i]])) as MapTextures
+  );
   // Неудачную загрузку не кэшируем: при следующем бое попробуем снова
   texturesPromise.catch(() => (texturesPromise = null));
   return texturesPromise;
 }
 
+/** Готовые картинки по ссылке procgen: — живут, пока открыта страница; повторное открытие боя мгновенно */
+const rendered = new Map<string, Promise<string>>();
+
+function renderUrl(url: string): Promise<string> {
+  let job = rendered.get(url);
+  if (!job) {
+    job = loadTextures().then(
+      (textures) =>
+        new Promise<string>((resolve, reject) => {
+          const layout = layoutForUrl(url);
+          if (!layout) return reject(new Error(`Неизвестная карта ${url}`));
+          renderMapToCanvas(layout, textures, CELL_PX).toBlob((blob) => {
+            if (blob) resolve(URL.createObjectURL(blob));
+            else reject(new Error("Не удалось сохранить картинку карты"));
+          }, "image/png");
+        })
+    );
+    job.catch(() => rendered.delete(url));
+    rendered.set(url, job);
+  }
+  return job;
+}
+
 /** Ссылка для `<image href>` или null, пока процедурная карта рисуется (и для пустого фона) */
 export function useProcgenBackground(backgroundUrl: string | null | undefined): string | null {
   const source = resolveBackgroundHref(backgroundUrl);
-  const seed = source.kind === "procgen" ? source.seed : null;
-  const [rendered, setRendered] = useState<{ seed: number; href: string } | null>(null);
+  const procgenUrl = source.kind === "procgen" ? source.url : null;
+  const [result, setResult] = useState<{ url: string; href: string } | null>(null);
 
   useEffect(() => {
-    if (seed === null) return;
+    if (!procgenUrl) return;
     let cancelled = false;
-    let href: string | null = null;
-    loadTextures()
-      .then((textures) => {
-        if (cancelled) return;
-        const canvas = renderCaveToCanvas(generateCaveLayout(seed), textures, CELL_PX);
-        canvas.toBlob((blob) => {
-          if (!blob || cancelled) return;
-          href = URL.createObjectURL(blob);
-          setRendered({ seed, href });
-        }, "image/png");
+    renderUrl(procgenUrl)
+      .then((href) => {
+        if (!cancelled) setResult({ url: procgenUrl, href });
       })
       .catch((e) => console.error("[procgen] не удалось нарисовать карту:", e));
     return () => {
       cancelled = true;
-      if (href) URL.revokeObjectURL(href);
     };
-  }, [seed]);
+  }, [procgenUrl]);
 
   if (source.kind === "image") return source.href;
-  if (source.kind === "procgen" && rendered?.seed === source.seed) return rendered.href;
+  if (source.kind === "procgen" && result?.url === source.url) return result.href;
   return null;
 }

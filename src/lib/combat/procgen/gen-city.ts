@@ -111,7 +111,7 @@ export function generateCityLayout(seed: number): ProcgenLayout {
   };
 
   // Колодец на площади, в стороне от осей улиц
-  place("well", cx + cw, ry + rh) || place("well", cx - 1, ry - 1);
+  if (!place("well", cx + cw, ry + rh)) place("well", cx - 1, ry - 1);
   const streetCells: [number, number][] = [];
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) if (open(x, y)) streetCells.push([x, y]);
   const scatter = (kind: Decor["kind"], count: number, w = 1, h = 1) => {

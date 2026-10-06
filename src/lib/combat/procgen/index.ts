@@ -9,7 +9,7 @@ import { BIOME_NAMES, PROCGEN_BIOMES, resolveProcgenBiome } from "./biomes";
 import { classifyLayout } from "./classify";
 import { buildAreaZones } from "./areas";
 import type { ProcgenBiome, ProcgenLayout } from "./layout";
-import { generateLavaLayout } from "./gen-lava";
+import { generateLavaLayout, caveToLayout } from "./gen-lava";
 import { generateDungeonLayout } from "./gen-dungeon";
 import { generateOutdoorLayout } from "./gen-outdoor";
 import { generateCityLayout } from "./gen-city";
@@ -113,4 +113,12 @@ export function generateProcgenMap(biomeName: BiomeType | string, seed: number):
     };
   }
   throw new Error(`Не удалось собрать карту: ${BIOME_NAMES[biome]}`);
+}
+
+/** План карты по ссылке фона — для отрисовки в браузере. Битая ссылка — null */
+export function layoutForUrl(url: string): ProcgenLayout | null {
+  const parsed = parseProcgenUrl(url);
+  if (!parsed) return null;
+  if (parsed.biome === "cave") return caveToLayout(generateCaveLayout(parsed.seed));
+  return GENERATORS[parsed.biome]?.(parsed.seed) ?? null;
 }
