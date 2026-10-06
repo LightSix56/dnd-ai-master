@@ -23,6 +23,8 @@ function fingerprint(biome: ProcgenBiome, seed: number): string {
 
 const GOLDEN: Partial<Record<ProcgenBiome, Record<number, string>>> = {
   lava: { 1: "3d539f7e", 42: "31311bcd", [-7]: "6c0980b1" },
+  dungeon: { 1: "361db4e0", 42: "d0b7f70e", [-7]: "e2c12683" },
+  tavern: { 1: "a04c82ac", 42: "5c6fcd47", [-7]: "8d5be85a" },
 };
 
 describe.each(Object.entries(GOLDEN) as [ProcgenBiome, Record<number, string>][])("procgen v=1: %s не меняется", (biome, seeds) => {

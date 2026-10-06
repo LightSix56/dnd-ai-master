@@ -10,6 +10,7 @@ import { classifyLayout } from "./classify";
 import { buildAreaZones } from "./areas";
 import type { ProcgenBiome, ProcgenLayout } from "./layout";
 import { generateLavaLayout } from "./gen-lava";
+import { generateDungeonLayout } from "./gen-dungeon";
 
 const VERSION = 1;
 const MAX_ATTEMPTS = 20;
@@ -28,6 +29,8 @@ export function parseProcgenUrl(url: string | null | undefined): { biome: Procge
 /** Генераторы общих планов; пещера идёт своим путём (её план и разметка зафиксированы v1) */
 export const GENERATORS: Partial<Record<ProcgenBiome, (seed: number) => ProcgenLayout>> = {
   lava: generateLavaLayout,
+  dungeon: (seed) => generateDungeonLayout(seed, "dungeon"),
+  tavern: (seed) => generateDungeonLayout(seed, "tavern"),
 };
 
 /** Какой старый биом пресета соответствует процедурному — для подбора монстров без биома в запросе */
