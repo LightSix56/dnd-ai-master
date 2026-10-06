@@ -35,7 +35,14 @@ export type DecorKind =
   | "counter"
   | "cart"
   | "well"
-  | "stall";
+  | "stall"
+  | "chair"
+  | "bench"
+  | "stool"
+  | "hearth"
+  | "bed"
+  | "door"
+  | "window";
 
 /** Объект на карте. x, y — в клетках (у прямоугольных w×h — левый верхний угол) */
 export interface Decor {
@@ -46,6 +53,8 @@ export interface Decor {
   r: number;
   w?: number;
   h?: number;
+  /** Вдоль какой стены стоит дверь или окно, куда развёрнут стул */
+  dir?: "h" | "v";
 }
 
 /** Область карты (зал, комната, край открытой местности) — в клетках */
@@ -76,4 +85,6 @@ export interface ProcgenLayout {
   paths: Polyline[];
   /** Комнаты и дома в клетках — для рисовальщика */
   structures: { x: number; y: number; w: number; h: number }[];
+  /** Дверные проёмы — в разметке боя это двери, которые можно закрыть */
+  doors?: { x: number; y: number }[];
 }

@@ -201,6 +201,17 @@ function drawDecor(ctx: CanvasRenderingContext2D, rng: Rng, d: Decor, cellPx: nu
       ctx.stroke();
       return;
     case "table": {
+      if (d.w === undefined) {
+        // Круглый стол
+        shadow(ctx, x, y, r, r * 0.85, 0.35);
+        blob(ctx, x, y, r, "rgb(196,148,96)", "rgb(120,78,40)");
+        ctx.strokeStyle = "rgb(60,36,16)";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.stroke();
+        return;
+      }
       const b = rectDecor(ctx, d, cellPx, "rgb(176,128,78)", "rgb(48,28,12)");
       ctx.fillStyle = "rgba(255,230,190,0.25)";
       ctx.fillRect(b.x + 3, b.y + 3, b.w - 6, b.h * 0.35);
@@ -225,6 +236,105 @@ function drawDecor(ctx: CanvasRenderingContext2D, rng: Rng, d: Decor, cellPx: nu
         ctx.fillStyle = "rgba(170,40,40,0.85)";
         ctx.fillRect(b.x + (b.w / stripes) * k, b.y, b.w / stripes, b.h);
       }
+      return;
+    }
+    case "chair": {
+      const s = cellPx * 0.38;
+      ctx.fillStyle = "rgba(0,0,0,0.3)";
+      ctx.fillRect(x - s / 2 + 3, y - s / 2 + 4, s, s);
+      ctx.fillStyle = "rgb(128,84,44)";
+      ctx.fillRect(x - s / 2, y - s / 2, s, s);
+      ctx.strokeStyle = "rgb(60,36,16)";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(x - s / 2, y - s / 2, s, s);
+      return;
+    }
+    case "stool":
+      shadow(ctx, x, y, r * 0.75, r * 0.6, 0.3);
+      blob(ctx, x, y, r * 0.75, "rgb(150,104,60)", "rgb(80,50,24)");
+      return;
+    case "bench": {
+      const bx = d.x * cellPx + cellPx * 0.1;
+      const by = (d.y + 0.3) * cellPx;
+      const bw = (d.w ?? 1) * cellPx - cellPx * 0.2;
+      const bh = cellPx * 0.4;
+      ctx.fillStyle = "rgba(0,0,0,0.3)";
+      ctx.fillRect(bx + 3, by + 4, bw, bh);
+      ctx.fillStyle = "rgb(132,88,46)";
+      ctx.fillRect(bx, by, bw, bh);
+      ctx.strokeStyle = "rgb(60,36,16)";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(bx, by, bw, bh);
+      return;
+    }
+    case "hearth": {
+      const b = rectDecor(ctx, d, cellPx, "rgb(120,112,104)", "rgb(50,46,42)");
+      const fx = b.x + b.w / 2;
+      const fy = b.y + b.h / 2;
+      const glow = ctx.createRadialGradient(fx, fy, 0, fx, fy, Math.max(b.w, b.h) * 0.6);
+      glow.addColorStop(0, "rgba(255,210,90,0.95)");
+      glow.addColorStop(0.45, "rgba(230,90,20,0.8)");
+      glow.addColorStop(1, "rgba(60,20,10,0)");
+      ctx.fillStyle = "rgb(30,22,18)";
+      ctx.fillRect(b.x + b.w * 0.2, b.y + b.h * 0.15, b.w * 0.6, b.h * 0.7);
+      ctx.fillStyle = glow;
+      ctx.fillRect(b.x + b.w * 0.2, b.y + b.h * 0.15, b.w * 0.6, b.h * 0.7);
+      return;
+    }
+    case "bed": {
+      const b = rectDecor(ctx, d, cellPx, "rgb(110,70,36)", "rgb(50,30,12)");
+      ctx.fillStyle = "rgb(225,220,205)";
+      ctx.fillRect(b.x + 4, b.y + 4, b.w - 8, b.h - 8);
+      ctx.fillStyle = "rgb(140,40,40)";
+      ctx.fillRect(b.x + 4, b.y + b.h * 0.35, b.w - 8, b.h * 0.65 - 4);
+      return;
+    }
+    case "door": {
+      const horizontal = d.dir !== "v";
+      const x0 = d.x * cellPx;
+      const y0 = d.y * cellPx;
+      const t = cellPx * 0.36;
+      const [rx, ry, rw, rh] = horizontal ? [x0 + 3, y0 + (cellPx - t) / 2, cellPx - 6, t] : [x0 + (cellPx - t) / 2, y0 + 3, t, cellPx - 6];
+      ctx.fillStyle = "rgb(150,100,52)";
+      ctx.fillRect(rx, ry, rw, rh);
+      ctx.strokeStyle = "rgba(60,36,16,0.9)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for (let k = 1; k < 4; k++) {
+        if (horizontal) {
+          ctx.moveTo(rx + (rw * k) / 4, ry);
+          ctx.lineTo(rx + (rw * k) / 4, ry + rh);
+        } else {
+          ctx.moveTo(rx, ry + (rh * k) / 4);
+          ctx.lineTo(rx + rw, ry + (rh * k) / 4);
+        }
+      }
+      ctx.stroke();
+      ctx.lineWidth = 3;
+      ctx.strokeRect(rx, ry, rw, rh);
+      return;
+    }
+    case "window": {
+      const horizontal = d.dir !== "v";
+      const x0 = d.x * cellPx;
+      const y0 = d.y * cellPx;
+      const t = cellPx * 0.3;
+      const len = cellPx * 0.75;
+      const [rx, ry, rw, rh] = horizontal ? [x0 + (cellPx - len) / 2, y0 + (cellPx - t) / 2, len, t] : [x0 + (cellPx - t) / 2, y0 + (cellPx - len) / 2, t, len];
+      ctx.fillStyle = "rgba(170,210,235,0.85)";
+      ctx.fillRect(rx, ry, rw, rh);
+      ctx.strokeStyle = "rgb(55,40,28)";
+      ctx.lineWidth = 3;
+      ctx.strokeRect(rx, ry, rw, rh);
+      ctx.beginPath();
+      if (horizontal) {
+        ctx.moveTo(rx + rw / 2, ry);
+        ctx.lineTo(rx + rw / 2, ry + rh);
+      } else {
+        ctx.moveTo(rx, ry + rh / 2);
+        ctx.lineTo(rx + rw, ry + rh / 2);
+      }
+      ctx.stroke();
       return;
     }
     case "well":
@@ -343,6 +453,16 @@ export function renderMapToCanvas(layout: ProcgenLayout, textures: MapTextures, 
         g.stroke();
         g.strokeStyle = g.createPattern(textures[palette.road.texture], "repeat")!;
       }
+    }
+    g.restore();
+  }
+  if (palette.interior) {
+    g.save();
+    g.fillStyle = g.createPattern(textures[palette.interior.texture], "repeat")!;
+    for (const s of layout.structures) g.fillRect(s.x * cellPx, s.y * cellPx, s.w * cellPx, s.h * cellPx);
+    if (palette.interior.tint) {
+      g.fillStyle = palette.interior.tint;
+      for (const s of layout.structures) g.fillRect(s.x * cellPx, s.y * cellPx, s.w * cellPx, s.h * cellPx);
     }
     g.restore();
   }

@@ -75,6 +75,13 @@ export const DECOR_CELL: Record<DecorKind, CellKind | null> = {
   cart: "cover",
   well: "obstacle",
   stall: "cover",
+  chair: null,
+  bench: null,
+  stool: null,
+  hearth: "obstacle",
+  bed: "cover",
+  door: null,
+  window: null,
 };
 
 /** Подписи на карте */

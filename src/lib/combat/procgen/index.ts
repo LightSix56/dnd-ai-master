@@ -13,6 +13,7 @@ import { generateLavaLayout, caveToLayout } from "./gen-lava";
 import { generateDungeonLayout } from "./gen-dungeon";
 import { generateOutdoorLayout } from "./gen-outdoor";
 import { generateCityLayout } from "./gen-city";
+import { generateTavernLayout } from "./gen-tavern";
 
 const VERSION = 1;
 const MAX_ATTEMPTS = 20;
@@ -31,8 +32,8 @@ export function parseProcgenUrl(url: string | null | undefined): { biome: Procge
 /** Генераторы общих планов; пещера идёт своим путём (её план и разметка зафиксированы v1) */
 const RAW_GENERATORS: Partial<Record<ProcgenBiome, (seed: number) => ProcgenLayout>> = {
   lava: generateLavaLayout,
-  dungeon: (seed) => generateDungeonLayout(seed, "dungeon"),
-  tavern: (seed) => generateDungeonLayout(seed, "tavern"),
+  dungeon: generateDungeonLayout,
+  tavern: generateTavernLayout,
   forest: (seed) => generateOutdoorLayout(seed, "forest"),
   swamp: (seed) => generateOutdoorLayout(seed, "swamp"),
   desert: (seed) => generateOutdoorLayout(seed, "desert"),
@@ -100,7 +101,10 @@ export function generateProcgenMap(biomeName: BiomeType | string, seed: number):
     const s = seed + attempt;
     const layout = generate(s);
     const cells = classifyLayout(layout);
-    const spawnZones = buildAreaZones(layout, cells);
+    // В дверном проёме никого не ставим: проход остаётся, но клетка не «пол» для зон
+    const zoneCells = cells.map((row) => [...row]);
+    for (const d of layout.doors ?? []) zoneCells[d.y][d.x] = "difficult";
+    const spawnZones = buildAreaZones(layout, zoneCells);
     if (!spawnZones) continue;
     return {
       id: `procgen-${biome}-${s}`,
@@ -112,7 +116,18 @@ export function generateProcgenMap(biomeName: BiomeType | string, seed: number):
       gridHeight: layout.height,
       cellSizeFt: 5,
       backgroundUrl: formatProcgenUrl(s, biome),
-      elements: mergeToElements(cells, { water: "Вода" }),
+      elements: [
+        ...mergeToElements(cells, { water: "Вода" }),
+        ...(layout.doors ?? []).map((d) => ({
+          id: `pg-door-${d.x}-${d.y}`,
+          type: "door" as const,
+          x: d.x,
+          y: d.y,
+          width: 1,
+          height: 1,
+          properties: { isOpen: true, label: "Дверь" },
+        })),
+      ],
       spawnZones,
       description: `${BIOME_NAMES[biome]}: карта собрана генератором.`,
     };

@@ -45,6 +45,8 @@ export interface Palette {
   solidTexture: TextureKey;
   /** Тропы и дороги по путям плана; ширина в клетках */
   road?: { texture: TextureKey; width: number; tint?: string };
+  /** Пол внутри зданий (layout.structures), если он отличается от земли снаружи */
+  interior?: { texture: TextureKey; tint?: string };
   liquid: "water" | "swamp" | "sea" | "lava";
   /** Тень у основания стен (0 — нет) */
   ambientOcclusion: number;
@@ -58,7 +60,7 @@ export const PALETTES: Record<ProcgenBiome, Palette> = {
   cave: { groundA: "caveFloorA", groundB: "caveFloorB", groundMix: 0.7, solid: "rock", solidTexture: "caveRock", liquid: "water", ambientOcclusion: 1, vignette: 0.45 },
   lava: { groundA: "caveFloorB", groundB: "caveFloorA", groundMix: 0.6, groundTint: "rgba(70,22,10,0.38)", solid: "rock", solidTexture: "caveRock", liquid: "lava", ambientOcclusion: 1, vignette: 0.55 },
   dungeon: { groundA: "stoneTiles", groundB: "stoneTiles", groundMix: 0, solid: "brick", solidTexture: "brick", liquid: "water", ambientOcclusion: 0.8, vignette: 0.4 },
-  tavern: { groundA: "woodFloor", groundB: "woodFloor", groundMix: 0, groundTint: "rgba(45,24,10,0.4)", solid: "brick", solidTexture: "brick", liquid: "water", ambientOcclusion: 0.6, vignette: 0.3 },
+  tavern: { groundA: "grassA", groundB: "dirtPath", groundMix: 0.55, solid: "brick", solidTexture: "brick", road: { texture: "dirtPath", width: 1.3 }, interior: { texture: "woodFloor", tint: "rgba(45,24,10,0.4)" }, liquid: "water", ambientOcclusion: 0.6, vignette: 0.3 },
   forest: { groundA: "grassA", groundB: "grassB", groundMix: 0.7, solid: "rock", solidTexture: "caveRock", road: { texture: "dirtPath", width: 1.1 }, liquid: "water", ambientOcclusion: 0.4, vignette: 0.25 },
   swamp: { groundA: "grassB", groundB: "dirtPath", groundMix: 0.9, groundTint: "rgba(14,38,8,0.42)", solid: "rock", solidTexture: "caveRock", road: { texture: "woodFloor", width: 1, tint: "rgba(48,40,30,0.55)" }, liquid: "swamp", ambientOcclusion: 0.4, vignette: 0.4 },
   desert: { groundA: "sandA", groundB: "sandB", groundMix: 0.6, solid: "rock", solidTexture: "caveRock", road: { texture: "sandB", width: 1.1 }, liquid: "water", ambientOcclusion: 0.4, vignette: 0.2 },

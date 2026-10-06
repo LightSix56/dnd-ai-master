@@ -1,5 +1,4 @@
-// Подземелье и таверна: прямоугольные комнаты, соединённые коридорами.
-// Подземелье — колонны, ящики, бочки, обломки; таверна — стойка, столы, бочки.
+// Подземелье: прямоугольные комнаты, соединённые коридорами; колонны, ящики, бочки, обломки.
 
 import { createRng, type Rng } from "./rng";
 import { Field, SUB } from "./field";
@@ -114,29 +113,8 @@ function dungeonDecor(rng: Rng, rooms: Room[]): Decor[] {
   return decor;
 }
 
-function tavernDecor(rng: Rng, rooms: Room[]): Decor[] {
-  const decor: Decor[] = [];
-  const hall = rooms.reduce((a, b) => (b.w * b.h > a.w * a.h ? b : a));
-  const counterW = Math.min(hall.w - 2, rng.int(3, 5));
-  if (counterW >= 2) decor.push({ kind: "counter", x: hall.x + 1, y: hall.y, r: 0.45, w: counterW, h: 1 });
-  for (const r of rooms) {
-    if (r.w < 3 || r.h < 3) continue;
-    for (let i = r === hall ? rng.int(2, 5) : rng.int(0, 2); i > 0; i--) {
-      const wide = r.w >= 4 && rng.next() < 0.4;
-      const x = r.x + 1 + rng.int(0, Math.max(0, r.w - 3 - (wide ? 1 : 0)));
-      const y = r.y + 1 + rng.int(0, Math.max(0, r.h - 3));
-      decor.push({ kind: "table", x, y, r: 0.45, w: wide ? 2 : 1, h: 1 });
-    }
-  }
-  for (let i = rng.int(2, 4); i > 0; i--) {
-    const c = besideWall(rng, rng.pick(rooms));
-    decor.push({ kind: "barrel", x: c.x + 0.5, y: c.y + 0.5, r: 0.35 });
-  }
-  return decor;
-}
-
-export function generateDungeonLayout(seed: number, variant: "dungeon" | "tavern"): ProcgenLayout {
-  const rng = createRng((seed ^ (variant === "tavern" ? 0x7a3e0001 : 0x0d0e0001)) >>> 0);
+export function generateDungeonLayout(seed: number): ProcgenLayout {
+  const rng = createRng((seed ^ 0x0d0e0001) >>> 0);
   const rooms = placeRooms(rng);
   const edges = connect(rng, rooms);
 
@@ -157,13 +135,13 @@ export function generateDungeonLayout(seed: number, variant: "dungeon" | "tavern
   const degree = rooms.map((_, i) => edges.filter(([a, b]) => a === i || b === i).length);
   const asArea = (r: Room): Area => ({ cx: r.x + r.w / 2, cy: r.y + r.h / 2, rx: r.w / 2, ry: r.h / 2 });
   return {
-    biome: variant,
+    biome: "dungeon",
     seed,
     width: W,
     height: H,
     ground,
     liquid: new Field(W * SUB, H * SUB),
-    decor: variant === "tavern" ? tavernDecor(rng, rooms) : dungeonDecor(rng, rooms),
+    decor: dungeonDecor(rng, rooms),
     areas: rooms.map(asArea),
     flankAreas: rooms.filter((_, i) => degree[i] === 1).map(asArea),
     paths,
