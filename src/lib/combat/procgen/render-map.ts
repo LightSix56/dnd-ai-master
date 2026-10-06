@@ -288,7 +288,12 @@ export function renderMapToCanvas(layout: ProcgenLayout, textures: MapTextures, 
       case "lava":
         return [Math.round(220 + t * 35), Math.round(70 + t * 110), Math.round(10 + t * 30), Math.round(a * 245)];
       case "swamp":
-        return [Math.round(55 + t * 30), Math.round(95 + t * 40), Math.round(80 + t * 30), Math.round(a * 230)];
+        // Мутная стоячая вода: бурая у берега, тёмно-зелёная на глубине
+        {
+          const deep = clamp01((depthOfLiquid.data[i] - 0.4) * 2);
+          const sheen = clamp01((t - 0.62) * 4) * 26; // тусклые блики на поверхности
+          return [Math.round(58 - deep * 30 + sheen), Math.round(74 - deep * 26 + sheen * 1.1), Math.round(50 - deep * 12 + sheen * 0.9), Math.round(a * (225 + deep * 28))];
+        }
       case "sea": {
         const deep = clamp01((depthOfLiquid.data[i] - 0.3) * 2);
         return [Math.round(30 - deep * 15), Math.round(95 + t * 30 - deep * 40), Math.round(140 + t * 40 - deep * 30), Math.round(a * 235)];

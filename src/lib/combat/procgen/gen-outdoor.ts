@@ -94,12 +94,27 @@ export function generateOutdoorLayout(seed: number, biome: OutdoorBiome): Procge
     const x0 = range(rng, W / 2 - 3, W / 2 + 3);
     rasterStroke(liquid, [{ x: x0, y: -1 }, { x: x0 + range(rng, -2, 2), y: H / 2 }, { x: x0 + range(rng, -3, 3), y: H + 1 }], 0.5, 1, edgeNoise, 0.3);
   }
+  const paths: Polyline[] = [path];
   if (biome === "swamp") {
-    for (let i = rng.int(4, 8); i > 0; i--) {
-      const cx = range(rng, 6, W - 6);
-      const cy = range(rng, 2, H - 2);
-      rasterBlob(liquid, cx, cy, range(rng, 0.6, 1.3), range(rng, 0.6, 1.3), edgeNoise, 1);
+    // Болото — огромные разливы воды с островками земли и грязи между ними: вода там,
+    // где крупный шум выше порога, порог оставляет под водой ~70% до прорезки троп и стоянок
+    const puddles = valueNoise(rng, liquid.w, liquid.h, 4, 3);
+    const sorted = Float32Array.from(puddles.data).sort();
+    const level = sorted[Math.floor(sorted.length * 0.28)];
+    for (let i = 0; i < liquid.data.length; i++) liquid.data[i] = puddles.data[i] > level ? 1 : 0;
+    for (const a of areas) rasterBlob(liquid, a.cx, a.cy, a.rx + 0.2, a.ry + 0.2, edgeNoise, 0);
+    for (const a of flankAreas) rasterBlob(liquid, a.cx, a.cy, a.rx, a.ry + 0.3, edgeNoise, 0);
+    if (rng.next() < 0.5) {
+      // Вторая гать — поперёк, от одной засады к другой
+      const [top, bottom] = flankAreas;
+      const x = top.cx + range(rng, -3, 3);
+      paths.push([
+        { x: top.cx, y: top.cy },
+        { x, y: H / 2 + range(rng, -2, 2) },
+        { x: bottom.cx, y: bottom.cy },
+      ]);
     }
+    for (const p of paths) rasterStroke(liquid, p, 1.3, 0, edgeNoise, 0.6);
   }
   if (biome === "mountain") {
     // Скальные гряды поперёк карты; тропа пробивает в каждой проход
@@ -123,7 +138,7 @@ export function generateOutdoorLayout(seed: number, biome: OutdoorBiome): Procge
   const free = (x: number, y: number, clearance: number) =>
     x > 0.5 && y > 0.5 && x < W - 0.5 && y < H - 0.5 &&
     areas.every((a) => Math.hypot(x - a.cx, y - a.cy) > 2.2) &&
-    distToPolyline(x, y, path) > clearance &&
+    paths.every((p) => distToPolyline(x, y, p) > clearance) &&
     softGround.get(Math.floor(x * SUB), Math.floor(y * SUB)) > 0.5 &&
     liquid.get(Math.floor(x * SUB), Math.floor(y * SUB)) < 0.3;
   const scatter = (kind: DecorKind, count: number, rMin: number, rMax: number, around?: { x: number; y: number; spread: number }) => {
@@ -145,8 +160,32 @@ export function generateOutdoorLayout(seed: number, biome: OutdoorBiome): Procge
       scatter("bush", rng.int(6, 12), 0.3, 0.45);
       break;
     case "swamp":
-      scatter("reed", rng.int(10, 20), 0.25, 0.4);
-      scatter("tree", rng.int(3, 6), 0.35, 0.5);
+      // Камыш по краям гатей — топкая трудная полоса вдоль сухой тропы
+      for (const p of paths) {
+        for (let i = rng.int(14, 22); i > 0; i--) {
+          // Точка сбоку от гати: смещение поперёк отрезка на 1–1.5 клетки
+          const seg = rng.int(0, p.length - 2);
+          const t = rng.next();
+          const dx = p[seg + 1].x - p[seg].x;
+          const dy = p[seg + 1].y - p[seg].y;
+          const len = Math.hypot(dx, dy) || 1;
+          const side = (rng.next() < 0.5 ? -1 : 1) * range(rng, 1, 1.5);
+          const x = p[seg].x + dx * t - (dy / len) * side;
+          const y = p[seg].y + dy * t + (dx / len) * side;
+          if (free(x, y, 0.9)) decor.push({ kind: "reed", x, y, r: range(rng, 0.25, 0.4) });
+        }
+      }
+      scatter("reed", rng.int(4, 8), 0.25, 0.4);
+      scatter("tree", rng.int(2, 4), 0.35, 0.5);
+      // Камыш на мелководье у берегов разливов (клетка остаётся водой)
+      for (let placed = 0, attempt = 0; placed < 14 && attempt < 400; attempt++) {
+        const x = range(rng, 1, W - 1);
+        const y = range(rng, 1, H - 1);
+        const wet = liquid.get(Math.floor(x * SUB), Math.floor(y * SUB));
+        if (wet < 0.45 || wet > 0.85 || paths.some((p) => distToPolyline(x, y, p) < 1)) continue;
+        decor.push({ kind: "reed", x, y, r: range(rng, 0.25, 0.4) });
+        placed++;
+      }
       break;
     case "desert":
       scatter("dune", rng.int(4, 8), 0.5, 0.8);
@@ -178,7 +217,7 @@ export function generateOutdoorLayout(seed: number, biome: OutdoorBiome): Procge
     decor,
     areas,
     flankAreas,
-    paths: [path],
+    paths,
     structures: [],
   };
 }

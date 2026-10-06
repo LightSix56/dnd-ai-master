@@ -26,7 +26,7 @@ const GOLDEN: Partial<Record<ProcgenBiome, Record<number, string>>> = {
   dungeon: { 1: "361db4e0", 42: "5e72cf99", [-7]: "73117b20" },
   tavern: { 1: "bf4ebca4", 42: "d0307a3d", [-7]: "19e1743" },
   forest: { 1: "7f210730", 42: "c7e698fc", [-7]: "773f1119" },
-  swamp: { 1: "4c443db", 42: "361ff01b", [-7]: "449d6871" },
+  swamp: { 1: "5533f7b7", 42: "19fe7b8a", [-7]: "ad76f9a1" },
   desert: { 1: "54f7be2d", 42: "64a867f", [-7]: "2cf004c2" },
   snow: { 1: "e053ebc1", 42: "a6616f7e", [-7]: "21b8b70b" },
   mountain: { 1: "a22775a4", 42: "1b8d4302", [-7]: "84eaf2dc" },

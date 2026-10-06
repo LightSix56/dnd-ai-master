@@ -26,7 +26,12 @@ vi.mock("@/lib/combat/generator", () => ({
   }),
 }));
 
+vi.mock("@/lib/combat/encounters/ensure-companions", () => ({
+  ensureCompanions: vi.fn().mockResolvedValue(undefined),
+}));
+
 import { db } from "@/lib/db";
+import { ensureCompanions } from "@/lib/combat/encounters/ensure-companions";
 import { createTacticalEncounter } from "@/lib/combat/generator";
 import { startCombatTool } from "../tools";
 
@@ -71,5 +76,19 @@ describe("start_combat: состав врагов подбирает движо�
       leaderName: "Человек в сером капюшоне",
     });
     expect(params.leaderName).toBe("Человек в сером капюшоне");
+  });
+
+  it("английские названия существ уходят в фракцию для поиска по бестиарию", async () => {
+    const params = await callStartCombat({ name: "Засада", enemyType: "ящеролюды и мертвецы", enemyKeywords: ["lizardfolk", "zombie"] });
+    expect(params.storyFaction).toEqual({ name: "ящеролюды и мертвецы", tags: ["lizardfolk", "zombie"] });
+  });
+
+  it("спутников из рассказа заводит до создания боя", async () => {
+    const companions = [{ name: "Марта", class: "Воин" }, { name: "Кестрел", class: "Жрец" }];
+    await callStartCombat({ name: "Засада", enemyType: "ящеролюды", companions });
+    expect(ensureCompanions).toHaveBeenCalledWith("camp-1", companions);
+    expect(vi.mocked(ensureCompanions).mock.invocationCallOrder[0]).toBeLessThan(
+      vi.mocked(createTacticalEncounter).mock.invocationCallOrder[0]
+    );
   });
 });

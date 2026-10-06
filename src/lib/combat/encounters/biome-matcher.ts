@@ -105,6 +105,61 @@ function entryMatchesKeywords(entry: MonsterManifestEntry, keywords: string[]): 
 }
 
 /**
+ * Слова названия фракции для поиска по бестиарию. Русские слова во множественном числе
+ * («бандиты», «мертвецы») к единственному не сводятся простым includes — добавляем основу.
+ */
+function factionKeywords(faction: StoryFactionContext): string[] {
+  const words = [
+    ...(faction.tags || []),
+    ...(faction.name ? faction.name.toLowerCase().split(/[^\p{L}-]+/u).filter((w) => w.length >= 3) : []),
+  ].map((w) => w.toLowerCase().trim()).filter(Boolean);
+  const keywords = new Set(words);
+  for (const w of words) {
+    if (!/^[а-яё]+$/.test(w)) continue;
+    const stem = w.replace(/(ов|ей|ами|ях|ы|и|а|я)$/, "");
+    if (stem.length >= 5 && stem !== w) keywords.add(stem);
+  }
+  return [...keywords];
+}
+
+/** Существа, подходящие под сюжетную фракцию: вожак, типы существ, названия */
+export function getFactionCandidatePool(
+  manifest: MonsterManifestEntry[],
+  faction?: StoryFactionContext
+): MonsterManifestEntry[] {
+  if (!faction || !manifest) return [];
+  const pool: MonsterManifestEntry[] = [];
+  const seen = new Set<string>();
+  const add = (entry: MonsterManifestEntry) => {
+    const key = entry.slug || entry.id;
+    if (!seen.has(key)) {
+      seen.add(key);
+      pool.push(entry);
+    }
+  };
+
+  if (faction.bossMonsterId) {
+    const target = faction.bossMonsterId.toLowerCase().trim();
+    const boss = manifest.find((m) =>
+      m.slug.toLowerCase() === target ||
+      m.id.toLowerCase() === target ||
+      m.name.toLowerCase() === target ||
+      m.nameEn.toLowerCase() === target
+    );
+    if (boss) add(boss);
+  }
+
+  const types = faction.creatureTypes && faction.creatureTypes.length > 0 ? new Set(faction.creatureTypes) : null;
+  const keywords = factionKeywords(faction);
+  if (types || keywords.length > 0) {
+    for (const entry of manifest) {
+      if ((types && types.has(entry.type)) || (keywords.length > 0 && entryMatchesKeywords(entry, keywords))) add(entry);
+    }
+  }
+  return pool;
+}
+
+/**
  * Selects candidate monsters from the manifest matching the requested biome and optional story faction.
  *
  * Tier 1 (Story Faction): Prioritizes boss monster, faction creature types, and faction tags.
@@ -132,42 +187,7 @@ export function getBiomeCandidatePool(
   };
 
   // --- Tier 1: Story Faction ---
-  if (faction) {
-    // 1a: Boss monster
-    if (faction.bossMonsterId) {
-      const target = faction.bossMonsterId.toLowerCase().trim();
-      const boss = manifest.find((m) =>
-        m.slug.toLowerCase() === target ||
-        m.id.toLowerCase() === target ||
-        m.name.toLowerCase() === target ||
-        m.nameEn.toLowerCase() === target
-      );
-      if (boss) {
-        addEntry(boss);
-      }
-    }
-
-    // 1b: Faction creature types & tags/name keywords
-    const factionTypes = faction.creatureTypes && faction.creatureTypes.length > 0
-      ? new Set(faction.creatureTypes)
-      : null;
-    const factionKeywords = [
-      ...(faction.tags || []),
-      ...(faction.name ? faction.name.toLowerCase().split(/\s+/).filter((w) => w.length >= 3) : []),
-    ];
-    const hasFactionKeywords = factionKeywords.length > 0;
-
-    if (factionTypes || hasFactionKeywords) {
-      for (const entry of manifest) {
-        const matchesType = factionTypes ? factionTypes.has(entry.type) : false;
-        const matchesTag = hasFactionKeywords ? entryMatchesKeywords(entry, factionKeywords) : false;
-
-        if (matchesType || matchesTag) {
-          addEntry(entry);
-        }
-      }
-    }
-  }
+  for (const entry of getFactionCandidatePool(manifest, faction)) addEntry(entry);
 
   // --- Tier 2: Native Biome ---
   const normalizedBiome = biome.toLowerCase().trim();

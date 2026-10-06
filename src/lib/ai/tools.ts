@@ -10,6 +10,7 @@ import { searchDuckDuckGo, fetchPageText } from "@/lib/dnd/search";
 import { parseStoryArc, type StoryAct, generateNextChapter } from "./story-arc";
 import { createTacticalEncounter } from "@/lib/combat/generator";
 import { resolveEncounterDifficulty } from "@/lib/combat/encounters/encounter-request";
+import { ensureCompanions } from "@/lib/combat/encounters/ensure-companions";
 
 // Контекст кампании приходит per-request через toolsContext, а не через глобальное
 // состояние модуля: иначе параллельные запросы перетирают campaignId друг друга.
@@ -814,10 +815,18 @@ export const startCombatTool = tool({
     "Ты называешь только ТИП врагов и (по желанию) сложность и имя вожака. " +
     "Количество и силу врагов движок подбирает сам из бестиария под уровни и число героев " +
     "и спутников (DMG p. 82): сколько бы врагов ни было в сюжете, на поле выйдет честный отряд. " +
+    "Перечисли в companions всех спутников героев, которые в бою, — иначе их не будет на карте. " +
+    "Вызывай инструмент ДО описания врагов: опиши ровно тех, кого он вернул. " +
     "Инструмент генерирует тактическую карту, расставляет участников, бросает инициативу и считает опыт.",
   inputSchema: z.object({
     name: z.string().describe("Название битвы (например: 'Засада гоблинов на тракте', 'Схватка с пауками в пещере')"),
     enemyType: z.string().describe("Тип врагов, без количества (например: 'городская стража', 'бандиты', 'головорезы', 'гоблины', 'культисты', 'нежить', 'волки'). Движок подберёт подходящих существ и их число"),
+    enemyKeywords: z.array(z.string()).optional().describe("Английские названия существ из бестиария D&D 5e для этого отряда (например: ['lizardfolk', 'zombie'] или ['bandit', 'thug']). Отряд может быть смешанным — перечисли все виды"),
+    companions: z.array(z.object({
+      name: z.string().describe("Имя спутника, как в рассказе"),
+      class: z.string().optional().describe("Класс или роль (например: 'Воин', 'Жрец', 'Следопыт')"),
+      race: z.string().optional().describe("Раса"),
+    })).optional().describe("ВСЕ спутники героев, которые участвуют в этом бою (в том числе только что введённые в рассказ). Они выйдут на карту, и баланс посчитается вместе с ними"),
     leaderName: z.string().optional().describe("Сюжетное имя вожака отряда (например: 'Человек в сером капюшоне'). Меняется только имя: силу вожака движок подбирает под баланс"),
     difficulty: z.enum(["easy", "medium", "hard", "deadly"]).optional().describe("Сложность столкновения по DMG p. 82. Не указывай — будет сложность кампании"),
     biome: z.string().optional().describe("Биом местности (forest, dungeon, cave, swamp, lava, mountain, snow, coastal, ship, desert, urban или любой из 24 тактических пресетов)"),
@@ -838,7 +847,7 @@ export const startCombatTool = tool({
     mapDescription: z.string().optional().describe("Краткое описание поля боя и препятствий"),
   }),
   contextSchema: campaignContextSchema,
-  execute: async ({ name, enemyType, leaderName, difficulty, biome, environment, archetype, isActClimax, mapPresetId, gridWidth, gridHeight, mapDescription }, { context }) => {
+  execute: async ({ name, enemyType, enemyKeywords, companions, leaderName, difficulty, biome, environment, archetype, isActClimax, mapPresetId, gridWidth, gridHeight, mapDescription }, { context }) => {
     let campaignId = context?.campaignId;
     let campaignDifficulty: string | undefined;
     if (campaignId) {
@@ -859,13 +868,15 @@ export const startCombatTool = tool({
       }
     }
 
+    await ensureCompanions(campaignId, companions);
+
     const encounter = await createTacticalEncounter({
       campaignId,
       name,
       environment,
       biome: biome || environment,
       difficulty: resolveEncounterDifficulty(difficulty, campaignDifficulty),
-      storyFaction: { name: enemyType },
+      storyFaction: { name: enemyType, tags: enemyKeywords },
       leaderName,
       archetype,
       isActClimax,
@@ -896,7 +907,7 @@ export const startCombatTool = tool({
       enemyNames: encounter.enemyNames,
       awardedXP: encounter.awardedXP,
       xpPerPlayer: encounter.xpPerPlayer,
-      message: `Тактический бой '${name}' успешно создан и запущен! Враги: ${enemyListStr}. Награда за победу: ${encounter.awardedXP} XP (${encounter.xpPerPlayer} на игрока). Игроку открыта тактическая сетка боя. Опиши начало сражения и передай ход инициативе.`,
+      message: `Тактический бой '${name}' успешно создан и запущен! Враги: ${enemyListStr}. Награда за победу: ${encounter.awardedXP} XP (${encounter.xpPerPlayer} на игрока). Игроку открыта тактическая сетка боя. Опиши начало сражения: на поле ровно эти враги — не называй другое их число и не добавляй других существ (остальных из рассказа опиши как отставших или стоящих поодаль). Передай ход инициативе.`,
     };
   },
 } as any);

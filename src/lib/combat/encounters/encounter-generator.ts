@@ -14,7 +14,7 @@ import {
   calculateAwardedXP,
   calculateAdjustedXP,
 } from "./xp-calculator";
-import { getBiomeCandidatePool } from "./biome-matcher";
+import { getBiomeCandidatePool, getFactionCandidatePool } from "./biome-matcher";
 import { solveSquad } from "./archetype-solver";
 import { generateProcgenMap } from "../procgen";
 import {
@@ -242,14 +242,27 @@ export async function generateEncounter(
   const manifest = options?.manifest || loadDefaultManifest(options?.monstersDir);
   const pool = getBiomeCandidatePool(manifest, effectiveBiome, request.storyFaction);
 
-  // 4. Solve Squad Composition
-  const squadPlan = solveSquad(
-    pool,
-    targetXP,
-    request.archetype || "any",
-    partySize,
-    request.isActClimax
-  );
+  // 4. Solve Squad Composition: сначала только из сюжетной фракции — иначе на «ящеролюдов»
+  // выходят случайные болотные звери. Если фракция не укладывается в бюджет (вожак слишком
+  // силён для одного героя), берём существ того же рода, и лишь потом — любых местных.
+  const factionPool = getFactionCandidatePool(manifest, request.storyFaction);
+  const factionTypes = new Set(factionPool.map((m) => m.type));
+  const kindredPool = [...factionPool, ...pool.filter((m) => factionTypes.has(m.type) && !factionPool.includes(m))];
+  const deadlyXP = calculatePartyXPBudget(party, "deadly");
+  const solve = (candidates: typeof pool) =>
+    solveSquad(candidates, targetXP, request.archetype || "any", partySize, request.isActClimax);
+  const fits = (plan: ReturnType<typeof solve>) =>
+    plan.slots.length > 0 && plan.estimatedAdjustedXP >= targetXP * 0.5 && plan.estimatedAdjustedXP <= deadlyXP;
+  let squadPlan: ReturnType<typeof solve> | null = null;
+  for (const candidates of [factionPool, kindredPool]) {
+    if (candidates.length === 0) continue;
+    const plan = solve(candidates);
+    if (fits(plan)) {
+      squadPlan = plan;
+      break;
+    }
+  }
+  squadPlan ??= solve(pool);
 
   // 5. Assemble Entities for Tactical Placement
   const allCombatants: Combatant[] = [];

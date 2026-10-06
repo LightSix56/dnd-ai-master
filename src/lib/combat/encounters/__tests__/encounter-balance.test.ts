@@ -66,3 +66,32 @@ describe("баланс для маленькой партии", () => {
     }
   }, 30000);
 });
+
+describe("враги из сюжетной фракции", () => {
+  const party = [1, 2, 3, 4].map((i) => ({ id: `p${i}`, name: `Герой ${i}`, level: 1 }));
+
+  it("по английским названиям выходят именно эти существа, а не местные звери", async () => {
+    for (let i = 0; i < 5; i++) {
+      const encounter = await generateEncounter({
+        party,
+        difficulty: "medium",
+        biome: "swamp",
+        storyFaction: { name: "ящеролюды и мертвецы", tags: ["lizardfolk", "zombie"] },
+        mapPresetId: "",
+      });
+      expect(encounter.enemies.length).toBeGreaterThan(0);
+      for (const e of encounter.enemies) expect(e.monster.nameEn ?? e.monster.name).toMatch(/lizardfolk|zombie/i);
+    }
+  }, 60000);
+
+  it("русское слово во множественном числе находит существо", async () => {
+    const encounter = await generateEncounter({
+      party,
+      difficulty: "medium",
+      biome: "forest",
+      storyFaction: { name: "разбойники" },
+      mapPresetId: "",
+    });
+    for (const e of encounter.enemies) expect(`${e.monster.name}`).toMatch(/разбойник/i);
+  }, 30000);
+});
