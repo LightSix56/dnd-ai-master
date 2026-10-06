@@ -3069,7 +3069,9 @@ export function DnDApp({
                                 </Badge>
                               </p>
                             </div>
+                            {/* Одиночную кампанию для друзей не открыть: сетевые начинаются из комнаты */}
                             {!activeRoom ? (
+                              activeCampaign?.mode === "network" && (
                               <Button
                                 type="button"
                                 variant="outline"
@@ -3085,6 +3087,7 @@ export function DnDApp({
                                 )}
                                 ОТКРЫТЬ КАМПАНИЮ ДЛЯ ДРУЗЕЙ
                               </Button>
+                              )
                             ) : (
                               <div className="flex items-center gap-2">
                                 <Badge variant="outline" className="border-emerald-500/40 text-emerald-600 dark:text-emerald-400">

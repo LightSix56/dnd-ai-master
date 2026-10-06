@@ -36,6 +36,7 @@ CREATE TABLE "Campaign" (
     "pvpEnabled" BOOLEAN NOT NULL DEFAULT false,
     "restFrequency" TEXT NOT NULL DEFAULT 'standard',
     "partyTies" TEXT NOT NULL DEFAULT 'tight_knit',
+    "mode" TEXT NOT NULL DEFAULT 'solo',
     "levelFrom" INTEGER NOT NULL DEFAULT 1,
     "levelTo" INTEGER NOT NULL DEFAULT 5,
     "storyArc" TEXT,

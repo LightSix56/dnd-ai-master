@@ -22,7 +22,6 @@ import {
   Settings,
   Sparkles,
   Loader2,
-  Share2,
   LogIn,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -237,8 +236,10 @@ export function HomeHubView() {
     }
   };
 
-  // Открыть стол для кампании
+  // Сетевая кампания открывается через стол: активная комната кампании или новая
+  const [openingCampaignId, setOpeningCampaignId] = useState<string | null>(null);
   const handleOpenRoomForCampaign = async (camp: Campaign) => {
+    setOpeningCampaignId(camp.id);
     try {
       const token = getAuthToken();
       const res = await fetch("/api/room/create", {
@@ -258,10 +259,23 @@ export function HomeHubView() {
         toast.error(data?.error || `Не удалось создать комнату стола (код ${res.status})`);
         return;
       }
-      toast.success(`Сетевой стол создан! Код: ${data.room.code}`);
+      // 200 — у кампании уже есть открытая комната, 201 — создана новая
+      if (res.status === 201) toast.success(`Сетевой стол открыт! Код: ${data.room.code}`);
       router.push(`/room/${data.room.code}`);
     } catch (err: any) {
       toast.error(`Ошибка: ${err?.message || "Сбой при открытии стола"}`);
+    } finally {
+      setOpeningCampaignId(null);
+    }
+  };
+
+  // Клик по карточке продолжает кампанию в её режиме
+  const handleOpenCampaign = (camp: Campaign) => {
+    if (openingCampaignId) return;
+    if (camp.mode === "network") {
+      handleOpenRoomForCampaign(camp);
+    } else {
+      router.push(`/campaign/${camp.id}`);
     }
   };
 
@@ -453,7 +467,17 @@ export function HomeHubView() {
               {campaigns.map((camp) => (
                 <Card
                   key={camp.id}
-                  className="border border-border/80 bg-card hover:shadow-md transition-shadow flex flex-col justify-between"
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Продолжить кампанию «${camp.name}»`}
+                  onClick={() => handleOpenCampaign(camp)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleOpenCampaign(camp);
+                    }
+                  }}
+                  className="border border-border/80 bg-card hover:shadow-md hover:border-foreground/30 transition-shadow flex flex-col justify-between cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between gap-2">
@@ -466,23 +490,23 @@ export function HomeHubView() {
                       {camp.description || `${camp.setting || "Forgotten Realms"} • ${camp.tone || "Героическое"}`}
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="pt-0 flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => router.push(`/campaign/${camp.id}`)}
-                      className="flex-1 text-xs h-8 cursor-pointer"
-                    >
-                      <span>Играть соло</span>
-                    </Button>
-                    <Button
-                      size="sm"
-                      onClick={() => handleOpenRoomForCampaign(camp)}
-                      className="flex-1 text-xs h-8 bg-amber-600 hover:bg-amber-700 text-white cursor-pointer gap-1"
-                    >
-                      <Share2 className="size-3" />
-                      <span>Открыть стол</span>
-                    </Button>
+                  <CardContent className="pt-0 flex items-center gap-1.5 text-xs text-muted-foreground">
+                    {openingCampaignId === camp.id ? (
+                      <>
+                        <Loader2 className="size-3.5 animate-spin" />
+                        <span>Открываем стол…</span>
+                      </>
+                    ) : camp.mode === "network" ? (
+                      <>
+                        <Radio className="size-3.5" />
+                        <span>Сетевая игра</span>
+                      </>
+                    ) : (
+                      <>
+                        <Swords className="size-3.5" />
+                        <span>Одиночная игра</span>
+                      </>
+                    )}
                   </CardContent>
                 </Card>
               ))}

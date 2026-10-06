@@ -960,6 +960,8 @@ export class RoomService {
           worldDescription: input.setting,
           customDmNotes: input.customDmNotes || null,
           storyArc: JSON.stringify(arc),
+          // Кампания, начатая за столом, — сетевая: с главной она открывается через комнату
+          mode: "network",
         },
       });
       campaignId = campaign.id;
