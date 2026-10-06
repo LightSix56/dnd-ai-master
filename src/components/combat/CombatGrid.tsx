@@ -9,6 +9,7 @@ import { remainingMovement, hasCondition } from "@/lib/combat/rules";
 import { cellKey } from "@/lib/combat/grid";
 import { ELEMENT_COLORS } from "@/lib/combat/types";
 import { useProcgenBackground } from "./useProcgenBackground";
+import { wallOutlineSegments } from "./wall-outline";
 
 interface CombatGridProps {
   combat: Combat;
@@ -66,6 +67,11 @@ export function CombatGrid({
   // Карта видимости («Глаз») для всех бойцов
   // Фон: процедурную пещеру браузер рисует сам по зерну из ссылки procgen:
   const backgroundHref = useProcgenBackground(combat.backgroundUrl);
+  // Контур стен — одна линия по границе со свободными клетками
+  const wallOutline = useMemo(() => {
+    const segs = wallOutlineSegments(combat.mapElements, W, H);
+    return segs.map((s) => `M${s.x1 * CS} ${s.y1 * CS}L${s.x2 * CS} ${s.y2 * CS}`).join("");
+  }, [combat.mapElements, W, H, CS]);
 
   const visibilityMap = useMemo(() => {
     const map = new Map<string, { status: VisibilityStatus; seenBy: string[] }>();
@@ -382,16 +388,7 @@ export function CombatGrid({
           if (el.type === "wall") {
             return (
               <g key={el.id} onClick={(e) => handleElementClick(e, el)} className="cursor-not-allowed">
-                <rect
-                  x={x}
-                  y={y}
-                  width={w}
-                  height={h}
-                  fill="rgba(0, 0, 0, 0.38)"
-                  stroke="#ef4444"
-                  strokeWidth={1.8}
-                  rx={1}
-                />
+                <rect x={x} y={y} width={w} height={h} fill="rgba(0, 0, 0, 0.38)" />
               </g>
             );
           }
@@ -554,6 +551,10 @@ export function CombatGrid({
             </g>
           );
         })}
+
+        {showTacticalOverlay && wallOutline && (
+          <path d={wallOutline} fill="none" stroke="#ef4444" strokeWidth={2.2} strokeLinecap="square" pointerEvents="none" />
+        )}
 
         {/* Достижимые клетки (движение) — только если нет таргетинга */}
         {showMovement && selectedCombatant && reachableCells.size > 0 && Array.from(reachableCells.entries()).map(([key, costFt]) => {
