@@ -844,8 +844,10 @@ export class RoomService {
         },
         options
       );
-    } catch {
-      // Фолбэк на базовый каркас Акта 1 в случае сбоя сети / отсутствия API-ключа
+    } catch (arcErr) {
+      // Фолбэк на базовый каркас Акта 1 в случае сбоя сети / отсутствия API-ключа.
+      // Причину пишем в лог: раньше сбой был не виден, и стол просто получал заготовку.
+      console.error("[room-service] сюжет под отряд не сгенерирован, используется заготовка:", arcErr);
       const actLevelTo = Math.min(
         input.levelTo || 5,
         Math.max(roomWithParticipants.startingLevel + 2, 3)
@@ -960,6 +962,8 @@ export class RoomService {
           worldDescription: input.setting,
           customDmNotes: input.customDmNotes || null,
           storyArc: JSON.stringify(arc),
+          // Сюжет уже готов: без статуса клиент не показывал кнопку «Начать приключение»
+          arcStatus: "ready",
           // Кампания, начатая за столом, — сетевая: с главной она открывается через комнату
           mode: "network",
         },
@@ -990,15 +994,9 @@ export class RoomService {
         }
         await this.linkHeroToCampaign(campaign.id, version);
       }
-
-      await db.chatMessage.create({
-        data: {
-          campaignId: campaign.id,
-          role: "assistant",
-          content: openingNarrative,
-          turn: 0,
-        },
-      });
+      // Вступление в чат не пишем: его рассказывает сам мастер, когда ведущий нажмёт
+      // «Начать приключение» (как в одиночной игре). Раньше сюда клался шаблон из плана
+      // сюжета — он раскрывал цель акта и скрывал кнопку начала.
     } catch (dbErr) {
       console.warn("[room-service] Failed to create local campaign in SQLite, fallback generated ID:", dbErr);
       campaignId = `camp_${Date.now()}`;

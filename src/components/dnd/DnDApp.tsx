@@ -735,6 +735,8 @@ export function DnDApp({
   const [submittingTurn, setSubmittingTurn] = useState(false);
   const [resolvingTurn, setResolvingTurn] = useState(false);
   const [streamingDmText, setStreamingDmText] = useState<string | null>(null);
+  // Когда пришёл последний «готово» с полным текстом ответа мастера
+  const dmFinishedAtRef = useRef(0);
   const [dmStatusText, setDmStatusText] = useState<string | null>(null);
   const roomChannelRef = useRef<any>(null);
   // Когда в последний раз приходил текст/статус от мастера и с какого момента раунд «думает»
@@ -836,6 +838,9 @@ export function DnDApp({
         if (payload.type === "status") {
           setDmStatusText(payload.status || "🎲 Мастер оценивает действия отряда...");
         } else if (payload.type === "chunk") {
+          // Куски рассылает сервер, а «готово» — клиент ведущего: кусок может прийти позже
+          // «готово» и вернуть пузырь рядом с уже готовым сообщением (ответ виден дважды)
+          if (Date.now() - dmFinishedAtRef.current < 5000) return;
           pendingStreamClearRef.current = false;
           setStreamingDmText(payload.text || "");
           setDmStatusText(null);
@@ -850,6 +855,7 @@ export function DnDApp({
           });
         } else if (payload.type === "finish") {
           setDmStatusText(null);
+          if (payload.fullText) dmFinishedAtRef.current = Date.now();
           if (!payload.fullText) {
             // Ведущий дописал ответ в личном чате: сам текст придёт из истории при ближайшем
             // опросе. До этого оставляем показанное, чтобы ответ не «мигал».
@@ -2483,6 +2489,19 @@ export function DnDApp({
   turnBusyRef.current = submittingTurn || resolvingTurn;
   // Игрок сетевой комнаты, но не её ведущий: сюжет настраивает и кампанию начинает ведущий
   const isRoomGuest = Boolean(activeRoom && activeRoom.hostUserId !== user?.id);
+  // Текст, который ещё пишется, — если этот ответ мастера уже лежит в чате готовым, второй раз не показываем
+  const visibleStreamingDmText = useMemo(() => {
+    const streaming = streamingDmText?.trim();
+    if (!streaming) return null;
+    const last = messages[messages.length - 1] as any;
+    if (last?.role !== "assistant") return streamingDmText;
+    const lastText = (last.parts ?? [])
+      .filter((p: any) => p?.type === "text" && typeof p.text === "string")
+      .map((p: any) => p.text)
+      .join("")
+      .trim();
+    return lastText && lastText.startsWith(streaming.slice(0, 200)) ? null : streamingDmText;
+  }, [streamingDmText, messages]);
 
   return (
     <div className="h-screen flex flex-col bg-background max-w-full overflow-x-hidden">
@@ -3548,12 +3567,12 @@ export function DnDApp({
                     );
                   })}
                   {/* Индикатор статуса и стриминга Мастера для всех участников (одиночная игра и комната) */}
-                  {(isLoading || resolvingTurn || activeRoomTurn?.status === "resolving" || streamingDmText) && (
+                  {(isLoading || resolvingTurn || activeRoomTurn?.status === "resolving" || visibleStreamingDmText) && (
                     <div className="flex flex-col gap-2">
-                      {streamingDmText ? (
+                      {visibleStreamingDmText ? (
                         <MessageBubble
                           role="assistant"
-                          content={streamingDmText}
+                          content={visibleStreamingDmText}
                           metadata={null}
                         />
                       ) : (

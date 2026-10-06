@@ -49,58 +49,61 @@ export interface CombatDifficultyConfig {
   };
 }
 
+// Схема терпима к мелким отклонениям ответа модели: не то число сцен, тип сцены вне списка,
+// число строкой, пропущенное поле. Раньше любое такое отклонение выбрасывало весь сюжет,
+// и стол молча получал шаблонную заготовку вместо сюжета под отряд.
+const text = z.string().catch("");
+const int = (fallback: number) => z.coerce.number().int().catch(fallback);
+
 export const partyAwareAct1Schema = z.object({
   title: z.string(),
-  premise: z.string(),
-  mainThreat: z.string(),
-  levelFrom: z.number().int(),
-  levelTo: z.number().int(),
+  premise: text,
+  mainThreat: text,
+  levelFrom: int(1),
+  levelTo: int(5),
   villains: z
     .array(
       z.object({
         name: z.string(),
-        role: z.string(),
-        motivation: z.string(),
-        secret: z.string(),
-        appearsInAct: z.number().int().default(1),
+        role: text,
+        motivation: text,
+        secret: text,
+        appearsInAct: int(1),
       })
     )
-    .min(2),
+    .min(1),
   act: z.object({
     name: z.string(),
-    levelFrom: z.number().int(),
-    levelTo: z.number().int(),
-    goal: z.string(),
-    summary: z.string(),
-    climaxObjective: z.string(),
-    personalHooks: z.array(
-      z.object({
-        characterName: z.string(),
-        hook: z.string(),
-        relatedNpcOrItem: z.string().optional(),
-      })
-    ),
+    levelFrom: int(1),
+    levelTo: int(3),
+    goal: text,
+    summary: text,
+    climaxObjective: text,
+    personalHooks: z
+      .array(
+        z.object({
+          characterName: z.string(),
+          hook: z.string(),
+          relatedNpcOrItem: z.string().optional().catch(undefined),
+        })
+      )
+      .catch([]),
     scenes: z
       .array(
         z.object({
           name: z.string(),
-          sceneType: z.enum([
-            "exploration",
-            "social",
-            "combat",
-            "stealth",
-            "puzzle",
-            "climax",
-          ]),
-          location: z.string(),
-          description: z.string(),
-          encounter: z.string(),
-          involvedCharacters: z.array(z.string()).optional(),
+          sceneType: z
+            .enum(["exploration", "social", "combat", "stealth", "puzzle", "climax"])
+            .catch("exploration"),
+          location: text,
+          description: text,
+          encounter: text,
+          involvedCharacters: z.array(z.string()).optional().catch(undefined),
         })
       )
-      .min(5)
-      .max(7),
-    twist: z.string(),
+      .min(1)
+      .transform((scenes) => scenes.slice(0, 7)),
+    twist: text,
     branches: z
       .array(
         z.object({
@@ -108,10 +111,10 @@ export const partyAwareAct1Schema = z.object({
           then: z.string(),
         })
       )
-      .min(2),
-    rewards: z.string(),
+      .catch([]),
+    rewards: text,
   }),
-  finaleHint: z.string(),
+  finaleHint: text,
 });
 
 export type PartyAwareAct1 = z.infer<typeof partyAwareAct1Schema>;
