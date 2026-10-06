@@ -65,6 +65,7 @@ import {
   Radio,
   Clock,
   LogOut,
+  UserMinus,
   Shield,
   Heart,
   Share2,
@@ -383,6 +384,11 @@ export function DnDApp({
   const accessDeniedShownRef = useRef<number | null>(null);
   const [showPicker, setShowPicker] = useState(false);
   const { user, signOut: supabaseSignOut, getAuthToken, signInAsGuest } = useSupabaseAuth();
+  // Для опроса комнаты в setInterval: замыкание не должно видеть устаревшего пользователя
+  const userIdRef = useRef<string | null>(null);
+  useEffect(() => {
+    userIdRef.current = user?.id ?? null;
+  }, [user?.id]);
   const [accountCharacters, setAccountCharacters] = useState<Array<{
     id: string;
     name: string;
@@ -864,16 +870,14 @@ export function DnDApp({
       .catch(() => {});
   }, [activeRoom?.code]);
 
-  // При смене кампании: деактивируем сетевую комнату предыдущей кампании и запрашиваем активную для новой
+  // При смене кампании: забываем комнату предыдущей кампании и запрашиваем активную для новой
   useEffect(() => {
     const currentId = activeCampaign?.id;
     const prevId = prevCampaignIdRef.current;
 
-    if (prevId && prevId !== currentId) {
-      if (!initialRoomCode) {
-        fetch(`/api/room/campaign/${prevId}`, { method: "DELETE" }).catch(() => {});
-        setActiveRoom(null);
-      }
+    // Комната закрывается только явным выходом ведущего; переход к другой кампании её не трогает
+    if (prevId && prevId !== currentId && !initialRoomCode) {
+      setActiveRoom(null);
     }
 
     prevCampaignIdRef.current = currentId || null;
@@ -910,6 +914,11 @@ export function DnDApp({
     fetch(`/api/room/${encodeURIComponent(cleanCode)}`)
       .then((res) => (res.ok ? res.json() : null))
       .then(async (data) => {
+        if (data?.room?.status === "archived") {
+          toast.info("Эта комната закрыта ведущим");
+          router.push("/");
+          return;
+        }
         if (data?.room) {
           const roomObj = {
             ...data.room,
@@ -1058,21 +1067,48 @@ export function DnDApp({
     }
   }
 
-  async function closeCampaignForFriends() {
-    if (!activeCampaign) return;
-    setClosingRoom(true);
-    try {
-      const res = await fetch(`/api/room/campaign/${activeCampaign.id}`, {
-        method: "DELETE",
-      });
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        toast.error(`Ошибка: ${err.error || "Не удалось закрыть комнату"}`);
-        return;
-      }
+  /** Убрать комнату с экрана и вернуться на главную (после выхода, закрытия или исключения) */
+  const exitRoomToHome = useCallback(
+    (message: string) => {
       setActiveRoom(null);
       setSidebarTab("characters");
-      toast.info("Сетевая комната закрыта");
+      router.push("/");
+      toast.info(message);
+    },
+    [router, setActiveRoom]
+  );
+
+  /**
+   * Выход из комнаты. Игрок уходит один; ведущий закрывает комнату для всех —
+   * игроков вернёт на главную, а кампанию он сможет продолжить позже с новой комнатой.
+   */
+  async function leaveRoom() {
+    if (!activeRoom) return;
+    const isHost = Boolean(user?.id && activeRoom.hostUserId === user.id);
+    if (
+      isHost &&
+      !window.confirm(
+        "Выйти из комнаты?\n\nКомната закроется: все игроки будут отключены от стола и не смогут вернуться в неё. " +
+          "Продолжить кампанию можно позже — с новой комнатой и новым кодом."
+      )
+    ) {
+      return;
+    }
+
+    setClosingRoom(true);
+    try {
+      const token = getAuthToken();
+      const res = await fetch(`/api/room/${encodeURIComponent(activeRoom.code)}/leave`, {
+        method: "POST",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      // 404 — комнаты уже нет, выходить всё равно нужно
+      if (!res.ok && res.status !== 404) {
+        const err = await res.json().catch(() => ({}));
+        toast.error(`Не удалось выйти из комнаты: ${err.error || res.status}`);
+        return;
+      }
+      exitRoomToHome(isHost ? "Комната закрыта" : "Вы вышли из сетевой комнаты");
     } catch (e: any) {
       toast.error(`Ошибка: ${e.message}`);
     } finally {
@@ -1080,12 +1116,40 @@ export function DnDApp({
     }
   }
 
-  async function leaveRoom() {
+  /** Исключать может только ведущий и только других игроков */
+  function canKick(participant: any): boolean {
+    return Boolean(user?.id && activeRoom?.hostUserId === user.id && participant.userId !== user.id);
+  }
+
+  /** Ведущий исключает игрока; тот может сразу войти снова */
+  async function kickParticipant(participant: any) {
     if (!activeRoom) return;
-    setActiveRoom(null);
-    setSidebarTab("characters");
-    router.push("/");
-    toast.info("Вы вышли из сетевой комнаты");
+    const who = participant.username || participant.character?.name || "игрока";
+    if (!window.confirm(`Исключить ${who} из комнаты?`)) return;
+    try {
+      const token = getAuthToken();
+      const res = await fetch(`/api/room/${encodeURIComponent(activeRoom.code)}/kick`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({ participantId: participant.id }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        toast.error(`Не удалось исключить: ${err.error || res.status}`);
+        return;
+      }
+      setActiveRoom((prev: any) =>
+        prev
+          ? { ...prev, participants: (prev.participants || []).filter((p: any) => p.id !== participant.id) }
+          : prev
+      );
+      toast.success(`${who} исключён из комнаты`);
+    } catch (e: any) {
+      toast.error(`Ошибка: ${e.message}`);
+    }
   }
 
   async function copyRoomLink() {
@@ -1219,6 +1283,19 @@ export function DnDApp({
         const res = await fetch(`/api/room/${encodeURIComponent(activeRoom.code)}`);
         if (res.ok) {
           const data = await res.json();
+          const me = userIdRef.current;
+          if (data?.room && me && data.room.hostUserId !== me) {
+            if (data.room.status === "archived") {
+              exitRoomToHome("Ведущий закрыл комнату");
+              return;
+            }
+            const wasIn = activeRoomRef.current?.participants?.some((p: any) => p.userId === me);
+            const isIn = (data.participants || data.room.participants || []).some((p: any) => p.userId === me);
+            if (wasIn && !isIn) {
+              exitRoomToHome("Ведущий исключил вас из комнаты");
+              return;
+            }
+          }
           if (data?.room) {
             setActiveRoom((prev: any) => {
               if (!prev) return data.room;
@@ -1318,7 +1395,7 @@ export function DnDApp({
     }, 3500);
 
     return () => clearInterval(interval);
-  }, [activeRoom?.code, isLoading, refreshActiveCampaign, setMessages, setActiveRoom]);
+  }, [activeRoom?.code, isLoading, refreshActiveCampaign, setMessages, setActiveRoom, exitRoomToHome]);
 
   // История чата из БД: useChat стартует с пустого списка, поэтому после
   // перезагрузки страницы диалог нужно восстановить вручную. Зависимость —
@@ -2655,7 +2732,7 @@ export function DnDApp({
                                 <div className="min-w-0 flex-1">
                                   <div className="flex items-center gap-1.5">
                                     <span className="font-semibold text-xs text-foreground truncate">
-                                      {snap.name || "Безымянный"}
+                                      {p.username || "Игрок"}
                                     </span>
                                     {p.isHost && (
                                       <span title="Ведущий комнаты">
@@ -2669,9 +2746,21 @@ export function DnDApp({
                                     )}
                                   </div>
                                   <div className="text-[11px] text-muted-foreground truncate">
-                                    {snap.className || "Персонаж"} • {snap.level || activeRoom.startingLevel || 1} ур.
+                                    {snap.name || "Безымянный"} • {snap.className || "Персонаж"} • {snap.level || activeRoom.startingLevel || 1} ур.
                                   </div>
                                 </div>
+                                {canKick(p) && (
+                                  <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="icon"
+                                    className="size-7 shrink-0 text-muted-foreground hover:text-destructive cursor-pointer"
+                                    onClick={() => kickParticipant(p)}
+                                    title="Исключить из комнаты"
+                                  >
+                                    <UserMinus className="size-3.5" />
+                                  </Button>
+                                )}
                               </div>
                             );
                           })}
@@ -2685,10 +2774,11 @@ export function DnDApp({
                         variant="ghost"
                         size="sm"
                         onClick={leaveRoom}
+                        disabled={closingRoom}
                         className="text-xs text-muted-foreground hover:text-destructive cursor-pointer w-full sm:w-auto"
                       >
                         <LogOut className="size-3.5 mr-1.5" />
-                        Покинуть комнату
+                        Выйти из комнаты
                       </Button>
 
                       {Boolean(user?.id && activeRoom.hostUserId === user.id) ? (
@@ -2893,16 +2983,10 @@ export function DnDApp({
                         size="sm"
                         variant="ghost"
                         className="h-7 text-xs text-muted-foreground hover:text-destructive cursor-pointer"
-                        onClick={activeRoom.hostUserId === user?.id ? closeCampaignForFriends : leaveRoom}
+                        onClick={leaveRoom}
                         disabled={closingRoom}
                       >
-                        {closingRoom ? (
-                          <Loader2 className="size-3 animate-spin" />
-                        ) : activeRoom.hostUserId === user?.id ? (
-                          "Закрыть доступ"
-                        ) : (
-                          "Покинуть"
-                        )}
+                        {closingRoom ? <Loader2 className="size-3 animate-spin" /> : "Выйти из комнаты"}
                       </Button>
                     </div>
                   </div>
@@ -3932,7 +4016,7 @@ export function DnDApp({
                                     <div className="min-w-0">
                                       <div className="flex items-center gap-1.5">
                                         <span className="font-semibold text-foreground truncate">
-                                          {snap.name || "Безымянный"}
+                                          {p.username || "Игрок"}
                                         </span>
                                         {p.isHost && (
                                           <span title="Ведущий комнаты">
@@ -3946,7 +4030,7 @@ export function DnDApp({
                                         )}
                                       </div>
                                       <p className="text-[11px] text-muted-foreground truncate">
-                                        {snap.race || "Герой"} • {snap.className || snap.class || "Приключенец"} ({snap.level || activeRoom.startingLevel} ур.)
+                                        {snap.name || "Безымянный"} • {snap.className || snap.class || "Приключенец"} ({snap.level || activeRoom.startingLevel} ур.)
                                       </p>
                                     </div>
                                   </div>
@@ -3962,6 +4046,18 @@ export function DnDApp({
                                         <Clock className="size-3" />
                                         В сборе
                                       </span>
+                                    )}
+                                    {canKick(p) && (
+                                      <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="icon"
+                                        className="size-6 text-muted-foreground hover:text-destructive cursor-pointer"
+                                        onClick={() => kickParticipant(p)}
+                                        title="Исключить из комнаты"
+                                      >
+                                        <UserMinus className="size-3" />
+                                      </Button>
                                     )}
                                   </div>
                                 </div>
@@ -3990,29 +4086,21 @@ export function DnDApp({
 
                       {/* Кнопки управления комнатой */}
                       <div className="pt-2 border-t border-border/50 flex flex-col gap-2">
-                        {activeRoom.hostUserId === user?.id ? (
-                          <Button
-                            type="button"
-                            variant="destructive"
-                            size="sm"
-                            className="w-full text-xs h-8 gap-1.5 cursor-pointer"
-                            onClick={closeCampaignForFriends}
-                            disabled={closingRoom}
-                          >
-                            <X className="size-3.5" />
-                            Закрыть сетевую комнату
-                          </Button>
-                        ) : (
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            className="w-full text-xs h-8 gap-1.5 text-muted-foreground hover:text-destructive border-border cursor-pointer"
-                            onClick={leaveRoom}
-                          >
-                            <LogOut className="size-3.5" />
-                            Покинуть комнату
-                          </Button>
+                        <Button
+                          type="button"
+                          variant={activeRoom.hostUserId === user?.id ? "destructive" : "outline"}
+                          size="sm"
+                          className="w-full text-xs h-8 gap-1.5 cursor-pointer"
+                          onClick={leaveRoom}
+                          disabled={closingRoom}
+                        >
+                          {closingRoom ? <Loader2 className="size-3.5 animate-spin" /> : <LogOut className="size-3.5" />}
+                          Выйти из комнаты
+                        </Button>
+                        {activeRoom.hostUserId === user?.id && (
+                          <p className="text-[11px] text-muted-foreground text-center">
+                            Вы ведущий: при выходе комната закроется для всех
+                          </p>
                         )}
                       </div>
                     </div>

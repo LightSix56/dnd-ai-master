@@ -61,6 +61,8 @@ export interface RoomParticipant {
   isHost: boolean;
   isReady: boolean;
   joinedAt: string;
+  /** Ник игрока из profiles.username (null — ник не задан или не прочитан) */
+  username?: string | null;
 }
 
 export interface RoomWithParticipants extends Room {

@@ -164,6 +164,8 @@ function mapTurnFromDb(row: Record<string, any>): RoomTurn {
 /** Нарушение правил комнаты: роуты отдают такие ошибки как 409, а не как сбой сервера */
 export class RoomRuleError extends Error {}
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 /**
  * Через сколько секунд без «пульса» блокировка «мастер думает» считается зависшей.
  * Пока мастер пишет, функция обновляет метку каждые RESOLVE_HEARTBEAT_SECONDS; если метка
@@ -267,7 +269,29 @@ export class RoomService {
     if (sheets && room?.campaignId) {
       await this.moveOriginalsToVersions(list, sheets, room);
     }
-    return list.map((r) => mapParticipantFromDb(r, sheets));
+    const usernames = await this.loadUsernames(list.map((r) => r.user_id));
+    return list.map((r) => ({
+      ...mapParticipantFromDb(r, sheets),
+      username: usernames.get(r.user_id) ?? null,
+    }));
+  }
+
+  /** Ники игроков из profiles; без ников комната всё равно показывается */
+  private async loadUsernames(userIds: unknown[]): Promise<Map<string, string>> {
+    const names = new Map<string, string>();
+    // В profiles id — uuid; служебные id ведущего вида host_campaign_* сломали бы запрос
+    const ids = [...new Set(userIds.filter((id): id is string => typeof id === "string" && UUID_RE.test(id)))];
+    if (ids.length === 0) return names;
+    try {
+      const { data, error } = await this.client.from("profiles").select("id, username").in("id", ids);
+      if (error) throw new Error(error.message);
+      for (const row of (data as Array<{ id: string; username: string | null }>) || []) {
+        if (row.username?.trim()) names.set(row.id, row.username.trim());
+      }
+    } catch (e) {
+      console.warn("[room-service] не удалось прочитать ники участников:", e);
+    }
+    return names;
   }
 
   /**
@@ -335,6 +359,60 @@ export class RoomService {
       .eq("room_id", activeRoom.id)
       .eq("character_id", sheetId);
     return !error;
+  }
+
+  /**
+   * Выход из комнаты. Игрок уходит один: удаляется только его строка участника.
+   * Ведущий закрывает комнату для всех: она архивируется, войти в неё больше нельзя
+   * (строки участников остаются — по статусу клиенты понимают, что стол закрыт, а не что их выгнали).
+   */
+  async leaveRoom(roomId: string, userId: string): Promise<{ closed: boolean }> {
+    const room = await this.getRoomById(roomId);
+    if (!room) throw new RoomRuleError("Комната не найдена.");
+
+    if (room.hostUserId === userId) {
+      const ok = await this.updateRoomStatus(roomId, "archived");
+      if (!ok) throw new Error("Не удалось закрыть комнату.");
+      return { closed: true };
+    }
+
+    const { error } = await this.client
+      .from("room_participants")
+      .delete()
+      .eq("room_id", roomId)
+      .eq("user_id", userId);
+    if (error) throw new Error(`Не удалось выйти из комнаты: ${error.message}`);
+    return { closed: false };
+  }
+
+  /**
+   * Ведущий исключает участника. Исключённый может сразу войти снова — это не бан.
+   */
+  async kickParticipant(roomId: string, hostUserId: string, participantId: string): Promise<void> {
+    const room = await this.getRoomById(roomId);
+    if (!room) throw new RoomRuleError("Комната не найдена.");
+    if (room.hostUserId !== hostUserId) {
+      throw new RoomRuleError("Исключать игроков может только ведущий.");
+    }
+
+    const { data, error } = await this.client
+      .from("room_participants")
+      .select("id, user_id")
+      .eq("id", participantId)
+      .eq("room_id", roomId)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    if (!data) throw new RoomRuleError("Участник не найден.");
+    if (data.user_id === hostUserId) {
+      throw new RoomRuleError("Ведущий не может исключить себя — чтобы уйти, закройте комнату.");
+    }
+
+    const { error: deleteError } = await this.client
+      .from("room_participants")
+      .delete()
+      .eq("id", participantId)
+      .eq("room_id", roomId);
+    if (deleteError) throw new Error(`Не удалось исключить игрока: ${deleteError.message}`);
   }
 
   /**
