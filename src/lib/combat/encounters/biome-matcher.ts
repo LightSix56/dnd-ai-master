@@ -70,6 +70,13 @@ export const BIOME_CONFIGS: Record<string, BiomeAffinity> = {
       "страж", "бандит", "убийца", "ассасин", "дворянин", "шпион", "вор", "разбойник", "город",
     ],
   },
+  tavern: {
+    creatureTypes: ["humanoid"],
+    keywords: [
+      "guard", "bandit", "thug", "spy", "rogue",
+      "страж", "бандит", "головорез", "шпион", "вор", "разбойник",
+    ],
+  },
   desert: {
     creatureTypes: ["beast", "fiend", "undead"],
     keywords: [

@@ -38,7 +38,7 @@ import { startCombatTool } from "../tools";
 /** Вызов инструмента так, как его вызывает AI SDK: вход сначала проходит через схему */
 async function callStartCombat(args: Record<string, unknown>) {
   const schema = startCombatTool.inputSchema as unknown as { parse: (v: unknown) => any };
-  const input = schema.parse(args);
+  const input = schema.parse({ biome: "urban", ...args });
   await (startCombatTool.execute as any)(input, { context: { campaignId: "camp-1" }, toolCallId: "t1", messages: [] });
   return vi.mocked(createTacticalEncounter).mock.calls[0][0];
 }
@@ -90,5 +90,15 @@ describe("start_combat: состав врагов подбирает движо�
     expect(vi.mocked(ensureCompanions).mock.invocationCallOrder[0]).toBeLessThan(
       vi.mocked(createTacticalEncounter).mock.invocationCallOrder[0]
     );
+  });
+
+  it("бой в таверне идёт на карте таверны, а не города", async () => {
+    const params = await callStartCombat({ name: "Драка в «Пьяном драконе»", enemyType: "наёмники", biome: "tavern" });
+    expect(params.biome).toBe("tavern");
+  });
+
+  it("без места боя вызов не проходит: мастер обязан выбрать биом", () => {
+    const schema = startCombatTool.inputSchema as unknown as { safeParse: (v: unknown) => { success: boolean } };
+    expect(schema.safeParse({ name: "Засада", enemyType: "бандиты" }).success).toBe(false);
   });
 });

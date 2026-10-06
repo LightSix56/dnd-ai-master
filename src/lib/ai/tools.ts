@@ -829,25 +829,21 @@ export const startCombatTool = tool({
     })).optional().describe("ВСЕ спутники героев, которые участвуют в этом бою (в том числе только что введённые в рассказ). Они выйдут на карту, и баланс посчитается вместе с ними"),
     leaderName: z.string().optional().describe("Сюжетное имя вожака отряда (например: 'Человек в сером капюшоне'). Меняется только имя: силу вожака движок подбирает под баланс"),
     difficulty: z.enum(["easy", "medium", "hard", "deadly"]).optional().describe("Сложность столкновения по DMG p. 82. Не указывай — будет сложность кампании"),
-    biome: z.string().optional().describe("Биом местности (forest, dungeon, cave, swamp, lava, mountain, snow, coastal, ship, desert, urban или любой из 24 тактических пресетов)"),
-    environment: z.enum([
-      "dungeon",
-      "cave",
-      "tavern",
-      "forest",
-      "ruins",
-      "arena",
-      "open_field",
-    ]).default("dungeon").describe("Тип окружения для тактической карты (legacy)"),
+    biome: z
+      .enum(["tavern", "urban", "dungeon", "cave", "lava", "forest", "swamp", "desert", "snow", "mountain", "coastal", "ship"])
+      .describe(
+        "Где буквально стоят бойцы — по нему собирается карта. Драка внутри таверны, трактира, постоялого двора — tavern, даже если он в городе или порту. " +
+          "urban — улица, площадь, рынок, переулок; coastal — пристань, берег; ship — палуба; dungeon — подземелье, склеп, тюрьма, замок, храм изнутри; " +
+          "cave — пещера, шахта; lava — вулкан, кузня; forest — лес, дорога, поле; swamp; desert; snow; mountain — горы, перевал, мост над пропастью"
+      ),
     archetype: z.enum(["solo_boss", "boss_minions", "tactical_squad", "horde", "ambush_duo", "any"]).optional().describe("Тактический архетип отряда врагов"),
     isActClimax: z.boolean().optional().describe("Является ли бой кульминацией акта (боссфайт)"),
-    mapPresetId: z.string().optional().describe("ID конкретного тактического пресета карты (опционально)"),
     gridWidth: z.number().int().min(10).max(50).default(20).describe("Ширина сетки"),
     gridHeight: z.number().int().min(10).max(50).default(15).describe("Высота сетки"),
     mapDescription: z.string().optional().describe("Краткое описание поля боя и препятствий"),
   }),
   contextSchema: campaignContextSchema,
-  execute: async ({ name, enemyType, enemyKeywords, companions, leaderName, difficulty, biome, environment, archetype, isActClimax, mapPresetId, gridWidth, gridHeight, mapDescription }, { context }) => {
+  execute: async ({ name, enemyType, enemyKeywords, companions, leaderName, difficulty, biome, archetype, isActClimax, gridWidth, gridHeight, mapDescription }, { context }) => {
     let campaignId = context?.campaignId;
     let campaignDifficulty: string | undefined;
     if (campaignId) {
@@ -873,14 +869,12 @@ export const startCombatTool = tool({
     const encounter = await createTacticalEncounter({
       campaignId,
       name,
-      environment,
-      biome: biome || environment,
+      biome,
       difficulty: resolveEncounterDifficulty(difficulty, campaignDifficulty),
       storyFaction: { name: enemyType, tags: enemyKeywords },
       leaderName,
       archetype,
       isActClimax,
-      mapPresetId,
       gridWidth,
       gridHeight,
       mapDescription,
