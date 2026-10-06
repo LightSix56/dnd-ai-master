@@ -498,9 +498,12 @@ export function dealDamage(
       target.concentration = null;
       dropConcentrationEffects(state, targetId);
     }
+    // Без сознания существо падает ничком (PHB, «Состояния»): очнувшись, оно лежит —
+    // атакует с помехой, пока не встанет за половину скорости
     target.conditions = [
-      ...target.conditions.filter((c) => c.type !== "unconscious" && c.type !== "stable"),
+      ...target.conditions.filter((c) => c.type !== "unconscious" && c.type !== "stable" && c.type !== "prone"),
       { type: "unconscious" },
+      { type: "prone" },
     ];
     state.addLog(`${target.name} падает без сознания!`, "damage", target.name);
   } else if (!wasAlive && target.hpCurrent <= 0) {
@@ -827,6 +830,11 @@ function allyAdjacentTo(state: CombatState, attacker: Combatant, target: Combata
       !c.conditions.some((cond) => ["unconscious", "paralyzed", "petrified", "stunned"].includes(cond.type)) &&
       distanceFt(c, target) <= 5
   );
+}
+
+/** Скрытая атака плута — пассивное умение, а не действие */
+export function isSneakAttackAbility(ability: { id: string; name: string }): boolean {
+  return ability.id === "sneak_attack" || ability.name.startsWith("Скрытая атака");
 }
 
 /** Готовая к применению Скрытая атака, если условия соблюдены (D&D 5e) */
@@ -2614,6 +2622,13 @@ function useAbilityUnsafe(
 
   const ability = c.abilities.find((a) => a.id === abilityId);
   if (!ability) throw new EngineError("Способность не найдена");
+  // Скрытая атака — пассивное умение: срабатывает сама при попадании (см. findSneakAttack).
+  // «Применение» раньше раскрывало скрытого плута, и его удар терял преимущество и бонусный урон
+  if (isSneakAttackAbility(ability)) {
+    throw new EngineError(
+      "«Скрытая атака» срабатывает сама при попадании фехтовальным или дальнобойным оружием — при преимуществе или когда рядом с целью стоит союзник"
+    );
+  }
   if (ability.usesMax > 0 && ability.usesUsed >= ability.usesMax) {
     throw new EngineError(`«${ability.name}»: использования закончились`);
   }

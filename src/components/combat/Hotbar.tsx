@@ -323,6 +323,8 @@ export function Hotbar({
     };
 
     for (const ab of combatant.abilities) {
+      // Скрытая атака — пассивное умение: срабатывает сама при попадании, кнопки у неё нет
+      if (ab.id === "sneak_attack" || ab.name.startsWith("Скрытая атака")) continue;
       const cost = ab.parameters?.actionCost ?? "action";
       if (cost === "bonus") groups.bonus.items.push(ab);
       else if (cost === "reaction") groups.reaction.items.push(ab);
@@ -904,7 +906,7 @@ export function Hotbar({
                     Магия ({combatant.spells.known.length})
                   </Button>
                 )}
-                {combatant.abilities.length > 0 && (
+                {groupedAbilities.length > 0 && (
                   <Button
                     size="sm"
                     variant={activeTab === "abilities" ? "default" : "ghost"}
@@ -914,7 +916,7 @@ export function Hotbar({
                     onClick={() => setActiveTab("abilities")}
                   >
                     <Sparkles className="size-2.5 text-purple-600 dark:text-purple-400" />
-                    Способности ({combatant.abilities.length})
+                    Способности ({groupedAbilities.reduce((n, g) => n + g.items.length, 0)})
                   </Button>
                 )}
                 <Button

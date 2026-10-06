@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { castSpell, useAbility, performAttack } from "../engine";
+import { castSpell, useAbility, performAttack, isSneakAttackAbility, EngineError } from "../engine";
 import { SPELL_LIBRARY, ABILITY_LIBRARY, ATTACK_LIBRARY } from "../library-data";
 import { BEAST_FORMS } from "../beast-forms";
 import type { Combatant, Cell, Attack, CombatAbility } from "../types";
@@ -386,6 +386,14 @@ describe("Combat Engine Full Audit & Stress Suite", () => {
       const rangeType = abDef.parameters.range?.type;
       const targetIds = rangeType === "self" ? [caster.id] : [targetMelee.id];
       const center = rangeType === "self" ? { x: caster.x, y: caster.y } : { x: targetMelee.x, y: targetMelee.y };
+
+      // Скрытая атака — пассивное умение: «применить» её нельзя, она срабатывает сама при попадании
+      if (isSneakAttackAbility(ability)) {
+        expect(() => useAbility(state, caster.id, abId, { targetIds, center, skipTurnCheck: true })).toThrow(
+          EngineError
+        );
+        continue;
+      }
 
       const res = useAbility(state, caster.id, abId, {
         targetIds,
