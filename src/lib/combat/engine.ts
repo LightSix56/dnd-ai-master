@@ -29,6 +29,7 @@ import {
 } from "./initiative";
 import {
   computeVisibilityStatus,
+  coversCell,
   hasCoverBetween,
   determineFacingTowards,
   findOpportunityAttackers,
@@ -127,6 +128,31 @@ export class CombatState {
     this.combatDirty = true;
   }
 
+  private addedElementList: MapElement[] = [];
+  private removedElementList = new Set<string>();
+
+  addElement(el: MapElement): void {
+    this.mapElements.push(el);
+    this.addedElementList.push(el);
+    this.combatDirty = true;
+  }
+
+  removeElement(id: string): void {
+    this.mapElements = this.mapElements.filter((e) => e.id !== id);
+    this.addedElementList = this.addedElementList.filter((e) => e.id !== id);
+    this.removedElementList.add(id);
+    this.dirtyElements.delete(id);
+    this.combatDirty = true;
+  }
+
+  get addedElements(): MapElement[] {
+    return [...this.addedElementList];
+  }
+
+  get removedElementIds(): string[] {
+    return [...this.removedElementList];
+  }
+
   get dirtyElementIds(): string[] {
     return [...this.dirtyElements];
   }
@@ -169,6 +195,9 @@ export class CombatState {
   snapshot(): CombatSnapshot {
     return {
       combatants: structuredClone(this.combatants),
+      mapElements: structuredClone(this.mapElements),
+      addedElements: [...this.addedElementList],
+      removedElements: new Set(this.removedElementList),
       turnOrder: [...this.turnOrder],
       currentTurnIndex: this.currentTurnIndex,
       round: this.round,
@@ -189,6 +218,9 @@ export class CombatState {
       Object.assign(target, saved);
       return target;
     });
+    if (snap.mapElements) this.mapElements = structuredClone(snap.mapElements);
+    this.addedElementList = snap.addedElements ? [...snap.addedElements] : [];
+    this.removedElementList = snap.removedElements ? new Set(snap.removedElements) : new Set();
     this.turnOrder = [...snap.turnOrder];
     this.currentTurnIndex = snap.currentTurnIndex;
     this.round = snap.round;
@@ -214,6 +246,9 @@ export class CombatState {
 
 export interface CombatSnapshot {
   combatants: Combatant[];
+  mapElements?: MapElement[];
+  addedElements?: MapElement[];
+  removedElements?: Set<string>;
   turnOrder: string[];
   currentTurnIndex: number;
   round: number;
@@ -457,6 +492,23 @@ export function dealDamage(
     }
   }
 
+  // Воспламеняющиеся зоны заклинаний (Паутина) сгорают при получении урона огнём
+  const isFire = (opts.damageType || "").toLowerCase() === "fire" || (opts.parts ?? []).some((p) => p.type === "fire");
+  if (isFire) {
+    const webZones = state.mapElements.filter(
+      (el) => el.properties?.isSpellZone && el.properties.flammable && coversCell(el, { x: target.x, y: target.y })
+    );
+    for (const web of webZones) {
+      state.removeElement(web.id);
+      const burnDmg = rollDice("2d4").total;
+      state.addLog(`🔥 Паутина под ${target.name} вспыхивает от огня и сгорает! (+${burnDmg} урона огнем)`, "damage", target.name);
+      const res = applyDamage(target, burnDmg);
+      target.hpCurrent = res.hpCurrent;
+      target.hpTemp = res.hpTemp;
+      state.mark(target.id);
+    }
+  }
+
   if (wasAlive && target.hpCurrent <= 0) {
     // Стойкость нежити (Undead Fortitude): спасбросок ТЕЛ Сл 5 + урон, если урон не излучением и не критический
     const hasUndeadFortitude = target.monsterTraits?.some((t) => {
@@ -558,6 +610,14 @@ function dropConcentrationEffects(state: CombatState, casterId: string): void {
       c.attacks = c.attacks.filter((a) => a.id !== "shadow_blade_attack" && a.id !== "flame_blade_attack");
       if (c.attacks.length !== beforeAtk) state.mark(c.id);
     }
+  }
+
+  // Снимаем зоны заклинаний, державшиеся концентрацией заклинателя
+  const droppedZones = state.mapElements.filter(
+    (el) => el.properties?.isSpellZone && el.properties.casterId === casterId && el.properties.concentration
+  );
+  for (const zone of droppedZones) {
+    state.removeElement(zone.id);
   }
 }
 
@@ -1444,6 +1504,75 @@ export function moveCombatant(
     return {
       path: [],
       costFt: 0,
+      remainingFt: remainingMovement(state.require(combatantId)),
+      opportunityAttacks,
+    };
+  }
+
+  for (let stepIdx = 0; stepIdx < result.path.length; stepIdx++) {
+    const stepCell = result.path[stepIdx];
+    mover.x = stepCell.x;
+    mover.y = stepCell.y;
+
+    // 1. Шипы (Spike Growth): 2d4 колющего урона за каждые 5 фт движения внутри области
+    const spikeZones = state.mapElements.filter(
+      (el) => el.properties?.isSpellZone && el.properties.zoneType === "spike_growth" && coversCell(el, stepCell)
+    );
+    if (spikeZones.length > 0 && mover.hpCurrent > 0) {
+      const spikeDmg = rollDice("2d4").total;
+      state.addLog(`🌱 ${mover.name} движется сквозь шипы и получает ${spikeDmg} колющего урона (2d4)!`, "damage", mover.name);
+      dealDamage(state, mover.id, spikeDmg, {
+        damageType: "piercing",
+        isAttack: false,
+        source: spikeZones[0].properties?.casterId,
+      });
+      if (mover.hpCurrent <= 0) {
+        mover.movementUsed = initialMovementUsed + (stepIdx + 1) * 5;
+        movementInterrupted = true;
+        break;
+      }
+    }
+
+    // 2. Паутина (Web): при входе в паутину проверка ЛОВ или restrained и остановка
+    const webZones = state.mapElements.filter(
+      (el) => el.properties?.isSpellZone && el.properties.zoneType === "web" && coversCell(el, stepCell)
+    );
+    if (webZones.length > 0 && !mover.conditions.some((c) => c.type === "restrained") && mover.hpCurrent > 0) {
+      const zone = webZones[0];
+      const saveDC = zone.properties?.saveDC ?? 13;
+      const save = rollEffectSave(state, mover, "DEX", saveDC, true, "Паутина");
+      if (!save.success) {
+        applyEffect(state, mover.id, { condition: "restrained", concentration: zone.properties?.concentration }, zone.properties?.casterId);
+        state.addLog(`🕸️ ${mover.name} наступает в паутину, проваливает спасбросок ЛОВ (${save.text}) и опутывается!`, "system", mover.name);
+        mover.movementUsed = effectiveSpeed(mover);
+        movementInterrupted = true;
+        break;
+      } else {
+        state.addLog(`🕸️ ${mover.name} проходит спасбросок ЛОВ (${save.text}) и избегает паутины`, "save", mover.name);
+      }
+    }
+
+    // 3. Скольжение (Grease): при входе спасбросок ЛОВ или prone
+    const greaseZones = state.mapElements.filter(
+      (el) => el.properties?.isSpellZone && el.properties.zoneType === "grease" && coversCell(el, stepCell)
+    );
+    if (greaseZones.length > 0 && !mover.conditions.some((c) => c.type === "prone") && mover.hpCurrent > 0) {
+      const zone = greaseZones[0];
+      const saveDC = zone.properties?.saveDC ?? 13;
+      const save = rollEffectSave(state, mover, "DEX", saveDC, true, "Скольжение");
+      if (!save.success) {
+        applyEffect(state, mover.id, { condition: "prone" }, zone.properties?.casterId);
+        state.addLog(`🧈 ${mover.name} поскальзывается на жире (${save.text}) и падает ничком!`, "system", mover.name);
+      } else {
+        state.addLog(`🧈 ${mover.name} сохраняет равновесие на жире (${save.text})`, "save", mover.name);
+      }
+    }
+  }
+
+  if (movementInterrupted) {
+    return {
+      path: result.path.slice(0, result.path.findIndex((c) => c.x === mover.x && c.y === mover.y) + 1),
+      costFt: mover.movementUsed - initialMovementUsed,
       remainingFt: remainingMovement(state.require(combatantId)),
       opportunityAttacks,
     };
@@ -2468,6 +2597,68 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
     state.mark(caster.id);
   }
 
+  // Создание динамических зон заклинаний на карте (Entangle, Web, Spike Growth, Grease)
+  let detectedZoneType: "entangle" | "web" | "spike_growth" | "grease" | undefined;
+  if (actLower.includes("опутывание") || actLower.includes("entangle")) {
+    detectedZoneType = "entangle";
+  } else if (actLower.includes("паутина") || actLower.includes("web")) {
+    detectedZoneType = "web";
+  } else if (actLower.includes("шип") || actLower.includes("spike growth")) {
+    detectedZoneType = "spike_growth";
+  } else if (actLower.includes("скольжение") || actLower.includes("grease") || actLower.includes("осаливание")) {
+    detectedZoneType = "grease";
+  } else if (params.zoneType) {
+    detectedZoneType = params.zoneType as any;
+  }
+
+  if (detectedZoneType && ctx.center) {
+    const shape = params.aoe?.shape ?? (detectedZoneType === "spike_growth" ? "sphere" : "cube");
+    const size = params.aoe?.size ?? (detectedZoneType === "grease" ? 10 : 20);
+    const cells = getAoeCells(
+      ctx.center,
+      shape,
+      size,
+      { x: caster.x, y: caster.y },
+      state.gridWidth,
+      state.gridHeight
+    );
+    const isConc = params.concentration !== false && detectedZoneType !== "grease";
+    const zoneRounds = params.duration
+      ? Math.max(1, Math.ceil(parseInt(params.duration, 10) / 6))
+      : detectedZoneType === "web"
+      ? 600
+      : detectedZoneType === "spike_growth"
+      ? 100
+      : 10;
+
+    for (const cell of cells) {
+      const zoneEl: MapElement = {
+        id: `spell_zone_${detectedZoneType}_${cell.x}_${cell.y}_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+        type: "difficult",
+        x: cell.x,
+        y: cell.y,
+        width: 1,
+        height: 1,
+        properties: {
+          isSpellZone: true,
+          zoneType: detectedZoneType,
+          spellName: ctx.label,
+          casterId: caster.id,
+          concentration: isConc,
+          durationRounds: zoneRounds,
+          saveType: (params.saveType as AbilityKey) ?? (detectedZoneType === "entangle" ? "STR" : "DEX"),
+          saveDC,
+          difficultTerrain: true,
+          conditionOnFail: detectedZoneType === "grease" ? "prone" : detectedZoneType === "spike_growth" ? undefined : "restrained",
+          damagePer5ft: detectedZoneType === "spike_growth" ? [{ dice: "2d4", mod: 0, type: "piercing" }] : undefined,
+          flammable: detectedZoneType === "web",
+        },
+      };
+      state.addElement(zoneEl);
+    }
+    state.addLog(`🌿 ${caster.name} создаёт область заклинания «${ctx.label}» (${cells.length} клеток)`, "spell", caster.name);
+  }
+
   const summary =
     results.length > 0
       ? results
@@ -3090,6 +3281,36 @@ export function startTurn(state: CombatState): void {
     dealDamage(state, c.id, lavaDmg, { isAttack: false, damageType: "fire" });
     state.addLog(`🔥 ${c.name} начинает ход в раскаленной лаве и получает ${lavaDmg} урона огнём!`, "damage", c.name);
   }
+
+  // D&D 5e: Проверка зон заклинаний в начале хода (Web и др.)
+  if (c.hpCurrent > 0) {
+    const standingZones = state.mapElements.filter(
+      (el) => el.properties?.isSpellZone && coversCell(el, { x: c.x, y: c.y })
+    );
+    for (const zone of standingZones) {
+      if (zone.properties?.zoneType === "web") {
+        const isRestrained = c.conditions.some((cond) => cond.type === "restrained");
+        if (!isRestrained) {
+          const saveDC = zone.properties.saveDC ?? 13;
+          const save = rollEffectSave(state, c, "DEX", saveDC, true, "Паутина");
+          if (!save.success) {
+            applyEffect(state, c.id, { condition: "restrained", concentration: zone.properties.concentration }, zone.properties.casterId);
+            state.addLog(`🕸️ ${c.name} начинает ход в паутине, проваливает спасбросок ЛОВ (${save.text}) и опутывается!`, "system", c.name);
+          } else {
+            state.addLog(`🕸️ ${c.name} начинает ход в паутине и успешно проходит спасбросок ЛОВ (${save.text})`, "save", c.name);
+          }
+        }
+      }
+      if (zone.properties?.damageOnTurnStart && zone.properties.damageOnTurnStart.length > 0) {
+        const rolled = rollDamage(zone.properties.damageOnTurnStart, false);
+        dealDamage(state, c.id, rolled.total, {
+          damageType: zone.properties.damageOnTurnStart[0]?.type,
+          parts: rolled.parts,
+          source: zone.properties.casterId,
+        });
+      }
+    }
+  }
 }
 
 /** Конец хода: спасброски на снятие эффектов (Save Ends), тикают таймеры */
@@ -3141,6 +3362,19 @@ export function endTurn(state: CombatState, depth = 0): { nextId: string | null 
         dropConcentrationEffects(state, current.id);
       } else {
         current.concentration = { ...current.concentration, durationRounds: left };
+      }
+    }
+
+    // D&D 5e: Проверка окончания хода в зоне Grease
+    const standingGrease = state.mapElements.find(
+      (el) => el.properties?.isSpellZone && el.properties.zoneType === "grease" && coversCell(el, { x: current.x, y: current.y })
+    );
+    if (standingGrease && current.hpCurrent > 0 && !current.conditions.some((c) => c.type === "prone")) {
+      const saveDC = standingGrease.properties?.saveDC ?? 13;
+      const save = rollEffectSave(state, current, "DEX", saveDC, true, "Скольжение");
+      if (!save.success) {
+        applyEffect(state, current.id, { condition: "prone" }, standingGrease.properties?.casterId);
+        state.addLog(`🧈 ${current.name} завершает ход на жире, проваливает спасбросок (${save.text}) и падает ничком!`, "system", current.name);
       }
     }
   }

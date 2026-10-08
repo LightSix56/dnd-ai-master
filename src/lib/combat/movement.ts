@@ -17,7 +17,7 @@ function getProps(el: MapElement): Record<string, unknown> {
   return el.properties as Record<string, unknown>;
 }
 
-function coversCell(el: MapElement, cell: Cell): boolean {
+export function coversCell(el: MapElement, cell: Cell): boolean {
   return (
     cell.x >= el.x &&
     cell.x < el.x + el.width &&
@@ -91,7 +91,9 @@ export function isDifficultTerrain(cell: Cell, mapElements: MapElement[], mover?
     return true;
   }
 
-  return mapElements.some((el) => el.type === "difficult" && coversCell(el, cell));
+  return mapElements.some(
+    (el) => (el.type === "difficult" || el.properties?.difficultTerrain) && coversCell(el, cell)
+  );
 }
 
 /** Стоимость входа в клетку в футах */
