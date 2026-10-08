@@ -28,6 +28,63 @@ function normalizeResponse(body: string): string {
   return changed ? JSON.stringify(data) : body;
 }
 
+// Claude кэширует промпт только по явной метке cache_control (DeepSeek и OpenAI — сами, по
+// совпадающему префиксу). Без меток у Claude не было ни одного попадания в кэш: каждый ход
+// заново оплачивался весь системный промпт (~18 тыс. токенов).
+// Метки ставим в формате OpenAI-совместимых агрегаторов (как у OpenRouter) — на текстовый блок:
+//  1. на системный промпт — он не меняется между ходами (вместе с ним кэшируются и инструменты);
+//  2. на предпоследнее сообщение — история до него тоже стабильна, а изменчивый срез сцены
+//     дописывается только в последнее сообщение (см. caching/ephemeral-tail).
+// У Claude не больше 4 меток на запрос — используем две.
+const CACHE_CONTROL = { type: "ephemeral" } as const;
+
+export function isClaudeModel(model: unknown): boolean {
+  return typeof model === "string" && /(^anthropic\/|claude)/i.test(model);
+}
+
+function withCacheControl(message: Record<string, unknown>): Record<string, unknown> {
+  const content = message.content;
+  if (typeof content === "string") {
+    if (!content) return message;
+    return { ...message, content: [{ type: "text", text: content, cache_control: CACHE_CONTROL }] };
+  }
+  if (Array.isArray(content) && content.length > 0) {
+    // Метку можно поставить только на текстовый блок — ищем последний
+    for (let i = content.length - 1; i >= 0; i--) {
+      const part = content[i] as Record<string, unknown>;
+      if (part?.type === "text" && typeof part.text === "string" && part.text) {
+        const next = [...content];
+        next[i] = { ...part, cache_control: CACHE_CONTROL };
+        return { ...message, content: next };
+      }
+    }
+  }
+  return message;
+}
+
+/** Добавляет метки кэша в тело запроса chat/completions для моделей Claude; остальное не трогает */
+export function addPromptCacheMarkers(body: string): string {
+  let data: Record<string, unknown>;
+  try {
+    data = JSON.parse(body);
+  } catch {
+    return body;
+  }
+  if (!isClaudeModel(data?.model) || !Array.isArray(data.messages)) return body;
+  const messages = [...(data.messages as Record<string, unknown>[])];
+
+  let lastSystem = -1;
+  messages.forEach((m, i) => {
+    if (m?.role === "system") lastSystem = i;
+  });
+  if (lastSystem >= 0) messages[lastSystem] = withCacheControl(messages[lastSystem]);
+
+  const penultimate = messages.length - 2;
+  if (penultimate > lastSystem) messages[penultimate] = withCacheControl(messages[penultimate]);
+
+  return JSON.stringify({ ...data, messages });
+}
+
 export function createClient(
   userApiKey?: string,
   authMode?: AuthMode,
@@ -52,7 +109,13 @@ export function createClient(
       headers.set("Authorization", cleanKey);
     }
 
-    const res = await fetch(input, { ...init, headers });
+    const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
+    const body =
+      typeof init?.body === "string" && url.includes("/chat/completions")
+        ? addPromptCacheMarkers(init.body)
+        : init?.body;
+
+    const res = await fetch(input, { ...init, headers, body });
 
     // Стрим и ошибки отдаём как есть: чанки читаются построчно, а не целиком
     const contentType = res.headers.get("content-type") || "";
