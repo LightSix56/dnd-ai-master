@@ -762,6 +762,27 @@ export function applyEffect(
     },
   ];
 
+  if (effect.condition === "restrained") {
+    if (!target.abilities.some((a) => a.id === "escape_restrained")) {
+      target.abilities.push({
+        id: "escape_restrained",
+        name: "Освободиться из пут",
+        usesMax: 0,
+        usesUsed: 0,
+        refresh: "turn",
+        parameters: {
+          name: "Освободиться из пут",
+          type: "ability",
+          actionCost: "action",
+          range: { type: "self" },
+          damage: [],
+          targeting: "self",
+          description: "Действие: совершить проверку Силы против СЛ заклинания, чтобы вырваться из пут/паутины.",
+        },
+      });
+    }
+  }
+
   // Специфические эффекты зачарования оружия и заклинаний
   if (effect.condition === "shillelagh") {
     const wisMod = target.abilityMods.WIS ?? (target.abilityMods.CHA ?? (target.abilityMods.INT ?? 0));
@@ -2892,6 +2913,43 @@ function useAbilityUnsafe(
     return { targets: [], text: `${c.name} совершает Отход (движение не провоцирует атак)` };
   }
 
+  // --- ДЕЙСТВИЕ ОСВОБОЖДЕНИЯ (ESCAPE ACTION) ---
+  if (lowId === "escape_restrained" || lowName.includes("освободиться из пут")) {
+    payActionCost(state, c, params.actionCost || "action");
+    const restrainedCond = c.conditions.find((cond) => cond.type === "restrained");
+    if (!restrainedCond) {
+      c.abilities = c.abilities.filter((a) => a.id !== "escape_restrained");
+      state.mark(combatantId);
+      return { targets: [], text: `${c.name} не находится под действием пут` };
+    }
+
+    const dc = restrainedCond.saveDC ?? 13;
+    const strMod = c.abilityMods?.STR ?? 0;
+    const prof = c.saves?.STR?.prof ? c.profBonus : 0;
+    const d20 = rollD20();
+    const total = d20.total + strMod + prof;
+
+    state.addLog(
+      `🎲 ${c.name} совершает проверку Силы для освобождения: ${d20.total} + ${strMod + prof} = ${total} против СЛ ${dc}`,
+      "ability",
+      c.name
+    );
+
+    if (total >= dc) {
+      c.conditions = c.conditions.filter((cond) => cond !== restrainedCond);
+      if (!c.conditions.some((cond) => cond.type === "restrained")) {
+        c.abilities = c.abilities.filter((a) => a.id !== "escape_restrained");
+      }
+      state.addLog(`✨ ${c.name} успешно вырывается из пут!`, "system", c.name);
+      state.mark(combatantId);
+      return { targets: [{ name: c.name, saved: true }], text: `${c.name} освобождается из пут` };
+    } else {
+      state.addLog(`❌ ${c.name} не удаётся вырваться из пут!`, "system", c.name);
+      state.mark(combatantId);
+      return { targets: [{ name: c.name, saved: false }], text: `${c.name} не удаётся вырваться` };
+    }
+  }
+
   payActionCost(state, c, params.actionCost);
   // Поворот бойца лицом к цели или к области
   if (opts.targetIds && opts.targetIds.length > 0) {
@@ -3322,7 +3380,7 @@ export function endTurn(state: CombatState, depth = 0): { nextId: string | null 
     // Повторные спасброски для снятия эффектов (Save Ends) по правилам D&D 5e
     if (current.hpCurrent > 0) {
       for (const cond of [...current.conditions]) {
-        if (cond.saveType && cond.saveDC) {
+        if (cond.saveType && cond.saveDC && cond.type !== "restrained") {
           const save = rollSave(current, cond.saveType, cond.saveDC);
           const label = CONDITION_EFFECTS[cond.type]?.name || cond.type;
           state.addLog(
