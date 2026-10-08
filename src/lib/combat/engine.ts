@@ -41,7 +41,7 @@ import {
   isWaterTerrain,
   isLavaTerrain,
 } from "./movement";
-import { cantripDiceMultiplier, sneakAttackDice } from "./library-data";
+import { cantripDiceMultiplier, getSpellDefinition, sneakAttackDice } from "./library-data";
 import { getBeastFormById } from "./beast-forms";
 import { checkLegendaryResistance, triggerAILegendaryActions } from "./legendary";
 import {
@@ -551,7 +551,7 @@ function dropConcentrationEffects(state: CombatState, casterId: string): void {
 
     if (c.id === casterId) {
       const beforeAb = c.abilities.length;
-      c.abilities = c.abilities.filter((a) => !a.id.startsWith("conc_") && a.id !== "heat_metal_burn");
+      c.abilities = c.abilities.filter((a) => !a.id.startsWith("conc_") && !a.id.startsWith("heat_metal_burn"));
       if (c.abilities.length !== beforeAb) state.mark(c.id);
 
       const beforeAtk = c.attacks.length;
@@ -1541,7 +1541,7 @@ function prepareDamage(
     if (mult > 1) base[0].dice = scaleDice(base[0].dice, mult);
   }
 
-  const baseLevel = params.spellSlotLevel ?? 0;
+  const baseLevel = params.spellSlotLevel ?? (params as any).level ?? 0;
   if (params.upcast?.perLevel && slotLevel > baseLevel) {
     const levels = slotLevel - baseLevel;
     const m = params.upcast.perLevel.toLowerCase().replace(/к/g, "d").match(/^(\d*)d(\d+)/);
@@ -2443,27 +2443,26 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
       if (targetId) {
         applyEffect(state, targetId, { condition: "heat_metal", durationRounds: rounds, concentration: true }, caster.id);
       }
-      const hasHeatAbility = caster.abilities.some((a) => a.id === "heat_metal_burn");
-      if (!hasHeatAbility) {
-        caster.abilities.push({
-          id: "heat_metal_burn",
+      const burnDice = `${2 + Math.max(0, slotLevel - 2)}d8`;
+      caster.abilities = caster.abilities.filter((a) => !a.id.startsWith("heat_metal_burn"));
+      caster.abilities.push({
+        id: `heat_metal_burn_${targetId || "target"}`,
+        name: "Раскалённый металл (Ожог)",
+        usesMax: 0,
+        usesUsed: 0,
+        refresh: "turn",
+        parameters: {
           name: "Раскалённый металл (Ожог)",
-          usesMax: 0,
-          usesUsed: 0,
-          refresh: "turn",
-          parameters: {
-            name: "Раскалённый металл (Ожог)",
-            type: "ability",
-            actionCost: "bonus",
-            range: { type: "ranged", value: 60 },
-            targeting: "creature",
-            damage: [{ dice: "2d8", mod: 0, type: "fire", save: "none" }],
-            saveType: "CON",
-            effects: [{ condition: "disadvantage", durationRounds: 1 }],
-            description: "Бонусное действие: повторный ожог раскаленного металла (2к8 огнём) по цели под действием заклинания.",
-          },
-        });
-      }
+          type: "ability",
+          actionCost: "bonus",
+          range: { type: "ranged", value: 60 },
+          targeting: "creature",
+          damage: [{ dice: burnDice, mod: 0, type: "fire", save: "none" }],
+          saveType: "CON",
+          effects: [{ condition: "heat_metal", durationRounds: 1 }],
+          description: `Бонусное действие: повторный ожог раскаленного металла (${burnDice} огнём) по цели под действием заклинания.`,
+        },
+      });
     }
 
     state.mark(caster.id);
@@ -2525,7 +2524,7 @@ export interface SpellDefinitionLike {
 export function castSpell(
   state: CombatState,
   casterId: string,
-  spell: SpellDefinitionLike,
+  spell: SpellDefinitionLike | string,
   opts: {
     targetIds?: string[];
     center?: Cell | null;
@@ -2539,7 +2538,7 @@ export function castSpell(
 function castSpellUnsafe(
   state: CombatState,
   casterId: string,
-  spell: SpellDefinitionLike,
+  spellOrId: SpellDefinitionLike | string,
   opts: {
     targetIds?: string[];
     center?: Cell | null;
@@ -2551,6 +2550,20 @@ function castSpellUnsafe(
   const caster = state.require(casterId);
   if (!canAct(caster)) throw new EngineError(`${caster.name} не может действовать`);
   if (caster.wildShape) throw new EngineError("Нельзя сотворять заклинания в облике зверя!");
+
+  let spell: SpellDefinitionLike;
+  if (typeof spellOrId === "string") {
+    const def = getSpellDefinition(spellOrId);
+    if (!def) throw new EngineError(`Заклинание «${spellOrId}» не найдено в библиотеке`);
+    spell = {
+      id: spellOrId,
+      name: def.name,
+      level: def.level,
+      parameters: def.parameters,
+    };
+  } else {
+    spell = spellOrId;
+  }
 
   const params = spell.parameters;
   const slotLevel = opts.slotLevel ?? spell.level;

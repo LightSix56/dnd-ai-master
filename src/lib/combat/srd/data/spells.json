@@ -6218,9 +6218,14 @@
         {
           "dice": "2d8",
           "mod": 0,
-          "type": "fire"
+          "type": "fire",
+          "save": "none"
         }
       ],
+      "spellSlotLevel": 2,
+      "upcast": {
+        "perLevel": "1d8"
+      },
       "targeting": "creature",
       "saveType": "CON",
       "effects": [
