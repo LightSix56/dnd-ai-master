@@ -301,7 +301,7 @@ export function findOpportunityAttackers(
   }
 
   // Невидимый или скрытый персонаж не провоцирует атак (правило 5e: "hostile creature that you can see")
-  if (mover.conditions.some((cond) => cond.type === "invisible") || mover.isHidden) {
+  if (mover.conditions.some((cond) => cond.type === "invisible" || cond.type === "greater_invisibility") || mover.isHidden) {
     return [];
   }
 
@@ -569,7 +569,7 @@ export function computeVisibilityStatus(
   mapElements: MapElement[]
 ): { status: VisibilityStatus; seenBy: string[] } {
   // Невидимого никто не видит обычным зрением
-  if (target.conditions.some((c) => c.type === "invisible")) {
+  if (target.conditions.some((c) => c.type === "invisible" || c.type === "greater_invisibility")) {
     return { status: "unseen", seenBy: [] };
   }
 

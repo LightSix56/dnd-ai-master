@@ -63,9 +63,10 @@ export function combatantToSheetPatch(
   const conditions = new Set<string>();
   if (Array.isArray(rawConditions)) {
     for (const item of rawConditions) {
-      const type = String((item && typeof item === "object" ? (item as { type?: unknown }).type : item) ?? "")
+      let type = String((item && typeof item === "object" ? (item as { type?: unknown }).type : item) ?? "")
         .trim()
         .toLowerCase();
+      if (type === "greater_invisibility") type = "invisible";
       if (SHEET_CONDITIONS.has(type)) conditions.add(type);
     }
   }

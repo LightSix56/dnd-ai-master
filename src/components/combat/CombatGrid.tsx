@@ -705,7 +705,7 @@ export function CombatGrid({
           const isCurrent = c.id === currentTurnId;
           const isDead = c.hpCurrent <= 0;
           const isProne = hasCondition(c, "prone");
-          const isInvisible = hasCondition(c, "invisible");
+          const isInvisible = hasCondition(c, "invisible") || hasCondition(c, "greater_invisibility");
           const inAoe = aoeCellKeys.has(cellKey({ x: c.x, y: c.y }));
           const hpPct = c.hpMax > 0 ? (c.hpCurrent / c.hpMax) * 100 : 0;
           const hpColor = hpPct > 60 ? "#10b981" : hpPct > 30 ? "#f59e0b" : "#ef4444";

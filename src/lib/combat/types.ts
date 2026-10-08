@@ -284,6 +284,7 @@ export interface ActionParameters {
   concentration?: boolean;
   duration?: string;
   spellSlotLevel?: number | null;
+  zoneType?: "entangle" | "web" | "spike_growth" | "grease" | string;
   upcast?: {
     perLevel?: string;
     description?: string;
@@ -384,6 +385,11 @@ export const CONDITION_EFFECTS: Record<string, {
   invisible: {
     name: "Невидимый",
     description: "Преимущество на свои атаки; атаки по нему получают помеху; невидим для обычного зрения",
+    effects: { attackAdvantage: true, attackDisadvantageAgainst: true },
+  },
+  greater_invisibility: {
+    name: "Высшая невидимость",
+    description: "Преимущество на свои атаки; атаки по нему получают помеху; невидим для обычного зрения (не спадает при атаках)",
     effects: { attackAdvantage: true, attackDisadvantageAgainst: true },
   },
   deafened: {

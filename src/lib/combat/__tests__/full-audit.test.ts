@@ -120,6 +120,12 @@ function createAuditState() {
     current() {
       return this.combatants[this.currentTurnIndex] || this.combatants[0];
     },
+    addElement(el: any) {
+      this.mapElements.push(el);
+    },
+    removeElement(id: string) {
+      this.mapElements = this.mapElements.filter((e: any) => e.id !== id);
+    },
   };
 
   return { state, caster, targetMelee, target10ft, targetRanged, targetDistant, ally };

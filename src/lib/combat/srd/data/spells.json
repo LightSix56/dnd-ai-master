@@ -5715,7 +5715,7 @@
       "targeting": "creature",
       "effects": [
         {
-          "condition": "invisible",
+          "condition": "greater_invisibility",
           "durationRounds": 10
         }
       ],

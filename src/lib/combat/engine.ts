@@ -499,7 +499,11 @@ export function dealDamage(
       (el) => el.properties?.isSpellZone && el.properties.flammable && coversCell(el, { x: target.x, y: target.y })
     );
     for (const web of webZones) {
-      state.removeElement(web.id);
+      if (typeof state.removeElement === "function") {
+        state.removeElement(web.id);
+      } else {
+        state.mapElements = state.mapElements.filter((e) => e.id !== web.id);
+      }
       const burnDmg = rollDice("2d4").total;
       state.addLog(`🔥 Паутина под ${target.name} вспыхивает от огня и сгорает! (+${burnDmg} урона огнем)`, "damage", target.name);
       const res = applyDamage(target, burnDmg);
@@ -617,7 +621,11 @@ function dropConcentrationEffects(state: CombatState, casterId: string): void {
     (el) => el.properties?.isSpellZone && el.properties.casterId === casterId && el.properties.concentration
   );
   for (const zone of droppedZones) {
-    state.removeElement(zone.id);
+    if (typeof state.removeElement === "function") {
+      state.removeElement(zone.id);
+    } else {
+      state.mapElements = state.mapElements.filter((e) => e.id !== zone.id);
+    }
   }
 }
 
@@ -2540,7 +2548,9 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
   }
 
   // Обычная невидимость спадает при касте (если это не сам каст невидимости)
-  const isCastingInvisibility = params.effects?.some((e) => e.condition === "invisible") || params.selfEffects?.some((e) => e.condition === "invisible");
+  const isCastingInvisibility =
+    params.effects?.some((e) => e.condition === "invisible" || e.condition === "greater_invisibility") ||
+    params.selfEffects?.some((e) => e.condition === "invisible" || e.condition === "greater_invisibility");
   if (caster.conditions.some((c) => c.type === "invisible") && !isCastingInvisibility) {
     caster.conditions = caster.conditions.filter((c) => c.type !== "invisible");
     state.addLog(`${caster.name}: невидимость спадает после совершения действия`, "system", caster.name);
@@ -2596,7 +2606,7 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
       const burnDice = `${2 + Math.max(0, slotLevel - 2)}d8`;
       caster.abilities = caster.abilities.filter((a) => !a.id.startsWith("heat_metal_burn"));
       caster.abilities.push({
-        id: `heat_metal_burn_${targetId || "target"}`,
+        id: "heat_metal_burn",
         name: "Раскалённый металл (Ожог)",
         usesMax: 0,
         usesUsed: 0,
@@ -2675,7 +2685,11 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
           flammable: detectedZoneType === "web",
         },
       };
-      state.addElement(zoneEl);
+      if (typeof state.addElement === "function") {
+        state.addElement(zoneEl);
+      } else if (state.mapElements) {
+        state.mapElements.push(zoneEl);
+      }
     }
     state.addLog(`🌿 ${caster.name} создаёт область заклинания «${ctx.label}» (${cells.length} клеток)`, "spell", caster.name);
   }
@@ -2942,11 +2956,11 @@ function useAbilityUnsafe(
       }
       state.addLog(`✨ ${c.name} успешно вырывается из пут!`, "system", c.name);
       state.mark(combatantId);
-      return { targets: [{ name: c.name, saved: true }], text: `${c.name} освобождается из пут` };
+      return { targets: [{ name: c.name, saved: true, amount: 0 }], text: `${c.name} освобождается из пут` };
     } else {
       state.addLog(`❌ ${c.name} не удаётся вырваться из пут!`, "system", c.name);
       state.mark(combatantId);
-      return { targets: [{ name: c.name, saved: false }], text: `${c.name} не удаётся вырваться` };
+      return { targets: [{ name: c.name, saved: false, amount: 0 }], text: `${c.name} не удаётся вырваться` };
     }
   }
 

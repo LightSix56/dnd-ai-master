@@ -125,7 +125,7 @@ function isPerceivableByBot(
   allCombatants: Combatant[] = []
 ): boolean {
   if (target.hpCurrent <= 0) return false;
-  if (target.conditions.some((c) => c.type === "invisible")) return false;
+  if (target.conditions.some((c) => c.type === "invisible" || c.type === "greater_invisibility")) return false;
 
   if (target.isHidden) {
     const dist = distanceFt(observer, target);

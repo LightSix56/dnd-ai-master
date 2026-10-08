@@ -63,7 +63,7 @@ export async function GET(req: Request) {
       const cover = hasCoverBetween(active, e, state.mapElements, state.combatants);
       const vis = computeVisibilityStatus(e, state.combatants, state.mapElements);
       const isPerceived =
-        !e.conditions.some((c) => c.type === "invisible") &&
+        !e.conditions.some((c) => c.type === "invisible" || c.type === "greater_invisibility") &&
         (e.isHidden ? distFt <= 5 : los);
 
       if (isPerceived) {
@@ -102,7 +102,7 @@ export async function GET(req: Request) {
           canAttackDirectly: false,
           reason: e.isHidden
             ? "Цель успешно скрылась (Скрытность / Hide)"
-            : e.conditions.some((c) => c.type === "invisible")
+            : e.conditions.some((c) => c.type === "invisible" || c.type === "greater_invisibility")
             ? "Цель невидима (Invisible)"
             : "Цель за глухим препятствием или стеной",
           visibilityStatus: "unseen",

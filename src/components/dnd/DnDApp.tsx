@@ -1771,8 +1771,10 @@ export function DnDApp({
     }
   }, []);
 
-  loadArcStateRef.current = loadArcState;
-  arcStatusRef.current = arcState?.status ?? null;
+  useEffect(() => {
+    loadArcStateRef.current = loadArcState;
+    arcStatusRef.current = arcState?.status ?? null;
+  });
 
   // Состояние истории при смене кампании (защищено от сброса при периодическом опросе)
   useEffect(() => {
@@ -2485,8 +2487,10 @@ export function DnDApp({
     await runImport({ shareCode: code });
   }
 
-  forceResolveRef.current = handleForceResolveTurn;
-  turnBusyRef.current = submittingTurn || resolvingTurn;
+  useEffect(() => {
+    forceResolveRef.current = handleForceResolveTurn;
+    turnBusyRef.current = submittingTurn || resolvingTurn;
+  });
   // Игрок сетевой комнаты, но не её ведущий: сюжет настраивает и кампанию начинает ведущий
   const isRoomGuest = Boolean(activeRoom && activeRoom.hostUserId !== user?.id);
   // Текст, который ещё пишется, — если этот ответ мастера уже лежит в чате готовым, второй раз не показываем
