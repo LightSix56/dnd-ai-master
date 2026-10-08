@@ -671,6 +671,22 @@ export interface MapElementProperties {
   damagePerTurn?: { dice: string; type: string };
   elevationFt?: number;
   destructible?: { hp: number; ac: number };
+  // Поля динамических зон заклинаний (Spell Zones / Hazards)
+  isSpellZone?: boolean;
+  spellId?: string;
+  spellName?: string;
+  casterId?: string;
+  concentration?: boolean;
+  durationRounds?: number;
+  saveType?: AbilityKey;
+  saveDC?: number;
+  zoneType?: "entangle" | "web" | "spike_growth" | "grease" | "fog" | "darkness" | "generic_hazard";
+  difficultTerrain?: boolean;
+  damageOnEnter?: DamageRoll[];
+  damagePer5ft?: DamageRoll[];
+  damageOnTurnStart?: DamageRoll[];
+  conditionOnFail?: string;
+  flammable?: boolean;
   [key: string]: unknown;
 }
 

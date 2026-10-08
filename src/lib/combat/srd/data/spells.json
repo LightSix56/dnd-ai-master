@@ -3943,11 +3943,15 @@
         "value": 90
       },
       "damage": [],
-      "targeting": "creature",
+      "targeting": "point",
       "saveType": "STR",
       "concentration": true,
       "duration": "Up to 1 minute",
-      "description": "Опутывание (Entangle)\nGrasping weeds and vines sprout from the ground in a 20-foot square starting form a point within range. For the duration, these plants turn the ground in the area into difficult terrain.\n\nA creature in the area when you cast the spell must succeed on a strength saving throw or be restrained by the entangling plants until the spell ends. A creature restrained by the plants can use its action to make a Strength check against your spell save DC. On a success, it frees itself.\n\nWhen the spell ends, the conjured plants wilt away."
+      "description": "Опутывание (Entangle)\nGrasping weeds and vines sprout from the ground in a 20-foot square starting form a point within range. For the duration, these plants turn the ground in the area into difficult terrain.\n\nA creature in the area when you cast the spell must succeed on a strength saving throw or be restrained by the entangling plants until the spell ends. A creature restrained by the plants can use its action to make a Strength check against your spell save DC. On a success, it frees itself.\n\nWhen the spell ends, the conjured plants wilt away.",
+      "aoe": {
+        "shape": "cube",
+        "size": 20
+      }
     }
   },
   {
@@ -5661,11 +5665,15 @@
         "value": 60
       },
       "damage": [],
-      "targeting": "creature",
+      "targeting": "point",
       "saveType": "DEX",
       "concentration": false,
       "duration": "1 minute",
-      "description": "Осаливание (Grease)\nSlick grease covers the ground in a 10-foot square centered on a point within range and turns it into difficult terrain for the duration.\n\nWhen the grease appears, each creature standing in its area must succeed on a dexterity saving throw or fall prone. A creature that enters the area or ends its turn there must also succeed on a dexterity saving throw or fall prone."
+      "description": "Осаливание (Grease)\nSlick grease covers the ground in a 10-foot square centered on a point within range and turns it into difficult terrain for the duration.\n\nWhen the grease appears, each creature standing in its area must succeed on a dexterity saving throw or fall prone. A creature that enters the area or ends its turn there must also succeed on a dexterity saving throw or fall prone.",
+      "aoe": {
+        "shape": "cube",
+        "size": 10
+      }
     }
   },
   {
@@ -11005,10 +11013,14 @@
           "type": "piercing"
         }
       ],
-      "targeting": "creature",
+      "targeting": "point",
       "concentration": true,
       "duration": "Up to 10 minutes",
-      "description": "Шипастый нарост (Spike Growth)\nThe ground in a 20-foot radius centered on a point within range twists and sprouts hard spikes and thorns. The area becomes difficult terrain for the duration. When a creature moves into or within the area, it takes 2d4 piercing damage for every 5 feet it travels.\n\nThe development of land is camouflaged to look natural. Any creature that does not see the area when the spell is spell casts must make a Wisdom (Perception) opposite the DD backup your fate or it does not recognize the dangerous nature of the ground before entering."
+      "description": "Шипастый нарост (Spike Growth)\nThe ground in a 20-foot radius centered on a point within range twists and sprouts hard spikes and thorns. The area becomes difficult terrain for the duration. When a creature moves into or within the area, it takes 2d4 piercing damage for every 5 feet it travels.\n\nThe development of land is camouflaged to look natural. Any creature that does not see the area when the spell is spell casts must make a Wisdom (Perception) opposite the DD backup your fate or it does not recognize the dangerous nature of the ground before entering.",
+      "aoe": {
+        "shape": "sphere",
+        "size": 20
+      }
     }
   },
   {
