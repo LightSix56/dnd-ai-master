@@ -17,6 +17,7 @@ import { db } from "@/lib/db";
 import { resolveStoryModel } from "./models";
 import { chronicleFromSummaries } from "./caching/dm-history";
 import { applyStatusToNotes } from "./scene-synchronizer";
+import { PARTY_TIES_DESCRIPTIONS, STARTING_SITUATION_OPTIONS, type PartyTies } from "@/lib/campaign/setup-params";
 
 // ─── Схемы ───
 
@@ -168,6 +169,7 @@ export interface ArcGenerationParams {
   customDmNotes?: string | null;
   language?: string;
   partyTies?: string;
+  startingSituation?: string | null;
   partyMembers?: ArcPartyMember[];
 }
 
@@ -183,14 +185,13 @@ function describeCampaign(p: ArcGenerationParams): string {
   ];
 
   if (p.partyTies) {
-    const tiesMap: Record<string, string> = {
-      tight_knit: "Слаженный боевой отряд (давние соратники, прикрывают спины)",
-      strangers: "Незнакомцы (судьба свела вместе, присматриваются и не знают тайн друг друга)",
-      mercenaries: "Наёмники на контракте (профессиональный расчёт, взаимная выгода)",
-      friends: "Друзья детства / Соклановцы (глубокая преданность и верность)",
-    };
-    lines.push(`Отношения в отряде: ${tiesMap[p.partyTies] || p.partyTies}`);
+    const ties = PARTY_TIES_DESCRIPTIONS[p.partyTies as PartyTies];
+    lines.push(`Отношения в отряде: ${ties || p.partyTies}`);
   }
+
+  // Завязка нужна только для Акта 1; без выбора строку не выводим (старые кампании)
+  const situation = STARTING_SITUATION_OPTIONS.find((o) => o.key === p.startingSituation);
+  if (situation) lines.push(`Как герои начали: ${situation.label}`);
 
   if (p.partyMembers && p.partyMembers.length > 0) {
     const partyList = p.partyMembers

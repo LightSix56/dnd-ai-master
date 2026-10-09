@@ -2,6 +2,7 @@ import { z } from "zod";
 import { generateText } from "ai";
 import { createClient, type AuthMode } from "./client";
 import { resolveStoryModel } from "./models";
+import { PARTY_TIES_DESCRIPTIONS, type PartyTies } from "@/lib/campaign/setup-params";
 
 export interface PartyRosterMember {
   id: string;
@@ -332,6 +333,7 @@ export function buildPartyAct1Prompt(params: PartyArcGenerationParams): string {
 - Сложность боёв: ${params.difficulty} (${diffConfig.distribution})
 - Начальная связь героев: ${situationText} (Код: ${params.startingSituation})
 - Стиль мастера: ${params.dmStyle || "Сбалансированный (баланс боёв, расследования и отыгрыша)"}
+${params.partyTies ? `- Отношения в отряде: ${PARTY_TIES_DESCRIPTIONS[params.partyTies as PartyTies] ?? params.partyTies}` : ""}
 ${params.customDmNotes ? `- Особые авторские пожелания Человека-ДМа: ${params.customDmNotes}` : ""}
 
 ${partyPrompt}

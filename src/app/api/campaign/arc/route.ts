@@ -154,6 +154,7 @@ export async function POST(req: Request) {
             customDmNotes: campaign.customDmNotes,
             language: campaign.language,
             partyTies: campaign.partyTies,
+            startingSituation: campaign.startingSituation,
             partyMembers: players.map((p) => ({
               name: p.name,
               race: p.race,
