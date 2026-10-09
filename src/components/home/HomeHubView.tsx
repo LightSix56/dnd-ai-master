@@ -72,6 +72,16 @@ export function HomeHubView() {
     if (typeof window === "undefined") return "https://polza.ai/api/v1";
     return localStorage.getItem("ai_base_url") || "https://polza.ai/api/v1";
   });
+  // Уровень рассуждений мастера (только для Claude). Пусто — не передаём, как в игре
+  const [reasoningEffort, setReasoningEffort] = useState(() => {
+    if (typeof window === "undefined") return "";
+    return localStorage.getItem("ai_reasoning_effort") || "";
+  });
+  useEffect(() => {
+    try {
+      localStorage.setItem("ai_reasoning_effort", reasoningEffort);
+    } catch {}
+  }, [reasoningEffort]);
   const [authMode, setAuthMode] = useState<"bearer" | "x-api-key" | "raw">(() => {
     if (typeof window === "undefined") return "bearer";
     return (localStorage.getItem("ai_auth_mode") as any) || "bearer";
@@ -550,6 +560,8 @@ export function HomeHubView() {
           model={model}
           cheapModel={cheapModel}
           storyModel={storyModel}
+          reasoningEffort={reasoningEffort}
+          onReasoningEffort={setReasoningEffort}
           authMode={authMode}
           modelsList={modelsList}
           loadingModels={loadingModels}
