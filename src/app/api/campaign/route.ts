@@ -2,6 +2,7 @@
 import { denyCampaignAccess } from "@/lib/auth/campaign-access";
 import { db } from "@/lib/db";
 import { getAuthUserFromRequest } from "@/lib/supabase/client";
+import { normalizeCampaignSetup, normalizeCampaignSetupPatch } from "@/lib/campaign/setup-params";
 
 export async function GET(req: Request) {
   try {
@@ -46,20 +47,13 @@ export async function POST(req: Request) {
     const {
       name,
       description,
-      setting = "Forgotten Realms",
-      tone = "heroic",
-      difficulty = "normal",
       language = "ru",
-      dmStyle = "balanced",
       ruleStrictness = "standard",
       startingLevel = 1,
       levelFrom,
-      levelTo,
       worldDescription,
-      customDmNotes,
       pvpEnabled = false,
       restFrequency = "standard",
-      partyTies = "tight_knit",
       makeActive = true,
     } = body;
 
@@ -72,7 +66,7 @@ export async function POST(req: Request) {
     const clampLevel = (v: unknown, fallback: number) =>
       Math.max(1, Math.min(20, Number(v) || fallback));
     const from = clampLevel(levelFrom ?? startingLevel, 1);
-    const to = Math.max(from, clampLevel(levelTo ?? from + 4, from + 4));
+    const setup = normalizeCampaignSetup(body, from);
 
     if (makeActive) {
       // Снимаем флаг активности только с кампаний текущего пользователя
@@ -87,20 +81,21 @@ export async function POST(req: Request) {
         userId,
         name: name.trim(),
         description: description?.trim() || null,
-        setting,
-        tone,
-        difficulty,
+        setting: setup.setting,
+        tone: setup.tone,
+        difficulty: setup.difficulty,
         language,
-        dmStyle,
+        dmStyle: setup.dmStyle,
         ruleStrictness,
         startingLevel: from,
         levelFrom: from,
-        levelTo: to,
+        levelTo: setup.levelTo,
         worldDescription: worldDescription?.trim() || null,
-        customDmNotes: customDmNotes?.trim() || null,
+        customDmNotes: setup.customDmNotes,
         pvpEnabled: Boolean(pvpEnabled),
         restFrequency,
-        partyTies,
+        partyTies: setup.partyTies,
+        startingSituation: setup.startingSituation,
         isActive: makeActive,
       },
     });
@@ -116,7 +111,7 @@ export async function POST(req: Request) {
 export async function PATCH(req: Request) {
   try {
     const body = await req.json();
-    const { id, setting, tone, difficulty, dmStyle, worldDescription, customDmNotes, partyTies } = body;
+    const { id, worldDescription } = body;
     if (!id) {
       return Response.json({ error: "id is required" }, { status: 400 });
     }
@@ -130,16 +125,16 @@ export async function PATCH(req: Request) {
     const denied = await denyCampaignAccess(req, id);
     if (denied) return denied;
 
+    // title — поле формы, у кампании его нет: в PATCH оно не сохраняется, название идёт через name
+    const { title: _formTitle, ...setupPatch } = normalizeCampaignSetupPatch(body, existing.levelFrom);
+    const nameChange = typeof body.name === "string" && body.name.trim() ? { name: body.name.trim() } : {};
+
     const updated = await db.campaign.update({
       where: { id },
       data: {
-        ...(setting !== undefined ? { setting } : {}),
-        ...(tone !== undefined ? { tone } : {}),
-        ...(difficulty !== undefined ? { difficulty } : {}),
-        ...(dmStyle !== undefined ? { dmStyle } : {}),
+        ...setupPatch,
+        ...nameChange,
         ...(worldDescription !== undefined ? { worldDescription: worldDescription?.trim() || null } : {}),
-        ...(customDmNotes !== undefined ? { customDmNotes: customDmNotes?.trim() || null } : {}),
-        ...(partyTies !== undefined ? { partyTies } : {}),
       },
     });
     return Response.json({ campaign: updated });
