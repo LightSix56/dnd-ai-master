@@ -766,11 +766,17 @@ export class RoomService {
   }
 
   /**
-   * Модель ДМ комнаты. Ход разрешают разные игроки, поэтому модель не берём из запроса
-   * того, кто нажал последним: её задаёт ведущий и хранит комната. Остальные используют сохранённую.
+   * Модель комнаты для роли: "dmModel" (ДМ) или "cheapModel" (служебная).
+   * Ход разрешают разные игроки, поэтому модель не берём из запроса того, кто нажал последним:
+   * её задаёт ведущий и хранит комната. Остальные используют сохранённую.
    */
-  async pickRoomDmModel(room: RoomWithParticipants, userId: string, requested?: string): Promise<string | undefined> {
-    const stored = (room.campaignSettings as Record<string, any>)?.dmModel as string | undefined;
+  async pickRoomModel(
+    room: RoomWithParticipants,
+    userId: string,
+    role: "dmModel" | "cheapModel",
+    requested?: string
+  ): Promise<string | undefined> {
+    const stored = (room.campaignSettings as Record<string, any>)?.[role] as string | undefined;
     if (userId !== room.hostUserId || !requested?.trim()) return stored || undefined;
 
     const model = requested.trim();
@@ -784,9 +790,9 @@ export class RoomService {
     const settings = (row.campaign_settings || {}) as Record<string, any>;
     const { error } = await this.client
       .from("rooms")
-      .update({ campaign_settings: { ...settings, dmModel: model }, updated_at: new Date().toISOString() })
+      .update({ campaign_settings: { ...settings, [role]: model }, updated_at: new Date().toISOString() })
       .eq("id", room.id);
-    if (error) console.error("[room] не удалось сохранить модель ДМ:", error.message);
+    if (error) console.error(`[room] не удалось сохранить модель (${role}):`, error.message);
     return model;
   }
 

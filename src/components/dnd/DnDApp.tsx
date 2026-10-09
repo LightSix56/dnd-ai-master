@@ -2117,6 +2117,7 @@ export function DnDApp({
             actionText: userMessage,
             apiKey,
             model,
+            cheapModel,
             authMode,
             baseURL,
           }),
@@ -2221,6 +2222,7 @@ export function DnDApp({
         body: JSON.stringify({
           apiKey,
           model,
+          cheapModel,
           authMode,
           baseURL,
           stream: true,

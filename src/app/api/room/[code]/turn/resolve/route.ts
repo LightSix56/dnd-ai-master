@@ -55,7 +55,8 @@ export async function POST(
     const body = await request.json().catch(() => ({}));
 
     // Модель ДМ задаёт ведущий и хранит комната; модель из запроса другого игрока не используем
-    const roomDmModel = await roomService.pickRoomDmModel(room, user.id, body.model);
+    const roomDmModel = await roomService.pickRoomModel(room, user.id, "dmModel", body.model);
+    const roomCheapModel = await roomService.pickRoomModel(room, user.id, "cheapModel", body.cheapModel);
 
     const locked = await roomService.lockTurnForResolving(activeTurn.id);
     if (!locked) {
@@ -87,6 +88,7 @@ export async function POST(
               afkCharacters: body.afkCharacters,
               apiKey: body.apiKey,
               model: roomDmModel,
+              cheapModel: roomCheapModel,
               authMode: body.authMode,
               baseURL: body.baseURL,
               roomService,
@@ -130,6 +132,7 @@ export async function POST(
         afkCharacters: body.afkCharacters,
         apiKey: body.apiKey,
         model: roomDmModel,
+        cheapModel: roomCheapModel,
         authMode: body.authMode,
         baseURL: body.baseURL,
         roomService,

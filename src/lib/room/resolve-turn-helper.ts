@@ -9,6 +9,7 @@ import { dmTools, buildToolsContext } from "@/lib/ai/tools";
 import { getDeterministicTools, buildDmHistory, buildFrozenSystemPrompt } from "@/lib/ai/caching";
 import { loadCampaignContext } from "@/lib/ai/campaign-context";
 import { compactHistory } from "@/lib/ai/compact";
+import { syncSceneState } from "@/lib/ai/scene-synchronizer";
 import { calculateCostRub, extractTokenUsage, type TokenUsage } from "@/lib/ai/cost";
 
 export interface RoomTurnStats {
@@ -29,6 +30,7 @@ export interface ResolveActiveRoomTurnOptions {
   partyStatus?: Array<CharacterTurnStatus>;
   apiKey?: string;
   model?: string;
+  cheapModel?: string;
   authMode?: string;
   baseURL?: string;
   roomService?: RoomService;
@@ -507,14 +509,28 @@ export async function resolveActiveRoomTurnHelper(
     // Хроника кампании дополняется в фоне, когда за пределами дословного окна накопился блок
     const compactKey = (options?.apiKey || process.env.AI_API_KEY || "").trim();
     if (compactKey && !narrative.trimStart().startsWith("⚠️")) {
-      const runCompaction = () =>
-        compactHistory({
+      const playerTurnText = Object.values(activeTurn.playerInputs || {})
+        .map((p) => `${p.characterName}: ${p.actionText}`)
+        .join("\n");
+      const runCompaction = async () => {
+        // Служебная модель обновляет состояние сцены и NPC по итогам хода (как в соло-чате)
+        await syncSceneState({
+          campaignId,
+          playerMessage: playerTurnText,
+          assistantResponse: narrative,
+          apiKey: compactKey,
+          authMode: (options?.authMode as AuthMode) || "bearer",
+          baseURL: options?.baseURL,
+          cheapModel: options?.cheapModel,
+        }).catch((e) => console.error("[resolveActiveRoomTurnHelper] scene sync failed:", e));
+        await compactHistory({
           campaignId,
           apiKey: compactKey,
           authMode: options?.authMode as AuthMode,
           model: options?.model,
           baseURL: options?.baseURL,
         }).catch((e) => console.error("[resolveActiveRoomTurnHelper] compaction failed:", e));
+      };
       try {
         // На Vercel фоновая работа должна быть зарегистрирована через after(), иначе функция
         // завершится раньше неё. Вне запроса (тесты, скрипты) after() бросает — тогда выполняем сразу.
