@@ -2,7 +2,7 @@ import { denyCampaignAccess } from "@/lib/auth/campaign-access";
 import { after } from "next/server";
 import { db } from "@/lib/db";
 import { generateNextChapter, parseStoryArc, type ArcProgress } from "@/lib/ai/story-arc";
-import { resolveDmModel } from "@/lib/ai/models";
+import { resolveStoryModel } from "@/lib/ai/models";
 
 export const maxDuration = 300;
 
@@ -53,7 +53,8 @@ export async function POST(req: Request) {
     }
 
     const nextActNumber = (arc.acts?.length ?? 0) + 1;
-    const dmModel = resolveDmModel(model);
+    // Следующий акт пишет модель сюжета, а не модель ДМ
+    const storyModel = resolveStoryModel(model);
 
     const progress: ArcProgress = {
       stage: "acts",
@@ -76,7 +77,7 @@ export async function POST(req: Request) {
         const nextChapter = await generateNextChapter({
           campaignId,
           outcome,
-          model: dmModel,
+          model: storyModel,
           apiKey: cleanKey,
           authMode,
           baseURL,

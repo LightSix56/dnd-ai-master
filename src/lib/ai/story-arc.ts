@@ -525,7 +525,8 @@ export async function generateNextChapter({
   }
 
   const client = createClient(apiKey, authMode, baseURL);
-  const storyModel = resolveStoryModel(model || campaign.arcModel || undefined);
+  // Модель берём только из запроса: запасной вариант из БД (прошлая арка) мог оплачиваться зря
+  const storyModel = resolveStoryModel(model);
 
   const actNumber = (arc.acts?.length ?? 0) + 1;
   const player = campaign.characters.find((c) => c.type === "player");

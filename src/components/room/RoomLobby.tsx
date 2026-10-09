@@ -9,6 +9,7 @@ import { RoomCampaignSetupModal, CampaignSetupFormValues } from "./RoomCampaignS
 import { SupabaseAuthModal } from "@/components/auth/SupabaseAuthModal";
 import { CoopTurnBar } from "./CoopTurnBar";
 import { copyToClipboard } from "@/lib/utils";
+import { storedAiRequestFields } from "@/lib/ai/ai-settings-storage";
 import {
   Dices,
   Link,
@@ -106,7 +107,8 @@ export function RoomLobby({
           "Content-Type": "application/json",
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify(values),
+        // Историю отряда генерирует модель сюжета, поэтому передаём её и ключ из настроек.
+        body: JSON.stringify({ ...values, ...storedAiRequestFields() }),
       });
 
       if (!res.ok) {

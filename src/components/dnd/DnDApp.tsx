@@ -1686,7 +1686,7 @@ export function DnDApp({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           campaignId,
-          model,
+          model: storyModel,
           apiKey,
           authMode,
           baseURL,
@@ -1738,7 +1738,7 @@ export function DnDApp({
         body: JSON.stringify({
           campaignId,
           outcome,
-          model,
+          model: storyModel,
           apiKey,
           authMode,
           baseURL,
