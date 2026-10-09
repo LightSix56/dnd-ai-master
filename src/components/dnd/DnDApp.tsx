@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo, useSyncExternalStore } from "react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
+import { calculateTurnReadiness } from "@/lib/room/turn-batcher";
 
 const emptySubscribe = () => () => {};
 
@@ -1431,7 +1432,9 @@ export function DnDApp({
                 if (
                   quietFor > 70_000 &&
                   Date.now() - watch.lastAttempt > 45_000 &&
-                  !turnBusyRef.current
+                  !turnBusyRef.current &&
+                  // Разрешает раунд только ведущий: остальные клиенты его не дёргают
+                  activeRoom.hostUserId === userIdRef.current
                 ) {
                   watch.lastAttempt = Date.now();
                   void forceResolveRef.current?.({ silent: true });
@@ -2495,6 +2498,23 @@ export function DnDApp({
     forceResolveRef.current = handleForceResolveTurn;
     turnBusyRef.current = submittingTurn || resolvingTurn;
   });
+
+  // Ведущий разрешает раунд сам, когда все игроки готовы: его ключ и его модель.
+  // Один раз на ход: если генерация упала, раунд ждёт ручного повтора ведущим.
+  const autoResolvedTurnRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!activeRoom || !activeRoomTurn || activeRoomTurn.status !== "waiting") return;
+    if (activeRoom.hostUserId !== user?.id || resolvingTurn || submittingTurn) return;
+    const readiness = calculateTurnReadiness(activeRoom.participants || [], activeRoomTurn.playerInputs || {});
+    if (!readiness.isAllReady || autoResolvedTurnRef.current === activeRoomTurn.id) return;
+    autoResolvedTurnRef.current = activeRoomTurn.id;
+    void forceResolveRef.current?.({ silent: true });
+  }, [activeRoom, activeRoomTurn, resolvingTurn, submittingTurn, user?.id]);
+
+  // После старта кампании модели не меняем: экономия токенов и непрерывность повествования
+  const campaignStarted =
+    Boolean(activeRoom && activeRoom.status !== "lobby") ||
+    Boolean(activeCampaign && (messages.length > 0 || arcState?.status === "ready"));
   // Игрок сетевой комнаты, но не её ведущий: сюжет настраивает и кампанию начинает ведущий
   const isRoomGuest = Boolean(activeRoom && activeRoom.hostUserId !== user?.id);
   // Текст, который ещё пишется, — если этот ответ мастера уже лежит в чате готовым, второй раз не показываем
@@ -4357,6 +4377,10 @@ export function DnDApp({
               : storyModel
           }
           onSelectModel={(selectedId) => {
+            if (campaignStarted) {
+              toast.error("Модель нельзя сменить после начала кампании");
+              return;
+            }
             if (activePickerRole === "dm") setModel(selectedId);
             else if (activePickerRole === "cheap") setCheapModel(selectedId);
             else if (activePickerRole === "story") setStoryModel(selectedId);

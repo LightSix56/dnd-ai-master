@@ -101,7 +101,9 @@ export async function POST(
     }
 
     const readiness = calculateTurnReadiness(room.participants || [], turn.playerInputs);
-    if (readiness.isAllReady) {
+    // Разрешает раунд только ведущий: его ключ и модель. Если ведущий офлайн, клиент ведущего
+    // разрешит раунд сам, когда все готовы.
+    if (readiness.isAllReady && room.hostUserId === user.id) {
       const locked = await roomService.lockTurnForResolving(turn.id);
       if (locked) {
         try {

@@ -33,7 +33,6 @@ vi.mock("@/lib/room/room-service", () => {
       getRoomByCode: vi.fn(),
       pickRoomModel: vi.fn().mockResolvedValue(undefined),
       getActiveTurn: vi.fn(),
-      pickRoomModel: vi.fn().mockResolvedValue(undefined),
       submitPlayerAction: vi.fn(),
       resolveRoomTurn: vi.fn(),
       lockTurnForResolving: vi.fn().mockResolvedValue(true),
@@ -247,6 +246,7 @@ describe("Room Turn API Routes (Phase 4)", () => {
         getRoomByCode: vi.fn().mockResolvedValue({
           id: "room-1",
           code: "DRAGON-1",
+          hostUserId: "user-1",
           participants: [
             {
               userId: "user-1",

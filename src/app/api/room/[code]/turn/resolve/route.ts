@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { getAuthUserFromRequest } from "@/lib/supabase/client";
 import { RoomService } from "@/lib/room/room-service";
 import { resolveActiveRoomTurnHelper } from "@/lib/room/resolve-turn-helper";
-import { calculateTurnReadiness } from "@/lib/room/turn-batcher";
 
 // Генерация раунда ограничена 240 с внутри помощника; запас нужен, чтобы функция успела
 // сама вернуть раунд в ожидание, а не была оборвана платформой.
@@ -47,10 +46,8 @@ export async function POST(
       return NextResponse.json({ error: "Нет активного раунда" }, { status: 404 });
     }
 
-    if (!isHost) {
-      const readiness = calculateTurnReadiness(room.participants || [], activeTurn.playerInputs);
-      if (!readiness.isAllReady) return notHostError;
-    }
+    // Разрешать раунд может только ведущий: его ключ API и модель
+    if (!isHost) return notHostError;
 
     const body = await request.json().catch(() => ({}));
 

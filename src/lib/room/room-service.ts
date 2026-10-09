@@ -777,6 +777,8 @@ export class RoomService {
     requested?: string
   ): Promise<string | undefined> {
     const stored = (room.campaignSettings as Record<string, any>)?.[role] as string | undefined;
+    // После старта кампании модель не меняем: экономия токенов и непрерывность повествования
+    if (room.status !== "lobby" && stored) return stored;
     if (userId !== room.hostUserId || !requested?.trim()) return stored || undefined;
 
     const model = requested.trim();

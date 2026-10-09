@@ -83,9 +83,6 @@ export interface SyncSceneStateParams {
   cheapModel?: string;
 }
 
-/** Ответ короче этого порога — обычно просьба сделать бросок или уточнение: сцена не изменилась */
-export const SYNC_MIN_RESPONSE_CHARS = 140;
-
 /** Сколько персонажей кампании максимум отдаём летописцу за один ход */
 const SYNC_MAX_CHARACTERS = 25;
 
@@ -133,8 +130,6 @@ export async function syncSceneState({
 }: SyncSceneStateParams): Promise<SceneUpdate | null> {
   if (!campaignId || !assistantResponse.trim()) return null;
 
-  // Короткий ответ мастера («Сделай проверку Ловкости») сцену не меняет — вызов модели не нужен
-  if (assistantResponse.trim().length < SYNC_MIN_RESPONSE_CHARS) return null;
 
   const allCharacters = await db.character.findMany({
     where: { campaignId },
