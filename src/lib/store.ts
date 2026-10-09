@@ -61,6 +61,7 @@ export interface Campaign {
   pvpEnabled?: boolean;
   restFrequency?: string;
   partyTies?: string;
+  startingSituation?: string | null;
   // solo — одиночная, network — сетевой стол (карточка на главной ведёт в комнату)
   mode?: string;
   // Сюжетная арка

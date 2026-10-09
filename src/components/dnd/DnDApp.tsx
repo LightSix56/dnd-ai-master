@@ -81,6 +81,8 @@ import { CreateRoomModal } from "@/components/room/CreateRoomModal";
 import { JoinRoomModal } from "@/components/room/JoinRoomModal";
 import { CharacterPickerModal } from "@/components/room/CharacterPickerModal";
 import { RoomCampaignSetupModal, type CampaignSetupFormValues } from "@/components/room/RoomCampaignSetupModal";
+import { CampaignSetupForm } from "@/components/campaign/CampaignSetupForm";
+import { defaultCampaignSetup, normalizeCampaignSetup, type CampaignSetupValues } from "@/lib/campaign/setup-params";
 import { PartyTurnBar } from "@/components/room/PartyTurnBar";
 import type { RoomTurn } from "@/lib/room/types";
 import { SupabaseAuthModal } from "@/components/auth/SupabaseAuthModal";
@@ -303,16 +305,10 @@ export function DnDApp({
   // Параметры создания новой кампании
   const [newCampaignName, setNewCampaignName] = useState("");
   const [newCampaignStartingLevel, setNewCampaignStartingLevel] = useState(1);
-  const [newCampaignSetting, setNewCampaignSetting] = useState("Forgotten Realms");
-  const [newCampaignTone, setNewCampaignTone] = useState("heroic");
-  const [newCampaignDifficulty, setNewCampaignDifficulty] = useState("normal");
   const [newCampaignLanguage, setNewCampaignLanguage] = useState("ru");
-  const [newCampaignDmStyle, setNewCampaignDmStyle] = useState("balanced");
   const [newCampaignRuleStrictness, setNewCampaignRuleStrictness] = useState("standard");
   const [newCampaignRestFrequency, setNewCampaignRestFrequency] = useState("standard");
   const [newCampaignWorldDescription, setNewCampaignWorldDescription] = useState("");
-  const [newCampaignCustomDmNotes, setNewCampaignCustomDmNotes] = useState("");
-  const [newCampaignPartyTies, setNewCampaignPartyTies] = useState("tight_knit");
   const [creatingInProgress, setCreatingInProgress] = useState(false);
 
   // Сюжетная арка активной кампании
@@ -1610,6 +1606,8 @@ export function DnDApp({
     setCreatingInProgress(true);
     try {
       const token = getAuthToken();
+      // Параметры сюжета задаются на карточке после создания; здесь — общие значения по умолчанию
+      const creationSetup = defaultCampaignSetup(newCampaignStartingLevel);
       const res = await fetch("/api/campaign", {
         method: "POST",
         headers: {
@@ -1620,15 +1618,16 @@ export function DnDApp({
           name: newCampaignName.trim(),
           startingLevel: newCampaignStartingLevel,
           levelFrom: newCampaignStartingLevel,
-          levelTo: Math.min(20, newCampaignStartingLevel + 4),
-          setting: newCampaignSetting,
-          tone: newCampaignTone,
-          difficulty: newCampaignDifficulty,
+          levelTo: creationSetup.levelTo,
+          setting: creationSetup.setting,
+          tone: creationSetup.tone,
+          difficulty: creationSetup.difficulty,
           language: newCampaignLanguage,
-          dmStyle: newCampaignDmStyle,
+          dmStyle: creationSetup.dmStyle,
           ruleStrictness: newCampaignRuleStrictness,
           restFrequency: newCampaignRestFrequency,
-          partyTies: newCampaignPartyTies,
+          partyTies: creationSetup.partyTies,
+          startingSituation: creationSetup.startingSituation,
           makeActive: true,
         }),
       });
@@ -1762,12 +1761,6 @@ export function DnDApp({
     syncedCampaignIdRef.current = campaignId;
 
     setShowStoryConfig(false);
-    if (activeCampaign.setting) setNewCampaignSetting(activeCampaign.setting);
-    if (activeCampaign.tone) setNewCampaignTone(activeCampaign.tone);
-    if (activeCampaign.difficulty) setNewCampaignDifficulty(activeCampaign.difficulty);
-    if (activeCampaign.dmStyle) setNewCampaignDmStyle(activeCampaign.dmStyle);
-    if (activeCampaign.customDmNotes) setNewCampaignCustomDmNotes(activeCampaign.customDmNotes);
-    if (activeCampaign.partyTies) setNewCampaignPartyTies(activeCampaign.partyTies);
 
     let cancelled = false;
     (async () => {
@@ -2337,7 +2330,13 @@ export function DnDApp({
   }
 
 
-  async function handleGenerateStory() {
+  // Значения карточки берём из сохранённой кампании: после перезагрузки или смены кампании форма покажет её параметры
+  const storySetupInitialValues = normalizeCampaignSetup(
+    (activeCampaign ?? {}) as unknown as Record<string, unknown>,
+    activeCampaign?.startingLevel ?? 1
+  );
+
+  async function handleGenerateStory(values: CampaignSetupValues) {
     if (!activeCampaign) return;
     if (!apiKey && !process.env.NEXT_PUBLIC_AI_API_KEY) {
       toast.error("Введите API ключ в настройках перед генерацией сюжета");
@@ -2351,12 +2350,15 @@ export function DnDApp({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           id: activeCampaign.id,
-          setting: newCampaignSetting,
-          tone: newCampaignTone,
-          difficulty: newCampaignDifficulty,
-          dmStyle: newCampaignDmStyle,
-          customDmNotes: newCampaignCustomDmNotes,
-          partyTies: newCampaignPartyTies,
+          name: values.title,
+          setting: values.setting,
+          tone: values.tone,
+          difficulty: values.difficulty,
+          dmStyle: values.dmStyle,
+          partyTies: values.partyTies,
+          startingSituation: values.startingSituation,
+          levelTo: values.levelTo,
+          customDmNotes: values.customDmNotes,
         }),
       });
       if (res.ok) {
@@ -3427,123 +3429,17 @@ export function DnDApp({
                             </div>
                           </CardHeader>
                           <CardContent className="space-y-4">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                              {/* Сеттинг */}
-                              <div className="space-y-1.5">
-                                <Label className="text-xs font-semibold">Сеттинг мира</Label>
-                                <Select value={newCampaignSetting} onValueChange={setNewCampaignSetting}>
-                                  <SelectTrigger className="h-8 text-xs">
-                                    <SelectValue placeholder="Сеттинг" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="Forgotten Realms">Forgotten Realms (Забытые Королевства)</SelectItem>
-                                    <SelectItem value="Ravenloft">Ravenloft (Тёмное фэнтези / Гримдарк)</SelectItem>
-                                    <SelectItem value="Eberron">Eberron (Магопанк и технологии)</SelectItem>
-                                    <SelectItem value="Dragonlance">Dragonlance (Сага о Копьях)</SelectItem>
-                                    <SelectItem value="Planescape">Planescape (Мультивселенная / Сигил)</SelectItem>
-                                    <SelectItem value="Dark Sun">Dark Sun (Пустынный пост-апокалипсис)</SelectItem>
-                                    <SelectItem value="Custom">Авторский мир</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </div>
-
-                              {/* Тон */}
-                              <div className="space-y-1.5">
-                                <Label className="text-xs font-semibold">Тон повествования</Label>
-                                <Select value={newCampaignTone} onValueChange={setNewCampaignTone}>
-                                  <SelectTrigger className="h-8 text-xs">
-                                    <SelectValue placeholder="Тон" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="heroic">Героический эпос</SelectItem>
-                                    <SelectItem value="dark">Мрачный гримдарк</SelectItem>
-                                    <SelectItem value="mystery">Мистический детектив</SelectItem>
-                                    <SelectItem value="classic">Классическое приключение D&D</SelectItem>
-                                    <SelectItem value="lighthearted">Легкомысленный / Приключенческий</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </div>
-
-                              {/* Стиль мастера */}
-                              <div className="space-y-1.5">
-                                <Label className="text-xs font-semibold">Стиль Мастера (DM)</Label>
-                                <Select value={newCampaignDmStyle} onValueChange={setNewCampaignDmStyle}>
-                                  <SelectTrigger className="h-8 text-xs">
-                                    <SelectValue placeholder="Стиль мастера" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="balanced">Сбалансированный</SelectItem>
-                                    <SelectItem value="narrative">Атмосферный нарратив и отыгрыш</SelectItem>
-                                    <SelectItem value="tactical">Тактические бои и сложные испытания</SelectItem>
-                                    <SelectItem value="sandbox">Песочница и свобода выбора</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </div>
-
-                              {/* Сложность */}
-                              <div className="space-y-1.5">
-                                <Label className="text-xs font-semibold">Сложность</Label>
-                                <Select value={newCampaignDifficulty} onValueChange={setNewCampaignDifficulty}>
-                                  <SelectTrigger className="h-8 text-xs">
-                                    <SelectValue placeholder="Сложность" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="easy">Сюжетная (мягкие бои)</SelectItem>
-                                    <SelectItem value="normal">Нормальная (баланс D&D 5e)</SelectItem>
-                                    <SelectItem value="hard">Опасная (умные враги)</SelectItem>
-                                    <SelectItem value="deadly">Смертоносная (хардкор)</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </div>
-
-                              {/* Отношения в отряде (Динамика группы) */}
-                              <div className="space-y-1.5 sm:col-span-2">
-                                <Label className="text-xs font-semibold">Отношения в отряде (Динамика группы)</Label>
-                                <Select value={newCampaignPartyTies} onValueChange={setNewCampaignPartyTies}>
-                                  <SelectTrigger className="h-8 text-xs">
-                                    <SelectValue placeholder="Отношения в группе" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="tight_knit">Слаженный боевой отряд (давние соратники, прикрывают спины)</SelectItem>
-                                    <SelectItem value="strangers">Незнакомцы (судьба свела вместе, присматриваются и не знают чужих тайн)</SelectItem>
-                                    <SelectItem value="mercenaries">Наёмники (общий контракт или гильдия, деловой расчёт)</SelectItem>
-                                    <SelectItem value="friends">Друзья детства / Соклановцы (крепкая эмоциональная связь, преданность)</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </div>
-                            </div>
-
-                            {/* Пожелания к сюжету */}
-                            <div className="space-y-1.5">
-                              <Label className="text-xs font-semibold">Пожелания мастера к сюжету и миру (опционально)</Label>
-                              <Textarea
-                                value={newCampaignCustomDmNotes}
-                                onChange={(e) => setNewCampaignCustomDmNotes(e.target.value)}
-                                placeholder="Например: Отряд начинает в таверне прибрежного города перед бурей, или в древней крипте в поисках реликвии..."
-                                className="min-h-[54px] max-h-[140px] text-xs resize-none"
-                              />
-                            </div>
-
-                            <div className="flex justify-end pt-1">
-                              <Button
-                                type="button"
-                                onClick={handleGenerateStory}
-                                disabled={savingStorySettings}
-                                className="h-9 px-4 text-xs font-semibold bg-gradient-to-r from-amber-600 via-amber-700 to-amber-800 hover:from-amber-500 hover:to-amber-700 text-amber-50 border border-amber-600/60 shadow-xs flex items-center gap-1.5 cursor-pointer"
-                              >
-                                {savingStorySettings ? (
-                                  <>
-                                    <Loader2 className="size-3.5 animate-spin" />
-                                    Сохраняю и запускаю...
-                                  </>
-                                ) : (
-                                  <>
-                                    <Sparkles className="size-3.5" />
-                                    Сгенерировать сюжет
-                                  </>
-                                )}
-                              </Button>
-                            </div>
+                            <CampaignSetupForm
+                              key={activeCampaign?.id ?? "no-campaign"}
+                              mode="solo"
+                              initialTitle={activeCampaign?.name ?? ""}
+                              initialValues={storySetupInitialValues}
+                              startingLevel={activeCampaign?.startingLevel ?? 1}
+                              isGenerating={savingStorySettings}
+                              error={null}
+                              onSubmit={handleGenerateStory}
+                              onCancel={() => setShowStoryConfig(false)}
+                            />
                           </CardContent>
                         </Card>
                       )}
