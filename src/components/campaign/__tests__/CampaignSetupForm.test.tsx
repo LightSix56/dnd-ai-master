@@ -29,6 +29,16 @@ describe("CampaignSetupForm: одинаковый набор полей в об�
   }
 });
 
+describe("CampaignSetupForm: сохранённый финальный уровень виден в списке", () => {
+  it("keeps a saved final level visible even when it is not one of the standard choices", () => {
+    const html = renderToStaticMarkup(
+      <CampaignSetupForm {...baseProps("solo")} initialValues={{ ...defaultCampaignSetup(1), levelTo: 7 }} />
+    );
+    expect(html).toContain('value="7"');
+    expect(html).toContain("До 7 ур.");
+  });
+});
+
 describe("prepareCampaignSubmit: проверка и значения перед отправкой", () => {
   it("refuses an empty setting and explains why", () => {
     const res = prepareCampaignSubmit({ ...defaultCampaignSetup(1), title: "Т", setting: "  " }, 1);

@@ -219,7 +219,8 @@ export function CampaignSetupForm({
           onChange={(e) => update("levelTo", Number(e.target.value))}
           className={selectClass}
         >
-          {levelToChoices(startingLevel).map((lvl) => (
+          {/* Сохранённое значение показываем, даже если его нет среди стандартных вариантов: иначе список врёт */}
+          {Array.from(new Set([...levelToChoices(startingLevel), draft.levelTo])).sort((a, b) => a - b).map((lvl) => (
             <option key={lvl} value={lvl}>До {lvl} ур.</option>
           ))}
         </select>
