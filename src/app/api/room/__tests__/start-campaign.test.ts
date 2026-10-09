@@ -114,4 +114,46 @@ describe("POST /api/room/[code]/start-campaign", () => {
       expect.anything()
     );
   });
+
+  it("forwards every setup field to the service; normalization happens there", async () => {
+    vi.spyOn(supabaseClient, "getAuthUserFromRequest").mockResolvedValue({
+      user: { id: "host-1" } as any,
+      error: null,
+    });
+    vi.mocked(roomService.startRoomCampaign).mockResolvedValueOnce({
+      success: true,
+      campaignId: "camp-setup",
+    } as any);
+
+    const request = new Request("http://localhost/api/room/DRAGON-42/start-campaign", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: "Встреча",
+        setting: "Тёмное фэнтези",
+        tone: "Мрачный и напряженный",
+        difficulty: "deadly",
+        dmStyle: "tactical",
+        partyTies: "friends",
+        startingSituation: "patron_contract",
+        levelTo: 10,
+      }),
+    });
+
+    const response = await POST(request, { params: Promise.resolve({ code: "DRAGON-42" }) });
+    expect(response.status).toBe(200);
+    expect(roomService.startRoomCampaign).toHaveBeenCalledWith(
+      "DRAGON-42",
+      "host-1",
+      expect.objectContaining({
+        tone: "Мрачный и напряженный",
+        difficulty: "deadly",
+        dmStyle: "tactical",
+        partyTies: "friends",
+        startingSituation: "patron_contract",
+        levelTo: 10,
+      }),
+      expect.anything()
+    );
+  });
 });

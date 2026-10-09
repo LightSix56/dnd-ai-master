@@ -30,26 +30,18 @@ export async function POST(
       return NextResponse.json({ error: "Сеттинг / жанр обязателен" }, { status: 400 });
     }
 
-    const validDifficulties = ["easy", "normal", "hard", "brutal"];
-    // «Смертоносная» в окне настройки приходит как deadly — это тот же уровень, что brutal
-    const requestedDifficulty = body.difficulty === "deadly" ? "brutal" : body.difficulty;
-    const difficulty = validDifficulties.includes(requestedDifficulty) ? requestedDifficulty : "normal";
-
-    const validSituations = ["strangers", "established_party", "captives_or_survivors", "patron_contract"];
-    const startingSituation = validSituations.includes(body.startingSituation)
-      ? body.startingSituation
-      : "strangers";
-
+    // Остальные параметры нормализует сервис (startRoomCampaign), здесь только передаём их дальше
     const input: StartRoomCampaignInput = {
       title: body.title.trim(),
       setting: body.setting.trim(),
-      tone: body.tone?.trim() || "Сбалансированный",
-      difficulty,
-      startingSituation,
-      levelTo: typeof body.levelTo === "number" ? body.levelTo : undefined,
-      customDmNotes: body.customDmNotes?.trim() || null,
-      dmStyle: body.dmStyle?.trim() || undefined,
-      ruleStrictness: body.ruleStrictness?.trim() || undefined,
+      tone: body.tone,
+      difficulty: body.difficulty,
+      startingSituation: body.startingSituation,
+      levelTo: body.levelTo,
+      customDmNotes: body.customDmNotes,
+      dmStyle: body.dmStyle,
+      partyTies: body.partyTies,
+      ruleStrictness: body.ruleStrictness,
     };
 
     const result = await startRoomCampaign(code, user.id, input, {

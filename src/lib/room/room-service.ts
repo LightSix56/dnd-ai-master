@@ -32,16 +32,19 @@ import {
 } from "@/lib/dnd/sheet-store";
 import { currentHitPoints } from "@/lib/dnd/hero-overlay";
 import type { AuthMode } from "@/lib/ai/client";
+import { normalizeCampaignSetup } from "@/lib/campaign/setup-params";
 
+// Значения приходят из окна настройки в сыром виде: нормализация внутри startRoomCampaign
 export interface StartRoomCampaignInput {
   title: string;
   setting: string;
-  tone: string;
-  difficulty: "easy" | "normal" | "hard" | "brutal";
-  startingSituation: StartingSituation;
+  tone?: string;
+  difficulty?: string;
+  startingSituation?: string;
   levelTo?: number;
   customDmNotes?: string | null;
   dmStyle?: string;
+  partyTies?: string;
   ruleStrictness?: string;
 }
 
@@ -825,6 +828,11 @@ export class RoomService {
     if (!roomWithParticipants) {
       throw new Error(`Комната с кодом ${code} не найдена`);
     }
+    // Все параметры окна нормализуются один раз; дальше по функции используется только setup
+    const setup = normalizeCampaignSetup(
+      input as unknown as Record<string, unknown>,
+      roomWithParticipants.startingLevel
+    );
 
     if (roomWithParticipants.hostUserId !== hostUserId) {
       const isHostInParts = roomWithParticipants.participants.some(
@@ -863,16 +871,17 @@ export class RoomService {
     try {
       arc = await generatePartyAwareAct1(
         {
-          title: input.title,
-          setting: input.setting,
-          tone: input.tone,
-          difficulty: input.difficulty,
-          startingSituation: input.startingSituation,
+          title: setup.title,
+          setting: setup.setting,
+          tone: setup.tone,
+          difficulty: setup.difficulty,
+          startingSituation: setup.startingSituation,
           levelFrom: roomWithParticipants.startingLevel,
-          levelTo: input.levelTo || Math.max(roomWithParticipants.startingLevel + 4, 5),
+          levelTo: setup.levelTo,
           party,
-          customDmNotes: input.customDmNotes,
-          dmStyle: input.dmStyle,
+          customDmNotes: setup.customDmNotes,
+          dmStyle: setup.dmStyle,
+          partyTies: setup.partyTies,
           ruleStrictness: input.ruleStrictness,
         },
         options
@@ -882,15 +891,15 @@ export class RoomService {
       // Причину пишем в лог: раньше сбой был не виден, и стол просто получал заготовку.
       console.error("[room-service] сюжет под отряд не сгенерирован, используется заготовка:", arcErr);
       const actLevelTo = Math.min(
-        input.levelTo || 5,
+        setup.levelTo,
         Math.max(roomWithParticipants.startingLevel + 2, 3)
       );
       arc = {
-        title: input.title,
-        premise: `Герои отправляются навстречу опасностям в мире «${input.setting}».`,
+        title: setup.title,
+        premise: `Герои отправляются навстречу опасностям в мире «${setup.setting}».`,
         mainThreat: "Древняя зловещая сила пробуждается и грозит разрушить хрупкий порядок.",
         levelFrom: roomWithParticipants.startingLevel,
-        levelTo: input.levelTo || 10,
+        levelTo: setup.levelTo,
         villains: [
           {
             name: "Мастер теней",
@@ -983,17 +992,19 @@ export class RoomService {
         data: {
           // Владелец кампании стола — ведущий: без владельца она была бы доступна кому угодно по id
           userId: roomWithParticipants.hostUserId || null,
-          name: input.title,
-          setting: input.setting,
-          tone: input.tone,
-          difficulty: input.difficulty,
-          dmStyle: input.dmStyle || "balanced",
+          name: setup.title,
+          setting: setup.setting,
+          tone: setup.tone,
+          difficulty: setup.difficulty,
+          dmStyle: setup.dmStyle,
+          partyTies: setup.partyTies,
+          startingSituation: setup.startingSituation,
           ruleStrictness: input.ruleStrictness || "standard",
           levelFrom: roomWithParticipants.startingLevel,
-          levelTo: input.levelTo || Math.max(roomWithParticipants.startingLevel + 4, 5),
+          levelTo: setup.levelTo,
           startingLevel: roomWithParticipants.startingLevel,
-          worldDescription: input.setting,
-          customDmNotes: input.customDmNotes || null,
+          worldDescription: null,
+          customDmNotes: setup.customDmNotes,
           storyArc: JSON.stringify(arc),
           // Сюжет уже готов: без статуса клиент не показывал кнопку «Начать приключение»
           arcStatus: "ready",
@@ -1012,7 +1023,7 @@ export class RoomService {
             userId: participant.userId,
             characterId: original.id,
             campaignId: campaign.id,
-            campaignName: input.title,
+            campaignName: setup.title,
           },
           this.client
         );
@@ -1042,13 +1053,15 @@ export class RoomService {
         campaign_settings: {
           ...roomWithParticipants.campaignSettings,
           campaignId,
-          title: input.title,
-          setting: input.setting,
-          tone: input.tone,
-          difficulty: input.difficulty,
-          startingSituation: input.startingSituation,
-          levelTo: input.levelTo,
-          customDmNotes: input.customDmNotes,
+          title: setup.title,
+          setting: setup.setting,
+          tone: setup.tone,
+          difficulty: setup.difficulty,
+          dmStyle: setup.dmStyle,
+          partyTies: setup.partyTies,
+          startingSituation: setup.startingSituation,
+          levelTo: setup.levelTo,
+          customDmNotes: setup.customDmNotes,
           openingNarrative,
         },
         story_arc: arc,

@@ -31,6 +31,7 @@ export interface PartyArcGenerationParams {
   tone: string;
   difficulty: "easy" | "normal" | "hard" | "brutal";
   dmStyle?: string;
+  partyTies?: string;
   ruleStrictness?: string;
   levelFrom: number;
   levelTo: number;
