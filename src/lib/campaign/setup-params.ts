@@ -234,3 +234,14 @@ export function validateCampaignSetupInput(input: Partial<{ title: string; setti
   }
   return { isValid: true };
 }
+
+export type CampaignSubmitResult = { ok: true; values: CampaignSetupValues } | { ok: false; error: string };
+
+// Проверка перед отправкой формы: тот же набор правил, что и на сервере
+export function prepareCampaignSubmit(draft: CampaignSetupValues, startingLevel: number): CampaignSubmitResult {
+  const validation = validateCampaignSetupInput({ title: draft.title, setting: draft.setting });
+  if (!validation.isValid) {
+    return { ok: false, error: validation.error ?? "Проверьте правильность заполнения полей" };
+  }
+  return { ok: true, values: normalizeCampaignSetup(draft as unknown as Record<string, unknown>, startingLevel) };
+}
