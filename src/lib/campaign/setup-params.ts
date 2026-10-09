@@ -222,7 +222,7 @@ export function normalizeCampaignSetupPatch(
   return patch;
 }
 
-export function validateCampaignSetupInput(input: Partial<{ title: string; setting: string }>): {
+export function validateCampaignSetupInput(input: { title?: string; setting?: string; [extra: string]: unknown }): {
   isValid: boolean;
   error?: string;
 } {
