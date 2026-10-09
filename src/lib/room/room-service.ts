@@ -766,6 +766,31 @@ export class RoomService {
   }
 
   /**
+   * Модель ДМ комнаты. Ход разрешают разные игроки, поэтому модель не берём из запроса
+   * того, кто нажал последним: её задаёт ведущий и хранит комната. Остальные используют сохранённую.
+   */
+  async pickRoomDmModel(room: RoomWithParticipants, userId: string, requested?: string): Promise<string | undefined> {
+    const stored = (room.campaignSettings as Record<string, any>)?.dmModel as string | undefined;
+    if (userId !== room.hostUserId || !requested?.trim()) return stored || undefined;
+
+    const model = requested.trim();
+    const { data: row, error: readError } = await this.client
+      .from("rooms")
+      .select("campaign_settings")
+      .eq("id", room.id)
+      .single();
+    if (readError || !row) return stored || model;
+
+    const settings = (row.campaign_settings || {}) as Record<string, any>;
+    const { error } = await this.client
+      .from("rooms")
+      .update({ campaign_settings: { ...settings, dmModel: model }, updated_at: new Date().toISOString() })
+      .eq("id", room.id);
+    if (error) console.error("[room] не удалось сохранить модель ДМ:", error.message);
+    return model;
+  }
+
+  /**
    * Обновляет статус комнаты ('lobby' | 'generating' | 'active' | 'archived')
    */
   async updateRoomStatus(roomId: string, status: Room["status"]): Promise<boolean> {

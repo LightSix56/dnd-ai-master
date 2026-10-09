@@ -31,7 +31,9 @@ vi.mock("@/lib/room/room-service", () => {
   return {
     RoomService: vi.fn().mockImplementation(() => ({
       getRoomByCode: vi.fn(),
+      pickRoomDmModel: vi.fn().mockResolvedValue(undefined),
       getActiveTurn: vi.fn(),
+      pickRoomDmModel: vi.fn().mockResolvedValue(undefined),
       submitPlayerAction: vi.fn(),
       resolveRoomTurn: vi.fn(),
       lockTurnForResolving: vi.fn().mockResolvedValue(true),
@@ -73,6 +75,7 @@ describe("Room Turn API Routes (Phase 4)", () => {
       };
       const mockService = {
         getRoomByCode: vi.fn().mockResolvedValue({ id: "room-1", code: "DRAGON-1" }),
+        pickRoomDmModel: vi.fn().mockResolvedValue(undefined),
         getActiveTurn: vi.fn().mockResolvedValue(mockTurn),
       };
       vi.mocked(RoomService).mockImplementation(function () {
@@ -184,6 +187,7 @@ describe("Room Turn API Routes (Phase 4)", () => {
             },
           ],
         }),
+        pickRoomDmModel: vi.fn().mockResolvedValue(undefined),
         submitPlayerAction: vi.fn().mockResolvedValue(mockTurn),
       };
       vi.mocked(RoomService).mockImplementation(function () {
@@ -250,6 +254,7 @@ describe("Room Turn API Routes (Phase 4)", () => {
             },
           ],
         }),
+        pickRoomDmModel: vi.fn().mockResolvedValue(undefined),
         submitPlayerAction: vi.fn().mockResolvedValue(mockTurn),
         resolveRoomTurn: vi.fn().mockImplementation((_roomId, narrative) =>
           Promise.resolve({
@@ -331,6 +336,7 @@ describe("Room Turn API Routes (Phase 4)", () => {
           code: "DRAGON-1",
           hostUserId: "user-1",
         }),
+        pickRoomDmModel: vi.fn().mockResolvedValue(undefined),
         getActiveTurn: vi.fn().mockResolvedValue({
           id: "turn-1",
           roundNumber: 1,
@@ -398,6 +404,7 @@ describe("Room Turn API Routes (Phase 4)", () => {
             },
           ],
         }),
+        pickRoomDmModel: vi.fn().mockResolvedValue(undefined),
         getActiveTurn: vi.fn().mockResolvedValue({
           id: "turn-1",
           roundNumber: 1,

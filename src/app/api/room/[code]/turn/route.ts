@@ -77,6 +77,9 @@ export async function POST(
       );
     }
 
+    // Модель ДМ задаёт ведущий и хранит комната, а не игрок, который отправил ход последним
+    const roomDmModel = await roomService.pickRoomDmModel(room, user.id, body.model);
+
     const input: PlayerTurnInput = {
       userId: user.id,
       characterName: participant.character?.name || "Герой",
@@ -104,7 +107,7 @@ export async function POST(
           // Автоматический старт генерации мира
           const resolveResult = await resolveActiveRoomTurnHelper(room, turn, {
             apiKey: body.apiKey,
-            model: body.model,
+            model: roomDmModel,
             authMode: body.authMode,
             baseURL: body.baseURL,
             roomService,
