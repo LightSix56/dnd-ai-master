@@ -85,10 +85,38 @@ export function addPromptCacheMarkers(body: string): string {
   return JSON.stringify({ ...data, messages });
 }
 
+export interface ReasoningOptions {
+  /** Уровень рассуждений: low | medium | high | max. Пусто — не передаём, как раньше */
+  effort?: string;
+  /** Применять только к запросам этой модели (служебная модель использует тот же клиент) */
+  forModel?: string;
+}
+
+/**
+ * Добавляет уровень рассуждений в тело запроса. Polza игнорирует верхнеуровневый reasoning_effort,
+ * поэтому передаём объект reasoning. Claude 4.7+ принимает только адаптивный режим с effort_level.
+ */
+export function addReasoningEffort(body: string, options: ReasoningOptions): string {
+  const level = options.effort?.trim();
+  if (!level) return body;
+  let data: Record<string, unknown>;
+  try {
+    data = JSON.parse(body);
+  } catch {
+    return body;
+  }
+  if (options.forModel && data.model !== options.forModel) return body;
+  data.reasoning = isClaudeModel(data.model)
+    ? { type: "adaptive", effort_level: level }
+    : { effort: level };
+  return JSON.stringify(data);
+}
+
 export function createClient(
   userApiKey?: string,
   authMode?: AuthMode,
-  userBaseURL?: string
+  userBaseURL?: string,
+  reasoning?: ReasoningOptions
 ) {
   // Триммим ключ — частая причина "Неверный формат API ключа"
   const cleanKey = (userApiKey || process.env.AI_API_KEY || "").trim();
@@ -110,10 +138,11 @@ export function createClient(
     }
 
     const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
-    const body =
-      typeof init?.body === "string" && url.includes("/chat/completions")
-        ? addPromptCacheMarkers(init.body)
-        : init?.body;
+    let body = init?.body;
+    if (typeof body === "string" && url.includes("/chat/completions")) {
+      body = addPromptCacheMarkers(body);
+      if (reasoning) body = addReasoningEffort(body, reasoning);
+    }
 
     const res = await fetch(input, { ...init, headers, body });
 

@@ -87,6 +87,7 @@ export async function POST(req: Request) {
       authMode,
       baseURL,
       trigger,
+      reasoningEffort,
     }: {
       messages: UIMessage[];
       campaignId?: string;
@@ -97,6 +98,8 @@ export async function POST(req: Request) {
       baseURL?: string;
       // AI SDK присылает "regenerate-message", когда игрок просит переписать последний ответ
       trigger?: string;
+      // Уровень рассуждений мастера (low | medium | high | max); пусто — не передаём
+      reasoningEffort?: string;
     } = await req.json();
 
     if (!messages || !Array.isArray(messages)) {
@@ -194,7 +197,11 @@ export async function POST(req: Request) {
       : undefined;
 
     const selectedModel = resolveDmModel(model);
-    const openai = createClient(userApiKey, authMode, baseURL);
+    // Уровень рассуждений относится только к модели мастера, служебная модель его не получает
+    const openai = createClient(userApiKey, authMode, baseURL, {
+      effort: reasoningEffort,
+      forModel: selectedModel,
+    });
     // Используем chat.completions API (классический OpenAI формат) — он поддерживается
     // всеми OpenAI-compatible провайдерами (включая polza.ai)
     const modelInstance = openai.chat(selectedModel);

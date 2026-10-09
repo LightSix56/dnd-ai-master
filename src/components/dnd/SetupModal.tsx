@@ -49,6 +49,9 @@ export interface SetupModalProps {
   testingKey: boolean;
   testResult: { valid: boolean; message: string } | null;
   onTestKey: () => void;
+  /** Уровень рассуждений мастера; выбор показываем только для моделей Claude */
+  reasoningEffort?: string;
+  onReasoningEffort?: (v: string) => void;
 }
 
 export function SetupModal({
@@ -72,6 +75,8 @@ export function SetupModal({
   testingKey,
   testResult,
   onTestKey,
+  reasoningEffort = "",
+  onReasoningEffort,
 }: SetupModalProps) {
   const renderModelCard = (
     roleId: "dm" | "cheap" | "story",
@@ -247,6 +252,23 @@ export function SetupModal({
             model,
             "Ведёт рассказ, отыгрывает NPC, принимает решения и ведёт тактический бой.",
             "DeepSeek V4.1 Flash (1M контекст, 16.5₽/49.4₽, кеш 0.49₽)."
+          )}
+
+          {onReasoningEffort && /(^anthropic\/|claude)/i.test(model) && (
+            <div className="flex items-center justify-between gap-3 px-1">
+              <Label className="text-xs text-muted-foreground">Уровень рассуждений мастера</Label>
+              <select
+                value={reasoningEffort}
+                onChange={(e) => onReasoningEffort(e.target.value)}
+                className="h-8 rounded-md border bg-background px-2 text-xs"
+              >
+                <option value="">По умолчанию (не передаётся)</option>
+                <option value="low">low</option>
+                <option value="medium">medium</option>
+                <option value="high">high</option>
+                <option value="max">max</option>
+              </select>
+            </div>
           )}
 
           {/* 2. Служебная модель */}

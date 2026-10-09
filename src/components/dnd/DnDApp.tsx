@@ -359,6 +359,11 @@ export function DnDApp({
     if (typeof window === "undefined") return "deepseek/deepseek-v4.1-flash";
     return localStorage.getItem("ai_story_model") || "deepseek/deepseek-v4.1-flash";
   });
+  // Уровень рассуждений мастера (только для Claude). Пусто — не передаём, как раньше
+  const [reasoningEffort, setReasoningEffort] = useState(() => {
+    if (typeof window === "undefined") return "";
+    return localStorage.getItem("ai_reasoning_effort") || "";
+  });
   const [authMode, setAuthMode] = useState<"bearer" | "x-api-key" | "raw">(() => {
     if (typeof window === "undefined") return "bearer";
     return (localStorage.getItem("ai_auth_mode") as "bearer" | "x-api-key" | "raw") || "bearer";
@@ -1263,11 +1268,12 @@ export function DnDApp({
           apiKey,
           model,
           cheapModel,
+          reasoningEffort,
           authMode,
           baseURL,
         }),
       }),
-    [activeCampaign?.id, apiKey, model, cheapModel, authMode, baseURL]
+    [activeCampaign?.id, apiKey, model, cheapModel, reasoningEffort, authMode, baseURL]
   );
 
   const { messages, setMessages, status, error, sendMessage, regenerate, stop } = useChat({
@@ -1580,6 +1586,10 @@ export function DnDApp({
     if (!isMounted) return;
     localStorage.setItem("ai_story_model", storyModel);
   }, [storyModel, isMounted]);
+  useEffect(() => {
+    if (!isMounted) return;
+    localStorage.setItem("ai_reasoning_effort", reasoningEffort);
+  }, [reasoningEffort, isMounted]);
   useEffect(() => {
     if (!isMounted) return;
     localStorage.setItem("ai_auth_mode", authMode);
@@ -4313,6 +4323,8 @@ export function DnDApp({
           model={model}
           cheapModel={cheapModel}
           storyModel={storyModel}
+          reasoningEffort={reasoningEffort}
+          onReasoningEffort={setReasoningEffort}
           authMode={authMode}
           modelsList={modelsList}
           loadingModels={loadingModels}
