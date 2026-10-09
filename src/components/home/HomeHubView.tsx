@@ -23,6 +23,7 @@ import {
   Sparkles,
   Loader2,
   LogIn,
+  Trash2,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useDnDStore, type Campaign } from "@/lib/store";
@@ -45,6 +46,35 @@ export function HomeHubView() {
   const [joiningRoom, setJoiningRoom] = useState(false);
   const [showCreateRoom, setShowCreateRoom] = useState(false);
   const [showCreateCampaign, setShowCreateCampaign] = useState(false);
+  const [deletingCampaignId, setDeletingCampaignId] = useState<string | null>(null);
+
+  // Удаление кампании с главной: тот же запрос, что и в списке кампаний в игре
+  async function deleteCampaignFromHome(camp: { id: string; name: string }) {
+    if (!window.confirm(`Удалить кампанию «${camp.name}»? Вместе с ней удалятся её герои, события и история.`)) return;
+    setDeletingCampaignId(camp.id);
+    try {
+      const token = getAuthToken();
+      const res = await fetch("/api/campaign/delete", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({ campaignId: camp.id }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        toast.error(data.error || "Не удалось удалить кампанию");
+        return;
+      }
+      setCampaigns(campaigns.filter((c) => c.id !== camp.id));
+      toast.success(`Кампания «${camp.name}» удалена`);
+    } catch {
+      toast.error("Не удалось удалить кампанию");
+    } finally {
+      setDeletingCampaignId(null);
+    }
+  }
   const [newCampaignName, setNewCampaignName] = useState("");
   const [newCampaignLevel, setNewCampaignLevel] = useState(1);
   const [creatingCampaign, setCreatingCampaign] = useState(false);
@@ -494,9 +524,29 @@ export function HomeHubView() {
                       <CardTitle className="text-base font-bold min-w-0 line-clamp-2 break-words" title={camp.name}>
                         {camp.name}
                       </CardTitle>
-                      <Badge variant="outline" className="text-[11px] shrink-0">
-                        {camp.startingLevel || camp.levelFrom || 1} ур.
-                      </Badge>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <Badge variant="outline" className="text-[11px] shrink-0">
+                          {camp.startingLevel || camp.levelFrom || 1} ур.
+                        </Badge>
+                        <button
+                          type="button"
+                          aria-label={`Удалить кампанию «${camp.name}»`}
+                          title="Удалить кампанию"
+                          disabled={deletingCampaignId === camp.id}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            void deleteCampaignFromHome(camp);
+                          }}
+                          onKeyDown={(e) => e.stopPropagation()}
+                          className="rounded-md p-1 text-muted-foreground hover:text-destructive hover:bg-destructive/10 disabled:opacity-50"
+                        >
+                          {deletingCampaignId === camp.id ? (
+                            <Loader2 className="size-3.5 animate-spin" />
+                          ) : (
+                            <Trash2 className="size-3.5" />
+                          )}
+                        </button>
+                      </div>
                     </div>
                     <CardDescription className="text-xs line-clamp-2">
                       {camp.description || `${camp.setting || "Forgotten Realms"} • ${camp.tone || "Героическое"}`}

@@ -18,9 +18,10 @@ export async function GET(request: Request) {
     const validatedStartingLevel =
       Number.isFinite(startingLevel) && startingLevel >= 1 && startingLevel <= 20 ? startingLevel : 1;
 
-    let campaignId: string | null = null;
+    // Одиночная игра передаёт кампанию напрямую, сетевая — код комнаты
+    let campaignId: string | null = url.searchParams.get("campaignId");
     const roomCode = url.searchParams.get("roomCode");
-    if (roomCode) {
+    if (!campaignId && roomCode) {
       const room = await new RoomService().getRoomByCode(roomCode);
       campaignId = room?.campaignId ?? null;
     }

@@ -4,11 +4,13 @@ vi.mock("@/lib/supabase/client", () => {
   const getAuthUserFromRequestMock = vi.fn();
   const selectMock = vi.fn();
   const eqMock = vi.fn();
+  const isMock = vi.fn();
   const orderMock = vi.fn();
 
   const queryBuilder = {
     select: selectMock.mockReturnThis(),
     eq: eqMock.mockReturnThis(),
+    is: isMock.mockReturnThis(),
     order: orderMock,
   };
 

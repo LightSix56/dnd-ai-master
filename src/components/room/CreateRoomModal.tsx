@@ -18,7 +18,6 @@ export function CreateRoomModal({ isOpen, onClose, onRoomCreated }: CreateRoomMo
 
   const [name, setName] = useState("Поход искателей приключений");
   const [startingLevel, setStartingLevel] = useState(1);
-  const [partyBond, setPartyBond] = useState<"strangers" | "established">("strangers");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -50,7 +49,6 @@ export function CreateRoomModal({ isOpen, onClose, onRoomCreated }: CreateRoomMo
         body: JSON.stringify({
           name: name.trim(),
           startingLevel,
-          partyBond,
         }),
       });
 
@@ -138,37 +136,6 @@ export function CreateRoomModal({ isOpen, onClose, onRoomCreated }: CreateRoomMo
               <p className="mt-1 text-[11px] text-zinc-500">
                 Все присоединяющиеся игроки должны будут выбрать героя ровно {startingLevel}-го уровня.
               </p>
-            </div>
-
-            <div>
-              <label className="mb-1 block text-xs font-medium text-zinc-700 dark:text-zinc-300">Связь отряда в сюжете</label>
-              <div className="grid grid-cols-2 gap-2 text-xs">
-                <button
-                  type="button"
-                  onClick={() => setPartyBond("strangers")}
-                  className={`rounded-lg border p-2.5 text-left transition-all cursor-pointer ${
-                    partyBond === "strangers"
-                      ? "border-zinc-900 bg-zinc-900 text-white dark:border-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 font-medium shadow-xs"
-                      : "border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
-                  }`}
-                >
-                  <p className="text-sm font-medium">Незнакомцы</p>
-                  <p className="text-[11px] opacity-80 mt-0.5">Встреча и знакомство в прологе</p>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setPartyBond("established")}
-                  className={`rounded-lg border p-2.5 text-left transition-all cursor-pointer ${
-                    partyBond === "established"
-                      ? "border-zinc-900 bg-zinc-900 text-white dark:border-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 font-medium shadow-xs"
-                      : "border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
-                  }`}
-                >
-                  <p className="text-sm font-medium">Слаженная группа</p>
-                  <p className="text-[11px] opacity-80 mt-0.5">Давно путешествуют вместе</p>
-                </button>
-              </div>
             </div>
 
             {!user && (

@@ -5,6 +5,10 @@ vi.mock("@/lib/supabase/client", () => {
   const getAuthUserFromRequestMock = vi.fn();
   return {
     getAuthUserFromRequest: getAuthUserFromRequestMock,
+    // Удаление версий героев кампании в Supabase: в тестах не нужно реальное соединение
+    getSupabaseAdminClient: () => ({
+      from: () => ({ delete: () => ({ eq: async () => ({ error: null }) }) }),
+    }),
     __mocks: { getAuthUserFromRequestMock },
   };
 });

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { validateCharacterForRoom } from "@/lib/room/validation";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -130,11 +130,19 @@ export function formatCampaignCharacterForPicker(
 
 export interface CharacterPickerModalProps {
   isOpen: boolean;
+  /** Пусто в одиночной игре: комнаты нет, выбор ведёт в solo */
   roomCode: string;
   startingLevel: number;
   campaignId?: string;
   onSelect: (selected: FormattedCharacterCard) => void;
   onClose: () => void;
+  /** Одиночная игра: выбор героя импортирует его в кампанию, а не подключает к комнате */
+  solo?: {
+    campaignId: string;
+    importType: string;
+    onImportTypeChange: (type: string) => void;
+    onPick: (sheet: Record<string, any>) => Promise<void> | void;
+  };
 }
 
 const DND_CLASSES = [
@@ -171,9 +179,12 @@ export function CharacterPickerModal({
   campaignId: propCampaignId,
   onSelect,
   onClose,
+  solo,
 }: CharacterPickerModalProps) {
   const { user, getAuthToken, signInAsGuest } = useSupabaseAuth();
-  const [activeTab, setActiveTab] = useState<"campaign" | "account" | "create">("campaign");
+  const [activeTab, setActiveTab] = useState<"campaign" | "account" | "create">(solo ? "account" : "campaign");
+  // Исходные листы по id: в одиночной игре выбранный лист импортируется целиком
+  const rawSheetsRef = useRef(new Map<string, Record<string, any>>());
 
   // Персонажи кампании (уже добавленные в отряд)
   const [campaignCharacters, setCampaignCharacters] = useState<
@@ -236,14 +247,18 @@ export function CharacterPickerModal({
     setLoadingAccount(true);
     try {
       const token = getAuthToken();
+      const scope = solo
+        ? `campaignId=${encodeURIComponent(solo.campaignId)}`
+        : `roomCode=${encodeURIComponent(roomCode)}`;
       const res = await fetch(
-        `/api/room/user-characters?startingLevel=${startingLevel}&roomCode=${encodeURIComponent(roomCode)}`,
+        `/api/room/user-characters?startingLevel=${startingLevel}&${scope}`,
         { headers: token ? { Authorization: `Bearer ${token}` } : {} }
       );
 
       if (res.ok) {
         const json = await res.json();
         const allRaw = [...(json.compliant || []), ...(json.nonCompliant || [])];
+        rawSheetsRef.current = new Map(allRaw.map((raw) => [raw.id, raw]));
         const formatted = allRaw.map((raw) => formatCharacterCardForPicker(raw, startingLevel));
         setAccountCards(formatted);
       }
@@ -268,6 +283,18 @@ export function CharacterPickerModal({
   // Выбор персонажа (из кампании или из аккаунта)
   async function handleSelectCharacter(card: FormattedCharacterCard) {
     if (!card.isSelectable) return;
+    if (solo) {
+      // Одиночная игра: лист импортируется в кампанию, комнаты нет
+      const raw = rawSheetsRef.current.get(card.id);
+      if (!raw?.data) return;
+      setSubmittingId(card.id);
+      try {
+        await solo.onPick(raw.data);
+      } finally {
+        setSubmittingId(null);
+      }
+      return;
+    }
     setSubmittingId(card.id);
     setError(null);
 
@@ -409,7 +436,23 @@ export function CharacterPickerModal({
           onValueChange={(val) => setActiveTab(val as any)}
           className="flex flex-col flex-1 min-h-0"
         >
-          <TabsList className="grid grid-cols-3 w-full mb-3">
+          {solo && (
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <span className="text-xs text-muted-foreground">Тип героя в кампании</span>
+              <Select value={solo.importType} onValueChange={solo.onImportTypeChange}>
+                <SelectTrigger className="h-8 w-44 text-xs">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="player">Персонаж игрока</SelectItem>
+                  <SelectItem value="companion">Спутник</SelectItem>
+                  <SelectItem value="npc">NPC</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+          <TabsList className={`grid ${solo ? "grid-cols-1" : "grid-cols-3"} w-full mb-3`}>
+            {!solo && (
             <TabsTrigger value="campaign" className="text-xs gap-1.5 cursor-pointer">
               <Swords className="size-3.5" />
               <span>Герои кампании</span>
@@ -419,6 +462,7 @@ export function CharacterPickerModal({
                 </Badge>
               )}
             </TabsTrigger>
+            )}
             <TabsTrigger value="account" className="text-xs gap-1.5 cursor-pointer">
               <Users className="size-3.5" />
               <span>Мои персонажи</span>
@@ -428,10 +472,12 @@ export function CharacterPickerModal({
                 </Badge>
               )}
             </TabsTrigger>
-            <TabsTrigger value="create" className="text-xs gap-1.5 cursor-pointer">
-              <Plus className="size-3.5" />
-              <span>Создать нового</span>
-            </TabsTrigger>
+            {!solo && (
+              <TabsTrigger value="create" className="text-xs gap-1.5 cursor-pointer">
+                <Plus className="size-3.5" />
+                <span>Создать нового</span>
+              </TabsTrigger>
+            )}
           </TabsList>
 
           {/* Вкладка 1: Герои кампании */}

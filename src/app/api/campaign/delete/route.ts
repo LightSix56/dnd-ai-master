@@ -1,6 +1,6 @@
 // API: удалить кампанию по id с проверкой владельца
 import { db } from "@/lib/db";
-import { getAuthUserFromRequest } from "@/lib/supabase/client";
+import { getAuthUserFromRequest, getSupabaseAdminClient } from "@/lib/supabase/client";
 
 export async function POST(req: Request) {
   try {
@@ -26,6 +26,16 @@ export async function POST(req: Request) {
     // Удаляем кампанию — каскадно удалятся characters, events, memories, chatMessages, summaries
     // (задано через onDelete: Cascade в схеме)
     await db.campaign.delete({ where: { id: campaignId } });
+
+    // Версии героев этой кампании (строки в листах с campaign_id) больше не нужны: удаляем их,
+    // чтобы не занимали место и не показывались в списках. Оригиналы героев не трогаем.
+    const { error: versionsError } = await getSupabaseAdminClient()
+      .from("characters")
+      .delete()
+      .eq("campaign_id", campaignId);
+    if (versionsError) {
+      console.error("[campaign/delete] не удалось удалить версии героев:", versionsError.message);
+    }
 
     // Если удалили активную — активируем последнюю из оставшихся кампаний этого же пользователя
     if (wasActive) {

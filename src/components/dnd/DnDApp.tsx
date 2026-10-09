@@ -396,47 +396,6 @@ export function DnDApp({
   useEffect(() => {
     userIdRef.current = user?.id ?? null;
   }, [user?.id]);
-  const [accountCharacters, setAccountCharacters] = useState<Array<{
-    id: string;
-    name: string;
-    race: string;
-    className: string;
-    level: number;
-    ac: number;
-    hp: string;
-    portrait_url: string | null;
-    rawSheet: Record<string, any>;
-  }>>([]);
-  const [loadingAccountCharacters, setLoadingAccountCharacters] = useState(false);
-
-  const loadAccountCharacters = useCallback(async () => {
-    if (!user) {
-      setAccountCharacters([]);
-      return;
-    }
-    setLoadingAccountCharacters(true);
-    try {
-      const token = getAuthToken();
-      const res = await fetch("/api/account/characters", {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
-      const data = await res.json();
-      if (res.ok && data.characters) {
-        setAccountCharacters(data.characters);
-      }
-    } catch (err) {
-      console.error("Failed to load account characters", err);
-    } finally {
-      setLoadingAccountCharacters(false);
-    }
-  }, [user, getAuthToken]);
-
-  useEffect(() => {
-    if (showImport && user) {
-      loadAccountCharacters();
-    }
-  }, [showImport, user, loadAccountCharacters]);
-
   const [showOutOfScene, setShowOutOfScene] = useState(false);
   const [activePickerRole, setActivePickerRole] = useState<"dm" | "cheap" | "story" | null>(null);
   // Список моделей с провайдера
@@ -4528,188 +4487,23 @@ export function DnDApp({
       />
 
       {/* Import character modal */}
-      {showImport && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <Card className="w-full max-w-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Users className="size-5" />
-                Импорт персонажа
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-sm text-muted-foreground">
-                Перенос листа из генератора персонажей. Характеристики, снаряжение,
-                заклинания и предыстория попадут в память мастера.
-              </p>
-
-              <div className="space-y-2">
-                <Label>Роль в кампании</Label>
-                <Select value={importType} onValueChange={setImportType}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="player">Персонаж игрока</SelectItem>
-                    <SelectItem value="companion">Спутник</SelectItem>
-                    <SelectItem value="npc">NPC</SelectItem>
-                    <SelectItem value="enemy">Враг</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <Separator />
-
-              {/* Выбор из аккаунта Supabase */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label className="font-semibold text-sm flex items-center gap-1.5">
-                    <span>🧙 Персонажи из вашего аккаунта</span>
-                    {user && (
-                      <span className="text-[11px] text-muted-foreground">({user.email})</span>
-                    )}
-                  </Label>
-                  {user && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-6 text-xs px-2"
-                      onClick={loadAccountCharacters}
-                      disabled={loadingAccountCharacters}
-                    >
-                      {loadingAccountCharacters ? <Loader2 className="size-3 animate-spin" /> : "Обновить"}
-                    </Button>
-                  )}
-                </div>
-
-                {user ? (
-                  loadingAccountCharacters ? (
-                    <div className="flex items-center justify-center p-4 border rounded-md bg-muted/20 text-xs text-muted-foreground gap-2">
-                      <Loader2 className="size-4 animate-spin" />
-                      Загрузка ваших персонажей из облака...
-                    </div>
-                  ) : accountCharacters.length > 0 ? (
-                    <div className="max-h-48 overflow-y-auto space-y-1.5 border rounded-md p-2 bg-muted/10">
-                      {accountCharacters.map((char) => {
-                        const targetCampaignLevel = activeCampaign?.startingLevel ?? activeCampaign?.levelFrom ?? 1;
-                        const isLevelMatch = importType !== "player" || char.level === targetCampaignLevel;
-
-                        return (
-                          <div
-                            key={char.id}
-                            className={`flex items-center justify-between p-2 rounded border transition text-xs ${
-                              isLevelMatch
-                                ? "bg-card hover:border-zinc-400 dark:hover:border-zinc-600"
-                                : "bg-muted/20 border-dashed opacity-60"
-                            }`}
-                          >
-                            <div className="min-w-0 pr-2">
-                              <div className="flex items-center gap-1.5">
-                                <span className="font-semibold text-foreground truncate">{char.name}</span>
-                                {importType === "player" && (
-                                  isLevelMatch ? (
-                                    <Badge variant="outline" className="text-[10px] text-emerald-600 dark:text-emerald-400 border-emerald-500/30 px-1 py-0 h-4 font-normal">
-                                      ✓ Подходит
-                                    </Badge>
-                                  ) : (
-                                    <Badge variant="outline" className="text-[10px] text-zinc-500 border-zinc-300 dark:border-zinc-700 px-1 py-0 h-4 font-normal">
-                                      Нужен {targetCampaignLevel} ур.
-                                    </Badge>
-                                  )
-                                )}
-                              </div>
-                              <div className="text-[11px] text-muted-foreground truncate">
-                                {char.race} • {char.className} • {char.level} ур. • КД {char.ac} • HP {char.hp}
-                              </div>
-                            </div>
-                            <Button
-                              size="sm"
-                              className="h-7 text-xs shrink-0 cursor-pointer"
-                              disabled={importing || !isLevelMatch}
-                              title={!isLevelMatch ? `Для этой кампании требуется ровно ${targetCampaignLevel} уровень` : undefined}
-                              onClick={() => runImport({ character: char.rawSheet })}
-                            >
-                              Выбрать
-                            </Button>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ) : (
-                    <div className="p-3 border rounded-md bg-muted/20 text-xs text-muted-foreground text-center">
-                      В вашем аккаунте пока нет сохранённых персонажей.
-                    </div>
-                  )
-                ) : (
-                  <div className="p-3 border border-border rounded-md bg-muted/30 flex items-center justify-between gap-2 text-xs">
-                    <span className="text-muted-foreground">
-                      Войдите в аккаунт, чтобы загрузить персонажей в 1 клик.
-                    </span>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="h-7 text-xs shrink-0 cursor-pointer"
-                      onClick={() => setShowAuthModal(true)}
-                    >
-                      Войти
-                    </Button>
-                  </div>
-                )}
-              </div>
-
-              <Separator />
-
-              <div className="space-y-2">
-                <Label>Код с сайта</Label>
-                <div className="flex gap-2">
-                  <Input
-                    value={shareCode}
-                    onChange={(e) => setShareCode(e.target.value)}
-                    placeholder="Например ABCD2345 или ссылка"
-                    disabled={importing}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") importFromCode();
-                    }}
-                  />
-                  <Button onClick={importFromCode} disabled={importing || !shareCode.trim()}>
-                    {importing ? <Loader2 className="size-4 animate-spin" /> : "Загрузить"}
-                  </Button>
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  На сайте-генераторе нажмите «🔗 Поделиться» — код скопируется в буфер.
-                </p>
-              </div>
-
-              <Separator />
-
-              <div className="space-y-2">
-                <Label>Или файл JSON</Label>
-                <Button
-                  variant="outline"
-                  className="w-full"
-                  onClick={importFromFile}
-                  disabled={importing}
-                >
-                  {importing ? (
-                    <Loader2 className="size-4 mr-2 animate-spin" />
-                  ) : (
-                    <Plus className="size-4 mr-2" />
-                  )}
-                  Выбрать файл, скачанный кнопкой «💾 JSON»
-                </Button>
-              </div>
-
-              <Button
-                variant="ghost"
-                className="w-full"
-                onClick={() => setShowImport(false)}
-                disabled={importing}
-              >
-                Закрыть
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
+      {showImport && activeCampaign && (
+        <CharacterPickerModal
+          isOpen={showImport}
+          roomCode=""
+          startingLevel={activeCampaign.startingLevel ?? activeCampaign.levelFrom ?? 1}
+          onSelect={() => {}}
+          onClose={() => setShowImport(false)}
+          solo={{
+            campaignId: activeCampaign.id,
+            importType,
+            onImportTypeChange: setImportType,
+            onPick: async (sheet) => {
+              await runImport({ character: sheet });
+              setShowImport(false);
+            },
+          }}
+        />
       )}
     </div>
   );
