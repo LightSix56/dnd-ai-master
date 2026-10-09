@@ -46,6 +46,15 @@ describe("generateStoryArc: завязка и отношения попадаю�
     expect(prompt).toContain("Соклановцы");
   });
 
+  it("carries setting, difficulty, DM style, level range and the DM notes into the arc prompt", async () => {
+    const prompt = await firstPromptFor({ ...base, customDmNotes: "Склеп с нежитью", startingSituation: null });
+    expect(prompt).toContain("Сеттинг: Тёмное фэнтези");
+    expect(prompt).toContain("Сложность боёв: brutal");
+    expect(prompt).toContain("Стиль мастера: tactical");
+    expect(prompt).toContain("Диапазон уровней: с 1 по 10 включительно");
+    expect(prompt).toContain("Склеп с нежитью");
+  });
+
   it("omits the starting situation line when it is not set (old campaigns)", async () => {
     const prompt = await firstPromptFor({ ...base, startingSituation: null });
     expect(prompt).not.toContain("Как герои начали");

@@ -21,6 +21,15 @@ describe("buildPartyAct1Prompt: параметры окна попадают в 
     expect(prompt).toContain("Стиль мастера: tactical");
   });
 
+  it("carries setting, difficulty, tone, level range and the DM notes", () => {
+    const prompt = buildPartyAct1Prompt({ ...base, customDmNotes: "Склеп с нежитью" });
+    expect(prompt).toContain("Сеттинг / Жанр: Тёмное фэнтези");
+    expect(prompt).toContain("Тон повествования: dark");
+    expect(prompt).toContain("Сложность боёв: brutal");
+    expect(prompt).toContain("с 1 по 10 уровень");
+    expect(prompt).toContain("Склеп с нежитью");
+  });
+
   it("carries the starting situation", () => {
     const prompt = buildPartyAct1Prompt({ ...base, partyTies: "friends" });
     expect(prompt).toContain("Начальная связь героев:");

@@ -70,6 +70,7 @@ describe("startRoomCampaign: параметры окна сохраняются 
       partyTies: "friends",
       startingSituation: "patron_contract",
       levelTo: 10,
+      customDmNotes: "Склеп с нежитью",
     } as any);
 
     const campaign = state.prisma.campaign.rows.find((c: any) => c.id === result.campaignId);
@@ -81,6 +82,9 @@ describe("startRoomCampaign: параметры окна сохраняются 
       startingSituation: "patron_contract",
       levelTo: 10,
       worldDescription: null,
+      name: "Встреча",
+      setting: "Forgotten Realms",
+      customDmNotes: "Склеп с нежитью",
     });
 
     const arcParams = vi.mocked(generatePartyAwareAct1).mock.calls[0][0];
