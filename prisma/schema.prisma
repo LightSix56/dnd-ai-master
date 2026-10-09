@@ -33,6 +33,7 @@ model Campaign {
   pvpEnabled  Boolean  @default(false)
   restFrequency String @default("standard") // frequent, standard, rare
   partyTies   String   @default("tight_knit") // tight_knit, strangers, mercenaries, friends
+  startingSituation String? // strangers, established_party, captives_or_survivors, patron_contract; NULL у старых кампаний
   mode        String   @default("solo") // solo — одиночная, network — сетевой стол (migration 010)
 
   // Сюжетная арка: диапазон уровней кампании и заранее сгенерированная история
