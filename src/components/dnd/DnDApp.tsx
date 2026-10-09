@@ -2032,12 +2032,14 @@ export function DnDApp({
       if (res.ok) {
         const data = await res.json();
         if (data.models && data.models.length > 0) {
-          setModelsList(data.models);
-          // Если текущая модель не в списке — переключим на рекомендуемую доступную
-          if (!data.models.find((m: any) => m.id === model)) {
-            const fallback = data.models.find((m: any) => m.id === "deepseek/deepseek-v4.1-flash")?.id || data.models[0].id;
-            setModel(fallback);
-          }
+          // Выбранную модель не сбрасываем, даже если её нет в списке (например, когда пришёл запасной каталог).
+          // Добавляем её в список, чтобы она оставалась видна и выбранной.
+          const hasSelected = data.models.some((m: any) => m.id === model);
+          setModelsList(
+            hasSelected
+              ? data.models
+              : [...data.models, { id: model, name: model, context_length: 0, pricing: {}, supports_tools: true }]
+          );
         }
       }
     } catch (e) {
