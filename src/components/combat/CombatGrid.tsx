@@ -292,11 +292,11 @@ export function CombatGrid({
 
   return (
     <div
-      className="inline-block bg-zinc-950 border border-zinc-800 rounded-lg shadow-md overflow-hidden"
+      className="flex flex-col w-full h-full min-w-0 min-h-0 bg-zinc-950 border border-zinc-800 rounded-lg shadow-md overflow-hidden"
       style={{ userSelect: "none", WebkitUserSelect: "none" }}
     >
       {/* Верхняя компактная панель управления картой */}
-      <div className="flex items-center justify-between px-3 py-1.5 bg-zinc-900 border-b border-zinc-800 text-xs font-sans">
+      <div className="flex items-center justify-between px-3 py-1.5 bg-zinc-900 border-b border-zinc-800 text-xs font-sans shrink-0">
         <div className="flex items-center gap-2">
           <span className="font-medium text-zinc-100">
             🗺️ {combat.name || "Тактическая карта"}
@@ -321,10 +321,13 @@ export function CombatGrid({
         </div>
       </div>
 
+      {/* Карта масштабируется под свободное место (с сохранением пропорций), а не задаёт размер сама */}
+      <div className="flex-1 min-h-0 min-w-0 flex items-center justify-center">
       <svg
         ref={svgRef}
-        width={totalW}
-        height={totalH}
+        width="100%"
+        height="100%"
+        preserveAspectRatio="xMidYMid meet"
         viewBox={`0 0 ${totalW} ${totalH}`}
         onClick={handleSvgClick}
         onMouseMove={handleSvgMouseMove}
@@ -1028,9 +1031,10 @@ export function CombatGrid({
         {/* Слой визуальных боевых анимаций и эффектов */}
         <CombatEffectsLayer effects={effects || []} popups={popups} />
       </svg>
+      </div>
 
       {/* Подсказка */}
-      <div className="px-3 py-2 text-xs text-muted-foreground bg-muted/30 border-t">
+      <div className="px-3 py-2 text-xs text-muted-foreground bg-muted/30 border-t shrink-0">
         {targetingRange && attackerPosition ? (
           <span>
             {targetingRange.long && targetingRange.long > targetingRange.normal ? (

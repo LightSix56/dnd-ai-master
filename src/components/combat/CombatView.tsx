@@ -1632,9 +1632,10 @@ export function CombatView({ combatId, campaignId, roomCode, onClose, onCombatEn
         </div>
       )}
 
-      <div className="flex-1 flex overflow-hidden">
+      {/* Узкий экран: панели друг над другом, карта посередине; широкий: панели по бокам, карта занимает всё остальное */}
+      <div className="flex-1 min-h-0 flex flex-col md:flex-row overflow-y-auto md:overflow-hidden">
         {/* Left: Initiative */}
-        <aside className="w-64 border-r bg-card/30 shrink-0">
+        <aside className="w-full md:w-52 lg:w-64 max-h-[24vh] md:max-h-none border-b md:border-b-0 md:border-r bg-card/30 shrink-0 overflow-hidden">
           <InitiativeTracker
             combatants={combat.combatants}
             turnOrder={combat.turnOrder}
@@ -1646,7 +1647,7 @@ export function CombatView({ combatId, campaignId, roomCode, onClose, onCombatEn
         </aside>
 
         {/* Center: Grid */}
-        <main className="flex-1 overflow-auto bg-muted/20 p-4">
+        <main className="flex-1 min-w-0 min-h-[40vh] md:min-h-0 overflow-hidden bg-muted/20 p-2">
           <CombatGrid
             combat={combat}
             selectedCombatantId={selectedCombatantId || currentTurnId}
@@ -1676,7 +1677,7 @@ export function CombatView({ combatId, campaignId, roomCode, onClose, onCombatEn
         </main>
 
         {/* Right: details + toolbar */}
-        <aside className="w-72 border-l bg-card/30 shrink-0 overflow-y-auto">
+        <aside className="w-full md:w-60 lg:w-72 max-h-[28vh] md:max-h-none border-t md:border-t-0 md:border-l bg-card/30 shrink-0 overflow-y-auto">
           <div className="p-3 space-y-3">
             {isDM && (
               <>

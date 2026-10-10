@@ -32,14 +32,14 @@ export function InitiativeTracker({
   const current = currentId ? byId.get(currentId) ?? null : null;
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full min-w-0 flex flex-col">
       <div className="p-3 border-b bg-card/50">
         <div className="text-xs font-medium text-muted-foreground">ОЧЕРЕДЬ ХОДОВ</div>
         <div className="text-xs text-muted-foreground mt-1">
           Раунд {round} • {combatants.length} бойцов
         </div>
       </div>
-      <ScrollArea className="flex-1">
+      <ScrollArea className="flex-1 [&_[data-radix-scroll-area-viewport]>div]:!block">
         <div className="p-2 space-y-1">
           {combatants.length === 0 ? (
             <div className="text-center text-xs text-muted-foreground py-8">
