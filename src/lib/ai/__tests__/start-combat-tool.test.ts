@@ -143,6 +143,34 @@ describe("start_combat: состав врагов подбирает движо�
     expect(result.message).toContain("застали врасплох");
   });
 
+  it("мастер может назвать сложность overwhelming", async () => {
+    const params = await callStartCombat({ name: "Нападение на стражу", enemyType: "городская стража", difficulty: "overwhelming" });
+    expect(params.difficulty).toBe("overwhelming");
+  });
+
+  it("сложность кампании — множитель, только если мастер назвал сложность сам", async () => {
+    const named = await callStartCombat({ name: "Засада", enemyType: "бандиты", difficulty: "hard" });
+    expect(named.budgetScale).toBeGreaterThan(1); // кампания brutal
+    vi.clearAllMocks();
+    vi.mocked(db.campaign.findUnique).mockResolvedValue({ id: "camp-1", difficulty: "brutal" } as any);
+    const unnamed = await callStartCombat({ name: "Засада", enemyType: "бандиты" });
+    expect(unnamed.budgetScale).toBeUndefined();
+    expect(unnamed.difficulty).toBe("deadly");
+  });
+
+  it("составы мастера приводятся к типам генератора", async () => {
+    expect((await callStartCombat({ name: "Б", enemyType: "бандиты", archetype: "boss_with_minions" })).archetype).toBe("boss_minions");
+    vi.clearAllMocks();
+    vi.mocked(db.campaign.findUnique).mockResolvedValue({ id: "camp-1", difficulty: "brutal" } as any);
+    expect((await callStartCombat({ name: "Б", enemyType: "бандиты", archetype: "balanced_squad" })).archetype).toBe("tactical_squad");
+    vi.clearAllMocks();
+    vi.mocked(db.campaign.findUnique).mockResolvedValue({ id: "camp-1", difficulty: "brutal" } as any);
+    expect((await callStartCombat({ name: "Б", enemyType: "бандиты", archetype: "horde" })).archetype).toBe("horde");
+    vi.clearAllMocks();
+    vi.mocked(db.campaign.findUnique).mockResolvedValue({ id: "camp-1", difficulty: "brutal" } as any);
+    expect((await callStartCombat({ name: "Б", enemyType: "бандиты" })).archetype).toBeUndefined();
+  });
+
   it("бой в таверне идёт на карте таверны, а не города", async () => {
     const params = await callStartCombat({ name: "Драка в «Пьяном драконе»", enemyType: "наёмники", biome: "tavern" });
     expect(params.biome).toBe("tavern");

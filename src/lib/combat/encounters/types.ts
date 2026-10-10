@@ -8,8 +8,10 @@ export interface PartyMember {
   level: number;
 }
 
-export type EncounterDifficulty = "easy" | "medium" | "hard" | "deadly";
-export type SquadArchetype = "boss_minions" | "tactical_squad" | "pack" | "solo_boss" | "any";
+/** Пороги DMG p. 82; overwhelming — сверх «смертельного»: безнадёжная для отряда ситуация (армия, стража большого города) */
+export type EncounterDifficulty = "easy" | "medium" | "hard" | "deadly" | "overwhelming";
+/** boss_minions — босс со свитой, tactical_squad — сбалансированный отряд, pack — стая однотипных, horde — орда мелочи, solo_boss — один босс */
+export type SquadArchetype = "boss_minions" | "tactical_squad" | "pack" | "horde" | "solo_boss" | "any";
 
 export interface StoryFactionContext {
   name?: string;
@@ -28,6 +30,8 @@ export interface EncounterRequest {
   storyFaction?: StoryFactionContext;
   archetype?: SquadArchetype;
   isActClimax?: boolean;
+  /** Множитель бюджета опыта (сложность кампании при явной сложности мастера); без него 1 */
+  budgetScale?: number;
 }
 
 export interface SpawnedEnemy {

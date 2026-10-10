@@ -9,7 +9,7 @@ import { rollDice, abilityModifier, proficiencyBonus } from "@/lib/dnd/dice";
 import { searchDuckDuckGo, fetchPageText } from "@/lib/dnd/search";
 import { parseStoryArc, type StoryAct, generateNextChapter } from "./story-arc";
 import { createTacticalEncounter } from "@/lib/combat/generator";
-import { resolveEncounterDifficulty } from "@/lib/combat/encounters/encounter-request";
+import { resolveEncounterDifficulty, campaignBudgetScale, normalizeArchetype } from "@/lib/combat/encounters/encounter-request";
 import { ensureCompanions } from "@/lib/combat/encounters/ensure-companions";
 
 // Контекст кампании приходит per-request через toolsContext, а не через глобальное
@@ -845,7 +845,14 @@ export const startCombatTool = tool({
           "party_ambush — засаду устроили герои: враги застигнуты врасплох и пропускают первый ход. Выбирай по сюжету"
       ),
     leaderName: z.string().optional().describe("Сюжетное имя вожака отряда (например: 'Человек в сером капюшоне'). Меняется только имя: силу вожака движок подбирает под баланс"),
-    difficulty: z.enum(["easy", "medium", "hard", "deadly"]).optional().describe("Сложность столкновения по DMG p. 82. Не указывай — будет сложность кампании"),
+    difficulty: z
+      .enum(["easy", "medium", "hard", "deadly", "overwhelming"])
+      .optional()
+      .describe(
+        "Насколько враги опасны для отряда, по порогам DMG p. 82: easy, medium, hard, deadly; overwhelming — сверх смертельного, " +
+          "почти безнадёжная схватка (стража большого города, армия, дракон против новичков): враги заведомо сильнее отряда, и честный исход — бегство или переговоры. " +
+          "Оценивай по сюжету: на кого нападают и сколько у них силы, а не «чтобы было сбалансированно». Не указывай — будет сложность кампании"
+      ),
     biome: z
       .enum(["tavern", "urban", "dungeon", "cave", "lava", "forest", "swamp", "desert", "snow", "mountain", "coastal", "ship"])
       .describe(
@@ -853,7 +860,14 @@ export const startCombatTool = tool({
           "urban — улица, площадь, рынок, переулок; coastal — пристань, берег; ship — палуба; dungeon — подземелье, склеп, тюрьма, замок, храм изнутри; " +
           "cave — пещера, шахта; lava — вулкан, кузня; forest — лес, дорога, поле; swamp; desert; snow; mountain — горы, перевал, мост над пропастью"
       ),
-    archetype: z.enum(["solo_boss", "boss_minions", "tactical_squad", "horde", "ambush_duo", "any"]).optional().describe("Тактический архетип отряда врагов"),
+    archetype: z
+      .enum(["any", "boss_with_minions", "solo_boss", "balanced_squad", "horde", "pack", "boss_minions", "tactical_squad", "ambush_duo"])
+      .optional()
+      .describe(
+        "Состав отряда врагов. boss_with_minions — босс со свитой; solo_boss — один сильный враг; " +
+          "balanced_squad — сбалансированный отряд (ближний бой, стрелки, поддержка); horde — толпа слабых; pack — стая однотипных (звери). " +
+          "Не указывай (any) — движок выберет по врагам сюжета"
+      ),
     isActClimax: z.boolean().optional().describe("Является ли бой кульминацией акта (боссфайт)"),
     gridWidth: z.number().int().min(10).max(50).default(20).describe("Ширина сетки"),
     gridHeight: z.number().int().min(10).max(50).default(15).describe("Высота сетки"),
@@ -883,14 +897,17 @@ export const startCombatTool = tool({
 
     await ensureCompanions(campaignId, companions);
 
+    const resolvedDifficulty = resolveEncounterDifficulty(difficulty, campaignDifficulty);
     const encounter = await createTacticalEncounter({
       campaignId,
       name,
       biome,
-      difficulty: resolveEncounterDifficulty(difficulty, campaignDifficulty),
+      difficulty: resolvedDifficulty,
+      // Сложность кампании остаётся дефолтом; если мастер назвал уровень сам, она работает множителем бюджета
+      budgetScale: difficulty ? campaignBudgetScale(campaignDifficulty) : undefined,
       storyFaction: { name: enemyType, tags: enemyKeywords },
       leaderName,
-      archetype,
+      archetype: normalizeArchetype(archetype),
       isActClimax,
       gridWidth,
       gridHeight,
@@ -938,6 +955,7 @@ export const startCombatTool = tool({
       xpPerPlayer: encounter.xpPerPlayer,
       participants: onMap,
       notParticipating: absent,
+      difficulty: resolvedDifficulty,
       formation: encounter.formation ?? "standard",
       surprised: encounter.surprised ?? null,
       message: `Тактический бой '${name}' успешно создан и запущен! Враги: ${enemyListStr}. Награда за победу: ${encounter.awardedXP} XP (${encounter.xpPerPlayer} на игрока). Игроку открыта тактическая сетка боя. Опиши начало сражения: на поле ровно эти враги — не называй другое их число и не добавляй других существ (остальных из рассказа опиши как отставших или стоящих поодаль). На карте из отряда: ${onMap.join(", ") || "никого"}.${absent.length > 0 ? ` ${absent.join(", ")} в бою не участву${absent.length > 1 ? "ют" : "ет"}: не описывай их в схватке, они остаются на своих местах, и после боя их не перемещают.` : ""} ${surpriseNote} Передай ход инициативе.`,

@@ -89,6 +89,8 @@ export interface CreateEncounterParams {
   participantNames?: string[];
   /** То же по id героев кампании (для ведущего комнаты) */
   participantIds?: string[];
+  /** Множитель бюджета опыта врагов (сложность кампании, когда мастер сам назвал сложность боя) */
+  budgetScale?: number;
   /** Как началась схватка: расстановка сторон и внезапность. Без значения — standard (стороны на расстоянии) */
   formation?: Formation;
 }
@@ -1712,6 +1714,7 @@ export async function createTacticalEncounter({
   participantNames,
   participantIds,
   formation = "standard",
+  budgetScale,
 }: CreateEncounterParams): Promise<TacticalEncounterResult> {
   // Завершаем старые активные бои в кампании; их итоги (хиты, ячейки) уходят в листы героев
   if (campaignId) {
@@ -1770,6 +1773,7 @@ export async function createTacticalEncounter({
       storyFaction,
       archetype,
       isActClimax,
+      budgetScale,
       mapPresetId: mapPresetId || "",
     });
     applyLeaderName(generatedEncounterResult.enemies, leaderName);

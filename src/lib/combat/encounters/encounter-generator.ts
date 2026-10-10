@@ -230,7 +230,7 @@ export async function generateEncounter(
   const partySize = Math.max(1, party.length);
 
   // 1. Calculate XP budget according to DMG p. 82
-  const targetXP = calculatePartyXPBudget(party, request.difficulty);
+  const targetXP = Math.round(calculatePartyXPBudget(party, request.difficulty) * (request.budgetScale ?? 1));
 
   // 2. Карта боя собирается генератором по зерну; готовые карты больше не используются
   const mapSeed = request.mapSeed ?? Math.floor(Math.random() * 2 ** 31);
@@ -249,10 +249,15 @@ export async function generateEncounter(
   const factionTypes = new Set(factionPool.map((m) => m.type));
   const kindredPool = [...factionPool, ...pool.filter((m) => factionTypes.has(m.type) && !factionPool.includes(m))];
   const deadlyXP = calculatePartyXPBudget(party, "deadly");
+  // Сверх «смертельного» (overwhelming) отряд намеренно тяжелее порога и больше по числу врагов
+  const large = request.difficulty === "overwhelming";
+  const ceiling = large ? targetXP * 1.5 : Math.max(deadlyXP, targetXP);
   const solve = (candidates: typeof pool) =>
-    solveSquad(candidates, targetXP, request.archetype || "any", partySize, request.isActClimax);
+    solveSquad(candidates, targetXP, request.archetype || "any", partySize, request.isActClimax, { large });
   const fits = (plan: ReturnType<typeof solve>) =>
-    plan.slots.length > 0 && plan.estimatedAdjustedXP >= targetXP * 0.5 && plan.estimatedAdjustedXP <= deadlyXP;
+    plan.slots.length > 0 &&
+    plan.estimatedAdjustedXP >= targetXP * 0.5 &&
+    plan.estimatedAdjustedXP <= ceiling;
   let squadPlan: ReturnType<typeof solve> | null = null;
   for (const candidates of [factionPool, kindredPool]) {
     if (candidates.length === 0) continue;

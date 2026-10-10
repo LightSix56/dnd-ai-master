@@ -3,7 +3,7 @@ import type { PartyMember, EncounterDifficulty } from "./types";
 /**
  * D&D 5e XP Thresholds by Character Level (DMG p. 82)
  */
-export const XP_THRESHOLDS_BY_LEVEL: Record<number, Record<EncounterDifficulty, number>> = {
+export const XP_THRESHOLDS_BY_LEVEL: Record<number, Record<Exclude<EncounterDifficulty, "overwhelming">, number>> = {
   1: { easy: 25, medium: 50, hard: 75, deadly: 100 },
   2: { easy: 50, medium: 100, hard: 150, deadly: 200 },
   3: { easy: 75, medium: 150, hard: 225, deadly: 400 },
@@ -26,6 +26,9 @@ export const XP_THRESHOLDS_BY_LEVEL: Record<number, Record<EncounterDifficulty, 
   20: { easy: 2800, medium: 5700, hard: 8500, deadly: 12700 },
 };
 
+/** Overwhelming — вдвое выше порога «смертельного»: победить почти нереально, разумнее бежать или договариваться */
+export const OVERWHELMING_FACTOR = 2;
+
 /**
  * Calculates party XP budget for a given difficulty threshold.
  * Clamps player levels between 1 and 20.
@@ -33,11 +36,13 @@ export const XP_THRESHOLDS_BY_LEVEL: Record<number, Record<EncounterDifficulty, 
 export function calculatePartyXPBudget(party: PartyMember[], difficulty: EncounterDifficulty): number {
   if (!party || party.length === 0) return 0;
 
-  return party.reduce((sum, member) => {
+  const base = difficulty === "overwhelming" ? "deadly" : difficulty;
+  const sum = party.reduce((total, member) => {
     const clampedLevel = Math.min(20, Math.max(1, Math.floor(member.level)));
     const thresholds = XP_THRESHOLDS_BY_LEVEL[clampedLevel];
-    return sum + (thresholds ? thresholds[difficulty] : 0);
+    return total + (thresholds ? thresholds[base] : 0);
   }, 0);
+  return difficulty === "overwhelming" ? sum * OVERWHELMING_FACTOR : sum;
 }
 
 const MULTIPLIER_TIERS = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0];

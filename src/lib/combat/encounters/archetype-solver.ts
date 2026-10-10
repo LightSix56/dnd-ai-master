@@ -81,6 +81,11 @@ export function resolveArchetype(pool: MonsterManifestEntry[]): SquadArchetype {
   return "tactical_squad";
 }
 
+/** Параметры решателя: large — бюджет сверх «смертельного», потолки числа врагов выше */
+export interface SolveOptions {
+  large?: boolean;
+}
+
 function solveSoloBoss(
   pool: MonsterManifestEntry[],
   targetAdjustedXP: number,
@@ -132,7 +137,8 @@ interface BossMinionsCandidate {
 function solveBossMinions(
   pool: MonsterManifestEntry[],
   targetAdjustedXP: number,
-  partySize: number
+  partySize: number,
+  opts: SolveOptions = {}
 ): SquadPlan | null {
   const candidates: BossMinionsCandidate[] = [];
 
@@ -142,7 +148,7 @@ function solveBossMinions(
       if (boss.xp <= minion.xp) continue;
       if (boss.challengeRating < minion.challengeRating) continue;
 
-      for (let count = 2; count <= 5; count++) {
+      for (let count = 2; count <= (opts.large ? 10 : 5); count++) {
         const allXPs = [boss.xp, ...Array(count).fill(minion.xp)];
         const rawXP = boss.xp + count * minion.xp;
         const adjustedXP = calculateAdjustedXP(allXPs, partySize);
@@ -218,7 +224,8 @@ interface TacticalCandidate {
 function solveTacticalSquad(
   pool: MonsterManifestEntry[],
   targetAdjustedXP: number,
-  partySize: number
+  partySize: number,
+  opts: SolveOptions = {}
 ): SquadPlan | null {
   const frontlinePool = pool.filter(isFrontlineCandidate);
   if (frontlinePool.length === 0) return null;
@@ -237,9 +244,9 @@ function solveTacticalSquad(
     for (const bMon of backlinePool) {
       if (fMon.slug === bMon.slug && pool.length > 1) continue;
 
-      for (let fCount = 1; fCount <= 2; fCount++) {
-        for (let bCount = 2; bCount <= 3; bCount++) {
-          if (fCount + bCount > 5) continue;
+      for (let fCount = 1; fCount <= (opts.large ? 4 : 2); fCount++) {
+        for (let bCount = 2; bCount <= (opts.large ? 6 : 3); bCount++) {
+          if (fCount + bCount > (opts.large ? 10 : 5)) continue;
 
           const allXPs = [
             ...Array(fCount).fill(fMon.xp),
@@ -309,11 +316,12 @@ interface PackCandidate {
 function solvePack(
   pool: MonsterManifestEntry[],
   targetAdjustedXP: number,
-  partySize: number
+  partySize: number,
+  opts: SolveOptions = {}
 ): SquadPlan | null {
   const candidates: PackCandidate[] = [];
 
-  for (let count = 3; count <= 6; count++) {
+  for (let count = 3; count <= (opts.large ? 10 : 6); count++) {
     const mult = getMonsterCountMultiplier(count, partySize);
     const targetPerMonster = targetAdjustedXP / (count * mult);
 
@@ -358,11 +366,49 @@ function solvePack(
   };
 }
 
+/**
+ * Орда: много слабых существ одного вида. Из подходящих по бюджету выбирается вариант с самой
+ * большой толпой, а не ближайший к бюджету по опыту (иначе вышли бы три крепких бойца).
+ */
+function solveHorde(
+  pool: MonsterManifestEntry[],
+  targetAdjustedXP: number,
+  partySize: number,
+  opts: SolveOptions = {}
+): SquadPlan | null {
+  const minCount = 6;
+  const maxCount = opts.large ? 16 : 12;
+  let best: { monster: MonsterManifestEntry; count: number; adjustedXP: number; rawXP: number; score: number } | null = null;
+
+  for (let count = minCount; count <= maxCount; count++) {
+    for (const m of pool) {
+      const allXPs = Array(count).fill(m.xp);
+      const adjustedXP = calculateAdjustedXP(allXPs, partySize);
+      if (adjustedXP < targetAdjustedXP * 0.65 || adjustedXP > targetAdjustedXP * 1.35) continue;
+      const xpDiffRel = Math.abs(adjustedXP - targetAdjustedXP) / targetAdjustedXP;
+      const score = xpDiffRel - count * 0.04;
+      if (!best || score < best.score) {
+        best = { monster: m, count, adjustedXP, rawXP: count * m.xp, score };
+      }
+    }
+  }
+
+  if (!best) return null;
+  return {
+    archetype: "horde",
+    slots: [{ monsterSlug: best.monster.slug, role: "minion", count: best.count }],
+    targetAdjustedXP,
+    estimatedRawXP: best.rawXP,
+    estimatedAdjustedXP: best.adjustedXP,
+  };
+}
+
 function solveGreedyFallback(
   pool: MonsterManifestEntry[],
   targetAdjustedXP: number,
   archetype: SquadArchetype,
-  partySize: number
+  partySize: number,
+  opts: SolveOptions = {}
 ): SquadPlan {
   if (pool.length === 0) {
     return {
@@ -385,7 +431,7 @@ function solveGreedyFallback(
 
   const chosen: MonsterManifestEntry[] = [first];
 
-  while (chosen.length < 8) {
+  while (chosen.length < (opts.large || archetype === "horde" ? 14 : 8)) {
     const currentAdj = calculateAdjustedXP(
       chosen.map((m) => m.xp),
       partySize
@@ -409,6 +455,8 @@ function solveGreedyFallback(
       role = idx === 0 ? "boss" : "minion";
     } else if (archetype === "tactical_squad") {
       role = isFrontlineCandidate(m) ? "frontline" : inferBacklineRole(m);
+    } else if (archetype === "horde") {
+      role = "minion";
     } else {
       role = isFrontlineCandidate(m) ? "frontline" : "minion";
     }
@@ -444,7 +492,8 @@ export function solveSquad(
   targetAdjustedXP: number,
   archetype: SquadArchetype,
   partySize: number,
-  isActClimax?: boolean
+  isActClimax?: boolean,
+  opts: SolveOptions = {}
 ): SquadPlan {
   if (!pool || pool.length === 0 || targetAdjustedXP <= 0) {
     const resolved = archetype === "any" ? "tactical_squad" : archetype;
@@ -457,17 +506,17 @@ export function solveSquad(
     };
   }
 
-  // 1. Climax override
-  if (isActClimax) {
+  // 1. Climax override. Явно названные сбалансированный отряд или орда важнее кульминации
+  if (isActClimax && archetype !== "tactical_squad" && archetype !== "horde") {
     const soloPlan = solveSoloBoss(pool, targetAdjustedXP, partySize);
     if (soloPlan) {
       return soloPlan;
     }
-    const bossMinionsPlan = solveBossMinions(pool, targetAdjustedXP, partySize);
+    const bossMinionsPlan = solveBossMinions(pool, targetAdjustedXP, partySize, opts);
     if (bossMinionsPlan) {
       return bossMinionsPlan;
     }
-    return solveGreedyFallback(pool, targetAdjustedXP, "boss_minions", partySize);
+    return solveGreedyFallback(pool, targetAdjustedXP, "boss_minions", partySize, opts);
   }
 
   // 2. Resolve 'any' archetype
@@ -482,11 +531,13 @@ export function solveSquad(
       case "solo_boss":
         return solveSoloBoss(pool, targetAdjustedXP, partySize);
       case "boss_minions":
-        return solveBossMinions(pool, targetAdjustedXP, partySize);
+        return solveBossMinions(pool, targetAdjustedXP, partySize, opts);
       case "tactical_squad":
-        return solveTacticalSquad(pool, targetAdjustedXP, partySize);
+        return solveTacticalSquad(pool, targetAdjustedXP, partySize, opts);
       case "pack":
-        return solvePack(pool, targetAdjustedXP, partySize);
+        return solvePack(pool, targetAdjustedXP, partySize, opts);
+      case "horde":
+        return solveHorde(pool, targetAdjustedXP, partySize, opts);
       default:
         return null;
     }
@@ -526,7 +577,7 @@ export function solveSquad(
 
   // 4. Fallback guarantee
   if (!plan) {
-    plan = solveGreedyFallback(pool, targetAdjustedXP, targetArchetype, partySize);
+    plan = solveGreedyFallback(pool, targetAdjustedXP, targetArchetype, partySize, opts);
   }
 
   return plan;
