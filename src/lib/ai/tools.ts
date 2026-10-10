@@ -816,6 +816,9 @@ export const startCombatTool = tool({
     "Количество и силу врагов движок подбирает сам из бестиария под уровни и число героев " +
     "и спутников (DMG p. 82): сколько бы врагов ни было в сюжете, на поле выйдет честный отряд. " +
     "Перечисли в companions всех спутников героев, которые в бою, — иначе их не будет на карте. " +
+    "В participants назови ТОЛЬКО тех героев и спутников, кто по сюжету рядом и втянут в схватку: остальные " +
+    "остаются на своих местах, на карту не выходят, опыта за бой не получают и после боя никуда не перемещаются. " +
+    "Не указывай participants, только если в бой действительно вступают все. " +
     "Вызывай инструмент ДО описания врагов: опиши ровно тех, кого он вернул. " +
     "Инструмент генерирует тактическую карту, расставляет участников, бросает инициативу и считает опыт.",
   inputSchema: z.object({
@@ -827,6 +830,7 @@ export const startCombatTool = tool({
       class: z.string().optional().describe("Класс или роль (например: 'Воин', 'Жрец', 'Следопыт')"),
       race: z.string().optional().describe("Раса"),
     })).optional().describe("ВСЕ спутники героев, которые участвуют в этом бою (в том числе только что введённые в рассказ). Они выйдут на карту, и баланс посчитается вместе с ними"),
+    participants: z.array(z.string()).optional().describe("Имена героев и спутников (как в составе отряда), которые участвуют в этом бою. Кого здесь нет — тот не на месте боя и на карту не выйдет. Спутники из companions участвуют автоматически. Не указывай, если в бою все"),
     leaderName: z.string().optional().describe("Сюжетное имя вожака отряда (например: 'Человек в сером капюшоне'). Меняется только имя: силу вожака движок подбирает под баланс"),
     difficulty: z.enum(["easy", "medium", "hard", "deadly"]).optional().describe("Сложность столкновения по DMG p. 82. Не указывай — будет сложность кампании"),
     biome: z
@@ -843,7 +847,7 @@ export const startCombatTool = tool({
     mapDescription: z.string().optional().describe("Краткое описание поля боя и препятствий"),
   }),
   contextSchema: campaignContextSchema,
-  execute: async ({ name, enemyType, enemyKeywords, companions, leaderName, difficulty, biome, archetype, isActClimax, gridWidth, gridHeight, mapDescription }, { context }) => {
+  execute: async ({ name, enemyType, enemyKeywords, companions, participants, leaderName, difficulty, biome, archetype, isActClimax, gridWidth, gridHeight, mapDescription }, { context }) => {
     let campaignId = context?.campaignId;
     let campaignDifficulty: string | undefined;
     if (campaignId) {
@@ -878,15 +882,22 @@ export const startCombatTool = tool({
       gridWidth,
       gridHeight,
       mapDescription,
+      // Названные в companions тоже идут в бой: мастер перечисляет там тех, кто сражается
+      participantNames: participants?.length
+        ? [...participants, ...(companions ?? []).map((c) => c.name)]
+        : undefined,
     });
 
     // Записываем событие в историю
     const enemyListStr = encounter.enemyNames.length > 0 ? encounter.enemyNames.join(", ") : "враги";
+    const onMap = encounter.participants ?? [];
+    const absent = encounter.notParticipating ?? [];
+    const absentNote = absent.length > 0 ? ` Не участвуют в бою: ${absent.join(", ")}.` : "";
     await db.gameEvent.create({
       data: {
         campaignId,
         type: "combat",
-        description: `⚔️ Начался тактический бой: ${name} (${encounter.environment}). Враги: ${enemyListStr}. Награда за победу: ${encounter.awardedXP} XP (${encounter.xpPerPlayer} на игрока).`,
+        description: `⚔️ Начался тактический бой: ${name} (${encounter.environment}). Враги: ${enemyListStr}. Награда за победу: ${encounter.awardedXP} XP (${encounter.xpPerPlayer} на игрока).${absentNote}`,
         isImportant: true,
       },
     });
@@ -901,7 +912,9 @@ export const startCombatTool = tool({
       enemyNames: encounter.enemyNames,
       awardedXP: encounter.awardedXP,
       xpPerPlayer: encounter.xpPerPlayer,
-      message: `Тактический бой '${name}' успешно создан и запущен! Враги: ${enemyListStr}. Награда за победу: ${encounter.awardedXP} XP (${encounter.xpPerPlayer} на игрока). Игроку открыта тактическая сетка боя. Опиши начало сражения: на поле ровно эти враги — не называй другое их число и не добавляй других существ (остальных из рассказа опиши как отставших или стоящих поодаль). Передай ход инициативе.`,
+      participants: onMap,
+      notParticipating: absent,
+      message: `Тактический бой '${name}' успешно создан и запущен! Враги: ${enemyListStr}. Награда за победу: ${encounter.awardedXP} XP (${encounter.xpPerPlayer} на игрока). Игроку открыта тактическая сетка боя. Опиши начало сражения: на поле ровно эти враги — не называй другое их число и не добавляй других существ (остальных из рассказа опиши как отставших или стоящих поодаль). На карте из отряда: ${onMap.join(", ") || "никого"}.${absent.length > 0 ? ` ${absent.join(", ")} в бою не участву${absent.length > 1 ? "ют" : "ет"}: не описывай их в схватке, они остаются на своих местах, и после боя их не перемещают.` : ""} Передай ход инициативе.`,
     };
   },
 } as any);

@@ -12,6 +12,7 @@ import {
 import { ATTACK_LIBRARY, attacksPerAction } from "./library-data";
 import { generateEncounter } from "./encounters/encounter-generator";
 import { applyLeaderName } from "./encounters/encounter-request";
+import { selectParticipants } from "./participants";
 import type {
   StoryFactionContext,
   SquadArchetype,
@@ -83,6 +84,10 @@ export interface CreateEncounterParams {
   archetype?: SquadArchetype;
   isActClimax?: boolean;
   mapPresetId?: string;
+  /** Имена героев и спутников, вступающих в бой. Остальные остаются на месте и на карту не выходят. Без списка — весь отряд */
+  participantNames?: string[];
+  /** То же по id героев кампании (для ведущего комнаты) */
+  participantIds?: string[];
 }
 
 export interface TacticalEncounterResult {
@@ -96,6 +101,10 @@ export interface TacticalEncounterResult {
   enemyNames: string[];
   awardedXP: number;
   xpPerPlayer: number;
+  /** Кто вышел на карту из героев и спутников */
+  participants: string[];
+  /** Кто остался вне боя (живые герои и спутники кампании, которых нет на карте) */
+  notParticipating: string[];
 }
 
 /**
@@ -871,172 +880,38 @@ export function resolveSpellDataForCombatant(
   return JSON.stringify(spells);
 }
 
+/** Герой или спутник кампании, которого нужно поставить на карту боя */
+type PartyCharacter = Awaited<ReturnType<typeof db.character.findMany>>[number];
+
 /**
- * Создаёт полный тактический бой из сюжетного энкаунтера
+ * Выводит на карту боя героев и спутников: считает атаки, способности, заклинания, зелья и
+ * расставляет их слева. Нужна и при создании боя, и когда ведущий добавляет героя в идущий бой.
+ * startIndex — сколько союзников уже стоит на карте (чтобы не ставить нового поверх них).
  */
-export async function createTacticalEncounter({
-  campaignId,
-  name,
-  environment = "dungeon",
-  gridWidth = 50,
-  gridHeight = 50,
-  mapDescription,
-  customMapElements,
-  enemies,
-  biome,
-  difficulty = "medium",
-  storyFaction,
-  leaderName,
-  archetype,
-  isActClimax,
-  mapPresetId,
-}: CreateEncounterParams): Promise<TacticalEncounterResult> {
-  // Завершаем старые активные бои в кампании; их итоги (хиты, ячейки) уходят в листы героев
-  if (campaignId) {
-    await endActiveCombats({ campaignId });
-  }
+export async function createPartyCombatants({
+  combatId,
+  characters,
+  gridWidth,
+  gridHeight,
+  placed,
+  startIndex = 0,
+}: {
+  combatId: string;
+  characters: PartyCharacter[];
+  gridWidth: number;
+  gridHeight: number;
+  placed?: Array<{ id: string; type: string; name: string; x: number; y: number }>;
+  startIndex?: number;
+}): Promise<Array<{ id: string; dexMod: number }>> {
+  const created: Array<{ id: string; dexMod: number }> = [];
 
-  // Подтягиваем персонажей игрока и спутников из кампании
-  const partyCharacters = campaignId
-    ? await db.character.findMany({
-        where: { campaignId, isAlive: true, type: { in: ["player", "companion"] } },
-        orderBy: [{ type: "asc" }, { createdAt: "asc" }],
-      })
-    : [];
-
-  // Герой привязан к листу, но лист не читается: в бой его не пускаем — иначе он вышел бы
-  // «пустым» персонажем с десятками во всех характеристиках
-  const lost = partyCharacters.find((c) => (c as { sheetMissing?: boolean }).sheetMissing);
-  if (lost) {
-    throw new Error(`У героя «${lost.name}» недоступен лист персонажа. Выберите героя заново.`);
-  }
-
-  const partyMembers: PartyMember[] =
-    partyCharacters.length > 0
-      ? partyCharacters.map((c) => ({
-          id: c.id,
-          name: c.name,
-          level: c.level || 1,
-        }))
-      : [
-          {
-            id: "default-hero",
-            name: "Герой",
-            level: 3,
-          },
-        ];
-
-  let effectiveGridWidth = gridWidth;
-  let effectiveGridHeight = gridHeight;
-  let generatedEncounterResult: GeneratedEncounter | null = null;
-  const effectiveBiome = biome || environment || "dungeon";
-
-  const isAutoGenerating = !enemies || enemies.length === 0;
-
-  if (isAutoGenerating) {
-    generatedEncounterResult = await generateEncounter({
-      party: partyMembers,
-      difficulty,
-      biome: effectiveBiome as any,
-      storyFaction,
-      archetype,
-      isActClimax,
-      mapPresetId: mapPresetId || "",
-    });
-    applyLeaderName(generatedEncounterResult.enemies, leaderName);
-
-    if (generatedEncounterResult.mapPreset) {
-      effectiveGridWidth = generatedEncounterResult.mapPreset.gridWidth || gridWidth;
-      effectiveGridHeight = generatedEncounterResult.mapPreset.gridHeight || gridHeight;
-    }
-  }
-
-  // Создаём запись боя
-  const combat = await db.combat.create({
-    data: {
-      campaignId: campaignId || null,
-      name: name || generatedEncounterResult?.mapPreset?.name || "Тактический бой",
-      gridWidth: effectiveGridWidth,
-      gridHeight: effectiveGridHeight,
-      cellSize: 40,
-      // Фон — процедурная карта (ссылка procgen:); готовые картинки больше не подставляются
-      backgroundUrl: generatedEncounterResult?.mapPreset?.backgroundUrl ?? null,
-      status: "active",
-      round: 1,
-      currentTurnIndex: 0,
-      turnOrder: "[]",
-      log: JSON.stringify([
-        // Формат LogEntry движка (round/actor/text/kind) — иначе запись не читается клиентом как системная
-        {
-          round: 1,
-          actor: "Мастер",
-          kind: "system",
-          text: `⚔️ Начало боя: ${name}${mapDescription ? ` (${mapDescription})` : ""}. Бросок инициативы!`,
-        },
-      ]),
-    },
-  });
-
-  // Генерируем элементы карты
-  if (customMapElements && customMapElements.length > 0) {
-    for (const el of customMapElements) {
-      await db.mapElement.create({
-        data: {
-          combatId: combat.id,
-          type: el.type,
-          x: el.x,
-          y: el.y,
-          width: el.width || 1,
-          height: el.height || 1,
-          properties: JSON.stringify(el.properties || {}),
-        },
-      });
-    }
-  } else if (
-    generatedEncounterResult?.mapPreset?.elements &&
-    generatedEncounterResult.mapPreset.elements.length > 0
-  ) {
-    // Разметка процедурной карты — одним запросом: на карте десятки элементов
-    await db.mapElement.createMany({
-      data: generatedEncounterResult.mapPreset.elements.map((el) => ({
-        combatId: combat.id,
-        type: el.type,
-        x: el.x,
-        y: el.y,
-        width: el.width || 1,
-        height: el.height || 1,
-        properties: JSON.stringify(el.properties || {}),
-      })),
-    });
-  } else {
-    const generatedElements = generateTacticalMap(
-      environment,
-      effectiveGridWidth,
-      effectiveGridHeight
-    );
-    for (const el of generatedElements) {
-      await db.mapElement.create({
-        data: {
-          combatId: combat.id,
-          type: el.type,
-          x: el.x,
-          y: el.y,
-          width: el.width || 1,
-          height: el.height || 1,
-          properties: JSON.stringify(el.properties || {}),
-        },
-      });
-    }
-  }
-
-  const createdCombatantIds: Array<{ id: string; dexMod: number }> = [];
 
   // Расставляем союзников (слева, со сдвигом от края)
-  const allyStartX = Math.max(3, Math.floor(effectiveGridWidth * 0.12));
-  const centerY = Math.floor(effectiveGridHeight / 2);
-  let allyIndex = 0;
+  const allyStartX = Math.max(3, Math.floor(gridWidth * 0.12));
+  const centerY = Math.floor(gridHeight / 2);
+  let allyIndex = startIndex;
 
-  for (const char of partyCharacters) {
+  for (const char of characters) {
     const dexMod = abilityModifier(char.dex);
     const strMod = abilityModifier(char.str);
     const conMod = abilityModifier(char.con);
@@ -1599,16 +1474,16 @@ export async function createTacticalEncounter({
     let posX = allyStartX + Math.floor(allyIndex / 4);
     let posY = Math.max(
       2,
-      Math.min(effectiveGridHeight - 3, centerY + ((allyIndex % 4) - 1.5) * 2)
+      Math.min(gridHeight - 3, centerY + ((allyIndex % 4) - 1.5) * 2)
     );
 
-    if (generatedEncounterResult?.combatants) {
-      const placed =
-        generatedEncounterResult.combatants.find((c) => c.id === char.id) ||
-        generatedEncounterResult.combatants.find((c) => c.type === "player" && c.name === char.name);
-      if (placed) {
-        posX = placed.x;
-        posY = placed.y;
+    if (placed) {
+      const spot =
+        placed.find((c) => c.id === char.id) ||
+        placed.find((c) => c.type === "player" && c.name === char.name);
+      if (spot) {
+        posX = spot.x;
+        posY = spot.y;
       }
     }
     allyIndex++;
@@ -1707,7 +1582,7 @@ export async function createTacticalEncounter({
 
     const combatant = await db.combatant.create({
       data: {
-        combatId: combat.id,
+        combatId,
         characterId: char.id,
         name: char.name,
         type: char.type as CombatantType,
@@ -1747,8 +1622,186 @@ export async function createTacticalEncounter({
       },
     });
 
-    createdCombatantIds.push({ id: combatant.id, dexMod });
+    created.push({ id: combatant.id, dexMod });
   }
+
+  return created;
+}
+
+/**
+ * Создаёт полный тактический бой из сюжетного энкаунтера
+ */
+export async function createTacticalEncounter({
+  campaignId,
+  name,
+  environment = "dungeon",
+  gridWidth = 50,
+  gridHeight = 50,
+  mapDescription,
+  customMapElements,
+  enemies,
+  biome,
+  difficulty = "medium",
+  storyFaction,
+  leaderName,
+  archetype,
+  isActClimax,
+  mapPresetId,
+  participantNames,
+  participantIds,
+}: CreateEncounterParams): Promise<TacticalEncounterResult> {
+  // Завершаем старые активные бои в кампании; их итоги (хиты, ячейки) уходят в листы героев
+  if (campaignId) {
+    await endActiveCombats({ campaignId });
+  }
+
+  // Подтягиваем персонажей игрока и спутников из кампании
+  const partyCharacters = campaignId
+    ? await db.character.findMany({
+        where: { campaignId, isAlive: true, type: { in: ["player", "companion"] } },
+        orderBy: [{ type: "asc" }, { createdAt: "asc" }],
+      })
+    : [];
+
+  // Герой привязан к листу, но лист не читается: в бой его не пускаем — иначе он вышел бы
+  // «пустым» персонажем с десятками во всех характеристиках
+  const lost = partyCharacters.find((c) => (c as { sheetMissing?: boolean }).sheetMissing);
+  if (lost) {
+    throw new Error(`У героя «${lost.name}» недоступен лист персонажа. Выберите героя заново.`);
+  }
+
+  // На карту выходят только те, кого мастер назвал; остальные остаются там, где были по сюжету
+  const { fighters, benched } = selectParticipants(partyCharacters, {
+    names: participantNames,
+    ids: participantIds,
+  });
+
+  const partyMembers: PartyMember[] =
+    fighters.length > 0
+      ? fighters.map((c) => ({
+          id: c.id,
+          name: c.name,
+          level: c.level || 1,
+        }))
+      : [
+          {
+            id: "default-hero",
+            name: "Герой",
+            level: 3,
+          },
+        ];
+
+  let effectiveGridWidth = gridWidth;
+  let effectiveGridHeight = gridHeight;
+  let generatedEncounterResult: GeneratedEncounter | null = null;
+  const effectiveBiome = biome || environment || "dungeon";
+
+  const isAutoGenerating = !enemies || enemies.length === 0;
+
+  if (isAutoGenerating) {
+    generatedEncounterResult = await generateEncounter({
+      party: partyMembers,
+      difficulty,
+      biome: effectiveBiome as any,
+      storyFaction,
+      archetype,
+      isActClimax,
+      mapPresetId: mapPresetId || "",
+    });
+    applyLeaderName(generatedEncounterResult.enemies, leaderName);
+
+    if (generatedEncounterResult.mapPreset) {
+      effectiveGridWidth = generatedEncounterResult.mapPreset.gridWidth || gridWidth;
+      effectiveGridHeight = generatedEncounterResult.mapPreset.gridHeight || gridHeight;
+    }
+  }
+
+  // Создаём запись боя
+  const combat = await db.combat.create({
+    data: {
+      campaignId: campaignId || null,
+      name: name || generatedEncounterResult?.mapPreset?.name || "Тактический бой",
+      gridWidth: effectiveGridWidth,
+      gridHeight: effectiveGridHeight,
+      cellSize: 40,
+      // Фон — процедурная карта (ссылка procgen:); готовые картинки больше не подставляются
+      backgroundUrl: generatedEncounterResult?.mapPreset?.backgroundUrl ?? null,
+      status: "active",
+      round: 1,
+      currentTurnIndex: 0,
+      turnOrder: "[]",
+      log: JSON.stringify([
+        // Формат LogEntry движка (round/actor/text/kind) — иначе запись не читается клиентом как системная
+        {
+          round: 1,
+          actor: "Мастер",
+          kind: "system",
+          text: `⚔️ Начало боя: ${name}${mapDescription ? ` (${mapDescription})` : ""}. Бросок инициативы!`,
+        },
+      ]),
+    },
+  });
+
+  // Генерируем элементы карты
+  if (customMapElements && customMapElements.length > 0) {
+    for (const el of customMapElements) {
+      await db.mapElement.create({
+        data: {
+          combatId: combat.id,
+          type: el.type,
+          x: el.x,
+          y: el.y,
+          width: el.width || 1,
+          height: el.height || 1,
+          properties: JSON.stringify(el.properties || {}),
+        },
+      });
+    }
+  } else if (
+    generatedEncounterResult?.mapPreset?.elements &&
+    generatedEncounterResult.mapPreset.elements.length > 0
+  ) {
+    // Разметка процедурной карты — одним запросом: на карте десятки элементов
+    await db.mapElement.createMany({
+      data: generatedEncounterResult.mapPreset.elements.map((el) => ({
+        combatId: combat.id,
+        type: el.type,
+        x: el.x,
+        y: el.y,
+        width: el.width || 1,
+        height: el.height || 1,
+        properties: JSON.stringify(el.properties || {}),
+      })),
+    });
+  } else {
+    const generatedElements = generateTacticalMap(
+      environment,
+      effectiveGridWidth,
+      effectiveGridHeight
+    );
+    for (const el of generatedElements) {
+      await db.mapElement.create({
+        data: {
+          combatId: combat.id,
+          type: el.type,
+          x: el.x,
+          y: el.y,
+          width: el.width || 1,
+          height: el.height || 1,
+          properties: JSON.stringify(el.properties || {}),
+        },
+      });
+    }
+  }
+
+  // Расставляем союзников (слева, со сдвигом от края)
+  const createdCombatantIds = await createPartyCombatants({
+    combatId: combat.id,
+    characters: fighters,
+    gridWidth: effectiveGridWidth,
+    gridHeight: effectiveGridHeight,
+    placed: generatedEncounterResult?.combatants,
+  });
 
   // Расставляем врагов
   const enemyNames: string[] = [];
@@ -1808,7 +1861,7 @@ export async function createTacticalEncounter({
 
       const dexMod = c.dexMod ?? 0;
       const posX = e.position?.x ?? Math.max(1, enemyStartX - (enemyIndex > 3 ? 2 : 0));
-      const posY = e.position?.y ?? Math.max(1, Math.min(effectiveGridHeight - 2, centerY + (enemyIndex % 2 === 0 ? -Math.floor(enemyIndex / 2) : Math.ceil(enemyIndex / 2))));
+      const posY = e.position?.y ?? Math.max(1, Math.min(effectiveGridHeight - 2, Math.floor(effectiveGridHeight / 2) + (enemyIndex % 2 === 0 ? -Math.floor(enemyIndex / 2) : Math.ceil(enemyIndex / 2))));
       enemyIndex++;
 
       const combatant = await db.combatant.create({
@@ -1849,7 +1902,7 @@ export async function createTacticalEncounter({
     }
 
     awardedXP = totalMonstersXP;
-    xpPerPlayer = Math.floor(awardedXP / Math.max(1, partyCharacters.length || 1));
+    xpPerPlayer = Math.floor(awardedXP / Math.max(1, fighters.length || 1));
   }
 
   // Бросаем инициативу для всех участников
@@ -1889,5 +1942,7 @@ export async function createTacticalEncounter({
     enemyNames,
     awardedXP,
     xpPerPlayer,
+    participants: fighters.map((c) => c.name),
+    notParticipating: benched.map((c) => c.name),
   };
 }

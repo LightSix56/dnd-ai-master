@@ -23,6 +23,8 @@ vi.mock("@/lib/combat/generator", () => ({
     enemyNames: ["Бандит", "Бандит"],
     awardedXP: 50,
     xpPerPlayer: 50,
+    participants: ["Лира"],
+    notParticipating: ["Добрун"],
   }),
 }));
 
@@ -90,6 +92,30 @@ describe("start_combat: состав врагов подбирает движо�
     expect(vi.mocked(ensureCompanions).mock.invocationCallOrder[0]).toBeLessThan(
       vi.mocked(createTacticalEncounter).mock.invocationCallOrder[0]
     );
+  });
+
+  it("участников боя передаёт генератору вместе со спутниками из companions", async () => {
+    const params = await callStartCombat({
+      name: "Засада",
+      enemyType: "бандиты",
+      participants: ["Лира"],
+      companions: [{ name: "Марта" }],
+    });
+    expect(params.participantNames).toEqual(["Лира", "Марта"]);
+  });
+
+  it("без participants в бой идут все (список не передаётся)", async () => {
+    const params = await callStartCombat({ name: "Засада", enemyType: "бандиты", companions: [{ name: "Марта" }] });
+    expect(params.participantNames).toBeUndefined();
+  });
+
+  it("мастеру возвращается, кто в бою не участвует", async () => {
+    const schema = startCombatTool.inputSchema as unknown as { parse: (v: unknown) => any };
+    const input = schema.parse({ biome: "urban", name: "Засада", enemyType: "бандиты", participants: ["Лира"] });
+    const result = await (startCombatTool.execute as any)(input, { context: { campaignId: "camp-1" }, toolCallId: "t1", messages: [] });
+    expect(result.participants).toEqual(["Лира"]);
+    expect(result.notParticipating).toEqual(["Добрун"]);
+    expect(result.message).toContain("Добрун");
   });
 
   it("бой в таверне идёт на карте таверны, а не города", async () => {

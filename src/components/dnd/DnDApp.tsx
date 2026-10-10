@@ -74,6 +74,7 @@ import {
 } from "lucide-react";
 import { CharacterCard } from "./CharacterCard";
 import { CombatView, type CombatEndSummary } from "@/components/combat/CombatView";
+import { buildCombatReport, outcomeText } from "@/lib/combat/summary-text";
 import { ModelPickerModal } from "./ModelPickerModal";
 import { SetupModal } from "./SetupModal";
 import { CostStatsModal } from "./CostStatsModal";
@@ -4185,23 +4186,15 @@ export function DnDApp({
             closeCombatView();
             setActiveCombat(null);
             await refreshActiveCampaign();
-            const surv = summary.survivingCombatants.filter((c) => c.type === "player" || c.type === "companion");
-            const survText = surv.map((c) => `${c.name} (HP: ${c.hpCurrent}/${c.hpMax})`).join(", ");
-            const outcomeRu =
-              summary.outcome === "victory"
-                ? "Победа (все враги повержены)"
-                : summary.outcome === "defeat"
-                ? "Поражение отряда"
-                : "Бой завершён";
+            const outcomeRu = outcomeText(summary.outcome);
 
             if (summary.outcome === "victory" && summary.xpPerPlayer && summary.xpPerPlayer > 0) {
-              toast.success(`Победа! Каждый герой получает +${summary.xpPerPlayer} XP! (Всего ${summary.awardedXP} XP)`);
+              toast.success(`Победа! Каждый участник боя получает +${summary.xpPerPlayer} XP! (Всего ${summary.awardedXP} XP)`);
             } else {
               toast.success(`Бой завершён: ${outcomeRu}`);
             }
 
-            const xpNote = summary.xpPerPlayer && summary.xpPerPlayer > 0 ? ` Награда отряду: +${summary.xpPerPlayer} XP каждому (всего ${summary.awardedXP} XP).` : "";
-            const prompt = `[Тактический бой '${summary.name}' завершён за ${summary.rounds} раунд(ов). Результат: ${outcomeRu}.${xpNote} Состояние отряда: ${survText || "все живы"}. Опиши завершение битвы и продолжение приключения.]`;
+            const prompt = buildCombatReport(summary);
             await sendMessage({ text: prompt });
           }}
         />

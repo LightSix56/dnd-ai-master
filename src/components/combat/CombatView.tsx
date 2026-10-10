@@ -90,9 +90,12 @@ export interface CombatEndSummary {
     type: string;
     hpCurrent: number;
     hpMax: number;
+    conditions?: string[];
   }>;
   awardedXP?: number;
   xpPerPlayer?: number;
+  /** Живые герои и спутники кампании, которых в бою не было: мастеру напоминают, что они не участвовали */
+  nonParticipants?: string[];
 }
 
 export interface CombatViewProps {
@@ -140,6 +143,8 @@ export function CombatView({ combatId, campaignId, roomCode, onClose, onCombatEn
   const [drawMode, setDrawMode] = useState<MapElementType | null>(null);
   const [deleteMode, setDeleteMode] = useState(false);
   const [showAddCombatant, setShowAddCombatant] = useState(false);
+  // Герои и спутники кампании, которых мастер не взял в бой: ведущий может ввести их в схватку
+  const [outsideHeroes, setOutsideHeroes] = useState<Array<{ id: string; name: string }>>([]);
   const [showImport, setShowImport] = useState(false);
   const [showFullLog, setShowFullLog] = useState(false);
   const [showWildShapeModal, setShowWildShapeModal] = useState(false);
@@ -636,6 +641,35 @@ export function CombatView({ combatId, campaignId, roomCode, onClose, onCombatEn
   );
   const isMyTurn = isDM ? true : currentTurnId === userRole;
 
+  // Кто из героев кампании не на карте — только ведущему, чтобы вернуть забытого в схватку
+  const fighterKey = (combat?.combatants ?? []).map((c) => c.characterId || c.name).join("|");
+  useEffect(() => {
+    if (!isDM || !campaignId || !combat) {
+      setOutsideHeroes([]);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch(`/api/character?campaignId=${encodeURIComponent(campaignId)}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        const ids = new Set(combat.combatants.map((c) => c.characterId).filter(Boolean));
+        const names = new Set(combat.combatants.map((c) => c.name.trim().toLowerCase()));
+        const outside = ((data.characters ?? []) as Array<{ id: string; name: string; type: string; isAlive: boolean }>)
+          .filter((c) => (c.type === "player" || c.type === "companion") && c.isAlive !== false)
+          .filter((c) => !ids.has(c.id) && !names.has(c.name.trim().toLowerCase()))
+          .map((c) => ({ id: c.id, name: c.name }));
+        if (!cancelled) setOutsideHeroes(outside);
+      } catch {
+        if (!cancelled) setOutsideHeroes([]);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [isDM, campaignId, combat?.id, fighterKey]);
+
   const selectedCombatant = useMemo(
     () => combat?.combatants.find((c) => c.id === selectedCombatantId) ?? null,
     [combat, selectedCombatantId]
@@ -1065,6 +1099,7 @@ export function CombatView({ combatId, campaignId, roomCode, onClose, onCombatEn
         type: c.type,
         hpCurrent: c.hpCurrent,
         hpMax: c.hpMax,
+        conditions: (c.conditions || []).map((cond) => String(cond?.type ?? "")).filter(Boolean),
       }));
       await onCombatEnd({
         combatId: combat.id,
@@ -1074,6 +1109,7 @@ export function CombatView({ combatId, campaignId, roomCode, onClose, onCombatEn
         survivingCombatants: surv,
         awardedXP: data?.xpAward?.totalXP,
         xpPerPlayer: data?.xpAward?.xpPerPlayer,
+        nonParticipants: Array.isArray(data?.nonParticipants) ? data.nonParticipants : [],
       });
     }
     onClose();
@@ -1739,6 +1775,25 @@ export function CombatView({ combatId, campaignId, roomCode, onClose, onCombatEn
                     </div>
                   </div>
                 </div>
+
+                {/* Герои вне боя: мастер их не взял, ведущий может ввести в схватку */}
+                {outsideHeroes.length > 0 && (
+                  <div className="space-y-1">
+                    <Label className="text-[10px] text-muted-foreground">Не участвуют в бою</Label>
+                    {outsideHeroes.map((hero) => (
+                      <Button
+                        key={hero.id}
+                        size="sm"
+                        variant="outline"
+                        className="w-full justify-start"
+                        onClick={() => doAction("add-party-member", { characterId: hero.id })}
+                      >
+                        <Plus className="size-3 mr-1" />
+                        {hero.name} — в бой
+                      </Button>
+                    ))}
+                  </div>
+                )}
 
                 {/* Добавить бойца */}
                 <div>

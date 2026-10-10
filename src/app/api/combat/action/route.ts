@@ -34,10 +34,12 @@ import {
 import { runBotTurn, isBotTurn } from "@/lib/combat/bot";
 import { hydrateCombat, dehydrateCombatant, safeParse } from "@/lib/combat/serialize";
 import { TYPE_COLORS, type ActionParameters, type Cell } from "@/lib/combat/types";
-import { buildTurnOrder } from "@/lib/combat/initiative";
+import { buildTurnOrder, rollInitiativeForAll } from "@/lib/combat/initiative";
 import { getSpellDefinition } from "@/lib/combat/library-data";
 import { awardCombatVictoryXP } from "@/lib/combat/xp-award";
 import { syncCombatToSheets } from "@/lib/combat/combat-sheet-sync";
+import { findNonParticipants } from "@/lib/combat/non-participants";
+import { createPartyCombatants } from "@/lib/combat/generator";
 import { checkCombatControl } from "@/lib/room/combat-access";
 
 /** Версия боя (Combat.updatedAt) на момент загрузки — для защиты от одновременных запросов */
@@ -822,6 +824,42 @@ export async function POST(req: Request) {
       return respond(combatId);
     }
 
+    if (action === "add-party-member") {
+      // Ведущий вводит в идущий бой героя или спутника, который не был выбран при старте
+      const { characterId }: { characterId?: string } = body;
+      if (!characterId) return Response.json({ error: "Не указан герой" }, { status: 400 });
+      const combat = await db.combat.findUnique({ where: { id: combatId }, include: { combatants: true } });
+      if (!combat) return Response.json({ error: "Бой не найден" }, { status: 404 });
+      const [hero] = await db.character.findMany({
+        where: { id: characterId, campaignId: combat.campaignId ?? undefined, isAlive: true, type: { in: ["player", "companion"] } },
+      });
+      if (!hero) return Response.json({ error: "Такого героя нет в кампании" }, { status: 404 });
+      if ((hero as { sheetMissing?: boolean }).sheetMissing) {
+        return Response.json({ error: `У героя «${hero.name}» недоступен лист персонажа` }, { status: 400 });
+      }
+      if (combat.combatants.some((c) => c.characterId === hero.id)) {
+        return Response.json({ error: `«${hero.name}» уже в бою` }, { status: 400 });
+      }
+      const created = await createPartyCombatants({
+        combatId,
+        characters: [hero],
+        gridWidth: combat.gridWidth,
+        gridHeight: combat.gridHeight,
+        startIndex: combat.combatants.filter((c) => c.type !== "enemy").length,
+      });
+      for (const roll of rollInitiativeForAll(created)) {
+        await db.combatant.update({
+          where: { id: roll.id },
+          data: { initiative: roll.initiative, initiativeTiebreak: roll.tiebreak },
+        });
+      }
+      const state = await loadState(combatId);
+      state.addLog(`${hero.name} вступает в бой`, "system");
+      syncTurnOrder(state);
+      await saveState(combatId, state);
+      return respond(combatId);
+    }
+
     if (action === "add-element") {
       const { type, x, y, width = 1, height = 1 }: any = body;
       await db.mapElement.create({
@@ -1011,7 +1049,9 @@ export async function POST(req: Request) {
       } catch (e) {
         console.error("Failed to write combat results to hero sheets:", e);
       }
-      return respond(combatId, { xpAward, outcome });
+      // Герои, которых в бою не было: мастеру о них напоминают в итоге боя
+      const nonParticipants = await findNonParticipants(combatId);
+      return respond(combatId, { xpAward, outcome, nonParticipants });
     }
 
     if (action === "delete-combat") {

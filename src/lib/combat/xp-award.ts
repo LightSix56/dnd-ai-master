@@ -100,11 +100,15 @@ export async function awardCombatVictoryXP(combatId: string): Promise<AwardComba
       return { combatId, totalXP, xpPerPlayer, awardedCharacters };
     }
 
+    // Опыт получают те, кто был на карте. Кого мастер в бой не брал, тот не сражался и опыта не получает.
+    // Бой без привязки бойцов к героям (собранный вручную) награждает весь отряд, как раньше.
+    const fighterIds = combatPlayers.map((c) => c.characterId).filter((id): id is string => Boolean(id));
     const livingCharacters = await db.character.findMany({
       where: {
         campaignId: combat.campaignId,
         isAlive: true,
         type: { in: ["player", "companion"] },
+        ...(fighterIds.length > 0 ? { id: { in: fighterIds } } : {}),
       },
     });
 

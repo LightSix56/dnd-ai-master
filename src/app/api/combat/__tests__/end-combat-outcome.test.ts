@@ -13,6 +13,7 @@ vi.mock("@/lib/room/combat-access", () => ({ checkCombatControl: vi.fn().mockRes
 vi.mock("@/lib/combat/xp-award", () => ({
   awardCombatVictoryXP: vi.fn().mockResolvedValue({ combatId: "combat-1", totalXP: 300, xpPerPlayer: 300, awardedCharacters: [] }),
 }));
+vi.mock("@/lib/combat/non-participants", () => ({ findNonParticipants: vi.fn().mockResolvedValue(["Добрун"]) }));
 vi.mock("@/lib/combat/combat-sheet-sync", () => ({ syncCombatToSheets: vi.fn().mockResolvedValue({ synced: 1, skipped: false }) }));
 
 import { db } from "@/lib/db";
@@ -58,5 +59,11 @@ describe("end-combat: победу определяет сервер", () => {
     const res = await endCombat("victory");
     expect(awardCombatVictoryXP).not.toHaveBeenCalled();
     expect((await res.json()).outcome).toBeNull();
+  });
+
+  it("в ответе перечислены герои, которых в бою не было", async () => {
+    vi.mocked(db.combat.findUnique).mockResolvedValue(combatRow(0, 8) as any);
+    const res = await endCombat("ended");
+    expect((await res.json()).nonParticipants).toEqual(["Добрун"]);
   });
 });
