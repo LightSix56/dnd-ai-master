@@ -1,14 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 // Mock supabase getAuthUserFromRequest
-vi.mock("@/lib/supabase/client", () => {
+vi.mock("@/lib/supabase/client", async () => {
+  const { fakeSupabase } = await import("@/lib/testing/fake-supabase");
   const getAuthUserFromRequestMock = vi.fn();
   return {
     getAuthUserFromRequest: getAuthUserFromRequestMock,
     // Удаление версий героев кампании в Supabase: в тестах не нужно реальное соединение
-    getSupabaseAdminClient: () => ({
-      from: () => ({ delete: () => ({ eq: async () => ({ error: null }) }) }),
-    }),
+    getSupabaseAdminClient: () => fakeSupabase(),
     __mocks: { getAuthUserFromRequestMock },
   };
 });

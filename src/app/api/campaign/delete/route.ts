@@ -26,10 +26,33 @@ export async function POST(req: Request) {
     // Сначала удаляем версии героев этой кампании (строки в листах с campaign_id).
     // Если это не удалось, кампанию не трогаем: иначе версии останутся без владельца.
     // Оригиналы героев не трогаем.
-    const { error: versionsError } = await getSupabaseAdminClient()
+    const supabase = getSupabaseAdminClient();
+    let versionsError: { message: string } | null = null;
+    const { data: versions, error: listError } = await supabase
       .from("characters")
-      .delete()
+      .select("id")
       .eq("campaign_id", campaignId);
+    versionsError = listError;
+
+    // Стол кампании закрываем, а места участников, занятые версиями, освобождаем:
+    // room_participants ссылается на лист с ON DELETE RESTRICT, и с занятым местом
+    // база не дала бы удалить версию (сетевые кампании не удалялись вовсе)
+    if (!versionsError) {
+      const { error } = await supabase
+        .from("rooms")
+        .update({ status: "archived", updated_at: new Date().toISOString() })
+        .filter("campaign_settings->>campaignId", "eq", campaignId);
+      versionsError = error;
+    }
+    const versionIds = (versions ?? []).map((v: { id: string }) => v.id);
+    if (!versionsError && versionIds.length > 0) {
+      const { error } = await supabase.from("room_participants").delete().in("character_id", versionIds);
+      versionsError = error;
+    }
+    if (!versionsError) {
+      const { error } = await supabase.from("characters").delete().eq("campaign_id", campaignId);
+      versionsError = error;
+    }
     if (versionsError) {
       console.error("[campaign/delete] не удалось удалить версии героев:", versionsError.message);
       return Response.json(
