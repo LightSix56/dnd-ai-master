@@ -2,8 +2,9 @@
 
 import React, { useState } from "react";
 import type { Room, RoomParticipant } from "@/lib/room/types";
-import { Crown, CheckCircle2, X, Loader2 } from "lucide-react";
-import { CampaignSetupForm } from "@/components/campaign/CampaignSetupForm";
+import { CheckCircle2, X, Loader2 } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { CampaignSetupPanel, partySetupDescription } from "@/components/campaign/CampaignSetupPanel";
 import {
   defaultCampaignSetup,
   validateCampaignSetupInput,
@@ -38,7 +39,7 @@ export function RoomCampaignSetupModal({
   const readyParticipants = participants.filter((p) => p.isReady && p.character);
 
   const partySlot = (
-    <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 p-3">
+    <div className="rounded-lg border border-border bg-muted/20 p-3">
       <div className="flex items-center justify-between text-xs text-zinc-700 dark:text-zinc-300 mb-2 font-medium">
         <span className="flex items-center gap-1.5">
           <CheckCircle2 className="size-4 text-emerald-600 dark:text-emerald-400" />
@@ -71,40 +72,24 @@ export function RoomCampaignSetupModal({
   );
 
   return (
-    <div className="fixed inset-0 z-[350] flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs overflow-y-auto font-sans">
-      <div className="w-full max-w-2xl rounded-xl border border-zinc-200 bg-white p-6 shadow-2xl text-zinc-950 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-50 my-8">
-        {/* Шапка */}
-        <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-zinc-200 bg-zinc-100 text-zinc-800 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200">
-              <Crown className="size-5" />
-            </div>
-            <div>
-              <h2 className="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-                Настройка приключения (Ведущий)
-              </h2>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                Генерация Акта 1 с учетом собравшегося состава героев
-              </p>
-            </div>
-          </div>
-          {!isGenerating && (
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex h-8 w-8 items-center justify-center rounded-lg text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 transition-colors cursor-pointer"
-              aria-label="Закрыть"
-            >
-              <X className="size-4" />
-            </button>
-          )}
-        </div>
-
+    <div className="fixed inset-0 z-[350] flex items-start justify-center p-4 bg-black/50 backdrop-blur-xs overflow-y-auto">
+      <div className="w-full max-w-2xl my-8">
         {/* Форма не размонтируется на время генерации: иначе после ошибки выбор ведущего сбросится */}
         <div className={isGenerating ? "hidden" : undefined}>
-          <CampaignSetupForm
+          <CampaignSetupPanel
             mode="network"
-            initialTitle={`${room.name}: Легенда`}
+            description={partySetupDescription(readyParticipants.length)}
+            headerAction={
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground transition-colors cursor-pointer"
+                aria-label="Закрыть"
+              >
+                <X className="size-4" />
+              </button>
+            }
+            initialTitle={room.name}
             initialValues={defaultCampaignSetup(room.startingLevel)}
             startingLevel={room.startingLevel}
             isGenerating={isGenerating}
@@ -123,16 +108,16 @@ export function RoomCampaignSetupModal({
         </div>
 
         {isGenerating && (
-          <div className="py-12 flex flex-col items-center justify-center text-center">
-            <div className="animate-spin text-zinc-800 dark:text-zinc-200 mb-4">
-              <Loader2 className="size-8" />
-            </div>
-            <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">Сотворение Акта 1 приключения...</h3>
-            <p className="mt-2 text-xs text-zinc-500 max-w-md leading-relaxed">
-              ИИ вплетает предыстории и особенности ваших персонажей в первый акт,
-              рассчитывает баланс боев и расставляет ключевые вехи.
-            </p>
-          </div>
+          <Card className="border-border bg-card/60">
+            <CardContent className="py-12 flex flex-col items-center justify-center text-center">
+              <Loader2 className="size-8 animate-spin text-amber-500 mb-4" />
+              <h3 className="text-lg font-semibold">Сотворение Акта 1 приключения...</h3>
+              <p className="mt-2 text-xs text-muted-foreground max-w-md leading-relaxed">
+                ИИ вплетает предыстории и особенности ваших персонажей в первый акт,
+                рассчитывает баланс боев и расставляет ключевые вехи.
+              </p>
+            </CardContent>
+          </Card>
         )}
       </div>
     </div>

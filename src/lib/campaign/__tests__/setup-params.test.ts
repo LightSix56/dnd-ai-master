@@ -3,6 +3,7 @@ import {
   normalizeCampaignSetup,
   normalizeCampaignSetupPatch,
   defaultCampaignSetup,
+  buildNewCampaignPayload,
   validateCampaignSetupInput,
 } from "../setup-params";
 
@@ -43,6 +44,26 @@ describe("normalizeCampaignSetup", () => {
 describe("normalizeCampaignSetupPatch", () => {
   it("returns only keys present in the input", () => {
     expect(normalizeCampaignSetupPatch({ tone: "heroic" }, 1)).toEqual({ tone: "heroic" });
+  });
+});
+
+describe("buildNewCampaignPayload", () => {
+  it("uses the shared defaults so every entry point creates the same campaign", () => {
+    const setup = defaultCampaignSetup(3);
+    const payload = buildNewCampaignPayload("  Тени  ", 3);
+    expect(payload).toMatchObject({
+      name: "Тени",
+      startingLevel: 3,
+      levelFrom: 3,
+      levelTo: setup.levelTo,
+      setting: setup.setting,
+      tone: setup.tone,
+      difficulty: setup.difficulty,
+      dmStyle: setup.dmStyle,
+      partyTies: setup.partyTies,
+      startingSituation: setup.startingSituation,
+      makeActive: true,
+    });
   });
 });
 

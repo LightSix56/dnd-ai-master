@@ -30,6 +30,7 @@ import { useDnDStore, type Campaign } from "@/lib/store";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { CreateRoomModal } from "@/components/room/CreateRoomModal";
 import { CreateCampaignModal } from "@/components/campaign/CreateCampaignModal";
+import { buildNewCampaignPayload } from "@/lib/campaign/setup-params";
 import { SetupModal } from "@/components/dnd/SetupModal";
 import { ModelPickerModal } from "@/components/dnd/ModelPickerModal";
 import { SupabaseAuthModal } from "@/components/auth/SupabaseAuthModal";
@@ -246,17 +247,7 @@ export function HomeHubView() {
           "Content-Type": "application/json",
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify({
-          name: newCampaignName.trim(),
-          startingLevel: newCampaignLevel,
-          levelFrom: newCampaignLevel,
-          levelTo: Math.min(20, newCampaignLevel + 4),
-          setting: "Forgotten Realms",
-          tone: "heroic",
-          difficulty: "normal",
-          language: "ru",
-          makeActive: true,
-        }),
+        body: JSON.stringify(buildNewCampaignPayload(newCampaignName, newCampaignLevel)),
       });
       const data = await res.json().catch(() => null);
       if (!res.ok || !data?.campaign) {
@@ -580,6 +571,7 @@ export function HomeHubView() {
       {/* Модальное окно создания кампании */}
       {showCreateCampaign && (
         <CreateCampaignModal
+          mode="solo"
           name={newCampaignName}
           startingLevel={newCampaignLevel}
           creating={creatingCampaign}

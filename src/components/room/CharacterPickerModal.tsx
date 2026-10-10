@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { validateCharacterForRoom } from "@/lib/room/validation";
+import { buildStarterSheet } from "@/lib/dnd/starter-sheet";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -43,6 +44,9 @@ export interface FormattedCharacterCard {
   campaignName?: string | null;
   isSelectable: boolean;
   reason?: string;
+  /** Подписи для героя, который уже в кампании (соло: герои отряда) */
+  ownedLabel?: string;
+  ownedButtonLabel?: string;
 }
 
 export function formatCharacterCardForPicker(
@@ -141,9 +145,28 @@ export interface CharacterPickerModalProps {
     campaignId: string;
     importType: string;
     onImportTypeChange: (type: string) => void;
+    /** Лист выбранного или только что созданного героя: его нужно добавить в кампанию */
     onPick: (sheet: Record<string, any>) => Promise<void> | void;
+    /** Герои, которые уже в кампании: показываются на вкладке «Герои кампании» */
+    party: Array<{
+      id: string;
+      name: string;
+      type: string;
+      race?: string | null;
+      class?: string | null;
+      subclass?: string | null;
+      level?: number | null;
+      hpMax?: number | null;
+      ac?: number | null;
+    }>;
   };
 }
+
+const SOLO_TYPE_LABELS: Record<string, string> = {
+  player: "В отряде",
+  companion: "Спутник",
+  npc: "NPC",
+};
 
 const DND_CLASSES = [
   "Воин",
@@ -182,7 +205,7 @@ export function CharacterPickerModal({
   solo,
 }: CharacterPickerModalProps) {
   const { user, getAuthToken, signInAsGuest } = useSupabaseAuth();
-  const [activeTab, setActiveTab] = useState<"campaign" | "account" | "create">(solo ? "account" : "campaign");
+  const [activeTab, setActiveTab] = useState<"campaign" | "account" | "create">("account");
   // Исходные листы по id: в одиночной игре выбранный лист импортируется целиком
   const rawSheetsRef = useRef(new Map<string, Record<string, any>>());
 
@@ -190,12 +213,29 @@ export function CharacterPickerModal({
   const [campaignCharacters, setCampaignCharacters] = useState<
     (FormattedCharacterCard & { isAssigned: boolean; isOwnedByMe: boolean })[]
   >([]);
+  // Соло: герои кампании — это уже собранный отряд; комната: герои, которых ведущий подготовил для игроков
+  const soloPartyCards = useMemo(
+    () =>
+      (solo?.party ?? [])
+        .filter((c) => c.type === "player" || c.type === "companion" || c.type === "npc")
+        .map((c) => ({
+          ...formatCampaignCharacterForPicker(
+            { ...c, class: c.class ?? undefined, race: c.race ?? undefined, subclass: c.subclass ?? undefined, level: c.level ?? undefined, hpMax: c.hpMax ?? undefined, ac: c.ac ?? undefined },
+            startingLevel
+          ),
+          isOwnedByMe: true,
+          ownedLabel: SOLO_TYPE_LABELS[c.type] ?? "В отряде",
+          ownedButtonLabel: "Уже в кампании ✓",
+        })),
+    [solo?.party, startingLevel]
+  );
   const [resolvedCampaignId, setResolvedCampaignId] = useState<string | null>(propCampaignId || null);
 
   // Личные персонажи из Supabase
   const [accountCards, setAccountCards] = useState<FormattedCharacterCard[]>([]);
 
   const [loadingCampaign, setLoadingCampaign] = useState(false);
+  const campaignCards = solo ? soloPartyCards : campaignCharacters;
   const [loadingAccount, setLoadingAccount] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submittingId, setSubmittingId] = useState<string | null>(null);
@@ -342,14 +382,27 @@ export function CharacterPickerModal({
       return;
     }
 
-    const campId = resolvedCampaignId || propCampaignId;
-    if (!campId) {
-      setError("Не найден идентификатор кампании комнаты");
+    setCreating(true);
+    setError(null);
+
+    if (solo) {
+      // Одиночная игра: тот же стартовый лист, что сервер делает герою комнаты, импортируется в кампанию
+      try {
+        await solo.onPick(buildStarterSheet({ name: trimmed, race: newRace, className: newClass, level: startingLevel }));
+      } catch (err: any) {
+        setError(err?.message || "Ошибка создания персонажа");
+      } finally {
+        setCreating(false);
+      }
       return;
     }
 
-    setCreating(true);
-    setError(null);
+    const campId = resolvedCampaignId || propCampaignId;
+    if (!campId) {
+      setCreating(false);
+      setError("Не найден идентификатор кампании комнаты");
+      return;
+    }
 
     try {
       let token = getAuthToken();
@@ -419,7 +472,7 @@ export function CharacterPickerModal({
             </h3>
           </div>
           <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-            Возьмите одного из подготовленных героев отряда, подключите своего персонажа или создайте нового под уровень стола ({startingLevel} ур.).
+            Возьмите одного из подготовленных героев отряда, подключите своего персонажа или создайте нового под уровень кампании ({startingLevel} ур.).
           </p>
         </div>
 
@@ -451,18 +504,16 @@ export function CharacterPickerModal({
               </Select>
             </div>
           )}
-          <TabsList className={`grid ${solo ? "grid-cols-1" : "grid-cols-3"} w-full mb-3`}>
-            {!solo && (
+          <TabsList className="grid grid-cols-3 w-full mb-3">
             <TabsTrigger value="campaign" className="text-xs gap-1.5 cursor-pointer">
               <Swords className="size-3.5" />
               <span>Герои кампании</span>
-              {campaignCharacters.length > 0 && (
+              {campaignCards.length > 0 && (
                 <Badge variant="secondary" className="px-1.5 py-0 text-[10px] ml-0.5">
-                  {campaignCharacters.length}
+                  {campaignCards.length}
                 </Badge>
               )}
             </TabsTrigger>
-            )}
             <TabsTrigger value="account" className="text-xs gap-1.5 cursor-pointer">
               <Users className="size-3.5" />
               <span>Мои персонажи</span>
@@ -472,12 +523,10 @@ export function CharacterPickerModal({
                 </Badge>
               )}
             </TabsTrigger>
-            {!solo && (
-              <TabsTrigger value="create" className="text-xs gap-1.5 cursor-pointer">
-                <Plus className="size-3.5" />
-                <span>Создать нового</span>
-              </TabsTrigger>
-            )}
+            <TabsTrigger value="create" className="text-xs gap-1.5 cursor-pointer">
+              <Plus className="size-3.5" />
+              <span>Создать нового</span>
+            </TabsTrigger>
           </TabsList>
 
           {/* Вкладка 1: Герои кампании */}
@@ -487,7 +536,7 @@ export function CharacterPickerModal({
                 <Loader2 className="size-6 animate-spin" />
                 <span className="mt-2 text-xs">Загрузка героев кампании...</span>
               </div>
-            ) : campaignCharacters.length === 0 ? (
+            ) : campaignCards.length === 0 ? (
               <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-zinc-300 dark:border-zinc-700 bg-zinc-50/50 dark:bg-zinc-900/30 py-10 text-center px-4">
                 <Swords className="size-8 text-zinc-400 mb-2" />
                 <p className="font-medium text-zinc-900 dark:text-zinc-100 text-sm">
@@ -508,7 +557,7 @@ export function CharacterPickerModal({
               </div>
             ) : (
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                {campaignCharacters.map((card) => {
+                {campaignCards.map((card) => {
                   const isJoining = submittingId === card.id;
 
                   return (
@@ -534,7 +583,7 @@ export function CharacterPickerModal({
                             className="bg-emerald-50 text-emerald-700 border-emerald-300 dark:bg-emerald-950/40 dark:text-emerald-300 text-[11px] gap-1"
                           >
                             <Check className="size-3" />
-                            Вы играете
+                            {card.ownedLabel ?? "Вы играете"}
                           </Badge>
                         ) : card.isAssigned ? (
                           <Badge
@@ -595,7 +644,7 @@ export function CharacterPickerModal({
                       <div className="mt-3 pt-1">
                         <Button
                           type="button"
-                          disabled={!card.isSelectable || isJoining}
+                          disabled={!card.isSelectable || isJoining || (Boolean(solo) && card.isOwnedByMe)}
                           onClick={() => handleSelectCharacter(card)}
                           className="w-full text-xs h-8 cursor-pointer"
                           variant={card.isOwnedByMe ? "outline" : "default"}
@@ -603,10 +652,10 @@ export function CharacterPickerModal({
                           {isJoining ? (
                             <span className="flex items-center justify-center gap-1.5">
                               <Loader2 className="size-3 animate-spin" />
-                              Подключение...
+                              {solo ? "Добавление..." : "Подключение..."}
                             </span>
                           ) : card.isOwnedByMe ? (
-                            "Выбран текущим героем ✓"
+                            card.ownedButtonLabel ?? "Выбран текущим героем ✓"
                           ) : card.isAssigned ? (
                             "Занят другим игроком"
                           ) : (
@@ -749,7 +798,7 @@ export function CharacterPickerModal({
                           {isJoining ? (
                             <span className="flex items-center justify-center gap-1.5">
                               <Loader2 className="size-3 animate-spin" />
-                              Подключение...
+                              {solo ? "Добавление..." : "Подключение..."}
                             </span>
                           ) : (
                             "Выбрать этого героя"
@@ -828,7 +877,7 @@ export function CharacterPickerModal({
                 </div>
 
                 <p className="text-[11px] text-muted-foreground leading-relaxed">
-                  Персонаж будет автоматически добавлен в кампанию со сбалансированными характеристиками D&D 5e под {startingLevel}-й уровень стола и сразу закреплен за вами.
+                  Персонаж будет автоматически добавлен в кампанию со сбалансированными характеристиками D&D 5e под {startingLevel}-й уровень кампании и сразу закреплен за вами.
                 </p>
               </div>
 
@@ -840,7 +889,7 @@ export function CharacterPickerModal({
                 {creating ? (
                   <span className="flex items-center gap-1.5">
                     <Loader2 className="size-3.5 animate-spin" />
-                    Создание и подключение...
+                    {solo ? "Создание и добавление..." : "Создание и подключение..."}
                   </span>
                 ) : (
                   <span className="flex items-center gap-1.5">

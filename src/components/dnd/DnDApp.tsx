@@ -81,8 +81,9 @@ import { CreateRoomModal } from "@/components/room/CreateRoomModal";
 import { JoinRoomModal } from "@/components/room/JoinRoomModal";
 import { CharacterPickerModal } from "@/components/room/CharacterPickerModal";
 import { RoomCampaignSetupModal, type CampaignSetupFormValues } from "@/components/room/RoomCampaignSetupModal";
-import { CampaignSetupForm } from "@/components/campaign/CampaignSetupForm";
-import { defaultCampaignSetup, normalizeCampaignSetup, type CampaignSetupValues } from "@/lib/campaign/setup-params";
+import { CampaignSetupPanel, partySetupDescription } from "@/components/campaign/CampaignSetupPanel";
+import { CreateCampaignModal } from "@/components/campaign/CreateCampaignModal";
+import { buildNewCampaignPayload, normalizeCampaignSetup, type CampaignSetupValues } from "@/lib/campaign/setup-params";
 import { PartyTurnBar } from "@/components/room/PartyTurnBar";
 import type { RoomTurn } from "@/lib/room/types";
 import { SupabaseAuthModal } from "@/components/auth/SupabaseAuthModal";
@@ -305,9 +306,6 @@ export function DnDApp({
   // Параметры создания новой кампании
   const [newCampaignName, setNewCampaignName] = useState("");
   const [newCampaignStartingLevel, setNewCampaignStartingLevel] = useState(1);
-  const [newCampaignLanguage, setNewCampaignLanguage] = useState("ru");
-  const [newCampaignRuleStrictness, setNewCampaignRuleStrictness] = useState("standard");
-  const [newCampaignRestFrequency, setNewCampaignRestFrequency] = useState("standard");
   const [newCampaignWorldDescription, setNewCampaignWorldDescription] = useState("");
   const [creatingInProgress, setCreatingInProgress] = useState(false);
 
@@ -1607,29 +1605,13 @@ export function DnDApp({
     try {
       const token = getAuthToken();
       // Параметры сюжета задаются на карточке после создания; здесь — общие значения по умолчанию
-      const creationSetup = defaultCampaignSetup(newCampaignStartingLevel);
       const res = await fetch("/api/campaign", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify({
-          name: newCampaignName.trim(),
-          startingLevel: newCampaignStartingLevel,
-          levelFrom: newCampaignStartingLevel,
-          levelTo: creationSetup.levelTo,
-          setting: creationSetup.setting,
-          tone: creationSetup.tone,
-          difficulty: creationSetup.difficulty,
-          language: newCampaignLanguage,
-          dmStyle: creationSetup.dmStyle,
-          ruleStrictness: newCampaignRuleStrictness,
-          restFrequency: newCampaignRestFrequency,
-          partyTies: creationSetup.partyTies,
-          startingSituation: creationSetup.startingSituation,
-          makeActive: true,
-        }),
+        body: JSON.stringify(buildNewCampaignPayload(newCampaignName, newCampaignStartingLevel)),
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
@@ -3403,45 +3385,31 @@ export function DnDApp({
                         </Card>
                       ) : (
                         /* Карточка: Настройка параметров сюжета и кнопка Сгенерировать сюжет */
-                        <Card className="border-border bg-card/60">
-                          <CardHeader className="pb-3">
-                            <div className="flex items-center justify-between gap-2 flex-wrap">
-                              <div>
-                                <CardTitle className="text-base flex items-center gap-2">
-                                  <Sparkles className="size-4 text-amber-500" />
-                                  Параметры сюжета и мира
-                                </CardTitle>
-                                <CardDescription className="text-xs text-muted-foreground mt-0.5">
-                                  Настройте мир и атмосферу приключения для вашего отряда ({playerCharacters.length} {playerCharacters.length === 1 ? "герой" : "героя"}).
-                                </CardDescription>
-                              </div>
-                              {arcState?.status === "ready" && (
-                                <Button
-                                  type="button"
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => setShowStoryConfig(false)}
-                                  className="text-xs h-7 text-muted-foreground cursor-pointer"
-                                >
-                                  Назад к готовому сюжету
-                                </Button>
-                              )}
-                            </div>
-                          </CardHeader>
-                          <CardContent className="space-y-4">
-                            <CampaignSetupForm
-                              key={activeCampaign?.id ?? "no-campaign"}
-                              mode="solo"
-                              initialTitle={activeCampaign?.name ?? ""}
-                              initialValues={storySetupInitialValues}
-                              startingLevel={activeCampaign?.startingLevel ?? 1}
-                              isGenerating={savingStorySettings}
-                              error={null}
-                              onSubmit={handleGenerateStory}
-                              onCancel={() => setShowStoryConfig(false)}
-                            />
-                          </CardContent>
-                        </Card>
+                        <CampaignSetupPanel
+                          key={activeCampaign?.id ?? "no-campaign"}
+                          mode="solo"
+                          description={partySetupDescription(playerCharacters.length)}
+                          headerAction={
+                            arcState?.status === "ready" ? (
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setShowStoryConfig(false)}
+                                className="text-xs h-7 text-muted-foreground cursor-pointer"
+                              >
+                                Назад к готовому сюжету
+                              </Button>
+                            ) : undefined
+                          }
+                          initialTitle={activeCampaign?.name ?? ""}
+                          initialValues={storySetupInitialValues}
+                          startingLevel={activeCampaign?.startingLevel ?? 1}
+                          isGenerating={savingStorySettings}
+                          error={null}
+                          onSubmit={handleGenerateStory}
+                          onCancel={() => setShowStoryConfig(false)}
+                        />
                       )}
                     </div>
                   )}
@@ -4280,6 +4248,7 @@ export function DnDApp({
       {/* Create campaign modal */}
       {creatingCampaign && (
         <CreateCampaignModal
+          mode="solo"
           name={newCampaignName}
           startingLevel={newCampaignStartingLevel}
           creating={creatingInProgress}
@@ -4387,13 +4356,14 @@ export function DnDApp({
         <CharacterPickerModal
           isOpen={showImport}
           roomCode=""
-          startingLevel={activeCampaign.startingLevel ?? activeCampaign.levelFrom ?? 1}
+          startingLevel={targetLevel}
           onSelect={() => {}}
           onClose={() => setShowImport(false)}
           solo={{
             campaignId: activeCampaign.id,
             importType,
             onImportTypeChange: setImportType,
+            party: characters,
             onPick: async (sheet) => {
               await runImport({ character: sheet });
               setShowImport(false);
@@ -4634,86 +4604,6 @@ function EventCard({ event }: { event: any }) {
           📍 {event.location}
         </div>
       )}
-    </div>
-  );
-}
-
-// ============ CREATE CAMPAIGN MODAL ============
-
-function CreateCampaignModal({
-  name,
-  startingLevel,
-  creating,
-  onName,
-  onStartingLevel,
-  onCreate,
-  onClose,
-}: {
-  name: string;
-  startingLevel: number;
-  creating: boolean;
-  onName: (v: string) => void;
-  onStartingLevel: (v: number) => void;
-  onCreate: () => void;
-  onClose: () => void;
-}) {
-  return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <Card className="max-w-md w-full">
-        <CardHeader>
-          <CardTitle>Новая кампания</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {/* Название */}
-          <div className="space-y-2">
-            <Label htmlFor="name">Название кампании *</Label>
-            <Input
-              id="name"
-              value={name}
-              onChange={(e) => onName(e.target.value)}
-              placeholder="Например: Забытые Королевства"
-              autoFocus
-            />
-          </div>
-
-          {/* Стартовый уровень */}
-          <div className="space-y-2">
-            <Label htmlFor="startingLevel">Стартовый уровень (1–20)</Label>
-            <Input
-              id="startingLevel"
-              type="number"
-              min={1}
-              max={20}
-              value={startingLevel}
-              onChange={(e) => {
-                const val = parseInt(e.target.value, 10);
-                if (!isNaN(val)) {
-                  onStartingLevel(Math.min(20, Math.max(1, val)));
-                }
-              }}
-            />
-            <p className="text-xs text-muted-foreground">
-              Все персонажи в этой кампании должны соответствовать текущему уровню отряда (на старте: {startingLevel} ур.).
-            </p>
-          </div>
-
-          <div className="flex justify-end gap-2 pt-2">
-            <Button variant="outline" onClick={onClose} disabled={creating}>
-              Отмена
-            </Button>
-            <Button onClick={onCreate} disabled={!name.trim() || creating}>
-              {creating ? (
-                <>
-                  <Loader2 className="size-4 mr-2 animate-spin" />
-                  Создаю...
-                </>
-              ) : (
-                "Создать кампанию"
-              )}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }

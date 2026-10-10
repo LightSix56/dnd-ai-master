@@ -186,6 +186,28 @@ export function defaultCampaignSetup(startingLevel: number): CampaignSetupValues
   };
 }
 
+// Тело запроса на создание кампании: одно на главной и в игре, значения по умолчанию общие.
+// Скрытые параметры (язык, строгость правил, частота отдыха) без полей в форме задаются здесь же.
+export function buildNewCampaignPayload(name: string, startingLevel: number) {
+  const setup = defaultCampaignSetup(startingLevel);
+  return {
+    name: name.trim(),
+    startingLevel,
+    levelFrom: startingLevel,
+    levelTo: setup.levelTo,
+    setting: setup.setting,
+    tone: setup.tone,
+    difficulty: setup.difficulty,
+    dmStyle: setup.dmStyle,
+    partyTies: setup.partyTies,
+    startingSituation: setup.startingSituation,
+    language: "ru",
+    ruleStrictness: "standard",
+    restFrequency: "standard",
+    makeActive: true,
+  };
+}
+
 export function normalizeCampaignSetup(
   input: Record<string, unknown>,
   startingLevel: number
