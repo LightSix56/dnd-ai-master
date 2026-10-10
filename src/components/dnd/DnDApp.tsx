@@ -678,6 +678,14 @@ export function DnDApp({
     await refreshActiveCampaign();
   }, [refreshActiveCampaign]);
 
+  // Кто-то вырос в уровне — перечитываем героев, чтобы карточки показали новый уровень и хиты
+  const levelChangesKey = levelChanges.map((c) => `${c.name}:${c.toLevel}`).join("|");
+  useEffect(() => {
+    if (!levelChangesKey) return;
+    const campaignId = activeCampaignRef.current?.id;
+    if (campaignId) void refreshActiveCampaign(campaignId);
+  }, [levelChangesKey, refreshActiveCampaign]);
+
   const playerCharacters = useMemo(
     () => characters.filter((c) => c.type === "player"),
     [characters]
