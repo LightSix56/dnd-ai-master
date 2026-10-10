@@ -1,26 +1,22 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
 import {
-  Swords,
-  Zap,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
+import {
   Shield,
   Footprints,
-  HandHelping,
   LogOut,
-  FastForward,
-  Sparkles,
-  Eye,
-  EyeOff,
   Compass,
   ArrowUp,
   ArrowUpRight,
@@ -33,10 +29,7 @@ import {
   XCircle,
   ChevronDown,
   ChevronUp,
-  LayoutGrid,
-  Layers,
-  SlidersHorizontal,
-  FlaskConical,
+  Heart,
 } from "lucide-react";
 import type {
   Combatant,
@@ -83,81 +76,76 @@ interface HotbarProps {
 
 const COST_LABEL: Record<string, string> = {
   action: "Действие",
-  bonus: "Бонусное",
-  "action+bonus": "Действие + бонус",
+  bonus: "Бонусное действие",
+  "action+bonus": "Действие + бонусное",
   reaction: "Реакция",
   free: "Бесплатно",
   none: "—",
 };
 
+type CostKind = "action" | "bonus" | "reaction" | "free";
+type Tab = "actions" | "spells" | "items";
+
+/** Цвет по школе магии; ключ — корень слова, чтобы ловить «Воплощение»/«воплощения» */
+const SCHOOL_ACCENT: Array<{ match: string; bar: string; text: string }> = [
+  { match: "воплощ", bar: "bg-orange-500", text: "text-orange-600 dark:text-orange-400" },
+  { match: "ограж", bar: "bg-sky-500", text: "text-sky-600 dark:text-sky-400" },
+  { match: "прорицан", bar: "bg-cyan-500", text: "text-cyan-600 dark:text-cyan-400" },
+  { match: "очарован", bar: "bg-pink-500", text: "text-pink-600 dark:text-pink-400" },
+  { match: "вызов", bar: "bg-yellow-500", text: "text-yellow-600 dark:text-yellow-400" },
+  { match: "иллюз", bar: "bg-indigo-500", text: "text-indigo-600 dark:text-indigo-400" },
+  { match: "некром", bar: "bg-emerald-600", text: "text-emerald-600 dark:text-emerald-400" },
+  { match: "преобраз", bar: "bg-amber-500", text: "text-amber-600 dark:text-amber-400" },
+];
+const DEFAULT_SPELL_ACCENT = { bar: "bg-blue-500", text: "text-blue-600 dark:text-blue-400" };
+
+function schoolAccent(school?: string) {
+  const s = (school ?? "").toLowerCase();
+  return SCHOOL_ACCENT.find((a) => s.includes(a.match)) ?? DEFAULT_SPELL_ACCENT;
+}
+
+function diceText(d: { dice?: string; mod?: number; type?: string }, withType = true): string {
+  const dice = d.dice || "";
+  const mod = d.mod ? (d.mod > 0 ? "+" + d.mod : "" + d.mod) : "";
+  const type = withType && d.type ? DAMAGE_TYPE_LABELS[d.type] || d.type : "";
+  return (dice + mod + " " + type).trim();
+}
+
 function damageSummary(attack: Attack): string {
-  return attack.damage
-    .map((d) => {
-      const dice = d.dice || "";
-      const mod = d.mod ? (d.mod > 0 ? "+" + d.mod : "" + d.mod) : "";
-      const type = DAMAGE_TYPE_LABELS[d.type] || d.type;
-      return (dice + mod + " " + type).trim();
-    })
-    .join(" + ");
+  return attack.damage.map((d) => diceText(d)).join(" + ");
 }
 
-function spellSummary(p?: ActionParameters): string {
-  if (!p) return "";
-  const parts: string[] = [];
-  if (p.level === 0) parts.push("Заговор");
-  else if (p.level) parts.push(p.level + " круг");
-  if (p.school) parts.push(p.school);
-  if (p.actionCost) parts.push(COST_LABEL[p.actionCost] ?? p.actionCost);
-  if (p.range) {
-    if (p.range.type === "touch") parts.push("Касание");
-    else if (p.range.type === "self") parts.push("На себя");
-    else if (p.range.value) parts.push(p.range.value + " фт");
-  }
-  if (p.aoe) {
-    parts.push("Область " + p.aoe.size + " фт (" + p.aoe.shape + ")");
-  }
-  if (p.damage && p.damage.length > 0) {
-    const dmg = p.damage
-      .map(
-        (d) =>
-          (d.dice || "") + (d.mod ? (d.mod > 0 ? "+" + d.mod : d.mod) : "") + " " + (DAMAGE_TYPE_LABELS[d.type] || d.type)
-      )
-      .join(" + ");
-    parts.push(dmg);
-  }
-  if (p.saveType) {
-    parts.push("Спасбросок " + p.saveType);
-  }
-  if (p.concentration) {
-    parts.push("Концентрация");
-  }
-  return parts.join(" • ");
+function shortDamage(attack: Attack): string {
+  return attack.damage.map((d) => diceText(d, false)).filter(Boolean).join(" + ");
 }
 
-function extractWeaponBase(name: string): string {
-  let base = name.replace(/\s*\([^)]*\)/g, "").trim();
-  base = base.replace(/\s*\[[^\]]*\]/g, "").trim();
-  if (base.toLowerCase().includes("дубинка") || base.toLowerCase().includes("шиллейла")) return "Дубинка / Шиллейла";
-  if (base.toLowerCase().includes("кинжал")) return "Кинжал";
-  if (base.toLowerCase().includes("короткий меч")) return "Короткий меч";
-  if (base.toLowerCase().includes("длинный меч")) return "Длинный меч";
-  if (base.toLowerCase().includes("рапира")) return "Рапира";
-  if (base.toLowerCase().includes("посох")) return "Посох";
-  if (base.toLowerCase().includes("ручной арбалет")) return "Ручной арбалет";
-  if (base.toLowerCase().includes("тяжёлый арбалет")) return "Тяжёлый арбалет";
-  if (base.toLowerCase().includes("короткий лук")) return "Короткий лук";
-  if (base.toLowerCase().includes("длинный лук")) return "Длинный лук";
-  if (
-    base.toLowerCase().includes("укус") ||
-    base.toLowerCase().includes("когти") ||
-    base.toLowerCase().includes("бивни")
-  ) {
-    return "Природные";
-  }
-  if (base.toLowerCase().includes("безоружный") || base.toLowerCase().includes("кулак")) {
-    return "Рукопашный";
-  }
-  return base || name;
+function rangeText(attack: Attack): string {
+  return attack.range.long && attack.range.long > attack.range.normal
+    ? attack.range.normal + "/" + attack.range.long + " фт"
+    : attack.range.normal + " фт";
+}
+
+const AOE_SHAPE: Record<string, string> = {
+  sphere: "сфера",
+  cone: "конус",
+  line: "линия",
+  cylinder: "цилиндр",
+  cube: "куб",
+};
+
+function spellRangeText(p?: ActionParameters): string | null {
+  if (!p?.range) return null;
+  if (p.range.type === "touch") return "Касание";
+  if (p.range.type === "self") return "На себя";
+  if (p.range.value) return p.range.value + " фт";
+  return null;
+}
+
+function costKind(cost: string | undefined): CostKind {
+  if (cost === "bonus") return "bonus";
+  if (cost === "reaction") return "reaction";
+  if (cost === "free" || cost === "none") return "free";
+  return "action";
 }
 
 export function Hotbar({
@@ -180,67 +168,13 @@ export function Hotbar({
   activeTargeting,
   onCancelTargeting,
   onEndTurn,
-  advantage,
-  disadvantage,
-  onToggleAdvantage,
-  onToggleDisadvantage,
   onOpenWildShape,
   onRevertWildShape,
   onDrinkPotion,
 }: HotbarProps) {
-  const [viewMode, setViewMode] = useState<"sections" | "tabs">("sections");
-  const [activeTab, setActiveTab] = useState<"all" | "attacks" | "spells" | "abilities" | "tactics" | "potions">("all");
-  const [sizeMode, setSizeMode] = useState<"tiny" | "compact" | "normal" | "large">("compact");
-  const [widthMode, setWidthMode] = useState<"compact" | "medium" | "wide" | "full">("medium");
-  const [heightMode, setHeightMode] = useState<"sm" | "md" | "lg" | "auto">("md");
+  const [activeTab, setActiveTab] = useState<Tab>("actions");
+  const [spellFilter, setSpellFilter] = useState<number | "all">("all");
   const [isCollapsed, setIsCollapsed] = useState(false);
-
-  useEffect(() => {
-    try {
-      const savedView = localStorage.getItem("dnd_hotbar_view");
-      if (savedView === "sections" || savedView === "tabs") setViewMode(savedView);
-      const savedSize = localStorage.getItem("dnd_hotbar_size");
-      if (savedSize === "tiny" || savedSize === "compact" || savedSize === "normal" || savedSize === "large") {
-        setSizeMode(savedSize as any);
-      }
-      const savedWidth = localStorage.getItem("dnd_hotbar_width");
-      if (savedWidth === "compact" || savedWidth === "medium" || savedWidth === "wide" || savedWidth === "full") {
-        setWidthMode(savedWidth as any);
-      }
-      const savedHeight = localStorage.getItem("dnd_hotbar_height");
-      if (savedHeight === "sm" || savedHeight === "md" || savedHeight === "lg" || savedHeight === "auto") {
-        setHeightMode(savedHeight as any);
-      }
-    } catch {}
-  }, []);
-
-  const handleSetViewMode = (mode: "sections" | "tabs") => {
-    setViewMode(mode);
-    try {
-      localStorage.setItem("dnd_hotbar_view", mode);
-    } catch {}
-  };
-
-  const handleSetSizeMode = (size: "tiny" | "compact" | "normal" | "large") => {
-    setSizeMode(size);
-    try {
-      localStorage.setItem("dnd_hotbar_size", size);
-    } catch {}
-  };
-
-  const handleSetWidthMode = (w: "compact" | "medium" | "wide" | "full") => {
-    setWidthMode(w);
-    try {
-      localStorage.setItem("dnd_hotbar_width", w);
-    } catch {}
-  };
-
-  const handleSetHeightMode = (h: "sm" | "md" | "lg" | "auto") => {
-    setHeightMode(h);
-    try {
-      localStorage.setItem("dnd_hotbar_height", h);
-    } catch {}
-  };
 
   const isDead = combatant.hpCurrent <= 0;
   const totalSpeed = effectiveSpeed(combatant);
@@ -250,7 +184,6 @@ export function Hotbar({
 
   const actionAvailable = !combatant.actionUsed || combatant.extraActions > 0;
   const attacksLeft = Math.max(0, combatant.attacksPerAction - combatant.attacksMadeThisAction);
-  const midAction = combatant.attacksMadeThisAction > 0 && attacksLeft > 0;
 
   const isRogue =
     combatant.className?.toLowerCase().includes("плут") ||
@@ -268,7 +201,6 @@ export function Hotbar({
   const canDisengage = actionAvailable || canBonusTactics;
   const canHide = actionAvailable || canBonusTactics;
 
-  // Зелья и расходники
   const availablePotions = useMemo(
     () => (combatant.potions || []).filter((p) => p.quantity > 0),
     [combatant.potions]
@@ -278,22 +210,7 @@ export function Hotbar({
     [availablePotions]
   );
 
-  // Группировка атак
-  const groupedAttacks = useMemo(() => {
-    const map = new Map<string, Attack[]>();
-    for (const atk of combatant.attacks) {
-      const base = extractWeaponBase(atk.name);
-      if (!map.has(base)) map.set(base, []);
-      map.get(base)!.push(atk);
-    }
-    return Array.from(map.entries()).map(([weapon, atks]) => ({
-      weapon,
-      attacks: atks,
-    }));
-  }, [combatant.attacks]);
-
-  // Группировка заклинаний
-  const groupedSpells = useMemo(() => {
+  const spellsByLevel = useMemo(() => {
     const map = new Map<number, Array<{ id: string; name: string; params?: ActionParameters }>>();
     for (const spellId of combatant.spells.known) {
       const p = spellParams?.[spellId];
@@ -306,66 +223,30 @@ export function Hotbar({
     }
     return Array.from(map.entries())
       .sort(([a], [b]) => a - b)
-      .map(([level, list]) => ({
-        level,
-        label: level === 0 ? "Заговоры (0 кр)" : level + " круг",
-        spells: list,
-      }));
+      .map(([level, spells]) => ({ level, spells }));
   }, [combatant.spells.known, spellNames, spellParams]);
 
-  // Группировка способностей
-  const groupedAbilities = useMemo(() => {
-    const groups: Record<string, { label: string; icon: string; items: CombatAbility[] }> = {
-      action: { label: "⚡ Действия", icon: "⚡", items: [] },
-      bonus: { label: "⏱️ Бонус", icon: "⏱️", items: [] },
-      reaction: { label: "🛡️ Реакции", icon: "🛡️", items: [] },
-      free: { label: "💎 Особые", icon: "💎", items: [] },
+  const abilityGroups = useMemo(() => {
+    const groups: Record<CostKind, { label: string; items: CombatAbility[] }> = {
+      action: { label: "Действие", items: [] },
+      bonus: { label: "Бонусное действие", items: [] },
+      reaction: { label: "Реакция", items: [] },
+      free: { label: "Особые", items: [] },
     };
-
     for (const ab of combatant.abilities) {
       // Скрытая атака — пассивное умение: срабатывает сама при попадании, кнопки у неё нет
       if (ab.id === "sneak_attack" || ab.name.startsWith("Скрытая атака")) continue;
-      const cost = ab.parameters?.actionCost ?? "action";
-      if (cost === "bonus") groups.bonus.items.push(ab);
-      else if (cost === "reaction") groups.reaction.items.push(ab);
-      else if (cost === "free" || cost === "none") groups.free.items.push(ab);
-      else groups.action.items.push(ab);
+      groups[costKind(ab.parameters?.actionCost)].items.push(ab);
     }
-
-    return Object.entries(groups)
-      .filter(([_, g]) => g.items.length > 0)
+    return (Object.entries(groups) as Array<[CostKind, { label: string; items: CombatAbility[] }]>)
+      .filter(([, g]) => g.items.length > 0)
       .map(([key, g]) => ({ key, ...g }));
   }, [combatant.abilities]);
 
-  // Высота кнопок и базовый размер
-  const btnSizeClass =
-    sizeMode === "tiny"
-      ? "h-6 text-[10.5px] px-1.5 py-0 font-medium rounded-md gap-1 shadow-none"
-      : sizeMode === "compact"
-      ? "h-7 text-[11px] px-2 py-0.5 font-medium rounded-md gap-1"
-      : sizeMode === "large"
-      ? "h-9 text-xs px-3 py-1 font-bold rounded-md gap-1.5"
-      : "h-8 text-xs px-2.5 py-1 font-semibold rounded-md gap-1.5";
+  const hasSpells = spellsByLevel.length > 0;
+  const tab: Tab = activeTab === "spells" && !hasSpells ? "actions" : activeTab;
 
-  // Настройка ширины названий действий
-  const textWidthClass =
-    widthMode === "compact"
-      ? "max-w-[110px] truncate"
-      : widthMode === "medium"
-      ? "max-w-[190px] truncate"
-      : widthMode === "wide"
-      ? "max-w-[290px] truncate"
-      : "max-w-none whitespace-nowrap";
-
-  const heightClass =
-    heightMode === "sm"
-      ? "max-h-[110px]"
-      : heightMode === "md"
-      ? "max-h-[190px]"
-      : heightMode === "lg"
-      ? "max-h-[320px]"
-      : "max-h-[500px]";
-
+  // ================= Мёртв / без сознания =================
   if (isDead) {
     const isDeadCond = hasCondition(combatant, "dead");
     const isStableCond = hasCondition(combatant, "stable");
@@ -384,21 +265,21 @@ export function Hotbar({
           </div>
           <span className="font-bold text-foreground">{combatant.name}</span>
           {isDeadCond ? (
-            <Badge variant="destructive" className="h-5 text-[10px]">💀 Погиб</Badge>
+            <Badge variant="destructive" className="h-5 text-[10px]">Погиб</Badge>
           ) : isStableCond ? (
             <Badge variant="secondary" className="h-5 text-[10px] bg-blue-500/20 text-blue-900 dark:text-blue-300 border-blue-500/40 font-semibold">
-              🛡️ Стабилизирован
+              Стабилизирован
             </Badge>
           ) : (
             <div className="flex items-center gap-1.5 text-[11px]">
               <Badge variant="outline" className="h-5 text-[10px] text-amber-900 dark:text-amber-400 border-amber-500/40 font-semibold">
-                ⚠️ 0 HP
+                0 HP
               </Badge>
               <span className="text-emerald-700 dark:text-emerald-400 font-mono font-bold">
-                У: {"🟢".repeat(successes)}{"⚪".repeat(Math.max(0, 3 - successes))}
+                Успехи: {"●".repeat(successes)}{"○".repeat(Math.max(0, 3 - successes))}
               </span>
               <span className="text-red-700 dark:text-red-400 font-mono font-bold">
-                П: {"🔴".repeat(failures)}{"⚪".repeat(Math.max(0, 3 - failures))}
+                Провалы: {"●".repeat(failures)}{"○".repeat(Math.max(0, 3 - failures))}
               </span>
             </div>
           )}
@@ -413,435 +294,437 @@ export function Hotbar({
     );
   }
 
-  return (
-    <div className="border-t bg-card/95 backdrop-blur-md px-2.5 py-1.5 shadow-2xl transition-all select-none text-foreground">
-      {!isMyTurn && (
-        <div className="text-center text-[11px] text-amber-800 dark:text-amber-400 font-semibold mb-0.5 flex items-center justify-center gap-1">
-          <span>⏸️</span>
-          <span>Ход другого бойца</span>
-        </div>
+  // ================= Плитки: действия =================
+  const attackTiles = combatant.attacks.map((atk) => {
+    const pay = canPayForAttack(combatant, atk);
+    const isTargetingThis = activeTargeting?.type === "attack" && activeTargeting.id === atk.id;
+    const cost = atk.actionCost === "bonus" ? "bonus" : "action";
+    return (
+      <Tile
+        key={"atk-" + atk.id}
+        label={atk.name}
+        caption={"+" + atk.attackBonus + (shortDamage(atk) ? " · " + shortDamage(atk) : "")}
+        barClass="bg-amber-500"
+        cost={cost}
+        extraCost={atk.actionCost === "action+bonus"}
+        active={isTargetingThis}
+        unavailable={!isTargetingThis && (disabled || !pay.ok)}
+        onClick={() => (isTargetingThis ? onCancelTargeting?.() : onAttack(atk.id))}
+        tooltip={{
+          title: atk.name,
+          tag: COST_LABEL[atk.actionCost] ?? atk.actionCost,
+          lines: [
+            "+" + atk.attackBonus + " к попаданию",
+            damageSummary(atk),
+            "Дистанция: " + rangeText(atk),
+          ].filter(Boolean),
+          description: atk.description,
+          warning: isTargetingThis ? undefined : !isMyTurn ? "Не ваш ход" : pay.ok ? undefined : pay.reason,
+          hint: isTargetingThis ? "Нажмите ещё раз или Esc, чтобы отменить выбор цели" : undefined,
+        }}
+      />
+    );
+  });
+
+  const abilityClick = (ab: CombatAbility, isTargetingThis: boolean) => {
+    if (isTargetingThis) {
+      onCancelTargeting?.();
+    } else if (ab.id === "revert_wild_shape" || ab.name.toLowerCase().includes("выйти из облика")) {
+      if (onRevertWildShape) onRevertWildShape();
+      else onUseAbility(ab.id);
+    } else if (ab.id.includes("wild_shape") || ab.name.toLowerCase().includes("дикий облик")) {
+      if (onOpenWildShape) onOpenWildShape();
+      else onUseAbility(ab.id);
+    } else {
+      onUseAbility(ab.id);
+    }
+  };
+
+  const abilityTiles = abilityGroups.map((grp) =>
+      grp.items.map((ab) => {
+        const kind = costKind(ab.parameters?.actionCost);
+        const noUses = ab.usesMax > 0 && ab.usesUsed >= ab.usesMax;
+        const costBlocked =
+          kind === "bonus"
+            ? combatant.bonusActionUsed
+            : kind === "reaction"
+            ? combatant.reactionUsed
+            : kind === "free"
+            ? false
+            : !actionAvailable;
+        const isTargetingThis = activeTargeting?.type === "ability" && activeTargeting.id === ab.id;
+        const warning = isTargetingThis
+          ? undefined
+          : !isMyTurn
+          ? "Не ваш ход"
+          : noUses
+          ? "Использования закончились"
+          : costBlocked
+          ? kind === "bonus"
+            ? "Бонусное действие уже потрачено"
+            : kind === "reaction"
+            ? "Реакция уже потрачена"
+            : "Действие уже потрачено"
+          : undefined;
+        return (
+          <Tile
+            key={"ab-" + ab.id}
+            label={ab.name}
+            charges={ab.usesMax > 0 ? ab.usesMax - ab.usesUsed + "/" + ab.usesMax : undefined}
+            barClass="bg-purple-500"
+            cost={kind}
+            active={isTargetingThis}
+            unavailable={!isTargetingThis && (disabled || noUses || costBlocked)}
+            onClick={() => abilityClick(ab, isTargetingThis)}
+            tooltip={{
+              title: ab.name,
+              tag: COST_LABEL[ab.parameters?.actionCost ?? "action"] ?? "Действие",
+              lines: [
+                ab.usesMax > 0 ? "Использований: " + (ab.usesMax - ab.usesUsed) + "/" + ab.usesMax : "",
+              ].filter(Boolean),
+              description: ab.parameters?.description,
+              warning,
+            }}
+          />
+        );
+      }));
+
+  const tacticTiles = (
+    <React.Fragment key="tactics">
+      <Tile
+        label="Рывок"
+        caption={!actionAvailable && canBonusTactics ? "бонусное" : "+" + combatant.speed + " фт"}
+        barClass="bg-emerald-500"
+        cost={!actionAvailable && canBonusTactics ? "bonus" : "action"}
+        unavailable={disabled || !canDash || isDashing}
+        onClick={onDash}
+        tooltip={{
+          title: "Рывок",
+          tag: "Действие",
+          lines: ["Удваивает скорость на этот ход"],
+          warning: !isMyTurn ? "Не ваш ход" : isDashing ? "Рывок уже совершён" : !canDash ? "Действие уже потрачено" : undefined,
+        }}
+      />
+      <Tile
+        label="Уклонение"
+        barClass="bg-emerald-500"
+        cost="action"
+        unavailable={disabled || !actionAvailable || hasCondition(combatant, "dodging")}
+        onClick={onDodge}
+        tooltip={{
+          title: "Уклонение",
+          tag: "Действие",
+          lines: ["Атаки по вам с помехой до начала вашего следующего хода"],
+          warning: !isMyTurn ? "Не ваш ход" : hasCondition(combatant, "dodging") ? "Уже уклоняетесь" : !actionAvailable ? "Действие уже потрачено" : undefined,
+        }}
+      />
+      <Tile
+        label="Отход"
+        caption={!actionAvailable && canBonusTactics ? "бонусное" : undefined}
+        barClass="bg-emerald-500"
+        cost={!actionAvailable && canBonusTactics ? "bonus" : "action"}
+        unavailable={disabled || !canDisengage || hasCondition(combatant, "disengaging")}
+        onClick={onDisengage}
+        tooltip={{
+          title: "Отход",
+          tag: "Действие",
+          lines: ["Движение в этот ход не провоцирует атак по возможности"],
+          warning: !isMyTurn ? "Не ваш ход" : hasCondition(combatant, "disengaging") ? "Уже отходите" : !canDisengage ? "Действие уже потрачено" : undefined,
+        }}
+      />
+      <Tile
+        label="Помощь"
+        barClass="bg-emerald-500"
+        cost="action"
+        unavailable={disabled || !actionAvailable}
+        onClick={onHelp}
+        tooltip={{
+          title: "Помощь",
+          tag: "Действие",
+          lines: ["Союзник из выбранной цели получает преимущество на следующую атаку"],
+          warning: !isMyTurn ? "Не ваш ход" : !actionAvailable ? "Действие уже потрачено" : undefined,
+        }}
+      />
+      {onHide && (
+        <Tile
+          label={combatant.isHidden ? "Скрыт" : "Спрятаться"}
+          caption={!combatant.isHidden && !actionAvailable && canBonusTactics ? "бонусное" : undefined}
+          barClass="bg-emerald-500"
+          cost={!actionAvailable && canBonusTactics ? "bonus" : "action"}
+          unavailable={disabled || !canHide || combatant.isHidden || visibilityStatus === "visible"}
+          onClick={onHide}
+          tooltip={{
+            title: "Спрятаться",
+            tag: "Действие",
+            lines: ["Проверка Скрытности против Внимательности врагов"],
+            warning: !isMyTurn
+              ? "Не ваш ход"
+              : combatant.isHidden
+              ? "Вы уже скрыты"
+              : visibilityStatus === "visible"
+              ? "Вас видят — прятаться негде"
+              : !canHide
+              ? "Действие уже потрачено"
+              : undefined,
+          }}
+        />
       )}
+      {hasCondition(combatant, "prone")
+        ? onStandUp && (
+            <Tile
+              label="Встать"
+              caption={Math.floor(totalSpeed / 2) + " фт движения"}
+              barClass="bg-emerald-500"
+              cost="free"
+              unavailable={disabled || movementRemaining < Math.floor(totalSpeed / 2)}
+              onClick={onStandUp}
+              tooltip={{
+                title: "Встать",
+                tag: "Движение",
+                lines: ["Тратит половину скорости"],
+                warning:
+                  !isMyTurn
+                    ? "Не ваш ход"
+                    : movementRemaining < Math.floor(totalSpeed / 2)
+                    ? "Не хватает движения"
+                    : undefined,
+              }}
+            />
+          )
+        : onDropProne && (
+            <Tile
+              label="Лечь"
+              barClass="bg-emerald-500"
+              cost="free"
+              unavailable={disabled}
+              onClick={onDropProne}
+              tooltip={{
+                title: "Лечь",
+                tag: "Бесплатно",
+                lines: ["Укрытие от дальних атак, но помеха на атаки и уязвимость вблизи"],
+                warning: !isMyTurn ? "Не ваш ход" : undefined,
+              }}
+            />
+          )}
+    </React.Fragment>
+  );
 
-      <div className="max-w-7xl mx-auto space-y-1.5">
-        {/* ================= ВЕРХНЯЯ СТАТУС-СТРОКА (КОМПАКТНАЯ) ================= */}
-        <div className="flex items-center justify-between gap-1.5 flex-wrap text-xs pb-1 border-b border-border/40">
-          <div className="flex items-center gap-2 flex-wrap">
-            {/* Иконка и имя */}
-            <div className="flex items-center gap-1">
+  // ================= Плитки: заклинания =================
+  const isWildShaped = !!combatant.wildShape;
+  const slotLevels = Object.keys(combatant.spells.slots)
+    .map(Number)
+    .filter((l) => l > 0)
+    .sort((a, b) => a - b);
+  const slotSummary =
+    slotLevels
+      .map((l) => {
+        const s = combatant.spells.slots[l];
+        return l + " кр: " + (s.max - s.used) + "/" + s.max;
+      })
+      .join(", ") || "только заговоры";
+
+  const spellSections = spellsByLevel
+    .filter((grp) => spellFilter === "all" || grp.level === spellFilter)
+    .map((grp) => {
+      const slotInfo = grp.level === 0 ? null : combatant.spells.slots[grp.level];
+      return (
+        <TileSection
+          key={"lvl-" + grp.level}
+          lead={<LevelBadge level={grp.level} slot={slotInfo} />}
+        >
+          {grp.spells.map(({ id: spellId, name, params: p }) => {
+            const isTargetingThis = activeTargeting?.type === "spell" && activeTargeting.id === spellId;
+            const kind = costKind(p?.actionCost);
+            const costBlocked =
+              kind === "bonus"
+                ? combatant.bonusActionUsed
+                : kind === "reaction"
+                ? combatant.reactionUsed
+                : kind === "free"
+                ? false
+                : !actionAvailable;
+            const spellLvl = p?.level ?? 0;
+            const hasSlot =
+              spellLvl === 0 ||
+              Object.entries(combatant.spells.slots).some(
+                ([l, s]) => Number(l) >= spellLvl && s.used < s.max
+              );
+            const canCast = !isWildShaped && !costBlocked && hasSlot;
+            const accent = schoolAccent(p?.school);
+            const dmg = p?.damage && p.damage.length > 0 ? p.damage.map((d) => diceText(d)).join(" + ") : "";
+            const range = spellRangeText(p);
+
+            const warning = isTargetingThis
+              ? undefined
+              : isWildShaped
+              ? "Заклинания недоступны в облике зверя"
+              : !isMyTurn
+              ? "Не ваш ход"
+              : !hasSlot
+              ? "Нет ячеек " + spellLvl + " круга и выше (" + slotSummary + ")"
+              : costBlocked
+              ? kind === "bonus"
+                ? "Бонусное действие уже потрачено"
+                : kind === "reaction"
+                ? "Реакция уже потрачена"
+                : "Действие уже потрачено"
+              : undefined;
+
+            return (
+              <Tile
+                key={"spell-" + spellId}
+                label={name}
+                caption={dmg ? diceText(p!.damage![0], false) : undefined}
+                barClass={accent.bar}
+                cost={kind}
+                concentration={!!p?.concentration}
+                active={isTargetingThis}
+                unavailable={!isTargetingThis && (disabled || !canCast)}
+                onClick={() => (isTargetingThis ? onCancelTargeting?.() : onCastSpell(spellId))}
+                tooltip={{
+                  title: name,
+                  tag: [spellLvl === 0 ? "Заговор" : spellLvl + " круг", p?.school].filter(Boolean).join(" · "),
+                  tagClass: accent.text,
+                  lines: [
+                    COST_LABEL[p?.actionCost ?? "action"] ?? "",
+                    range ? "Дистанция: " + range : "",
+                    p?.aoe ? "Область: " + p.aoe.size + " фт (" + (AOE_SHAPE[p.aoe.shape] ?? p.aoe.shape) + ")" : "",
+                    dmg ? "Урон: " + dmg : "",
+                    p?.saveType ? "Спасбросок: " + p.saveType : "",
+                    p?.concentration ? "Концентрация" : "",
+                    spellLvl > 0 ? "Ячейки: " + slotSummary : "",
+                  ].filter(Boolean),
+                  description: p?.description,
+                  warning,
+                  hint: isTargetingThis ? "Нажмите ещё раз или Esc, чтобы отменить выбор цели" : undefined,
+                }}
+              />
+            );
+          })}
+        </TileSection>
+      );
+    });
+
+  // ================= Плитки: предметы =================
+  const itemTiles = (
+    <TileSection>
+      {availablePotions.length === 0 ? (
+        <div className="text-xs text-muted-foreground py-3 px-1">В инвентаре нет доступных зелий</div>
+      ) : (
+        availablePotions.map((p: CombatPotion) => {
+          const blocked = disabled || combatant.bonusActionUsed || p.quantity <= 0;
+          const typeLabel = p.type === "heal" ? "Лечение" : p.type === "buff" ? "Усиление" : "Прочее";
+          return (
+            <Tile
+              key={"potion-" + p.id}
+              label={p.name}
+              caption={p.formula}
+              charges={"×" + p.quantity}
+              barClass={p.type === "heal" ? "bg-rose-500" : p.type === "buff" ? "bg-sky-500" : "bg-slate-400"}
+              cost="bonus"
+              unavailable={blocked}
+              onClick={() => onDrinkPotion?.(p.id)}
+              tooltip={{
+                title: p.name,
+                tag: [typeLabel, p.rarity].filter(Boolean).join(" · "),
+                lines: [
+                  "Бонусное действие",
+                  p.formula ? "Эффект: " + p.formula : "",
+                  p.tempHp ? "+" + p.tempHp + " врем. HP" : "",
+                  p.buffEffect ?? "",
+                ].filter(Boolean),
+                description: p.description,
+                warning: !isMyTurn
+                  ? "Не ваш ход"
+                  : combatant.bonusActionUsed
+                  ? "Бонусное действие уже потрачено"
+                  : undefined,
+              }}
+            />
+          );
+        })
+      )}
+    </TileSection>
+  );
+
+  // ================= Портрет и ресурсы =================
+  const hpPct = combatant.hpMax > 0 ? Math.max(0, Math.min(100, (combatant.hpCurrent / combatant.hpMax) * 100)) : 0;
+  const hpColor = hpPct > 50 ? "bg-emerald-500" : hpPct > 25 ? "bg-amber-500" : "bg-red-500";
+  const movePct = totalSpeed > 0 ? Math.max(0, Math.min(100, (movementRemaining / totalSpeed) * 100)) : 0;
+
+  return (
+    <div className="border-t bg-card/95 backdrop-blur-md px-2.5 pt-1.5 pb-2 shadow-2xl select-none text-foreground">
+      <div className="max-w-6xl mx-auto space-y-1.5">
+        {/* ============ Индикаторы ресурсов хода ============ */}
+        <div className="flex items-center justify-center gap-x-3 gap-y-1 flex-wrap text-[11px]">
+          {!isMyTurn && (
+            <span className="text-amber-800 dark:text-amber-400 font-semibold">Ход другого бойца</span>
+          )}
+          <ResourceGem kind="action" label="Действие" used={!actionAvailable} extra={combatant.extraActions} />
+          <ResourceGem kind="bonus" label="Бонусное" used={combatant.bonusActionUsed} />
+          <ResourceGem kind="reaction" label="Реакция" used={combatant.reactionUsed} />
+
+          <div
+            className="flex items-center gap-1.5"
+            title={"Движение: " + movementRemaining + " из " + totalSpeed + " фт" + (isDashing ? " (рывок)" : "")}
+          >
+            <Footprints className="size-3.5 text-amber-600 dark:text-amber-400" />
+            <div className="w-24 h-2 rounded-full bg-muted overflow-hidden border border-border/60">
               <div
-                className="size-4.5 rounded-full flex items-center justify-center text-white text-[9px] font-bold shadow"
-                style={{ backgroundColor: combatant.color }}
-              >
-                {combatant.name.charAt(0).toUpperCase()}
-              </div>
-              <span className="font-bold text-xs tracking-tight text-foreground">{combatant.name}</span>
+                className={"h-full transition-all " + (movementRemaining === 0 ? "bg-red-500" : "bg-amber-500")}
+                style={{ width: movePct + "%" }}
+              />
             </div>
-
-            <Separator orientation="vertical" className="h-3.5" />
-
-            {/* Хиты */}
-            <span className="flex items-center gap-0.5 font-mono font-bold text-[11px] text-foreground">
-              <span className="text-red-500">❤</span>
-              <span>
-                {combatant.hpCurrent}/{combatant.hpMax}
-                {combatant.hpTemp > 0 && <span className="text-blue-600 dark:text-blue-400 font-bold"> +{combatant.hpTemp}</span>}
-              </span>
+            <span className="font-mono font-bold tabular-nums">
+              {movementRemaining}/{totalSpeed} фт
             </span>
-
-            {/* КД */}
-            <span className="flex items-center gap-0.5 text-blue-700 dark:text-blue-400 font-mono font-bold text-[11px]">
-              <Shield className="size-3" /> {combatant.ac}
-            </span>
-
-            {/* Движение */}
-            <span className="flex items-center gap-0.5 font-mono font-bold text-[11px]">
-              <Footprints className="size-3 text-amber-600 dark:text-amber-400" />
-              <span className={movementRemaining === 0 ? "text-red-600 dark:text-red-400" : "text-amber-800 dark:text-amber-300"}>
-                {movementRemaining}/{totalSpeed}ф
-                {isDashing && <span className="text-amber-600 ml-0.5">⚡Р</span>}
-              </span>
-            </span>
-
-            <Separator orientation="vertical" className="h-3.5" />
-
-            {/* Расход ресурсов (Действие, Бонус, Реакция) */}
-            <div className="flex items-center gap-0.5">
-              <ResourcePip label="Д" used={!actionAvailable} title="Основное действие" />
-              <ResourcePip label="Б" used={combatant.bonusActionUsed} title="Бонусное действие" />
-              <ResourcePip label="Р" used={combatant.reactionUsed} roundBased title="Реакция" />
-            </div>
-
-            {combatant.extraActions > 0 && (
-              <Badge className="h-4 px-1 text-[9px] bg-amber-500 hover:bg-amber-500 text-black font-bold">
-                ⚡ +{combatant.extraActions}Д
-              </Badge>
-            )}
-
-            {combatant.attacksPerAction > 1 && (
-              <Badge variant="outline" className="h-4 px-1 text-[9px] border-amber-500/50 text-amber-900 dark:text-amber-300 font-semibold">
-                {attacksLeft}/{combatant.attacksPerAction} ат
-              </Badge>
-            )}
-
-            {combatant.concentration && (
-              <Badge
-                variant="outline"
-                className="h-4 px-1 text-[9px] bg-purple-500/15 text-purple-900 dark:text-purple-300 border-purple-500/50 font-bold"
-              >
-                ◆ {combatant.concentration.spellName}
-              </Badge>
-            )}
-
-            {combatant.wildShape && (
-              <Badge
-                variant="outline"
-                className="h-4 px-1 text-[9px] bg-emerald-500/20 text-emerald-900 dark:text-emerald-300 border-emerald-500/60 font-bold flex items-center gap-0.5 animate-pulse"
-              >
-                <span>{combatant.wildShape.icon || "🐾"}</span>
-                <span>{combatant.wildShape.formName} ({combatant.hpCurrent}/{combatant.hpMax})</span>
-              </Badge>
-            )}
-
-            {combatant.conditions.length > 0 && (
-              <div className="flex gap-0.5 flex-wrap">
-                {combatant.conditions.map((c, i) => (
-                  <Badge
-                    key={i}
-                    variant="outline"
-                    className="h-4 px-1 text-[9px] bg-amber-500/15 text-amber-950 dark:text-amber-300 border-amber-500/40 font-semibold"
-                    title={CONDITION_EFFECTS[c.type]?.description}
-                  >
-                    {CONDITION_EFFECTS[c.type]?.name || c.type}
-                    {c.duration ? " (" + c.duration + ")" : ""}
-                  </Badge>
-                ))}
-              </div>
-            )}
           </div>
 
-          {/* Правая панель: Быстрый доступ к зельям, Вид, Настройки размера и ширины, Свернуть */}
-          <div className="flex items-center gap-0.5 ml-auto">
-            {/* Быстрый доступ к зельям */}
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="h-6 px-1.5 text-[10.5px] font-semibold flex items-center gap-1 border-amber-500/40 bg-background/80 hover:bg-amber-500/10 text-foreground shadow-xs"
-                  title="Рюкзак: Зелья и расходники (1 Бонусное действие)"
-                >
-                  <FlaskConical className="size-3 text-amber-600 dark:text-amber-400" />
-                  <span>Зелья</span>
-                  <Badge
-                    variant="secondary"
-                    className={`h-4 px-1 text-[9px] font-bold ${
-                      totalPotionsCount > 0
-                        ? "bg-amber-500/20 text-amber-950 dark:text-amber-300 border border-amber-500/40"
-                        : "text-muted-foreground"
-                    }`}
-                  >
-                    {totalPotionsCount}
-                  </Badge>
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent
-                align="end"
-                className="w-80 p-3 bg-card backdrop-blur border-border shadow-2xl space-y-2.5 text-foreground z-[300]"
+          {combatant.attacksPerAction > 1 && (
+            <Badge variant="outline" className="h-5 px-1.5 text-[10px] border-amber-500/50 text-amber-900 dark:text-amber-300 font-semibold">
+              Атак: {attacksLeft}/{combatant.attacksPerAction}
+            </Badge>
+          )}
+          {combatant.concentration && (
+            <Badge
+              variant="outline"
+              className="h-5 px-1.5 text-[10px] bg-purple-500/15 text-purple-900 dark:text-purple-300 border-purple-500/50 font-bold"
+              title="Концентрация"
+            >
+              ◆ {combatant.concentration.spellName}
+            </Badge>
+          )}
+          {combatant.wildShape && (
+            <Badge
+              variant="outline"
+              className="h-5 px-1.5 text-[10px] bg-emerald-500/20 text-emerald-900 dark:text-emerald-300 border-emerald-500/60 font-bold"
+            >
+              {combatant.wildShape.icon || "🐾"} {combatant.wildShape.formName}
+            </Badge>
+          )}
+          {combatant.conditions
+            .filter((c) => c.type !== "death_save")
+            .map((c, i) => (
+              <Badge
+                key={i}
+                variant="outline"
+                className="h-5 px-1.5 text-[10px] bg-amber-500/15 text-amber-950 dark:text-amber-300 border-amber-500/40 font-semibold"
+                title={CONDITION_EFFECTS[c.type]?.description}
               >
-                {/* Заголовок */}
-                <div className="flex items-center justify-between pb-1.5 border-b border-border/50">
-                  <div className="flex items-center gap-1.5">
-                    <FlaskConical className="size-4 text-amber-600 dark:text-amber-400" />
-                    <span className="text-xs font-bold tracking-tight">Рюкзак: Зелья и расходники</span>
-                  </div>
-                  <Badge variant="outline" className="text-[10px] font-mono font-bold">
-                    Всего: {totalPotionsCount} шт.
-                  </Badge>
-                </div>
+                {CONDITION_EFFECTS[c.type]?.name || c.type}
+                {c.duration ? " (" + c.duration + ")" : ""}
+              </Badge>
+            ))}
 
-                {/* Подзаголовок стоимости */}
-                <div className="flex items-center justify-between text-[11px] px-2 py-1 rounded bg-muted/60 border border-border/60">
-                  <span className="text-muted-foreground text-[10.5px]">Стоимость: 1 Бонусное действие</span>
-                  {combatant.bonusActionUsed ? (
-                    <span className="text-red-600 dark:text-red-400 font-bold text-[10.5px] flex items-center gap-0.5">
-                      <span>⏱️</span> Бонусное действие потрачено
-                    </span>
-                  ) : (
-                    <span className="text-emerald-600 dark:text-emerald-400 font-bold text-[10.5px] flex items-center gap-0.5">
-                      <span>⚡</span> Бонусное действие доступно
-                    </span>
-                  )}
-                </div>
-
-                {/* Список зелий */}
-                {availablePotions.length === 0 ? (
-                  <div className="py-4 text-center text-xs text-muted-foreground">
-                    В инвентаре нет зелий
-                  </div>
-                ) : (
-                  <ScrollArea className="max-h-[260px] pr-1 overflow-y-auto">
-                    <div className="space-y-2">
-                      {availablePotions.map((p) => {
-                        const typeLabel =
-                          p.type === "heal"
-                            ? "💚 Лечение"
-                            : p.type === "buff"
-                            ? "🛡️ Бафф"
-                            : "🔮 Утилитарное";
-
-                        const isBonusBlocked = combatant.bonusActionUsed;
-                        const isBlocked = disabled || isBonusBlocked || p.quantity <= 0;
-                        const blockReason = isDead
-                          ? "Боец без сознания или мертв"
-                          : !isMyTurn
-                          ? "Не ваш ход"
-                          : isBonusBlocked
-                          ? "Бонусное действие уже потрачено в этом раунде"
-                          : p.quantity <= 0
-                          ? "Зелье закончилось"
-                          : undefined;
-
-                        return (
-                          <div
-                            key={p.id}
-                            className="p-2 rounded-md bg-background/80 border border-border/80 shadow-xs space-y-1.5"
-                          >
-                            <div className="flex items-start justify-between gap-1">
-                              <div>
-                                <div className="font-bold text-xs text-foreground flex items-center gap-1.5">
-                                  <span>{p.name}</span>
-                                  <Badge variant="secondary" className="h-4 px-1 text-[9px] font-mono font-bold">
-                                    x{p.quantity}
-                                  </Badge>
-                                </div>
-                                {p.nameEn && (
-                                  <div className="text-[10px] text-muted-foreground italic">
-                                    {p.nameEn}
-                                  </div>
-                                )}
-                              </div>
-                              <div className="flex items-center gap-1 flex-wrap justify-end">
-                                <Badge
-                                  variant="outline"
-                                  className="h-4 px-1 text-[9px] border-amber-500/40 text-amber-900 dark:text-amber-300 font-medium"
-                                >
-                                  {typeLabel}
-                                </Badge>
-                                {p.rarity && (
-                                  <Badge variant="secondary" className="h-4 px-1 text-[9px] text-muted-foreground">
-                                    {p.rarity}
-                                  </Badge>
-                                )}
-                              </div>
-                            </div>
-
-                            {(p.formula || p.tempHp || p.buffEffect) && (
-                              <div className="text-[11px] font-mono font-semibold text-emerald-700 dark:text-emerald-400">
-                                {p.formula && <span>Эффект: {p.formula}</span>}
-                                {p.tempHp && <span> +{p.tempHp} врем. HP</span>}
-                                {p.buffEffect && <span> ({p.buffEffect})</span>}
-                              </div>
-                            )}
-
-                            {p.description && (
-                              <div className="text-[10.5px] text-muted-foreground leading-snug">
-                                {p.description}
-                              </div>
-                            )}
-
-                            <div className="pt-0.5 flex items-center justify-between gap-2">
-                              <Button
-                                size="sm"
-                                variant="default"
-                                className="h-6 text-[10.5px] font-bold px-2.5 bg-gradient-to-r from-amber-600 via-amber-700 to-amber-800 hover:from-amber-500 hover:to-amber-700 text-amber-50 border border-amber-600/60 shadow-xs disabled:opacity-50"
-                                disabled={isBlocked}
-                                title={blockReason || "Выпить зелье (1 Бонусное действие)"}
-                                onClick={() => onDrinkPotion?.(p.id)}
-                              >
-                                <FlaskConical className="size-3 mr-1" />
-                                Выпить
-                              </Button>
-                              {isBonusBlocked && (
-                                <span className="text-[10px] text-red-600 dark:text-red-400 font-medium" title="Бонусное действие уже потрачено в этом раунде">
-                                  Бонусное действие недоступно
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </ScrollArea>
-                )}
-              </PopoverContent>
-            </Popover>
-
-            <Separator orientation="vertical" className="h-3.5 mx-0.5" />
-
-            {/* Вид: Вкладки / Все блоки */}
-            <Button
-              size="sm"
-              variant="ghost"
-              className="h-5.5 w-5.5 p-0 text-foreground hover:bg-accent"
-              onClick={() => handleSetViewMode(viewMode === "sections" ? "tabs" : "sections")}
-              title={viewMode === "sections" ? "Вкладки" : "Все блоки"}
-            >
-              {viewMode === "sections" ? <Layers className="size-3 text-foreground" /> : <LayoutGrid className="size-3 text-foreground" />}
-            </Button>
-
-            {/* Настройка масштаба, ширины кнопок и высоты панели */}
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  className="h-5.5 w-5.5 p-0 text-foreground hover:bg-accent"
-                  title="Настройка размера, ширины и высоты кнопок"
-                >
-                  <SlidersHorizontal className="size-3 text-foreground" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent align="end" className="w-64 p-3 bg-card backdrop-blur border-border shadow-2xl space-y-2.5 text-foreground">
-                {/* 1. Размер / Высота кнопок */}
-                <div>
-                  <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1">
-                    Размер и высота кнопок
-                  </div>
-                  <div className="grid grid-cols-4 gap-1">
-                    <Button
-                      size="sm"
-                      variant={sizeMode === "tiny" ? "default" : "outline"}
-                      className={"h-6 text-[9px] " + (sizeMode === "tiny" ? "bg-primary font-bold text-primary-foreground" : "text-foreground")}
-                      onClick={() => handleSetSizeMode("tiny")}
-                    >
-                      Микро
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant={sizeMode === "compact" ? "default" : "outline"}
-                      className={"h-6 text-[9px] " + (sizeMode === "compact" ? "bg-primary font-bold text-primary-foreground" : "text-foreground")}
-                      onClick={() => handleSetSizeMode("compact")}
-                    >
-                      Компакт
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant={sizeMode === "normal" ? "default" : "outline"}
-                      className={"h-6 text-[9px] " + (sizeMode === "normal" ? "bg-primary font-bold text-primary-foreground" : "text-foreground")}
-                      onClick={() => handleSetSizeMode("normal")}
-                    >
-                      Норм
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant={sizeMode === "large" ? "default" : "outline"}
-                      className={"h-6 text-[9px] " + (sizeMode === "large" ? "bg-primary font-bold text-primary-foreground" : "text-foreground")}
-                      onClick={() => handleSetSizeMode("large")}
-                    >
-                      Крупный
-                    </Button>
-                  </div>
-                </div>
-
-                {/* 2. Ширина названий (чтобы текст влезал точно) */}
-                <div className="pt-1.5 border-t border-border/50">
-                  <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1">
-                    Ширина названий действий
-                  </div>
-                  <div className="grid grid-cols-4 gap-1">
-                    <Button
-                      size="sm"
-                      variant={widthMode === "compact" ? "default" : "outline"}
-                      className={"h-6 text-[9px] " + (widthMode === "compact" ? "bg-primary font-bold text-primary-foreground" : "text-foreground")}
-                      onClick={() => handleSetWidthMode("compact")}
-                      title="Компактная ширина: 110px"
-                    >
-                      110px
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant={widthMode === "medium" ? "default" : "outline"}
-                      className={"h-6 text-[9px] " + (widthMode === "medium" ? "bg-primary font-bold text-primary-foreground" : "text-foreground")}
-                      onClick={() => handleSetWidthMode("medium")}
-                      title="Средняя ширина: 190px (помещается большинство названий)"
-                    >
-                      190px
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant={widthMode === "wide" ? "default" : "outline"}
-                      className={"h-6 text-[9px] " + (widthMode === "wide" ? "bg-primary font-bold text-primary-foreground" : "text-foreground")}
-                      onClick={() => handleSetWidthMode("wide")}
-                      title="Широкая ширина: 290px"
-                    >
-                      290px
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant={widthMode === "full" ? "default" : "outline"}
-                      className={"h-6 text-[9px] " + (widthMode === "full" ? "bg-primary font-bold text-primary-foreground" : "text-foreground")}
-                      onClick={() => handleSetWidthMode("full")}
-                      title="Полный текст: без обрезки"
-                    >
-                      Полный
-                    </Button>
-                  </div>
-                </div>
-
-                {/* 3. Высота хотбара */}
-                <div className="pt-1.5 border-t border-border/50">
-                  <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1">
-                    Высота панели хотбара
-                  </div>
-                  <div className="grid grid-cols-4 gap-1">
-                    <Button
-                      size="sm"
-                      variant={heightMode === "sm" ? "default" : "outline"}
-                      className={"h-6 text-[9px] " + (heightMode === "sm" ? "bg-primary font-bold text-primary-foreground" : "text-foreground")}
-                      onClick={() => handleSetHeightMode("sm")}
-                    >
-                      1 ряд
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant={heightMode === "md" ? "default" : "outline"}
-                      className={"h-6 text-[9px] " + (heightMode === "md" ? "bg-primary font-bold text-primary-foreground" : "text-foreground")}
-                      onClick={() => handleSetHeightMode("md")}
-                    >
-                      2 ряда
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant={heightMode === "lg" ? "default" : "outline"}
-                      className={"h-6 text-[9px] " + (heightMode === "lg" ? "bg-primary font-bold text-primary-foreground" : "text-foreground")}
-                      onClick={() => handleSetHeightMode("lg")}
-                    >
-                      3 ряда
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant={heightMode === "auto" ? "default" : "outline"}
-                      className={"h-6 text-[9px] " + (heightMode === "auto" ? "bg-primary font-bold text-primary-foreground" : "text-foreground")}
-                      onClick={() => handleSetHeightMode("auto")}
-                    >
-                      Авто
-                    </Button>
-                  </div>
-                </div>
-              </PopoverContent>
-            </Popover>
-
-            {/* Свернуть / Развернуть */}
-            <Button
-              size="sm"
-              variant="ghost"
-              className="h-5.5 w-5.5 p-0 text-foreground hover:bg-accent"
-              onClick={() => setIsCollapsed(!isCollapsed)}
-              title={isCollapsed ? "Развернуть" : "Свернуть"}
-            >
-              {isCollapsed ? <ChevronUp className="size-3.5 text-foreground" /> : <ChevronDown className="size-3.5 text-foreground" />}
-            </Button>
-          </div>
+          <Button
+            size="icon"
+            variant="ghost"
+            className="size-5 text-muted-foreground hover:text-foreground"
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            title={isCollapsed ? "Развернуть панель" : "Свернуть панель"}
+          >
+            {isCollapsed ? <ChevronUp className="size-3.5" /> : <ChevronDown className="size-3.5" />}
+          </Button>
         </div>
 
         {/* Панель активного таргетинга */}
@@ -866,578 +749,393 @@ export function Hotbar({
           </div>
         )}
 
-        {/* ================= ОСНОВНОЙ БЛОК ДЕЙСТВИЙ ================= */}
+        {/* ============ Основная панель ============ */}
         {!isCollapsed && (
-          <div className="space-y-1">
-            {/* Переключатель вкладок при viewMode === "tabs" */}
-            {viewMode === "tabs" && (
-              <div className="flex items-center gap-0.5 border-b border-border/40 pb-1 overflow-x-auto">
-                <Button
-                  size="sm"
-                  variant={activeTab === "all" ? "default" : "ghost"}
-                  className={"h-6 text-[10.5px] font-bold px-2 " + (activeTab === "all" ? "bg-muted text-foreground" : "text-muted-foreground hover:text-foreground")}
-                  onClick={() => setActiveTab("all")}
-                >
-                  Все
-                </Button>
-                {combatant.attacks.length > 0 && (
-                  <Button
-                    size="sm"
-                    variant={activeTab === "attacks" ? "default" : "ghost"}
-                    className={"h-6 text-[10.5px] font-bold px-2 flex items-center gap-1 " + (
-                      activeTab === "attacks" ? "bg-amber-500/20 text-amber-950 dark:text-amber-300 border border-amber-500/40" : "text-muted-foreground hover:text-foreground"
-                    )}
-                    onClick={() => setActiveTab("attacks")}
+          <div className="flex flex-col md:flex-row md:items-stretch gap-2">
+            {/* Портрет */}
+            <div className="md:w-48 shrink-0 flex md:flex-col items-center md:items-stretch gap-2.5 md:gap-1.5 p-2 rounded-lg border bg-muted/40">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="relative shrink-0">
+                  <div
+                    className="size-12 rounded-full flex items-center justify-center text-white text-lg font-bold shadow-md ring-2 ring-offset-2 ring-offset-card"
+                    style={{ backgroundColor: combatant.color, ["--tw-ring-color" as string]: combatant.color }}
                   >
-                    <Swords className="size-2.5 text-amber-600 dark:text-amber-400" />
-                    Атаки ({combatant.attacks.length})
-                  </Button>
-                )}
-                {combatant.spells.known.length > 0 && (
-                  <Button
-                    size="sm"
-                    variant={activeTab === "spells" ? "default" : "ghost"}
-                    className={"h-6 text-[10.5px] font-bold px-2 flex items-center gap-1 " + (
-                      activeTab === "spells" ? "bg-blue-500/20 text-blue-950 dark:text-blue-300 border border-blue-500/40" : "text-muted-foreground hover:text-foreground"
-                    )}
-                    onClick={() => setActiveTab("spells")}
-                  >
-                    <Zap className="size-2.5 text-blue-600 dark:text-blue-400" />
-                    Магия ({combatant.spells.known.length})
-                  </Button>
-                )}
-                {groupedAbilities.length > 0 && (
-                  <Button
-                    size="sm"
-                    variant={activeTab === "abilities" ? "default" : "ghost"}
-                    className={"h-6 text-[10.5px] font-bold px-2 flex items-center gap-1 " + (
-                      activeTab === "abilities" ? "bg-purple-500/20 text-purple-950 dark:text-purple-300 border border-purple-500/40" : "text-muted-foreground hover:text-foreground"
-                    )}
-                    onClick={() => setActiveTab("abilities")}
-                  >
-                    <Sparkles className="size-2.5 text-purple-600 dark:text-purple-400" />
-                    Способности ({groupedAbilities.reduce((n, g) => n + g.items.length, 0)})
-                  </Button>
-                )}
-                <Button
-                  size="sm"
-                  variant={activeTab === "tactics" ? "default" : "ghost"}
-                  className={"h-6 text-[10.5px] font-bold px-2 flex items-center gap-1 " + (
-                    activeTab === "tactics" ? "bg-emerald-500/20 text-emerald-950 dark:text-emerald-300 border border-emerald-500/40" : "text-muted-foreground hover:text-foreground"
-                  )}
-                  onClick={() => setActiveTab("tactics")}
-                >
-                  <Shield className="size-2.5 text-emerald-600 dark:text-emerald-400" />
-                  Тактика
-                </Button>
-                <Button
-                  size="sm"
-                  variant={activeTab === "potions" ? "default" : "ghost"}
-                  className={"h-6 text-[10.5px] font-bold px-2 flex items-center gap-1 " + (
-                    activeTab === "potions" ? "bg-amber-500/20 text-amber-950 dark:text-amber-300 border border-amber-500/40" : "text-muted-foreground hover:text-foreground"
-                  )}
-                  onClick={() => setActiveTab("potions")}
-                >
-                  <FlaskConical className="size-2.5 text-amber-600 dark:text-amber-400" />
-                  🎒 Зелья ({totalPotionsCount})
-                </Button>
-              </div>
-            )}
-
-            {/* Контейнер со скроллом для всех действий */}
-            <ScrollArea className={heightClass + " pr-1.5 overflow-y-auto"}>
-              <div className="space-y-1.5 pb-1">
-                {/* 1. БЛОК АТАК */}
-                {(viewMode === "sections" || activeTab === "all" || activeTab === "attacks") &&
-                  groupedAttacks.length > 0 && (
-                    <div className="p-1 rounded bg-amber-500/10 border border-amber-500/25">
-                      <div className="flex items-center gap-1.5 flex-wrap overflow-x-auto py-0.5">
-                        <span className="text-[10px] font-bold text-amber-900 dark:text-amber-400 uppercase tracking-tight flex items-center gap-1 select-none pr-1">
-                          <Swords className="size-3 text-amber-600 dark:text-amber-400" />
-                          Атаки:
-                        </span>
-
-                        {groupedAttacks.map((grp) => (
-                          <div key={grp.weapon} className="flex items-center gap-0.5 bg-background/90 px-1 py-0.5 rounded border border-border/80 shadow-xs">
-                            <span className="text-[10px] font-bold text-muted-foreground select-none pr-0.5">
-                              {grp.weapon}:
-                            </span>
-                            {grp.attacks.map((atk) => {
-                              const pay = canPayForAttack(combatant, atk);
-                              const isTargetingThis =
-                                activeTargeting?.type === "attack" && activeTargeting?.id === atk.id;
-                              const rangeText =
-                                atk.range.long && atk.range.long > atk.range.normal
-                                  ? atk.range.normal + "/" + atk.range.long + " фт"
-                                  : atk.range.normal + " фт";
-
-                              return (
-                                <Button
-                                  key={atk.id}
-                                  size="sm"
-                                  variant="secondary"
-                                  className={btnSizeClass + " transition-all " + (
-                                    isTargetingThis
-                                      ? "ring-2 ring-amber-500 bg-amber-500/30 text-amber-950 dark:text-amber-200 font-bold border-amber-500 animate-pulse"
-                                      : atk.actionCost === "action+bonus"
-                                      ? "border border-amber-500/60 bg-amber-500/15 hover:bg-amber-500/25 text-foreground"
-                                      : "bg-muted/90 hover:bg-muted text-foreground border border-border"
-                                  )}
-                                  disabled={disabled || (!isTargetingThis && !pay.ok)}
-                                  onClick={() => {
-                                    if (isTargetingThis) onCancelTargeting?.();
-                                    else onAttack(atk.id);
-                                  }}
-                                  title={
-                                    isTargetingThis
-                                      ? "Отменить выбор (Esc)"
-                                      : pay.ok
-                                      ? "+" + atk.attackBonus + " к попаданию, " + damageSummary(atk) + "\n" + rangeText + " • " + (COST_LABEL[atk.actionCost] ?? atk.actionCost)
-                                      : pay.reason
-                                  }
-                                >
-                                  <Swords className="size-2.5 text-amber-600 dark:text-amber-400" />
-                                  <span className={"font-semibold text-foreground " + textWidthClass}>{atk.name}</span>
-                                  <span className="text-[9.5px] font-mono font-bold text-emerald-700 dark:text-emerald-400">
-                                    +{atk.attackBonus}
-                                  </span>
-                                  {atk.actionCost === "action+bonus" && (
-                                    <span className="text-[9px] text-amber-700 dark:text-amber-400 font-bold">2×</span>
-                                  )}
-                                </Button>
-                              );
-                            })}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                {/* 2. БЛОК ЗАКЛИНАНИЙ */}
-                {(viewMode === "sections" || activeTab === "all" || activeTab === "spells") &&
-                  groupedSpells.length > 0 && (
-                    <div className="p-1 rounded bg-blue-500/10 border border-blue-500/25">
-                      <div className="flex items-center gap-1.5 flex-wrap overflow-x-auto py-0.5">
-                        <span className="text-[10px] font-bold text-blue-900 dark:text-blue-400 uppercase tracking-tight flex items-center gap-1 select-none pr-1">
-                          <Zap className="size-3 text-blue-600 dark:text-blue-400" />
-                          Магия:
-                        </span>
-
-                        {groupedSpells.map((grp) => {
-                          const slotInfo =
-                            grp.level === 0 ? null : combatant.spells.slots[String(grp.level)];
-
-                          return (
-                            <div key={grp.level} className="flex items-center gap-0.5 bg-background/90 px-1 py-0.5 rounded border border-border/80 shadow-xs">
-                              <span className="text-[10px] font-bold text-blue-900 dark:text-blue-400 select-none pr-0.5">
-                                {grp.label}
-                                {slotInfo && (
-                                  <span className="text-[9px] text-foreground font-mono font-bold ml-0.5">
-                                    ({slotInfo.max - slotInfo.used}/{slotInfo.max})
-                                  </span>
-                                )}:
-                              </span>
-
-                              {grp.spells.map(({ id: spellId, name, params: p }) => {
-                                const isTargetingThis =
-                                  activeTargeting?.type === "spell" && activeTargeting?.id === spellId;
-                                const cost = p?.actionCost ?? "action";
-                                const costBlocked =
-                                  cost === "bonus"
-                                    ? combatant.bonusActionUsed
-                                    : cost === "reaction"
-                                    ? combatant.reactionUsed
-                                    : cost === "free" || cost === "none"
-                                    ? false
-                                    : !actionAvailable;
-
-                                const spellLvl = p?.level ?? 0;
-                                const hasSlot =
-                                  spellLvl === 0 ||
-                                  Object.entries(combatant.spells.slots).some(
-                                    ([l, s]) => Number(l) >= spellLvl && s.used < s.max
-                                  );
-                                const isWildShaped = !!combatant.wildShape;
-                                const canCast = !isWildShaped && !costBlocked && hasSlot;
-
-                                const summary = spellSummary(p);
-                                const slotText =
-                                  Object.entries(combatant.spells.slots)
-                                    .map(([l, s]) => l + " кр: " + (s.max - s.used) + "/" + s.max)
-                                    .join(", ") || "заговоры";
-
-                                return (
-                                  <Button
-                                    key={"spell-" + spellId}
-                                    size="sm"
-                                    variant="secondary"
-                                    className={btnSizeClass + " transition-all " + (
-                                      isTargetingThis
-                                        ? "ring-2 ring-blue-500 bg-blue-500/30 text-blue-950 dark:text-blue-200 font-bold border-blue-500 animate-pulse"
-                                        : "bg-blue-600/15 hover:bg-blue-600/25 border border-blue-500/40 text-foreground"
-                                    )}
-                                    disabled={disabled || (!isTargetingThis && !canCast)}
-                                    onClick={() => {
-                                      if (isTargetingThis) onCancelTargeting?.();
-                                      else onCastSpell(spellId);
-                                    }}
-                                    title={
-                                      isWildShaped
-                                        ? "Заклинания недоступны в облике зверя (D&D 5e)"
-                                        : isTargetingThis
-                                        ? "Отменить выбор (Esc)"
-                                        : !hasSlot
-                                        ? "Нет ячеек " + spellLvl + "+ круга\nЯчейки: " + slotText
-                                        : costBlocked
-                                        ? cost === "bonus"
-                                          ? "Бонусное действие уже использовано"
-                                          : "Действие уже использовано"
-                                        : (summary ? summary + "\n" : "") + (p?.description ? p.description + "\n" : "") + "Ячейки: " + slotText
-                                    }
-                                  >
-                                    <Zap className="size-2.5 text-blue-600 dark:text-blue-400" />
-                                    <span className={"font-semibold text-foreground " + textWidthClass}>{name}</span>
-                                    {cost === "bonus" && (
-                                      <span className="text-[8.5px] bg-blue-500/20 text-blue-900 dark:text-blue-300 px-0.5 rounded font-bold">
-                                        Б
-                                      </span>
-                                    )}
-                                  </Button>
-                                );
-                              })}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
-
-                {/* 3. БЛОК СПОСОБНОСТЕЙ */}
-                {(viewMode === "sections" || activeTab === "all" || activeTab === "abilities") &&
-                  groupedAbilities.length > 0 && (
-                    <div className="p-1 rounded bg-purple-500/10 border border-purple-500/25">
-                      <div className="flex items-center gap-1.5 flex-wrap overflow-x-auto py-0.5">
-                        <span className="text-[10px] font-bold text-purple-900 dark:text-purple-400 uppercase tracking-tight flex items-center gap-1 select-none pr-1">
-                          <Sparkles className="size-3 text-purple-600 dark:text-purple-400" />
-                          Способности:
-                        </span>
-
-                        {groupedAbilities.map((grp) => (
-                          <div key={grp.key} className="flex items-center gap-0.5 bg-background/90 px-1 py-0.5 rounded border border-border/80 shadow-xs">
-                            <span className="text-[10px] font-bold text-purple-900 dark:text-purple-400 select-none pr-0.5">
-                              {grp.label}:
-                            </span>
-                            {grp.items.map((ab) => {
-                              const cost = ab.parameters?.actionCost ?? "action";
-                              const noUses = ab.usesMax > 0 && ab.usesUsed >= ab.usesMax;
-                              const costBlocked =
-                                cost === "bonus"
-                                  ? combatant.bonusActionUsed
-                                  : cost === "reaction"
-                                  ? combatant.reactionUsed
-                                  : cost === "free" || cost === "none"
-                                  ? false
-                                  : !actionAvailable;
-                              const isTargetingThis =
-                                activeTargeting?.type === "ability" && activeTargeting?.id === ab.id;
-
-                              return (
-                                <Button
-                                  key={ab.id}
-                                  size="sm"
-                                  variant="secondary"
-                                  className={btnSizeClass + " transition-all " + (
-                                    isTargetingThis
-                                      ? "ring-2 ring-purple-500 bg-purple-500/30 text-purple-950 dark:text-purple-200 font-bold border-purple-500 animate-pulse"
-                                      : "bg-purple-600/15 hover:bg-purple-600/25 border border-purple-500/40 text-foreground"
-                                  )}
-                                  disabled={disabled || (!isTargetingThis && (noUses || costBlocked))}
-                                  onClick={() => {
-                                    if (isTargetingThis) {
-                                      onCancelTargeting?.();
-                                    } else if (
-                                      ab.id === "revert_wild_shape" ||
-                                      ab.name.toLowerCase().includes("выйти из облика")
-                                    ) {
-                                      if (onRevertWildShape) onRevertWildShape();
-                                      else onUseAbility(ab.id);
-                                    } else if (
-                                      ab.id.includes("wild_shape") ||
-                                      ab.name.toLowerCase().includes("дикий облик")
-                                    ) {
-                                      if (onOpenWildShape) onOpenWildShape();
-                                      else onUseAbility(ab.id);
-                                    } else {
-                                      onUseAbility(ab.id);
-                                    }
-                                  }}
-                                  title={
-                                    isTargetingThis
-                                      ? "Отменить выбор (Esc)"
-                                      : (COST_LABEL[cost] ?? cost) + (ab.usesMax > 0 ? " • " + (ab.usesMax - ab.usesUsed) + "/" + ab.usesMax : "") + (ab.parameters?.description ? "\n" + ab.parameters.description : "")
-                                  }
-                                >
-                                  <Sparkles className="size-2.5 text-purple-600 dark:text-purple-400" />
-                                  <span className={"font-semibold text-foreground " + textWidthClass}>{ab.name}</span>
-                                  {ab.usesMax > 0 && (
-                                    <span className="text-[9.5px] font-mono font-bold text-purple-700 dark:text-purple-300">
-                                      {ab.usesMax - ab.usesUsed}/{ab.usesMax}
-                                    </span>
-                                  )}
-                                </Button>
-                              );
-                            })}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                {/* 4. БЛОК ТАКТИКИ И БАЗОВЫХ ДЕЙСТВИЙ */}
-                {(viewMode === "sections" || activeTab === "all" || activeTab === "tactics") && (
-                  <div className="p-1 rounded bg-emerald-500/10 border border-emerald-500/25">
-                    <div className="flex items-center gap-1 flex-wrap py-0.5">
-                      <span className="text-[10px] font-bold text-emerald-900 dark:text-emerald-400 uppercase tracking-tight flex items-center gap-1 select-none pr-1">
-                        <Shield className="size-3 text-emerald-600 dark:text-emerald-400" />
-                        Тактика:
-                      </span>
-
-                      <ActionButton
-                        icon={<FastForward className="size-2.5 text-amber-600 dark:text-amber-400" />}
-                        label={!actionAvailable && canBonusTactics ? "Рывок (Б)" : "Рывок"}
-                        sizeClass={btnSizeClass}
-                        disabled={disabled || !canDash || hasCondition(combatant, "dashing")}
-                        onClick={onDash}
-                      />
-                      <ActionButton
-                        icon={<Shield className="size-2.5 text-blue-600 dark:text-blue-400" />}
-                        label="Уклонение"
-                        sizeClass={btnSizeClass}
-                        disabled={disabled || !actionAvailable || hasCondition(combatant, "dodging")}
-                        onClick={onDodge}
-                      />
-                      <ActionButton
-                        icon={<LogOut className="size-2.5 text-purple-600 dark:text-purple-400" />}
-                        label={!actionAvailable && canBonusTactics ? "Отход (Б)" : "Отход"}
-                        sizeClass={btnSizeClass}
-                        disabled={disabled || !canDisengage || hasCondition(combatant, "disengaging")}
-                        onClick={onDisengage}
-                      />
-                      <ActionButton
-                        icon={<HandHelping className="size-2.5 text-emerald-600 dark:text-emerald-400" />}
-                        label="Помощь"
-                        sizeClass={btnSizeClass}
-                        disabled={disabled || !actionAvailable}
-                        onClick={onHelp}
-                      />
-
-                      {onHide && (
-                        <ActionButton
-                          icon={
-                            combatant.isHidden ? (
-                              <EyeOff className="size-2.5 text-sky-600 dark:text-sky-400" />
-                            ) : (
-                              <Eye className="size-2.5 text-slate-700 dark:text-slate-300" />
-                            )
-                          }
-                          label={combatant.isHidden ? "Скрыт" : !actionAvailable && canBonusTactics ? "Спрятаться (Б)" : "Спрятаться"}
-                          sizeClass={btnSizeClass}
-                          disabled={
-                            disabled || !canHide || combatant.isHidden || visibilityStatus === "visible"
-                          }
-                          onClick={onHide}
-                        />
-                      )}
-
-                      {hasCondition(combatant, "prone") ? (
-                        onStandUp && (
-                          <ActionButton
-                            icon={<Footprints className="size-2.5 text-amber-600 dark:text-amber-400" />}
-                            label={"Встать (" + Math.floor(totalSpeed / 2) + "ф)"}
-                            sizeClass={btnSizeClass}
-                            disabled={disabled || movementRemaining < Math.floor(totalSpeed / 2)}
-                            onClick={onStandUp}
-                          />
-                        )
-                      ) : (
-                        onDropProne && (
-                          <ActionButton
-                            icon={<ArrowDown className="size-2.5 text-slate-600 dark:text-muted-foreground" />}
-                            label="Лечь"
-                            sizeClass={btnSizeClass}
-                            disabled={disabled}
-                            onClick={onDropProne}
-                          />
-                        )
-                      )}
-
-                      <Separator orientation="vertical" className="h-5 mx-0.5" />
-
-                      {onSetFacing && (
-                        <FacingCompass
-                          currentFacing={combatant.facing || (combatant.type === "enemy" ? "W" : "E")}
-                          onSetFacing={onSetFacing}
-                          disabled={disabled}
-                        />
-                      )}
-
-                      {combatant.wildShape && onRevertWildShape && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className={btnSizeClass + " bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-950 dark:text-emerald-300 border-emerald-500/50 flex items-center gap-1 font-bold"}
-                          disabled={disabled || combatant.bonusActionUsed}
-                          onClick={onRevertWildShape}
-                          title="Вернуться в истинный облик"
-                        >
-                          <span>🔄</span>
-                          <span>Выйти из зверя</span>
-                        </Button>
-                      )}
-
-                      {isMyTurn && (
-                        <Button
-                          size="sm"
-                          className={btnSizeClass + " ml-auto bg-emerald-600 hover:bg-emerald-700 font-bold text-white shadow flex items-center gap-1"}
-                          onClick={onEndTurn}
-                        >
-                          <LogOut className="size-3" />
-                          <span>Завершить ход</span>
-                        </Button>
-                      )}
-                    </div>
+                    {combatant.name.charAt(0).toUpperCase()}
                   </div>
-                )}
-
-                {/* 5. БЛОК ЗЕЛИЙ И РАСХОДНИКОВ */}
-                {((viewMode === "sections" && availablePotions.length > 0) ||
-                  activeTab === "potions" ||
-                  (activeTab === "all" && availablePotions.length > 0)) && (
-                  <div className="p-1.5 rounded bg-amber-500/10 border border-amber-500/25 space-y-1.5">
-                    <div className="flex items-center justify-between gap-2 flex-wrap py-0.5">
-                      <span className="text-[10px] font-bold text-amber-900 dark:text-amber-400 uppercase tracking-tight flex items-center gap-1 select-none pr-1">
-                        <FlaskConical className="size-3 text-amber-600 dark:text-amber-400" />
-                        🎒 Зелья и расходники (Бонусное действие):
-                      </span>
-                      <div className="flex items-center gap-1.5 text-[10px]">
-                        {combatant.bonusActionUsed ? (
-                          <span className="text-red-600 dark:text-red-400 font-bold flex items-center gap-0.5">
-                            <span>⏱️</span> Бонусное действие потрачено
-                          </span>
-                        ) : (
-                          <span className="text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-0.5">
-                            <span>⚡</span> 1 Бонусное действие доступно
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    {availablePotions.length === 0 ? (
-                      <div className="py-4 text-center text-xs text-muted-foreground">
-                        В инвентаре нет доступных зелий
-                      </div>
-                    ) : (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
-                        {availablePotions.map((potion) => {
-                          const typeLabel =
-                            potion.type === "heal"
-                              ? "💚 Лечение"
-                              : potion.type === "buff"
-                              ? "🛡️ Бафф"
-                              : "🔮 Утилитарное";
-                          const isBonusBlocked = combatant.bonusActionUsed;
-                          const isBlocked = disabled || isBonusBlocked || potion.quantity <= 0;
-                          const blockReason = isDead
-                            ? "Боец без сознания или мертв"
-                            : !isMyTurn
-                            ? "Не ваш ход"
-                            : isBonusBlocked
-                            ? "Бонусное действие уже потрачено в этом раунде"
-                            : potion.quantity <= 0
-                            ? "Зелье закончилось"
-                            : undefined;
-
-                          return (
-                            <div
-                              key={potion.id}
-                              className="flex flex-col justify-between p-2.5 rounded-md bg-background/90 border border-border/80 shadow-xs hover:border-amber-500/40 transition-colors gap-2"
-                            >
-                              <div className="space-y-1">
-                                <div className="flex items-start justify-between gap-1">
-                                  <div className="font-bold text-xs text-foreground flex items-center gap-1.5 min-w-0">
-                                    <FlaskConical className="size-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
-                                    <span className="truncate">{potion.name}</span>
-                                  </div>
-                                  <Badge variant="secondary" className="h-4 px-1 text-[9px] font-mono font-bold shrink-0">
-                                    x{potion.quantity}
-                                  </Badge>
-                                </div>
-                                {potion.nameEn && (
-                                  <div className="text-[10px] text-muted-foreground italic truncate">
-                                    {potion.nameEn}
-                                  </div>
-                                )}
-                                <div className="flex items-center gap-1 flex-wrap pt-0.5">
-                                  <Badge
-                                    variant="outline"
-                                    className="h-4 px-1 text-[8.5px] border-amber-500/40 text-amber-900 dark:text-amber-300 font-medium"
-                                  >
-                                    {typeLabel}
-                                  </Badge>
-                                  {potion.rarity && (
-                                    <Badge variant="secondary" className="h-4 px-1 text-[8.5px] text-muted-foreground">
-                                      {potion.rarity}
-                                    </Badge>
-                                  )}
-                                </div>
-                                {(potion.formula || potion.tempHp || potion.buffEffect) && (
-                                  <div className="text-[11px] font-mono font-semibold text-emerald-700 dark:text-emerald-400 pt-0.5">
-                                    {potion.formula && <span>Эффект: {potion.formula}</span>}
-                                    {potion.tempHp && <span> +{potion.tempHp} врем. HP</span>}
-                                    {potion.buffEffect && <span> ({potion.buffEffect})</span>}
-                                  </div>
-                                )}
-                                {potion.description && (
-                                  <div className="text-[10.5px] text-muted-foreground line-clamp-2 leading-tight pt-0.5">
-                                    {potion.description}
-                                  </div>
-                                )}
-                              </div>
-
-                              <div className="pt-1.5 border-t border-border/40">
-                                <Button
-                                  size="sm"
-                                  variant="default"
-                                  className={
-                                    "w-full " +
-                                    (activeTab === "potions" ? "h-8 text-xs font-bold" : btnSizeClass) +
-                                    " bg-gradient-to-r from-amber-600 via-amber-700 to-amber-800 hover:from-amber-500 hover:to-amber-700 text-amber-50 border border-amber-600/60 shadow-xs disabled:opacity-50"
-                                  }
-                                  disabled={isBlocked}
-                                  title={blockReason || "Выпить зелье (1 Бонусное действие)"}
-                                  onClick={() => onDrinkPotion?.(potion.id)}
-                                >
-                                  <FlaskConical className="size-3.5 mr-1" />
-                                  <span>Выпить (Бонусное действие)</span>
-                                </Button>
-                                {isBonusBlocked && (
-                                  <div className="text-[9.5px] text-red-600 dark:text-red-400 font-medium text-center mt-1">
-                                    Бонусное действие уже потрачено в этом раунде
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
+                  <div
+                    className="absolute -bottom-1 -right-2 flex items-center gap-0.5 rounded-full bg-card border px-1.5 py-px text-[11px] font-bold font-mono shadow"
+                    title="Класс доспеха"
+                  >
+                    <Shield className="size-3 text-blue-600 dark:text-blue-400" />
+                    {combatant.ac}
+                  </div>
+                </div>
+                <div className="min-w-0">
+                  <div className="font-bold text-sm leading-tight truncate" title={combatant.name}>{combatant.name}</div>
+                  <div className="text-[10.5px] text-muted-foreground truncate">
+                    {[combatant.className, combatant.level ? combatant.level + " ур." : ""].filter(Boolean).join(" · ")}
+                  </div>
+                </div>
+              </div>
+              <div className="flex-1 md:flex-none min-w-0" title="Хиты">
+                <div className="relative h-4 rounded-full bg-muted border border-border overflow-hidden">
+                  <div className={"h-full transition-all " + hpColor} style={{ width: hpPct + "%" }} />
+                  <div className="absolute inset-0 flex items-center justify-center gap-1 text-[10.5px] font-bold font-mono text-foreground drop-shadow-sm">
+                    <Heart className="size-2.5 fill-current text-red-500" />
+                    {combatant.hpCurrent}/{combatant.hpMax}
+                    {combatant.hpTemp > 0 && (
+                      <span className="text-blue-700 dark:text-blue-300">+{combatant.hpTemp}</span>
                     )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Сетка действий */}
+            <div className="flex-1 min-w-0 rounded-lg border bg-muted/20 flex flex-col">
+              <div className="flex items-center gap-1 px-1.5 pt-1 border-b border-border/60">
+                <TabButton active={tab === "actions"} onClick={() => setActiveTab("actions")}>
+                  Действия
+                </TabButton>
+                {hasSpells && (
+                  <TabButton active={tab === "spells"} onClick={() => setActiveTab("spells")}>
+                    Заклинания
+                  </TabButton>
+                )}
+                <TabButton active={tab === "items"} onClick={() => setActiveTab("items")}>
+                  Предметы{totalPotionsCount > 0 ? " (" + totalPotionsCount + ")" : ""}
+                </TabButton>
+
+                {tab === "spells" && (
+                  <div className="ml-auto flex items-center gap-0.5 pb-1 overflow-x-auto">
+                    <FilterChip active={spellFilter === "all"} onClick={() => setSpellFilter("all")}>
+                      Все
+                    </FilterChip>
+                    {spellsByLevel.map((grp) => {
+                      const slot = grp.level === 0 ? null : combatant.spells.slots[grp.level];
+                      return (
+                        <FilterChip
+                          key={grp.level}
+                          active={spellFilter === grp.level}
+                          dim={!!slot && slot.used >= slot.max}
+                          onClick={() => setSpellFilter(grp.level)}
+                        >
+                          {grp.level === 0 ? "Заг." : grp.level}
+                          {slot && <span className="ml-1 font-mono">{slot.max - slot.used}/{slot.max}</span>}
+                        </FilterChip>
+                      );
+                    })}
                   </div>
                 )}
               </div>
-            </ScrollArea>
+
+              <div className="p-1.5 h-[136px] overflow-y-auto">
+                {tab === "actions" && (
+                  <div className="flex flex-wrap gap-1">
+                    {[attackTiles, ...abilityTiles, [tacticTiles]]
+                      .filter((g) => g.length > 0)
+                      .map((g, i) => (
+                        <TileSection key={i} divider={i > 0}>
+                          {g}
+                        </TileSection>
+                      ))}
+                  </div>
+                )}
+                {tab === "spells" && <div className="flex flex-wrap gap-1">{spellSections}</div>}
+                {tab === "items" && <div className="flex flex-wrap gap-1">{itemTiles}</div>}
+              </div>
+            </div>
+
+            {/* Завершить ход */}
+            <div className="md:w-40 shrink-0 flex md:flex-col gap-1.5">
+              {isMyTurn ? (
+                <Button
+                  className="flex-1 md:h-auto min-h-12 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md flex md:flex-col items-center justify-center gap-1"
+                  onClick={onEndTurn}
+                >
+                  <LogOut className="size-4" />
+                  <span>Завершить ход</span>
+                </Button>
+              ) : (
+                <div className="flex-1 min-h-12 rounded-md border border-dashed flex items-center justify-center text-[11px] text-muted-foreground text-center px-2">
+                  Ожидание хода
+                </div>
+              )}
+              <div className="flex md:flex-col gap-1.5">
+                {onSetFacing && (
+                  <FacingCompass
+                    currentFacing={combatant.facing || (combatant.type === "enemy" ? "W" : "E")}
+                    onSetFacing={onSetFacing}
+                    disabled={disabled}
+                  />
+                )}
+                {combatant.wildShape && onRevertWildShape && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="h-7 text-[11px] bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-950 dark:text-emerald-300 border-emerald-500/50 font-bold"
+                    disabled={disabled || combatant.bonusActionUsed}
+                    onClick={onRevertWildShape}
+                    title="Вернуться в истинный облик"
+                  >
+                    Выйти из зверя
+                  </Button>
+                )}
+              </div>
+            </div>
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+// ================= Вспомогательные компоненты =================
+
+interface TileTooltip {
+  title: string;
+  tag?: string;
+  tagClass?: string;
+  lines?: string[];
+  description?: string;
+  warning?: string;
+  hint?: string;
+}
+
+function Tile({
+  label,
+  caption,
+  charges,
+  barClass,
+  cost,
+  extraCost,
+  concentration,
+  active,
+  unavailable,
+  onClick,
+  tooltip,
+}: {
+  label: string;
+  caption?: string;
+  charges?: string;
+  barClass: string;
+  cost: CostKind;
+  /** Атака «действие + бонусное»: рядом с маркером действия рисуем маркер бонусного */
+  extraCost?: boolean;
+  concentration?: boolean;
+  active?: boolean;
+  unavailable?: boolean;
+  onClick: () => void;
+  tooltip: TileTooltip;
+}) {
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button
+          type="button"
+          aria-disabled={unavailable || undefined}
+          onClick={() => {
+            if (!unavailable) onClick();
+          }}
+          className={
+            "relative w-[92px] h-[60px] shrink-0 rounded-md border bg-card text-left overflow-hidden transition-all flex flex-col " +
+            (active
+              ? "ring-2 ring-red-500 border-red-500 animate-pulse "
+              : unavailable
+              ? "opacity-40 cursor-not-allowed grayscale-[40%] "
+              : "hover:-translate-y-0.5 hover:shadow-md hover:border-foreground/40 cursor-pointer ")
+          }
+        >
+          <span className="flex items-center gap-1 h-3.5 px-1.5 shrink-0">
+            <span className={"h-1 flex-1 rounded-full " + barClass} />
+            {concentration && <span className="text-[8px] leading-none text-purple-600 dark:text-purple-400 font-bold">◆</span>}
+            <CostMarker kind={cost} size="sm" />
+            {extraCost && <CostMarker kind="bonus" size="sm" />}
+          </span>
+          <span className="flex-1 px-1.5 pb-0.5 flex flex-col justify-between min-h-0">
+            <span className="text-[11px] font-semibold leading-[1.1] line-clamp-2 break-words">{label}</span>
+            <span className="flex items-end justify-between gap-1">
+              <span className="text-[9.5px] font-mono text-muted-foreground truncate">{caption}</span>
+              {charges && (
+                <span className="text-[9.5px] font-mono font-bold bg-muted rounded px-1 shrink-0">{charges}</span>
+              )}
+            </span>
+          </span>
+        </button>
+      </TooltipTrigger>
+      <TooltipContent
+        side="top"
+        sideOffset={6}
+        className="bg-popover text-popover-foreground border shadow-xl max-w-72 p-0 z-[400] [&>svg]:hidden"
+      >
+        <div className="px-3 py-2 space-y-1">
+          <div className="flex items-baseline justify-between gap-3">
+            <span className="font-bold text-sm">{tooltip.title}</span>
+          </div>
+          {tooltip.tag && (
+            <div className={"text-[10.5px] font-semibold " + (tooltip.tagClass ?? "text-muted-foreground")}>{tooltip.tag}</div>
+          )}
+          {tooltip.lines && tooltip.lines.length > 0 && (
+            <ul className="text-[11px] space-y-0.5">
+              {tooltip.lines.map((l, i) => (
+                <li key={i}>{l}</li>
+              ))}
+            </ul>
+          )}
+          {tooltip.description && (
+            <p className="text-[11px] text-muted-foreground leading-snug whitespace-pre-line">{tooltip.description}</p>
+          )}
+          {tooltip.hint && <p className="text-[10.5px] text-muted-foreground italic">{tooltip.hint}</p>}
+          {tooltip.warning && (
+            <p className="text-[11px] font-semibold text-red-600 dark:text-red-400">{tooltip.warning}</p>
+          )}
+        </div>
+      </TooltipContent>
+    </Tooltip>
+  );
+}
+
+/** Группа плиток: сама ничего не рисует, плитки текут в общей сетке; перед группой — тонкий разделитель */
+function TileSection({
+  lead,
+  divider,
+  children,
+}: {
+  lead?: React.ReactNode;
+  divider?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <>
+      {divider && <span aria-hidden className="w-px self-stretch bg-border mx-0.5" />}
+      {lead}
+      {children}
+    </>
+  );
+}
+
+function LevelBadge({ level, slot }: { level: number; slot: { max: number; used: number } | null }) {
+  return (
+    <div
+      className="w-8 h-[60px] shrink-0 rounded-md border bg-muted/60 flex flex-col items-center justify-center gap-1"
+      title={level === 0 ? "Заговоры" : level + " круг" + (slot ? ": ячеек " + (slot.max - slot.used) + " из " + slot.max : "")}
+    >
+      <span className="text-sm font-bold leading-none">{level === 0 ? "∞" : level}</span>
+      {slot && <SlotPips max={slot.max} used={slot.used} vertical />}
+    </div>
+  );
+}
+
+function TabButton({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={
+        "px-2.5 py-1 text-[11.5px] font-bold rounded-t-md border-b-2 transition-colors " +
+        (active
+          ? "border-foreground text-foreground"
+          : "border-transparent text-muted-foreground hover:text-foreground")
+      }
+    >
+      {children}
+    </button>
+  );
+}
+
+function FilterChip({
+  active,
+  dim,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  dim?: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={
+        "px-1.5 h-5 rounded text-[10px] font-bold border shrink-0 transition-colors " +
+        (active ? "bg-foreground text-background border-foreground " : "bg-card hover:bg-accent border-border ") +
+        (dim && !active ? "opacity-50" : "")
+      }
+    >
+      {children}
+    </button>
+  );
+}
+
+function SlotPips({ max, used, vertical }: { max: number; used: number; vertical?: boolean }) {
+  return (
+    <span className={"flex items-center gap-0.5 " + (vertical ? "flex-wrap justify-center max-w-[22px]" : "")} title={"Ячеек: " + (max - used) + " из " + max}>
+      {Array.from({ length: max }).map((_, i) => (
+        <span
+          key={i}
+          className={
+            "size-2 rounded-full border " +
+            (i < max - used ? "bg-blue-500 border-blue-500" : "bg-transparent border-muted-foreground/50")
+          }
+        />
+      ))}
+    </span>
+  );
+}
+
+const COST_STYLE: Record<CostKind, { fill: string; shape: string; title: string }> = {
+  action: { fill: "bg-emerald-500", shape: "rounded-full", title: "Действие" },
+  bonus: {
+    fill: "bg-orange-500",
+    shape: "[clip-path:polygon(50%_0,100%_100%,0_100%)]",
+    title: "Бонусное действие",
+  },
+  reaction: { fill: "bg-violet-500", shape: "rotate-45 rounded-[2px]", title: "Реакция" },
+  free: { fill: "bg-slate-400", shape: "rounded-[2px]", title: "Бесплатно" },
+};
+
+function CostMarker({ kind, size, used }: { kind: CostKind; size: "sm" | "md"; used?: boolean }) {
+  const s = COST_STYLE[kind];
+  const dim = size === "md" ? "size-3.5" : "size-2";
+  return (
+    <span
+      aria-hidden
+      className={"inline-block " + dim + " " + s.shape + " " + (used ? "bg-muted-foreground/30" : s.fill)}
+    />
+  );
+}
+
+function ResourceGem({
+  kind,
+  label,
+  used,
+  extra,
+}: {
+  kind: CostKind;
+  label: string;
+  used: boolean;
+  extra?: number;
+}) {
+  return (
+    <div
+      className={"flex items-center gap-1.5 transition-opacity " + (used ? "opacity-50" : "")}
+      title={label + (used ? ": потрачено" : ": доступно")}
+    >
+      <CostMarker kind={kind} size="md" used={used} />
+      <span className={"font-semibold " + (used ? "line-through text-muted-foreground" : "")}>{label}</span>
+      {!!extra && extra > 0 && (
+        <Badge className="h-4 px-1 text-[9px] bg-amber-500 hover:bg-amber-500 text-black font-bold">+{extra}</Badge>
+      )}
     </div>
   );
 }
@@ -1457,12 +1155,13 @@ function FacingCompass({
         <Button
           size="sm"
           variant="outline"
-          className="h-6 px-1.5 text-[10.5px] flex items-center gap-1 border-amber-500/50 hover:border-amber-500 bg-amber-500/10 hover:bg-amber-500/20 text-foreground font-semibold"
+          className="h-7 flex-1 px-1.5 text-[11px] flex items-center justify-center gap-1 font-semibold"
           disabled={disabled}
           title="Направление взгляда"
         >
           <Compass className="size-3 text-amber-600 dark:text-amber-500" />
-          <span className="font-bold text-amber-800 dark:text-amber-400 font-mono text-[11px]">{currentFacing}</span>
+          <span>Взгляд</span>
+          <span className="font-bold text-amber-800 dark:text-amber-400 font-mono">{currentFacing}</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent
@@ -1475,19 +1174,19 @@ function FacingCompass({
         </div>
 
         <div className="grid grid-cols-3 grid-rows-3 gap-1 p-1.5 rounded-full bg-muted/60 border border-amber-500/30">
-          <CompassButton dir="NW" icon={ArrowUpLeft} label="СЗ" title="Северо-Запад" currentFacing={currentFacing} onSelect={onSetFacing} />
-          <CompassButton dir="N" icon={ArrowUp} label="С" title="Север" currentFacing={currentFacing} onSelect={onSetFacing} />
-          <CompassButton dir="NE" icon={ArrowUpRight} label="СВ" title="Северо-Восток" currentFacing={currentFacing} onSelect={onSetFacing} />
+          <CompassButton dir="NW" icon={ArrowUpLeft} title="Северо-Запад" currentFacing={currentFacing} onSelect={onSetFacing} />
+          <CompassButton dir="N" icon={ArrowUp} title="Север" currentFacing={currentFacing} onSelect={onSetFacing} />
+          <CompassButton dir="NE" icon={ArrowUpRight} title="Северо-Восток" currentFacing={currentFacing} onSelect={onSetFacing} />
 
-          <CompassButton dir="W" icon={ArrowLeft} label="З" title="Запад" currentFacing={currentFacing} onSelect={onSetFacing} />
+          <CompassButton dir="W" icon={ArrowLeft} title="Запад" currentFacing={currentFacing} onSelect={onSetFacing} />
           <div className="size-8 rounded-full bg-amber-500/20 border-2 border-amber-500 flex items-center justify-center text-amber-900 dark:text-amber-400 font-bold text-xs select-none">
             {currentFacing}
           </div>
-          <CompassButton dir="E" icon={ArrowRight} label="В" title="Восток" currentFacing={currentFacing} onSelect={onSetFacing} />
+          <CompassButton dir="E" icon={ArrowRight} title="Восток" currentFacing={currentFacing} onSelect={onSetFacing} />
 
-          <CompassButton dir="SW" icon={ArrowDownLeft} label="ЮЗ" title="Юго-Запад" currentFacing={currentFacing} onSelect={onSetFacing} />
-          <CompassButton dir="S" icon={ArrowDown} label="Ю" title="Юг" currentFacing={currentFacing} onSelect={onSetFacing} />
-          <CompassButton dir="SE" icon={ArrowDownRight} label="ЮВ" title="Юго-Восток" currentFacing={currentFacing} onSelect={onSetFacing} />
+          <CompassButton dir="SW" icon={ArrowDownLeft} title="Юго-Запад" currentFacing={currentFacing} onSelect={onSetFacing} />
+          <CompassButton dir="S" icon={ArrowDown} title="Юг" currentFacing={currentFacing} onSelect={onSetFacing} />
+          <CompassButton dir="SE" icon={ArrowDownRight} title="Юго-Восток" currentFacing={currentFacing} onSelect={onSetFacing} />
         </div>
 
         <div className="text-[9px] text-muted-foreground text-center">
@@ -1501,14 +1200,12 @@ function FacingCompass({
 function CompassButton({
   dir,
   icon: Icon,
-  label,
   title,
   currentFacing,
   onSelect,
 }: {
   dir: FacingDirection;
-  icon: any;
-  label: string;
+  icon: React.ComponentType<{ className?: string }>;
   title: string;
   currentFacing: FacingDirection;
   onSelect: (dir: FacingDirection) => void;
@@ -1527,59 +1224,5 @@ function CompassButton({
     >
       <Icon className={"size-3.5 " + (isSelected ? "stroke-[2.5]" : "stroke-[2]")} />
     </button>
-  );
-}
-
-function ResourcePip({
-  label,
-  used,
-  roundBased,
-  title,
-}: {
-  label: string;
-  used: boolean;
-  roundBased?: boolean;
-  title?: string;
-}) {
-  return (
-    <span
-      title={title}
-      className={"px-1 py-0.2 rounded text-[9.5px] font-bold cursor-default " + (
-        used
-          ? roundBased
-            ? "bg-amber-500/20 text-amber-900 dark:text-amber-300"
-            : "bg-red-500/20 text-red-900 dark:text-red-300"
-          : "bg-emerald-500/20 text-emerald-950 dark:text-emerald-300"
-      )}
-    >
-      {label}
-    </span>
-  );
-}
-
-function ActionButton({
-  icon,
-  label,
-  sizeClass = "h-6 text-[10.5px]",
-  disabled,
-  onClick,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  sizeClass?: string;
-  disabled?: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <Button
-      size="sm"
-      variant="outline"
-      className={sizeClass + " flex items-center gap-1 shadow-2xs border-border hover:bg-accent text-foreground font-semibold"}
-      disabled={disabled}
-      onClick={onClick}
-    >
-      {icon}
-      <span className="text-foreground">{label}</span>
-    </Button>
   );
 }
