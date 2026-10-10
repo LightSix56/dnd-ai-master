@@ -12,6 +12,7 @@ import {
   buildPartyLeveledNote,
   findLevelChanges,
   PartyLeveledError,
+  soloLeveledTitle,
 } from "../party-leveled";
 
 // Герой, каким его отдаёт @/lib/db: уровень и класс — уже из живого листа
@@ -68,6 +69,35 @@ describe("buildPartyLeveledNote", () => {
   });
 });
 
+describe("solo wording", () => {
+  it("title speaks of the player and one or several characters", () => {
+    expect(soloLeveledTitle(1)).toBe("Игрок и его персонаж прокачались");
+    expect(soloLeveledTitle(2)).toBe("Игрок и его персонажи прокачались");
+  });
+
+  it("solo note for one character", () => {
+    const note = buildPartyLeveledNote(
+      [{ characterId: "a", name: "Токсин", className: "Плут", fromLevel: 1, toLevel: 2 }],
+      "solo"
+    );
+    expect(note.split("\n")).toEqual([
+      "Игрок и его персонаж прокачались, посмотри его лист заново.",
+      "Токсин — 2 ур. (Плут), был 1",
+    ]);
+  });
+
+  it("solo note for several characters", () => {
+    const note = buildPartyLeveledNote(
+      [
+        { characterId: "a", name: "Токсин", className: "Плут", fromLevel: 1, toLevel: 2 },
+        { characterId: "b", name: "Клык", className: "", fromLevel: 2, toLevel: 3 },
+      ],
+      "solo"
+    );
+    expect(note.split("\n")[0]).toBe("Игрок и его персонажи прокачались, посмотри их листы заново.");
+  });
+});
+
 describe("acknowledgePartyLevels", () => {
   function setup(characters: Record<string, any>[], combats: Record<string, any>[] = []) {
     state.prisma = fakePrisma({ character: characters, combat: combats });
@@ -98,6 +128,18 @@ describe("acknowledgePartyLevels", () => {
     await acknowledgePartyLevels("camp-1");
     await expect(acknowledgePartyLevels("camp-1")).rejects.toThrow("Никто из партии ещё не повысил уровень.");
     expect(state.prisma.chatMessage.rows).toHaveLength(1);
+  });
+
+  it("solo mode writes the player wording and its own refusal", async () => {
+    setup([hero({ level: 2, sheetLevelSeen: 1 })]);
+    const result = await acknowledgePartyLevels("camp-1", "solo");
+    expect(state.prisma.chatMessage.rows[0].content).toBe(
+      "[Система] Игрок и его персонаж прокачались, посмотри его лист заново.\nТоксин — 2 ур. (Плут), был 1"
+    );
+    expect(result.note.startsWith("Игрок и его персонаж прокачались")).toBe(true);
+    await expect(acknowledgePartyLevels("camp-1", "solo")).rejects.toThrow(
+      "Никто из персонажей ещё не повысил уровень."
+    );
   });
 
   it("post during combat is refused", async () => {

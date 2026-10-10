@@ -1,12 +1,18 @@
-// «Партия прокачалась».
+// «Партия прокачалась» (в соло — «Игрок и его персонаж прокачались»).
 //
 // Досье героев мастер получает из их листов на каждом ходу, так что новые умения он видит сам.
 // Эта кнопка нужна, чтобы явно сказать ему, что герои выросли в уровне: в историю кампании
 // добавляется короткое сообщение, а запомненные уровни обновляются.
 
 import { db } from "@/lib/db";
+import { soloLeveledTitle } from "./level-up-text";
+
+export { soloLeveledTitle };
 
 export const PARTY_LEVELED_TEXT = "Партия прокачала уровень, посмотри их листы заново.";
+
+/** Сетевая игра — «партия»; соло — один игрок со своими персонажами */
+export type LevelNoteMode = "party" | "solo";
 
 export interface LevelChange {
   characterId: string;
@@ -55,11 +61,15 @@ export function findLevelChanges(heroes: HeroLike[]): LevelChange[] {
   return changes;
 }
 
-export function buildPartyLeveledNote(changes: LevelChange[]): string {
+export function buildPartyLeveledNote(changes: LevelChange[], mode: LevelNoteMode = "party"): string {
   const lines = changes.map(
     (c) => `${c.name} — ${c.toLevel} ур.${c.className ? ` (${c.className})` : ""}, был ${c.fromLevel}`
   );
-  return [PARTY_LEVELED_TEXT, ...lines].join("\n");
+  const head =
+    mode === "solo"
+      ? `${soloLeveledTitle(changes.length)}, посмотри ${changes.length > 1 ? "их листы" : "его лист"} заново.`
+      : PARTY_LEVELED_TEXT;
+  return [head, ...lines].join("\n");
 }
 
 export async function isCombatActive(campaignId: string): Promise<boolean> {
@@ -77,7 +87,8 @@ export async function loadLevelChanges(campaignId: string): Promise<LevelChange[
  * Во время боя и без изменений — отказ.
  */
 export async function acknowledgePartyLevels(
-  campaignId: string
+  campaignId: string,
+  mode: LevelNoteMode = "party"
 ): Promise<{ changes: LevelChange[]; note: string }> {
   if (await isCombatActive(campaignId)) {
     throw new PartyLeveledError("Сначала завершите бой.");
@@ -97,10 +108,12 @@ export async function acknowledgePartyLevels(
   }
 
   if (changes.length === 0) {
-    throw new PartyLeveledError("Никто из партии ещё не повысил уровень.");
+    throw new PartyLeveledError(
+      mode === "solo" ? "Никто из персонажей ещё не повысил уровень." : "Никто из партии ещё не повысил уровень."
+    );
   }
 
-  const note = buildPartyLeveledNote(changes);
+  const note = buildPartyLeveledNote(changes, mode);
   // Роль "user": такие сообщения мастер читает в истории (служебную роль история пропускает)
   await db.chatMessage.create({
     data: { campaignId, role: "user", content: `[Система] ${note}` },

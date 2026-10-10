@@ -70,6 +70,7 @@ import {
   Shield,
   Heart,
   Share2,
+  ArrowUpCircle,
 } from "lucide-react";
 import { CharacterCard } from "./CharacterCard";
 import { CombatView, type CombatEndSummary } from "@/components/combat/CombatView";
@@ -86,6 +87,7 @@ import { CreateCampaignModal } from "@/components/campaign/CreateCampaignModal";
 import { buildNewCampaignPayload, normalizeCampaignSetup, type CampaignSetupValues } from "@/lib/campaign/setup-params";
 import { PartyTurnBar } from "@/components/room/PartyTurnBar";
 import type { RoomTurn } from "@/lib/room/types";
+import { soloLeveledTitle } from "@/lib/room/level-up-text";
 import { SupabaseAuthModal } from "@/components/auth/SupabaseAuthModal";
 import { useSupabaseAuth } from "@/hooks/useSupabaseAuth";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
@@ -266,42 +268,56 @@ export function DnDApp({
     }
   }, [initialRoomCode]);
 
-  // Проверяем, не вырос ли кто-то из героев комнаты в уровне (уровни читаются из их листов в базе)
+  // Куда спрашивать о новых уровнях: комната (сетевая игра) или кампания (соло)
+  const levelChangesUrl = useCallback((): string | null => {
+    const room = activeRoomRef.current;
+    if (room?.code) {
+      return room.campaignId ? `/api/room/${encodeURIComponent(room.code)}/party-leveled` : null;
+    }
+    if (initialRoomCode) return null;
+    const campaignId = activeCampaignRef.current?.id;
+    return campaignId ? `/api/campaign/party-leveled?campaignId=${encodeURIComponent(campaignId)}` : null;
+  }, [initialRoomCode]);
+
+  // Проверяем, не вырос ли кто-то из героев в уровне (уровни читаются из их листов в базе)
   const loadLevelChanges = useCallback(async () => {
-    const code = activeRoomRef.current?.code;
-    if (!code || !activeRoomRef.current?.campaignId) {
+    const url = levelChangesUrl();
+    if (!url) {
       setLevelChanges([]);
       return;
     }
     try {
-      const res = await fetch(`/api/room/${encodeURIComponent(code)}/party-leveled`);
+      const res = await fetch(url);
       if (!res.ok) return;
       const data = await res.json();
       setLevelChanges(Array.isArray(data.changes) ? data.changes : []);
     } catch {
       // сеть недоступна — попробуем на следующем раунде
     }
-  }, []);
+  }, [levelChangesUrl]);
 
-  const handlePartyLeveled = useCallback(async () => {
-    const code = activeRoomRef.current?.code;
-    if (!code) return;
+  /** Сообщает мастеру о новых уровнях. Возвращает текст сообщения, записанного в историю, или null */
+  const handlePartyLeveled = useCallback(async (): Promise<string | null> => {
+    const url = levelChangesUrl();
+    if (!url) return null;
     setPartyLeveledBusy(true);
     try {
-      const res = await fetch(`/api/room/${encodeURIComponent(code)}/party-leveled`, { method: "POST" });
+      const res = await fetch(url, { method: "POST" });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
         toast.error(data.error || "Не удалось сообщить мастеру");
-        return;
+        return null;
       }
       setLevelChanges([]);
+      return typeof data.note === "string" ? data.note : null;
     } catch {
       toast.error("Не удалось связаться с сервером");
+      return null;
     } finally {
       setPartyLeveledBusy(false);
       void loadLevelChanges();
     }
-  }, [loadLevelChanges]);
+  }, [levelChangesUrl, loadLevelChanges]);
 
   // Параметры создания новой кампании
   const [newCampaignName, setNewCampaignName] = useState("");
@@ -1275,6 +1291,36 @@ export function DnDApp({
 
   // Алиасы для совместимости со старым кодом
   const isLoading = status === "submitted" || status === "streaming";
+
+  // Соло: уровни сверяем при открытии кампании, после ответа мастера, после боя
+  // и когда игрок возвращается на вкладку (например, с сайта листа после прокачки)
+  const soloCampaignId = !initialRoomCode && !activeRoom?.code ? activeCampaign?.id : undefined;
+  useEffect(() => {
+    if (!soloCampaignId || isLoading) return;
+    void loadLevelChanges();
+    const onFocus = () => {
+      if (document.visibilityState === "visible") void loadLevelChanges();
+    };
+    window.addEventListener("focus", onFocus);
+    document.addEventListener("visibilitychange", onFocus);
+    return () => {
+      window.removeEventListener("focus", onFocus);
+      document.removeEventListener("visibilitychange", onFocus);
+    };
+  }, [soloCampaignId, isLoading, messages.length, activeCombat?.id, loadLevelChanges]);
+
+  // Соло: сообщение мастеру сразу показываем и в чате — после перезагрузки оно придёт из истории
+  const handleSoloLeveled = useCallback(async () => {
+    const note = await handlePartyLeveled();
+    if (!note) return;
+    toast.success(soloLeveledTitle(note.split("\n").length - 1), {
+      description: note.split("\n").slice(1).join("; ") || undefined,
+    });
+    setMessages((prev) => [
+      ...prev,
+      { id: `level-up-${Date.now()}`, role: "user", parts: [{ type: "text", text: `[Система] ${note}` }] },
+    ]);
+  }, [handlePartyLeveled, setMessages]);
 
   // Ведущий ведёт сцену через личный чат (вступление, реплики вне раунда). Остальные игроки
   // комнаты раньше видели такой ответ только целиком и с задержкой — рассылаем его по мере написания.
@@ -3518,6 +3564,28 @@ export function DnDApp({
                       <Brain className="size-3 mr-1" />
                       Вспомни
                     </Button>
+
+                    {soloCampaignId && levelChanges.length > 0 && (
+                      <Button
+                        type="button"
+                        size="sm"
+                        onClick={handleSoloLeveled}
+                        disabled={Boolean(activeCombat) || partyLeveledBusy || isLoading}
+                        className="h-7 px-2 text-xs font-medium cursor-pointer bg-gradient-to-r from-amber-600 via-amber-700 to-amber-800 hover:from-amber-500 hover:to-amber-700 text-amber-50 border border-amber-600/60 shadow-xs disabled:opacity-60"
+                        title={
+                          activeCombat
+                            ? "Сначала завершите бой"
+                            : `Сообщить мастеру о новых уровнях: ${levelChanges.map((c) => `${c.name} — ${c.toLevel} ур.`).join(", ")}`
+                        }
+                      >
+                        {partyLeveledBusy ? (
+                          <Loader2 className="size-3 mr-1 animate-spin" />
+                        ) : (
+                          <ArrowUpCircle className="size-3 mr-1" />
+                        )}
+                        {soloLeveledTitle(levelChanges.length)}
+                      </Button>
+                    )}
                   </div>
                   {/* Панель очереди раунда отряда в сетевом режиме */}
                   {activeRoom && (
