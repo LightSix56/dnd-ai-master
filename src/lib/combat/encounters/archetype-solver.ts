@@ -376,31 +376,35 @@ function solveHorde(
   partySize: number,
   opts: SolveOptions = {}
 ): SquadPlan | null {
-  const minCount = 6;
   const maxCount = opts.large ? 16 : 12;
-  let best: { monster: MonsterManifestEntry; count: number; adjustedXP: number; rawXP: number; score: number } | null = null;
+  // Настоящая толпа — от шести. Если бюджета на неё нет (слабый отряд, лёгкий бой), то хотя бы горстка от трёх
+  for (const minCount of [6, 3]) {
+    let best: { monster: MonsterManifestEntry; count: number; adjustedXP: number; rawXP: number; score: number } | null = null;
 
-  for (let count = minCount; count <= maxCount; count++) {
-    for (const m of pool) {
-      const allXPs = Array(count).fill(m.xp);
-      const adjustedXP = calculateAdjustedXP(allXPs, partySize);
-      if (adjustedXP < targetAdjustedXP * 0.65 || adjustedXP > targetAdjustedXP * 1.35) continue;
-      const xpDiffRel = Math.abs(adjustedXP - targetAdjustedXP) / targetAdjustedXP;
-      const score = xpDiffRel - count * 0.04;
-      if (!best || score < best.score) {
-        best = { monster: m, count, adjustedXP, rawXP: count * m.xp, score };
+    for (let count = minCount; count <= maxCount; count++) {
+      for (const m of pool) {
+        const allXPs = Array(count).fill(m.xp);
+        const adjustedXP = calculateAdjustedXP(allXPs, partySize);
+        if (adjustedXP < targetAdjustedXP * 0.65 || adjustedXP > targetAdjustedXP * 1.35) continue;
+        const xpDiffRel = Math.abs(adjustedXP - targetAdjustedXP) / targetAdjustedXP;
+        const score = xpDiffRel - count * 0.04;
+        if (!best || score < best.score) {
+          best = { monster: m, count, adjustedXP, rawXP: count * m.xp, score };
+        }
       }
     }
-  }
 
-  if (!best) return null;
-  return {
-    archetype: "horde",
-    slots: [{ monsterSlug: best.monster.slug, role: "minion", count: best.count }],
-    targetAdjustedXP,
-    estimatedRawXP: best.rawXP,
-    estimatedAdjustedXP: best.adjustedXP,
-  };
+    if (best) {
+      return {
+        archetype: "horde",
+        slots: [{ monsterSlug: best.monster.slug, role: "minion", count: best.count }],
+        targetAdjustedXP,
+        estimatedRawXP: best.rawXP,
+        estimatedAdjustedXP: best.adjustedXP,
+      };
+    }
+  }
+  return null;
 }
 
 function solveGreedyFallback(
@@ -439,9 +443,13 @@ function solveGreedyFallback(
     if (currentAdj >= targetAdjustedXP * 0.9) {
       break;
     }
-    const remainingAdj = targetAdjustedXP - currentAdj;
-    const next =
-      sorted.find((m) => m.xp <= remainingAdj) || sorted[sorted.length - 1];
+    // Каждый новый враг поднимает множитель опыта за число существ, поэтому берём самого крупного,
+    // с кем итог ближе к бюджету, чем сейчас; если такого нет — отряд собран
+    const gap = Math.abs(currentAdj - targetAdjustedXP);
+    const next = sorted.find(
+      (m) => Math.abs(calculateAdjustedXP([...chosen.map((c) => c.xp), m.xp], partySize) - targetAdjustedXP) < gap
+    );
+    if (!next) break;
     chosen.push(next);
   }
 

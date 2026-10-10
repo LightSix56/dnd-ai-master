@@ -92,3 +92,21 @@ describe("состав отряда по выбору мастера", () => {
     expect(e.squadArchetype).toBe("horde");
   }, 60000);
 });
+
+describe("слабый отряд (3 героя 1 уровня)", () => {
+  const weak = [1, 2, 3].map((i) => ({ id: `w${i}`, name: `Новичок ${i}`, level: 1 }));
+  const run = (difficulty: EncounterDifficulty, archetype?: SquadArchetype) =>
+    generateEncounter({ party: weak, difficulty, biome: "dungeon", archetype, mapSeed: 11, mapPresetId: "" });
+
+  it("лёгкий бой не превышает бюджет в полтора раза: у слабых существ растёт множитель за число врагов", async () => {
+    const enc = await run("easy");
+    expect(enc.adjustedXP).toBeLessThanOrEqual(enc.targetXP * 1.35);
+  });
+
+  it("орда на среднем бою — горстка одинаковых слабаков, а не пара бойцов", async () => {
+    const enc = await run("medium", "horde");
+    expect(enc.enemies.length).toBeGreaterThanOrEqual(3);
+    expect(new Set(enc.enemies.map((e) => e.monster.slug)).size).toBe(1);
+    expect(enc.adjustedXP).toBeLessThanOrEqual(enc.targetXP * 1.35);
+  });
+});

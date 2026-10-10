@@ -1,3 +1,4 @@
+import { SIZE_CELLS } from "../types";
 import type { Cell, Combatant } from "../types";
 import type { TacticalMapPreset, SpawnZoneType, SpawnZoneDefinition } from "./types";
 
@@ -135,6 +136,21 @@ export function inferCombatantRole(combatant: Combatant): TacticalRole {
   return "vanguard";
 }
 
+/** Всё тело существа (size × size клеток от левого верхнего угла) на свободных и проходимых клетках */
+function bodyFits(
+  cell: Cell,
+  size: number,
+  isBlocked: (x: number, y: number) => boolean,
+  isOccupied: (x: number, y: number) => boolean
+): boolean {
+  for (let dx = 0; dx < size; dx++) {
+    for (let dy = 0; dy < size; dy++) {
+      if (isBlocked(cell.x + dx, cell.y + dy) || isOccupied(cell.x + dx, cell.y + dy)) return false;
+    }
+  }
+  return true;
+}
+
 /**
  * Поиск ближайшей свободной и проходимой клетки методом BFS
  */
@@ -143,7 +159,8 @@ function findClosestPassableCell(
   width: number,
   height: number,
   isBlocked: (x: number, y: number) => boolean,
-  isOccupied: (x: number, y: number) => boolean
+  isOccupied: (x: number, y: number) => boolean,
+  size = 1
 ): Cell {
   const queue: Cell[] = [origin];
   const visited = new Set<string>([`${origin.x},${origin.y}`]);
@@ -162,7 +179,7 @@ function findClosestPassableCell(
 
   while (queue.length > 0) {
     const current = queue.shift()!;
-    if (!isBlocked(current.x, current.y) && !isOccupied(current.x, current.y)) {
+    if (bodyFits(current, size, isBlocked, isOccupied)) {
       const isPerimeter =
         current.x === 0 || current.x === width - 1 || current.y === 0 || current.y === height - 1;
       if (!isPerimeter || width <= 2 || height <= 2) {
@@ -200,7 +217,7 @@ export function assignTacticalSpawns(
   const blockedSet = new Set<string>();
 
   for (const elem of preset.elements) {
-    if (elem.type === "wall" || elem.type === "obstacle") {
+    if (elem.type === "wall" || elem.type === "obstacle" || elem.type === "window" || elem.type === "lava" || elem.type === "water") {
       for (let dx = 0; dx < elem.width; dx++) {
         for (let dy = 0; dy < elem.height; dy++) {
           blockedSet.add(`${elem.x + dx},${elem.y + dy}`);
@@ -219,6 +236,10 @@ export function assignTacticalSpawns(
     blockedSet.has(`${x},${y}`) || x < 0 || x >= preset.gridWidth || y < 0 || y >= preset.gridHeight;
 
   const occupiedSet = new Set<string>();
+  const sizeOf = (c: Combatant) => SIZE_CELLS[c.size] ?? 1;
+  const occupy = (cell: Cell, size: number) => {
+    for (let dx = 0; dx < size; dx++) for (let dy = 0; dy < size; dy++) occupiedSet.add(`${cell.x + dx},${cell.y + dy}`);
+  };
   const isOccupied = (x: number, y: number) => occupiedSet.has(`${x},${y}`);
 
   const rawSpawnZones =
@@ -253,23 +274,19 @@ export function assignTacticalSpawns(
   for (const p of players) {
     let chosenCell: Cell | null = null;
 
-    while (partyPool.length > 0) {
-      const candidate = partyPool.shift()!;
-      if (!isOccupied(candidate.x, candidate.y) && !isBlocked(candidate.x, candidate.y)) {
-        chosenCell = candidate;
-        break;
-      }
-    }
+    const pSize = sizeOf(p);
+    const pIdx = partyPool.findIndex((c) => bodyFits(c, pSize, isBlocked, isOccupied));
+    if (pIdx >= 0) chosenCell = partyPool.splice(pIdx, 1)[0];
 
     if (!chosenCell) {
       const fallbackOrigin = rawSpawnZones.find((z) => z.name === "party")?.cells[0] || {
         x: Math.max(1, Math.min(2, Math.floor(preset.gridWidth * 0.2))),
         y: Math.max(1, Math.min(preset.gridHeight - 2, Math.floor(preset.gridHeight / 2))),
       };
-      chosenCell = findClosestPassableCell(fallbackOrigin, preset.gridWidth, preset.gridHeight, isBlocked, isOccupied);
+      chosenCell = findClosestPassableCell(fallbackOrigin, preset.gridWidth, preset.gridHeight, isBlocked, isOccupied, pSize);
     }
 
-    occupiedSet.add(`${chosenCell.x},${chosenCell.y}`);
+    occupy(chosenCell, pSize);
     result.push({
       ...p,
       x: chosenCell.x,
@@ -294,17 +311,14 @@ export function assignTacticalSpawns(
     }
 
     let chosenCell: Cell | null = null;
+    const eSize = sizeOf(e);
 
     for (const zName of targetZoneNames) {
       const pool = zoneMap.get(zName);
       if (pool && pool.length > 0) {
-        while (pool.length > 0) {
-          const candidate = pool.shift()!;
-          if (!isOccupied(candidate.x, candidate.y) && !isBlocked(candidate.x, candidate.y)) {
-            chosenCell = candidate;
-            break;
-          }
-        }
+        // Клетки, куда крупный не помещается, остаются в зоне для мелких
+        const idx = pool.findIndex((c) => bodyFits(c, eSize, isBlocked, isOccupied));
+        if (idx >= 0) chosenCell = pool.splice(idx, 1)[0];
       }
       if (chosenCell) break;
     }
@@ -316,10 +330,10 @@ export function assignTacticalSpawns(
         x: Math.max(1, Math.min(preset.gridWidth - 4, Math.floor(preset.gridWidth * 0.7))),
         y: Math.max(1, Math.min(preset.gridHeight - 2, Math.floor(preset.gridHeight / 2))),
       };
-      chosenCell = findClosestPassableCell(fallbackOrigin, preset.gridWidth, preset.gridHeight, isBlocked, isOccupied);
+      chosenCell = findClosestPassableCell(fallbackOrigin, preset.gridWidth, preset.gridHeight, isBlocked, isOccupied, eSize);
     }
 
-    occupiedSet.add(`${chosenCell.x},${chosenCell.y}`);
+    occupy(chosenCell, eSize);
     result.push({
       ...e,
       x: chosenCell.x,

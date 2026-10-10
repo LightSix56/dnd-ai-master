@@ -194,4 +194,17 @@ describe("Monster Adapter (Task 2)", () => {
     expect(combatant.attacks.length).toBeGreaterThanOrEqual(1);
     expect(combatant.monsterTraits?.length).toBeGreaterThanOrEqual(1);
   });
+
+  it("действия, записанные в справочнике дважды, не удваивают атаки и мультиатаку (велоцираптор)", async () => {
+    const fs = await import("fs/promises");
+    const path = await import("path");
+    const raw = await fs.readFile(path.resolve(process.cwd(), "src/data/compendium/monsters/beast/6607-velociraptor.json"), "utf-8");
+    const raptor = JSON.parse(raw) as MonsterDefinition;
+    // В файле действия записаны дважды (Мультиатака, Укус, Когти)
+    expect(raptor.actions.filter((a) => a.name === "Укус").length).toBeGreaterThan(1);
+
+    const combatant = monsterDefinitionToCombatant(raptor);
+    expect(combatant.attacks.map((a) => a.name)).toEqual(["Укус", "Когти"]);
+    expect(combatant.attacksPerAction).toBe(2);
+  });
 });

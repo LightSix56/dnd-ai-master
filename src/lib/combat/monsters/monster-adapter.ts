@@ -213,8 +213,13 @@ export function monsterDefinitionToCombatant(
   const rechargeAbilities: RechargeAbility[] = [];
   let multiActionDesc: string | null = null;
 
+  // В справочнике у части существ действия записаны дважды (две редакции описания): повтор
+  // удваивал мультиатаку (у велоцираптора выходило 4 удара вместо 2), берём первое
+  const seenActions = new Set<string>();
   for (const action of monster.actions || []) {
     const lowerName = action.name.toLowerCase();
+    if (seenActions.has(lowerName)) continue;
+    seenActions.add(lowerName);
     if (lowerName.includes("мультиатака") || lowerName.includes("multiattack")) {
       multiActionDesc = action.description;
       continue;

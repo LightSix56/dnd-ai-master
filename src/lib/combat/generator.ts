@@ -3,6 +3,7 @@ import { endActiveCombats, sheetConditionsForCombat } from "./combat-sheet-sync"
 import { db } from "@/lib/db";
 import { abilityModifier, proficiencyBonus } from "@/lib/dnd/dice";
 import { rollInitiativeForAll, sortByInitiative } from "./initiative";
+import { SIZE_CELLS } from "./types";
 import type { Attack, CombatPotion, CombatantType, CreatureSize, MapElementType, HotbarItem } from "./types";
 import {
   extractAttacksFromCharacter,
@@ -1646,7 +1647,7 @@ export async function createPartyCombatants({
  * Переставляет героев и врагов по выбранному типу расстановки (засада, ближний контакт, окружение)
  * и возвращает, кто застигнут врасплох. Меняет клетки в уже сгенерированном отряде.
  */
-function applyFormation(
+export function applyFormation(
   encounter: GeneratedEncounter,
   formation: Formation,
   width: number,
@@ -1671,8 +1672,8 @@ function applyFormation(
     height,
     blocked,
     cover,
-    heroes: heroes.map((h) => ({ id: h.id, x: h.x, y: h.y })),
-    enemies: enemies.map((e) => ({ id: e.combatant.id, x: e.combatant.x, y: e.combatant.y })),
+    heroes: heroes.map((h) => ({ id: h.id, x: h.x, y: h.y, size: SIZE_CELLS[h.size] ?? 1 })),
+    enemies: enemies.map((e) => ({ id: e.combatant.id, x: e.combatant.x, y: e.combatant.y, size: SIZE_CELLS[e.combatant.size] ?? 1 })),
   });
   for (const h of heroes) {
     const spot = plan.positions.get(h.id);
