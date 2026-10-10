@@ -184,7 +184,7 @@ function describeCampaign(p: ArcGenerationParams): string {
     `Диапазон уровней: с ${p.levelFrom} по ${p.levelTo} включительно`,
   ];
 
-  if (p.partyTies) {
+  if (p.partyTies && p.partyTies !== "neutral") {
     const ties = PARTY_TIES_DESCRIPTIONS[p.partyTies as PartyTies];
     lines.push(`Отношения в отряде: ${ties || p.partyTies}`);
   }

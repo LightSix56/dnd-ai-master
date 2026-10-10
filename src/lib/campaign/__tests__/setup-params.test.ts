@@ -4,6 +4,7 @@ import {
   normalizeCampaignSetupPatch,
   defaultCampaignSetup,
   buildNewCampaignPayload,
+  showPartyFieldsForSolo,
   validateCampaignSetupInput,
 } from "../setup-params";
 
@@ -60,10 +61,24 @@ describe("buildNewCampaignPayload", () => {
       tone: setup.tone,
       difficulty: setup.difficulty,
       dmStyle: setup.dmStyle,
-      partyTies: setup.partyTies,
-      startingSituation: setup.startingSituation,
       makeActive: true,
     });
+  });
+
+  it("starts a solo campaign with neutral party fields (they are hidden for one or two heroes)", () => {
+    expect(buildNewCampaignPayload("Т", 1)).toMatchObject({ partyTies: "neutral", startingSituation: "neutral" });
+  });
+});
+
+describe("поля отряда в соло", () => {
+  it("shows party fields from three heroes", () => {
+    expect([0, 1, 2, 3, 4].map(showPartyFieldsForSolo)).toEqual([false, false, false, true, true]);
+  });
+
+  it("keeps the neutral values when normalizing a stored campaign", () => {
+    const v = normalizeCampaignSetup({ partyTies: "neutral", startingSituation: "neutral" }, 1);
+    expect(v.partyTies).toBe("neutral");
+    expect(v.startingSituation).toBe("neutral");
   });
 });
 

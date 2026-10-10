@@ -24,7 +24,9 @@ export type StartingSituation =
   | "strangers"
   | "established_party"
   | "captives_or_survivors"
-  | "patron_contract";
+  | "patron_contract"
+  // Игрок не выбирал завязку (соло с одним-двумя героями): стартовая связь героев не навязывается
+  | "neutral";
 
 export interface PartyArcGenerationParams {
   title: string;
@@ -304,6 +306,8 @@ const startingSituationDescriptions: Record<StartingSituation, string> = {
     "«Узники / Выжившие» — приключение начинается экстремально: герои очнулись в плену, темнице, на невольничьем корабле или чудом выжили после крушения.",
   patron_contract:
     "«Контракт от гильдии или могущественного покровителя» — отряд нанят влиятельной фракцией или эксцентричным лордом для выполнения сложного и опасного поручения.",
+  neutral:
+    "Завязка не задана — придумай начало приключения сам, не предполагая, что герои знакомы или составляют отряд.",
 };
 
 /**

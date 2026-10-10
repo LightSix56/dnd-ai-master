@@ -94,3 +94,17 @@ test("buildSystemPrompt formats multi-player party with plural address, backgrou
   assert.match(prompt, /ДИНАМИКА И ОТНОШЕНИЯ В ОТРЯДЕ/);
   assert.match(prompt, /Co-Master Worker/);
 });
+
+test("buildSystemPrompt does not mention party relations when they are neutral", () => {
+  const context: CampaignContext = {
+    name: "Одиночка",
+    setting: "Тёмное фэнтези",
+    tone: "dark",
+    partyTies: "neutral",
+    playerCharacter: "Элиас, Эльф Следопыт 1 ур.",
+    partyMembers: [{ name: "Элиас", race: "Эльф", class: "Следопыт", level: 1 }],
+  };
+  const prompt = buildSystemPrompt(context);
+  assert.ok(!prompt.includes("Отношения в отряде"));
+  assert.ok(!prompt.includes("Слаженный боевой отряд"));
+});

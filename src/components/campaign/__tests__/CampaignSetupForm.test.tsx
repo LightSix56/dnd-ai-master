@@ -29,6 +29,33 @@ describe("CampaignSetupForm: одинаковый набор полей в об�
   }
 });
 
+describe("CampaignSetupForm: поля отряда", () => {
+  it("shows relations and starting situation by default", () => {
+    const html = renderToStaticMarkup(<CampaignSetupForm {...baseProps("solo")} />);
+    expect(html).toContain("Отношения в отряде");
+    expect(html).toContain("Завязка");
+  });
+
+  it("hides relations and starting situation when showPartyFields is off, keeping the other fields", () => {
+    const html = renderToStaticMarkup(<CampaignSetupForm {...baseProps("solo")} showPartyFields={false} />);
+    expect(html).not.toContain("Отношения в отряде");
+    expect(html).not.toContain("Завязка");
+    for (const label of ["Тон", "Сложность", "Стиль мастера", "Финальный уровень", "Пожелания"]) {
+      expect(html).toContain(label);
+    }
+  });
+
+  it("falls back to ordinary options when neutral values reach a form that shows the fields", () => {
+    const html = renderToStaticMarkup(
+      <CampaignSetupForm
+        {...baseProps("solo")}
+        initialValues={{ ...defaultCampaignSetup(1), partyTies: "neutral", startingSituation: "neutral" }}
+      />
+    );
+    expect(html).toContain('<option value="tight_knit" selected');
+  });
+});
+
 describe("CampaignSetupForm: сохранённый финальный уровень виден в списке", () => {
   it("keeps a saved final level visible even when it is not one of the standard choices", () => {
     const html = renderToStaticMarkup(

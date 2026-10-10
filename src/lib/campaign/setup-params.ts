@@ -5,7 +5,8 @@ import type { StartingSituation } from "@/lib/ai/party-arc-generator";
 export type Tone = "heroic" | "dark" | "mystery" | "classic" | "lighthearted";
 export type Difficulty = "easy" | "normal" | "hard" | "brutal";
 export type DmStyle = "balanced" | "narrative" | "tactical" | "sandbox";
-export type PartyTies = "tight_knit" | "strangers" | "mercenaries" | "friends";
+// "neutral" нет в форме: его получают поля, скрытые для соло с одним-двумя героями
+export type PartyTies = "tight_knit" | "strangers" | "mercenaries" | "friends" | "neutral";
 
 export interface CampaignSetupValues {
   title: string;
@@ -80,6 +81,18 @@ export const DM_STYLE_OPTIONS: Array<{ key: DmStyle; label: string }> = [
   { key: "sandbox", label: "Песочница и свобода выбора" },
 ];
 
+// Раздел «Отношения в отряде» и «Завязка» в соло показываем от этого числа героев
+export const SOLO_PARTY_FIELDS_MIN_HEROES = 3;
+
+export const NEUTRAL_PARTY_FIELDS: { partyTies: PartyTies; startingSituation: StartingSituation } = {
+  partyTies: "neutral",
+  startingSituation: "neutral",
+};
+
+export function showPartyFieldsForSolo(heroCount: number): boolean {
+  return heroCount >= SOLO_PARTY_FIELDS_MIN_HEROES;
+}
+
 export const PARTY_TIES_OPTIONS: Array<{ key: PartyTies; label: string }> = [
   { key: "tight_knit", label: "Слаженный боевой отряд (давние соратники, прикрывают спины)" },
   { key: "strangers", label: "Незнакомцы (судьба свела вместе, присматриваются и не знают чужих тайн)" },
@@ -116,6 +129,7 @@ export const PARTY_TIES_DESCRIPTIONS: Record<PartyTies, string> = {
   strangers: "Незнакомцы (судьба свела вместе, присматриваются и не знают тайн друг друга)",
   mercenaries: "Наёмники на контракте (профессиональный расчёт, взаимная выгода)",
   friends: "Друзья детства / Соклановцы (глубокая преданность и верность)",
+  neutral: "Не задано: отношения между героями (если их несколько) развивай по ходу игры из их предысторий",
 };
 
 const LEGACY_TONE_LABELS: Record<string, Tone> = {
@@ -128,8 +142,8 @@ const LEGACY_TONE_LABELS: Record<string, Tone> = {
 
 const DIFFICULTY_KEYS: Difficulty[] = ["easy", "normal", "hard", "brutal"];
 const DM_STYLE_KEYS: DmStyle[] = DM_STYLE_OPTIONS.map((o) => o.key);
-const PARTY_TIES_KEYS: PartyTies[] = PARTY_TIES_OPTIONS.map((o) => o.key);
-const STARTING_SITUATION_KEYS: StartingSituation[] = STARTING_SITUATION_OPTIONS.map((o) => o.key);
+const PARTY_TIES_KEYS: PartyTies[] = [...PARTY_TIES_OPTIONS.map((o) => o.key), "neutral"];
+const STARTING_SITUATION_KEYS: StartingSituation[] = [...STARTING_SITUATION_OPTIONS.map((o) => o.key), "neutral"];
 const TONE_KEYS: Tone[] = TONE_OPTIONS.map((o) => o.key);
 
 const DEFAULTS = {
@@ -199,8 +213,8 @@ export function buildNewCampaignPayload(name: string, startingLevel: number) {
     tone: setup.tone,
     difficulty: setup.difficulty,
     dmStyle: setup.dmStyle,
-    partyTies: setup.partyTies,
-    startingSituation: setup.startingSituation,
+    // Соло начинается без героев и с одним-двумя героями: отряд и завязка не задаются, пока форма их не показывает
+    ...NEUTRAL_PARTY_FIELDS,
     language: "ru",
     ruleStrictness: "standard",
     restFrequency: "standard",

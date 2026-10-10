@@ -9,6 +9,8 @@ import {
   SETTING_PRESETS,
   STARTING_SITUATION_OPTIONS,
   TONE_OPTIONS,
+  NEUTRAL_PARTY_FIELDS,
+  defaultCampaignSetup,
   levelToChoices,
   prepareCampaignSubmit,
   type CampaignSetupValues,
@@ -29,6 +31,11 @@ export interface CampaignSetupFormProps {
   onSubmit: (values: CampaignSetupValues) => void | Promise<void>;
   onCancel: () => void;
   partySlot?: ReactNode;
+  /**
+   * Показывать «Отношения в отряде» и «Завязку». В соло с одним-двумя героями их скрывают:
+   * тогда сохраняются нейтральные значения, чтобы мастер не говорил об «отряде».
+   */
+  showPartyFields?: boolean;
 }
 
 const inputClass =
@@ -47,8 +54,19 @@ export function CampaignSetupForm({
   onSubmit,
   onCancel,
   partySlot,
+  showPartyFields = true,
 }: CampaignSetupFormProps) {
-  const [draft, setDraft] = useState<CampaignSetupValues>({ ...initialValues, title: initialTitle });
+  const [draft, setDraft] = useState<CampaignSetupValues>(() => {
+    const base = { ...initialValues, title: initialTitle };
+    if (!showPartyFields) return base;
+    // Нейтральные значения нет среди вариантов списка: возвращаем обычные значения по умолчанию
+    const defaults = defaultCampaignSetup(startingLevel);
+    return {
+      ...base,
+      partyTies: base.partyTies === "neutral" ? defaults.partyTies : base.partyTies,
+      startingSituation: base.startingSituation === "neutral" ? defaults.startingSituation : base.startingSituation,
+    };
+  });
   const [localError, setLocalError] = useState<string | null>(null);
 
   const update = <K extends keyof CampaignSetupValues>(key: K, value: CampaignSetupValues[K]) =>
@@ -56,7 +74,7 @@ export function CampaignSetupForm({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const result = prepareCampaignSubmit(draft, startingLevel);
+    const result = prepareCampaignSubmit(showPartyFields ? draft : { ...draft, ...NEUTRAL_PARTY_FIELDS }, startingLevel);
     if (!result.ok) {
       setLocalError(result.error);
       return;
@@ -168,48 +186,53 @@ export function CampaignSetupForm({
         </div>
       </div>
 
-      <div>
-        <span className={labelClass}>Отношения в отряде (Динамика группы)</span>
-        <select
-          aria-label="Отношения в отряде"
-          value={draft.partyTies}
-          onChange={(e) => update("partyTies", e.target.value as PartyTies)}
-          className={selectClass}
-        >
-          {PARTY_TIES_OPTIONS.map((o) => (
-            <option key={o.key} value={o.key}>{o.label}</option>
-          ))}
-        </select>
-      </div>
-
-      <div>
-        <span className={labelClass}>Завязка: начальная связь героев</span>
-        <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
-          {STARTING_SITUATION_OPTIONS.map((sit) => (
-            <label
-              key={sit.key}
-              className={`flex cursor-pointer flex-col rounded-lg border p-2 transition text-xs ${
-                draft.startingSituation === sit.key
-                  ? "border-zinc-900 bg-zinc-50 font-medium text-zinc-900 dark:border-zinc-100 dark:bg-zinc-900 dark:text-zinc-100"
-                  : "border-zinc-200 bg-white text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-300 hover:bg-zinc-50/50"
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="situation"
-                  value={sit.key}
-                  checked={draft.startingSituation === sit.key}
-                  onChange={() => update("startingSituation", sit.key as StartingSituation)}
-                  className="accent-zinc-900 dark:accent-zinc-100"
-                />
-                <span>{sit.label}</span>
-              </div>
-              <p className="mt-0.5 text-[10px] text-zinc-500 font-normal pl-5">{sit.desc}</p>
-            </label>
-          ))}
+      {showPartyFields && (
+        <>
+        <div>
+          <span className={labelClass}>Отношения в отряде (Динамика группы)</span>
+          <select
+            aria-label="Отношения в отряде"
+            value={draft.partyTies}
+            onChange={(e) => update("partyTies", e.target.value as PartyTies)}
+            className={selectClass}
+          >
+            {PARTY_TIES_OPTIONS.map((o) => (
+              <option key={o.key} value={o.key}>{o.label}</option>
+            ))}
+          </select>
         </div>
-      </div>
+
+        <div>
+          <span className={labelClass}>Завязка: начальная связь героев</span>
+          <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
+            {STARTING_SITUATION_OPTIONS.map((sit) => (
+              <label
+                key={sit.key}
+                className={`flex cursor-pointer flex-col rounded-lg border p-2 transition text-xs ${
+                  draft.startingSituation === sit.key
+                    ? "border-zinc-900 bg-zinc-50 font-medium text-zinc-900 dark:border-zinc-100 dark:bg-zinc-900 dark:text-zinc-100"
+                    : "border-zinc-200 bg-white text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-300 hover:bg-zinc-50/50"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="situation"
+                    value={sit.key}
+                    checked={draft.startingSituation === sit.key}
+                    onChange={() => update("startingSituation", sit.key as StartingSituation)}
+                    className="accent-zinc-900 dark:accent-zinc-100"
+                  />
+                  <span>{sit.label}</span>
+                </div>
+                <p className="mt-0.5 text-[10px] text-zinc-500 font-normal pl-5">{sit.desc}</p>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        </>
+      )}
 
       <div>
         <label htmlFor="campaign-level-to" className={labelClass}>Финальный уровень кампании</label>

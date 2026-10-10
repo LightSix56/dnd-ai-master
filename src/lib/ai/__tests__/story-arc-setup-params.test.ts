@@ -61,6 +61,12 @@ describe("generateStoryArc: завязка и отношения попадаю�
     expect(prompt).not.toContain("undefined");
   });
 
+  it("does not mention a party or a starting situation for the neutral values of a lone hero", async () => {
+    const prompt = await firstPromptFor({ ...base, partyTies: "neutral", startingSituation: "neutral" });
+    expect(prompt).not.toContain("Отношения в отряде");
+    expect(prompt).not.toContain("Как герои начали");
+  });
+
   it("keeps old tone labels readable in the prompt", async () => {
     const prompt = await firstPromptFor({ ...base, tone: "Мрачный и напряженный", startingSituation: null });
     expect(prompt).toContain("Тон: Мрачный и напряженный");

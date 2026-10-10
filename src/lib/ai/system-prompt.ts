@@ -47,6 +47,7 @@ export const partyTiesDescriptions: Record<string, string> = {
   strangers: "Незнакомцы. Судьба свела героев вместе только что при необычных обстоятельствах; они присматриваются друг к другу, не знают чужих тайн и предысторий.",
   mercenaries: "Наёмники на общем контракте. Деловые отношения, взаимная выгода и профессиональный расчёт. Личное доверие ещё предстоит заслужить.",
   friends: "Друзья детства / Соклановцы. Глубокая преданность, общие корни или клятвы, крепкая эмоциональная связь и готовность рисковать собой ради своих.",
+  neutral: "Не задано игроком. Отношения между героями развивай по ходу игры из их предысторий, не навязывай готовую историю отряда.",
 };
 
 const difficultyDescriptions: Record<string, string> = {
@@ -290,8 +291,7 @@ ${campaignContext ? `- **Название:** ${campaignContext.name}
 - **Стиль мастера:** ${dmStyle} — ${dmStyleDescriptions[dmStyle] || ""}
 - **Строгость правил:** ${ruleStrict} — ${ruleStrictnessDescriptions[ruleStrict] || ""}
 - **Частота отдыха:** ${restFreq} — ${restFrequencyDescriptions[restFreq] || ""}
-- **Отношения в отряде:** ${partyTieDesc}
-- **Стартовый уровень:** ${startingLevel}
+${partyTieKey === "neutral" ? "" : `- **Отношения в отряде:** ${partyTieDesc}\n`}- **Стартовый уровень:** ${startingLevel}
 - **Диапазон кампании:** с ${campaignContext.levelFrom ?? startingLevel} по ${campaignContext.levelTo ?? 20} уровень включительно
 - **Язык:** ${lang === "ru" ? "Русский" : "English"}
 ${campaignContext.worldDescription ? `- **Описание мира:** ${campaignContext.worldDescription}` : ""}

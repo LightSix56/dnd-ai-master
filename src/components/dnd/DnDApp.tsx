@@ -85,7 +85,7 @@ import { CharacterPickerModal } from "@/components/room/CharacterPickerModal";
 import { RoomCampaignSetupModal, type CampaignSetupFormValues } from "@/components/room/RoomCampaignSetupModal";
 import { CampaignSetupPanel, partySetupDescription } from "@/components/campaign/CampaignSetupPanel";
 import { CreateCampaignModal } from "@/components/campaign/CreateCampaignModal";
-import { buildNewCampaignPayload, normalizeCampaignSetup, type CampaignSetupValues } from "@/lib/campaign/setup-params";
+import { buildNewCampaignPayload, normalizeCampaignSetup, showPartyFieldsForSolo, type CampaignSetupValues } from "@/lib/campaign/setup-params";
 import { PartyTurnBar } from "@/components/room/PartyTurnBar";
 import type { RoomTurn } from "@/lib/room/types";
 import { soloLeveledTitle } from "@/lib/room/level-up-text";
@@ -3433,8 +3433,9 @@ export function DnDApp({
                       ) : (
                         /* Карточка: Настройка параметров сюжета и кнопка Сгенерировать сюжет */
                         <CampaignSetupPanel
-                          key={activeCampaign?.id ?? "no-campaign"}
+                          key={`${activeCampaign?.id ?? "no-campaign"}-${showPartyFieldsForSolo(playerCharacters.length)}`}
                           mode="solo"
+                          showPartyFields={showPartyFieldsForSolo(playerCharacters.length)}
                           description={partySetupDescription(playerCharacters.length)}
                           headerAction={
                             arcState?.status === "ready" ? (
