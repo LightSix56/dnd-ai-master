@@ -13,6 +13,7 @@ import { ATTACK_LIBRARY, attacksPerAction } from "./library-data";
 import { generateEncounter } from "./encounters/encounter-generator";
 import { applyLeaderName } from "./encounters/encounter-request";
 import { selectParticipants } from "./participants";
+import { planFormation, FORMATION_LABELS, type Formation } from "./formation";
 import type {
   StoryFactionContext,
   SquadArchetype,
@@ -88,6 +89,8 @@ export interface CreateEncounterParams {
   participantNames?: string[];
   /** То же по id героев кампании (для ведущего комнаты) */
   participantIds?: string[];
+  /** Как началась схватка: расстановка сторон и внезапность. Без значения — standard (стороны на расстоянии) */
+  formation?: Formation;
 }
 
 export interface TacticalEncounterResult {
@@ -105,6 +108,9 @@ export interface TacticalEncounterResult {
   participants: string[];
   /** Кто остался вне боя (живые герои и спутники кампании, которых нет на карте) */
   notParticipating: string[];
+  formation: Formation;
+  /** Кто застигнут врасплох и пропускает первый ход */
+  surprised: "heroes" | "enemies" | null;
 }
 
 /**
@@ -895,6 +901,7 @@ export async function createPartyCombatants({
   gridHeight,
   placed,
   startIndex = 0,
+  surprised = false,
 }: {
   combatId: string;
   characters: PartyCharacter[];
@@ -902,6 +909,8 @@ export async function createPartyCombatants({
   gridHeight: number;
   placed?: Array<{ id: string; type: string; name: string; x: number; y: number }>;
   startIndex?: number;
+  /** Герои застигнуты врасплох: первый ход пропускают (состояние surprised) */
+  surprised?: boolean;
 }): Promise<Array<{ id: string; dexMod: number }>> {
   const created: Array<{ id: string; dexMod: number }> = [];
 
@@ -1593,7 +1602,10 @@ export async function createPartyCombatants({
         hpCurrent: char.hpCurrent,
         // Временные хиты и состояния героя переходят в бой из листа, а после боя — обратно
         hpTemp: char.hpTemp || 0,
-        conditions: JSON.stringify(sheetConditionsForCombat((char as { sheet?: Record<string, any> | null }).sheet)),
+        conditions: JSON.stringify([
+          ...sheetConditionsForCombat((char as { sheet?: Record<string, any> | null }).sheet),
+          ...(surprised ? [{ type: "surprised" }] : []),
+        ]),
         ac: char.ac,
         speed: char.speed,
         dexMod,
@@ -1629,6 +1641,56 @@ export async function createPartyCombatants({
 }
 
 /**
+ * Переставляет героев и врагов по выбранному типу расстановки (засада, ближний контакт, окружение)
+ * и возвращает, кто застигнут врасплох. Меняет клетки в уже сгенерированном отряде.
+ */
+function applyFormation(
+  encounter: GeneratedEncounter,
+  formation: Formation,
+  width: number,
+  height: number
+): "heroes" | "enemies" | null {
+  if (formation === "standard") return null;
+  const heroes = (encounter.combatants ?? []).filter((c) => c.type !== "enemy");
+  const enemies = encounter.enemies.filter(
+    (e): e is typeof e & { combatant: NonNullable<typeof e.combatant> } => Boolean(e.combatant)
+  );
+  const elements = encounter.mapPreset?.elements ?? [];
+  const blocked = new Set<string>();
+  const cover = new Set<string>();
+  for (const el of elements) {
+    const target = el.type === "cover" ? cover : ["wall", "obstacle", "window", "lava", "water"].includes(el.type) ? blocked : null;
+    if (!target) continue;
+    for (let dx = 0; dx < (el.width || 1); dx++) for (let dy = 0; dy < (el.height || 1); dy++) target.add(`${el.x + dx},${el.y + dy}`);
+  }
+  const plan = planFormation({
+    formation,
+    width,
+    height,
+    blocked,
+    cover,
+    heroes: heroes.map((h) => ({ id: h.id, x: h.x, y: h.y })),
+    enemies: enemies.map((e) => ({ id: e.combatant.id, x: e.combatant.x, y: e.combatant.y })),
+  });
+  for (const h of heroes) {
+    const spot = plan.positions.get(h.id);
+    if (spot) {
+      h.x = spot.x;
+      h.y = spot.y;
+    }
+  }
+  for (const e of enemies) {
+    const spot = plan.positions.get(e.combatant.id);
+    if (spot) {
+      e.combatant.x = spot.x;
+      e.combatant.y = spot.y;
+      e.position = { x: spot.x, y: spot.y };
+    }
+  }
+  return plan.surprised;
+}
+
+/**
  * Создаёт полный тактический бой из сюжетного энкаунтера
  */
 export async function createTacticalEncounter({
@@ -1649,6 +1711,7 @@ export async function createTacticalEncounter({
   mapPresetId,
   participantNames,
   participantIds,
+  formation = "standard",
 }: CreateEncounterParams): Promise<TacticalEncounterResult> {
   // Завершаем старые активные бои в кампании; их итоги (хиты, ячейки) уходят в листы героев
   if (campaignId) {
@@ -1697,6 +1760,7 @@ export async function createTacticalEncounter({
   const effectiveBiome = biome || environment || "dungeon";
 
   const isAutoGenerating = !enemies || enemies.length === 0;
+  let surprisedSide: "heroes" | "enemies" | null = null;
 
   if (isAutoGenerating) {
     generatedEncounterResult = await generateEncounter({
@@ -1714,6 +1778,8 @@ export async function createTacticalEncounter({
       effectiveGridWidth = generatedEncounterResult.mapPreset.gridWidth || gridWidth;
       effectiveGridHeight = generatedEncounterResult.mapPreset.gridHeight || gridHeight;
     }
+
+    surprisedSide = applyFormation(generatedEncounterResult, formation, effectiveGridWidth, effectiveGridHeight);
   }
 
   // Создаём запись боя
@@ -1738,6 +1804,16 @@ export async function createTacticalEncounter({
           kind: "system",
           text: `⚔️ Начало боя: ${name}${mapDescription ? ` (${mapDescription})` : ""}. Бросок инициативы!`,
         },
+        ...(surprisedSide
+          ? [
+              {
+                round: 1,
+                actor: "Мастер",
+                kind: "system",
+                text: `🗡 ${FORMATION_LABELS[formation]}. ${surprisedSide === "heroes" ? "Герои" : "Враги"} застигнуты врасплох: пропускают первый ход.`,
+              },
+            ]
+          : []),
       ]),
     },
   });
@@ -1801,6 +1877,7 @@ export async function createTacticalEncounter({
     gridWidth: effectiveGridWidth,
     gridHeight: effectiveGridHeight,
     placed: generatedEncounterResult?.combatants,
+    surprised: surprisedSide === "heroes",
   });
 
   // Расставляем врагов
@@ -1840,6 +1917,7 @@ export async function createTacticalEncounter({
           profBonus: c.profBonus || 2,
           attacksPerAction: c.attacksPerAction || 1,
           monsterData: packMonsterData(c),
+          conditions: JSON.stringify(surprisedSide === "enemies" ? [{ type: "surprised" }] : []),
           isAIControlled: true,
         },
       });
@@ -1944,5 +2022,7 @@ export async function createTacticalEncounter({
     xpPerPlayer,
     participants: fighters.map((c) => c.name),
     notParticipating: benched.map((c) => c.name),
+    formation,
+    surprised: surprisedSide,
   };
 }

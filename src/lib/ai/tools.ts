@@ -819,6 +819,9 @@ export const startCombatTool = tool({
     "В participants назови ТОЛЬКО тех героев и спутников, кто по сюжету рядом и втянут в схватку: остальные " +
     "остаются на своих местах, на карту не выходят, опыта за бой не получают и после боя никуда не перемещаются. " +
     "Не указывай participants, только если в бой действительно вступают все. " +
+    "В formation выбери, как началась схватка: standard — стороны на расстоянии (по умолчанию), ambush — враги напали из засады на отряд " +
+    "(вокруг героев и в укрытиях, герои застигнуты врасплох и пропускают первый ход), close — напали вплотную (стража, драка: враги в 1–2 клетках), " +
+    "surrounded — окружили со всех сторон, party_ambush — герои сами устроили засаду (враги застигнуты врасплох). " +
     "Вызывай инструмент ДО описания врагов: опиши ровно тех, кого он вернул. " +
     "Инструмент генерирует тактическую карту, расставляет участников, бросает инициативу и считает опыт.",
   inputSchema: z.object({
@@ -831,6 +834,16 @@ export const startCombatTool = tool({
       race: z.string().optional().describe("Раса"),
     })).optional().describe("ВСЕ спутники героев, которые участвуют в этом бою (в том числе только что введённые в рассказ). Они выйдут на карту, и баланс посчитается вместе с ними"),
     participants: z.array(z.string()).optional().describe("Имена героев и спутников (как в составе отряда), которые участвуют в этом бою. Кого здесь нет — тот не на месте боя и на карту не выйдет. Спутники из companions участвуют автоматически. Не указывай, если в бою все"),
+    formation: z
+      .enum(["standard", "ambush", "close", "surrounded", "party_ambush"])
+      .optional()
+      .describe(
+        "Как началась схватка и где стоят стороны. standard — стороны на расстоянии друг от друга (по умолчанию). " +
+          "ambush — враги напали из засады: вокруг отряда и в укрытиях, герои застигнуты врасплох и пропускают первый ход. " +
+          "close — враги рядом с героями в 1–2 клетках (стража подошла и напала, драка в толпе, ближний контакт). " +
+          "surrounded — враги со всех сторон, отряд в центре. " +
+          "party_ambush — засаду устроили герои: враги застигнуты врасплох и пропускают первый ход. Выбирай по сюжету"
+      ),
     leaderName: z.string().optional().describe("Сюжетное имя вожака отряда (например: 'Человек в сером капюшоне'). Меняется только имя: силу вожака движок подбирает под баланс"),
     difficulty: z.enum(["easy", "medium", "hard", "deadly"]).optional().describe("Сложность столкновения по DMG p. 82. Не указывай — будет сложность кампании"),
     biome: z
@@ -847,7 +860,7 @@ export const startCombatTool = tool({
     mapDescription: z.string().optional().describe("Краткое описание поля боя и препятствий"),
   }),
   contextSchema: campaignContextSchema,
-  execute: async ({ name, enemyType, enemyKeywords, companions, participants, leaderName, difficulty, biome, archetype, isActClimax, gridWidth, gridHeight, mapDescription }, { context }) => {
+  execute: async ({ name, enemyType, enemyKeywords, companions, participants, formation, leaderName, difficulty, biome, archetype, isActClimax, gridWidth, gridHeight, mapDescription }, { context }) => {
     let campaignId = context?.campaignId;
     let campaignDifficulty: string | undefined;
     if (campaignId) {
@@ -883,6 +896,7 @@ export const startCombatTool = tool({
       gridHeight,
       mapDescription,
       // Названные в companions тоже идут в бой: мастер перечисляет там тех, кто сражается
+      formation,
       participantNames: participants?.length
         ? [...participants, ...(companions ?? []).map((c) => c.name)]
         : undefined,
@@ -890,6 +904,16 @@ export const startCombatTool = tool({
 
     // Записываем событие в историю
     const enemyListStr = encounter.enemyNames.length > 0 ? encounter.enemyNames.join(", ") : "враги";
+    const surpriseNote =
+      encounter.surprised === "heroes"
+        ? "Героев застали врасплох: опиши внезапное нападение, они пропускают первый ход."
+        : encounter.surprised === "enemies"
+        ? "Врагов застали врасплох: опиши, как герои выскакивают из засады, враги пропускают первый ход."
+        : encounter.formation === "close"
+        ? "Враги подошли вплотную: опиши схватку с первых секунд, а не издали."
+        : encounter.formation === "surrounded"
+        ? "Отряд окружён: враги со всех сторон."
+        : "";
     const onMap = encounter.participants ?? [];
     const absent = encounter.notParticipating ?? [];
     const absentNote = absent.length > 0 ? ` Не участвуют в бою: ${absent.join(", ")}.` : "";
@@ -914,7 +938,9 @@ export const startCombatTool = tool({
       xpPerPlayer: encounter.xpPerPlayer,
       participants: onMap,
       notParticipating: absent,
-      message: `Тактический бой '${name}' успешно создан и запущен! Враги: ${enemyListStr}. Награда за победу: ${encounter.awardedXP} XP (${encounter.xpPerPlayer} на игрока). Игроку открыта тактическая сетка боя. Опиши начало сражения: на поле ровно эти враги — не называй другое их число и не добавляй других существ (остальных из рассказа опиши как отставших или стоящих поодаль). На карте из отряда: ${onMap.join(", ") || "никого"}.${absent.length > 0 ? ` ${absent.join(", ")} в бою не участву${absent.length > 1 ? "ют" : "ет"}: не описывай их в схватке, они остаются на своих местах, и после боя их не перемещают.` : ""} Передай ход инициативе.`,
+      formation: encounter.formation ?? "standard",
+      surprised: encounter.surprised ?? null,
+      message: `Тактический бой '${name}' успешно создан и запущен! Враги: ${enemyListStr}. Награда за победу: ${encounter.awardedXP} XP (${encounter.xpPerPlayer} на игрока). Игроку открыта тактическая сетка боя. Опиши начало сражения: на поле ровно эти враги — не называй другое их число и не добавляй других существ (остальных из рассказа опиши как отставших или стоящих поодаль). На карте из отряда: ${onMap.join(", ") || "никого"}.${absent.length > 0 ? ` ${absent.join(", ")} в бою не участву${absent.length > 1 ? "ют" : "ет"}: не описывай их в схватке, они остаются на своих местах, и после боя их не перемещают.` : ""} ${surpriseNote} Передай ход инициативе.`,
     };
   },
 } as any);

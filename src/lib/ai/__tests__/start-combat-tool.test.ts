@@ -25,6 +25,8 @@ vi.mock("@/lib/combat/generator", () => ({
     xpPerPlayer: 50,
     participants: ["Лира"],
     notParticipating: ["Добрун"],
+    formation: "ambush",
+    surprised: "heroes",
   }),
 }));
 
@@ -116,6 +118,29 @@ describe("start_combat: состав врагов подбирает движо�
     expect(result.participants).toEqual(["Лира"]);
     expect(result.notParticipating).toEqual(["Добрун"]);
     expect(result.message).toContain("Добрун");
+  });
+
+  it("тип расстановки передаётся генератору, без него не указывается", async () => {
+    const params = await callStartCombat({ name: "Засада", enemyType: "бандиты", formation: "ambush" });
+    expect(params.formation).toBe("ambush");
+    vi.clearAllMocks();
+    vi.mocked(db.campaign.findUnique).mockResolvedValue({ id: "camp-1" } as any);
+    const plain = await callStartCombat({ name: "Засада", enemyType: "бандиты" });
+    expect(plain.formation).toBeUndefined();
+  });
+
+  it("неизвестный тип расстановки не проходит схему", () => {
+    const schema = startCombatTool.inputSchema as unknown as { safeParse: (v: unknown) => { success: boolean } };
+    expect(schema.safeParse({ biome: "urban", name: "Засада", enemyType: "бандиты", formation: "diagonal" }).success).toBe(false);
+  });
+
+  it("мастеру сообщается, кто застигнут врасплох", async () => {
+    const schema = startCombatTool.inputSchema as unknown as { parse: (v: unknown) => any };
+    const input = schema.parse({ biome: "urban", name: "Засада", enemyType: "бандиты", formation: "ambush" });
+    const result = await (startCombatTool.execute as any)(input, { context: { campaignId: "camp-1" }, toolCallId: "t1", messages: [] });
+    expect(result.formation).toBe("ambush");
+    expect(result.surprised).toBe("heroes");
+    expect(result.message).toContain("застали врасплох");
   });
 
   it("бой в таверне идёт на карте таверны, а не города", async () => {
