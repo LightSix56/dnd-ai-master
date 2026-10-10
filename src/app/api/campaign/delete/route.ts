@@ -23,19 +23,24 @@ export async function POST(req: Request) {
 
     const wasActive = existing.isActive;
 
-    // Удаляем кампанию — каскадно удалятся characters, events, memories, chatMessages, summaries
-    // (задано через onDelete: Cascade в схеме)
-    await db.campaign.delete({ where: { id: campaignId } });
-
-    // Версии героев этой кампании (строки в листах с campaign_id) больше не нужны: удаляем их,
-    // чтобы не занимали место и не показывались в списках. Оригиналы героев не трогаем.
+    // Сначала удаляем версии героев этой кампании (строки в листах с campaign_id).
+    // Если это не удалось, кампанию не трогаем: иначе версии останутся без владельца.
+    // Оригиналы героев не трогаем.
     const { error: versionsError } = await getSupabaseAdminClient()
       .from("characters")
       .delete()
       .eq("campaign_id", campaignId);
     if (versionsError) {
       console.error("[campaign/delete] не удалось удалить версии героев:", versionsError.message);
+      return Response.json(
+        { error: "Не удалось удалить версии героев, кампания не удалена", details: versionsError.message },
+        { status: 500 }
+      );
     }
+
+    // Удаляем кампанию — каскадно удалятся characters, events, memories, chatMessages, summaries
+    // (задано через onDelete: Cascade в схеме)
+    await db.campaign.delete({ where: { id: campaignId } });
 
     // Если удалили активную — активируем последнюю из оставшихся кампаний этого же пользователя
     if (wasActive) {
