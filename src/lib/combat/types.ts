@@ -276,7 +276,7 @@ export interface ActionParameters {
   selfEffects?: AppliedEffect[];
   // Лечение себя (Второе дыхание)
   selfHeal?: { dice: string; mod: number; addLevel?: boolean } | null;
-  // Даёт дополнительное Действие (Порыв действия)
+  // Даёт дополнительное Действие (Всплеск действий)
   grantsExtraAction?: boolean;
   // Даёт преимущество союзнику на следующую атаку (Помощь)
   grantsAllyAdvantage?: boolean;
@@ -291,7 +291,12 @@ export interface ActionParameters {
   } | null;
 
   uses?: number;
-  usesFormula?: "profBonus" | "level" | null;
+  /** Формула зарядов по уровню, см. resolveAbilityUses в ability-uses.ts */
+  usesFormula?: "profBonus" | "level" | "rage" | "actionSurge" | "layOnHands" | "bardicInspiration" | null;
+  /** Сколько очков ци тратит приём монаха */
+  kiCost?: number;
+  /** Счётчик ресурса (очки ци), сам по себе не применяется */
+  isResource?: boolean;
   refresh?: "short" | "long" | "none" | "turn" | "round";
 
   friendlyFire?: boolean;
@@ -516,7 +521,22 @@ export const CONDITION_EFFECTS: Record<string, {
   },
   raging: {
     name: "Ярость",
-    description: "Преимущество на проверки СИЛ, бонус к урону",
+    description: "Преимущество на проверки и спасброски СИЛ, бонус к урону рукопашными атаками Силой, сопротивление дробящему, колющему и рубящему урону",
+    effects: { saveAdvantage: ["STR"] },
+  },
+  action_surge_used: {
+    name: "Всплеск действий использован",
+    description: "Всплеск действий уже применён в этом ходу",
+    effects: {},
+  },
+  smite_ready: {
+    name: "Божественная кара наготове",
+    description: "Следующее попадание рукопашным оружием в этом ходу потратит ячейку и добавит урон излучением",
+    effects: {},
+  },
+  bardic_inspiration: {
+    name: "Вдохновение барда",
+    description: "Кость вдохновения добавится к следующему неудачному броску атаки или спасброску",
     effects: {},
   },
   hunters_mark: {
@@ -635,7 +655,8 @@ export const CONDITION_EFFECTS: Record<string, {
   reckless: {
     name: "Безрассудная атака",
     description: "Преимущество на рукопашные атаки Силой; враги имеют преимущество на атаки по вам",
-    effects: { attackAdvantage: true, attackAdvantageAgainst: true },
+    // Преимущество на свои атаки — только рукопашные Силой, см. computeAttackAdvantage
+    effects: { attackAdvantageAgainst: true },
   },
   patient_defense: {
     name: "Терпеливая оборона",
@@ -651,11 +672,6 @@ export const CONDITION_EFFECTS: Record<string, {
     name: "Кошачья ловкость",
     description: "Скорость перемещения удвоена до конца текущего хода",
     effects: { speedMultiplier: 2 },
-  },
-  bardic_inspiration: {
-    name: "Вдохновение барда",
-    description: "+1к6 (или +1к8) к броску атаки, спасброску или проверке характеристики",
-    effects: {},
   },
   cutting_words: {
     name: "Режущие слова",

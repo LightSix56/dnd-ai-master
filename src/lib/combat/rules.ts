@@ -29,6 +29,27 @@ export function hasCondition(c: Combatant, type: string): boolean {
   return c.conditions.some((cond) => cond.type === type);
 }
 
+/**
+ * Рукопашная атака оружием на Силе — нужна Ярости (бонус урона) и Безрассудной атаке.
+ * У атаки нет поля характеристики: фехтовальное оружие считаем на Силе, только если Сила не ниже Ловкости.
+ */
+export function isStrengthMeleeAttack(c: Combatant, attack: Attack): boolean {
+  if (attack.kind !== "melee" || attack.usesSpellAttack) return false;
+  if (!attack.finesse) return true;
+  return (c.abilityMods?.STR ?? 0) >= (c.abilityMods?.DEX ?? 0);
+}
+
+/**
+ * Вдохновение барда: кость добавляется к броску, который иначе неудачен (игрок не стал бы тратить её на успех).
+ * Снимает состояние при использовании. Возвращает выпавшее значение или 0.
+ */
+export function spendBardicInspiration(c: Combatant): number {
+  const cond = c.conditions.find((x) => x.type === "bardic_inspiration");
+  if (!cond) return 0;
+  c.conditions = c.conditions.filter((x) => x !== cond);
+  return rollDice(`1d${cond.value ?? 6}`).total;
+}
+
 /** Может ли боец вообще совершать действия */
 export function canAct(c: Combatant): boolean {
   if (c.hpCurrent <= 0) return false;
@@ -132,6 +153,12 @@ export function computeAttackAdvantage(
       dis = true;
       reasons.push(`цель: ${label} (издалека)`);
     }
+  }
+
+  // Безрассудная атака: преимущество только на рукопашные атаки Силой
+  if (hasCondition(attacker, "reckless") && isStrengthMeleeAttack(attacker, attack)) {
+    adv = true;
+    reasons.push("Безрассудная атака");
   }
 
   // Скрытность атакующего (атака из засады или состояние hidden)
@@ -384,14 +411,22 @@ export function rollSave(
     };
   }
 
-  const success = roll.total >= dc;
+  let success = roll.total >= dc;
+  let inspiredText = "";
+  if (!success && hasCondition(c, "bardic_inspiration")) {
+    const bonusDie = spendBardicInspiration(c);
+    roll.modifier += bonusDie;
+    roll.total += bonusDie;
+    success = roll.total >= dc;
+    inspiredText = ` (Вдохновение барда +${bonusDie})`;
+  }
   return {
     success,
     roll,
     dc,
     ability,
     autoFail: false,
-    text: `${roll.total} vs DC ${dc} (${success ? "Успех" : "Провал"})`,
+    text: `${roll.total} vs DC ${dc} (${success ? "Успех" : "Провал"})${inspiredText}`,
     advantage: adv,
   };
 }
@@ -629,6 +664,14 @@ export function resolveAttack(
       (attacker.level ?? 1) >= 3);
   const isSurprised = hasCondition(target, "surprised");
 
+  // Вдохновение барда спасает промах (не критический)
+  let inspiredBonus = 0;
+  if (!natCrit && !fumble && roll.total < targetAC && hasCondition(attacker, "bardic_inspiration")) {
+    inspiredBonus = spendBardicInspiration(attacker);
+    roll.modifier += inspiredBonus;
+    roll.total += inspiredBonus;
+  }
+
   const hit = natCrit || (!fumble && roll.total >= targetAC);
   const crit = natCrit || (hit && isHelpless && inMeleeRange) || (hit && isAssassin && isSurprised);
 
@@ -646,6 +689,7 @@ export function resolveAttack(
 
   let text = `${attack.name}: ${formatD20Roll(roll)} против КД ${targetAC}`;
   if (coverBonus > 0) text += ` (укрытие +${coverBonus})`;
+  if (inspiredBonus > 0) text += ` (Вдохновение барда +${inspiredBonus})`;
   if (crit) {
     if (isAssassin && isSurprised && !natCrit) text += " — АВТО-КРИТ (Ликвидация: застигнут врасплох)!";
     else if (isHelpless && !natCrit) text += " — АВТО-КРИТ (беспомощная цель в 5 фт)!";
@@ -746,7 +790,7 @@ export function payForAttack(
   let { actionUsed, bonusActionUsed, extraActions, attacksMadeThisAction } = c;
 
   const spendAction = () => {
-    // Порыв действия: сначала тратим дополнительные Действия
+    // Всплеск действий: сначала тратим дополнительные Действия
     if (actionUsed && extraActions > 0) {
       extraActions -= 1;
       attacksMadeThisAction = 0;

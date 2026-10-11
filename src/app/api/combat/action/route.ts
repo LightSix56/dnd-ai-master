@@ -41,6 +41,7 @@ import { syncCombatToSheets } from "@/lib/combat/combat-sheet-sync";
 import { findNonParticipants } from "@/lib/combat/non-participants";
 import { createPartyCombatants } from "@/lib/combat/generator";
 import { checkCombatControl } from "@/lib/room/combat-access";
+import { resolveAbilityUses } from "@/lib/combat/ability-uses";
 
 /** Версия боя (Combat.updatedAt) на момент загрузки — для защиты от одновременных запросов */
 const loadedVersion = new WeakMap<CombatState, Date>();
@@ -1011,13 +1012,18 @@ export async function POST(req: Request) {
         if (!abDef) return Response.json({ error: "Способность не найдена в библиотеке" }, { status: 404 });
         addedName = abDef.name;
         const params = safeParse<any>(abDef.parameters, {});
+        const { usesMax, refresh } = resolveAbilityUses(params, {
+          level: c.level,
+          profBonus: c.profBonus,
+          abilityMods: c.abilityMods,
+        });
         const newAb: any = {
           id: `abl_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
           name: abDef.name,
           source: abDef.source || "Библиотека",
-          usesMax: params.uses ?? 0,
+          usesMax,
           usesUsed: 0,
-          refresh: params.refresh ?? "none",
+          refresh,
           parameters: params,
         };
         c.abilities = [...c.abilities, newAb];

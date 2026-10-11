@@ -11,6 +11,8 @@ import {
   canAct,
   checkReach,
   consumeAttackConditions,
+  hasCondition,
+  isStrengthMeleeAttack,
   effectiveSpeed,
   payForAttack,
   remainingMovement,
@@ -43,7 +45,8 @@ import {
   isLavaTerrain,
 } from "./movement";
 import { cantripDiceMultiplier, getSpellDefinition, sneakAttackDice } from "./library-data";
-import { getBeastFormById } from "./beast-forms";
+import { getAvailableBeastForms, getBeastFormById } from "./beast-forms";
+import { bardicInspirationDie, martialArtsDie, rageDamageBonus } from "./ability-uses";
 import { checkLegendaryResistance, triggerAILegendaryActions } from "./legendary";
 import {
   CONDITION_EFFECTS,
@@ -389,7 +392,9 @@ export function dealDamage(
       continue;
     }
 
-    if (target.damageResistances?.some((res) => matchesTyped(res, type, isPhysical, isNonmagical))) {
+    // Ярость: сопротивление дробящему, колющему и рубящему урону (в том числе магическому)
+    const rageResists = isPhysical && hasCondition(target, "raging");
+    if (rageResists || target.damageResistances?.some((res) => matchesTyped(res, type, isPhysical, isNonmagical))) {
       const halved = Math.floor(part.amount / 2);
       state.addLog(`${target.name} имеет сопротивление к «${part.type}» (урон: ${part.amount} → ${halved})`, "system", target.name);
       actualAmount += halved;
@@ -926,6 +931,67 @@ export function isSneakAttackAbility(ability: { id: string; name: string }): boo
   return ability.id === "sneak_attack" || ability.name.startsWith("Скрытая атака");
 }
 
+/** Нежить и исчадия: Божественная кара против них сильнее на 1к8 */
+function isUndeadOrFiend(c: Combatant): boolean {
+  const cls = (c.className || "").toLowerCase();
+  return /нежит|undead|исчади|fiend/.test(cls);
+}
+
+/** Самая низкая ячейка заклинаний с остатком (для Божественной кары) */
+function lowestFreeSlot(c: Combatant): number | null {
+  const levels = Object.keys(c.spells?.slots ?? {})
+    .map(Number)
+    .filter((lvl) => lvl >= 1)
+    .sort((a, b) => a - b);
+  for (const lvl of levels) {
+    const slot = c.spells.slots[lvl];
+    if (slot && slot.used < slot.max) return lvl;
+  }
+  return null;
+}
+
+/**
+ * Добавки к попаданию оружием: бонус Ярости и Божественная кара.
+ * Меняет resolution (урон и его части), возвращает текст для лога.
+ */
+function applyWeaponHitRiders(
+  state: CombatState,
+  attacker: Combatant,
+  target: Combatant,
+  attack: Attack,
+  resolution: { damage: number; damageParts: DamagePart[]; crit: boolean }
+): string {
+  let text = "";
+  const weaponPart = resolution.damageParts[0];
+
+  const rage = attacker.conditions.find((c) => c.type === "raging");
+  if (rage && isStrengthMeleeAttack(attacker, attack)) {
+    const bonus = rage.value ?? 2;
+    resolution.damage += bonus;
+    resolution.damageParts.push({ amount: bonus, type: weaponPart?.type ?? "", magical: weaponPart?.magical });
+    text += `, ярость +${bonus}`;
+  }
+
+  if (hasCondition(attacker, "smite_ready") && attack.kind === "melee" && !attack.usesSpellAttack) {
+    const slotLevel = lowestFreeSlot(attacker);
+    if (slotLevel !== null) {
+      const diceCount = Math.min(5, 1 + slotLevel) + (isUndeadOrFiend(target) ? 1 : 0);
+      const smite = rollDamage([{ dice: `${diceCount}d8`, mod: 0, type: "radiant" }], resolution.crit);
+      resolution.damage += smite.total;
+      resolution.damageParts.push({ amount: smite.total, type: "radiant", magical: true });
+      attacker.spells.slots[slotLevel] = {
+        ...attacker.spells.slots[slotLevel],
+        used: attacker.spells.slots[slotLevel].used + 1,
+      };
+      attacker.conditions = attacker.conditions.filter((c) => c.type !== "smite_ready");
+      state.mark(attacker.id);
+      text += `, Божественная кара (ячейка ${slotLevel}-го круга) ${diceCount}к8${resolution.crit ? " ×2 за крит" : ""} = ${smite.total}`;
+    }
+  }
+
+  return text;
+}
+
 /** Готовая к применению Скрытая атака, если условия соблюдены (D&D 5e) */
 function findSneakAttack(
   state: CombatState,
@@ -1044,6 +1110,7 @@ export function performAttack(
     let extra1 = "";
     let sneakUsedOn1 = false;
     if (res1.hit) {
+      extra1 += applyWeaponHitRiders(state, attacker, target, strike1Attack, res1);
       const sneak = findSneakAttack(
         state,
         attacker,
@@ -1103,6 +1170,7 @@ export function performAttack(
 
     let extra2 = "";
     if (res2.hit) {
+      extra2 += applyWeaponHitRiders(state, attacker, target, strike2Attack, res2);
       // Скрытая атака применяется ко второму удару ТОЛЬКО если не сработала на первом
       if (!sneakUsedOn1) {
         const sneak = findSneakAttack(
@@ -1209,6 +1277,7 @@ export function performAttack(
 
   let extraText = "";
   if (resolution.hit) {
+    extraText += applyWeaponHitRiders(state, attacker, target, attack, resolution);
     const sneak = findSneakAttack(
       state,
       attacker,
@@ -2776,6 +2845,7 @@ function castSpellUnsafe(
   const caster = state.require(casterId);
   if (!canAct(caster)) throw new EngineError(`${caster.name} не может действовать`);
   if (caster.wildShape) throw new EngineError("Нельзя сотворять заклинания в облике зверя!");
+  if (hasCondition(caster, "raging")) throw new EngineError("В Ярости нельзя сотворять заклинания");
 
   let spell: SpellDefinitionLike;
   if (typeof spellOrId === "string") {
@@ -2840,6 +2910,134 @@ function castSpellUnsafe(
   return result;
 }
 
+/** Отметить расход заряда способности */
+function spendAbilityUse(c: Combatant, ability: CombatAbility, amount = 1): void {
+  if (ability.usesMax > 0) {
+    ability.usesUsed += amount;
+    c.abilities = [...c.abilities];
+  }
+}
+
+/**
+ * Классовые умения, которые не описываются общими параметрами:
+ * Ярость, Божественная кара, Наложение рук, Вдохновение барда, Шквал ударов.
+ * Возвращает null, если способность обычная.
+ */
+function useClassFeature(
+  state: CombatState,
+  c: Combatant,
+  ability: CombatAbility,
+  params: ActionParameters,
+  opts: { targetIds?: string[]; center?: Cell | null; skipTurnCheck?: boolean }
+): CastResult | null {
+  const name = (params.name || ability.name).toLowerCase();
+
+  // --- ЯРОСТЬ ---
+  if (name === "ярость" || /(^|_)rage($|_)/.test(ability.id)) {
+    if (hasCondition(c, "raging")) throw new EngineError(`${c.name} уже в Ярости`);
+    payActionCost(state, c, params.actionCost);
+    applyEffect(state, c.id, { condition: "raging", durationRounds: 10, value: rageDamageBonus(c.level || 1) }, c.id);
+    // В Ярости нельзя поддерживать концентрацию
+    if (c.concentration) {
+      state.addLog(`${c.name}: концентрация на «${c.concentration.spellName}» прервана Яростью`, "system", c.name);
+      c.concentration = null;
+      dropConcentrationEffects(state, c.id);
+    }
+    spendAbilityUse(c, ability);
+    state.addLog(`${c.name} впадает в Ярость (+${rageDamageBonus(c.level || 1)} к урону, сопротивление физическому урону)`, "ability", c.name);
+    state.mark(c.id);
+    return { targets: [{ name: c.name, amount: 0 }], text: `${c.name} впадает в Ярость` };
+  }
+
+  // --- БОЖЕСТВЕННАЯ КАРА: готовим к следующему попаданию в этом ходу ---
+  if (name.startsWith("божественная кара") || ability.id.includes("divine_smite")) {
+    if (hasCondition(c, "smite_ready")) {
+      c.conditions = c.conditions.filter((cond) => cond.type !== "smite_ready");
+      state.mark(c.id);
+      return { targets: [], text: `${c.name}: кара отменена` };
+    }
+    if (lowestFreeSlot(c) === null) throw new EngineError("Для Божественной кары нет свободных ячеек заклинаний");
+    c.conditions = [...c.conditions, { type: "smite_ready", duration: 1, source: c.id }];
+    state.mark(c.id);
+    state.addLog(`${c.name} готовит Божественную кару`, "ability", c.name);
+    return { targets: [], text: `${c.name}: следующее попадание оружием в этом ходу усилит Божественная кара` };
+  }
+
+  // --- НАЛОЖЕНИЕ РУК: лечение из запаса хитов ---
+  if (name.startsWith("наложение рук") || ability.id.includes("lay_on_hands")) {
+    const target = state.require(opts.targetIds?.[0] ?? c.id);
+    if (target.id !== c.id && distanceFt(c, target) > 5) {
+      throw new EngineError(`Наложение рук — касанием, ${target.name} слишком далеко`);
+    }
+    const pool = ability.usesMax > 0 ? ability.usesMax - ability.usesUsed : Infinity;
+    const missing = target.hpMax - target.hpCurrent;
+    if (missing <= 0) throw new EngineError(`${target.name} не ранен`);
+    if (pool <= 0) throw new EngineError("Запас Наложения рук исчерпан");
+    const amount = Math.min(missing, pool);
+    payActionCost(state, c, params.actionCost);
+    heal(state, target.id, amount);
+    spendAbilityUse(c, ability, amount);
+    state.addLog(`${c.name} накладывает руки на ${target.name}: +${amount} хитов`, "ability", c.name);
+    state.mark(c.id);
+    return { targets: [{ name: target.name, amount }], text: `${target.name} +${amount} хитов` };
+  }
+
+  // --- ВДОХНОВЕНИЕ БАРДА ---
+  if (name.startsWith("вдохновение барда") || ability.id.includes("bardic_inspiration")) {
+    const target = opts.targetIds?.[0] ? state.require(opts.targetIds[0]) : null;
+    if (!target || target.id === c.id) throw new EngineError("Вдохновение барда даётся другому существу");
+    if (distanceFt(c, target) > (params.range?.value ?? 60)) {
+      throw new EngineError(`${target.name} дальше ${params.range?.value ?? 60} фт`);
+    }
+    if (hasCondition(target, "bardic_inspiration")) throw new EngineError(`${target.name} уже вдохновлён`);
+    payActionCost(state, c, params.actionCost);
+    const die = bardicInspirationDie(c.level || 1);
+    // 10 минут — на весь бой
+    applyEffect(state, target.id, { condition: "bardic_inspiration", durationRounds: 100, value: die }, c.id);
+    spendAbilityUse(c, ability);
+    state.addLog(`${c.name} вдохновляет ${target.name} (кость к${die})`, "ability", c.name);
+    state.mark(c.id);
+    return { targets: [{ name: target.name, amount: 0 }], text: `${target.name} получает Вдохновение барда (к${die})` };
+  }
+
+  // --- ШКВАЛ УДАРОВ: два безоружных удара бонусным действием после Атаки ---
+  if (name.startsWith("шквал ударов") || ability.id.includes("flurry")) {
+    if (!c.actionUsed && c.attacksMadeThisAction <= 0) {
+      throw new EngineError("Шквал ударов — сразу после Действия Атаки");
+    }
+    const target = opts.targetIds?.[0] ? state.require(opts.targetIds[0]) : null;
+    if (!target) throw new EngineError("Выберите цель для Шквала ударов");
+    payActionCost(state, c, "bonus");
+    const mod = Math.max(c.abilityMods?.STR ?? 0, c.abilityMods?.DEX ?? 0);
+    const unarmed: Attack = {
+      id: "__flurry_unarmed",
+      name: "Безоружный удар (Шквал)",
+      kind: "melee",
+      range: { normal: 5 },
+      attackBonus: mod + (c.profBonus || 2),
+      damage: [{ dice: martialArtsDie(c.level || 1), mod, type: "bludgeoning" }],
+      actionCost: "bonus",
+    };
+    c.attacks = [...c.attacks, unarmed];
+    const results: CastResult["targets"] = [];
+    const texts: string[] = [];
+    try {
+      for (let i = 0; i < 2 && target.hpCurrent > 0; i++) {
+        const res = performAttack(state, c.id, target.id, unarmed.id, { skipTurnCheck: true, skipCost: true });
+        results.push({ name: target.name, hit: res.hit, amount: res.damage });
+        texts.push(res.hit ? `${res.damage} ур.` : "промах");
+      }
+    } finally {
+      c.attacks = c.attacks.filter((a) => a.id !== unarmed.id);
+    }
+    spendAbilityUse(c, ability);
+    state.mark(c.id);
+    return { targets: results, text: `Шквал ударов: ${texts.join(", ")}` };
+  }
+
+  return null;
+}
+
 /** Применение способности. Атомарно, как и castSpell. */
 export function useAbility(
   state: CombatState,
@@ -2850,7 +3048,50 @@ export function useAbility(
   return atomic(state, () => useAbilityUnsafe(state, combatantId, abilityId, opts));
 }
 
+/**
+ * Общие ограничения способностей: очки ци у приёмов монаха и «не чаще раза за ход» у Всплеска действий.
+ * Расход списывается только после успешного применения.
+ */
 function useAbilityUnsafe(
+  state: CombatState,
+  combatantId: string,
+  abilityId: string,
+  opts: { targetIds?: string[]; center?: Cell | null; skipTurnCheck?: boolean } = {}
+): CastResult {
+  const c = state.require(combatantId);
+  const ability = c.abilities.find((a) => a.id === abilityId);
+  const params = ability?.parameters;
+
+  const ki = params?.kiCost
+    ? c.abilities.find((a) => a.parameters?.isResource && /ци|\bki\b/i.test(a.name))
+    : undefined;
+  if (ability && params?.kiCost && ki) {
+    const left = ki.usesMax - ki.usesUsed;
+    if (left < params.kiCost) throw new EngineError(`«${ability.name}»: не хватает очков ци (${left}/${params.kiCost})`);
+  }
+  if (ability && params?.grantsExtraAction) {
+    if (c.conditions.some((cond) => cond.type === "action_surge_used" && cond.source === turnKey(state))) {
+      throw new EngineError(`«${ability.name}» уже применён в этом ходу`);
+    }
+  }
+
+  const result = useAbilityCore(state, combatantId, abilityId, opts);
+
+  if (params?.kiCost && ki) {
+    ki.usesUsed += params.kiCost;
+    c.abilities = [...c.abilities];
+  }
+  if (params?.grantsExtraAction) {
+    c.conditions = [
+      ...c.conditions.filter((cond) => cond.type !== "action_surge_used"),
+      { type: "action_surge_used", source: turnKey(state) },
+    ];
+  }
+  state.mark(c.id);
+  return result;
+}
+
+function useAbilityCore(
   state: CombatState,
   combatantId: string,
   abilityId: string,
@@ -2877,6 +3118,13 @@ function useAbilityUnsafe(
   if (!canAct(c) && params.actionCost !== "free") {
     throw new EngineError(`${c.name} не может действовать`);
   }
+
+  if (params.isResource) {
+    throw new EngineError(`«${ability.name}» — запас для приёмов, сам по себе не применяется`);
+  }
+
+  const special = useClassFeature(state, c, ability, params, opts);
+  if (special) return special;
 
   if (abilityId === "revert_wild_shape" || ability.name.toLowerCase().includes("выйти из облика")) {
     payActionCost(state, c, params.actionCost);
@@ -3024,6 +3272,11 @@ export function transformWildShape(
     c.className?.toLowerCase().includes("лун") ||
     c.className?.toLowerCase().includes("moon") ||
     c.abilities.some((a) => a.id.includes("combat_wild_shape") || a.name.toLowerCase().includes("боевой дикий облик"));
+
+  // Звери по уровню друида (ПО, плавание, полёт), как в окне выбора облика
+  if (c.type === "player" && !getAvailableBeastForms(c.level || 1, isMoonDruid).some((f) => f.id === form.id)) {
+    throw new EngineError(`«${form.name}» недоступен друиду ${c.level || 1} уровня`);
+  }
 
   const cost = isMoonDruid ? "bonus" : "action";
   payActionCost(state, c, cost);
@@ -3282,7 +3535,14 @@ export function startTurn(state: CombatState): void {
   c.extraActions = 0;
   c.hasActed = false;
   // Реакция «Щит» держится до начала следующего хода носителя
-  c.conditions = c.conditions.filter((cond) => cond.type !== "shielded" && cond.type !== "sneak_used");
+  // Безрассудная атака даёт врагам преимущество до начала следующего хода варвара
+  c.conditions = c.conditions.filter(
+    (cond) =>
+      cond.type !== "shielded" &&
+      cond.type !== "sneak_used" &&
+      cond.type !== "reckless" &&
+      cond.type !== "action_surge_used"
+  );
   // Способности, обновляющиеся каждый ход (Скрытая атака)
   c.abilities = c.abilities.map((a) => (a.refresh === "turn" ? { ...a, usesUsed: 0 } : a));
 

@@ -1476,10 +1476,11 @@ export function runBotTurn(state: CombatState, actorOverride?: Combatant): BotTu
     }
   }
 
-  // 8. Action Surge (Порыв к действию) — если действие потрачено, есть враг в упор/дистанции, разряжаем!
+  // 8. Action Surge (Всплеск действий) — если действие потрачено, есть враг в упор/дистанции, разряжаем!
   if (actor.actionUsed && actor.extraActions === 0) {
     const surgeAbility = actor.abilities.find(
       (a) =>
+        a.name.toLowerCase().includes("всплеск действий") ||
         a.name.toLowerCase().includes("порыв к действию") ||
         a.name.toLowerCase().includes("action surge")
     );

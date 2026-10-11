@@ -218,7 +218,7 @@ describe("D&D 5e SRD 5.1 Official Compendium", () => {
 
       const surge = getAbilityDefinition("action_surge");
       expect(surge).toBeDefined();
-      expect(surge?.name).toBe("Порыв к действию");
+      expect(surge?.name).toBe("Всплеск действий");
     });
   });
 });

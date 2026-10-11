@@ -393,6 +393,18 @@ describe("Combat Engine Full Audit & Stress Suite", () => {
       const targetIds = rangeType === "self" ? [caster.id] : [targetMelee.id];
       const center = rangeType === "self" ? { x: caster.x, y: caster.y } : { x: targetMelee.x, y: targetMelee.y };
 
+      // Запас ци — счётчик для приёмов монаха, сам не применяется
+      if (abDef.parameters.isResource) {
+        expect(() => useAbility(state, caster.id, abId, { targetIds, center, skipTurnCheck: true })).toThrow(
+          EngineError
+        );
+        continue;
+      }
+      // Условия некоторых умений: Шквал ударов — после Атаки, Кара — нужна ячейка, Наложение рук — раненая цель
+      if (abDef.name.startsWith("Шквал")) caster.actionUsed = true;
+      caster.spells.slots = { 1: { max: 2, used: 0 } };
+      targetMelee.hpCurrent = Math.max(1, targetMelee.hpMax - 5);
+
       // Скрытая атака — пассивное умение: «применить» её нельзя, она срабатывает сама при попадании
       if (isSneakAttackAbility(ability)) {
         expect(() => useAbility(state, caster.id, abId, { targetIds, center, skipTurnCheck: true })).toThrow(

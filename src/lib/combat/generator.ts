@@ -976,7 +976,7 @@ export async function createPartyCombatants({
             actionCost: "free",
             range: { type: "self" },
             damage: [],
-            selfEffects: [{ condition: "action_surge", durationRounds: 1 }],
+            grantsExtraAction: true,
             targeting: "self",
             description: "Получить одно дополнительное основное действие в этот ход.",
           },
@@ -1023,13 +1023,13 @@ export async function createPartyCombatants({
       charAbilities = [
         {
           id: `abl_p_${char.id}_bardic`,
-          name: "Бард. вдохновение",
+          name: "Вдохновение барда",
           usesMax: Math.max(1, chaMod),
           usesUsed: 0,
-          refresh: "long",
+          refresh: char.level >= 5 ? "short" : "long",
           parameters: {
-            name: "Бард. вдохновение",
-            type: "spell",
+            name: "Вдохновение барда",
+            type: "ability",
             actionCost: "bonus",
             range: { type: "ranged", value: 60 },
             damage: [],
@@ -1281,17 +1281,16 @@ export async function createPartyCombatants({
           {
             id: `abl_p_${char.id}_divine_smite`,
             name: "Божественная кара",
-            usesMax: 3,
+            usesMax: 0,
             usesUsed: 0,
-            refresh: "long",
+            refresh: "none",
             parameters: {
               name: "Божественная кара",
               type: "ability",
-              actionCost: "bonus",
+              actionCost: "free",
               range: { type: "self" },
-              damage: [{ dice: "2d8", mod: 0, type: "radiant" }],
               targeting: "self",
-              description: "Нанести дополнительный урон излучением при попадании рукопашной атакой.",
+              description: "Готовит кару на этот ход: следующее попадание рукопашным оружием тратит ячейку и добавляет 2к8 излучением (+1к8 за круг выше 1-го).",
             },
           },
         ];

@@ -9,6 +9,10 @@ import { TYPE_COLORS, type Attack, type CombatAbility } from "@/lib/combat/types
 import { abilitiesForClass, attacksPerAction, sneakAttackDice } from "@/lib/combat/library-data";
 import { abilityModifier, proficiencyBonus } from "@/lib/dnd/dice";
 import { safeParse } from "@/lib/combat/serialize";
+import { resolveAbilityUses } from "@/lib/combat/ability-uses";
+
+/** Старые имена способностей, переименованных в коде (записи БД с ними устарели) */
+const LEGACY_ABILITY_NAMES = new Set(["порыв к действию", "поступь ветра"]);
 
 const DAMAGE_TYPE_RU: Record<string, string> = {
   кол: "piercing",
@@ -292,25 +296,30 @@ export async function POST(req: NextRequest) {
     };
 
     // ============ КЛАССОВЫЕ СПОСОБНОСТИ ============
-    // Берём из БД, чтобы подхватывались и добавленные вручную; иначе — из кода
+    // Способности из кода — источник правил (заряды, эффекты). Из БД добавляем только те,
+    // которых в коде нет (добавленные вручную); устаревшие записи БД с тем же именем не берём
+    const codeAbilities = abilitiesForClass(className, level);
+    const codeNames = new Set(codeAbilities.map((a) => a.name.toLowerCase()));
     const libAbilities = await db.abilityLibrary.findMany();
-    const matchedFromDb = libAbilities.filter((a) => {
+    const extraFromDb = libAbilities.filter((a) => {
       if (a.minLevel > level) return false;
       if (!a.className) return false;
-      return a.className.trim().toLowerCase() === className.trim().toLowerCase();
+      if (a.className.trim().toLowerCase() !== className.trim().toLowerCase()) return false;
+      return !codeNames.has(a.name.toLowerCase()) && !LEGACY_ABILITY_NAMES.has(a.name.toLowerCase());
     });
 
-    const source = matchedFromDb.length
-      ? matchedFromDb.map((a) => ({
-          libraryId: a.id,
-          name: a.name,
-          parameters: safeParse<any>(a.parameters, undefined),
-        }))
-      : abilitiesForClass(className, level).map((a) => ({
-          libraryId: undefined,
-          name: a.name,
-          parameters: a.parameters,
-        }));
+    const source = [
+      ...codeAbilities.map((a) => ({
+        libraryId: undefined as string | undefined,
+        name: a.name,
+        parameters: structuredClone(a.parameters),
+      })),
+      ...extraFromDb.map((a) => ({
+        libraryId: a.id as string | undefined,
+        name: a.name,
+        parameters: safeParse<any>(a.parameters, undefined),
+      })),
+    ];
 
     const abilities: CombatAbility[] = source.map((a, idx) => {
       const params = a.parameters;
@@ -318,9 +327,7 @@ export async function POST(req: NextRequest) {
       if (params && a.name.startsWith("Скрытая атака") && params.damage?.[0]) {
         params.damage[0].dice = sneakAttackDice(level);
       }
-      const usesFormula = params?.usesFormula;
-      const usesMax =
-        usesFormula === "profBonus" ? profBonus : usesFormula === "level" ? level : params?.uses ?? 0;
+      const { usesMax, refresh } = resolveAbilityUses(params, { level, profBonus, abilityMods });
 
       return {
         id: `abl_${idx}_${Date.now()}`,
@@ -328,7 +335,7 @@ export async function POST(req: NextRequest) {
         name: a.name,
         usesMax,
         usesUsed: 0,
-        refresh: params?.refresh ?? "none",
+        refresh,
         parameters: params,
       };
     });

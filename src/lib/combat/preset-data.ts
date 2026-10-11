@@ -673,12 +673,12 @@ export const CAMPAIGN_HEROES_PRESETS: CharacterPreset[] = [
       },
       {
         id: "varis-action-surge",
-        name: "Порыв к действию",
+        name: "Всплеск действий",
         usesMax: 1,
         usesUsed: 0,
         refresh: "short",
         parameters: {
-          name: "Порыв к действию",
+          name: "Всплеск действий",
           type: "ability",
           actionCost: "free",
           grantsExtraAction: true,

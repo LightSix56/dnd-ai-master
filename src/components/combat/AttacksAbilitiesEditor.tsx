@@ -23,6 +23,7 @@ import type {
   DamageRoll,
 } from "@/lib/combat/types";
 import { DAMAGE_TYPE_LABELS } from "@/lib/combat/types";
+import { resolveAbilityUses } from "@/lib/combat/ability-uses";
 
 interface LibrarySpell {
   id: string;
@@ -166,12 +167,11 @@ export function AttacksAbilitiesEditor({ combatant, onSave, onClose }: Props) {
       return;
     }
     const p = lib.parameters;
-    const usesMax =
-      p?.usesFormula === "profBonus"
-        ? combatant.profBonus
-        : p?.usesFormula === "level"
-        ? combatant.level
-        : p?.uses ?? 0;
+    const { usesMax, refresh } = resolveAbilityUses(p, {
+      level: combatant.level,
+      profBonus: combatant.profBonus,
+      abilityMods: combatant.abilityMods,
+    });
     setAbilities((prev) => [
       ...prev,
       {
@@ -180,7 +180,7 @@ export function AttacksAbilitiesEditor({ combatant, onSave, onClose }: Props) {
         name: lib.name,
         usesMax,
         usesUsed: 0,
-        refresh: p?.refresh ?? "none",
+        refresh,
         parameters: p,
       },
     ]);

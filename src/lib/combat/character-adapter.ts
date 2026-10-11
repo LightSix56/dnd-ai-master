@@ -19,6 +19,7 @@ import {
   ATTACK_LIBRARY,
 } from "./library-data";
 import { proficiencyBonus } from "@/lib/dnd/dice";
+import { resolveAbilityUses } from "./ability-uses";
 
 const DAMAGE_TYPE_RU: Record<string, string> = {
   кол: "piercing",
@@ -505,7 +506,7 @@ export function extractSpellsFromCharacter(
 
 /**
  * Извлекает классовые способности персонажа с корректным масштабированием
- * (Скрытая атака плута, Всплеск действий, Ярость и т.д.).
+ * и зарядами по правилам (Скрытая атака плута, Всплеск действий, Ярость и т.д.).
  */
 export function extractAbilitiesFromCharacter(
   char: Record<string, any>,
@@ -527,25 +528,14 @@ export function extractAbilitiesFromCharacter(
       params.description = `+${dice} урона при атаке оружием с фехтовальным свойством или дальнего боя при преимуществе.`;
     }
 
-    const usesFormula = (params as any)?.usesFormula;
-    let usesMax =
-      usesFormula === "profBonus"
-        ? profBonus
-        : usesFormula === "level"
-        ? level
-        : (params as any)?.uses ?? 0;
-
-    // Специальные формулы использований
-    if (a.name.includes("Вдохновение") && abilityMods.CHA) {
-      usesMax = Math.max(1, abilityMods.CHA);
-    }
+    const { usesMax, refresh } = resolveAbilityUses(params, { level, profBonus, abilityMods });
 
     return {
       id: `abl_p_${char.id || "char"}_${idx}_${Date.now()}`,
       name: a.name,
       usesMax,
       usesUsed: 0,
-      refresh: (params as any)?.refresh ?? "none",
+      refresh,
       parameters: params,
     };
   });

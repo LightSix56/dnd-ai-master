@@ -856,7 +856,7 @@ export function CombatView({ combatId, campaignId, roomCode, onClose, onCombatEn
       return;
     }
 
-    // Способности без внешней цели (Второе дыхание, Порыв действия, Ярость) применяем сразу на себя
+    // Способности без внешней цели (Второе дыхание, Всплеск действий, Ярость) применяем сразу на себя
     const needsTarget = mode === "creature" || mode === "ally";
     if (!needsTarget) {
       await doAction("use-ability", {
