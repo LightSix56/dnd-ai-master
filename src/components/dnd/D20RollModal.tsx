@@ -33,15 +33,27 @@ interface D20RollModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   characters: Character[];
+  /** Сетевая комната: можно бросать только за своего героя, выбора персонажа нет */
+  ownCharacterId?: string | null;
+  onlineRoom?: boolean;
   onRollSelect: (rollText: string) => void;
 }
 
 export function D20RollModal({
   open,
   onOpenChange,
-  characters,
+  characters: allCharacters,
+  ownCharacterId = null,
+  onlineRoom = false,
   onRollSelect,
 }: D20RollModalProps) {
+  const characters = useMemo(() => {
+    if (!onlineRoom) return allCharacters;
+    const own = ownCharacterId ? allCharacters.find((c) => c.id === ownCharacterId) : null;
+    if (own) return [own];
+    const firstPlayer = allCharacters.find((c) => c.type === "player") || allCharacters[0];
+    return firstPlayer ? [firstPlayer] : [];
+  }, [allCharacters, onlineRoom, ownCharacterId]);
   const [selectedCharIdOverride, setSelectedCharIdOverride] = useState<string | null>(null);
 
   const activePlayerChar = useMemo(() => {
@@ -135,13 +147,13 @@ export function D20RollModal({
 
         {/* Выбор персонажа */}
         {characters.length > 1 && (
-          <div className="flex items-center gap-2 bg-muted/30 p-2 rounded-lg border border-border/40">
-            <User className="size-4 text-muted-foreground ml-1" />
-            <span className="text-xs text-muted-foreground font-medium">Персонаж:</span>
+          <div className="flex items-center gap-2 bg-muted/30 p-2 rounded-lg border border-border/40 min-w-0">
+            <User className="size-4 shrink-0 text-muted-foreground ml-1" />
+            <span className="shrink-0 text-xs text-muted-foreground font-medium">Персонаж:</span>
             <select
               value={selectedCharId || ""}
               onChange={(e) => setSelectedCharIdOverride(e.target.value)}
-              className="flex-1 bg-background border border-border rounded px-2.5 py-1 text-xs font-medium focus:outline-none focus:ring-1 focus:ring-amber-500"
+              className="flex-1 min-w-0 w-full truncate bg-background border border-border rounded px-2.5 py-1 text-xs font-medium focus:outline-none focus:ring-1 focus:ring-amber-500"
             >
               {sortedCharacters.map((c) => (
                 <option key={c.id} value={c.id}>

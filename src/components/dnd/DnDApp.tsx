@@ -1303,6 +1303,16 @@ export function DnDApp({
 
   // Соло: уровни сверяем при открытии кампании, после ответа мастера, после боя
   // и когда игрок возвращается на вкладку (например, с сайта листа после прокачки)
+  // Герой текущего игрока в сетевой комнате: лист участника -> герой кампании (по листу или имени)
+  const ownRoomCharacterId = useMemo(() => {
+    const me = activeRoom?.participants?.find((p: any) => p.userId === user?.id);
+    if (!me) return null;
+    const bySheet = characters.find((c) => c.sheetCharacterId && c.sheetCharacterId === me.characterId);
+    if (bySheet) return bySheet.id;
+    const name = String(me.character?.name || "").trim().toLowerCase();
+    return name ? characters.find((c) => c.name.trim().toLowerCase() === name)?.id ?? null : null;
+  }, [activeRoom?.participants, characters, user?.id]);
+
   const soloCampaignId = !initialRoomCode && !activeRoom?.code ? activeCampaign?.id : undefined;
   useEffect(() => {
     if (!soloCampaignId || isLoading) return;
@@ -4267,6 +4277,8 @@ export function DnDApp({
         open={showD20Modal}
         onOpenChange={setShowD20Modal}
         characters={characters}
+        onlineRoom={Boolean(activeRoom?.code)}
+        ownCharacterId={ownRoomCharacterId}
         onRollSelect={handleD20RollSelect}
       />
 
