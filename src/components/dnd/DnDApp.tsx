@@ -82,6 +82,7 @@ import { D20RollModal } from "./D20RollModal";
 import { CreateRoomModal } from "@/components/room/CreateRoomModal";
 import { JoinRoomModal } from "@/components/room/JoinRoomModal";
 import { CharacterPickerModal } from "@/components/room/CharacterPickerModal";
+import { MISSING_API_KEY_MESSAGE } from "@/lib/ai/api-key";
 import { RoomCampaignSetupModal, type CampaignSetupFormValues } from "@/components/room/RoomCampaignSetupModal";
 import { CampaignSetupPanel, partySetupDescription } from "@/components/campaign/CampaignSetupPanel";
 import { CreateCampaignModal } from "@/components/campaign/CreateCampaignModal";
@@ -1105,6 +1106,10 @@ export function DnDApp({
    */
   async function startRoomCampaignFromLobby(values: CampaignSetupFormValues) {
     if (!activeRoom) return;
+    if (!apiKey.trim()) {
+      openSetup();
+      throw new Error(MISSING_API_KEY_MESSAGE);
+    }
     setStartingRoomCampaign(true);
     try {
       const token = getAuthToken();
@@ -1743,7 +1748,7 @@ export function DnDApp({
 
   // Запуск генерации следующего акта (подтверждение человека-мастера)
   async function startNextActGeneration(campaignId: string, outcome?: string) {
-    if (!apiKey && !process.env.NEXT_PUBLIC_AI_API_KEY) {
+    if (!apiKey.trim()) {
       toast.error("Введите API ключ в настройках перед генерацией следующего акта");
       openSetup();
       return;
@@ -2203,7 +2208,7 @@ export function DnDApp({
       return;
     }
 
-    if (!apiKey) {
+    if (!apiKey.trim()) {
       toast.error("Введите API ключ в настройках");
       openSetup();
       return;
@@ -2385,7 +2390,7 @@ export function DnDApp({
 
   async function handleGenerateStory(values: CampaignSetupValues) {
     if (!activeCampaign) return;
-    if (!apiKey && !process.env.NEXT_PUBLIC_AI_API_KEY) {
+    if (!apiKey.trim()) {
       toast.error("Введите API ключ в настройках перед генерацией сюжета");
       openSetup();
       return;
@@ -2425,7 +2430,7 @@ export function DnDApp({
 
   async function startCampaignGame() {
     if (!activeCampaign) return;
-    if (!apiKey && !process.env.NEXT_PUBLIC_AI_API_KEY) {
+    if (!apiKey.trim()) {
       toast.error("Введите API ключ в настройках перед началом игры");
       openSetup();
       return;
@@ -3472,6 +3477,7 @@ export function DnDApp({
                           initialValues={storySetupInitialValues}
                           startingLevel={activeCampaign?.startingLevel ?? 1}
                           isGenerating={savingStorySettings}
+                          blockedReason={apiKey.trim() ? undefined : MISSING_API_KEY_MESSAGE}
                           error={null}
                           onSubmit={handleGenerateStory}
                           onCancel={() => setShowStoryConfig(false)}
@@ -4350,6 +4356,7 @@ export function DnDApp({
           participants={activeRoom.participants || []}
           onStartCampaign={startRoomCampaignFromLobby}
           isGenerating={startingRoomCampaign}
+          blockedReason={apiKey.trim() ? undefined : MISSING_API_KEY_MESSAGE}
         />
       )}
 

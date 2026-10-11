@@ -21,6 +21,7 @@ describe("POST /api/room/[code]/start-campaign", () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        apiKey: "sk-test-key",
         title: "Забытые катакомбы",
         setting: "Тёмное фэнтези",
         tone: "Мрачный",
@@ -33,6 +34,26 @@ describe("POST /api/room/[code]/start-campaign", () => {
     expect(response.status).toBe(401);
     const data = await response.json();
     expect(data.error).toBe("Требуется авторизация");
+  });
+
+  it("returns 401 without an API key in settings, even if the server has AI_API_KEY", async () => {
+    vi.stubEnv("AI_API_KEY", "server-secret-key");
+    vi.spyOn(supabaseClient, "getAuthUserFromRequest").mockResolvedValue({
+      user: { id: "host-1", email: "host@example.com" } as any,
+      error: null,
+    });
+    const startSpy = vi.spyOn(roomService, "startRoomCampaign");
+    startSpy.mockClear();
+
+    const request = new Request("http://localhost/api/room/DRAGON-42/start-campaign", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title: "Забытые катакомбы", setting: "Тёмное фэнтези", apiKey: "  " }),
+    });
+    const response = await POST(request, { params: Promise.resolve({ code: "DRAGON-42" }) });
+    expect(response.status).toBe(401);
+    expect(startSpy).not.toHaveBeenCalled();
+    vi.unstubAllEnvs();
   });
 
   it("returns 400 when required fields are missing", async () => {
@@ -48,6 +69,7 @@ describe("POST /api/room/[code]/start-campaign", () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        apiKey: "sk-test-key",
         // missing title, setting, etc.
         difficulty: "hard",
       }),
@@ -87,6 +109,7 @@ describe("POST /api/room/[code]/start-campaign", () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        apiKey: "sk-test-key",
         title: "Забытые катакомбы",
         setting: "Тёмное фэнтези",
         tone: "Мрачный",
@@ -129,6 +152,7 @@ describe("POST /api/room/[code]/start-campaign", () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        apiKey: "sk-test-key",
         title: "Встреча",
         setting: "Тёмное фэнтези",
         tone: "Мрачный и напряженный",

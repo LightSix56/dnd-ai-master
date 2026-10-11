@@ -10,6 +10,7 @@ import { getDeterministicTools, buildDmHistory, buildFrozenSystemPrompt } from "
 import { loadCampaignContext } from "@/lib/ai/campaign-context";
 import { compactHistory } from "@/lib/ai/compact";
 import { syncSceneState } from "@/lib/ai/scene-synchronizer";
+import { resolveApiKey } from "@/lib/ai/api-key";
 import { calculateCostRub, extractTokenUsage, type TokenUsage } from "@/lib/ai/cost";
 
 export interface RoomTurnStats {
@@ -292,7 +293,7 @@ export async function resolveActiveRoomTurnHelper(
   let statsPayload: RoomTurnStats | undefined = undefined;
 
   if (!narrative) {
-    const cleanKey = (options?.apiKey || process.env.AI_API_KEY || "").trim();
+    const cleanKey = resolveApiKey(options?.apiKey);
 
     if (cleanKey) {
       try {
@@ -510,7 +511,7 @@ export async function resolveActiveRoomTurnHelper(
     }
 
     // Хроника кампании дополняется в фоне, когда за пределами дословного окна накопился блок
-    const compactKey = (options?.apiKey || process.env.AI_API_KEY || "").trim();
+    const compactKey = resolveApiKey(options?.apiKey);
     if (compactKey && !narrative.trimStart().startsWith("⚠️")) {
       const playerTurnText = Object.values(activeTurn.playerInputs || {})
         .map((p) => `${p.characterName}: ${p.actionText}`)

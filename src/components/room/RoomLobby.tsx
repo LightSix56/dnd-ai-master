@@ -9,7 +9,8 @@ import { RoomCampaignSetupModal, CampaignSetupFormValues } from "./RoomCampaignS
 import { SupabaseAuthModal } from "@/components/auth/SupabaseAuthModal";
 import { CoopTurnBar } from "./CoopTurnBar";
 import { copyToClipboard } from "@/lib/utils";
-import { storedAiRequestFields } from "@/lib/ai/ai-settings-storage";
+import { MISSING_API_KEY_MESSAGE } from "@/lib/ai/api-key";
+import { readStoredAiSettings, storedAiRequestFields } from "@/lib/ai/ai-settings-storage";
 import {
   Dices,
   Link,
@@ -51,6 +52,11 @@ export function RoomLobby({
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showSetupModal, setShowSetupModal] = useState(false);
   const [isGeneratingStory, setIsGeneratingStory] = useState(false);
+  // Ключ читаем при открытии окна настройки (не при рендере: localStorage ломает гидратацию)
+  const [hasApiKey, setHasApiKey] = useState(false);
+  useEffect(() => {
+    if (showSetupModal) setHasApiKey(!!readStoredAiSettings().apiKey.trim());
+  }, [showSetupModal]);
 
   const refresh = useCallback(async () => {
     try {
@@ -98,6 +104,7 @@ export function RoomLobby({
   }
 
   async function handleStartCampaign(values: CampaignSetupFormValues) {
+    if (!readStoredAiSettings().apiKey.trim()) throw new Error(MISSING_API_KEY_MESSAGE);
     setIsGeneratingStory(true);
     try {
       const token = getAuthToken();
@@ -519,6 +526,7 @@ export function RoomLobby({
         participants={participants}
         onStartCampaign={handleStartCampaign}
         isGenerating={isGeneratingStory}
+        blockedReason={hasApiKey ? undefined : MISSING_API_KEY_MESSAGE}
       />
 
       <CharacterPickerModal

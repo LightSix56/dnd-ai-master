@@ -2,6 +2,7 @@
 // Здесь же лежит починка ответа провайдера — она нужна и чату, и генератору арки.
 
 import { createOpenAI } from "@ai-sdk/openai";
+import { MISSING_API_KEY_MESSAGE, resolveApiKey } from "./api-key";
 
 export type AuthMode = "bearer" | "x-api-key" | "raw";
 
@@ -119,7 +120,8 @@ export function createClient(
   reasoning?: ReasoningOptions
 ) {
   // Триммим ключ — частая причина "Неверный формат API ключа"
-  const cleanKey = (userApiKey || process.env.AI_API_KEY || "").trim();
+  const cleanKey = resolveApiKey(userApiKey);
+  if (!cleanKey) throw new Error(MISSING_API_KEY_MESSAGE);
   const baseURL = (userBaseURL || process.env.AI_BASE_URL || "https://polza.ai/api/v1")
     .trim()
     .replace(/\/+$/, "");

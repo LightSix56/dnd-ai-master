@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { MISSING_API_KEY_MESSAGE, resolveApiKey } from "@/lib/ai/api-key";
 import { getAuthUserFromRequest } from "@/lib/supabase/client";
 import { startRoomCampaign, type StartRoomCampaignInput } from "@/lib/room/room-service";
 
@@ -21,6 +22,11 @@ export async function POST(
     }
 
     const body = await request.json().catch(() => ({}));
+
+    // Сюжет отряда генерирует модель: без ключа из настроек кампанию не создаём
+    if (!resolveApiKey(body.apiKey)) {
+      return NextResponse.json({ error: MISSING_API_KEY_MESSAGE }, { status: 401 });
+    }
 
     if (!body.title || typeof body.title !== "string" || !body.title.trim()) {
       return NextResponse.json({ error: "Название кампании обязательно" }, { status: 400 });

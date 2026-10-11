@@ -1,5 +1,6 @@
 // API: получить список доступных моделей с Polza.ai (или другого OpenAI-compatible провайдера)
 import { FEATURED_MODELS } from "@/lib/ai/models";
+import { resolveApiKey } from "@/lib/ai/api-key";
 
 export const maxDuration = 15;
 
@@ -11,7 +12,7 @@ export async function GET(req: Request) {
   const baseURL = (paramBaseURL || process.env.AI_BASE_URL || "https://polza.ai/api/v1")
     .trim()
     .replace(/\/+$/, "");
-  const apiKey = (paramApiKey || process.env.AI_API_KEY || "").trim();
+  const apiKey = resolveApiKey(paramApiKey);
 
   try {
     const url = baseURL.includes("polza.ai")

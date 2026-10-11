@@ -22,6 +22,8 @@ interface RoomCampaignSetupModalProps {
   participants: RoomParticipant[];
   onStartCampaign: (values: CampaignSetupFormValues) => Promise<void>;
   isGenerating?: boolean;
+  /** Причина блокировки запуска (нет API ключа) */
+  blockedReason?: string;
 }
 
 export function RoomCampaignSetupModal({
@@ -31,6 +33,7 @@ export function RoomCampaignSetupModal({
   participants,
   onStartCampaign,
   isGenerating = false,
+  blockedReason,
 }: RoomCampaignSetupModalProps) {
   const [error, setError] = useState<string | null>(null);
 
@@ -95,6 +98,7 @@ export function RoomCampaignSetupModal({
             startingLevel={room.startingLevel}
             isGenerating={isGenerating}
             error={error}
+            blockedReason={blockedReason}
             onCancel={onClose}
             partySlot={partySlot}
             onSubmit={async (values) => {

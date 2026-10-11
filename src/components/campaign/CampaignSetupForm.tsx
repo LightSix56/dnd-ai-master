@@ -36,6 +36,8 @@ export interface CampaignSetupFormProps {
    * тогда сохраняются нейтральные значения, чтобы мастер не говорил об «отряде».
    */
   showPartyFields?: boolean;
+  /** Причина, по которой запуск недоступен (например, нет API ключа): блокирует кнопку и показывается под формой */
+  blockedReason?: string;
 }
 
 const inputClass =
@@ -55,6 +57,7 @@ export function CampaignSetupForm({
   onCancel,
   partySlot,
   showPartyFields = true,
+  blockedReason,
 }: CampaignSetupFormProps) {
   const [draft, setDraft] = useState<CampaignSetupValues>(() => {
     const base = { ...initialValues, title: initialTitle };
@@ -261,6 +264,12 @@ export function CampaignSetupForm({
         />
       </div>
 
+      {blockedReason && (
+        <p role="alert" data-testid="campaign-blocked-reason" className="text-xs text-red-600 dark:text-red-400">
+          {blockedReason}
+        </p>
+      )}
+
       <div className="flex items-center justify-end gap-3 pt-3 border-t border-zinc-200 dark:border-zinc-800">
         <button
           type="button"
@@ -272,7 +281,7 @@ export function CampaignSetupForm({
         </button>
         <button
           type="submit"
-          disabled={isGenerating}
+          disabled={isGenerating || !!blockedReason}
           className="rounded-md bg-zinc-900 px-5 py-2 text-xs font-medium text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 flex items-center gap-2 cursor-pointer shadow-xs disabled:opacity-60"
         >
           {isGenerating ? <Loader2 className="size-4 animate-spin" /> : <BookOpen className="size-4" />}

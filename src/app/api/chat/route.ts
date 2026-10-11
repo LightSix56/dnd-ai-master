@@ -37,6 +37,7 @@ import { syncSceneState } from "@/lib/ai/scene-synchronizer";
 import { BOOKKEEPING_TOOLS, resolveCheapModel, resolveDmModel } from "@/lib/ai/models";
 import { calculateCostRub, extractTokenUsage } from "@/lib/ai/cost";
 import { db } from "@/lib/db";
+import { resolveApiKey } from "@/lib/ai/api-key";
 import {
   buildFrozenSystemPrompt,
   getDeterministicTools,
@@ -107,7 +108,7 @@ export async function POST(req: Request) {
     }
 
     // Проверка API-ключа до запроса к LLM
-    const cleanKey = (userApiKey || process.env.AI_API_KEY || "").trim();
+    const cleanKey = resolveApiKey(userApiKey);
     if (!cleanKey) {
       return Response.json({
         error: "API ключ не указан. Откройте настройки и введите ключ с https://polza.ai",

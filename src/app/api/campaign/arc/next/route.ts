@@ -3,6 +3,7 @@ import { after } from "next/server";
 import { db } from "@/lib/db";
 import { generateNextChapter, parseStoryArc, type ArcProgress } from "@/lib/ai/story-arc";
 import { resolveStoryModel } from "@/lib/ai/models";
+import { resolveApiKey } from "@/lib/ai/api-key";
 
 export const maxDuration = 300;
 
@@ -39,7 +40,7 @@ export async function POST(req: Request) {
       return Response.json({ error: "Генерация уже идёт" }, { status: 409 });
     }
 
-    const cleanKey = (apiKey || process.env.AI_API_KEY || "").trim();
+    const cleanKey = resolveApiKey(apiKey);
     if (!cleanKey) {
       return Response.json(
         { error: "API ключ не указан. Откройте настройки и введите ключ." },
