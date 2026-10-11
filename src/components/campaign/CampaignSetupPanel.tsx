@@ -2,6 +2,7 @@
 
 import React, { type ReactNode } from "react";
 import { Sparkles } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { CampaignSetupForm, type CampaignSetupFormProps } from "@/components/campaign/CampaignSetupForm";
 
@@ -9,6 +10,8 @@ export interface CampaignSetupPanelProps extends CampaignSetupFormProps {
   description: ReactNode;
   /** Кнопка справа в шапке (например, «Назад к готовому сюжету») */
   headerAction?: ReactNode;
+  /** Доп. классы карточки: в окне поверх затемнения фон должен быть непрозрачным */
+  className?: string;
 }
 
 function heroesWord(count: number): string {
@@ -26,9 +29,9 @@ export function partySetupDescription(heroCount: number): string {
 }
 
 // Карточка «Параметры сюжета и мира»: одна и та же в соло-странице и в окне ведущего комнаты
-export function CampaignSetupPanel({ description, headerAction, ...formProps }: CampaignSetupPanelProps) {
+export function CampaignSetupPanel({ description, headerAction, className, ...formProps }: CampaignSetupPanelProps) {
   return (
-    <Card className="border-border bg-card/60" data-mode={formProps.mode}>
+    <Card className={cn("border-border bg-card/60", className)} data-mode={formProps.mode}>
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between gap-2 flex-wrap">
           <div>

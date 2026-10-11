@@ -78,6 +78,7 @@ export function RoomCampaignSetupModal({
         <div className={isGenerating ? "hidden" : undefined}>
           <CampaignSetupPanel
             mode="network"
+            className="bg-card"
             description={partySetupDescription(readyParticipants.length)}
             headerAction={
               <button
@@ -108,7 +109,7 @@ export function RoomCampaignSetupModal({
         </div>
 
         {isGenerating && (
-          <Card className="border-border bg-card/60">
+          <Card className="border-border bg-card">
             <CardContent className="py-12 flex flex-col items-center justify-center text-center">
               <Loader2 className="size-8 animate-spin text-amber-500 mb-4" />
               <h3 className="text-lg font-semibold">Сотворение Акта 1 приключения...</h3>
