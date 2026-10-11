@@ -1510,7 +1510,9 @@ export async function createPartyCombatants({
     const seenHotbarIds = new Set<string>();
     const hotbarItems: HotbarItem[] = [
       ...charAttacks.map((a) => ({ id: a.id, type: "attack" as const, name: a.name })),
-      ...charAbilities.map((ab) => ({ id: ab.id, type: "ability" as const, name: ab.name })),
+      ...charAbilities
+        .filter((ab) => !ab.parameters?.passive && !ab.parameters?.isResource)
+        .map((ab) => ({ id: ab.id, type: "ability" as const, name: ab.name })),
       ...spellHotbar,
     ].filter((item) => {
       if (seenHotbarIds.has(item.id)) return false;

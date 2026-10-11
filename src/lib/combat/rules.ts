@@ -9,6 +9,7 @@ import {
   isHostile,
   type AbilityKey,
   type Attack,
+  type CombatAbility,
   type Combatant,
   type Condition,
   type ConditionEffect,
@@ -27,6 +28,21 @@ export function getConditionEffects(conditions: Condition[]): ConditionEffect[] 
 
 export function hasCondition(c: Combatant, type: string): boolean {
   return c.conditions.some((cond) => cond.type === type);
+}
+
+/** Классовое умение SRD у бойца (см. class-features.ts): ключи вида «champion/improved-critical» */
+export function classFeature(c: Combatant, ...srdKeys: string[]): CombatAbility | undefined {
+  return c.abilities?.find((a) => a.parameters?.srdKey && srdKeys.includes(a.parameters.srdKey));
+}
+
+/** С какого результата к20 атака оружием — крит: Чемпион 19 (Улучшенные), 18 (Превосходные) */
+export function critThreshold(attacker: Combatant, attack: Attack): number {
+  if (attack.kind === "spell" || attack.usesSpellAttack) return 20;
+  const values = [
+    classFeature(attacker, "champion/superior-critical")?.parameters?.featureValue,
+    classFeature(attacker, "champion/improved-critical")?.parameters?.featureValue,
+  ].filter((v): v is number => typeof v === "number");
+  return Math.min(20, ...values);
 }
 
 /**
@@ -361,7 +377,14 @@ export function rollSave(
   c: Combatant,
   ability: AbilityKey,
   dc: number,
-  opts: { isSpell?: boolean; advantage?: boolean; disadvantage?: boolean } = {}
+  opts: {
+    isSpell?: boolean;
+    advantage?: boolean;
+    disadvantage?: boolean;
+    /** Бонус со стороны (Аура защиты паладина) */
+    bonus?: number;
+    bonusText?: string;
+  } = {}
 ): SaveResult {
   const effects = getConditionEffects(c.conditions);
 
@@ -371,7 +394,7 @@ export function rollSave(
     (ability === "DEX" && effects.some((e) => e.autoFailDexSave));
 
   const saveData = c.saves?.[ability];
-  let bonus = saveData ? saveData.mod : c.abilityMods?.[ability] ?? 0;
+  let bonus = (saveData ? saveData.mod : c.abilityMods?.[ability] ?? 0) + (opts.bonus ?? 0);
 
   // Бонус к спасброскам ЛОВ от укрытий (полуукрытие +2, 3/4 укрытие +5)
   if (ability === "DEX") {
@@ -381,6 +404,15 @@ export function rollSave(
 
   let adv = effects.some((e) => e.saveAdvantage?.includes(ability)) || !!opts.advantage;
   let dis = effects.some((e) => e.saveDisadvantage?.includes(ability)) || !!opts.disadvantage;
+
+  // Чувство опасности варвара: преимущество на спасброски Ловкости, если он видит и слышит
+  if (
+    ability === "DEX" &&
+    classFeature(c, "barbarian/danger-sense") &&
+    !["blinded", "deafened", "incapacitated", "stunned", "paralyzed", "unconscious"].some((t) => hasCondition(c, t))
+  ) {
+    adv = true;
+  }
 
   // Магическое сопротивление (Magic Resistance): преимущество на спасброски против заклинаний
   if (opts.isSpell) {
@@ -426,7 +458,7 @@ export function rollSave(
     dc,
     ability,
     autoFail: false,
-    text: `${roll.total} vs DC ${dc} (${success ? "Успех" : "Провал"})${inspiredText}`,
+    text: `${roll.total} vs DC ${dc} (${success ? "Успех" : "Провал"})${opts.bonus && opts.bonusText ? ` (${opts.bonusText} +${opts.bonus})` : ""}${inspiredText}`,
     advantage: adv,
   };
 }
@@ -650,7 +682,7 @@ export function resolveAttack(
 
   const coverBonus = options.coverBonus ?? 0;
   const targetAC = effectiveAC(target) + coverBonus;
-  const natCrit = roll.natural === 20;
+  const natCrit = roll.natural >= critThreshold(attacker, attackToUse);
   const fumble = roll.natural === 1;
   const inMeleeRange = (options.distanceFt ?? 5) <= 5;
   const isHelpless = hasCondition(target, "paralyzed") || hasCondition(target, "unconscious");

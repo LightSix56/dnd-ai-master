@@ -739,7 +739,10 @@ function tryPreAttackBuffsAndHealing(
   if (!actor.bonusActionUsed) {
     // Ярость (Rage)
     const rageAbility = actor.abilities.find(
-      (a) => a.name.toLowerCase().includes("ярость") || a.name.toLowerCase().includes("rage")
+      (a) =>
+        !a.parameters?.passive &&
+        !a.parameters?.manual &&
+        (a.name.toLowerCase().includes("ярость") || a.name.toLowerCase().includes("rage"))
     );
     if (
       rageAbility &&

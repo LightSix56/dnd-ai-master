@@ -297,6 +297,16 @@ export interface ActionParameters {
   kiCost?: number;
   /** Счётчик ресурса (очки ци), сам по себе не применяется */
   isResource?: boolean;
+  /** Умение SRD, из которого собрана способность (см. class-features.ts), например «monk/stunning-strike» */
+  srdKey?: string;
+  /** Тратит из общего запаса другой способности: pool — её srdKey («cleric/channel-divinity») */
+  resourceCost?: { pool: string; amount: number };
+  /** Действует само (при попадании, в начале хода) или как справка мастеру — кнопки нет */
+  passive?: boolean;
+  /** Эффект разыгрывает мастер: движок тратит действие и заряды и пишет в журнал */
+  manual?: boolean;
+  /** Число умения на уровне героя: лишние кости крита, порог крита, лечение Уцелевшего, бонус ауры */
+  featureValue?: number;
   refresh?: "short" | "long" | "none" | "turn" | "round";
 
   friendlyFire?: boolean;
@@ -542,6 +552,16 @@ export const CONDITION_EFFECTS: Record<string, {
   hunters_mark: {
     name: "Метка охотника",
     description: "Доп. урон 1к6 от отметившего",
+    effects: {},
+  },
+  divine_strike_used: {
+    name: "Божественный удар использован",
+    description: "Божественный удар уже нанесён в этом ходу",
+    effects: {},
+  },
+  colossus_slayer_used: {
+    name: "Убийца колоссов использован",
+    description: "Урон Убийцы колоссов уже добавлен в этом ходу",
     effects: {},
   },
   sneak_used: {

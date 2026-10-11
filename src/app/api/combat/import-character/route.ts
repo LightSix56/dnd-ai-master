@@ -10,6 +10,7 @@ import { abilitiesForClass, attacksPerAction, sneakAttackDice } from "@/lib/comb
 import { abilityModifier, proficiencyBonus } from "@/lib/dnd/dice";
 import { safeParse } from "@/lib/combat/serialize";
 import { resolveAbilityUses } from "@/lib/combat/ability-uses";
+import { srdCombatAbilities } from "@/lib/combat/class-features";
 
 /** Старые имена способностей, переименованных в коде (записи БД с ними устарели) */
 const LEGACY_ABILITY_NAMES = new Set(["порыв к действию", "поступь ветра"]);
@@ -321,7 +322,7 @@ export async function POST(req: NextRequest) {
       })),
     ];
 
-    const abilities: CombatAbility[] = source.map((a, idx) => {
+    const handMade: CombatAbility[] = source.map((a, idx) => {
       const params = a.parameters;
       // Скрытая атака масштабируется по уровню плута
       if (params && a.name.startsWith("Скрытая атака") && params.damage?.[0]) {
@@ -339,6 +340,18 @@ export async function POST(req: NextRequest) {
         parameters: params,
       };
     });
+    // Остальные умения класса и архетипа из SRD: заряды, общие запасы, срабатывания при попадании.
+    // Записи БД с тем же названием не дублируем — у SRD-версии есть механика
+    const srd = srdCombatAbilities(
+      { className, subclass: cj.subclass, level, profBonus, abilityMods, sheet: cj },
+      `abl_${Date.now()}`
+    );
+    const srdNames = new Set(srd.map((a) => a.name.toLowerCase()));
+    const abilities: CombatAbility[] = [
+      ...handMade.filter((a) => !a.libraryId),
+      ...srd,
+      ...handMade.filter((a) => a.libraryId && !srdNames.has(a.name.toLowerCase())),
+    ];
 
     // ============ СБОРКА ============
     const color = TYPE_COLORS[type] || "#6b7280";
@@ -353,7 +366,9 @@ export async function POST(req: NextRequest) {
         name: s.name,
         libraryId: s.id,
       })),
-      ...abilities.map((a) => ({ id: a.id, type: "ability" as const, name: a.name })),
+      ...abilities
+        .filter((a) => !a.parameters?.passive && !a.parameters?.isResource)
+        .map((a) => ({ id: a.id, type: "ability" as const, name: a.name })),
     ];
 
     const combatant = await db.combatant.create({

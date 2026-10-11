@@ -20,6 +20,7 @@ import {
 } from "./library-data";
 import { proficiencyBonus } from "@/lib/dnd/dice";
 import { resolveAbilityUses } from "./ability-uses";
+import { srdCombatAbilities } from "./class-features";
 
 const DAMAGE_TYPE_RU: Record<string, string> = {
   кол: "piercing",
@@ -507,6 +508,8 @@ export function extractSpellsFromCharacter(
 /**
  * Извлекает классовые способности персонажа с корректным масштабированием
  * и зарядами по правилам (Скрытая атака плута, Всплеск действий, Ярость и т.д.).
+ * К способностям с ручной реализацией добавляются остальные умения SRD класса и архетипа
+ * (class-features.ts); выбранные варианты (боевой стиль, воззвания) берутся из листа char.sheet.
  */
 export function extractAbilitiesFromCharacter(
   char: Record<string, any>,
@@ -518,7 +521,7 @@ export function extractAbilitiesFromCharacter(
   const className = normalizeClassName(rawClass);
   const baseAbilities = abilitiesForClass(className, level);
 
-  return baseAbilities.map((a, idx) => {
+  const handMade = baseAbilities.map((a, idx) => {
     const params = a.parameters ? { ...a.parameters } : undefined;
 
     // Скрытая атака масштабируется по уровню плута (1к6, 2к6, 3к6...)
@@ -539,4 +542,10 @@ export function extractAbilitiesFromCharacter(
       parameters: params,
     };
   });
+
+  const srd = srdCombatAbilities(
+    { className: rawClass, subclass: char.subclass, level, profBonus, abilityMods, sheet: char.sheet ?? char },
+    `abl_p_${char.id || "char"}`
+  );
+  return [...handMade, ...srd];
 }

@@ -11,6 +11,7 @@ import {
   canAct,
   checkReach,
   consumeAttackConditions,
+  classFeature,
   hasCondition,
   isStrengthMeleeAttack,
   effectiveSpeed,
@@ -989,7 +990,72 @@ function applyWeaponHitRiders(
     }
   }
 
+  const isWeapon = attack.kind !== "spell" && !attack.usesSpellAttack;
+  const extra = (label: string, roll: DamageRoll) => {
+    const rolled = rollDamage([{ ...roll, type: roll.type || weaponPart?.type || "" }], resolution.crit);
+    resolution.damage += rolled.total;
+    resolution.damageParts.push({
+      amount: rolled.total,
+      type: roll.type || weaponPart?.type || "",
+      magical: roll.type === "radiant" || weaponPart?.magical,
+    });
+    text += `, ${label} ${roll.dice}${resolution.crit ? " ×2 за крит" : ""} = ${rolled.total}`;
+  };
+  const oncePerTurn = (marker: string) => {
+    if (attacker.conditions.some((c) => c.type === marker && c.source === turnKey(state))) return false;
+    attacker.conditions = [
+      ...attacker.conditions.filter((c) => c.type !== marker),
+      { type: marker, source: turnKey(state) },
+    ];
+    return true;
+  };
+
+  // Божественный удар домена Жизни: раз в ход при попадании оружием
+  const divineStrike = classFeature(attacker, "life-domain/divine-strike");
+  const divineStrikeDie = divineStrike?.parameters?.damage?.[0];
+  if (isWeapon && divineStrikeDie && oncePerTurn("divine_strike_used")) {
+    extra("Божественный удар", divineStrikeDie);
+  }
+
+  // Улучшенная божественная кара: каждое попадание рукопашным оружием
+  const radiant = classFeature(attacker, "paladin/radiant-strikes")?.parameters?.damage?.[0];
+  if (isWeapon && attack.kind === "melee" && radiant) {
+    extra("Улучшенная божественная кара", radiant);
+  }
+
+  // Убийца колоссов: раз в ход по раненой цели
+  const colossus = classFeature(attacker, "hunter/colossus-slayer")?.parameters?.damage?.[0];
+  if (isWeapon && colossus && target.hpCurrent < target.hpMax && oncePerTurn("colossus_slayer_used")) {
+    extra("Убийца колоссов", colossus);
+  }
+
+  // Сильный критический удар варвара: лишние кости оружия при крите в ближнем бою
+  const brutal = classFeature(attacker, "barbarian/brutal-critical")?.parameters?.featureValue ?? 0;
+  const weaponDie = attack.damage[0]?.dice?.match(/^\d*d(\d+)$/)?.[1];
+  if (resolution.crit && isWeapon && attack.kind === "melee" && brutal > 0 && weaponDie) {
+    const rolled = rollDamage([{ dice: `${brutal}d${weaponDie}`, mod: 0, type: weaponPart?.type ?? "" }], false);
+    resolution.damage += rolled.total;
+    resolution.damageParts.push({ amount: rolled.total, type: weaponPart?.type ?? "", magical: weaponPart?.magical });
+    text += `, Сильный критический удар ${brutal}к${weaponDie} = ${rolled.total}`;
+  }
+
   return text;
+}
+
+/**
+ * Аура защиты паладина: союзники в радиусе ауры (и сам паладин) прибавляют его модификатор
+ * Харизмы к спасброскам, пока паладин в сознании. Берётся сильнейшая аура.
+ */
+function auraSaveBonus(state: CombatState, target: Combatant): number {
+  let best = 0;
+  for (const p of state.combatants) {
+    const aura = classFeature(p, "paladin/aura-of-protection")?.parameters;
+    if (!aura || p.hpCurrent <= 0 || hasCondition(p, "unconscious")) continue;
+    if (p.id !== target.id && isHostile(p.type, target.type)) continue;
+    if (distanceFt(p, target) > (aura.range?.value ?? 10)) continue;
+    best = Math.max(best, aura.featureValue ?? 0);
+  }
+  return best;
 }
 
 /** Готовая к применению Скрытая атака, если условия соблюдены (D&D 5e) */
@@ -1881,7 +1947,7 @@ function rollEffectSave(
   isSpell: boolean,
   label: string
 ) {
-  const save = rollSave(target, ability, dc, { isSpell });
+  const save = rollSave(target, ability, dc, { isSpell, bonus: auraSaveBonus(state, target), bonusText: "Аура защиты" });
   if (!save.success && checkLegendaryResistance(target, state, label)) {
     return { ...save, success: true, text: `${save.text} → успех (Легендарное сопротивление)` };
   }
@@ -2515,6 +2581,19 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
           amount = rolled.total;
           amountParts = rolled.parts;
         }
+        // Увёртливость: спасбросок Ловкости на половину урона — при успехе урона нет, при провале половина
+        if (
+          params.saveType === "DEX" &&
+          halfOnSave &&
+          !noSave &&
+          classFeature(target, "rogue/evasion", "monk/evasion", "hunter/evasion") &&
+          !["incapacitated", "stunned", "paralyzed", "unconscious"].some((t) => hasCondition(target, t))
+        ) {
+          const factor = save.success ? 0 : 0.5;
+          amount = Math.floor(amount * factor);
+          amountParts = amountParts?.map((p) => ({ ...p, amount: Math.floor(p.amount * factor) }));
+          state.addLog(`${target.name}: Увёртливость — ${save.success ? "урона нет" : "половина урона"}`, "ability", target.name);
+        }
       }
     } else if (params.attackType && attackBonus && !isHealing) {
       const resolution = resolveAttack(
@@ -3052,6 +3131,16 @@ export function useAbility(
  * Общие ограничения способностей: очки ци у приёмов монаха и «не чаще раза за ход» у Всплеска действий.
  * Расход списывается только после успешного применения.
  */
+/** Способность-запас по srdKey; у старых боёв ци ещё без srdKey — узнаём по названию */
+function findResourcePool(c: Combatant, srdKey: string): CombatAbility | undefined {
+  return (
+    c.abilities.find((a) => a.parameters?.srdKey === srdKey) ??
+    (srdKey === "monk/monks-focus"
+      ? c.abilities.find((a) => a.parameters?.isResource && /ци|\bki\b/i.test(a.name))
+      : undefined)
+  );
+}
+
 function useAbilityUnsafe(
   state: CombatState,
   combatantId: string,
@@ -3062,12 +3151,12 @@ function useAbilityUnsafe(
   const ability = c.abilities.find((a) => a.id === abilityId);
   const params = ability?.parameters;
 
-  const ki = params?.kiCost
-    ? c.abilities.find((a) => a.parameters?.isResource && /ци|\bki\b/i.test(a.name))
-    : undefined;
-  if (ability && params?.kiCost && ki) {
-    const left = ki.usesMax - ki.usesUsed;
-    if (left < params.kiCost) throw new EngineError(`«${ability.name}»: не хватает очков ци (${left}/${params.kiCost})`);
+  // Общий запас (ци, Канал божественности, очки чародейства): проверяем до применения, списываем после
+  const cost = params?.resourceCost ?? (params?.kiCost ? { pool: "monk/monks-focus", amount: params.kiCost } : null);
+  const pool = cost ? findResourcePool(c, cost.pool) : undefined;
+  if (ability && cost && pool && pool.usesMax > 0) {
+    const left = pool.usesMax - pool.usesUsed;
+    if (left < cost.amount) throw new EngineError(`«${ability.name}»: не хватает «${pool.name}» (${left}/${cost.amount})`);
   }
   if (ability && params?.grantsExtraAction) {
     if (c.conditions.some((cond) => cond.type === "action_surge_used" && cond.source === turnKey(state))) {
@@ -3077,8 +3166,8 @@ function useAbilityUnsafe(
 
   const result = useAbilityCore(state, combatantId, abilityId, opts);
 
-  if (params?.kiCost && ki) {
-    ki.usesUsed += params.kiCost;
+  if (cost && pool && pool.usesMax > 0) {
+    pool.usesUsed += cost.amount;
     c.abilities = [...c.abilities];
   }
   if (params?.grantsExtraAction) {
@@ -3122,9 +3211,29 @@ function useAbilityCore(
   if (params.isResource) {
     throw new EngineError(`«${ability.name}» — запас для приёмов, сам по себе не применяется`);
   }
+  if (params.passive) {
+    throw new EngineError(`«${ability.name}» действует само, применять его не нужно`);
+  }
 
   const special = useClassFeature(state, c, ability, params, opts);
   if (special) return special;
+
+  // Умение, которое разыгрывает мастер: тратим действие и заряды, пишем в журнал, что оно делает
+  if (params.manual) {
+    payActionCost(state, c, params.actionCost);
+    if (ability.usesMax > 0) {
+      ability.usesUsed += 1;
+      c.abilities = [...c.abilities];
+    }
+    const target = opts.targetIds?.[0] ? state.get(opts.targetIds[0]) : undefined;
+    const onWhom = target && target.id !== c.id ? ` на ${target.name}` : "";
+    state.addLog(`${c.name} применяет «${ability.name}»${onWhom}`, "ability", c.name);
+    state.mark(combatantId);
+    return {
+      targets: target ? [{ name: target.name, amount: 0 }] : [],
+      text: `${c.name} применяет «${ability.name}»${onWhom}. ${params.description ?? ""} Эффект разыгрывает мастер.`.trim(),
+    };
+  }
 
   if (abilityId === "revert_wild_shape" || ability.name.toLowerCase().includes("выйти из облика")) {
     payActionCost(state, c, params.actionCost);
@@ -3541,10 +3650,19 @@ export function startTurn(state: CombatState): void {
       cond.type !== "shielded" &&
       cond.type !== "sneak_used" &&
       cond.type !== "reckless" &&
-      cond.type !== "action_surge_used"
+      cond.type !== "action_surge_used" &&
+      cond.type !== "divine_strike_used" &&
+      cond.type !== "colossus_slayer_used"
   );
   // Способности, обновляющиеся каждый ход (Скрытая атака)
   c.abilities = c.abilities.map((a) => (a.refresh === "turn" ? { ...a, usesUsed: 0 } : a));
+
+  // Уцелевший (Чемпион 18): в начале хода при половине хитов или меньше — 5 + мод. Телосложения
+  const survivor = classFeature(c, "champion/survivor")?.parameters?.featureValue;
+  if (survivor && c.hpCurrent > 0 && c.hpCurrent <= Math.floor(c.hpMax / 2)) {
+    heal(state, c.id, survivor);
+    state.addLog(`${c.name}: Уцелевший восстанавливает ${survivor} хитов`, "ability", c.name);
+  }
 
   // Восстановление очков легендарных действий босса
   if (c.legendaryState) {
@@ -3655,7 +3773,10 @@ export function endTurn(state: CombatState, depth = 0): { nextId: string | null 
     if (current.hpCurrent > 0) {
       for (const cond of [...current.conditions]) {
         if (cond.saveType && cond.saveDC && cond.type !== "restrained") {
-          const save = rollSave(current, cond.saveType, cond.saveDC);
+          const save = rollSave(current, cond.saveType, cond.saveDC, {
+            bonus: auraSaveBonus(state, current),
+            bonusText: "Аура защиты",
+          });
           const label = CONDITION_EFFECTS[cond.type]?.name || cond.type;
           state.addLog(
             `${current.name}: спасбросок от «${label}» (${save.text})`,

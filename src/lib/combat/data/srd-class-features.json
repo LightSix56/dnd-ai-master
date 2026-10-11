@@ -1,0 +1,4975 @@
+{
+ "source": {
+  "repository": "https://github.com/foundryvtt/dnd5e",
+  "commit": "10d00807d854e85e02e4e6e142d8a742748c1102",
+  "notice": "This work includes material taken from the System Reference Document 5.1 (\"SRD 5.1\") by Wizards of the Coast LLC and available at https://dnd.wizards.com/resources/systems-reference-document. The SRD 5.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode. Structured data adapted from the Foundry VTT D&D 5e system (MIT License, Copyright 2021 Andrew Clayton)."
+ },
+ "classes": [
+  {
+   "key": "barbarian",
+   "nameEn": "Barbarian"
+  },
+  {
+   "key": "bard",
+   "nameEn": "Bard"
+  },
+  {
+   "key": "cleric",
+   "nameEn": "Cleric"
+  },
+  {
+   "key": "druid",
+   "nameEn": "Druid"
+  },
+  {
+   "key": "fighter",
+   "nameEn": "Fighter"
+  },
+  {
+   "key": "monk",
+   "nameEn": "Monk"
+  },
+  {
+   "key": "paladin",
+   "nameEn": "Paladin"
+  },
+  {
+   "key": "ranger",
+   "nameEn": "Ranger"
+  },
+  {
+   "key": "rogue",
+   "nameEn": "Rogue"
+  },
+  {
+   "key": "sorcerer",
+   "nameEn": "Sorcerer"
+  },
+  {
+   "key": "warlock",
+   "nameEn": "Warlock"
+  },
+  {
+   "key": "wizard",
+   "nameEn": "Wizard"
+  }
+ ],
+ "subclasses": [
+  {
+   "key": "champion",
+   "className": "fighter",
+   "nameEn": "Champion"
+  },
+  {
+   "key": "circle-of-the-land",
+   "className": "druid",
+   "nameEn": "Circle of the Land"
+  },
+  {
+   "key": "college-of-lore",
+   "className": "bard",
+   "nameEn": "College of Lore"
+  },
+  {
+   "key": "draconic-bloodline",
+   "className": "sorcerer",
+   "nameEn": "Draconic Bloodline"
+  },
+  {
+   "key": "hunter",
+   "className": "ranger",
+   "nameEn": "Hunter"
+  },
+  {
+   "key": "life-domain",
+   "className": "cleric",
+   "nameEn": "Life Domain"
+  },
+  {
+   "key": "oath-of-devotion",
+   "className": "paladin",
+   "nameEn": "Oath of Devotion"
+  },
+  {
+   "key": "path-of-the-berserker",
+   "className": "barbarian",
+   "nameEn": "Path of the Berserker"
+  },
+  {
+   "key": "school-of-evocation",
+   "className": "wizard",
+   "nameEn": "School of Evocation"
+  },
+  {
+   "key": "the-fiend",
+   "className": "warlock",
+   "nameEn": "The Fiend"
+  },
+  {
+   "key": "thief",
+   "className": "rogue",
+   "nameEn": "Thief"
+  },
+  {
+   "key": "way-of-the-open-hand",
+   "className": "monk",
+   "nameEn": "Way of the Open Hand"
+  }
+ ],
+ "scales": {
+  "barbarian.brutal-critical": {
+   "type": "number",
+   "scale": {
+    "9": 1,
+    "13": 2,
+    "17": 3
+   }
+  },
+  "barbarian.rage-damage": {
+   "type": "number",
+   "scale": {
+    "1": 2,
+    "9": 3,
+    "16": 4
+   }
+  },
+  "barbarian.rages": {
+   "type": "number",
+   "scale": {
+    "1": 2,
+    "3": 3,
+    "6": 4,
+    "12": 5,
+    "17": 6,
+    "20": 999
+   }
+  },
+  "bard.cantrips-known": {
+   "type": "number",
+   "scale": {
+    "1": 2,
+    "4": 3,
+    "10": 4
+   }
+  },
+  "bard.inspiration": {
+   "type": "dice",
+   "scale": {
+    "1": "1d6",
+    "5": "1d8",
+    "10": "1d10",
+    "15": "1d12"
+   }
+  },
+  "bard.song-of-rest": {
+   "type": "dice",
+   "scale": {
+    "2": "1d6",
+    "9": "1d8",
+    "13": "1d10",
+    "17": "1d12"
+   }
+  },
+  "bard.spells-known": {
+   "type": "number",
+   "scale": {
+    "1": 4,
+    "2": 5,
+    "3": 6,
+    "4": 7,
+    "5": 8,
+    "6": 9,
+    "7": 10,
+    "8": 11,
+    "9": 12,
+    "10": 14,
+    "11": 15,
+    "13": 16,
+    "14": 18,
+    "15": 19,
+    "17": 20,
+    "18": 22
+   }
+  },
+  "cleric.cantrips-known": {
+   "type": "number",
+   "scale": {
+    "1": 3,
+    "4": 4,
+    "10": 5
+   }
+  },
+  "cleric.channel-divinity": {
+   "type": "number",
+   "scale": {
+    "2": 1,
+    "6": 2,
+    "18": 3
+   }
+  },
+  "cleric.destroy-undead": {
+   "type": "cr",
+   "scale": {
+    "5": 0.5,
+    "8": 1,
+    "11": 2,
+    "14": 3,
+    "17": 4
+   }
+  },
+  "druid.cantrips-known": {
+   "type": "number",
+   "scale": {
+    "1": 2,
+    "4": 3,
+    "10": 4
+   }
+  },
+  "druid.wild-shape": {
+   "type": "cr",
+   "scale": {
+    "2": 0.25,
+    "4": 0.5,
+    "8": 1
+   }
+  },
+  "druid.wild-shape-uses": {
+   "type": "number",
+   "scale": {
+    "2": 2,
+    "20": 99
+   }
+  },
+  "fighter.action-surge": {
+   "type": "number",
+   "scale": {
+    "2": 1,
+    "17": 2
+   }
+  },
+  "fighter.indomitable": {
+   "type": "number",
+   "scale": {
+    "9": 1,
+    "13": 2,
+    "17": 3
+   }
+  },
+  "life-domain.divine-strike": {
+   "type": "dice",
+   "scale": {
+    "8": "1d8",
+    "14": "2d8"
+   }
+  },
+  "monk.die": {
+   "type": "dice",
+   "scale": {
+    "1": "1d4",
+    "5": "1d6",
+    "11": "1d8",
+    "17": "1d10"
+   }
+  },
+  "monk.unarmored-movement": {
+   "type": "distance",
+   "scale": {
+    "2": 10,
+    "6": 15,
+    "10": 20,
+    "14": 25,
+    "18": 30
+   }
+  },
+  "paladin.aura-radius": {
+   "type": "distance",
+   "scale": {
+    "6": 10,
+    "18": 30
+   }
+  },
+  "ranger.spells-known": {
+   "type": "number",
+   "scale": {
+    "2": 2,
+    "3": 3,
+    "5": 4,
+    "7": 5,
+    "9": 6,
+    "11": 7,
+    "13": 8,
+    "15": 9,
+    "17": 10,
+    "19": 11
+   }
+  },
+  "rogue.sneak-attack": {
+   "type": "dice",
+   "scale": {
+    "1": "1d6",
+    "3": "2d6",
+    "5": "3d6",
+    "7": "4d6",
+    "9": "5d6",
+    "11": "6d6",
+    "13": "7d6",
+    "15": "8d6",
+    "17": "9d6",
+    "19": "10d6"
+   }
+  },
+  "sorcerer.cantrips-known": {
+   "type": "number",
+   "scale": {
+    "1": 4,
+    "4": 5,
+    "10": 6
+   }
+  },
+  "sorcerer.spells-known": {
+   "type": "number",
+   "scale": {
+    "1": 2,
+    "2": 3,
+    "3": 4,
+    "4": 5,
+    "5": 6,
+    "6": 7,
+    "7": 8,
+    "8": 9,
+    "9": 10,
+    "10": 11,
+    "11": 12,
+    "13": 13,
+    "15": 14,
+    "17": 15
+   }
+  },
+  "warlock.cantrips-known": {
+   "type": "number",
+   "scale": {
+    "1": 2,
+    "4": 3,
+    "10": 4
+   }
+  },
+  "warlock.spells-known": {
+   "type": "number",
+   "scale": {
+    "1": 2,
+    "2": 3,
+    "3": 4,
+    "4": 5,
+    "5": 6,
+    "6": 7,
+    "7": 8,
+    "8": 9,
+    "9": 10,
+    "11": 11,
+    "13": 12,
+    "15": 13,
+    "17": 14,
+    "19": 15
+   }
+  },
+  "wizard.cantrips-known": {
+   "type": "number",
+   "scale": {
+    "1": 3,
+    "4": 4,
+    "10": 5
+   }
+  }
+ },
+ "features": [
+  {
+   "key": "barbarian/rage",
+   "nameEn": "Rage",
+   "className": "barbarian",
+   "subclass": null,
+   "level": 1,
+   "choice": false,
+   "uses": {
+    "max": "@scale.barbarian.rages",
+    "recovery": [
+     "lr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "bonus",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     },
+     "duration": {
+      "value": "1",
+      "units": "minute"
+     },
+     "consumes": [
+      {
+       "pool": "barbarian/rage",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": true
+  },
+  {
+   "key": "barbarian/unarmored-defense-barbarian",
+   "nameEn": "Unarmored Defense (Barbarian)",
+   "className": "barbarian",
+   "subclass": null,
+   "level": 1,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": true
+  },
+  {
+   "key": "barbarian/danger-sense",
+   "nameEn": "Danger Sense",
+   "className": "barbarian",
+   "subclass": null,
+   "level": 2,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "barbarian/reckless-attack",
+   "nameEn": "Reckless Attack",
+   "className": "barbarian",
+   "subclass": null,
+   "level": 2,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "barbarian/primal-path",
+   "nameEn": "Primal Path",
+   "className": "barbarian",
+   "subclass": null,
+   "level": 3,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "barbarian/extra-attack",
+   "nameEn": "Extra Attack",
+   "className": "barbarian",
+   "subclass": null,
+   "level": 5,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "barbarian/fast-movement",
+   "nameEn": "Fast Movement",
+   "className": "barbarian",
+   "subclass": null,
+   "level": 5,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": true
+  },
+  {
+   "key": "barbarian/feral-instinct",
+   "nameEn": "Feral Instinct",
+   "className": "barbarian",
+   "subclass": null,
+   "level": 7,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": true
+  },
+  {
+   "key": "barbarian/brutal-critical",
+   "nameEn": "Brutal Critical",
+   "className": "barbarian",
+   "subclass": null,
+   "level": 9,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "barbarian/relentless-rage",
+   "nameEn": "Relentless Rage",
+   "className": "barbarian",
+   "subclass": null,
+   "level": 11,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility"
+    },
+    {
+     "type": "save",
+     "save": {
+      "ability": "con",
+      "dc": "10",
+      "onSave": "half"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "barbarian/persistent-rage",
+   "nameEn": "Persistent Rage",
+   "className": "barbarian",
+   "subclass": null,
+   "level": 15,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "barbarian/indomitable-might",
+   "nameEn": "Indomitable Might",
+   "className": "barbarian",
+   "subclass": null,
+   "level": 18,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "special",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "barbarian/primal-champion",
+   "nameEn": "Primal Champion",
+   "className": "barbarian",
+   "subclass": null,
+   "level": 20,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "path-of-the-berserker/frenzy",
+   "nameEn": "Frenzy",
+   "className": "barbarian",
+   "subclass": "path-of-the-berserker",
+   "level": 3,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "bonus",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "path-of-the-berserker/mindless-rage",
+   "nameEn": "Mindless Rage",
+   "className": "barbarian",
+   "subclass": "path-of-the-berserker",
+   "level": 6,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "path-of-the-berserker/intimidating-presence",
+   "nameEn": "Intimidating Presence",
+   "className": "barbarian",
+   "subclass": "path-of-the-berserker",
+   "level": 10,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "save",
+     "activation": "action",
+     "target": "creature",
+     "targetCount": "1",
+     "range": {
+      "units": "ft",
+      "value": "30"
+     },
+     "save": {
+      "ability": "wis",
+      "dc": "cha",
+      "onSave": "half"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "path-of-the-berserker/retaliation",
+   "nameEn": "Retaliation",
+   "className": "barbarian",
+   "subclass": "path-of-the-berserker",
+   "level": 14,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "reaction",
+     "target": "creature",
+     "targetCount": "1",
+     "range": {
+      "units": "ft",
+      "value": "5"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "bard/bardic-inspiration",
+   "nameEn": "Bardic Inspiration",
+   "className": "bard",
+   "subclass": null,
+   "level": 1,
+   "choice": false,
+   "uses": {
+    "max": "max(1, @abilities.cha.mod)",
+    "recovery": [
+     "lr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "bonus",
+     "target": "creature",
+     "targetCount": "1",
+     "range": {
+      "units": "ft",
+      "value": "60"
+     },
+     "duration": {
+      "value": "10",
+      "units": "minute"
+     },
+     "consumes": [
+      {
+       "pool": "bard/bardic-inspiration",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "bard/spellcasting",
+   "nameEn": "Spellcasting",
+   "className": "bard",
+   "subclass": null,
+   "level": 1,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "bard/jack-of-all-trades",
+   "nameEn": "Jack of All Trades",
+   "className": "bard",
+   "subclass": null,
+   "level": 2,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": true
+  },
+  {
+   "key": "bard/song-of-rest",
+   "nameEn": "Song of Rest",
+   "className": "bard",
+   "subclass": null,
+   "level": 2,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "heal",
+     "activation": "special",
+     "heal": "1@scale.bard.song-of-rest",
+     "healTypes": [
+      "healing"
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "bard/bard-college",
+   "nameEn": "Bard College",
+   "className": "bard",
+   "subclass": null,
+   "level": 3,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "bard/expertise",
+   "nameEn": "Expertise",
+   "className": "bard",
+   "subclass": null,
+   "level": 3,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "bard/font-of-inspiration",
+   "nameEn": "Font of Inspiration",
+   "className": "bard",
+   "subclass": null,
+   "level": 5,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "bard/countercharm",
+   "nameEn": "Countercharm",
+   "className": "bard",
+   "subclass": null,
+   "level": 6,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "action",
+     "condition": "Creatures must be able to hear you to benefit.",
+     "range": {
+      "units": "ft",
+      "value": "30"
+     },
+     "duration": {
+      "value": "1",
+      "units": "round"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "bard/magical-secrets",
+   "nameEn": "Magical Secrets",
+   "className": "bard",
+   "subclass": null,
+   "level": 10,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "bard/superior-inspiration",
+   "nameEn": "Superior Inspiration",
+   "className": "bard",
+   "subclass": null,
+   "level": 20,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "encounter",
+     "condition": "When you roll initiative and have no uses of Bardic Inspiration",
+     "consumes": [
+      {
+       "pool": "bard/bardic-inspiration",
+       "amount": "-1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "college-of-lore/bonus-proficiencies",
+   "nameEn": "Bonus Proficiencies",
+   "className": "bard",
+   "subclass": "college-of-lore",
+   "level": 3,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "college-of-lore/cutting-words",
+   "nameEn": "Cutting Words",
+   "className": "bard",
+   "subclass": "college-of-lore",
+   "level": 3,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "reaction",
+     "condition": "Target must be able to hear you and not be immune to being Charmed.",
+     "target": "creature",
+     "targetCount": "1",
+     "range": {
+      "units": "ft",
+      "value": "60"
+     },
+     "duration": {
+      "value": "",
+      "units": "inst"
+     },
+     "consumes": [
+      {
+       "pool": "bard/bardic-inspiration",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "college-of-lore/additional-magical-secrets",
+   "nameEn": "Additional Magical Secrets",
+   "className": "bard",
+   "subclass": "college-of-lore",
+   "level": 6,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "college-of-lore/peerless-skill",
+   "nameEn": "Peerless Skill",
+   "className": "bard",
+   "subclass": "college-of-lore",
+   "level": 14,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "special",
+     "consumes": [
+      {
+       "pool": "bard/bardic-inspiration",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "cleric/divine-domain",
+   "nameEn": "Divine Domain",
+   "className": "cleric",
+   "subclass": null,
+   "level": 1,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "cleric/spellcasting",
+   "nameEn": "Spellcasting",
+   "className": "cleric",
+   "subclass": null,
+   "level": 1,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "cleric/channel-divinity",
+   "nameEn": "Channel Divinity",
+   "className": "cleric",
+   "subclass": null,
+   "level": 2,
+   "choice": false,
+   "uses": {
+    "max": "@scale.cleric.channel-divinity",
+    "recovery": [
+     "sr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "special",
+     "consumes": [
+      {
+       "pool": "cleric/channel-divinity",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "cleric/channel-divinity-turn-undead",
+   "nameEn": "Channel Divinity: Turn Undead",
+   "className": "cleric",
+   "subclass": null,
+   "level": 2,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "save",
+     "activation": "action",
+     "condition": "Targets must be able to see or hear you.",
+     "range": {
+      "units": "ft",
+      "value": "30"
+     },
+     "duration": {
+      "value": "1",
+      "units": "minute"
+     },
+     "consumes": [
+      {
+       "pool": "cleric/channel-divinity",
+       "amount": "1"
+      }
+     ],
+     "save": {
+      "ability": "wis",
+      "dc": "wis",
+      "onSave": "half"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "cleric/sear-undead",
+   "nameEn": "Destroy Undead",
+   "className": "cleric",
+   "subclass": null,
+   "level": 5,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "cleric/divine-intervention",
+   "nameEn": "Divine Intervention",
+   "className": "cleric",
+   "subclass": null,
+   "level": 10,
+   "choice": false,
+   "uses": {
+    "max": "1",
+    "recovery": [
+     "lr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "action",
+     "condition": "Your need must be great...",
+     "consumes": [
+      {
+       "pool": "cleric/divine-intervention",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "life-domain/bonus-proficiency",
+   "nameEn": "Bonus Proficiency",
+   "className": "cleric",
+   "subclass": "life-domain",
+   "level": 1,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "life-domain/disciple-of-life",
+   "nameEn": "Disciple of Life",
+   "className": "cleric",
+   "subclass": "life-domain",
+   "level": 1,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "life-domain/channel-divinity-preserve-life",
+   "nameEn": "Channel Divinity: Preserve Life",
+   "className": "cleric",
+   "subclass": "life-domain",
+   "level": 2,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "heal",
+     "activation": "action",
+     "condition": "The target cannot be Undead or a Construct",
+     "range": {
+      "units": "ft",
+      "value": "30"
+     },
+     "consumes": [
+      {
+       "pool": "cleric/channel-divinity",
+       "amount": "1"
+      }
+     ],
+     "heal": "5* @classes.cleric.levels",
+     "healTypes": [
+      "healing"
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "life-domain/blessed-healer",
+   "nameEn": "Blessed Healer",
+   "className": "cleric",
+   "subclass": "life-domain",
+   "level": 6,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "heal",
+     "activation": "special",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     },
+     "heal": "@scaling + 2",
+     "healTypes": [
+      "healing"
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "life-domain/divine-strike",
+   "nameEn": "Divine Strike",
+   "className": "cleric",
+   "subclass": "life-domain",
+   "level": 8,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "damage",
+     "damage": [
+      {
+       "formula": "@scale.life-domain.divine-strike",
+       "types": [
+        "radiant"
+       ]
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "life-domain/supreme-healing",
+   "nameEn": "Supreme Healing",
+   "className": "cleric",
+   "subclass": "life-domain",
+   "level": 17,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "druid/druidic",
+   "nameEn": "Druidic",
+   "className": "druid",
+   "subclass": null,
+   "level": 1,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "druid/spellcasting",
+   "nameEn": "Spellcasting",
+   "className": "druid",
+   "subclass": null,
+   "level": 1,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "druid/druid-circle",
+   "nameEn": "Druid Circle",
+   "className": "druid",
+   "subclass": null,
+   "level": 2,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "druid/wild-shape",
+   "nameEn": "Wild Shape",
+   "className": "druid",
+   "subclass": null,
+   "level": 2,
+   "choice": false,
+   "uses": {
+    "max": "@scale.druid.wild-shape-uses",
+    "recovery": [
+     "sr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "transform",
+     "activation": "action",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     },
+     "duration": {
+      "value": "floor(@classes.druid.levels / 2)",
+      "units": "hour"
+     },
+     "consumes": [
+      {
+       "pool": "druid/wild-shape",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "druid/beast-spells",
+   "nameEn": "Beast Spells",
+   "className": "druid",
+   "subclass": null,
+   "level": 18,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "druid/timeless-body",
+   "nameEn": "Timeless Body",
+   "className": "druid",
+   "subclass": null,
+   "level": 18,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "druid/archdruid",
+   "nameEn": "Archdruid",
+   "className": "druid",
+   "subclass": null,
+   "level": 20,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "circle-of-the-land/bonus-cantrip",
+   "nameEn": "Bonus Cantrip",
+   "className": "druid",
+   "subclass": "circle-of-the-land",
+   "level": 2,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "circle-of-the-land/natural-recovery",
+   "nameEn": "Natural Recovery",
+   "className": "druid",
+   "subclass": "circle-of-the-land",
+   "level": 2,
+   "choice": false,
+   "uses": {
+    "max": "1",
+    "recovery": [
+     "lr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "special",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     },
+     "consumes": [
+      {
+       "pool": "circle-of-the-land/natural-recovery",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "circle-of-the-land/circle-spells",
+   "nameEn": "Circle Spells",
+   "className": "druid",
+   "subclass": "circle-of-the-land",
+   "level": 3,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "circle-of-the-land/lands-stride",
+   "nameEn": "Land's Stride",
+   "className": "druid",
+   "subclass": "circle-of-the-land",
+   "level": 6,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "circle-of-the-land/natures-ward",
+   "nameEn": "Nature's Ward",
+   "className": "druid",
+   "subclass": "circle-of-the-land",
+   "level": 10,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": true
+  },
+  {
+   "key": "circle-of-the-land/natures-sanctuary",
+   "nameEn": "Nature's Sanctuary",
+   "className": "druid",
+   "subclass": "circle-of-the-land",
+   "level": 14,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "save",
+     "save": {
+      "ability": "wis",
+      "dc": "wis",
+      "onSave": "half"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "fighter/archery",
+   "nameEn": "Archery",
+   "className": "fighter",
+   "subclass": null,
+   "level": 1,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": true
+  },
+  {
+   "key": "fighter/defense",
+   "nameEn": "Defense",
+   "className": "fighter",
+   "subclass": null,
+   "level": 1,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": true
+  },
+  {
+   "key": "fighter/dueling",
+   "nameEn": "Dueling",
+   "className": "fighter",
+   "subclass": null,
+   "level": 1,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": true
+  },
+  {
+   "key": "fighter/fighting-style",
+   "nameEn": "Fighting Style",
+   "className": "fighter",
+   "subclass": null,
+   "level": 1,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "fighter/great-weapon-fighting",
+   "nameEn": "Great Weapon Fighting",
+   "className": "fighter",
+   "subclass": null,
+   "level": 1,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "fighter/protection",
+   "nameEn": "Protection",
+   "className": "fighter",
+   "subclass": null,
+   "level": 1,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "reaction",
+     "condition": "Must be wearing a shield.",
+     "target": "creature",
+     "targetCount": "1",
+     "range": {
+      "units": "ft",
+      "value": "5"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "fighter/second-wind",
+   "nameEn": "Second Wind",
+   "className": "fighter",
+   "subclass": null,
+   "level": 1,
+   "choice": false,
+   "uses": {
+    "max": "1",
+    "recovery": [
+     "sr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "heal",
+     "activation": "bonus",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     },
+     "consumes": [
+      {
+       "pool": "fighter/second-wind",
+       "amount": "1"
+      }
+     ],
+     "heal": "1d10 + @classes.fighter.levels",
+     "healTypes": [
+      "healing"
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "fighter/two-weapon-fighting",
+   "nameEn": "Two-Weapon Fighting",
+   "className": "fighter",
+   "subclass": null,
+   "level": 1,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "fighter/action-surge",
+   "nameEn": "Action Surge",
+   "className": "fighter",
+   "subclass": null,
+   "level": 2,
+   "choice": false,
+   "uses": {
+    "max": "@scale.fighter.action-surge",
+    "recovery": [
+     "sr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "special",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     },
+     "consumes": [
+      {
+       "pool": "fighter/action-surge",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "fighter/martial-archetype",
+   "nameEn": "Martial Archetype",
+   "className": "fighter",
+   "subclass": null,
+   "level": 3,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "fighter/extra-attack",
+   "nameEn": "Extra Attack",
+   "className": "fighter",
+   "subclass": null,
+   "level": 5,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "fighter/indomitable",
+   "nameEn": "Indomitable",
+   "className": "fighter",
+   "subclass": null,
+   "level": 9,
+   "choice": false,
+   "uses": {
+    "max": "@scale.fighter.indomitable",
+    "recovery": [
+     "lr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "special",
+     "consumes": [
+      {
+       "pool": "fighter/indomitable",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "champion/improved-critical",
+   "nameEn": "Improved Critical",
+   "className": "fighter",
+   "subclass": "champion",
+   "level": 3,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "champion/remarkable-athlete",
+   "nameEn": "Remarkable Athlete",
+   "className": "fighter",
+   "subclass": "champion",
+   "level": 7,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "champion/additional-fighting-style",
+   "nameEn": "Additional Fighting Style",
+   "className": "fighter",
+   "subclass": "champion",
+   "level": 10,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "champion/archery",
+   "nameEn": "Archery",
+   "className": "fighter",
+   "subclass": "champion",
+   "level": 10,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": true
+  },
+  {
+   "key": "champion/defense",
+   "nameEn": "Defense",
+   "className": "fighter",
+   "subclass": "champion",
+   "level": 10,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": true
+  },
+  {
+   "key": "champion/dueling",
+   "nameEn": "Dueling",
+   "className": "fighter",
+   "subclass": "champion",
+   "level": 10,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": true
+  },
+  {
+   "key": "champion/great-weapon-fighting",
+   "nameEn": "Great Weapon Fighting",
+   "className": "fighter",
+   "subclass": "champion",
+   "level": 10,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "champion/protection",
+   "nameEn": "Protection",
+   "className": "fighter",
+   "subclass": "champion",
+   "level": 10,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "reaction",
+     "condition": "Must be wearing a shield.",
+     "target": "creature",
+     "targetCount": "1",
+     "range": {
+      "units": "ft",
+      "value": "5"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "champion/two-weapon-fighting",
+   "nameEn": "Two-Weapon Fighting",
+   "className": "fighter",
+   "subclass": "champion",
+   "level": 10,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "champion/superior-critical",
+   "nameEn": "Superior Critical",
+   "className": "fighter",
+   "subclass": "champion",
+   "level": 15,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "champion/survivor",
+   "nameEn": "Survivor",
+   "className": "fighter",
+   "subclass": "champion",
+   "level": 18,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "heal",
+     "heal": "5 + @mod",
+     "healTypes": [
+      "healing"
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "monk/martial-arts",
+   "nameEn": "Martial Arts",
+   "className": "monk",
+   "subclass": null,
+   "level": 1,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "monk/unarmored-defense",
+   "nameEn": "Unarmored Defense",
+   "className": "monk",
+   "subclass": null,
+   "level": 1,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": true
+  },
+  {
+   "key": "monk/flurry-of-blows",
+   "nameEn": "Flurry of Blows",
+   "className": "monk",
+   "subclass": null,
+   "level": 2,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "bonus",
+     "condition": "Comes immediately after taking the Attack action.",
+     "range": {
+      "units": "ft",
+      "value": "5"
+     },
+     "consumes": [
+      {
+       "pool": "monk/monks-focus",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "monk/monks-focus",
+   "nameEn": "Ki",
+   "className": "monk",
+   "subclass": null,
+   "level": 2,
+   "choice": false,
+   "uses": {
+    "max": "@classes.monk.levels",
+    "recovery": [
+     "sr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "special",
+     "consumes": [
+      {
+       "pool": "monk/monks-focus",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "monk/patient-defense",
+   "nameEn": "Patient Defense",
+   "className": "monk",
+   "subclass": null,
+   "level": 2,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "bonus",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     },
+     "consumes": [
+      {
+       "pool": "monk/monks-focus",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "monk/step-of-the-wind",
+   "nameEn": "Step of the Wind",
+   "className": "monk",
+   "subclass": null,
+   "level": 2,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "bonus",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     },
+     "consumes": [
+      {
+       "pool": "monk/monks-focus",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "monk/unarmored-movement",
+   "nameEn": "Unarmored Movement",
+   "className": "monk",
+   "subclass": null,
+   "level": 2,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": true
+  },
+  {
+   "key": "monk/deflect-attacks",
+   "nameEn": "Deflect Missiles",
+   "className": "monk",
+   "subclass": null,
+   "level": 3,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "attack",
+     "activation": "reaction",
+     "range": {
+      "units": "ft",
+      "value": "20"
+     },
+     "consumes": [
+      {
+       "pool": "monk/monks-focus",
+       "amount": "1"
+      }
+     ],
+     "damage": [
+      {
+       "formula": "1@scale.monk.die + @mod",
+       "types": []
+      }
+     ],
+     "attack": {
+      "type": "ranged"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "monk/monastic-tradition",
+   "nameEn": "Monastic Tradition",
+   "className": "monk",
+   "subclass": null,
+   "level": 3,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "monk/slow-fall",
+   "nameEn": "Slow Fall",
+   "className": "monk",
+   "subclass": null,
+   "level": 4,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "reaction",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "monk/extra-attack",
+   "nameEn": "Extra Attack",
+   "className": "monk",
+   "subclass": null,
+   "level": 5,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "monk/stunning-strike",
+   "nameEn": "Stunning Strike",
+   "className": "monk",
+   "subclass": null,
+   "level": 5,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "save",
+     "activation": "special",
+     "consumes": [
+      {
+       "pool": "monk/monks-focus",
+       "amount": "1"
+      }
+     ],
+     "save": {
+      "ability": "con",
+      "dc": "wis",
+      "onSave": "half"
+     }
+    }
+   ],
+   "hasEffects": true
+  },
+  {
+   "key": "monk/empowered-strikes",
+   "nameEn": "Ki-Empowered Strikes",
+   "className": "monk",
+   "subclass": null,
+   "level": 6,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "monk/evasion",
+   "nameEn": "Evasion",
+   "className": "monk",
+   "subclass": null,
+   "level": 7,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "monk/self-restoration",
+   "nameEn": "Stillness of Mind",
+   "className": "monk",
+   "subclass": null,
+   "level": 7,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "action",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "monk/purity-of-body",
+   "nameEn": "Purity of Body",
+   "className": "monk",
+   "subclass": null,
+   "level": 10,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "monk/tongue-of-the-sun-and-moon",
+   "nameEn": "Tongue of the Sun and Moon",
+   "className": "monk",
+   "subclass": null,
+   "level": 13,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "monk/disciplined-survivor",
+   "nameEn": "Diamond Soul",
+   "className": "monk",
+   "subclass": null,
+   "level": 14,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "condition": "Whenever you make a saving throw and fail",
+     "consumes": [
+      {
+       "pool": "monk/monks-focus",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": true
+  },
+  {
+   "key": "monk/timeless-body",
+   "nameEn": "Timeless Body",
+   "className": "monk",
+   "subclass": null,
+   "level": 15,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "monk/superior-defense",
+   "nameEn": "Empty Body",
+   "className": "monk",
+   "subclass": null,
+   "level": 18,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "action",
+     "condition": "Also requires 4 ki points (or 8 for Astral Projection).",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     },
+     "duration": {
+      "value": "1",
+      "units": "minute"
+     }
+    }
+   ],
+   "hasEffects": true
+  },
+  {
+   "key": "monk/perfect-focus",
+   "nameEn": "Perfect Self",
+   "className": "monk",
+   "subclass": null,
+   "level": 20,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "way-of-the-open-hand/open-hand-technique",
+   "nameEn": "Open Hand Technique",
+   "className": "monk",
+   "subclass": "way-of-the-open-hand",
+   "level": 3,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "special",
+     "target": "creature",
+     "targetCount": "1"
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "way-of-the-open-hand/wholeness-of-body",
+   "nameEn": "Wholeness of Body",
+   "className": "monk",
+   "subclass": "way-of-the-open-hand",
+   "level": 6,
+   "choice": false,
+   "uses": {
+    "max": "1",
+    "recovery": [
+     "lr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "heal",
+     "activation": "action",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     },
+     "consumes": [
+      {
+       "pool": "way-of-the-open-hand/wholeness-of-body",
+       "amount": "1"
+      }
+     ],
+     "heal": "3 * @classes.monk.levels",
+     "healTypes": [
+      "healing"
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "way-of-the-open-hand/tranquility",
+   "nameEn": "Tranquility",
+   "className": "monk",
+   "subclass": "way-of-the-open-hand",
+   "level": 11,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "save",
+     "activation": "special",
+     "save": {
+      "ability": "wis",
+      "dc": "wis",
+      "onSave": "half"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "way-of-the-open-hand/quivering-palm",
+   "nameEn": "Quivering Palm",
+   "className": "monk",
+   "subclass": "way-of-the-open-hand",
+   "level": 17,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "save",
+     "activation": "action",
+     "condition": "Only ending the vibrations harmfully requires an action.",
+     "consumes": [
+      {
+       "pool": "monk/monks-focus",
+       "amount": "3"
+      }
+     ],
+     "damage": [
+      {
+       "formula": "10d10",
+       "types": [
+        "necrotic"
+       ]
+      }
+     ],
+     "save": {
+      "ability": "con",
+      "dc": "wis",
+      "onSave": "half"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "paladin/divine-sense",
+   "nameEn": "Divine Sense",
+   "className": "paladin",
+   "subclass": null,
+   "level": 1,
+   "choice": false,
+   "uses": {
+    "max": "1 + @abilities.cha.mod",
+    "recovery": [
+     "lr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "action",
+     "range": {
+      "units": "ft",
+      "value": "60"
+     },
+     "duration": {
+      "value": "1",
+      "units": "round"
+     },
+     "consumes": [
+      {
+       "pool": "paladin/divine-sense",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "paladin/lay-on-hands",
+   "nameEn": "Lay on Hands",
+   "className": "paladin",
+   "subclass": null,
+   "level": 1,
+   "choice": false,
+   "uses": {
+    "max": "5 * @classes.paladin.levels",
+    "recovery": [
+     "lr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "heal",
+     "activation": "action",
+     "condition": "Target cannot be Undead or a Construct.",
+     "target": "creature",
+     "targetCount": "1",
+     "range": {
+      "units": "touch",
+      "value": null
+     },
+     "consumes": [
+      {
+       "pool": "paladin/lay-on-hands",
+       "amount": "1"
+      }
+     ],
+     "heal": "1",
+     "healTypes": [
+      "healing"
+     ]
+    },
+    {
+     "type": "utility",
+     "name": "Cure Disease and Poison",
+     "activation": "action",
+     "condition": "Target cannot be Undead or a Construct.",
+     "target": "creature",
+     "targetCount": "1",
+     "range": {
+      "units": "touch",
+      "value": null
+     },
+     "consumes": [
+      {
+       "pool": "paladin/lay-on-hands",
+       "amount": "5"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "paladin/defense",
+   "nameEn": "Defense",
+   "className": "paladin",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": true
+  },
+  {
+   "key": "paladin/divine-smite",
+   "nameEn": "Divine Smite",
+   "className": "paladin",
+   "subclass": null,
+   "level": 2,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "damage",
+     "activation": "special",
+     "target": "creature",
+     "targetCount": "1",
+     "damage": [
+      {
+       "formula": "2d8",
+       "types": [
+        "radiant"
+       ]
+      }
+     ]
+    },
+    {
+     "type": "damage",
+     "activation": "special",
+     "target": "creature",
+     "targetCount": "1",
+     "damage": [
+      {
+       "formula": "1d8",
+       "types": []
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "paladin/dueling",
+   "nameEn": "Dueling",
+   "className": "paladin",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": true
+  },
+  {
+   "key": "paladin/fighting-style",
+   "nameEn": "Fighting Style",
+   "className": "paladin",
+   "subclass": null,
+   "level": 2,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "paladin/great-weapon-fighting",
+   "nameEn": "Great Weapon Fighting",
+   "className": "paladin",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "paladin/protection",
+   "nameEn": "Protection",
+   "className": "paladin",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "reaction",
+     "condition": "Must be wearing a shield.",
+     "target": "creature",
+     "targetCount": "1",
+     "range": {
+      "units": "ft",
+      "value": "5"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "paladin/spellcasting",
+   "nameEn": "Spellcasting",
+   "className": "paladin",
+   "subclass": null,
+   "level": 2,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "paladin/channel-divinity",
+   "nameEn": "Channel Divinity",
+   "className": "paladin",
+   "subclass": null,
+   "level": 3,
+   "choice": false,
+   "uses": {
+    "max": "1",
+    "recovery": [
+     "sr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "special",
+     "consumes": [
+      {
+       "pool": "paladin/channel-divinity",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "paladin/divine-health",
+   "nameEn": "Divine Health",
+   "className": "paladin",
+   "subclass": null,
+   "level": 3,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "paladin/sacred-oath",
+   "nameEn": "Sacred Oath",
+   "className": "paladin",
+   "subclass": null,
+   "level": 3,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "paladin/extra-attack",
+   "nameEn": "Extra Attack",
+   "className": "paladin",
+   "subclass": null,
+   "level": 5,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "paladin/aura-of-protection",
+   "nameEn": "Aura of Protection",
+   "className": "paladin",
+   "subclass": null,
+   "level": 6,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "paladin/aura-of-courage",
+   "nameEn": "Aura of Courage",
+   "className": "paladin",
+   "subclass": null,
+   "level": 10,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "paladin/radiant-strikes",
+   "nameEn": "Improved Divine Smite",
+   "className": "paladin",
+   "subclass": null,
+   "level": 11,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "damage",
+     "damage": [
+      {
+       "formula": "1d8",
+       "types": [
+        "radiant"
+       ]
+      }
+     ]
+    }
+   ],
+   "hasEffects": true
+  },
+  {
+   "key": "paladin/restoring-touch",
+   "nameEn": "Cleansing Touch",
+   "className": "paladin",
+   "subclass": null,
+   "level": 14,
+   "choice": false,
+   "uses": {
+    "max": "max(1, @abilities.cha.mod)",
+    "recovery": [
+     "lr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "action",
+     "condition": "Target must be willing.",
+     "target": "creature",
+     "targetCount": "1",
+     "range": {
+      "units": "touch",
+      "value": null
+     },
+     "duration": {
+      "value": "",
+      "units": "inst"
+     },
+     "consumes": [
+      {
+       "pool": "paladin/restoring-touch",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "oath-of-devotion/channel-divinity-sacred-weapon",
+   "nameEn": "Channel Divinity: Sacred Weapon",
+   "className": "paladin",
+   "subclass": "oath-of-devotion",
+   "level": 3,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "action",
+     "range": {
+      "units": "ft",
+      "value": "20"
+     },
+     "duration": {
+      "value": "1",
+      "units": "minute"
+     },
+     "consumes": [
+      {
+       "pool": "paladin/channel-divinity",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "oath-of-devotion/channel-divinity-turn-the-unholy",
+   "nameEn": "Channel Divinity: Turn the Unholy",
+   "className": "paladin",
+   "subclass": "oath-of-devotion",
+   "level": 3,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "save",
+     "activation": "action",
+     "target": "self",
+     "range": {
+      "units": "ft",
+      "value": "30"
+     },
+     "duration": {
+      "value": "1",
+      "units": "minute"
+     },
+     "consumes": [
+      {
+       "pool": "paladin/channel-divinity",
+       "amount": "1"
+      }
+     ],
+     "save": {
+      "ability": "wis",
+      "dc": "cha",
+      "onSave": "half"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "oath-of-devotion/aura-of-devotion",
+   "nameEn": "Aura of Devotion",
+   "className": "paladin",
+   "subclass": "oath-of-devotion",
+   "level": 7,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "oath-of-devotion/purity-of-spirit",
+   "nameEn": "Purity of Spirit",
+   "className": "paladin",
+   "subclass": "oath-of-devotion",
+   "level": 15,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "oath-of-devotion/holy-nimbus",
+   "nameEn": "Holy Nimbus",
+   "className": "paladin",
+   "subclass": "oath-of-devotion",
+   "level": 20,
+   "choice": false,
+   "uses": {
+    "max": "1",
+    "recovery": [
+     "lr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "damage",
+     "activation": "action",
+     "target": "self",
+     "range": {
+      "units": "ft",
+      "value": "30"
+     },
+     "duration": {
+      "value": "1",
+      "units": "minute"
+     },
+     "consumes": [
+      {
+       "pool": "oath-of-devotion/holy-nimbus",
+       "amount": "1"
+      }
+     ],
+     "damage": [
+      {
+       "formula": "10",
+       "types": [
+        "radiant"
+       ]
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "ranger/deft-explorer",
+   "nameEn": "Natural Explorer",
+   "className": "ranger",
+   "subclass": null,
+   "level": 1,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "ranger/favored-enemy",
+   "nameEn": "Favored Enemy",
+   "className": "ranger",
+   "subclass": null,
+   "level": 1,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "ranger/archery",
+   "nameEn": "Archery",
+   "className": "ranger",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": true
+  },
+  {
+   "key": "ranger/defense",
+   "nameEn": "Defense",
+   "className": "ranger",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": true
+  },
+  {
+   "key": "ranger/dueling",
+   "nameEn": "Dueling",
+   "className": "ranger",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": true
+  },
+  {
+   "key": "ranger/fighting-style",
+   "nameEn": "Fighting Style",
+   "className": "ranger",
+   "subclass": null,
+   "level": 2,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "ranger/spellcasting",
+   "nameEn": "Spellcasting",
+   "className": "ranger",
+   "subclass": null,
+   "level": 2,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "ranger/two-weapon-fighting",
+   "nameEn": "Two-Weapon Fighting",
+   "className": "ranger",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "ranger/primeval-awareness",
+   "nameEn": "Primeval Awareness",
+   "className": "ranger",
+   "subclass": null,
+   "level": 3,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "action",
+     "condition": "It also expends a spell slot; the slot level dictates duration.",
+     "target": "self",
+     "range": {
+      "units": "mi",
+      "value": "1"
+     },
+     "duration": {
+      "value": "",
+      "units": "spec"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "ranger/ranger-archetype",
+   "nameEn": "Ranger Archetype",
+   "className": "ranger",
+   "subclass": null,
+   "level": 3,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "ranger/extra-attack",
+   "nameEn": "Extra Attack",
+   "className": "ranger",
+   "subclass": null,
+   "level": 5,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "ranger/lands-stride",
+   "nameEn": "Land's Stride",
+   "className": "ranger",
+   "subclass": null,
+   "level": 8,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "ranger/hide-in-plain-sight",
+   "nameEn": "Hide in Plain Sight",
+   "className": "ranger",
+   "subclass": null,
+   "level": 10,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "minute",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     }
+    }
+   ],
+   "hasEffects": true
+  },
+  {
+   "key": "ranger/natures-veil",
+   "nameEn": "Vanish",
+   "className": "ranger",
+   "subclass": null,
+   "level": 14,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "bonus",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "ranger/feral-senses",
+   "nameEn": "Feral Senses",
+   "className": "ranger",
+   "subclass": null,
+   "level": 18,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "ranger/foe-slayer",
+   "nameEn": "Foe Slayer",
+   "className": "ranger",
+   "subclass": null,
+   "level": 20,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "damage",
+     "activation": "special",
+     "damage": [
+      {
+       "formula": "@mod",
+       "types": []
+      }
+     ]
+    },
+    {
+     "type": "utility",
+     "activation": "special"
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "hunter/colossus-slayer",
+   "nameEn": "Colossus Slayer",
+   "className": "ranger",
+   "subclass": "hunter",
+   "level": 3,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "damage",
+     "activation": "special",
+     "damage": [
+      {
+       "formula": "1d8",
+       "types": []
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "hunter/giant-killer",
+   "nameEn": "Giant Killer",
+   "className": "ranger",
+   "subclass": "hunter",
+   "level": 3,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "reaction",
+     "condition": "Creature must be Large or larger and visible.",
+     "target": "creature",
+     "targetCount": "1",
+     "range": {
+      "units": "ft",
+      "value": "5"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "hunter/horde-breaker",
+   "nameEn": "Horde Breaker",
+   "className": "ranger",
+   "subclass": "hunter",
+   "level": 3,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "special"
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "hunter/hunters-prey",
+   "nameEn": "Hunter's Prey",
+   "className": "ranger",
+   "subclass": "hunter",
+   "level": 3,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "hunter/defensive-tactics",
+   "nameEn": "Defensive Tactics",
+   "className": "ranger",
+   "subclass": "hunter",
+   "level": 7,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "hunter/escape-the-horde",
+   "nameEn": "Escape the Horde",
+   "className": "ranger",
+   "subclass": "hunter",
+   "level": 7,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "hunter/multiattack-defense",
+   "nameEn": "Multiattack Defense",
+   "className": "ranger",
+   "subclass": "hunter",
+   "level": 7,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "hunter/steel-will",
+   "nameEn": "Steel Will",
+   "className": "ranger",
+   "subclass": "hunter",
+   "level": 7,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "hunter/multiattack",
+   "nameEn": "Multiattack",
+   "className": "ranger",
+   "subclass": "hunter",
+   "level": 11,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "hunter/volley",
+   "nameEn": "Volley",
+   "className": "ranger",
+   "subclass": "hunter",
+   "level": 11,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "action",
+     "template": {
+      "type": "square",
+      "size": "20"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "hunter/whirlwind-attack",
+   "nameEn": "Whirlwind Attack",
+   "className": "ranger",
+   "subclass": "hunter",
+   "level": 11,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "action"
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "hunter/evasion",
+   "nameEn": "Evasion",
+   "className": "ranger",
+   "subclass": "hunter",
+   "level": 15,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "hunter/stand-against-the-tide",
+   "nameEn": "Stand Against the Tide",
+   "className": "ranger",
+   "subclass": "hunter",
+   "level": 15,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "reaction",
+     "target": "creature",
+     "targetCount": "1"
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "hunter/superior-hunters-defense",
+   "nameEn": "Superior Hunter's Defense",
+   "className": "ranger",
+   "subclass": "hunter",
+   "level": 15,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "hunter/uncanny-dodge",
+   "nameEn": "Uncanny Dodge",
+   "className": "ranger",
+   "subclass": "hunter",
+   "level": 15,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "reaction",
+     "condition": "Attacker must be visible.",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "rogue/expertise",
+   "nameEn": "Expertise",
+   "className": "rogue",
+   "subclass": null,
+   "level": 1,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "rogue/sneak-attack",
+   "nameEn": "Sneak Attack",
+   "className": "rogue",
+   "subclass": null,
+   "level": 1,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "damage",
+     "damage": [
+      {
+       "formula": "@scale.rogue.sneak-attack",
+       "types": []
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "rogue/thieves-cant",
+   "nameEn": "Thieves' Cant",
+   "className": "rogue",
+   "subclass": null,
+   "level": 1,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "rogue/cunning-action",
+   "nameEn": "Cunning Action",
+   "className": "rogue",
+   "subclass": null,
+   "level": 2,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "bonus",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "rogue/roguish-archetype",
+   "nameEn": "Roguish Archetype",
+   "className": "rogue",
+   "subclass": null,
+   "level": 3,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "rogue/uncanny-dodge",
+   "nameEn": "Uncanny Dodge",
+   "className": "rogue",
+   "subclass": null,
+   "level": 5,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "reaction",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "rogue/evasion",
+   "nameEn": "Evasion",
+   "className": "rogue",
+   "subclass": null,
+   "level": 7,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "rogue/reliable-talent",
+   "nameEn": "Reliable Talent",
+   "className": "rogue",
+   "subclass": null,
+   "level": 11,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": true
+  },
+  {
+   "key": "rogue/blindsense",
+   "nameEn": "Blindsense",
+   "className": "rogue",
+   "subclass": null,
+   "level": 14,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "rogue/slippery-mind",
+   "nameEn": "Slippery Mind",
+   "className": "rogue",
+   "subclass": null,
+   "level": 15,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "rogue/elusive",
+   "nameEn": "Elusive",
+   "className": "rogue",
+   "subclass": null,
+   "level": 18,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "rogue/stroke-of-luck",
+   "nameEn": "Stroke of Luck",
+   "className": "rogue",
+   "subclass": null,
+   "level": 20,
+   "choice": false,
+   "uses": {
+    "max": "1",
+    "recovery": [
+     "sr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "special",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     },
+     "consumes": [
+      {
+       "pool": "rogue/stroke-of-luck",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "thief/fast-hands",
+   "nameEn": "Fast Hands",
+   "className": "rogue",
+   "subclass": "thief",
+   "level": 3,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "bonus",
+     "target": "self",
+     "range": {
+      "units": "touch",
+      "value": null
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "thief/second-story-work",
+   "nameEn": "Second-Story Work",
+   "className": "rogue",
+   "subclass": "thief",
+   "level": 3,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "thief/supreme-sneak",
+   "nameEn": "Supreme Sneak",
+   "className": "rogue",
+   "subclass": "thief",
+   "level": 9,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "thief/use-magic-device",
+   "nameEn": "Use Magic Device",
+   "className": "rogue",
+   "subclass": "thief",
+   "level": 13,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "thief/thiefs-reflexes",
+   "nameEn": "Thief's Reflexes",
+   "className": "rogue",
+   "subclass": "thief",
+   "level": 17,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "sorcerer/sorcerous-origins",
+   "nameEn": "Sorcerous Origins",
+   "className": "sorcerer",
+   "subclass": null,
+   "level": 1,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "sorcerer/spellcasting",
+   "nameEn": "Spellcasting",
+   "className": "sorcerer",
+   "subclass": null,
+   "level": 1,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "sorcerer/font-of-magic",
+   "nameEn": "Font of Magic",
+   "className": "sorcerer",
+   "subclass": null,
+   "level": 2,
+   "choice": false,
+   "uses": {
+    "max": "@classes.sorcerer.levels",
+    "recovery": [
+     "lr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "utility",
+     "name": "Regain Spell Slot",
+     "activation": "bonus",
+     "range": {
+      "units": "self",
+      "value": null
+     },
+     "duration": {
+      "value": null,
+      "units": "inst"
+     },
+     "consumes": [
+      {
+       "pool": "sorcerer/font-of-magic",
+       "amount": "1 + @scaling + floor(@scaling / 3)"
+      },
+      {
+       "pool": "spellSlot",
+       "amount": "-1",
+       "slotLevel": "1"
+      }
+     ]
+    },
+    {
+     "type": "utility",
+     "name": "Regain Sorcery Points",
+     "range": {
+      "units": "self",
+      "value": null
+     },
+     "duration": {
+      "value": null,
+      "units": "inst"
+     },
+     "consumes": [
+      {
+       "pool": "spellSlot",
+       "amount": "1",
+       "slotLevel": "1"
+      },
+      {
+       "pool": "sorcerer/font-of-magic",
+       "amount": "0 - @scaling"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "sorcerer/careful-spell",
+   "nameEn": "Careful Spell",
+   "className": "sorcerer",
+   "subclass": null,
+   "level": 3,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "special",
+     "consumes": [
+      {
+       "pool": "sorcerer/font-of-magic",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "sorcerer/distant-spell",
+   "nameEn": "Distant Spell",
+   "className": "sorcerer",
+   "subclass": null,
+   "level": 3,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "special",
+     "consumes": [
+      {
+       "pool": "sorcerer/font-of-magic",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "sorcerer/empowered-spell",
+   "nameEn": "Empowered Spell",
+   "className": "sorcerer",
+   "subclass": null,
+   "level": 3,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "special",
+     "consumes": [
+      {
+       "pool": "sorcerer/font-of-magic",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "sorcerer/extended-spell",
+   "nameEn": "Extended Spell",
+   "className": "sorcerer",
+   "subclass": null,
+   "level": 3,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "special",
+     "consumes": [
+      {
+       "pool": "sorcerer/font-of-magic",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "sorcerer/heightened-spell",
+   "nameEn": "Heightened Spell",
+   "className": "sorcerer",
+   "subclass": null,
+   "level": 3,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "special",
+     "consumes": [
+      {
+       "pool": "sorcerer/font-of-magic",
+       "amount": "3"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "sorcerer/metamagic",
+   "nameEn": "Metamagic",
+   "className": "sorcerer",
+   "subclass": null,
+   "level": 3,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "sorcerer/quickened-spell",
+   "nameEn": "Quickened Spell",
+   "className": "sorcerer",
+   "subclass": null,
+   "level": 3,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "special",
+     "consumes": [
+      {
+       "pool": "sorcerer/font-of-magic",
+       "amount": "2"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "sorcerer/subtle-spell",
+   "nameEn": "Subtle Spell",
+   "className": "sorcerer",
+   "subclass": null,
+   "level": 3,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "special",
+     "consumes": [
+      {
+       "pool": "sorcerer/font-of-magic",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "sorcerer/twinned-spell",
+   "nameEn": "Twinned Spell",
+   "className": "sorcerer",
+   "subclass": null,
+   "level": 3,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "special",
+     "consumes": [
+      {
+       "pool": "sorcerer/font-of-magic",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "sorcerer/sorcerous-restoration",
+   "nameEn": "Sorcerous Restoration",
+   "className": "sorcerer",
+   "subclass": null,
+   "level": 20,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "special"
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "draconic-bloodline/draconic-resilience",
+   "nameEn": "Draconic Resilience",
+   "className": "sorcerer",
+   "subclass": "draconic-bloodline",
+   "level": 1,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": true
+  },
+  {
+   "key": "draconic-bloodline/dragon-ancestor",
+   "nameEn": "Dragon Ancestor",
+   "className": "sorcerer",
+   "subclass": "draconic-bloodline",
+   "level": 1,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "draconic-bloodline/elemental-affinity",
+   "nameEn": "Elemental Affinity",
+   "className": "sorcerer",
+   "subclass": "draconic-bloodline",
+   "level": 6,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "damage",
+     "activation": "special",
+     "condition": "1 sorcery point is also required if the resistance is desired.",
+     "damage": [
+      {
+       "formula": "@mod",
+       "types": []
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "draconic-bloodline/dragon-wings",
+   "nameEn": "Dragon Wings",
+   "className": "sorcerer",
+   "subclass": "draconic-bloodline",
+   "level": 14,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "bonus",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "draconic-bloodline/draconic-presence",
+   "nameEn": "Draconic Presence",
+   "className": "sorcerer",
+   "subclass": "draconic-bloodline",
+   "level": 18,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "save",
+     "activation": "action",
+     "condition": "Also requires 5 sorcery points.",
+     "target": "self",
+     "range": {
+      "units": "ft",
+      "value": "60"
+     },
+     "duration": {
+      "value": "1",
+      "units": "minute"
+     },
+     "save": {
+      "ability": "wis",
+      "dc": "cha",
+      "onSave": "half"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/otherworldly-patron",
+   "nameEn": "Otherworldly Patron",
+   "className": "warlock",
+   "subclass": null,
+   "level": 1,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/pact-magic",
+   "nameEn": "Pact Magic",
+   "className": "warlock",
+   "subclass": null,
+   "level": 1,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/agonizing-blast",
+   "nameEn": "Agonizing Blast",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/armor-of-shadows",
+   "nameEn": "Armor of Shadows",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "action",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     },
+     "duration": {
+      "value": "8",
+      "units": "hour"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/ascendant-step",
+   "nameEn": "Ascendant Step",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "action",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     },
+     "duration": {
+      "value": "10",
+      "units": "minute"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/beast-speech",
+   "nameEn": "Beast Speech",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "action",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     },
+     "duration": {
+      "value": "10",
+      "units": "minute"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/beguiling-influence",
+   "nameEn": "Beguiling Influence",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/bewitching-whispers",
+   "nameEn": "Bewitching Whispers",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": {
+    "max": "1",
+    "recovery": [
+     "lr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "save",
+     "activation": "action",
+     "target": "creature",
+     "range": {
+      "units": "ft",
+      "value": "30"
+     },
+     "duration": {
+      "value": "1",
+      "units": "minute"
+     },
+     "consumes": [
+      {
+       "pool": "warlock/bewitching-whispers",
+       "amount": "1"
+      }
+     ],
+     "save": {
+      "ability": "wis",
+      "dc": "cha",
+      "onSave": "half"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/book-of-ancient-secrets",
+   "nameEn": "Book of Ancient Secrets",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/chains-of-carceri",
+   "nameEn": "Chains of Carceri",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "save",
+     "activation": "action",
+     "target": "creature",
+     "targetCount": "1",
+     "range": {
+      "units": "ft",
+      "value": "90"
+     },
+     "duration": {
+      "value": "1",
+      "units": "minute"
+     },
+     "save": {
+      "ability": "wis",
+      "dc": "cha",
+      "onSave": "half"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/devils-sight",
+   "nameEn": "Devil's Sight",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": true
+  },
+  {
+   "key": "warlock/dreadful-word",
+   "nameEn": "Dreadful Word",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": {
+    "max": "1",
+    "recovery": [
+     "lr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "save",
+     "activation": "action",
+     "range": {
+      "units": "ft",
+      "value": "90"
+     },
+     "template": {
+      "type": "sphere",
+      "size": "10"
+     },
+     "duration": {
+      "value": "1",
+      "units": "minute"
+     },
+     "consumes": [
+      {
+       "pool": "warlock/dreadful-word",
+       "amount": "1"
+      }
+     ],
+     "save": {
+      "ability": "wis",
+      "dc": "cha",
+      "onSave": "half"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/eldritch-invocations",
+   "nameEn": "Eldritch Invocations",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/eldritch-sight",
+   "nameEn": "Eldritch Sight",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "action",
+     "range": {
+      "units": "self",
+      "value": null
+     },
+     "template": {
+      "type": "radius",
+      "size": "30"
+     },
+     "duration": {
+      "value": "10",
+      "units": "minute"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/eldritch-spear",
+   "nameEn": "Eldritch Spear",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/eyes-of-the-rune-keeper",
+   "nameEn": "Eyes of the Rune Keeper",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/fiendish-vigor",
+   "nameEn": "Fiendish Vigor",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "heal",
+     "activation": "action",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     },
+     "duration": {
+      "value": "1",
+      "units": "hour"
+     },
+     "heal": "1d4 + 4",
+     "healTypes": [
+      "temphp"
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/gaze-of-two-minds",
+   "nameEn": "Gaze of Two Minds",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "action",
+     "condition": "Target must be a willing humanoid.",
+     "target": "creature",
+     "targetCount": "1",
+     "range": {
+      "units": "touch",
+      "value": null
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/lifedrinker",
+   "nameEn": "Lifedrinker",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/mask-of-many-faces",
+   "nameEn": "Mask of Many Faces",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "action",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     },
+     "duration": {
+      "value": "1",
+      "units": "hour"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/master-of-myriad-forms",
+   "nameEn": "Master of Myriad Forms",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "action",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     },
+     "duration": {
+      "value": "1",
+      "units": "hour"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/minions-of-chaos",
+   "nameEn": "Minions of Chaos",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": {
+    "max": "1",
+    "recovery": [
+     "lr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "action",
+     "target": "space",
+     "targetCount": "10",
+     "range": {
+      "units": "ft",
+      "value": "90"
+     },
+     "duration": {
+      "value": "1",
+      "units": "hour"
+     },
+     "consumes": [
+      {
+       "pool": "warlock/minions-of-chaos",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/mire-the-mind",
+   "nameEn": "Mire the Mind",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": {
+    "max": "1",
+    "recovery": [
+     "lr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "save",
+     "activation": "action",
+     "range": {
+      "units": "ft",
+      "value": "120"
+     },
+     "template": {
+      "type": "cube",
+      "size": "40"
+     },
+     "duration": {
+      "value": "1",
+      "units": "minute"
+     },
+     "consumes": [
+      {
+       "pool": "warlock/mire-the-mind",
+       "amount": "1"
+      }
+     ],
+     "save": {
+      "ability": "wis",
+      "dc": "cha",
+      "onSave": "half"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/misty-visions",
+   "nameEn": "Misty Visions",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "check",
+     "activation": "action",
+     "range": {
+      "units": "ft",
+      "value": "60"
+     },
+     "template": {
+      "type": "cube",
+      "size": "15"
+     },
+     "duration": {
+      "value": "10",
+      "units": "minute"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/one-with-shadows",
+   "nameEn": "One With Shadows",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "action",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/otherworldly-leap",
+   "nameEn": "Otherworldly Leap",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "action",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     },
+     "duration": {
+      "value": "1",
+      "units": "minute"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/repelling-blast",
+   "nameEn": "Repelling Blast",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/sculptor-of-flesh",
+   "nameEn": "Sculptor of Flesh",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": {
+    "max": "1",
+    "recovery": [
+     "lr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "save",
+     "activation": "action",
+     "target": "creature",
+     "targetCount": "1",
+     "range": {
+      "units": "ft",
+      "value": "60"
+     },
+     "duration": {
+      "value": "1",
+      "units": "hour"
+     },
+     "consumes": [
+      {
+       "pool": "warlock/sculptor-of-flesh",
+       "amount": "1"
+      }
+     ],
+     "save": {
+      "ability": "wis",
+      "dc": "cha",
+      "onSave": "half"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/sign-of-ill-omen",
+   "nameEn": "Sign of Ill Omen",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": {
+    "max": "1",
+    "recovery": [
+     "lr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "save",
+     "activation": "action",
+     "target": "creature",
+     "targetCount": "1",
+     "range": {
+      "units": "touch",
+      "value": null
+     },
+     "duration": {
+      "value": "1",
+      "units": "minute"
+     },
+     "consumes": [
+      {
+       "pool": "warlock/sign-of-ill-omen",
+       "amount": "1"
+      }
+     ],
+     "save": {
+      "ability": "wis",
+      "dc": "cha",
+      "onSave": "half"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/thief-of-five-fates",
+   "nameEn": "Thief of Five Fates",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": {
+    "max": "1",
+    "recovery": [
+     "lr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "save",
+     "activation": "action",
+     "target": "creature",
+     "targetCount": "3",
+     "range": {
+      "units": "ft",
+      "value": "30"
+     },
+     "consumes": [
+      {
+       "pool": "warlock/thief-of-five-fates",
+       "amount": "1"
+      }
+     ],
+     "save": {
+      "ability": "cha",
+      "dc": "cha",
+      "onSave": "half"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/thirsting-blade",
+   "nameEn": "Thirsting Blade",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "special"
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/visions-of-distant-realms",
+   "nameEn": "Visions of Distant Realms",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "action",
+     "range": {
+      "units": "ft",
+      "value": "30"
+     },
+     "duration": {
+      "value": "1",
+      "units": "hour"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/voice-of-the-chain-master",
+   "nameEn": "Voice of the Chain Master",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/whispers-of-the-grave",
+   "nameEn": "Whispers of the Grave",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "action",
+     "target": "creature",
+     "targetCount": "1",
+     "range": {
+      "units": "ft",
+      "value": "10"
+     },
+     "duration": {
+      "value": "10",
+      "units": "minute"
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/witch-sight",
+   "nameEn": "Witch Sight",
+   "className": "warlock",
+   "subclass": null,
+   "level": 2,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/pact-boon",
+   "nameEn": "Pact Boon",
+   "className": "warlock",
+   "subclass": null,
+   "level": 3,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/pact-of-the-blade",
+   "nameEn": "Pact of the Blade",
+   "className": "warlock",
+   "subclass": null,
+   "level": 3,
+   "choice": true,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "action",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     }
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/pact-of-the-chain",
+   "nameEn": "Pact of the Chain",
+   "className": "warlock",
+   "subclass": null,
+   "level": 3,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/pact-of-the-tome",
+   "nameEn": "Pact of the Tome",
+   "className": "warlock",
+   "subclass": null,
+   "level": 3,
+   "choice": true,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/mystic-arcanum",
+   "nameEn": "Mystic Arcanum",
+   "className": "warlock",
+   "subclass": null,
+   "level": 11,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "warlock/eldritch-master",
+   "nameEn": "Eldritch Master",
+   "className": "warlock",
+   "subclass": null,
+   "level": 20,
+   "choice": false,
+   "uses": {
+    "max": "1",
+    "recovery": [
+     "lr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "minute",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     },
+     "consumes": [
+      {
+       "pool": "warlock/eldritch-master",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "the-fiend/dark-ones-blessing",
+   "nameEn": "Dark One's Blessing",
+   "className": "warlock",
+   "subclass": "the-fiend",
+   "level": 1,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "heal",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     },
+     "heal": "max(1, @abilities.cha.mod + @classes.warlock.levels)",
+     "healTypes": [
+      "temphp"
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "the-fiend/expanded-spell-list",
+   "nameEn": "Expanded Spell List",
+   "className": "warlock",
+   "subclass": "the-fiend",
+   "level": 1,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "the-fiend/dark-ones-own-luck",
+   "nameEn": "Dark One's Own Luck",
+   "className": "warlock",
+   "subclass": "the-fiend",
+   "level": 6,
+   "choice": false,
+   "uses": {
+    "max": "1",
+    "recovery": [
+     "sr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "special",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     },
+     "consumes": [
+      {
+       "pool": "the-fiend/dark-ones-own-luck",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "the-fiend/fiendish-resilience",
+   "nameEn": "Fiendish Resilience",
+   "className": "warlock",
+   "subclass": "the-fiend",
+   "level": 10,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "special",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     }
+    }
+   ],
+   "hasEffects": true
+  },
+  {
+   "key": "the-fiend/hurl-through-hell",
+   "nameEn": "Hurl Through Hell",
+   "className": "warlock",
+   "subclass": "the-fiend",
+   "level": 14,
+   "choice": false,
+   "uses": {
+    "max": "1",
+    "recovery": [
+     "lr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "damage",
+     "activation": "special",
+     "target": "creature",
+     "targetCount": "1",
+     "duration": {
+      "value": "1",
+      "units": "round"
+     },
+     "consumes": [
+      {
+       "pool": "the-fiend/hurl-through-hell",
+       "amount": "1"
+      }
+     ],
+     "damage": [
+      {
+       "formula": "10d10",
+       "types": [
+        "psychic"
+       ]
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "wizard/arcane-recovery",
+   "nameEn": "Arcane Recovery",
+   "className": "wizard",
+   "subclass": null,
+   "level": 1,
+   "choice": false,
+   "uses": {
+    "max": "1",
+    "recovery": [
+     "lr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "special",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     },
+     "consumes": [
+      {
+       "pool": "wizard/arcane-recovery",
+       "amount": "1"
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "wizard/spellcasting",
+   "nameEn": "Spellcasting",
+   "className": "wizard",
+   "subclass": null,
+   "level": 1,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "wizard/arcane-tradition",
+   "nameEn": "Arcane Tradition",
+   "className": "wizard",
+   "subclass": null,
+   "level": 2,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "wizard/spell-mastery",
+   "nameEn": "Spell Mastery",
+   "className": "wizard",
+   "subclass": null,
+   "level": 18,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "wizard/signature-spells",
+   "nameEn": "Signature Spells",
+   "className": "wizard",
+   "subclass": null,
+   "level": 20,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "school-of-evocation/evocation-savant",
+   "nameEn": "Evocation Savant",
+   "className": "wizard",
+   "subclass": "school-of-evocation",
+   "level": 2,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "school-of-evocation/sculpt-spells",
+   "nameEn": "Sculpt Spells",
+   "className": "wizard",
+   "subclass": "school-of-evocation",
+   "level": 2,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "utility",
+     "activation": "special"
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "school-of-evocation/potent-cantrip",
+   "nameEn": "Potent Cantrip",
+   "className": "wizard",
+   "subclass": "school-of-evocation",
+   "level": 6,
+   "choice": false,
+   "uses": null,
+   "activities": [],
+   "hasEffects": false
+  },
+  {
+   "key": "school-of-evocation/empowered-evocation",
+   "nameEn": "Empowered Evocation",
+   "className": "wizard",
+   "subclass": "school-of-evocation",
+   "level": 10,
+   "choice": false,
+   "uses": null,
+   "activities": [
+    {
+     "type": "damage",
+     "activation": "special",
+     "damage": [
+      {
+       "formula": "@mod",
+       "types": []
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  },
+  {
+   "key": "school-of-evocation/overchannel",
+   "nameEn": "Overchannel",
+   "className": "wizard",
+   "subclass": "school-of-evocation",
+   "level": 14,
+   "choice": false,
+   "uses": {
+    "max": "1",
+    "recovery": [
+     "lr"
+    ]
+   },
+   "activities": [
+    {
+     "type": "damage",
+     "activation": "special",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     },
+     "consumes": [
+      {
+       "pool": "school-of-evocation/overchannel",
+       "amount": "1"
+      }
+     ],
+     "damage": [
+      {
+       "formula": "2d12",
+       "types": [
+        "necrotic"
+       ]
+      }
+     ]
+    },
+    {
+     "type": "damage",
+     "activation": "special",
+     "target": "self",
+     "range": {
+      "units": "self",
+      "value": null
+     },
+     "consumes": [
+      {
+       "pool": "school-of-evocation/overchannel",
+       "amount": "1"
+      }
+     ],
+     "damage": [
+      {
+       "formula": "1d12",
+       "types": []
+      }
+     ]
+    }
+   ],
+   "hasEffects": false
+  }
+ ]
+}

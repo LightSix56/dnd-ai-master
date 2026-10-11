@@ -236,6 +236,8 @@ export function Hotbar({
     for (const ab of combatant.abilities) {
       // Скрытая атака — пассивное умение: срабатывает сама при попадании, кнопки у неё нет
       if (ab.id === "sneak_attack" || ab.name.startsWith("Скрытая атака")) continue;
+      // Умения, которые действуют сами (Божественный удар, Увёртливость), тоже без кнопки
+      if (ab.parameters?.passive) continue;
       groups[costKind(ab.parameters?.actionCost)].items.push(ab);
     }
     return (Object.entries(groups) as Array<[CostKind, { label: string; items: CombatAbility[] }]>)

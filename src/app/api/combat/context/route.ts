@@ -216,6 +216,11 @@ export async function GET(req: Request) {
           range: ab.parameters?.range ?? { type: "self" },
           targeting: ab.parameters?.targeting ?? "self",
           description: ab.parameters?.description ?? "",
+          // Действует само (при попадании, в начале хода) — применять не нужно
+          passive: ab.parameters?.passive || undefined,
+          // Эффект разыгрывает мастер: движок только тратит действие и заряды
+          manual: ab.parameters?.manual || undefined,
+          resourceCost: ab.parameters?.resourceCost,
         })),
       },
       enemies: visibleEnemies,

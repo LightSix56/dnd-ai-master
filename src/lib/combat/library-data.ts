@@ -103,6 +103,7 @@ export const ABILITY_LIBRARY: AbilityDefinition[] = [
     parameters: {
       name: "Ярость",
       type: "ability",
+      srdKey: "barbarian/rage",
       actionCost: "bonus",
       range: { type: "self" },
       damage: [],
@@ -122,6 +123,7 @@ export const ABILITY_LIBRARY: AbilityDefinition[] = [
     parameters: {
       name: "Безрассудная атака",
       type: "ability",
+      srdKey: "barbarian/reckless-attack",
       actionCost: "free",
       range: { type: "self" },
       damage: [],
@@ -142,6 +144,7 @@ export const ABILITY_LIBRARY: AbilityDefinition[] = [
     parameters: {
       name: "Второе дыхание",
       type: "ability",
+      srdKey: "fighter/second-wind",
       actionCost: "bonus",
       range: { type: "self" },
       damage: [],
@@ -161,6 +164,7 @@ export const ABILITY_LIBRARY: AbilityDefinition[] = [
     parameters: {
       name: "Всплеск действий",
       type: "ability",
+      srdKey: "fighter/action-surge",
       actionCost: "free",
       range: { type: "self" },
       damage: [],
@@ -182,6 +186,7 @@ export const ABILITY_LIBRARY: AbilityDefinition[] = [
     parameters: {
       name: "Скрытая атака",
       type: "ability",
+      srdKey: "rogue/sneak-attack",
       actionCost: "free",
       damage: [{ dice: "1d6", mod: 0, type: "piercing" }],
       description: "+1к6 (или более по уровню) урона оружием при преимуществе на атаку или когда рядом с целью есть союзник.",
@@ -260,6 +265,7 @@ export const ABILITY_LIBRARY: AbilityDefinition[] = [
     parameters: {
       name: "Невероятное уклонение",
       type: "ability",
+      srdKey: "rogue/uncanny-dodge",
       actionCost: "reaction",
       description: "Реакция: когда видимый нападающий попадает по вам атакой, вы уполовиниваете получаемый урон.",
     },
@@ -275,6 +281,7 @@ export const ABILITY_LIBRARY: AbilityDefinition[] = [
     parameters: {
       name: "Божественная кара",
       type: "ability",
+      srdKey: "paladin/divine-smite",
       actionCost: "free",
       range: { type: "self" },
       targeting: "self",
@@ -290,6 +297,7 @@ export const ABILITY_LIBRARY: AbilityDefinition[] = [
     parameters: {
       name: "Наложение рук",
       type: "ability",
+      srdKey: "paladin/lay-on-hands",
       actionCost: "action",
       range: { type: "touch", value: 5 },
       damage: [],
@@ -310,6 +318,7 @@ export const ABILITY_LIBRARY: AbilityDefinition[] = [
     parameters: {
       name: "Очки ци",
       type: "ability",
+      srdKey: "monk/monks-focus",
       actionCost: "none",
       usesFormula: "level",
       refresh: "short",
@@ -326,6 +335,7 @@ export const ABILITY_LIBRARY: AbilityDefinition[] = [
     parameters: {
       name: "Шквал ударов",
       type: "ability",
+      srdKey: "monk/flurry-of-blows",
       actionCost: "bonus",
       range: { type: "melee", value: 5 },
       targeting: "creature",
@@ -342,6 +352,7 @@ export const ABILITY_LIBRARY: AbilityDefinition[] = [
     parameters: {
       name: "Терпеливая оборона",
       type: "ability",
+      srdKey: "monk/patient-defense",
       actionCost: "bonus",
       range: { type: "self" },
       targeting: "self",
@@ -395,6 +406,7 @@ export const ABILITY_LIBRARY: AbilityDefinition[] = [
     parameters: {
       name: "Дикий облик",
       type: "ability",
+      srdKey: "druid/wild-shape",
       actionCost: "action",
       range: { type: "self" },
       damage: [],
@@ -415,6 +427,7 @@ export const ABILITY_LIBRARY: AbilityDefinition[] = [
     parameters: {
       name: "Вдохновение барда",
       type: "ability",
+      srdKey: "bard/bardic-inspiration",
       actionCost: "bonus",
       range: { type: "ranged", value: 60 },
       targeting: "ally",
