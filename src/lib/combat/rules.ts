@@ -219,6 +219,16 @@ export function computeAttackAdvantage(
     }
   }
 
+  // Неуловимость плута (18 ур.): атаки по нему не получают преимущества, пока он дееспособен
+  if (
+    adv &&
+    classFeature(target, "rogue/elusive") &&
+    !["incapacitated", "stunned", "paralyzed", "unconscious", "petrified"].some((t) => hasCondition(target, t))
+  ) {
+    adv = false;
+    reasons.push("цель: Неуловимость (без преимущества)");
+  }
+
   // Скрытность цели
   if (target.isHidden) {
     dis = true;
@@ -674,8 +684,16 @@ export function resolveAttack(
   const blessDice = effects.find((e) => e.attackBonusDice)?.attackBonusDice;
   const blessBonus = blessDice ? rollDice(blessDice).total : 0;
 
+  // Боевой стиль «Стрельба»: +2 к броскам атаки дальнобойным оружием
+  const archery =
+    attackToUse.kind === "ranged" &&
+    !attackToUse.usesSpellAttack &&
+    classFeature(attacker, "fighter/archery", "champion/archery", "ranger/archery")
+      ? 2
+      : 0;
+
   const roll = rollD20(
-    attackToUse.attackBonus + blessBonus,
+    attackToUse.attackBonus + blessBonus + archery,
     advResult.advantage,
     advResult.disadvantage
   );

@@ -388,7 +388,7 @@ const OUT_OF_COMBAT = new Set([
   "arcane-recovery", "eldritch-master", "primeval-awareness", "font-of-inspiration", "sorcerous-restoration",
   "beast-speech", "beguiling-influence", "book-of-ancient-secrets", "eyes-of-the-rune-keeper",
   "mask-of-many-faces", "master-of-myriad-forms", "visions-of-distant-realms", "whispers-of-the-grave",
-  "gaze-of-two-minds", "eldritch-sight", "voice-of-the-chain-master", "pact-of-the-tome", "purity-of-body",
+  "gaze-of-two-minds", "eldritch-sight", "voice-of-the-chain-master", "pact-of-the-tome",
   "divine-health", "beast-spells", "unarmored-defense", "unarmored-defense-barbarian", "draconic-resilience",
   "fast-movement", "unarmored-movement", "primal-champion",
 ]);
@@ -396,8 +396,32 @@ const OUT_OF_COMBAT = new Set([
 // Запас тратится не всегда: Отражение снарядов берёт ци, только чтобы бросить снаряд обратно
 const OPTIONAL_POOL_COST = new Set(["monk/deflect-attacks"]);
 
-// Действуют сами в начале боя — мастеру как справка, без кнопки
-const ALWAYS_PASSIVE = new Set(["bard/superior-inspiration", "monk/perfect-focus"]);
+// Стоимость, которую Foundry держит только в тексте условия
+const POOL_COST_OVERRIDES: Record<string, { pool: string; amount: number }> = {
+  "monk/superior-defense": { pool: "monk/monks-focus", amount: 4 },
+  "monk/disciplined-survivor": { pool: "monk/monks-focus", amount: 1 },
+  "draconic-bloodline/draconic-presence": { pool: "sorcerer/font-of-magic", amount: 5 },
+};
+
+// Запасы, которые всегда счётчик, даже если ни одного приёма из них пока нет
+const ALWAYS_POOL = new Set(["cleric/channel-divinity", "paladin/channel-divinity", "sorcerer/font-of-magic"]);
+
+// Применяются по кнопке, хотя в Foundry у них нет способа применения
+const FORCE_ACTIVE: Record<string, ActionCost> = {
+  "monk/disciplined-survivor": "free",
+  "hunter/horde-breaker": "free",
+};
+
+// Умения, которые движок разыгрывает сам (useClassFeature по srdKey), а не мастер
+export const ENGINE_ACTIONS = new Set([
+  "cleric/channel-divinity-turn-undead",
+  "oath-of-devotion/channel-divinity-turn-the-unholy",
+  "life-domain/channel-divinity-preserve-life",
+  "path-of-the-berserker/frenzy",
+  "hunter/horde-breaker",
+  "hunter/whirlwind-attack",
+  "hunter/volley",
+]);
 
 // Особые случаи, где свойств Foundry мало: что именно происходит при провале спасброска
 const SAVE_EFFECT_OVERRIDES: Record<string, { effects: AppliedEffect[]; saveAbility?: AbilityKey; dcAbility: AbilityKey; targeting: ActionParameters["targeting"]; range: ActionParameters["range"]; actionCost?: ActionCost }> = {
@@ -434,6 +458,32 @@ export const TRIGGERED_FEATURES = new Set([
   "rogue/evasion",
   "monk/evasion",
   "hunter/evasion",
+  "hunter/uncanny-dodge",
+  "barbarian/relentless-rage",
+  "barbarian/feral-instinct",
+  "path-of-the-berserker/mindless-rage",
+  "paladin/aura-of-courage",
+  "oath-of-devotion/aura-of-devotion",
+  "monk/purity-of-body",
+  "circle-of-the-land/natures-ward",
+  "rogue/elusive",
+  "warlock/thirsting-blade",
+  "warlock/agonizing-blast",
+  "warlock/repelling-blast",
+  "warlock/eldritch-spear",
+  "the-fiend/dark-ones-blessing",
+  "bard/superior-inspiration",
+  "monk/perfect-focus",
+  "life-domain/disciple-of-life",
+  "life-domain/supreme-healing",
+  "life-domain/blessed-healer",
+  "school-of-evocation/empowered-evocation",
+  "school-of-evocation/potent-cantrip",
+  "school-of-evocation/sculpt-spells",
+  "fighter/archery",
+  "champion/archery",
+  "ranger/archery",
+  "way-of-the-open-hand/open-hand-technique",
 ]);
 
 const ACTIVATION_COST: Record<string, ActionCost> = {
@@ -479,6 +529,9 @@ export function srdAbilityDefinitions(ctx: HeroFeatureContext): SrdAbilityDefini
         if (c.pool !== feature.key && c.pool !== "spellSlot") pools.add(c.pool);
       }
     }
+    const forced = POOL_COST_OVERRIDES[feature.key];
+    if (forced) pools.add(forced.pool);
+    if (ALWAYS_POOL.has(feature.key)) pools.add(feature.key);
   }
 
   const out: SrdAbilityDefinition[] = [];
@@ -496,20 +549,24 @@ export function srdAbilityDefinitions(ctx: HeroFeatureContext): SrdAbilityDefini
       continue;
     }
 
-    const active = feature.activities.find(
-      (a) =>
-        (a.activation && ACTIVATION_COST[a.activation]) ||
-        (a.activation && a.activation !== "none" && (uses || (a.consumes ?? []).some((c) => c.pool !== "spellSlot")))
-    );
+    const active: SrdActivity | undefined = FORCE_ACTIVE[feature.key]
+      ? { ...(feature.activities[0] ?? { type: "utility" }), activation: FORCE_ACTIVE[feature.key] === "free" ? "special" : FORCE_ACTIVE[feature.key] }
+      : feature.activities.find(
+          (a) =>
+            (a.activation && ACTIVATION_COST[a.activation]) ||
+            (a.activation && a.activation !== "none" && (uses || (a.consumes ?? []).some((c) => c.pool !== "spellSlot")))
+        );
 
     // 2. Срабатывает само или просто действует: движок или мастер учитывают его без кнопки
-    if (!active || TRIGGERED_FEATURES.has(feature.key) || ALWAYS_PASSIVE.has(feature.key)) {
+    if (!active || TRIGGERED_FEATURES.has(feature.key)) {
       out.push({ ...base, parameters: { ...common, actionCost: "none", passive: true, ...triggerValues(feature, ctx) } });
       continue;
     }
 
     // 3. Применяемое умение
-    const poolCost = (active.consumes ?? []).find((c) => c.pool !== feature.key && c.pool !== "spellSlot");
+    const poolCost = POOL_COST_OVERRIDES[feature.key]
+      ? { pool: POOL_COST_OVERRIDES[feature.key].pool, amount: String(POOL_COST_OVERRIDES[feature.key].amount) }
+      : (active.consumes ?? []).find((c) => c.pool !== feature.key && c.pool !== "spellSlot");
     const params: ActionParameters = {
       ...common,
       actionCost: ACTIVATION_COST[active.activation ?? ""] ?? "free",
@@ -525,7 +582,9 @@ export function srdAbilityDefinitions(ctx: HeroFeatureContext): SrdAbilityDefini
     }
 
     const override = SAVE_EFFECT_OVERRIDES[feature.key];
-    if (override) {
+    if (ENGINE_ACTIONS.has(feature.key)) {
+      Object.assign(params, engineActionValues(feature, ctx));
+    } else if (override) {
       params.saveType = override.saveAbility ?? null;
       params.saveDC = 8 + ctx.profBonus + (ctx.abilityMods[override.dcAbility] ?? 0);
       params.effects = override.effects;
@@ -552,6 +611,36 @@ export function srdAbilityDefinitions(ctx: HeroFeatureContext): SrdAbilityDefini
   return out;
 }
 
+/** Параметры умений, которые разыгрывает движок: дальность, спасбросок, запас лечения… */
+function engineActionValues(feature: SrdFeature, ctx: HeroFeatureContext): Partial<ActionParameters> {
+  const dc = (ability: AbilityKey) => 8 + ctx.profBonus + (ctx.abilityMods[ability] ?? 0);
+  switch (feature.key) {
+    case "cleric/channel-divinity-turn-undead":
+      return {
+        targeting: "self",
+        range: { type: "self", value: 30 },
+        saveType: "WIS",
+        saveDC: dc("WIS"),
+        // Уничтожение нежити: нежить с ПО не выше этого порога рассыпается
+        featureValue: Number(scaleValue("cleric.destroy-undead", ctx.level)) || 0,
+      };
+    case "oath-of-devotion/channel-divinity-turn-the-unholy":
+      return { targeting: "self", range: { type: "self", value: 30 }, saveType: "WIS", saveDC: dc("CHA") };
+    case "life-domain/channel-divinity-preserve-life":
+      return { targeting: "self", range: { type: "self", value: 30 }, featureValue: 5 * Math.max(1, ctx.level) };
+    case "path-of-the-berserker/frenzy":
+      return { targeting: "creature", range: { type: "melee", value: 5 } };
+    case "hunter/horde-breaker":
+      return { targeting: "creature", range: { type: "special" } };
+    case "hunter/whirlwind-attack":
+      return { targeting: "self", range: { type: "self", value: 5 } };
+    case "hunter/volley":
+      return { targeting: "point", range: { type: "ranged", value: 150 }, aoe: { shape: "sphere", size: 10 } };
+    default:
+      return {};
+  }
+}
+
 /** Готовые числа для срабатывающих умений: кость Божественного удара, лишние кости крита… */
 function triggerValues(feature: SrdFeature, ctx: HeroFeatureContext): Partial<ActionParameters> {
   const formula: FormulaContext = { level: ctx.level, profBonus: ctx.profBonus, abilityMods: ctx.abilityMods };
@@ -576,6 +665,15 @@ function triggerValues(feature: SrdFeature, ctx: HeroFeatureContext): Partial<Ac
         featureValue: Math.max(1, ctx.abilityMods.CHA ?? 0),
         range: { type: "self", value: Number(scaleValue("paladin.aura-radius", ctx.level)) || 10 },
       };
+    case "paladin/aura-of-courage":
+    case "oath-of-devotion/aura-of-devotion":
+      return { range: { type: "self", value: Number(scaleValue("paladin.aura-radius", ctx.level)) || 10 } };
+    case "the-fiend/dark-ones-blessing":
+      return { featureValue: Math.max(1, (ctx.abilityMods.CHA ?? 0) + ctx.level) };
+    case "school-of-evocation/empowered-evocation":
+      return { featureValue: ctx.abilityMods.INT ?? 0 };
+    case "warlock/agonizing-blast":
+      return { featureValue: ctx.abilityMods.CHA ?? 0 };
     default:
       return {};
   }

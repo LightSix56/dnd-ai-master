@@ -12,14 +12,22 @@ export interface InitiativeRoll {
   tiebreak: number;
 }
 
-export function rollInitiativeFor(c: Pick<Combatant, "dexMod">): number {
+type InitiativeInput = Pick<Combatant, "dexMod"> & {
+  /** Преимущество на инициативу (Дикий инстинкт варвара) */
+  initiativeAdvantage?: boolean;
+  abilities?: Combatant["abilities"];
+};
+
+export function rollInitiativeFor(c: InitiativeInput): number {
   const mod = typeof c.dexMod === "number" && Number.isFinite(c.dexMod) ? c.dexMod : 0;
-  const roll = rollD20(mod).total;
+  const advantage =
+    !!c.initiativeAdvantage || !!c.abilities?.some((a) => a.parameters?.srdKey === "barbarian/feral-instinct");
+  const roll = rollD20(mod, advantage).total;
   return Number.isFinite(roll) ? Math.round(roll) : 10;
 }
 
 export function rollInitiativeForAll(
-  combatants: Array<Pick<Combatant, "id" | "dexMod">>
+  combatants: Array<Pick<Combatant, "id"> & InitiativeInput>
 ): InitiativeRoll[] {
   return combatants.map((c) => ({
     id: c.id,

@@ -52,6 +52,16 @@ describe("resolveSheetAttacks", () => {
     expect(attacks.some((a) => a.attackBonus.includes("14"))).toBe(false);
   });
 
+  it("стиль «Сражение двумя оружиями» из листа добавляет модификатор ко второй руке", () => {
+    for (const sheet of [
+      { traitsList: [{ id: "fighting-style-two-weapon" }] },
+      { levelHistory: [{ selectedFightingStyle: "two-weapon" }] },
+    ]) {
+      const attacks = resolveSheetAttacks({ ...rogue, ...sheet });
+      expect(attacks[1].damageAndType).toBe("1d6+3 колющий");
+    }
+  });
+
   it("пользовательские атаки, которых нет среди оружия, сохраняются", () => {
     const attacks = resolveSheetAttacks({
       ...rogue,

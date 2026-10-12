@@ -705,7 +705,7 @@ export function Hotbar({
             </Badge>
           )}
           {combatant.conditions
-            .filter((c) => c.type !== "death_save")
+            .filter((c) => c.type !== "death_save" && !CONDITION_EFFECTS[c.type]?.service)
             .map((c, i) => (
               <Badge
                 key={i}

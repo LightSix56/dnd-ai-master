@@ -59,6 +59,9 @@ export function resolveAbilityUses(
       return { usesMax: level >= 17 ? 2 : 1, refresh: "short" };
     case "layOnHands":
       return { usesMax: level * 5, refresh: "long" };
+    case "wildShape":
+      // Архидруид (20 ур.): Дикий облик без ограничения
+      return { usesMax: level >= 20 ? 0 : 2, refresh: "short" };
     case "bardicInspiration":
       // С 5 уровня (Источник вдохновения) восстанавливается и на коротком отдыхе
       return {

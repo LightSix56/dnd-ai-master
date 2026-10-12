@@ -914,8 +914,8 @@ export async function createPartyCombatants({
   startIndex?: number;
   /** Герои застигнуты врасплох: первый ход пропускают (состояние surprised) */
   surprised?: boolean;
-}): Promise<Array<{ id: string; dexMod: number }>> {
-  const created: Array<{ id: string; dexMod: number }> = [];
+}): Promise<Array<{ id: string; dexMod: number; initiativeAdvantage?: boolean }>> {
+  const created: Array<{ id: string; dexMod: number; initiativeAdvantage?: boolean }> = [];
 
 
   // Расставляем союзников (слева, со сдвигом от края)
@@ -1632,13 +1632,17 @@ export async function createPartyCombatants({
           CHA: { prof: !!profSaves.CHA, mod: chaMod + (profSaves.CHA ? charProfBonus : 0) },
         }),
         profBonus: charProfBonus,
-        attacksPerAction: attacksPerAction(char.class || "", char.level || 1),
+        attacksPerAction: attacksPerAction(char.class || "", char.level || 1, charAbilities),
         isAIControlled: false,
         potions: JSON.stringify(combatPotions),
       },
     });
 
-    created.push({ id: combatant.id, dexMod });
+    created.push({
+      id: combatant.id,
+      dexMod,
+      initiativeAdvantage: charAbilities.some((a) => a.parameters?.srdKey === "barbarian/feral-instinct"),
+    });
   }
 
   return created;

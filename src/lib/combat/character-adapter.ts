@@ -519,7 +519,7 @@ export function extractAbilitiesFromCharacter(
 ): CombatAbility[] {
   const rawClass = String(char.class || char.className || "");
   const className = normalizeClassName(rawClass);
-  const baseAbilities = abilitiesForClass(className, level);
+  const baseAbilities = abilitiesForClass(className, level, char.subclass);
 
   const handMade = baseAbilities.map((a, idx) => {
     const params = a.parameters ? { ...a.parameters } : undefined;

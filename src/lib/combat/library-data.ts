@@ -38,6 +38,8 @@ export interface AbilityDefinition {
   source: string;
   className: string;
   minLevel: number;
+  /** Только для архетипа, чьё название подходит под шаблон (Ликвидация — только Убийца) */
+  subclass?: RegExp;
   category?: "damage" | "utility" | "buff" | "debuff" | "control" | "healing" | "defense" | "passive";
   parameters: ActionParameters;
 }
@@ -248,6 +250,7 @@ export const ABILITY_LIBRARY: AbilityDefinition[] = [
     source: "PHB",
     className: "Плут",
     minLevel: 3,
+    subclass: /убийц|assassin/i,
     category: "damage",
     parameters: {
       name: "Ликвидация (Убийца)",
@@ -412,8 +415,9 @@ export const ABILITY_LIBRARY: AbilityDefinition[] = [
       damage: [],
       targeting: "self",
       uses: 2,
+      usesFormula: "wildShape",
       refresh: "short",
-      description: "Действие (или бонусное для Круга Луны): превращение в зверя. Заменяет физические статы и получает пул HP зверя. 2 раза за короткий или длинный отдых.",
+      description: "Действие (или бонусное для Круга Луны): превращение в зверя. Заменяет физические статы и получает пул HP зверя. 2 раза за короткий или длинный отдых, на 20 уровне без ограничения.",
     },
   },
 
@@ -502,17 +506,44 @@ export function getAbilityDefinition(nameOrId: string): AbilityDefinition | unde
   return ABILITY_LIBRARY.find((a) => a.name.toLowerCase().includes(lower) || lower.includes(a.name.toLowerCase()));
 }
 
-/** Список способностей, доступных классу на заданном уровне */
-export function abilitiesForClass(className: string, level: number): AbilityDefinition[] {
+/**
+ * Список способностей, доступных классу на заданном уровне.
+ * Умения архетипа (subclass) выдаются, только если архетип героя под них подходит.
+ */
+export function abilitiesForClass(className: string, level: number, subclass?: string | null): AbilityDefinition[] {
   if (!className) return [];
   const lower = className.trim().toLowerCase();
   return ABILITY_LIBRARY.filter(
-    (a) => a.className.toLowerCase() === lower && a.minLevel <= level
+    (a) =>
+      a.className.toLowerCase() === lower &&
+      a.minLevel <= level &&
+      (!a.subclass || a.subclass.test(subclass || ""))
   );
 }
 
-/** Количество атак за одно Действие по классу и уровню */
-export function attacksPerAction(className: string, level: number): number {
+/** Названия всех умений класса из кода, включая умения чужих архетипов: их не берём из БД */
+export function libraryAbilityNamesForClass(className: string): Set<string> {
+  const lower = (className || "").trim().toLowerCase();
+  return new Set(
+    ABILITY_LIBRARY.filter((a) => a.className.toLowerCase() === lower).map((a) => a.name.toLowerCase())
+  );
+}
+
+/**
+ * Количество атак за одно Действие по классу и уровню.
+ * Воззвание «Жаждущий клинок» (колдун 5+, договор клинка) даёт вторую атаку.
+ */
+export function attacksPerAction(
+  className: string,
+  level: number,
+  abilities?: { parameters?: { srdKey?: string } }[]
+): number {
+  const base = attacksPerActionByClass(className, level);
+  if (abilities?.some((a) => a.parameters?.srdKey === "warlock/thirsting-blade")) return Math.max(base, 2);
+  return base;
+}
+
+function attacksPerActionByClass(className: string, level: number): number {
   if (!className) return 1;
   const lower = className.trim().toLowerCase();
   if (lower.includes("воин") || lower.includes("fighter")) {

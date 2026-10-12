@@ -292,7 +292,7 @@ export interface ActionParameters {
 
   uses?: number;
   /** Формула зарядов по уровню, см. resolveAbilityUses в ability-uses.ts */
-  usesFormula?: "profBonus" | "level" | "rage" | "actionSurge" | "layOnHands" | "bardicInspiration" | null;
+  usesFormula?: "profBonus" | "level" | "rage" | "actionSurge" | "layOnHands" | "bardicInspiration" | "wildShape" | null;
   /** Сколько очков ци тратит приём монаха */
   kiCost?: number;
   /** Счётчик ресурса (очки ци), сам по себе не применяется */
@@ -357,6 +357,8 @@ export const CONDITION_EFFECTS: Record<string, {
   name: string;
   description: string;
   effects: ConditionEffect;
+  /** Служебная отметка движка («уже использовано в этом ходу») — на карточке бойца не показывается */
+  service?: boolean;
 }> = {
   poisoned: {
     name: "Отравлен",
@@ -538,6 +540,7 @@ export const CONDITION_EFFECTS: Record<string, {
     name: "Всплеск действий использован",
     description: "Всплеск действий уже применён в этом ходу",
     effects: {},
+    service: true,
   },
   smite_ready: {
     name: "Божественная кара наготове",
@@ -558,16 +561,48 @@ export const CONDITION_EFFECTS: Record<string, {
     name: "Божественный удар использован",
     description: "Божественный удар уже нанесён в этом ходу",
     effects: {},
+    service: true,
   },
   colossus_slayer_used: {
     name: "Убийца колоссов использован",
     description: "Урон Убийцы колоссов уже добавлен в этом ходу",
     effects: {},
+    service: true,
+  },
+  last_attack: {
+    name: "Атаковал в этом ходу",
+    description: "Последняя атака бойца в этом ходу (для Сокрушителя орды и Ошеломляющего удара)",
+    effects: {},
+    service: true,
+  },
+  horde_breaker_used: {
+    name: "Сокрушитель орды использован",
+    description: "Дополнительная атака Сокрушителя орды уже сделана в этом ходу",
+    effects: {},
+    service: true,
+  },
+  relentless_rage: {
+    name: "Непреклонная ярость",
+    description: "Сколько раз сработала Непреклонная ярость: каждый раз СЛ спасброска выше на 5",
+    effects: {},
+    service: true,
+  },
+  battle_start_done: {
+    name: "Начало боя учтено",
+    description: "Умения, срабатывающие при броске инициативы, уже учтены",
+    effects: {},
+    service: true,
+  },
+  turned: {
+    name: "Изгнан",
+    description: "Бежит от изгнавшего: не атакует и не совершает реакций, не подходит к нему. Проходит через минуту или при получении урона",
+    effects: { noActions: true, noReactions: true, cannotApproachSource: true },
   },
   sneak_used: {
     name: "Скрытая атака использована",
     description: "Скрытая атака уже применена в этом ходу",
     effects: {},
+    service: true,
   },
   sneak_ready: {
     name: "Скрытая атака готова",

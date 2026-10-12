@@ -392,6 +392,13 @@ export function dealDamage(
       state.addLog(`${target.name} имеет иммунитет к урону «${part.type}» (0 урона)`, "system", target.name);
       continue;
     }
+    // Чистота тела монаха и Покровительство природы друида: иммунитет к урону ядом
+    const poisonGuard = (type === "poison" || type.includes("яд")) &&
+      classFeature(target, "monk/purity-of-body", "circle-of-the-land/natures-ward");
+    if (poisonGuard) {
+      state.addLog(`${target.name}: иммунитет к урону ядом (${poisonGuard.name})`, "system", target.name);
+      continue;
+    }
 
     // Ярость: сопротивление дробящему, колющему и рубящему урону (в том числе магическому)
     const rageResists = isPhysical && hasCondition(target, "raging");
@@ -409,6 +416,12 @@ export function dealDamage(
   }
 
   if (actualAmount <= 0) return;
+
+  // Изгнание (Изгнание нежити) проходит, когда существо получает урон
+  if (hasCondition(target, "turned")) {
+    target.conditions = target.conditions.filter((c) => c.type !== "turned");
+    state.addLog(`${target.name} больше не изгнан — получил урон`, "system", target.name);
+  }
 
   // Невероятное уклонение (Плут 5 ур): реакцией уполовинивает урон от атаки
   const hasUncannyDodge =
@@ -520,6 +533,24 @@ export function dealDamage(
   }
 
   if (wasAlive && target.hpCurrent <= 0) {
+    // Непреклонная ярость варвара: в ярости спасбросок ТЕЛ Сл 10 (+5 за каждое срабатывание) — остаётся 1 хит
+    if (hasCondition(target, "raging") && classFeature(target, "barbarian/relentless-rage")) {
+      const counter = target.conditions.find((c) => c.type === "relentless_rage");
+      const dc = 10 + 5 * (counter?.value ?? 0);
+      const save = rollSave(target, "CON", dc);
+      target.conditions = [
+        ...target.conditions.filter((c) => c.type !== "relentless_rage"),
+        { type: "relentless_rage", value: (counter?.value ?? 0) + 1 },
+      ];
+      if (save.success) {
+        target.hpCurrent = 1;
+        state.addLog(`${target.name}: Непреклонная ярость — остаётся с 1 хитом (${save.text})`, "ability", target.name);
+        state.mark(targetId);
+        return;
+      }
+      state.addLog(`${target.name}: Непреклонная ярость не помогла (${save.text})`, "ability", target.name);
+    }
+
     // Стойкость нежити (Undead Fortitude): спасбросок ТЕЛ Сл 5 + урон, если урон не излучением и не критический
     const hasUndeadFortitude = target.monsterTraits?.some((t) => {
       const n = (t.name || "").toLowerCase();
@@ -568,6 +599,16 @@ export function dealDamage(
       { type: "prone" },
     ];
     state.addLog(`${target.name} падает без сознания!`, "damage", target.name);
+
+    // Благословение Тёмного (колдун Исчадия): опустив хиты врага до 0, получает временные хиты
+    const killer = attackerId ? state.get(attackerId) : undefined;
+    const blessing = killer && killer.id !== target.id && isHostile(killer.type, target.type)
+      ? classFeature(killer, "the-fiend/dark-ones-blessing")?.parameters?.featureValue
+      : undefined;
+    if (killer && blessing) {
+      grantTempHp(state, killer.id, blessing);
+      state.addLog(`${killer.name}: Благословение Тёмного — ${blessing} временных хитов`, "ability", killer.name);
+    }
   } else if (!wasAlive && target.hpCurrent <= 0) {
     // Урон по персонажу с 0 HP: добавляет провал спасброска от смерти
     let dsCond = target.conditions.find((cond) => cond.type === "death_save");
@@ -761,6 +802,12 @@ export function applyEffect(
     state.addLog(`${target.name} имеет иммунитет к состоянию «${effect.condition}»`, "system", target.name);
     return;
   }
+  const immuneBy = featureConditionImmunity(state, target, effect.condition);
+  if (immuneBy) {
+    const label = CONDITION_EFFECTS[effect.condition]?.name ?? effect.condition;
+    state.addLog(`${target.name} не поддаётся состоянию «${label}» (${immuneBy})`, "system", target.name);
+    return;
+  }
   const label = CONDITION_EFFECTS[effect.condition]?.name ?? effect.condition;
 
   target.conditions = [
@@ -938,6 +985,61 @@ function isUndeadOrFiend(c: Combatant): boolean {
   return /нежит|undead|исчади|fiend/.test(cls);
 }
 
+function isUndead(c: Combatant): boolean {
+  return /нежит|undead/.test((c.className || "").toLowerCase());
+}
+
+function isUndeadOrConstruct(c: Combatant): boolean {
+  return /нежит|undead|конструкт|construct/.test((c.className || "").toLowerCase());
+}
+
+/** Мистический залп (заклинание или атака-заглушка «Мистический заряд») */
+function isEldritchBlast(label: string): boolean {
+  return /мистическ\S* (залп|заряд)|eldritch blast/i.test(label);
+}
+
+/** Лучшая атака оружием нужного вида (без заклинательных и временных) */
+function weaponAttackOf(c: Combatant, kind: "melee" | "ranged"): Attack | undefined {
+  return c.attacks
+    .filter((a) => a.kind === kind && !a.usesSpellAttack && !a.id.startsWith("__"))
+    .sort((a, b) => b.attackBonus - a.attackBonus)[0];
+}
+
+/** Последняя атака бойца в этом ходу: цель и попала ли (для Ошеломляющего удара, Сокрушителя орды) */
+function lastAttackThisTurn(state: CombatState, c: Combatant): { targetId: string; hit: boolean; kind: string } | null {
+  const mark = c.conditions.find((cond) => cond.type === "last_attack" && cond.source?.startsWith(`${turnKey(state)}|`));
+  if (!mark?.source) return null;
+  const [, targetId, hit, kind] = mark.source.split("|");
+  return { targetId, hit: hit === "1", kind };
+}
+
+/**
+ * Иммунитет к состоянию от классовых умений: Бездумная ярость (в ярости — очарование и испуг),
+ * Аура отваги (испуг) и Аура преданности (очарование) паладина рядом, Чистота тела и
+ * Покровительство природы (отравление). Возвращает название умения или null.
+ */
+function featureConditionImmunity(state: CombatState, target: Combatant, condition: string): string | null {
+  if ((condition === "charmed" || condition === "frightened") && hasCondition(target, "raging")) {
+    const f = classFeature(target, "path-of-the-berserker/mindless-rage");
+    if (f) return f.name;
+  }
+  if (condition === "poisoned") {
+    const f = classFeature(target, "monk/purity-of-body", "circle-of-the-land/natures-ward");
+    if (f) return f.name;
+  }
+  const auraKey =
+    condition === "frightened" ? "paladin/aura-of-courage" : condition === "charmed" ? "oath-of-devotion/aura-of-devotion" : null;
+  if (auraKey) {
+    for (const p of state.combatants) {
+      const aura = classFeature(p, auraKey);
+      if (!aura || p.hpCurrent <= 0 || hasCondition(p, "unconscious")) continue;
+      if (p.id !== target.id && isHostile(p.type, target.type)) continue;
+      if (distanceFt(p, target) <= (aura.parameters?.range?.value ?? 10)) return aura.name;
+    }
+  }
+  return null;
+}
+
 /** Самая низкая ячейка заклинаний с остатком (для Божественной кары) */
 function lowestFreeSlot(c: Combatant): number | null {
   const levels = Object.keys(c.spells?.slots ?? {})
@@ -990,7 +1092,10 @@ function applyWeaponHitRiders(
     }
   }
 
-  const isWeapon = attack.kind !== "spell" && !attack.usesSpellAttack;
+  // Мучительный и Отталкивающий взрыв для атаки «Мистический заряд»
+  if (isEldritchBlast(attack.name)) text += eldritchBlastRiders(state, attacker, target, resolution);
+
+  const isWeapon = attack.kind !== "spell" && !attack.usesSpellAttack && !isEldritchBlast(attack.name);
   const extra = (label: string, roll: DamageRoll) => {
     const rolled = rollDamage([{ ...roll, type: roll.type || weaponPart?.type || "" }], resolution.crit);
     resolution.damage += rolled.total;
@@ -1039,6 +1144,27 @@ function applyWeaponHitRiders(
     text += `, Сильный критический удар ${brutal}к${weaponDie} = ${rolled.total}`;
   }
 
+  return text;
+}
+
+/** Воззвания колдуна для попадания Мистическим залпом: + мод. Харизмы к урону, отталкивание на 10 фт */
+function eldritchBlastRiders(
+  state: CombatState,
+  caster: Combatant,
+  target: Combatant,
+  resolution: { damage: number; damageParts: DamagePart[] }
+): string {
+  let text = "";
+  const agonizing = classFeature(caster, "warlock/agonizing-blast")?.parameters?.featureValue ?? 0;
+  if (agonizing > 0) {
+    resolution.damage += agonizing;
+    resolution.damageParts.push({ amount: agonizing, type: resolution.damageParts[0]?.type || "force", magical: true });
+    text += `, Мучительный взрыв +${agonizing}`;
+  }
+  if (classFeature(caster, "warlock/repelling-blast")) {
+    pushCombatantAway(state, target, { x: caster.x, y: caster.y }, 2);
+    text += ", Отталкивающий взрыв (10 фт)";
+  }
   return text;
 }
 
@@ -1096,6 +1222,31 @@ function findSneakAttack(
 }
 
 export function performAttack(
+  state: CombatState,
+  attackerId: string,
+  targetId: string,
+  attackId: string,
+  opts: {
+    manualAdvantage?: boolean;
+    manualDisadvantage?: boolean;
+    skipTurnCheck?: boolean;
+    skipCost?: boolean;
+  } = {}
+): AttackOutcome {
+  const outcome = performAttackUnmarked(state, attackerId, targetId, attackId, opts);
+  // Запоминаем последнюю атаку в ходу: Ошеломляющему удару нужно попадание, Сокрушителю орды — первая цель
+  const attacker = state.get(attackerId);
+  const attack = attacker?.attacks.find((a) => a.id === attackId);
+  if (attacker && attack) {
+    attacker.conditions = [
+      ...attacker.conditions.filter((c) => c.type !== "last_attack"),
+      { type: "last_attack", source: `${turnKey(state)}|${targetId}|${outcome.hit ? 1 : 0}|${attack.kind}` },
+    ];
+  }
+  return outcome;
+}
+
+function performAttackUnmarked(
   state: CombatState,
   attackerId: string,
   targetId: string,
@@ -1818,6 +1969,16 @@ interface CastContext {
 interface CastResult {
   targets: Array<{ name: string; saved?: boolean; hit?: boolean; amount: number }>;
   text: string;
+}
+
+/** Максимум костей: «2d8+1d4» → 20 */
+function maxDiceTotal(dice: string): number {
+  let total = 0;
+  for (const m of (dice || "").toLowerCase().replace(/к/g, "d").matchAll(/(\d*)d(\d+)/g)) {
+    total += (m[1] ? parseInt(m[1], 10) : 1) * parseInt(m[2], 10);
+  }
+  const flat = (dice || "").match(/^\s*(\d+)\s*$/);
+  return flat ? parseInt(flat[1], 10) : total;
 }
 
 /** Готовит массив урона с учётом масштабирования заговоров и апкаста */
@@ -2543,7 +2704,25 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
 
   const results: CastResult["targets"] = [];
 
+  // Классовые умения, меняющие заклинания (жрец Жизни, волшебник Воплощения, колдун)
+  const spellLevel = Math.max(slotLevel, Number((params as any).level) || 0);
+  const isEvocation = isSpellAction && /evocation|воплощ|эвокац/i.test(params.school ?? "");
+  const isBlast = isSpellAction && isEldritchBlast(params.name || ctx.label || "");
+  let sculptBudget =
+    isEvocation && params.aoe && params.saveType && classFeature(caster, "school-of-evocation/sculpt-spells")
+      ? 1 + spellLevel
+      : 0;
+  let healedOthers = false;
+
   for (const target of targets) {
+    // Формовка заклинаний: союзники в области воплощения автоматически спасаются и не получают урона
+    if (sculptBudget > 0 && target.id !== caster.id && !isHostile(caster.type, target.type) && !isHealing) {
+      sculptBudget -= 1;
+      state.addLog(`${target.name} в безопасном кармане (Формовка заклинаний)`, "save", target.name);
+      results.push({ name: target.name, saved: true, amount: 0 });
+      continue;
+    }
+
     let saved: boolean | undefined;
     let hit: boolean | undefined;
     let amount = 0;
@@ -2580,6 +2759,12 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
           const rolled = rollDamage(damage, false, { halfOnSave: save.success && halfOnSave });
           amount = rolled.total;
           amountParts = rolled.parts;
+        } else if (isSpellAction && spellLevel === 0 && classFeature(caster, "school-of-evocation/potent-cantrip")) {
+          // Могущественный заговор: при успешном спасброске — половина урона заговора
+          const rolled = rollDamage(damage, false, { halfOnSave: true });
+          amount = rolled.total;
+          amountParts = rolled.parts;
+          state.addLog(`${target.name}: Могущественный заговор — половина урона`, "spell", caster.name);
         }
         // Увёртливость: спасбросок Ловкости на половину урона — при успехе урона нет, при провале половина
         if (
@@ -2619,6 +2804,31 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
       const rolled = rollDamage(targetDamage, false);
       amount = rolled.total;
       amountParts = rolled.parts;
+    }
+
+    // Целительство жреца Жизни для заклинаний 1+ круга: Высшее исцеление (максимум костей), Поборник жизни (+2 + круг)
+    if (amount > 0 && isHealing && isSpellAction && spellLevel >= 1 && !targetDamage[0]?.temp) {
+      if (classFeature(caster, "life-domain/supreme-healing")) {
+        amount = targetDamage.reduce((sum, d) => sum + maxDiceTotal(d.dice) + (d.mod || 0), 0);
+      }
+      if (classFeature(caster, "life-domain/disciple-of-life")) amount += 2 + spellLevel;
+      if (target.id !== caster.id) healedOthers = true;
+    }
+    // Усиленная эвокация (+ мод. Интеллекта) и воззвания колдуна для Мистического залпа
+    if (amount > 0 && !isHealing && isEvocation) {
+      const bonus = classFeature(caster, "school-of-evocation/empowered-evocation")?.parameters?.featureValue ?? 0;
+      if (bonus > 0) {
+        amount += bonus;
+        amountParts = amountParts ? [...amountParts, { amount: bonus, type: amountParts[0]?.type ?? "", magical: true }] : undefined;
+        state.addLog(`Усиленная эвокация: +${bonus} урона`, "spell", caster.name);
+      }
+    }
+    if (amount > 0 && !isHealing && isBlast) {
+      const blast = { damage: amount, damageParts: amountParts ?? [{ amount, type: targetDamage[0]?.type ?? "force", magical: true }] };
+      const text = eldritchBlastRiders(state, caster, target, blast);
+      if (text) state.addLog(`Мистический залп${text}`, "spell", caster.name);
+      amount = blast.damage;
+      amountParts = blast.damageParts;
     }
 
     if (amount > 0) {
@@ -2687,6 +2897,12 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
     }
 
     results.push({ name: target.name, saved, hit, amount });
+  }
+
+  // Благословенный целитель: леча других заклинанием 1+ круга, жрец лечит и себя
+  if (healedOthers && classFeature(caster, "life-domain/blessed-healer")) {
+    heal(state, caster.id, 2 + spellLevel);
+    state.addLog(`${caster.name}: Благословенный целитель +${2 + spellLevel} хитов`, "spell", caster.name);
   }
 
   // Если кастер был скрыт — применение заклинания/способности раскрывает его
@@ -2997,6 +3213,191 @@ function spendAbilityUse(c: Combatant, ability: CombatAbility, amount = 1): void
   }
 }
 
+/** Атака оружием в рамках умения: без оплаты действия, с обычными бросками и срабатываниями */
+function featureAttack(state: CombatState, c: Combatant, target: Combatant, attack: Attack) {
+  const res = performAttack(state, c.id, target.id, attack.id, { skipTurnCheck: true, skipCost: true });
+  return { name: target.name, hit: res.hit, amount: res.damage, text: res.hit ? `${target.name}: ${res.damage} ур.` : `${target.name}: промах` };
+}
+
+/**
+ * Умения SRD, которые движок разыгрывает сам (см. ENGINE_ACTIONS в class-features.ts),
+ * и проверки условий для остальных. null — умение обычное.
+ */
+function srdClassFeature(
+  state: CombatState,
+  c: Combatant,
+  ability: CombatAbility,
+  params: ActionParameters,
+  opts: { targetIds?: string[]; center?: Cell | null }
+): CastResult | null {
+  const key = params.srdKey;
+  if (!key) return null;
+  const pickTarget = (what: string) => {
+    const t = opts.targetIds?.[0] ? state.get(opts.targetIds[0]) : undefined;
+    if (!t || t.id === c.id) throw new EngineError(`Выберите цель для «${what}»`);
+    return t;
+  };
+
+  // Ошеломляющий удар — только после попадания рукопашной атакой в этом ходу; обычный спасбросок дальше
+  if (key === "monk/stunning-strike") {
+    const last = lastAttackThisTurn(state, c);
+    if (!last || !last.hit || last.kind !== "melee") {
+      throw new EngineError("Ошеломляющий удар — сразу после попадания рукопашной атакой в этом ходу");
+    }
+    return null;
+  }
+
+  // Изгнание нежити жреца и Изгнание нечестивых паладина: спасбросок Мудрости, провал — изгнан на минуту
+  if (key === "cleric/channel-divinity-turn-undead" || key === "oath-of-devotion/channel-divinity-turn-the-unholy") {
+    const unholy = key.startsWith("oath");
+    const radius = params.range?.value ?? 30;
+    const dc = params.saveDC ?? 8 + c.profBonus + (c.abilityMods?.WIS ?? 0);
+    const targets = state.combatants.filter(
+      (t) =>
+        t.id !== c.id &&
+        t.hpCurrent > 0 &&
+        isHostile(c.type, t.type) &&
+        distanceFt(c, t) <= radius &&
+        (unholy ? isUndeadOrFiend(t) : isUndead(t))
+    );
+    payActionCost(state, c, params.actionCost);
+    state.addLog(`${c.name} применяет «${ability.name}»`, "ability", c.name);
+    const results: CastResult["targets"] = [];
+    for (const t of targets) {
+      const save = rollEffectSave(state, t, "WIS", dc, false, ability.name);
+      state.addLog(`${t.name}: ${save.text}`, "save", t.name);
+      if (save.success) {
+        results.push({ name: t.name, saved: true, amount: 0 });
+        continue;
+      }
+      // Уничтожение нежити: слабая нежить рассыпается
+      const crLimit = unholy ? 0 : params.featureValue ?? 0;
+      if (crLimit > 0 && (t.challengeRating ?? Infinity) <= crLimit) {
+        t.hpCurrent = 0;
+        t.hpTemp = 0;
+        if (t.concentration) {
+          t.concentration = null;
+          dropConcentrationEffects(state, t.id);
+        }
+        t.conditions = [...t.conditions.filter((x) => x.type !== "dead"), { type: "dead" }];
+        state.addLog(`${t.name} уничтожен (Уничтожение нежити, ПО ${t.challengeRating})`, "damage", t.name);
+        state.mark(t.id);
+      } else {
+        applyEffect(state, t.id, { condition: "turned", durationRounds: 10 }, c.id);
+        state.addLog(`${t.name} изгнан на минуту`, "ability", t.name);
+      }
+      results.push({ name: t.name, saved: false, amount: 0 });
+    }
+    spendAbilityUse(c, ability);
+    state.mark(c.id);
+    const text = targets.length
+      ? `${ability.name}: ${results.map((r) => `${r.name} — ${r.saved ? "устоял" : "изгнан"}`).join(", ")}`
+      : `${ability.name}: в ${radius} фт нет подходящих существ`;
+    return { targets: results, text };
+  }
+
+  // Сохранение жизни: запас 5 × уровень жреца на раненых союзников в 30 фт, не выше половины их максимума
+  if (key === "life-domain/channel-divinity-preserve-life") {
+    const radius = params.range?.value ?? 30;
+    let pool = params.featureValue ?? 5 * (c.level || 1);
+    const allies = state.combatants
+      .filter(
+        (t) =>
+          (t.id === c.id || !isHostile(c.type, t.type)) &&
+          !hasCondition(t, "dead") &&
+          !isUndeadOrConstruct(t) &&
+          distanceFt(c, t) <= radius &&
+          t.hpCurrent < Math.floor(t.hpMax / 2)
+      )
+      // Сначала тяжелораненые
+      .sort((a, b) => a.hpCurrent / a.hpMax - b.hpCurrent / b.hpMax);
+    if (allies.length === 0) throw new EngineError("Рядом нет союзников с хитами меньше половины");
+    payActionCost(state, c, params.actionCost);
+    state.addLog(`${c.name} применяет «${ability.name}»`, "ability", c.name);
+    const results: CastResult["targets"] = [];
+    for (const t of allies) {
+      if (pool <= 0) break;
+      const amount = Math.min(pool, Math.floor(t.hpMax / 2) - Math.max(0, t.hpCurrent));
+      if (amount <= 0) continue;
+      heal(state, t.id, amount);
+      pool -= amount;
+      results.push({ name: t.name, amount });
+      state.addLog(`${t.name}: восстановлено ${amount} хитов`, "ability", t.name);
+    }
+    spendAbilityUse(c, ability);
+    state.mark(c.id);
+    return { targets: results, text: `${ability.name}: ${results.map((r) => `${r.name} +${r.amount}`).join(", ")}` };
+  }
+
+  // Бешенство берсерка: в ярости — атака рукопашным оружием бонусным действием
+  if (key === "path-of-the-berserker/frenzy") {
+    if (!hasCondition(c, "raging")) throw new EngineError("Бешенство — только в Ярости");
+    const weapon = weaponAttackOf(c, "melee");
+    if (!weapon) throw new EngineError("Нужно рукопашное оружие");
+    const target = pickTarget(ability.name);
+    payActionCost(state, c, params.actionCost);
+    const r = featureAttack(state, c, target, weapon);
+    spendAbilityUse(c, ability);
+    state.mark(c.id);
+    return { targets: [r], text: `Бешенство: ${r.text}. После Ярости — 1 уровень истощения` };
+  }
+
+  // Сокрушитель орды: раз в ход ещё одна атака по другому существу в 5 фт от первой цели
+  if (key === "hunter/horde-breaker") {
+    const last = lastAttackThisTurn(state, c);
+    if (!last) throw new EngineError("Сокрушитель орды — после атаки оружием в этом ходу");
+    if (c.conditions.some((x) => x.type === "horde_breaker_used" && x.source === turnKey(state))) {
+      throw new EngineError("Сокрушитель орды уже использован в этом ходу");
+    }
+    const first = state.get(last.targetId);
+    const target = pickTarget(ability.name);
+    if (target.id === last.targetId) throw new EngineError("Нужна другая цель, не та, что атакована");
+    if (first && distanceFt(first, target) > 5) throw new EngineError(`${target.name} дальше 5 фт от ${first.name}`);
+    const weapon = weaponAttackOf(c, last.kind === "ranged" ? "ranged" : "melee") ?? weaponAttackOf(c, "melee") ?? weaponAttackOf(c, "ranged");
+    if (!weapon) throw new EngineError("Нужно оружие");
+    c.conditions = [
+      ...c.conditions.filter((x) => x.type !== "horde_breaker_used"),
+      { type: "horde_breaker_used", source: turnKey(state) },
+    ];
+    const r = featureAttack(state, c, target, weapon);
+    state.mark(c.id);
+    return { targets: [r], text: `Сокрушитель орды: ${r.text}` };
+  }
+
+  // Вихревая атака: рукопашная атака по каждому врагу в 5 фт
+  if (key === "hunter/whirlwind-attack") {
+    const weapon = weaponAttackOf(c, "melee");
+    if (!weapon) throw new EngineError("Нужно рукопашное оружие");
+    const foes = state.combatants.filter((t) => t.hpCurrent > 0 && isHostile(c.type, t.type) && distanceFt(c, t) <= 5);
+    if (foes.length === 0) throw new EngineError("Рядом нет врагов");
+    payActionCost(state, c, params.actionCost);
+    const results = foes.map((t) => featureAttack(state, c, t, weapon));
+    state.mark(c.id);
+    return { targets: results, text: `Вихревая атака: ${results.map((r) => r.text).join(", ")}` };
+  }
+
+  // Залп: дальнобойная атака по каждому существу в 10 фт от точки
+  if (key === "hunter/volley") {
+    const weapon = weaponAttackOf(c, "ranged");
+    if (!weapon) throw new EngineError("Нужно дальнобойное оружие");
+    if (!opts.center) throw new EngineError("Выберите точку для Залпа");
+    if (distanceFt(c, opts.center) > (weapon.range.long ?? weapon.range.normal)) {
+      throw new EngineError("Точка дальше дистанции оружия");
+    }
+    const radius = params.aoe?.size ?? 10;
+    const foes = state.combatants.filter(
+      (t) => t.hpCurrent > 0 && isHostile(c.type, t.type) && distanceFt(opts.center!, t) <= radius
+    );
+    if (foes.length === 0) throw new EngineError("В области Залпа нет врагов");
+    payActionCost(state, c, params.actionCost);
+    const results = foes.map((t) => featureAttack(state, c, t, weapon));
+    state.mark(c.id);
+    return { targets: results, text: `Залп: ${results.map((r) => r.text).join(", ")}` };
+  }
+
+  return null;
+}
+
 /**
  * Классовые умения, которые не описываются общими параметрами:
  * Ярость, Божественная кара, Наложение рук, Вдохновение барда, Шквал ударов.
@@ -3010,6 +3411,9 @@ function useClassFeature(
   opts: { targetIds?: string[]; center?: Cell | null; skipTurnCheck?: boolean }
 ): CastResult | null {
   const name = (params.name || ability.name).toLowerCase();
+
+  const srd = srdClassFeature(state, c, ability, params, opts);
+  if (srd) return srd;
 
   // --- ЯРОСТЬ ---
   if (name === "ярость" || /(^|_)rage($|_)/.test(ability.id)) {
@@ -3048,6 +3452,7 @@ function useClassFeature(
     if (target.id !== c.id && distanceFt(c, target) > 5) {
       throw new EngineError(`Наложение рук — касанием, ${target.name} слишком далеко`);
     }
+    if (isUndeadOrConstruct(target)) throw new EngineError("Наложение рук не действует на нежить и конструктов");
     const pool = ability.usesMax > 0 ? ability.usesMax - ability.usesUsed : Infinity;
     const missing = target.hpMax - target.hpCurrent;
     if (missing <= 0) throw new EngineError(`${target.name} не ранен`);
@@ -3105,6 +3510,16 @@ function useClassFeature(
         const res = performAttack(state, c.id, target.id, unarmed.id, { skipTurnCheck: true, skipCost: true });
         results.push({ name: target.name, hit: res.hit, amount: res.damage });
         texts.push(res.hit ? `${res.damage} ур.` : "промах");
+        // Техника открытой ладони: попавший удар Шквала сбивает с ног (спасбросок Ловкости)
+        if (res.hit && target.hpCurrent > 0 && !hasCondition(target, "prone") && classFeature(c, "way-of-the-open-hand/open-hand-technique")) {
+          const dc = 8 + (c.profBonus || 2) + (c.abilityMods?.WIS ?? 0);
+          const save = rollEffectSave(state, target, "DEX", dc, false, "Техника открытой ладони");
+          state.addLog(`${target.name}: ${save.text} против Техники открытой ладони`, "save", target.name);
+          if (!save.success) {
+            applyEffect(state, target.id, { condition: "prone" }, c.id);
+            texts.push(`${target.name} сбит с ног`);
+          }
+        }
       }
     } finally {
       c.attacks = c.attacks.filter((a) => a.id !== unarmed.id);
@@ -3656,6 +4071,21 @@ export function startTurn(state: CombatState): void {
   );
   // Способности, обновляющиеся каждый ход (Скрытая атака)
   c.abilities = c.abilities.map((a) => (a.refresh === "turn" ? { ...a, usesUsed: 0 } : a));
+
+  // При броске инициативы (в первый ход героя в бою): Превосходное вдохновение барда, Совершенство монаха
+  if (!hasCondition(c, "battle_start_done")) {
+    c.conditions = [...c.conditions, { type: "battle_start_done" }];
+    const restore = (key: string, poolKey: string, amount: number) => {
+      if (!classFeature(c, key)) return;
+      const pool = c.abilities.find((a) => a.parameters?.srdKey === poolKey);
+      if (pool && pool.usesMax > 0 && pool.usesUsed >= pool.usesMax) {
+        pool.usesUsed = Math.max(0, pool.usesMax - amount);
+        state.addLog(`${c.name}: ${classFeature(c, key)!.name} — восстановлено ${amount} «${pool.name}»`, "ability", c.name);
+      }
+    };
+    restore("bard/superior-inspiration", "bard/bardic-inspiration", 1);
+    restore("monk/perfect-focus", "monk/monks-focus", 4);
+  }
 
   // Уцелевший (Чемпион 18): в начале хода при половине хитов или меньше — 5 + мод. Телосложения
   const survivor = classFeature(c, "champion/survivor")?.parameters?.featureValue;

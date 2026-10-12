@@ -139,9 +139,12 @@ function hasTwoWeaponFightingStyle(sheet: Sheet): boolean {
   if (["сражение двумя оружиями", "two-weapon fighting", "парным оружием"].some((q) => text.includes(q))) {
     return true;
   }
+  // Выбор стиля в листе: traitsList (fighting-style-two-weapon) или levelHistory (two-weapon / two_weapon)
+  const traits = Array.isArray(sheet.traitsList) ? sheet.traitsList : [];
+  if (traits.some((t: Sheet) => /fighting-style-two[-_]weapon/.test(String(t?.id || "")))) return true;
   return (Array.isArray(sheet.levelHistory) ? sheet.levelHistory : []).some((h: Sheet) => {
     const style = String(h?.selectedFightingStyle || "").toLowerCase();
-    return style.includes("two_weapon") || style.includes("двумя");
+    return /two[-_]weapon/.test(style) || style.includes("двумя");
   });
 }
 

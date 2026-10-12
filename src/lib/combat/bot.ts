@@ -985,6 +985,26 @@ export function runBotTurn(state: CombatState, actorOverride?: Combatant): BotTu
       actorOverride.conditions = [...actor.conditions];
     }
   };
+  // Изгнанная нежить (Изгнание нежити) не действует, а уходит как можно дальше от изгнавшего
+  const turned = actor.hpCurrent > 0 ? actor.conditions.find((c) => c.type === "turned") : undefined;
+  if (turned) {
+    const turner = turned.source ? state.get(turned.source) : undefined;
+    const dest = getFleeingDestination(actor, state.gridWidth, state.gridHeight, turner ? [turner] : []);
+    const cell = findClosestCellTowardsTarget(state, actor, dest);
+    if (cell) {
+      try {
+        moveCombatant(state, actor.id, cell, { skipTurnCheck: true, avoidHazards: true });
+        actor.facing = determineFacingTowards(actor, dest);
+        state.mark(actor.id);
+      } catch (e) {
+        if (!(e instanceof EngineError)) throw e;
+      }
+    }
+    steps.push({ kind: "move", text: `${actor.name} изгнан и бежит прочь${turner ? ` от ${turner.name}` : ""}` });
+    syncOverride();
+    return { steps, ended: false };
+  }
+
   if (actor.hpCurrent <= 0 || !canAct(actor)) {
     steps.push({ kind: "skip", text: `${actor.name} не может действовать — ход пропущен` });
     syncOverride();

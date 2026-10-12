@@ -6,7 +6,7 @@ import { denyCampaignAccess } from "@/lib/auth/campaign-access";
 import { db } from "@/lib/db";
 import { NextRequest } from "next/server";
 import { TYPE_COLORS, type Attack, type CombatAbility } from "@/lib/combat/types";
-import { abilitiesForClass, attacksPerAction, sneakAttackDice } from "@/lib/combat/library-data";
+import { abilitiesForClass, attacksPerAction, libraryAbilityNamesForClass, sneakAttackDice } from "@/lib/combat/library-data";
 import { abilityModifier, proficiencyBonus } from "@/lib/dnd/dice";
 import { safeParse } from "@/lib/combat/serialize";
 import { resolveAbilityUses } from "@/lib/combat/ability-uses";
@@ -299,8 +299,9 @@ export async function POST(req: NextRequest) {
     // ============ КЛАССОВЫЕ СПОСОБНОСТИ ============
     // Способности из кода — источник правил (заряды, эффекты). Из БД добавляем только те,
     // которых в коде нет (добавленные вручную); устаревшие записи БД с тем же именем не берём
-    const codeAbilities = abilitiesForClass(className, level);
-    const codeNames = new Set(codeAbilities.map((a) => a.name.toLowerCase()));
+    const codeAbilities = abilitiesForClass(className, level, cj.subclass);
+    // Умения чужих архетипов (Ликвидация у не-Убийцы) из БД тоже не берём
+    const codeNames = libraryAbilityNamesForClass(className);
     const libAbilities = await db.abilityLibrary.findMany();
     const extraFromDb = libAbilities.filter((a) => {
       if (a.minLevel > level) return false;
@@ -397,7 +398,7 @@ export async function POST(req: NextRequest) {
         actionUsed: false,
         bonusActionUsed: false,
         reactionUsed: false,
-        attacksPerAction: attacksPerAction(className, level),
+        attacksPerAction: attacksPerAction(className, level, abilities),
         attacksMadeThisAction: 0,
         extraActions: 0,
         hotbar: JSON.stringify(hotbar),
@@ -425,7 +426,7 @@ export async function POST(req: NextRequest) {
         speed,
         dexMod,
         attacks: attacks.length,
-        attacksPerAction: attacksPerAction(className, level),
+        attacksPerAction: attacksPerAction(className, level, abilities),
         abilities: abilities.map((a) => a.name),
         spells: knownSpells.map((s) => s.name),
         unmatchedSpells: knownSpellNames.filter(

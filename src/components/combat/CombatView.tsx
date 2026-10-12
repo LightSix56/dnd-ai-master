@@ -2343,7 +2343,7 @@ function CombatantDetails({
           <div>
             <Label className="text-[10px]">Состояния</Label>
             <div className="flex flex-wrap gap-1 mt-1">
-              {combatant.conditions.map((c, i) => (
+              {combatant.conditions.filter((c) => !CONDITION_EFFECTS[c.type]?.service).map((c, i) => (
                 <Badge
                   key={i}
                   variant="outline"
