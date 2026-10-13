@@ -12,22 +12,26 @@
 
 import { rollDice, rollD20 } from "@/lib/dnd/dice";
 import { distanceFt } from "./grid";
-import { canAct, checkReach, hasCondition, type DamagePart } from "./rules";
+import { canAct, checkReach, hasCondition, rollDamage, type DamagePart } from "./rules";
 import {
   EngineError,
   applyEffect,
   dealDamage,
   grantTempHp,
+  heal,
   lastAttackThisTurn,
   payActionCost,
   performAttack,
   pushCombatantAway,
   rollEffectSave,
   spendAbilityUse,
+  turnKey,
   type CastResult,
   type CombatState,
 } from "./engine";
 import {
+  ARCANE_SHOT_POOL,
+  PSIONIC_POOL,
   RIDER_COND,
   SUPERIORITY_POOL,
   abilityByKey,
@@ -118,10 +122,12 @@ interface HitCtx {
 }
 
 interface RiderDef {
-  /** Запас, из которого списывается заряд при срабатывании */
-  pool: string;
+  /** Запас, из которого списывается заряд при срабатывании; у рун запаса нет — тратится само умение */
+  pool?: string;
   /** Только рукопашная / только дальнобойная атака оружием */
   weapon?: "melee" | "ranged";
+  /** Только из лука (Магический выстрел) */
+  bow?: boolean;
   /** Применяется при попадании; возвращает текст для журнала атаки */
   apply: (ctx: HitCtx) => string;
 }
