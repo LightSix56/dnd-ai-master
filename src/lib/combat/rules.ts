@@ -17,6 +17,7 @@ import {
   type MapElement,
 } from "./types";
 import { hasLineOfSight, isInVisionCone } from "./movement";
+import { dynamicAcBonus, spendPrecisionAttack } from "./fighter-pool";
 
 // ============ СОСТОЯНИЯ ============
 
@@ -78,7 +79,7 @@ export function effectiveAC(c: Combatant): number {
     (sum, e) => sum + (e.acBonus ?? 0),
     0
   );
-  return c.ac + bonus;
+  return c.ac + bonus + dynamicAcBonus(c);
 }
 
 /** Итоговая скорость с учётом состояний и Рывка */
@@ -168,6 +169,30 @@ export function computeAttackAdvantage(
     if (e.rangedDisadvantageAgainst && !isMelee) {
       dis = true;
       reasons.push(`цель: ${label} (издалека)`);
+    }
+  }
+
+  // Подклассы Воина: финт (преимущество по выбранной цели), Отвлекающий удар (по отвлечённой цели от других),
+  // Подстрекающая атака и Непоколебимая метка (помеха на атаки не по источнику)
+  const feint = attacker.conditions.find((x) => x.type === "feint" && x.targetId === target.id);
+  if (feint) {
+    adv = true;
+    reasons.push("Атака с финтом");
+  }
+  if (target.conditions.some((x) => x.type === "distracted" && x.source !== attacker.id)) {
+    adv = true;
+    reasons.push("цель: Отвлекающий удар");
+  }
+  if (attacker.conditions.some((x) => x.type === "goaded" && x.source !== target.id)) {
+    dis = true;
+    reasons.push("Провоцирующая атака (цель не источник)");
+  }
+  const mark = attacker.conditions.find((x) => x.type === "unwavering_mark" && x.source !== target.id);
+  if (mark) {
+    const knight = context.allCombatants?.find((x) => x.id === mark.source);
+    if (knight && knight.hpCurrent > 0 && distanceFt(attacker, knight) <= 5) {
+      dis = true;
+      reasons.push("Непоколебимая метка");
     }
   }
 
@@ -411,6 +436,9 @@ export function rollSave(
     if (hasCondition(c, "cover_three_quarters")) bonus += 5;
     else if (hasCondition(c, "cover_half")) bonus += 2;
   }
+
+  // Ледяная руна: +2 к спасброскам Силы и Телосложения
+  if (hasCondition(c, "frost_rune") && (ability === "STR" || ability === "CON")) bonus += 2;
 
   let adv = effects.some((e) => e.saveAdvantage?.includes(ability)) || !!opts.advantage;
   let dis = effects.some((e) => e.saveDisadvantage?.includes(ability)) || !!opts.disadvantage;
@@ -722,6 +750,17 @@ export function resolveAttack(
     roll.total += inspiredBonus;
   }
 
+  // Точная атака Мастера боевых искусств: кость превосходства добавляется к промаху, если может его исправить
+  let precisionText = "";
+  if (!natCrit && !fumble && roll.total < targetAC) {
+    const precision = spendPrecisionAttack(attacker, targetAC - roll.total);
+    if (precision) {
+      roll.modifier += precision.bonus;
+      roll.total += precision.bonus;
+      precisionText = ` (Точная атака +${precision.bonus})`;
+    }
+  }
+
   const hit = natCrit || (!fumble && roll.total >= targetAC);
   const crit = natCrit || (hit && isHelpless && inMeleeRange) || (hit && isAssassin && isSurprised);
 
@@ -740,6 +779,7 @@ export function resolveAttack(
   let text = `${attack.name}: ${formatD20Roll(roll)} против КД ${targetAC}`;
   if (coverBonus > 0) text += ` (укрытие +${coverBonus})`;
   if (inspiredBonus > 0) text += ` (Вдохновение барда +${inspiredBonus})`;
+  text += precisionText;
   if (crit) {
     if (isAssassin && isSurprised && !natCrit) text += " — АВТО-КРИТ (Ликвидация: застигнут врасплох)!";
     else if (isHelpless && !natCrit) text += " — АВТО-КРИТ (беспомощная цель в 5 фт)!";

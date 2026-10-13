@@ -13,6 +13,7 @@
 
 import data from "./data/fighter-dndsu.json";
 import type { HeroFeatureContext, SrdAbilityDefinition } from "./class-features";
+import { ARCANE_SHOT_POOL, PSIONIC_POOL, SUPERIORITY_POOL } from "./fighter-pool";
 import type { AbilityKey, ActionCost, ActionParameters, CombatAbility } from "./types";
 
 // ============ ДАННЫЕ ============
@@ -87,9 +88,7 @@ function mentions(text: string, name: string): boolean {
 // ============ ПРАВИЛА УМЕНИЙ ============
 
 /** Запасы: на них ссылаются resourceCost вариантов */
-export const SUPERIORITY_POOL = "battlemaster/combat-superiority";
-export const PSIONIC_POOL = "psi-warrior/psionic-power";
-export const ARCANE_SHOT_POOL = "arcane-archer/arcane-shot";
+export { SUPERIORITY_POOL, PSIONIC_POOL, ARCANE_SHOT_POOL };
 
 type Refresh = CombatAbility["refresh"];
 
@@ -102,6 +101,10 @@ interface Rule {
   /** Спасбросок цели и характеристика СЛ */
   save?: AbilityKey;
   dc?: (ctx: Calc) => number;
+  /** Разыгрывается движком сама (fighter-combat.ts); без флага эффект разыгрывает мастер */
+  auto?: boolean;
+  /** Заряжает умение до атаки: запас списывается при срабатывании, а не при нажатии */
+  defer?: boolean;
   /** Сколько зарядов и когда они возвращаются */
   uses?: (ctx: Calc) => { max: number; refresh: Refresh };
   /** Траты из общего запаса */
@@ -295,31 +298,37 @@ const FEATURE_RULES: Record<string, Rule> = {
   "rune-knight/runic-juggernaut": { kind: "passive" },
 };
 
+/** Реакция воина срабатывает сама, когда выполнено условие (см. fighter-combat.ts) */
+const reaction = (): Rule => ({
+  kind: "passive",
+  note: (c) => `Срабатывает сама как реакция и тратит кость превосходства (к${superiorityFaces(c.level)}).`,
+});
+
 /** Правила вариантов на выбор: «подкласс/вариант» */
 const OPTION_RULES: Record<string, Rule> = {
   // Приёмы Мастера боевых искусств
-  "evasive-footwork": maneuver("free"),
-  "lunging-attack": maneuver("free", { target: "creature" }),
-  "maneuvering-attack": maneuver("free", { target: "creature" }),
-  "menacing-attack": maneuver("free", { target: "creature", save: "WIS" }),
-  "feinting-attack": maneuver("bonus", { target: "creature" }),
-  "disarming-attack": maneuver("free", { target: "creature", save: "STR" }),
-  "trip-attack": maneuver("free", { target: "creature", save: "STR" }),
-  riposte: maneuver("reaction", { target: "creature" }),
-  "distracting-strike": maneuver("free", { target: "creature" }),
-  parry: maneuver("reaction"),
-  "goading-attack": maneuver("free", { target: "creature", save: "WIS" }),
-  rally: maneuver("bonus", { target: "ally" }),
-  "pushing-attack": maneuver("free", { target: "creature", save: "STR" }),
-  "precision-attack": maneuver("free", { target: "creature" }),
-  "commanders-strike": maneuver("bonus", { target: "ally" }),
-  "sweeping-attack": maneuver("free", { target: "creature" }),
-  "grappling-strike": maneuver("bonus", { target: "creature" }),
-  "quick-toss": maneuver("bonus", { target: "creature" }),
-  brace: maneuver("reaction", { target: "creature" }),
+  "evasive-footwork": maneuver("free", { auto: true }),
+  "lunging-attack": maneuver("free", { auto: true, defer: true }),
+  "maneuvering-attack": maneuver("free", { auto: true, defer: true }),
+  "menacing-attack": maneuver("free", { auto: true, defer: true, save: "WIS" }),
+  "feinting-attack": maneuver("bonus", { auto: true, target: "creature" }),
+  "disarming-attack": maneuver("free", { auto: true, defer: true, save: "STR" }),
+  "trip-attack": maneuver("free", { auto: true, defer: true, save: "STR" }),
+  riposte: reaction(),
+  "distracting-strike": maneuver("free", { auto: true, defer: true }),
+  parry: reaction(),
+  "goading-attack": maneuver("free", { auto: true, defer: true, save: "WIS" }),
+  rally: maneuver("bonus", { auto: true, target: "ally" }),
+  "pushing-attack": maneuver("free", { auto: true, defer: true, save: "STR" }),
+  "precision-attack": maneuver("free", { auto: true, defer: true }),
+  "commanders-strike": maneuver("bonus", { auto: true, target: "ally" }),
+  "sweeping-attack": maneuver("free", { auto: true, defer: true }),
+  "grappling-strike": maneuver("bonus", { auto: true, target: "creature" }),
+  "quick-toss": maneuver("bonus", { auto: true, target: "creature" }),
+  brace: reaction(),
   ambush: maneuver("free"),
   "commanding-presence": maneuver("free"),
-  "bait-and-switch": maneuver("free", { target: "ally" }),
+  "bait-and-switch": maneuver("free", { auto: true, target: "ally" }),
   "tactical-assessment": maneuver("free"),
 
   // Магические выстрелы
@@ -406,7 +415,8 @@ function buildDefinition(
     range: { type: rule.target ? "special" : "self" },
     targeting: rule.target ?? "self",
     damage: [],
-    manual: true,
+    ...(rule.auto ? {} : { manual: true }),
+    ...(rule.defer ? { deferCost: true } : {}),
   };
   if (rule.pool) params.resourceCost = { pool: rule.pool, amount: 1 };
   if (rule.save) {

@@ -50,6 +50,15 @@ import { getAvailableBeastForms, getBeastFormById } from "./beast-forms";
 import { bardicInspirationDie, martialArtsDie, rageDamageBonus } from "./ability-uses";
 import { checkLegendaryResistance, triggerAILegendaryActions } from "./legendary";
 import {
+  fighterAfterAttack,
+  fighterHitRiders,
+  fighterOnAttackResolved,
+  fighterReduceDamage,
+  useFighterFeature,
+  type HitResolution,
+} from "./fighter-combat";
+import { armedRider } from "./fighter-pool";
+import {
   CONDITION_EFFECTS,
   isHostile,
   type AbilityKey,
@@ -401,7 +410,10 @@ export function dealDamage(
     }
 
     // Ярость: сопротивление дробящему, колющему и рубящему урону (в том числе магическому)
-    const rageResists = isPhysical && hasCondition(target, "raging");
+    // Холмовая руна — как Ярость; Защищённый разум пси-воина — сопротивление психической энергии
+    const rageResists =
+      (isPhysical && (hasCondition(target, "raging") || hasCondition(target, "hill_rune"))) ||
+      ((type === "psychic" || type.includes("психич")) && !!classFeature(target, "psi-warrior/guarded-mind"));
     if (rageResists || target.damageResistances?.some((res) => matchesTyped(res, type, isPhysical, isNonmagical))) {
       const halved = Math.floor(part.amount / 2);
       state.addLog(`${target.name} имеет сопротивление к «${part.type}» (урон: ${part.amount} → ${halved})`, "system", target.name);
@@ -438,6 +450,9 @@ export function dealDamage(
     );
     actualAmount = halved;
   }
+
+  // Парирование Мастера боевых искусств
+  actualAmount = fighterReduceDamage(state, target, actualAmount, { isAttack: opts.isAttack, attackerId });
 
   if (actualAmount <= 0) return;
 
@@ -948,7 +963,7 @@ function attackCoverBonus(state: CombatState, attacker: Combatant, target: Comba
 }
 
 /** Ключ текущего хода: Скрытая атака доступна один раз за ход (в т.ч. реакцией в чужой ход) */
-function turnKey(state: CombatState): string {
+export function turnKey(state: CombatState): string {
   return `${state.round}:${state.currentTurnIndex}`;
 }
 
@@ -1006,7 +1021,7 @@ function weaponAttackOf(c: Combatant, kind: "melee" | "ranged"): Attack | undefi
 }
 
 /** Последняя атака бойца в этом ходу: цель и попала ли (для Ошеломляющего удара, Сокрушителя орды) */
-function lastAttackThisTurn(state: CombatState, c: Combatant): { targetId: string; hit: boolean; kind: string } | null {
+export function lastAttackThisTurn(state: CombatState, c: Combatant): { targetId: string; hit: boolean; kind: string } | null {
   const mark = c.conditions.find((cond) => cond.type === "last_attack" && cond.source?.startsWith(`${turnKey(state)}|`));
   if (!mark?.source) return null;
   const [, targetId, hit, kind] = mark.source.split("|");
@@ -1062,7 +1077,7 @@ function applyWeaponHitRiders(
   attacker: Combatant,
   target: Combatant,
   attack: Attack,
-  resolution: { damage: number; damageParts: DamagePart[]; crit: boolean }
+  resolution: HitResolution
 ): string {
   let text = "";
   const weaponPart = resolution.damageParts[0];
@@ -1143,6 +1158,9 @@ function applyWeaponHitRiders(
     resolution.damageParts.push({ amount: rolled.total, type: weaponPart?.type ?? "", magical: weaponPart?.magical });
     text += `, Сильный критический удар ${brutal}к${weaponDie} = ${rolled.total}`;
   }
+
+  // Подклассы Воина: заряженные приёмы, выстрелы, силы и руны срабатывают на попадании
+  text += fighterHitRiders(state, attacker, target, attack, resolution);
 
   return text;
 }
@@ -1273,7 +1291,14 @@ function performAttackUnmarked(
     if (!pay.ok) throw new EngineError(pay.reason ?? "Нельзя совершить атаку");
   }
 
-  const reach = checkReach(attacker, target, attack, state.mapElements);
+  // Атака с выпадом: досягаемость рукопашной атаки +5 футов
+  const lunging = attack.kind === "melee" && !!armedRider(attacker, "battlemaster/lunging-attack");
+  const reach = checkReach(
+    attacker,
+    target,
+    lunging ? { ...attack, range: { ...attack.range, normal: attack.range.normal + 5, long: undefined } } : attack,
+    state.mapElements
+  );
   if (!reach.ok) throw new EngineError(reach.reason ?? "Цель недосягаема");
 
   const coverBonus = attackCoverBonus(state, attacker, target);
@@ -1474,6 +1499,10 @@ function performAttackUnmarked(
       });
     }
 
+    fighterOnAttackResolved(state, attacker, target, strike1Attack, res1);
+    fighterOnAttackResolved(state, attacker, target, strike2Attack, res2);
+    fighterAfterAttack(state, attacker, target);
+
     return {
       hit: anyHit,
       crit: anyCrit,
@@ -1584,6 +1613,10 @@ function performAttackUnmarked(
       source: attacker.id,
     });
   }
+
+  // Подклассы Воина: реакции на промах (Ответный удар) и расход временных состояний (финт, отвлечение)
+  fighterOnAttackResolved(state, attacker, target, attack, resolution);
+  fighterAfterAttack(state, attacker, target);
 
   return {
     hit: resolution.hit,
@@ -1966,7 +1999,7 @@ interface CastContext {
   label: string;
 }
 
-interface CastResult {
+export interface CastResult {
   targets: Array<{ name: string; saved?: boolean; hit?: boolean; amount: number }>;
   text: string;
 }
@@ -2100,7 +2133,7 @@ function checkSpellRange(
  * Спасбросок против заклинания/способности: учитывает «Сопротивление магии» (isSpell)
  * и Легендарное сопротивление — босс превращает провал в успех, пока есть заряды.
  */
-function rollEffectSave(
+export function rollEffectSave(
   state: CombatState,
   target: Combatant,
   ability: AbilityKey,
@@ -2116,7 +2149,7 @@ function rollEffectSave(
 }
 
 /** Отталкивает существо от источника на указанное число клеток */
-function pushCombatantAway(state: CombatState, target: Combatant, origin: Cell, cellsCount: number): void {
+export function pushCombatantAway(state: CombatState, target: Combatant, origin: Cell, cellsCount: number): void {
   const dx = Math.sign(target.x - origin.x);
   const dy = Math.sign(target.y - origin.y);
   if (dx === 0 && dy === 0) return;
@@ -3075,7 +3108,7 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
 }
 
 /** Платит за действие согласно actionCost */
-function payActionCost(state: CombatState, c: Combatant, cost: ActionParameters["actionCost"]): void {
+export function payActionCost(state: CombatState, c: Combatant, cost: ActionParameters["actionCost"]): void {
   if (cost === "action" || cost === "action+bonus") {
     if (c.actionUsed && c.extraActions <= 0) {
       throw new EngineError("Действие уже использовано");
@@ -3206,7 +3239,7 @@ function castSpellUnsafe(
 }
 
 /** Отметить расход заряда способности */
-function spendAbilityUse(c: Combatant, ability: CombatAbility, amount = 1): void {
+export function spendAbilityUse(c: Combatant, ability: CombatAbility, amount = 1): void {
   if (ability.usesMax > 0) {
     ability.usesUsed += amount;
     c.abilities = [...c.abilities];
@@ -3232,6 +3265,9 @@ function srdClassFeature(
 ): CastResult | null {
   const key = params.srdKey;
   if (!key) return null;
+  // Подклассы Воина из dnd.su: приёмы, выстрелы, силы, руны и т. д. (fighter-combat.ts)
+  const fighterResult = useFighterFeature(state, c, ability, params, opts);
+  if (fighterResult) return fighterResult;
   const pickTarget = (what: string) => {
     const t = opts.targetIds?.[0] ? state.get(opts.targetIds[0]) : undefined;
     if (!t || t.id === c.id) throw new EngineError(`Выберите цель для «${what}»`);
@@ -3569,6 +3605,7 @@ function useAbilityUnsafe(
   // Общий запас (ци, Канал божественности, очки чародейства): проверяем до применения, списываем после
   const cost = params?.resourceCost ?? (params?.kiCost ? { pool: "monk/monks-focus", amount: params.kiCost } : null);
   const pool = cost ? findResourcePool(c, cost.pool) : undefined;
+  const deferCost = !!params?.deferCost;
   if (ability && cost && pool && pool.usesMax > 0) {
     const left = pool.usesMax - pool.usesUsed;
     if (left < cost.amount) throw new EngineError(`«${ability.name}»: не хватает «${pool.name}» (${left}/${cost.amount})`);
@@ -3581,7 +3618,7 @@ function useAbilityUnsafe(
 
   const result = useAbilityCore(state, combatantId, abilityId, opts);
 
-  if (cost && pool && pool.usesMax > 0) {
+  if (cost && pool && pool.usesMax > 0 && !deferCost) {
     pool.usesUsed += cost.amount;
     c.abilities = [...c.abilities];
   }

@@ -305,6 +305,8 @@ export interface ActionParameters {
   passive?: boolean;
   /** Эффект разыгрывает мастер: движок тратит действие и заряды и пишет в журнал */
   manual?: boolean;
+  /** Траты запаса списываются не при нажатии, а при срабатывании (заряженные приёмы, выстрелы, силы) */
+  deferCost?: boolean;
   /** Число умения на уровне героя: лишние кости крита, порог крита, лечение Уцелевшего, бонус ауры */
   featureValue?: number;
   refresh?: "short" | "long" | "none" | "turn" | "round";
@@ -490,6 +492,11 @@ export const CONDITION_EFFECTS: Record<string, {
     description: "+1к4 к атакам и спасброскам",
     effects: { attackBonusDice: "1d4" },
   },
+  disarmed: {
+    name: "Обезоружен",
+    description: "Уронил оружие: помеха на атаки до конца хода",
+    effects: { attackDisadvantage: true },
+  },
   // Служебные состояния движка
   dashing: {
     name: "Рывок",
@@ -535,6 +542,131 @@ export const CONDITION_EFFECTS: Record<string, {
     name: "Ярость",
     description: "Преимущество на проверки и спасброски СИЛ, бонус к урону рукопашными атаками Силой, сопротивление дробящему, колющему и рубящему урону",
     effects: { saveAdvantage: ["STR"] },
+  },
+  // Подклассы Воина (fighter-combat.ts)
+  fighter_rider: {
+    name: "Умение заряжено",
+    description: "Сработает при ближайшем подходящем попадании в этом ходу (приём, магический выстрел, руна, псионический удар)",
+    effects: {},
+  },
+  feint: {
+    name: "Финт",
+    description: "Преимущество на следующую атаку по выбранной цели в этом ходу",
+    effects: {},
+    service: true,
+  },
+  distracted: {
+    name: "Отвлечён",
+    description: "Следующая атака по существу от кого-либо, кроме отвлёкшего, совершается с преимуществом",
+    effects: {},
+  },
+  goaded: {
+    name: "Спровоцирован",
+    description: "Помеха на броски атаки по всем, кроме спровоцировавшего",
+    effects: {},
+  },
+  unwavering_mark: {
+    name: "Метка кавалериста",
+    description: "Помеха на атаки по другим, пока рядом с отметившим (5 фт); его наказание срабатывает, если метка вредит другому",
+    effects: {},
+  },
+  evasive_footwork: {
+    name: "Активное уклонение",
+    description: "Кость превосходства добавлена к КД, пока вы двигаетесь (до атаки или конца хода)",
+    effects: {},
+  },
+  bait_and_switch: {
+    name: "Подмена",
+    description: "Кость превосходства добавлена к КД до начала следующего хода",
+    effects: {},
+  },
+  warding_maneuver: {
+    name: "Защитный манёвр",
+    description: "Кость добавлена к КД против этой атаки; при попадании урон уменьшен вдвое",
+    effects: {},
+    service: true,
+  },
+  banished: {
+    name: "Изгнан",
+    description: "Недееспособен, скорость 0 (в безвредном месте Страны Фей до конца своего хода)",
+    effects: { noActions: true, noReactions: true, speedSetTo: 0 },
+  },
+  stone_trance: {
+    name: "Магический ступор",
+    description: "Очарован руной: скорость 0, недееспособен; повторяет спасбросок в конце хода",
+    effects: { noActions: true, noReactions: true, speedSetTo: 0 },
+  },
+  fire_shackles: {
+    name: "Огненные кандалы",
+    description: "Опутан огненными кандалами: 2к6 урона огнём в начале хода, повторяет спасбросок Силы",
+    effects: {
+      speedSetTo: 0,
+      attackDisadvantage: true,
+      saveDisadvantage: ["DEX"],
+      attackAdvantageAgainst: true,
+      damagePerTurn: { dice: "2d6", type: "fire" },
+    },
+  },
+  enfeebled: {
+    name: "Ослаблен",
+    description: "Урон его атак оружием уменьшен вдвое",
+    effects: {},
+  },
+  shadow_veil: {
+    name: "Тень на глазах",
+    description: "Не видит дальше 5 футов: помеха на атаки",
+    effects: { attackDisadvantage: true },
+  },
+  grasping_briars: {
+    name: "Колючие кусты",
+    description: "Скорость уменьшена на 10 фт; 2к6 рубящего урона за первое перемещение в ход",
+    effects: {},
+  },
+  giants_might: {
+    name: "Мощь великана",
+    description: "Преимущество на проверки и спасброски Силы; раз в ход оружие наносит дополнительный урон",
+    effects: { saveAdvantage: ["STR"] },
+  },
+  fighting_spirit: {
+    name: "Боевой дух",
+    description: "Преимущество на броски атаки оружием до конца хода",
+    effects: { attackAdvantage: true },
+  },
+  frost_rune: {
+    name: "Ледяная руна",
+    description: "+2 к проверкам и спасброскам Силы и Телосложения",
+    effects: {},
+  },
+  hill_rune: {
+    name: "Холмовая руна",
+    description: "Сопротивление дробящему, рубящему и колющему урону",
+    effects: {},
+  },
+  psi_leap: {
+    name: "Пси-прыжок",
+    description: "Скорость полёта вдвое больше скорости ходьбы до конца хода",
+    effects: { speedMultiplier: 2 },
+  },
+  war_magic_ready: {
+    name: "Боевая магия",
+    description: "После заклинания можно бонусным действием атаковать оружием",
+    effects: {},
+  },
+  rapid_strike: {
+    name: "Стремительный удар",
+    description: "Следующая атака без преимущества, но с дополнительной атакой",
+    effects: {},
+    service: true,
+  },
+  eldritch_struck: {
+    name: "Мистический удар",
+    description: "Помеха на спасбросок от следующего заклинания воина",
+    effects: {},
+  },
+  echo: {
+    name: "Эхо",
+    description: "Магическое эхо воина",
+    effects: {},
   },
   action_surge_used: {
     name: "Всплеск действий использован",
