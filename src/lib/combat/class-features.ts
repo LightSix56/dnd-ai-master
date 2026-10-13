@@ -12,6 +12,7 @@
 
 import featureData from "./data/srd-class-features.json";
 import ruData from "./data/srd-class-features-ru.json";
+import { fighterSubclassAbilityDefinitions } from "./fighter-subclasses";
 import type { AbilityKey, ActionCost, ActionParameters, AppliedEffect, CombatAbility } from "./types";
 
 // ============ ДАННЫЕ ============
@@ -608,6 +609,8 @@ export function srdAbilityDefinitions(ctx: HeroFeatureContext): SrdAbilityDefini
 
     out.push({ ...base, parameters: params });
   }
+  // Подклассы Воина из dnd.su (кроме Чемпиона, он уже в SRD): fighter-subclasses.ts
+  out.push(...fighterSubclassAbilityDefinitions(ctx));
   return out;
 }
 

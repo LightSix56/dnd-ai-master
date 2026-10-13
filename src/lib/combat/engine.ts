@@ -4072,7 +4072,8 @@ export function startTurn(state: CombatState): void {
   // Способности, обновляющиеся каждый ход (Скрытая атака)
   c.abilities = c.abilities.map((a) => (a.refresh === "turn" ? { ...a, usesUsed: 0 } : a));
 
-  // При броске инициативы (в первый ход героя в бою): Превосходное вдохновение барда, Совершенство монаха
+  // При броске инициативы (в первый ход героя в бою): Превосходное вдохновение барда, Совершенство монаха,
+  // Неослабевающий Мастера боевых искусств и родственные умения подклассов Воина
   if (!hasCondition(c, "battle_start_done")) {
     c.conditions = [...c.conditions, { type: "battle_start_done" }];
     const restore = (key: string, poolKey: string, amount: number) => {
@@ -4085,6 +4086,11 @@ export function startTurn(state: CombatState): void {
     };
     restore("bard/superior-inspiration", "bard/bardic-inspiration", 1);
     restore("monk/perfect-focus", "monk/monks-focus", 4);
+    // Подклассы Воина: бросок инициативы без запаса возвращает одно использование
+    restore("battlemaster/relentless", "battlemaster/combat-superiority", 1);
+    restore("arcane-archer/ever-ready-shot", "arcane-archer/arcane-shot", 1);
+    restore("samurai/tireless-spirit", "samurai/fighting-spirit", 1);
+    restore("echo-knight/legion-of-one", "echo-knight/unleash-incarnation", 1);
   }
 
   // Уцелевший (Чемпион 18): в начале хода при половине хитов или меньше — 5 + мод. Телосложения
