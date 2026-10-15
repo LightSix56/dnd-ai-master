@@ -365,7 +365,7 @@ const OPTION_RULES: Record<string, Rule> = {
   "grappling-strike": maneuver("bonus", { auto: true, target: "creature" }),
   "quick-toss": maneuver("bonus", { auto: true, target: "creature" }),
   brace: reaction(),
-  ambush: maneuver("free"),
+  ambush: maneuver("free", { auto: true }),
   "commanding-presence": maneuver("free"),
   "bait-and-switch": maneuver("free", { auto: true, target: "ally" }),
   "tactical-assessment": maneuver("free"),

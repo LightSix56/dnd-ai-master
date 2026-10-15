@@ -670,6 +670,11 @@ export const CONDITION_EFFECTS: Record<string, {
     description: "Магическое эхо воина",
     effects: {},
   },
+  ambush: {
+    name: "Засада",
+    description: "Кость превосходства прибавится к ближайшей проверке Скрытности",
+    effects: {},
+  },
   bulwark_of_force: {
     name: "Оплот силы",
     description: "Укрытие наполовину: КД +2 и спасброски Ловкости +2 на минуту",

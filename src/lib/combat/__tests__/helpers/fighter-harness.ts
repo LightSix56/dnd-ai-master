@@ -108,8 +108,9 @@ export function makeState(combatants: Combatant[]) {
       return this.combatants.find((x: Combatant) => x.id === id);
     },
     current() {
-      return this.combatants[this.currentTurnIndex];
+      return this.get(this.turnOrder[this.currentTurnIndex]) ?? null;
     },
+    removeCombatant() {},
     mark(id: string) {
       this.dirtyIds.add(id);
     },

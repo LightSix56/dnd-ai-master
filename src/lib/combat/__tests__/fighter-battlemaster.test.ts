@@ -223,6 +223,14 @@ describe("приёмы-действия", () => {
     expect(dice(h).usesUsed).toBe(1);
   });
 
+  it("Засада: кость уходит сразу и ложится бонусом к ближайшей проверке Скрытности", () => {
+    setup(["Засада"]);
+    useAbility(state, "bm", bySrd(h, "battlemaster/ambush").id, {});
+    expect(dice(h).usesUsed).toBe(1);
+    const cond = h.conditions.find((c) => c.type === "ambush");
+    expect(cond?.value).toBe(5);
+  });
+
   it("Атака с финтом: бонусное действие, преимущество на атаку и кость к урону", () => {
     setup(["Атака с финтом"]);
     useAbility(state, "bm", bySrd(h, "battlemaster/feinting-attack").id, { targetIds: ["orc"] });

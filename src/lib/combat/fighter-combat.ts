@@ -433,7 +433,7 @@ function armHandler(label: string): Handler {
     if (!def) throw new EngineError(`«${label}»: нет правила`);
     if (def.pool && poolLeft(c, def.pool) < 1) throw new EngineError(`«${label}»: не хватает «${abilityByKey(c, def.pool)?.name ?? "запаса"}»`);
     if (def.bow && !bowAttack(c)) throw new EngineError(`«${label}»: нужен короткий или длинный лук`);
-    if (def.once && usedThisTurn(state, c, def.once)) throw new EngineError(`«${label}»: в этом ходу уже применён выстрел`);
+    if (def.once && usedThisTurn(state, c, def.once)) throw new EngineError(`«${label}»: в этом ходу уже применён Магический выстрел`);
     payActionCost(state, c, params.actionCost);
     // Один приём на атаку: прежний заряженный приём того же запаса снимается
     for (const cond of armedRiders(c)) {
@@ -472,6 +472,15 @@ const ACTIONS: Record<string, Handler> = {
     grantTempHp(state, ally.id, total);
     log(state, c, `${c.name}: Сплочение — ${ally.name} получает ${total} временных хитов (${d} + мод. Харизмы)`);
     return result(`${ally.name} получает ${total} временных хитов`, [{ name: ally.name, amount: total }]);
+  },
+
+  "battlemaster/ambush": (state, c, ability, params) => {
+    const d = rollDice(`1d${poolFaces(c, SUPERIORITY_POOL)}`).total;
+    payActionCost(state, c, params.actionCost);
+    c.conditions = [...c.conditions.filter((x) => x.type !== "ambush"), { type: "ambush", value: d, duration: 2 }];
+    state.mark(c.id);
+    log(state, c, `${c.name}: Засада — +${d} к ближайшей проверке Скрытности`);
+    return result(`${c.name} готовит засаду: +${d} к проверке Скрытности`);
   },
 
   "battlemaster/feinting-attack": (state, c, ability, params, opts) => {
@@ -1221,7 +1230,7 @@ ACTIONS["echo-knight/manifest-echo"] = (state, c, ability, params, opts) => {
     })();
   if (!dest) throw new EngineError("Нет свободного места для эха");
   if (distanceFt(c, dest) > 15) throw new EngineError("Эхо появляется в пределах 15 футов");
-  if (!cellIsFree(state, dest, c.id)) throw new EngineError("Клетка занята");
+  if (!cellIsFree(state, dest)) throw new EngineError("Клетка занята");
   payActionCost(state, c, params.actionCost);
   const maxEchoes = c.level >= 18 ? 2 : 1;
   const current = echoesOf(c);
@@ -1242,7 +1251,7 @@ ACTIONS["echo-knight/echo-move"] = (state, c, ability, params, opts) => {
   const candidates = echoes.map((e, i) => ({ e, i })).sort((a, b) => distanceFt(a.e, dest) - distanceFt(b.e, dest));
   const pick = candidates.find((x) => distanceFt(x.e, dest) <= 30);
   if (!pick) throw new EngineError("Эхо перемещается не дальше чем на 30 футов");
-  if (!cellIsFree(state, dest, c.id)) throw new EngineError("Клетка занята");
+  if (!cellIsFree(state, dest)) throw new EngineError("Клетка занята");
   echoes[pick.i] = { x: dest.x, y: dest.y };
   setEchoes(c, echoes);
   c.conditions = [...c.conditions, { type: "echo_moved", source: turnKey(state) }];
@@ -1562,8 +1571,10 @@ export function fighterNoteDamage(state: CombatState, attackerId: string | undef
 /** Самурай «Стойкость перед смертью»: хиты упали до 0 (но не убили) — сознание держится до дополнительного хода */
 export function fighterOnDrop(state: CombatState, target: Combatant, hpBefore: number, amount: number): boolean {
   if (amount - hpBefore >= target.hpMax) return false; // мгновенная смерть
-  const ability = reactionReady(target, "samurai/strength-before-death");
-  if (!ability) return false;
+  // Хиты уже 0, поэтому canAct не годится: проверяем реакцию и недееспособность по состояниям
+  const ability = abilityByKey(target, "samurai/strength-before-death");
+  if (!ability || target.reactionUsed || ability.usesUsed >= ability.usesMax) return false;
+  if (target.conditions.some((x) => ["incapacitated", "stunned", "paralyzed", "unconscious", "petrified"].includes(x.type))) return false;
   target.reactionUsed = true;
   spendAbilityUse(target, ability);
   target.hpCurrent = 0;
@@ -1640,10 +1651,17 @@ export function fighterOnMove(state: CombatState, mover: Combatant, start: { x: 
         if (distanceFt(e, start) <= 5 && distanceFt(e, mover) > 5 && !k.reactionUsed && alive(mover)) {
           k.reactionUsed = true;
           log(state, k, `${k.name}: провоцированная атака с позиции эха по ${mover.name}`);
+          // Атака разыгрывается там, где враг был в момент ухода
+          const end = { x: mover.x, y: mover.y };
+          mover.x = start.x;
+          mover.y = start.y;
           try {
             attackFromEcho(state, k, e, mover, { skipCost: true, kind: "melee" });
           } catch {
             k.reactionUsed = false;
+          } finally {
+            mover.x = end.x;
+            mover.y = end.y;
           }
         }
       }

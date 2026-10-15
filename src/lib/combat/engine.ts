@@ -4387,7 +4387,7 @@ export function endTurn(state: CombatState, depth = 0): { nextId: string | null 
   // Если боец после спасброска всё ещё без сознания, действовать ему нечем — ход идёт дальше.
   // Ограничение глубины страхует от зацикливания, когда на ногах не осталось никого.
   const now = state.current();
-  if (now && now.hpCurrent <= 0 && next.nextId && depth < state.turnOrder.length) {
+  if (now && now.hpCurrent <= 0 && !hasCondition(now, "strength_before_death") && next.nextId && depth < state.turnOrder.length) {
     const anyoneStanding = state.combatants.some((c) => c.hpCurrent > 0);
     if (anyoneStanding) return endTurn(state, depth + 1);
   }
@@ -4463,7 +4463,10 @@ export function attemptHide(
   }
 
   const dexMod = c.abilityMods?.DEX ?? 0;
-  const stealthBonus = dexMod + (isRogue ? c.profBonus * 2 : c.profBonus);
+  // Засада Мастера боевых искусств: кость превосходства к проверке Скрытности
+  const ambush = c.conditions.find((x) => x.type === "ambush");
+  if (ambush) c.conditions = c.conditions.filter((x) => x !== ambush);
+  const stealthBonus = dexMod + (isRogue ? c.profBonus * 2 : c.profBonus) + (ambush?.value ?? 0);
   const roll = rollD20(stealthBonus);
 
   if (roll.total >= highestPerception) {
