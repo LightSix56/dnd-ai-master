@@ -158,16 +158,19 @@ describe("Мастер боевых искусств", () => {
     const keys = list.map((d) => d.srdKey);
     expect(keys).toEqual(expect.arrayContaining(["battlemaster/parry", "battlemaster/precision-attack", "battlemaster/rally"]));
     expect(keys).not.toContain("battlemaster/riposte");
-    for (const d of list.filter((x) => x.srdKey !== "battlemaster/combat-superiority")) {
-      expect(d.parameters.resourceCost, d.srdKey).toEqual({ pool: "battlemaster/combat-superiority", amount: 1 });
-      expect(d.parameters.manual, d.srdKey).toBe(true);
+    // Парирование срабатывает само (реакция), остальные приёмы — кнопки с тратой кости
+    expect(byKey(ctx(BM, 3, traits("Парирование")), "battlemaster/parry")!.parameters.passive).toBe(true);
+    for (const key of ["battlemaster/precision-attack", "battlemaster/rally"]) {
+      const d = list.find((x) => x.srdKey === key)!;
+      expect(d.parameters.resourceCost, key).toEqual({ pool: "battlemaster/combat-superiority", amount: 1 });
+      expect(d.parameters.manual, key).toBeUndefined();
     }
   });
 
   it("действие приёма и СЛ спасброска (8 + мастерство + лучшая из Силы/Ловкости)", () => {
     const c = ctx(BM, 3, traits("Парирование", "Ответный удар", "Сплочение", "Опрокидывающая атака", "Атака с угрозой"));
-    expect(byKey(c, "battlemaster/parry")!.parameters.actionCost).toBe("reaction");
-    expect(byKey(c, "battlemaster/riposte")!.parameters.actionCost).toBe("reaction");
+    expect(byKey(c, "battlemaster/parry")!.parameters.passive).toBe(true);
+    expect(byKey(c, "battlemaster/riposte")!.parameters.passive).toBe(true);
     expect(byKey(c, "battlemaster/rally")!.parameters.actionCost).toBe("bonus");
     expect(byKey(c, "battlemaster/trip-attack")!.parameters).toMatchObject({ saveType: "STR", saveDC: 8 + 2 + 3, actionCost: "free" });
     expect(byKey(c, "battlemaster/menacing-attack")!.parameters.saveType).toBe("WIS");
@@ -221,10 +224,7 @@ describe("Пси-воин", () => {
 
   it("силы: Защитное поле — реакция, Псионический удар — раз в ход, обе тратят кость", () => {
     const c = ctx(PW, 3, traits("Защитное поле", "Псионический удар", "Телекинетическое передвижение"));
-    expect(byKey(c, "psi-warrior/protective-field")!.parameters).toMatchObject({
-      actionCost: "reaction",
-      resourceCost: { pool: "psi-warrior/psionic-power", amount: 1 },
-    });
+    expect(byKey(c, "psi-warrior/protective-field")!.parameters.passive).toBe(true);
     const strike = byKey(c, "psi-warrior/psionic-strike")!;
     expect(strike).toMatchObject({ usesMax: 1, refresh: "turn" });
     expect(strike.parameters.resourceCost).toEqual({ pool: "psi-warrior/psionic-power", amount: 1 });
@@ -262,7 +262,7 @@ describe("Рунный рыцарь", () => {
 
   it("Рунический щит — реакция с 7 уровня", () => {
     expect(byKey(ctx(RK, 6), "rune-knight/runic-shield")).toBeUndefined();
-    expect(byKey(ctx(RK, 7), "rune-knight/runic-shield")!.parameters.actionCost).toBe("reaction");
+    expect(byKey(ctx(RK, 7), "rune-knight/runic-shield")!.parameters.passive).toBe(true);
   });
 });
 
@@ -277,7 +277,7 @@ describe("остальные подклассы", () => {
   it("Кавалерист: метка — по Силе, Защитный маневр — по Телосложению, натиск раз в ход", () => {
     expect(byKey(ctx("Кавалерист", 3), "cavalier/unwavering-mark")).toMatchObject({ usesMax: 3, refresh: "long" });
     expect(byKey(ctx("Кавалерист", 7), "cavalier/warding-maneuver")).toMatchObject({ usesMax: 2, refresh: "long" });
-    expect(byKey(ctx("Кавалерист", 7), "cavalier/warding-maneuver")!.parameters.actionCost).toBe("reaction");
+    expect(byKey(ctx("Кавалерист", 7), "cavalier/warding-maneuver")!.parameters.passive).toBe(true);
     const charge = byKey(ctx("Кавалерист", 15), "cavalier/ferocious-charger")!;
     expect(charge).toMatchObject({ usesMax: 1, refresh: "turn" });
     expect(charge.parameters).toMatchObject({ saveType: "STR", saveDC: 8 + 5 + 3 });
@@ -287,7 +287,7 @@ describe("остальные подклассы", () => {
     expect(byKey(ctx("Рыцарь Эха", 3), "echo-knight/manifest-echo")!.parameters.actionCost).toBe("bonus");
     expect(byKey(ctx("Рыцарь Эха", 3), "echo-knight/unleash-incarnation")).toMatchObject({ usesMax: 2, refresh: "long" });
     expect(byKey(ctx("Рыцарь Эха", 10), "echo-knight/shadow-martyr")).toMatchObject({ usesMax: 1, refresh: "short" });
-    expect(byKey(ctx("Рыцарь Эха", 10), "echo-knight/shadow-martyr")!.parameters.actionCost).toBe("reaction");
+    expect(byKey(ctx("Рыцарь Эха", 10), "echo-knight/shadow-martyr")!.parameters.passive).toBe(true);
   });
 });
 
@@ -382,7 +382,7 @@ describe("подклассы Воина в бою", () => {
     const h = hero("bm", BM, 3, traits("Парирование", "Точная атака"));
     const dice = bySrd(h, "battlemaster/combat-superiority");
     expect(dice).toMatchObject({ usesMax: 4, usesUsed: 0, refresh: "short" });
-    expect(bySrd(h, "battlemaster/parry").parameters?.resourceCost?.pool).toBe("battlemaster/combat-superiority");
+    expect(bySrd(h, "battlemaster/precision-attack").parameters?.resourceCost?.pool).toBe("battlemaster/combat-superiority");
   });
 
   it("приём тратит кость превосходства и действие, пишет в журнал", () => {
@@ -391,7 +391,7 @@ describe("подклассы Воина в бою", () => {
     const dice = bySrd(h, "battlemaster/combat-superiority");
 
     const res = useAbility(state, "bm", bySrd(h, "battlemaster/rally").id);
-    expect(res.text).toContain("Сплочение");
+    expect(res.text).toContain("временных хитов");
     expect(dice.usesUsed).toBe(1);
     expect(h.bonusActionUsed).toBe(true);
     expect(state.log.some((l: any) => l.text.includes("Сплочение"))).toBe(true);
@@ -445,25 +445,22 @@ describe("подклассы Воина в бою", () => {
     }
   });
 
-  it("Магический выстрел: стрела тратит заряд, третий выстрел за отдых невозможен", () => {
+  it("Магический выстрел без лука не заряжается и ничего не тратит", () => {
     const h = hero("aa", "Мистический лучник", 3, traits("Взрывная стрела"));
     const state = makeState([h]);
     const arrow = bySrd(h, "arcane-archer/bursting-arrow");
-    useAbility(state, "aa", arrow.id);
-    expect(bySrd(h, "arcane-archer/arcane-shot").usesUsed).toBe(1);
-    useAbility(state, "aa", arrow.id);
-    expect(() => useAbility(state, "aa", arrow.id)).toThrow(/не хватает/);
+    expect(() => useAbility(state, "aa", arrow.id)).toThrow(/лук/);
+    expect(bySrd(h, "arcane-archer/arcane-shot").usesUsed).toBe(0);
   });
 
   it("Псионический удар: кость энергии тратится, раз в ход", () => {
     const h = hero("pw", "Пси-воин", 5, traits("Псионический удар"));
     const state = makeState([h]);
     const strike = bySrd(h, "psi-warrior/psionic-strike");
+    // Кнопка заряжает удар; кость тратится при попадании, а не при нажатии
     useAbility(state, "pw", strike.id);
-    expect(bySrd(h, "psi-warrior/psionic-power").usesUsed).toBe(1);
-    expect(() => useAbility(state, "pw", strike.id)).toThrow(/закончились/);
-    startTurn(state);
-    expect(bySrd(h, "psi-warrior/psionic-strike").usesUsed).toBe(0);
+    expect(bySrd(h, "psi-warrior/psionic-power").usesUsed).toBe(0);
+    expect(h.conditions.some((x) => x.type === "fighter_rider" && x.source === "psi-warrior/psionic-strike")).toBe(true);
   });
 
   it("Боевой дух самурая: три использования, бонусное действие", () => {

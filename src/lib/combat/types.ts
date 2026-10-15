@@ -307,6 +307,8 @@ export interface ActionParameters {
   manual?: boolean;
   /** Траты запаса списываются не при нажатии, а при срабатывании (заряженные приёмы, выстрелы, силы) */
   deferCost?: boolean;
+  /** Когда использования кончились, умение можно повторить за кость этого запаса (Пси-прыжок, Оплот силы…) */
+  dieFallback?: string;
   /** Число умения на уровне героя: лишние кости крита, порог крита, лечение Уцелевшего, бонус ауры */
   featureValue?: number;
   refresh?: "short" | "long" | "none" | "turn" | "round";
@@ -667,6 +669,79 @@ export const CONDITION_EFFECTS: Record<string, {
     name: "Эхо",
     description: "Магическое эхо воина",
     effects: {},
+  },
+  bulwark_of_force: {
+    name: "Оплот силы",
+    description: "Укрытие наполовину: КД +2 и спасброски Ловкости +2 на минуту",
+    effects: {},
+  },
+  strength_before_death: {
+    name: "Стойкость перед смертью",
+    description: "Не теряет сознание при 0 хитов до конца дополнительного хода",
+    effects: {},
+  },
+  telekinetic_master: {
+    name: "Мастер телекинеза",
+    description: "Телекинез удерживается: каждый ход можно атаковать оружием бонусным действием",
+    effects: {},
+  },
+  echo_avatar: {
+    name: "Аватар эха",
+    description: "Сознание в эхе: воин слеп и глух",
+    effects: {},
+  },
+  mark_punish: {
+    name: "Помеченный навредил не вам",
+    description: "Бонусным действием можно совершить особую атаку по помеченному",
+    effects: {},
+  },
+  mark_strike: {
+    name: "mark_strike",
+    description: "Служебная отметка",
+    effects: {},
+    service: true,
+  },
+  charged: {
+    name: "charged",
+    description: "Служебная отметка",
+    effects: {},
+    service: true,
+  },
+  echo_moved: {
+    name: "echo_moved",
+    description: "Служебная отметка",
+    effects: {},
+    service: true,
+  },
+  arcane_shot_used: {
+    name: "arcane_shot_used",
+    description: "Служебная отметка",
+    effects: {},
+    service: true,
+  },
+  giants_might_hit: {
+    name: "giants_might_hit",
+    description: "Служебная отметка",
+    effects: {},
+    service: true,
+  },
+  psionic_strike_used: {
+    name: "psionic_strike_used",
+    description: "Служебная отметка",
+    effects: {},
+    service: true,
+  },
+  briars_hit: {
+    name: "briars_hit",
+    description: "Служебная отметка",
+    effects: {},
+    service: true,
+  },
+  vigilant_used: {
+    name: "vigilant_used",
+    description: "Служебная отметка",
+    effects: {},
+    service: true,
   },
   action_surge_used: {
     name: "Всплеск действий использован",

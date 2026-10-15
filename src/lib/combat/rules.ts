@@ -69,7 +69,8 @@ export function spendBardicInspiration(c: Combatant): number {
 
 /** Может ли боец вообще совершать действия */
 export function canAct(c: Combatant): boolean {
-  if (c.hpCurrent <= 0) return false;
+  // Самурай со Стойкостью перед смертью действует при 0 хитов до конца дополнительного хода
+  if (c.hpCurrent <= 0 && !c.conditions.some((x) => x.type === "strength_before_death")) return false;
   return !getConditionEffects(c.conditions).some((e) => e.noActions);
 }
 
@@ -93,6 +94,8 @@ export function effectiveSpeed(c: Combatant): number {
   for (const e of effects) {
     if (e.speedMultiplier) speed = Math.floor(speed * e.speedMultiplier);
   }
+  // Колючие кусты Сжимающей стрелы: скорость −10
+  if (hasCondition(c, "grasping_briars")) speed = Math.max(0, speed - 10);
   if (hasCondition(c, "dashing")) speed *= 2;
   return speed;
 }
@@ -124,6 +127,7 @@ export function computeAttackAdvantage(
   const reasons: string[] = [];
   let adv = false;
   let dis = false;
+  let rapidGiveUp = false;
 
   if (manual.advantage) {
     adv = true;
@@ -186,6 +190,12 @@ export function computeAttackAdvantage(
   if (attacker.conditions.some((x) => x.type === "goaded" && x.source !== target.id)) {
     dis = true;
     reasons.push("Провоцирующая атака (цель не источник)");
+  }
+  // Стремительный удар: преимущество на эту атаку отдано за дополнительную атаку
+  const rapid = attacker.conditions.find((x) => x.type === "rapid_strike" && x.targetId === target.id);
+  if (rapid) {
+    rapidGiveUp = true;
+    reasons.push("Стремительный удар: без преимущества");
   }
   const mark = attacker.conditions.find((x) => x.type === "unwavering_mark" && x.source !== target.id);
   if (mark) {
@@ -319,6 +329,8 @@ export function computeAttackAdvantage(
     }
   }
 
+  // Стремительный удар самурая: на эту атаку преимущество отдано (помеха всё равно действует)
+  if (rapidGiveUp) adv = false;
   return { advantage: adv, disadvantage: dis, reasons };
 }
 
@@ -439,6 +451,8 @@ export function rollSave(
 
   // Ледяная руна: +2 к спасброскам Силы и Телосложения
   if (hasCondition(c, "frost_rune") && (ability === "STR" || ability === "CON")) bonus += 2;
+  // Оплот силы: укрытие наполовину даёт +2 к спасброскам Ловкости
+  if (ability === "DEX" && hasCondition(c, "bulwark_of_force")) bonus += 2;
 
   let adv = effects.some((e) => e.saveAdvantage?.includes(ability)) || !!opts.advantage;
   let dis = effects.some((e) => e.saveDisadvantage?.includes(ability)) || !!opts.disadvantage;
@@ -460,6 +474,12 @@ export function rollSave(
     });
     if (hasMagicResistance) {
       adv = true;
+    }
+    // Мистический удар воина: помеха на следующий спасбросок против его заклинания
+    const struck = c.conditions.find((x) => x.type === "eldritch_struck");
+    if (struck) {
+      dis = true;
+      c.conditions = c.conditions.filter((x) => x !== struck);
     }
   }
 

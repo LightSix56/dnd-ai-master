@@ -95,5 +95,7 @@ export function spendPrecisionAttack(attacker: Combatant, missBy: number): { bon
 export const AC_BONUS_CONDITIONS = ["evasive_footwork", "bait_and_switch", "warding_maneuver"] as const;
 
 export function dynamicAcBonus(c: Combatant): number {
-  return c.conditions.reduce((sum, x) => sum + ((AC_BONUS_CONDITIONS as readonly string[]).includes(x.type) ? x.value ?? 0 : 0), 0);
+  const fromDice = c.conditions.reduce((sum, x) => sum + ((AC_BONUS_CONDITIONS as readonly string[]).includes(x.type) ? x.value ?? 0 : 0), 0);
+  // Оплот силы: укрытие наполовину
+  return fromDice + (c.conditions.some((x) => x.type === "bulwark_of_force") ? 2 : 0);
 }

@@ -97,7 +97,11 @@ interface Rule {
   kind: "skip" | "passive" | "pool" | "active";
   cost?: ActionCost;
   /** Кого выбирают целью кнопки (по умолчанию — себя) */
-  target?: "creature" | "ally";
+  target?: "creature" | "ally" | "point";
+  /** Дальность выбора клетки/цели в футах */
+  range?: number;
+  /** Использования кончились — повтор за кость этого запаса (Пси-прыжок, Оплот силы…) */
+  dieFallback?: string;
   /** Спасбросок цели и характеристика СЛ */
   save?: AbilityKey;
   dc?: (ctx: Calc) => number;
@@ -152,6 +156,8 @@ const maneuver = (cost: ActionCost, extra: Partial<Rule> = {}): Rule => ({
 const arcaneShot = (extra: Partial<Rule> = {}): Rule => ({
   kind: "active",
   cost: "free",
+  auto: true,
+  defer: true,
   pool: ARCANE_SHOT_POOL,
   dc: dcOf("INT"),
   note: (c) => `Тратит использование Магического выстрела; СЛ ${8 + c.prof + c.mod("INT")}. ${c.level >= 18 ? "Усилено (18 ур.)." : ""}`.trim(),
@@ -162,6 +168,7 @@ const arcaneShot = (extra: Partial<Rule> = {}): Rule => ({
 const rune = (cost: ActionCost, extra: Partial<Rule> = {}): Rule => ({
   kind: "active",
   cost,
+  auto: true,
   dc: dcOf("CON"),
   uses: (c) => (c.level >= 15 ? { max: 2, refresh: "short" } : { max: 1, refresh: "long" }),
   note: (c) => `СЛ рунной магии ${8 + c.prof + c.mod("CON")}.`,
@@ -187,7 +194,14 @@ const FEATURE_RULES: Record<string, Rule> = {
   "eldritch-knight/weapon-bond": { kind: "passive" },
   "eldritch-knight/war-magic": { kind: "passive" },
   "eldritch-knight/eldritch-strike": { kind: "passive" },
-  "eldritch-knight/arcane-charge": { kind: "passive" },
+  "eldritch-knight/arcane-charge": {
+    kind: "active",
+    cost: "free",
+    auto: true,
+    target: "point",
+    range: 30,
+    note: () => "Сразу после Всплеска действий: телепортация до 30 футов в свободную клетку.",
+  },
   "eldritch-knight/improved-war-magic": { kind: "passive" },
 
   // Рыцарь Пурпурного дракона
@@ -201,25 +215,25 @@ const FEATURE_RULES: Record<string, Rule> = {
   "cavalier/born-to-the-saddle": { kind: "skip" },
   "cavalier/unwavering-mark": {
     kind: "active",
-    cost: "free",
+    cost: "bonus",
+    auto: true,
     target: "creature",
     uses: (c) => ({ max: atLeastOne(c.mod("STR")), refresh: "long" }),
+    note: (c) =>
+      `Метка ставится сама при рукопашном попадании. Кнопка — особая атака бонусным действием по помеченному, который навредил не вам: с преимуществом, +${Math.floor(c.level / 2)} урона.`,
   },
   "cavalier/warding-maneuver": {
-    kind: "active",
-    cost: "reaction",
-    target: "ally",
+    kind: "passive",
     uses: (c) => ({ max: atLeastOne(c.mod("CON")), refresh: "long" }),
+    note: () => "Срабатывает сама реакцией, когда по вам или соседу в 5 футах попадает серьёзный удар: +1к8 к КД, а при попадании — сопротивление урону.",
   },
   "cavalier/hold-the-line": { kind: "passive" },
   "cavalier/ferocious-charger": {
-    kind: "active",
-    cost: "free",
-    target: "creature",
+    kind: "passive",
     save: "STR",
     dc: dcOf("STR"),
     uses: onePerRest("turn"),
-    note: (c) => `СЛ ${8 + c.prof + c.mod("STR")}.`,
+    note: (c) => `Срабатывает сам после разбега не менее 10 футов по прямой; СЛ ${8 + c.prof + c.mod("STR")}.`,
   },
   "cavalier/vigilant-defender": { kind: "passive" },
 
@@ -231,7 +245,7 @@ const FEATURE_RULES: Record<string, Rule> = {
     note: (c) => `СЛ Магического выстрела ${8 + c.prof + c.mod("INT")}.`,
   },
   "arcane-archer/magic-arrow": { kind: "passive" },
-  "arcane-archer/curving-shot": { kind: "active", cost: "bonus", target: "creature" },
+  "arcane-archer/curving-shot": { kind: "active", cost: "bonus", auto: true, target: "creature", range: 60 },
   "arcane-archer/ever-ready-shot": { kind: "passive" },
 
   // Самурай
@@ -240,29 +254,38 @@ const FEATURE_RULES: Record<string, Rule> = {
   "samurai/fighting-spirit": {
     kind: "active",
     cost: "bonus",
+    auto: true,
     uses: () => ({ max: 3, refresh: "long" }),
     value: (c) => (c.level >= 15 ? 15 : c.level >= 10 ? 10 : 5),
     note: (c) => `Преимущество на атаки оружием до конца хода и ${c.level >= 15 ? 15 : c.level >= 10 ? 10 : 5} временных хитов.`,
   },
   "samurai/tireless-spirit": { kind: "passive" },
-  "samurai/rapid-strike": { kind: "active", cost: "free", target: "creature", uses: onePerRest("turn") },
-  "samurai/strength-before-death": { kind: "active", cost: "reaction", uses: onePerRest("long") },
+  "samurai/rapid-strike": { kind: "active", cost: "free", auto: true, target: "creature", uses: onePerRest("turn") },
+  "samurai/strength-before-death": {
+    kind: "passive",
+    uses: onePerRest("long"),
+    note: () => "Срабатывает сама реакцией, когда урон опускает хиты до 0, но не убивает: дополнительный ход без потери сознания.",
+  },
 
   // Рыцарь Эха
-  "echo-knight/manifest-echo": { kind: "active", cost: "bonus" },
+  "echo-knight/manifest-echo": { kind: "active", cost: "bonus", auto: true, target: "point", range: 15 },
   "echo-knight/unleash-incarnation": {
     kind: "active",
     cost: "free",
+    auto: true,
     target: "creature",
     uses: (c) => ({ max: atLeastOne(c.mod("CON")), refresh: "long" }),
   },
-  "echo-knight/echo-avatar": { kind: "active", cost: "action" },
-  "echo-knight/shadow-martyr": { kind: "active", cost: "reaction", target: "ally", uses: onePerRest("short") },
+  "echo-knight/echo-avatar": { kind: "active", cost: "action", auto: true },
+  "echo-knight/shadow-martyr": {
+    kind: "passive",
+    uses: onePerRest("short"),
+    note: () => "Срабатывает сама реакцией, когда по раненому союзнику (до 60% хитов) собираются бить: эхо принимает бросок атаки.",
+  },
   "echo-knight/reclaim-potential": {
-    kind: "active",
-    cost: "free",
+    kind: "passive",
     uses: (c) => ({ max: atLeastOne(c.mod("CON")), refresh: "long" }),
-    note: (c) => `Временные хиты: 2к6 + ${c.mod("CON")}.`,
+    note: (c) => `Когда эхо разрушено ударом, вы получаете временные хиты: 2к6 + ${c.mod("CON")} (если их у вас нет).`,
   },
   "echo-knight/legion-of-one": { kind: "passive" },
 
@@ -275,8 +298,24 @@ const FEATURE_RULES: Record<string, Rule> = {
   },
   "psi-warrior/telekinetic-adept": { kind: "skip" }, // варианты — отдельными кнопками
   "psi-warrior/guarded-mind": { kind: "passive" },
-  "psi-warrior/bulwark-of-force": { kind: "active", cost: "bonus", uses: onePerRest("long") },
-  "psi-warrior/telekinetic-master": { kind: "active", cost: "action", uses: onePerRest("long") },
+  "psi-warrior/bulwark-of-force": {
+    kind: "active",
+    cost: "bonus",
+    auto: true,
+    uses: onePerRest("long"),
+    dieFallback: PSIONIC_POOL,
+    note: () => "Когда использования кончились, можно повторить за кость псионической энергии.",
+  },
+  "psi-warrior/telekinetic-master": {
+    kind: "active",
+    cost: "action",
+    auto: true,
+    target: "creature",
+    range: 60,
+    uses: onePerRest("long"),
+    dieFallback: PSIONIC_POOL,
+    note: () => "Когда использования кончились, можно повторить за кость псионической энергии.",
+  },
 
   // Рунный рыцарь
   "rune-knight/bonus-proficiencies": { kind: "skip" },
@@ -284,14 +323,14 @@ const FEATURE_RULES: Record<string, Rule> = {
   "rune-knight/giants-might": {
     kind: "active",
     cost: "bonus",
+    auto: true,
     uses: (c) => ({ max: c.prof, refresh: "long" }),
     note: (c) => `Дополнительный урон раз в ход: ${giantsMightDie(c.level)}.`,
   },
   "rune-knight/runic-shield": {
-    kind: "active",
-    cost: "reaction",
-    target: "ally",
+    kind: "passive",
     uses: (c) => ({ max: c.prof, refresh: "long" }),
+    note: () => "Срабатывает сама реакцией, когда по союзнику в 60 футах попадает серьёзный удар: нападающий перебрасывает к20.",
   },
   "rune-knight/great-stature": { kind: "passive" },
   "rune-knight/master-of-runes": { kind: "passive" },
@@ -334,31 +373,48 @@ const OPTION_RULES: Record<string, Rule> = {
   // Магические выстрелы
   "bursting-arrow": arcaneShot(),
   "banishing-arrow": arcaneShot({ save: "CHA" }),
-  "seeking-arrow": arcaneShot({ save: "DEX" }),
+  // Стрелы без броска атаки сами тратят заряд, поэтому общий запас в правиле не указан
+  "seeking-arrow": arcaneShot({ save: "DEX", defer: false, pool: undefined }),
   "beguiling-arrow": arcaneShot({ save: "WIS" }),
   "enfeebling-arrow": arcaneShot({ save: "CON" }),
-  "piercing-arrow": arcaneShot({ save: "DEX" }),
+  "piercing-arrow": arcaneShot({ save: "DEX", defer: false, pool: undefined }),
   "grasping-arrow": arcaneShot(),
   "shadow-arrow": arcaneShot({ save: "WIS" }),
 
   // Псионические силы
   "protective-field": {
-    kind: "active",
-    cost: "reaction",
-    target: "ally",
+    kind: "passive",
     pool: PSIONIC_POOL,
-    note: (c) => `Тратит кость псионической энергии (к${psionicFaces(c.level)}): урон уменьшается на результат + мод. Интеллекта (${Math.max(1, c.mod("INT"))}).`,
+    note: (c) => `Срабатывает сама реакцией на урон от 6 и выше (себе или союзнику в 30 футах): тратит кость к${psionicFaces(c.level)}, урон уменьшается на результат + ${Math.max(1, c.mod("INT"))}.`,
   },
   "psionic-strike": {
     kind: "active",
     cost: "free",
+    auto: true,
+    defer: true,
     target: "creature",
     pool: PSIONIC_POOL,
     uses: onePerRest("turn"),
     note: (c) => `Тратит кость псионической энергии (к${psionicFaces(c.level)}): урон силовым полем = результат + мод. Интеллекта (${c.mod("INT")}).`,
   },
-  "telekinetic-movement": { kind: "active", cost: "action", target: "ally", uses: onePerRest("short") },
-  "psi-powered-leap": { kind: "active", cost: "bonus", uses: onePerRest("short") },
+  "telekinetic-movement": {
+    kind: "active",
+    cost: "action",
+    auto: true,
+    target: "ally",
+    range: 30,
+    uses: onePerRest("short"),
+    dieFallback: PSIONIC_POOL,
+    note: () => "Союзника переносит в клетку до 30 футов (если не указать клетку — в безопасную рядом с вами). Повтор — за кость псионической энергии.",
+  },
+  "psi-powered-leap": {
+    kind: "active",
+    cost: "bonus",
+    auto: true,
+    uses: onePerRest("short"),
+    dieFallback: PSIONIC_POOL,
+    note: () => "Повтор за кость псионической энергии, когда использования кончились.",
+  },
   "telekinetic-thrust": {
     kind: "passive",
     save: "STR",
@@ -367,13 +423,58 @@ const OPTION_RULES: Record<string, Rule> = {
   },
 
   // Руны
-  "stone-rune": rune("reaction", { target: "creature", save: "WIS" }),
+  "stone-rune": rune("reaction", { kind: "passive", save: "WIS", note: (c) => `Срабатывает сама на врага, закончившего ход в 30 футах от вас; СЛ ${8 + c.prof + c.mod("CON")}.` }),
   "frost-rune": rune("bonus"),
-  "cloud-rune": rune("reaction", { target: "creature" }),
-  "fire-rune": rune("free", { target: "creature", save: "STR" }),
+  "cloud-rune": rune("reaction", { kind: "passive", note: () => "Срабатывает сама, когда по вам или союзнику в 30 футах попадает серьёзный удар: удар переходит на другое существо." }),
+  "fire-rune": rune("free", { defer: true, target: "creature", save: "STR" }),
   "hill-rune": rune("bonus"),
-  "storm-rune": rune("bonus"),
+  // Штормовая руна завязана на решения игрока по чужим броскам, её разыгрывает мастер
+  "storm-rune": rune("bonus", { auto: false }),
 };
+
+/** Кнопки, которые вытекают из умений подкласса: эхо, атака по Боевой магии, атака при Телекинезе */
+const SYNTHETIC_ABILITIES: Array<{ subclassId: string; minLevel: number; key: string; name: string; description: string; rule: Rule }> = [
+  {
+    subclassId: "echo-knight",
+    minLevel: 3,
+    key: "echo-knight/echo-move",
+    name: "Эхо: переместить",
+    description: "На своём ходу мысленно передвиньте эхо на 30 футов в любом направлении (без действия). Эхо дальше 30 футов от вас в конце хода рассеивается.",
+    rule: { kind: "active", cost: "free", auto: true, target: "point", range: 30 },
+  },
+  {
+    subclassId: "echo-knight",
+    minLevel: 3,
+    key: "echo-knight/echo-swap",
+    name: "Эхо: поменяться местами",
+    description: "Бонусным действием телепортируйтесь на место эха, а эхо займёт ваше. Тратит 15 футов перемещения.",
+    rule: { kind: "active", cost: "bonus", auto: true },
+  },
+  {
+    subclassId: "echo-knight",
+    minLevel: 3,
+    key: "echo-knight/echo-strike",
+    name: "Атака из позиции эха",
+    description: "Атака оружием из действия Атака, которая происходит из клетки вашего эха.",
+    rule: { kind: "active", cost: "free", auto: true, target: "creature" },
+  },
+  {
+    subclassId: "eldritch-knight",
+    minLevel: 7,
+    key: "eldritch-knight/war-magic-strike",
+    name: "Боевая магия: атака оружием",
+    description: "Бонусным действием атакуйте оружием сразу после заклинания (заговор — с 7 уровня, любое заклинание — с 18).",
+    rule: { kind: "active", cost: "bonus", auto: true, target: "creature" },
+  },
+  {
+    subclassId: "psi-warrior",
+    minLevel: 18,
+    key: "psi-warrior/telekinetic-master-strike",
+    name: "Атака оружием (Мастер телекинеза)",
+    description: "Каждый ход, пока вы удерживаете Телекинез, бонусным действием совершите одну атаку оружием.",
+    rule: { kind: "active", cost: "bonus", auto: true, target: "creature" },
+  },
+];
 
 // ============ УМЕНИЯ ГЕРОЯ ============
 
@@ -412,11 +513,12 @@ function buildDefinition(
   const params: ActionParameters = {
     ...common,
     actionCost: rule.cost ?? "free",
-    range: { type: rule.target ? "special" : "self" },
+    range: rule.target ? { type: "special", ...(rule.range ? { value: rule.range } : {}) } : { type: "self" },
     targeting: rule.target ?? "self",
     damage: [],
     ...(rule.auto ? {} : { manual: true }),
     ...(rule.defer ? { deferCost: true } : {}),
+    ...(rule.dieFallback ? { dieFallback: rule.dieFallback } : {}),
   };
   if (rule.pool) params.resourceCost = { pool: rule.pool, amount: 1 };
   if (rule.save) {
@@ -458,6 +560,11 @@ export function fighterSubclassAbilityDefinitions(ctx: HeroFeatureContext): SrdA
       if (optRule.kind === "skip") continue;
       out.push(buildDefinition(`${subclassId}/${o.id}`, o.name, o.description, optRule, c));
     }
+  }
+  // Служебные кнопки, которых нет в тексте умений, но без которых умение в бою не сыграть
+  for (const x of SYNTHETIC_ABILITIES) {
+    if (x.subclassId !== subclassId || x.minLevel > c.level) continue;
+    out.push(buildDefinition(x.key, x.name, x.description, x.rule, c));
   }
   return out;
 }

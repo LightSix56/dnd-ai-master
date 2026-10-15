@@ -50,10 +50,20 @@ import { getAvailableBeastForms, getBeastFormById } from "./beast-forms";
 import { bardicInspirationDie, martialArtsDie, rageDamageBonus } from "./ability-uses";
 import { checkLegendaryResistance, triggerAILegendaryActions } from "./legendary";
 import {
+  fighterAfterAbility,
   fighterAfterAttack,
+  fighterAfterSpell,
+  fighterDefense,
+  fighterEndTurn,
   fighterHitRiders,
+  fighterNoteDamage,
   fighterOnAttackResolved,
+  fighterOnDrop,
+  fighterOnMove,
+  fighterPreAttack,
   fighterReduceDamage,
+  fighterShield,
+  fighterStartTurn,
   useFighterFeature,
   type HitResolution,
 } from "./fighter-combat";
@@ -451,10 +461,17 @@ export function dealDamage(
     actualAmount = halved;
   }
 
-  // Парирование Мастера боевых искусств
+  // Подклассы Воина: Парирование, Защитное поле, ослабленные атаки
   actualAmount = fighterReduceDamage(state, target, actualAmount, { isAttack: opts.isAttack, attackerId });
 
   if (actualAmount <= 0) return;
+
+  // Самурай ждёт дополнительного хода: пока он не наступил, урон по нему не засчитывается
+  if (fighterShield(target)) {
+    state.addLog(`${target.name} держится на силе духа — урон не засчитан`, "system", target.name);
+    return;
+  }
+  fighterNoteDamage(state, attackerId, targetId);
 
   // Дикий облик: урон поглощается пулом хитов формы зверя
   if (target.wildShape) {
@@ -490,6 +507,7 @@ export function dealDamage(
     }
   }
 
+  const hpBefore = target.hpCurrent;
   const res = applyDamage(target, actualAmount);
   const wasAlive = target.hpCurrent > 0;
   target.hpCurrent = res.hpCurrent;
@@ -548,6 +566,9 @@ export function dealDamage(
   }
 
   if (wasAlive && target.hpCurrent <= 0) {
+    // Стойкость перед смертью самурая: сознание держится до дополнительного хода
+    if (fighterOnDrop(state, target, hpBefore, actualAmount)) return;
+
     // Непреклонная ярость варвара: в ярости спасбросок ТЕЛ Сл 10 (+5 за каждое срабатывание) — остаётся 1 хит
     if (hasCondition(target, "raging") && classFeature(target, "barbarian/relentless-rage")) {
       const counter = target.conditions.find((c) => c.type === "relentless_rage");
@@ -1279,7 +1300,7 @@ function performAttackUnmarked(
   if (!opts.skipTurnCheck) assertTurn(state, attackerId);
 
   const attacker = state.require(attackerId);
-  const target = state.require(targetId);
+  let target = state.require(targetId);
 
   if (target.hpCurrent <= 0) throw new EngineError(`${target.name} уже выведен из боя`);
 
@@ -1302,6 +1323,15 @@ function performAttackUnmarked(
   if (!reach.ok) throw new EngineError(reach.reason ?? "Цель недосягаема");
 
   const coverBonus = attackCoverBonus(state, attacker, target);
+
+  // Эхо-мученик: эхо рыцаря принимает бросок атаки вместо союзника
+  const martyr = fighterPreAttack(state, attacker, target, attack);
+  if (martyr) {
+    if (!opts.skipCost) Object.assign(attacker, payForAttack(attacker, attack));
+    state.mark(attackerId);
+    state.addLog(martyr.text, "attack", attacker.name);
+    return { hit: false, crit: false, damage: 0, text: martyr.text, targetHp: target.hpCurrent };
+  }
 
   const isDualAttack =
     attack.actionCost === "action+bonus" ||
@@ -1349,6 +1379,7 @@ function performAttackUnmarked(
       coverBonus,
     });
 
+    fighterDefense(state, attacker, target, strike1Attack, res1, false);
     let extra1 = "";
     let sneakUsedOn1 = false;
     if (res1.hit) {
@@ -1410,6 +1441,7 @@ function performAttackUnmarked(
       coverBonus,
     });
 
+    fighterDefense(state, attacker, target, strike2Attack, res2, false);
     let extra2 = "";
     if (res2.hit) {
       extra2 += applyWeaponHitRiders(state, attacker, target, strike2Attack, res2);
@@ -1520,6 +1552,13 @@ function performAttackUnmarked(
     allCombatants: state.combatants,
     coverBonus,
   });
+
+  // Защитные реакции союзников цели (Рунический щит, Защитный манёвр, Облачная руна)
+  const defended = fighterDefense(state, attacker, target, attack, resolution);
+  if (defended.id !== target.id) {
+    target = defended;
+    targetId = defended.id;
+  }
 
   let extraText = "";
   if (resolution.hit) {
@@ -1758,6 +1797,7 @@ export function moveCombatant(
     : findOpportunityAttackers(mover, result.path, state.combatants, 5, state.mapElements);
 
   const initialMovementUsed = mover.movementUsed;
+  const startCell = { x: mover.x, y: mover.y };
   mover.movementUsed += result.costFt;
   state.mark(combatantId);
   state.addLog(
@@ -1978,6 +2018,9 @@ export function moveCombatant(
       state.addLog(`🌊 ${mover.name} входит в воду (перемещение вплавь, удвоенная стоимость)`, "move", mover.name);
     }
   }
+
+  // Подклассы Воина: разбег, колючие кусты, Держать строй, эхо
+  fighterOnMove(state, mover, startCell, result.path);
 
   return {
     path: result.path,
@@ -3155,7 +3198,11 @@ export function castSpell(
     skipTurnCheck?: boolean;
   } = {}
 ): CastResult {
-  return atomic(state, () => castSpellUnsafe(state, casterId, spell, opts));
+  const out = atomic(state, () => castSpellUnsafe(state, casterId, spell, opts));
+  const level = typeof spell === "string" ? getSpellDefinition(spell)?.level ?? 1 : spell.level;
+  const caster = state.get(casterId);
+  if (caster) fighterAfterSpell(state, caster, level);
+  return out;
 }
 
 function castSpellUnsafe(
@@ -3617,6 +3664,7 @@ function useAbilityUnsafe(
   }
 
   const result = useAbilityCore(state, combatantId, abilityId, opts);
+  fighterAfterAbility(state, c, params?.srdKey);
 
   if (cost && pool && pool.usesMax > 0 && !deferCost) {
     pool.usesUsed += cost.amount;
@@ -3651,7 +3699,9 @@ function useAbilityCore(
     );
   }
   if (ability.usesMax > 0 && ability.usesUsed >= ability.usesMax) {
-    throw new EngineError(`«${ability.name}»: использования закончились`);
+    const fallback = ability.parameters?.dieFallback;
+    const pool = fallback ? findResourcePool(c, fallback) : undefined;
+    if (!pool || pool.usesMax - pool.usesUsed < 1) throw new EngineError(`«${ability.name}»: использования закончились`);
   }
 
   const params = ability.parameters;
@@ -4032,7 +4082,7 @@ export function needsDeathSave(c: Combatant): boolean {
     c.hpCurrent <= 0 &&
     c.type !== "enemy" &&
     c.conditions.some((cond) => cond.type === "unconscious" || cond.type === "death_save") &&
-    !c.conditions.some((cond) => cond.type === "stable" || cond.type === "dead")
+    !c.conditions.some((cond) => cond.type === "stable" || cond.type === "dead" || cond.type === "strength_before_death")
   );
 }
 
@@ -4108,6 +4158,7 @@ export function startTurn(state: CombatState): void {
   );
   // Способности, обновляющиеся каждый ход (Скрытая атака)
   c.abilities = c.abilities.map((a) => (a.refresh === "turn" ? { ...a, usesUsed: 0 } : a));
+  fighterStartTurn(state, c);
 
   // При броске инициативы (в первый ход героя в бою): Превосходное вдохновение барда, Совершенство монаха,
   // Неослабевающий Мастера боевых искусств и родственные умения подклассов Воина
@@ -4241,6 +4292,7 @@ export function endTurn(state: CombatState, depth = 0): { nextId: string | null 
   const current = state.current();
   if (current) {
     current.hasActed = true;
+    fighterEndTurn(state, current, "before");
 
     // Повторные спасброски для снятия эффектов (Save Ends) по правилам D&D 5e
     if (current.hpCurrent > 0) {
@@ -4275,6 +4327,7 @@ export function endTurn(state: CombatState, depth = 0): { nextId: string | null 
       )
       .filter((cond) => cond.type === "death_save" || cond.duration === undefined || cond.duration > 0);
     state.mark(current.id);
+    fighterEndTurn(state, current, "after");
 
     if (current.concentration) {
       const left = current.concentration.durationRounds - 1;
@@ -4317,7 +4370,7 @@ export function endTurn(state: CombatState, depth = 0): { nextId: string | null 
     state.combatants,
     state.currentTurnIndex,
     state.round,
-    (c) => c.hpCurrent > 0 || needsDeathSave(c)
+    (c) => c.hpCurrent > 0 || needsDeathSave(c) || hasCondition(c, "strength_before_death")
   );
 
   const newRound = next.nextRound > state.round;
