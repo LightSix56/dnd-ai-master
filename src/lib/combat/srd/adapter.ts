@@ -2,8 +2,7 @@
 import type { ActionParameters, AttackKind, ActionCost, DamageRoll, CharacterPreset } from "../types";
 import type { AttackDefinition, SpellDefinition, AbilityDefinition } from "../library-data";
 
-import spellsData from "./data/spells.json";
-import expandedSpellsData from "../data/expanded-combat-spells.json";
+import { SPELLS } from "dnd-shared";
 import monstersData from "./data/monsters.json";
 import weaponsData from "./data/equipment.json";
 
@@ -43,8 +42,18 @@ export interface SRDWeapon {
 }
 
 // In-memory caches for O(1) lookups
-const spellsList: SRDSpell[] = spellsData as unknown as SRDSpell[];
-const expandedList: SRDSpell[] = expandedSpellsData as unknown as SRDSpell[];
+// Заклинания берутся из общей библиотеки dnd-shared (её же использует сайт листа).
+// Запись мастера восстанавливается из masterRecord + combat в прежнем виде и порядке.
+function combatSpells(source: "srd" | "expanded"): SRDSpell[] {
+  return SPELLS.filter((s) => s.combatSource === source && s.masterRecord && s.combat)
+    .sort((a, b) => a.masterRecord!.order - b.masterRecord!.order)
+    .map((s) => {
+      const { order: _order, ...record } = s.masterRecord!;
+      return { ...record, parameters: s.combat } as unknown as SRDSpell;
+    });
+}
+const spellsList: SRDSpell[] = combatSpells("srd");
+const expandedList: SRDSpell[] = combatSpells("expanded");
 const allCombatSpellsList: SRDSpell[] = [...spellsList, ...expandedList];
 const monstersList: CharacterPreset[] = monstersData as unknown as CharacterPreset[];
 const weaponsList: SRDWeapon[] = weaponsData as unknown as SRDWeapon[];
