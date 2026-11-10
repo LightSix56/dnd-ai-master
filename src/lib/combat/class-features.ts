@@ -13,6 +13,8 @@
 import featureData from "./data/srd-class-features.json";
 import ruData from "./data/srd-class-features-ru.json";
 import { fighterSubclassAbilityDefinitions } from "./fighter-subclasses";
+import { classAbilityDefinitions, srdOverride } from "./class-defs";
+import "./classes/rules-index";
 import type { AbilityKey, ActionCost, ActionParameters, AppliedEffect, CombatAbility } from "./types";
 
 // ============ ДАННЫЕ ============
@@ -520,6 +522,7 @@ export interface SrdAbilityDefinition {
  */
 export function srdAbilityDefinitions(ctx: HeroFeatureContext): SrdAbilityDefinition[] {
   const features = heroClassFeatures(ctx);
+  const classKey = srdClassKey(ctx.className);
   const formula: FormulaContext = { level: ctx.level, profBonus: ctx.profBonus, abilityMods: ctx.abilityMods };
 
   // Запасы, из которых тратят другие умения героя (Канал божественности, очки чародейства)
@@ -609,8 +612,21 @@ export function srdAbilityDefinitions(ctx: HeroFeatureContext): SrdAbilityDefini
 
     out.push({ ...base, parameters: params });
   }
+  // Умения SRD, которые движок теперь разыгрывает сам: параметры правит класс (classes/*.ts)
+  for (const def of out) {
+    const override = srdOverride(def.srdKey, ctx);
+    if (!override) continue;
+    const { usesMax, refresh, ...params } = override;
+    const merged: ActionParameters = { ...def.parameters, ...params };
+    if (!("manual" in params)) delete merged.manual;
+    def.parameters = merged;
+    if (usesMax !== undefined) def.usesMax = usesMax;
+    if (refresh !== undefined) def.refresh = refresh;
+  }
   // Подклассы Воина из dnd.su (кроме Чемпиона, он уже в SRD): fighter-subclasses.ts
   out.push(...fighterSubclassAbilityDefinitions(ctx));
+  // Подклассы остальных классов: правила в classes/*.ts, сборка в class-defs.ts
+  out.push(...classAbilityDefinitions(ctx, classKey));
   return out;
 }
 

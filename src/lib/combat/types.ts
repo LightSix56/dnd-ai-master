@@ -355,6 +355,8 @@ export interface ConditionEffect {
   cannotApproachSource?: boolean;
   // Расходуется на первую атаку (Помощь / преимущество от союзника)
   consumedOnAttack?: boolean;
+  // Помеха на атаки по всем, кроме наложившего состояние (source)
+  disadvantageVsOthers?: boolean;
 }
 
 export const CONDITION_EFFECTS: Record<string, {
@@ -544,6 +546,73 @@ export const CONDITION_EFFECTS: Record<string, {
     name: "Ярость",
     description: "Преимущество на проверки и спасброски СИЛ, бонус к урону рукопашными атаками Силой, сопротивление дробящему, колющему и рубящему урону",
     effects: { saveAdvantage: ["STR"] },
+  },
+  // Служебные состояния конструктора классов (class-kit.ts)
+  once_mark: {
+    name: "once_mark",
+    description: "Служебная отметка: умение уже сработало в этом ходу",
+    effects: {},
+    service: true,
+  },
+  kit_watch: {
+    name: "kit_watch",
+    description: "Служебная отметка: включена стойка, движок следит за её окончанием",
+    effects: {},
+    service: true,
+  },
+  // Варвар (classes/barbarian-combat.ts)
+  rage_fed: {
+    name: "rage_fed",
+    description: "Служебная отметка: в этом раунде варвар атаковал врага или получил урон — Ярость продолжается",
+    effects: {},
+    service: true,
+  },
+  fanatical_used: {
+    name: "fanatical_used",
+    description: "Служебная отметка: переброс спасброска за эту ярость уже использован",
+    effects: {},
+    service: true,
+  },
+  ancestral_mark: {
+    name: "Духи предков",
+    description: "Помеха на атаки по всем, кроме варвара; урон его атак по другим уменьшается вдвое",
+    effects: { disadvantageVsOthers: true },
+  },
+  zealous_presence: {
+    name: "Ревностное воодушевление",
+    description: "Преимущество на броски атаки и спасброски",
+    effects: { attackAdvantage: true, saveAdvantage: ["STR", "DEX", "CON", "INT", "WIS", "CHA"] },
+  },
+  beast_form: {
+    name: "Форма зверя",
+    description: "Природное оружие до конца ярости: укус, когти или хвост",
+    effects: {},
+  },
+  wild_surge: {
+    name: "Всплеск дикой магии",
+    description: "Эффект таблицы Дикой магии действует до конца ярости",
+    effects: {},
+  },
+  bolstered: {
+    name: "Подпитка магией",
+    description: "+1к3 к броскам атаки и проверкам характеристик",
+    effects: {},
+  },
+  storm_aura: {
+    name: "storm_aura",
+    description: "Служебная отметка: стихия Ауры бури",
+    effects: {},
+    service: true,
+  },
+  storm_frozen: {
+    name: "Скован льдом",
+    description: "Скорость 0 до конца своего хода (Ярость бури)",
+    effects: { speedSetTo: 0 },
+  },
+  elemental_cleaver: {
+    name: "Стихийное оружие",
+    description: "В ярости оружие наносит дополнительный урон стихией",
+    effects: {},
   },
   // Подклассы Воина (fighter-combat.ts)
   fighter_rider: {

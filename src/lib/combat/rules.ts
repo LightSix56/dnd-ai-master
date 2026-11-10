@@ -18,6 +18,17 @@ import {
 } from "./types";
 import { hasLineOfSight, isInVisionCone } from "./movement";
 import { dynamicAcBonus, spendPrecisionAttack } from "./fighter-pool";
+import {
+  modAcBonus,
+  modAttackAdvantage,
+  modAttackBonusDice,
+  modAttackInfluence,
+  modCritFrom,
+  modSaveAdvantage,
+  modSaveBonus,
+  modSpeedBonus,
+} from "./feature-mods";
+import "./classes/rules-index";
 
 // ============ СОСТОЯНИЯ ============
 
@@ -43,7 +54,7 @@ export function critThreshold(attacker: Combatant, attack: Attack): number {
     classFeature(attacker, "champion/superior-critical")?.parameters?.featureValue,
     classFeature(attacker, "champion/improved-critical")?.parameters?.featureValue,
   ].filter((v): v is number => typeof v === "number");
-  return Math.min(20, ...values);
+  return Math.min(20, modCritFrom(attacker), ...values);
 }
 
 /**
@@ -75,12 +86,13 @@ export function canAct(c: Combatant): boolean {
 }
 
 /** Итоговый AC с учётом бонусов от состояний (Щит, Ускорение, Укрытия) */
-export function effectiveAC(c: Combatant): number {
+export function effectiveAC(c: Combatant, all?: Combatant[]): number {
   const bonus = getConditionEffects(c.conditions).reduce(
     (sum, e) => sum + (e.acBonus ?? 0),
     0
   );
-  return c.ac + bonus + dynamicAcBonus(c);
+  // Поправки от умений и аур союзников (feature-mods.ts); ауры считаются, когда известны все бойцы
+  return c.ac + bonus + dynamicAcBonus(c) + modAcBonus(c, all);
 }
 
 /** Итоговая скорость с учётом состояний и Рывка */
@@ -90,7 +102,7 @@ export function effectiveSpeed(c: Combatant): number {
   const setTo = effects.find((e) => e.speedSetTo !== undefined)?.speedSetTo;
   if (setTo !== undefined) return setTo;
 
-  let speed = c.speed;
+  let speed = c.speed + modSpeedBonus(c);
   for (const e of effects) {
     if (e.speedMultiplier) speed = Math.floor(speed * e.speedMultiplier);
   }
@@ -204,6 +216,28 @@ export function computeAttackAdvantage(
       dis = true;
       reasons.push("Непоколебимая метка");
     }
+  }
+
+  // Состояния «помеха на атаки по всем, кроме наложившего» (Защитники предков)
+  for (const cond of attacker.conditions) {
+    if (CONDITION_EFFECTS[cond.type]?.effects.disadvantageVsOthers && cond.source && cond.source !== target.id) {
+      dis = true;
+      reasons.push(`${CONDITION_EFFECTS[cond.type].name} (цель не источник)`);
+    }
+  }
+  // Поправки от умений: свои (feature-mods.ts) и чужие — союзник-«волк» у цели, враг-«медведь» рядом
+  for (const name of modAttackAdvantage(attacker, attack)) {
+    adv = true;
+    reasons.push(name);
+  }
+  const influence = modAttackInfluence(attacker, target, attack, context.allCombatants);
+  for (const name of influence.advantage) {
+    adv = true;
+    reasons.push(name);
+  }
+  for (const name of influence.disadvantage) {
+    dis = true;
+    reasons.push(name);
   }
 
   // Безрассудная атака: преимущество только на рукопашные атаки Силой
@@ -431,6 +465,8 @@ export function rollSave(
     /** Бонус со стороны (Аура защиты паладина) */
     bonus?: number;
     bonusText?: string;
+    /** Все бойцы: чтобы учесть ауры союзников (feature-mods.ts) */
+    all?: Combatant[];
   } = {}
 ): SaveResult {
   const effects = getConditionEffects(c.conditions);
@@ -441,7 +477,7 @@ export function rollSave(
     (ability === "DEX" && effects.some((e) => e.autoFailDexSave));
 
   const saveData = c.saves?.[ability];
-  let bonus = (saveData ? saveData.mod : c.abilityMods?.[ability] ?? 0) + (opts.bonus ?? 0);
+  let bonus = (saveData ? saveData.mod : c.abilityMods?.[ability] ?? 0) + (opts.bonus ?? 0) + modSaveBonus(c, ability, opts.all);
 
   // Бонус к спасброскам ЛОВ от укрытий (полуукрытие +2, 3/4 укрытие +5)
   if (ability === "DEX") {
@@ -454,7 +490,7 @@ export function rollSave(
   // Оплот силы: укрытие наполовину даёт +2 к спасброскам Ловкости
   if (ability === "DEX" && hasCondition(c, "bulwark_of_force")) bonus += 2;
 
-  let adv = effects.some((e) => e.saveAdvantage?.includes(ability)) || !!opts.advantage;
+  let adv = effects.some((e) => e.saveAdvantage?.includes(ability)) || !!opts.advantage || modSaveAdvantage(c, ability, opts.all);
   let dis = effects.some((e) => e.saveDisadvantage?.includes(ability)) || !!opts.disadvantage;
 
   // Чувство опасности варвара: преимущество на спасброски Ловкости, если он видит и слышит
@@ -740,14 +776,17 @@ export function resolveAttack(
       ? 2
       : 0;
 
+  // Кости к броску атаки от умений (Подпитка магией)
+  const modDice = modAttackBonusDice(attacker).reduce((sum, d) => sum + rollDice(d.dice).total, 0);
+
   const roll = rollD20(
-    attackToUse.attackBonus + blessBonus + archery,
+    attackToUse.attackBonus + blessBonus + archery + modDice,
     advResult.advantage,
     advResult.disadvantage
   );
 
   const coverBonus = options.coverBonus ?? 0;
-  const targetAC = effectiveAC(target) + coverBonus;
+  const targetAC = effectiveAC(target, options.allCombatants) + coverBonus;
   const natCrit = roll.natural >= critThreshold(attacker, attackToUse);
   const fumble = roll.natural === 1;
   const inMeleeRange = (options.distanceFt ?? 5) <= 5;

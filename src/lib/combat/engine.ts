@@ -13,7 +13,6 @@ import {
   consumeAttackConditions,
   classFeature,
   hasCondition,
-  isStrengthMeleeAttack,
   effectiveSpeed,
   payForAttack,
   remainingMovement,
@@ -49,24 +48,16 @@ import { cantripDiceMultiplier, getSpellDefinition, sneakAttackDice } from "./li
 import { getAvailableBeastForms, getBeastFormById } from "./beast-forms";
 import { bardicInspirationDie, martialArtsDie, rageDamageBonus } from "./ability-uses";
 import { checkLegendaryResistance, triggerAILegendaryActions } from "./legendary";
+import { classHooks, type HitResolution } from "./class-hooks";
+import "./classes/combat-index";
 import {
-  fighterAfterAbility,
-  fighterAfterAttack,
-  fighterAfterSpell,
-  fighterDefense,
-  fighterEndTurn,
-  fighterHitRiders,
-  fighterNoteDamage,
-  fighterOnAttackResolved,
-  fighterOnDrop,
-  fighterOnMove,
-  fighterPreAttack,
-  fighterReduceDamage,
-  fighterShield,
-  fighterStartTurn,
-  useFighterFeature,
-  type HitResolution,
-} from "./fighter-combat";
+  modConditionImmunity,
+  modDamageBonuses,
+  modDamageImmunity,
+  modOpportunityDisadvantage,
+  modReachBonus,
+  modResistance,
+} from "./feature-mods";
 import { armedRider } from "./fighter-pool";
 import {
   CONDITION_EFFECTS,
@@ -419,12 +410,17 @@ export function dealDamage(
       continue;
     }
 
-    // Ярость: сопротивление дробящему, колющему и рубящему урону (в том числе магическому)
+    // Сопротивления от умений и состояний (Ярость, тотемы, ауры) — feature-mods.ts (modResistance).
     // Холмовая руна — как Ярость; Защищённый разум пси-воина — сопротивление психической энергии
     const rageResists =
-      (isPhysical && (hasCondition(target, "raging") || hasCondition(target, "hill_rune"))) ||
+      (isPhysical && hasCondition(target, "hill_rune")) ||
       ((type === "psychic" || type.includes("психич")) && !!classFeature(target, "psi-warrior/guarded-mind"));
-    if (rageResists || target.damageResistances?.some((res) => matchesTyped(res, type, isPhysical, isNonmagical))) {
+    const modImmune = modDamageImmunity(target, type, state.combatants);
+    if (modImmune) {
+      state.addLog(`${target.name}: иммунитет к урону «${part.type}» (${modImmune})`, "system", target.name);
+      continue;
+    }
+    if (rageResists || modResistance(target, type, state.combatants) || target.damageResistances?.some((res) => matchesTyped(res, type, isPhysical, isNonmagical))) {
       const halved = Math.floor(part.amount / 2);
       state.addLog(`${target.name} имеет сопротивление к «${part.type}» (урон: ${part.amount} → ${halved})`, "system", target.name);
       actualAmount += halved;
@@ -462,16 +458,20 @@ export function dealDamage(
   }
 
   // Подклассы Воина: Парирование, Защитное поле, ослабленные атаки
-  actualAmount = fighterReduceDamage(state, target, actualAmount, { isAttack: opts.isAttack, attackerId });
+  actualAmount = classHooks.reduceDamage(state, target, actualAmount, {
+    isAttack: opts.isAttack,
+    attackerId,
+    damageType: opts.damageType,
+  });
 
   if (actualAmount <= 0) return;
 
   // Самурай ждёт дополнительного хода: пока он не наступил, урон по нему не засчитывается
-  if (fighterShield(target)) {
+  if (classHooks.shield(target)) {
     state.addLog(`${target.name} держится на силе духа — урон не засчитан`, "system", target.name);
     return;
   }
-  fighterNoteDamage(state, attackerId, targetId);
+  classHooks.noteDamage(state, attackerId, targetId);
 
   // Дикий облик: урон поглощается пулом хитов формы зверя
   if (target.wildShape) {
@@ -520,6 +520,12 @@ export function dealDamage(
     state.addLog(`❄️ «Доспех Агатиса» на ${target.name} рассеивается (временные хиты исчерпаны)`, "system", target.name);
   }
 
+  // Урон нанесён: ответные умения классов (Ответный удар, шипы, поддержание Ярости)
+  classHooks.damaged(state, target, attackerId ? state.get(attackerId) : undefined, actualAmount, {
+    isAttack: opts.isAttack,
+    damageType: opts.damageType,
+  });
+
   if (res.absorbed > 0) {
     state.addLog(
       `${target.name}: ${res.absorbed} поглощено временными хитами`,
@@ -567,7 +573,7 @@ export function dealDamage(
 
   if (wasAlive && target.hpCurrent <= 0) {
     // Стойкость перед смертью самурая: сознание держится до дополнительного хода
-    if (fighterOnDrop(state, target, hpBefore, actualAmount)) return;
+    if (classHooks.onDrop(state, target, hpBefore, actualAmount)) return;
 
     // Непреклонная ярость варвара: в ярости спасбросок ТЕЛ Сл 10 (+5 за каждое срабатывание) — остаётся 1 хит
     if (hasCondition(target, "raging") && classFeature(target, "barbarian/relentless-rage")) {
@@ -710,6 +716,15 @@ function dropConcentrationEffects(state: CombatState, casterId: string): void {
       state.mapElements = state.mapElements.filter((e) => e.id !== zone.id);
     }
   }
+}
+
+/** Прерывает концентрацию бойца и снимает всё, что на ней держалось */
+export function dropConcentration(state: CombatState, casterId: string): void {
+  const caster = state.require(casterId);
+  if (!caster.concentration) return;
+  caster.concentration = null;
+  dropConcentrationEffects(state, casterId);
+  state.mark(casterId);
 }
 
 export function heal(state: CombatState, targetId: string, amount: number): void {
@@ -1063,6 +1078,8 @@ function featureConditionImmunity(state: CombatState, target: Combatant, conditi
     const f = classFeature(target, "monk/purity-of-body", "circle-of-the-land/natures-ward");
     if (f) return f.name;
   }
+  const byMods = modConditionImmunity(target, condition, state.combatants);
+  if (byMods) return byMods;
   const auraKey =
     condition === "frightened" ? "paladin/aura-of-courage" : condition === "charmed" ? "oath-of-devotion/aura-of-devotion" : null;
   if (auraKey) {
@@ -1103,12 +1120,11 @@ function applyWeaponHitRiders(
   let text = "";
   const weaponPart = resolution.damageParts[0];
 
-  const rage = attacker.conditions.find((c) => c.type === "raging");
-  if (rage && isStrengthMeleeAttack(attacker, attack)) {
-    const bonus = rage.value ?? 2;
-    resolution.damage += bonus;
-    resolution.damageParts.push({ amount: bonus, type: weaponPart?.type ?? "", magical: weaponPart?.magical });
-    text += `, ярость +${bonus}`;
+  // Постоянные прибавки к урону от умений и состояний (Ярость и ей подобные): feature-mods.ts
+  for (const bonus of modDamageBonuses(attacker, attack)) {
+    resolution.damage += bonus.amount;
+    resolution.damageParts.push({ amount: bonus.amount, type: weaponPart?.type ?? "", magical: weaponPart?.magical });
+    text += `, ${bonus.label} +${bonus.amount}`;
   }
 
   if (hasCondition(attacker, "smite_ready") && attack.kind === "melee" && !attack.usesSpellAttack) {
@@ -1181,7 +1197,7 @@ function applyWeaponHitRiders(
   }
 
   // Подклассы Воина: заряженные приёмы, выстрелы, силы и руны срабатывают на попадании
-  text += fighterHitRiders(state, attacker, target, attack, resolution);
+  text += classHooks.hitRiders(state, attacker, target, attack, resolution);
 
   return text;
 }
@@ -1314,10 +1330,14 @@ function performAttackUnmarked(
 
   // Атака с выпадом: досягаемость рукопашной атаки +5 футов
   const lunging = attack.kind === "melee" && !!armedRider(attacker, "battlemaster/lunging-attack");
+  // Досягаемость от умений (Ярость великана): feature-mods.ts
+  const extraReach = attack.kind === "melee" ? (lunging ? 5 : 0) + modReachBonus(attacker) : 0;
   const reach = checkReach(
     attacker,
     target,
-    lunging ? { ...attack, range: { ...attack.range, normal: attack.range.normal + 5, long: undefined } } : attack,
+    extraReach > 0
+      ? { ...attack, range: { ...attack.range, normal: attack.range.normal + extraReach, long: undefined } }
+      : attack,
     state.mapElements
   );
   if (!reach.ok) throw new EngineError(reach.reason ?? "Цель недосягаема");
@@ -1325,7 +1345,7 @@ function performAttackUnmarked(
   const coverBonus = attackCoverBonus(state, attacker, target);
 
   // Эхо-мученик: эхо рыцаря принимает бросок атаки вместо союзника
-  const martyr = fighterPreAttack(state, attacker, target, attack);
+  const martyr = classHooks.preAttack(state, attacker, target, attack);
   if (martyr) {
     if (!opts.skipCost) Object.assign(attacker, payForAttack(attacker, attack));
     state.mark(attackerId);
@@ -1379,7 +1399,7 @@ function performAttackUnmarked(
       coverBonus,
     });
 
-    fighterDefense(state, attacker, target, strike1Attack, res1, false);
+    classHooks.defense(state, attacker, target, strike1Attack, res1, false);
     let extra1 = "";
     let sneakUsedOn1 = false;
     if (res1.hit) {
@@ -1441,7 +1461,7 @@ function performAttackUnmarked(
       coverBonus,
     });
 
-    fighterDefense(state, attacker, target, strike2Attack, res2, false);
+    classHooks.defense(state, attacker, target, strike2Attack, res2, false);
     let extra2 = "";
     if (res2.hit) {
       extra2 += applyWeaponHitRiders(state, attacker, target, strike2Attack, res2);
@@ -1531,9 +1551,9 @@ function performAttackUnmarked(
       });
     }
 
-    fighterOnAttackResolved(state, attacker, target, strike1Attack, res1);
-    fighterOnAttackResolved(state, attacker, target, strike2Attack, res2);
-    fighterAfterAttack(state, attacker, target);
+    classHooks.attackResolved(state, attacker, target, strike1Attack, res1);
+    classHooks.attackResolved(state, attacker, target, strike2Attack, res2);
+    classHooks.afterAttack(state, attacker, target, attack);
 
     return {
       hit: anyHit,
@@ -1554,7 +1574,7 @@ function performAttackUnmarked(
   });
 
   // Защитные реакции союзников цели (Рунический щит, Защитный манёвр, Облачная руна)
-  const defended = fighterDefense(state, attacker, target, attack, resolution);
+  const defended = classHooks.defense(state, attacker, target, attack, resolution);
   if (defended.id !== target.id) {
     target = defended;
     targetId = defended.id;
@@ -1654,8 +1674,8 @@ function performAttackUnmarked(
   }
 
   // Подклассы Воина: реакции на промах (Ответный удар) и расход временных состояний (финт, отвлечение)
-  fighterOnAttackResolved(state, attacker, target, attack, resolution);
-  fighterAfterAttack(state, attacker, target);
+  classHooks.attackResolved(state, attacker, target, attack, resolution);
+  classHooks.afterAttack(state, attacker, target, attack);
 
   return {
     hit: resolution.hit,
@@ -1820,6 +1840,8 @@ export function moveCombatant(
 
     const resolution = resolveAttack(attacker, mover, melee, {
       distanceFt: reach.distanceFt,
+      allCombatants: state.combatants,
+      manualDisadvantage: !!modOpportunityDisadvantage(mover),
     });
     attacker.reactionUsed = true;
     state.mark(attacker.id);
@@ -2020,7 +2042,7 @@ export function moveCombatant(
   }
 
   // Подклассы Воина: разбег, колючие кусты, Держать строй, эхо
-  fighterOnMove(state, mover, startCell, result.path);
+  classHooks.onMove(state, mover, startCell, result.path);
 
   return {
     path: result.path,
@@ -2184,7 +2206,16 @@ export function rollEffectSave(
   isSpell: boolean,
   label: string
 ) {
-  const save = rollSave(target, ability, dc, { isSpell, bonus: auraSaveBonus(state, target), bonusText: "Аура защиты" });
+  const roll = () =>
+    rollSave(target, ability, dc, {
+      isSpell,
+      bonus: auraSaveBonus(state, target),
+      bonusText: "Аура защиты",
+      all: state.combatants,
+    });
+  let save = roll();
+  // Провал может перебросить умение класса (Фанатичная сосредоточенность)
+  if (!save.success && !save.autoFail) save = classHooks.saveFailed(state, target, ability, dc, roll) ?? save;
   if (!save.success && checkLegendaryResistance(target, state, label)) {
     return { ...save, success: true, text: `${save.text} → успех (Легендарное сопротивление)` };
   }
@@ -3201,7 +3232,7 @@ export function castSpell(
   const out = atomic(state, () => castSpellUnsafe(state, casterId, spell, opts));
   const level = typeof spell === "string" ? getSpellDefinition(spell)?.level ?? 1 : spell.level;
   const caster = state.get(casterId);
-  if (caster) fighterAfterSpell(state, caster, level);
+  if (caster) classHooks.afterSpell(state, caster, level);
   return out;
 }
 
@@ -3312,9 +3343,9 @@ function srdClassFeature(
 ): CastResult | null {
   const key = params.srdKey;
   if (!key) return null;
-  // Подклассы Воина из dnd.su: приёмы, выстрелы, силы, руны и т. д. (fighter-combat.ts)
-  const fighterResult = useFighterFeature(state, c, ability, params, opts);
-  if (fighterResult) return fighterResult;
+  // Умения классов и подклассов, которые разыгрывают их модули (class-hooks.ts, classes/*-combat.ts)
+  const moduleResult = classHooks.useFeature(state, c, ability, params, opts);
+  if (moduleResult) return moduleResult;
   const pickTarget = (what: string) => {
     const t = opts.targetIds?.[0] ? state.get(opts.targetIds[0]) : undefined;
     if (!t || t.id === c.id) throw new EngineError(`Выберите цель для «${what}»`);
@@ -3664,7 +3695,7 @@ function useAbilityUnsafe(
   }
 
   const result = useAbilityCore(state, combatantId, abilityId, opts);
-  fighterAfterAbility(state, c, params?.srdKey);
+  classHooks.afterAbility(state, c, params?.srdKey);
 
   if (cost && pool && pool.usesMax > 0 && !deferCost) {
     pool.usesUsed += cost.amount;
@@ -4158,7 +4189,7 @@ export function startTurn(state: CombatState): void {
   );
   // Способности, обновляющиеся каждый ход (Скрытая атака)
   c.abilities = c.abilities.map((a) => (a.refresh === "turn" ? { ...a, usesUsed: 0 } : a));
-  fighterStartTurn(state, c);
+  classHooks.startTurn(state, c);
 
   // При броске инициативы (в первый ход героя в бою): Превосходное вдохновение барда, Совершенство монаха,
   // Неослабевающий Мастера боевых искусств и родственные умения подклассов Воина
@@ -4172,6 +4203,7 @@ export function startTurn(state: CombatState): void {
         state.addLog(`${c.name}: ${classFeature(c, key)!.name} — восстановлено ${amount} «${pool.name}»`, "ability", c.name);
       }
     };
+    classHooks.battleStart(state, c);
     restore("bard/superior-inspiration", "bard/bardic-inspiration", 1);
     restore("monk/perfect-focus", "monk/monks-focus", 4);
     // Подклассы Воина: бросок инициативы без запаса возвращает одно использование
@@ -4292,7 +4324,7 @@ export function endTurn(state: CombatState, depth = 0): { nextId: string | null 
   const current = state.current();
   if (current) {
     current.hasActed = true;
-    fighterEndTurn(state, current, "before");
+    classHooks.endTurn(state, current, "before");
 
     // Повторные спасброски для снятия эффектов (Save Ends) по правилам D&D 5e
     if (current.hpCurrent > 0) {
@@ -4327,7 +4359,7 @@ export function endTurn(state: CombatState, depth = 0): { nextId: string | null 
       )
       .filter((cond) => cond.type === "death_save" || cond.duration === undefined || cond.duration > 0);
     state.mark(current.id);
-    fighterEndTurn(state, current, "after");
+    classHooks.endTurn(state, current, "after");
 
     if (current.concentration) {
       const left = current.concentration.durationRounds - 1;

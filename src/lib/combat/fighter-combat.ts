@@ -45,6 +45,7 @@ import {
   spendPool,
 } from "./fighter-pool";
 import { isHostile, type AbilityKey, type ActionParameters, type Attack, type CombatAbility, type Combatant } from "./types";
+import { registerClassModule } from "./class-hooks";
 
 // ============ ОБЩЕЕ ============
 
@@ -1792,3 +1793,23 @@ export function fighterAfterSpell(state: CombatState, caster: Combatant, spellLe
     log(state, caster, `${caster.name}: Боевая магия — можно атаковать оружием бонусным действием`, "system");
   }
 }
+
+// Подключение к движку: общие точки вызова — в class-hooks.ts
+registerClassModule({
+  id: "fighter",
+  useFeature: useFighterFeature,
+  preAttack: fighterPreAttack,
+  defense: fighterDefense,
+  hitRiders: fighterHitRiders,
+  attackResolved: fighterOnAttackResolved,
+  afterAttack: fighterAfterAttack,
+  reduceDamage: fighterReduceDamage,
+  shield: fighterShield,
+  noteDamage: fighterNoteDamage,
+  onDrop: fighterOnDrop,
+  onMove: fighterOnMove,
+  startTurn: fighterStartTurn,
+  endTurn: fighterEndTurn,
+  afterAbility: fighterAfterAbility,
+  afterSpell: fighterAfterSpell,
+});
