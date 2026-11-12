@@ -49,3 +49,23 @@ describe("системный промпт: вступительная сцена
     expect(buildFrozenSystemPrompt(party)).toBe(buildFrozenSystemPrompt(party));
   });
 });
+
+describe("системный промпт: граница героя", () => {
+  it("запрещает присваивать герою вещи, чувства и решения во всех режимах", () => {
+    for (const ctx of [solo, party, undefined]) {
+      const prompt = buildSystemPrompt(ctx);
+      expect(prompt).toContain("## 11. ГРАНИЦА ГЕРОЯ");
+      expect(prompt).toContain("Давать герою вещи");
+      expect(prompt).toContain("Писать герою чувства, мысли, воспоминания и реакции тела");
+      expect(prompt).toContain("Решать за героя слова и поступки");
+    }
+  });
+
+  it("повторяет запрет последней строкой промпта и не разрешает мысли героя курсивом", () => {
+    const prompt = buildSystemPrompt(party);
+    const lastLine = prompt.trimEnd().split(/\r?\n/).pop() ?? "";
+    expect(lastLine).toContain("ГЛАВНОЕ НАПОМИНАНИЕ ПЕРЕД ОТВЕТОМ");
+    expect(prompt).not.toContain("*курсив* — мысли и ощущения.");
+    expect(prompt).toContain("Мысли и ощущения героя курсивом не пиши");
+  });
+});
