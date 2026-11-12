@@ -246,20 +246,6 @@ export const ABILITY_LIBRARY: AbilityDefinition[] = [
     },
   },
   {
-    name: "Ликвидация (Убийца)",
-    source: "PHB",
-    className: "Плут",
-    minLevel: 3,
-    subclass: /убийц|assassin/i,
-    category: "damage",
-    parameters: {
-      name: "Ликвидация (Убийца)",
-      type: "ability",
-      actionCost: "free",
-      description: "Преимущество на атаки по существам, которые еще не ходили в бою. Любое попадание по застигнутому врасплох существу становится критическим.",
-    },
-  },
-  {
     name: "Невероятное уклонение",
     source: "PHB",
     className: "Плут",
@@ -269,8 +255,10 @@ export const ABILITY_LIBRARY: AbilityDefinition[] = [
       name: "Невероятное уклонение",
       type: "ability",
       srdKey: "rogue/uncanny-dodge",
-      actionCost: "reaction",
-      description: "Реакция: когда видимый нападающий попадает по вам атакой, вы уполовиниваете получаемый урон.",
+      // Срабатывает само, когда видимый нападающий попадает по плуту (см. dealDamage)
+      actionCost: "none",
+      passive: true,
+      description: "Реакция: когда видимый нападающий попадает по вам атакой, вы уполовиниваете получаемый урон. Срабатывает само.",
     },
   },
 

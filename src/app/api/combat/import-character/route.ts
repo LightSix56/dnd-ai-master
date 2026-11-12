@@ -13,7 +13,7 @@ import { resolveAbilityUses } from "@/lib/combat/ability-uses";
 import { srdCombatAbilities } from "@/lib/combat/class-features";
 
 /** Старые имена способностей, переименованных в коде (записи БД с ними устарели) */
-const LEGACY_ABILITY_NAMES = new Set(["порыв к действию", "поступь ветра"]);
+const LEGACY_ABILITY_NAMES = new Set(["порыв к действию", "поступь ветра", "ликвидация (убийца)"]);
 
 const DAMAGE_TYPE_RU: Record<string, string> = {
   кол: "piercing",

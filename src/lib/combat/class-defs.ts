@@ -84,6 +84,10 @@ export interface Rule {
   when?: (c: Calc) => boolean;
   /** Название способности в бою, если оно не совпадает с названием умения */
   name?: string;
+  /** Описание вместо текста из data/class-subclasses.json (когда тот расходится с источником) */
+  description?: string;
+  /** Реакция, применимая и не в свой ход */
+  offTurn?: boolean;
 }
 
 /** Вариант умения на выбор (тотем, стихия ауры, форма зверя) */
@@ -230,6 +234,7 @@ function buildDefinition(key: string, name: string, description: string, rule: R
     ...save,
     ...(rule.manual ? { manual: true } : {}),
     ...(rule.defer ? { deferCost: true } : {}),
+    ...(rule.offTurn ? { offTurn: true } : {}),
     ...(rule.dieFallback ? { dieFallback: rule.dieFallback } : {}),
     ...(value !== undefined ? { featureValue: value } : {}),
   };
@@ -259,7 +264,7 @@ export function classAbilityDefinitions(ctx: HeroFeatureContext, classId: string
     if (f.level > c.level) continue;
     const rule = subRules.features[f.name];
     if (!rule) throw new Error(`Нет правила для умения «${f.name}» (${sub.name})`);
-    push(rule, f.name, f.description);
+    push(rule, f.name, rule.description ?? f.description);
 
     const options = (rule.options ?? []).filter((o) => (o.minLevel ?? f.level) <= c.level);
     const chosen = options.filter((o) => optionChosen(o, c));

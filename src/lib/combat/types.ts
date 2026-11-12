@@ -307,6 +307,8 @@ export interface ActionParameters {
   manual?: boolean;
   /** Траты запаса списываются не при нажатии, а при срабатывании (заряженные приёмы, выстрелы, силы) */
   deferCost?: boolean;
+  /** Реакция, которую можно применить и не в свой ход (Зачинщик скаута, Жетон души фантома) */
+  offTurn?: boolean;
   /** Когда использования кончились, умение можно повторить за кость этого запаса (Пси-прыжок, Оплот силы…) */
   dieFallback?: string;
   /** Число умения на уровне героя: лишние кости крита, порог крита, лечение Уцелевшего, бонус ауры */
@@ -613,6 +615,30 @@ export const CONDITION_EFFECTS: Record<string, {
     name: "Стихийное оружие",
     description: "В ярости оружие наносит дополнительный урон стихией",
     effects: {},
+  },
+  // Плут (classes/rogue-combat.ts)
+  fancy_footwork: {
+    name: "Ловкое маневрирование",
+    description: "Существо (source) не может совершать провоцированные атаки по плуту до конца хода",
+    effects: {},
+    service: true,
+  },
+  panache: {
+    name: "Щегольство",
+    description: "Помеха на атаки по всем, кроме плута, и нет провоцированных атак по другим; длится минуту",
+    effects: { disadvantageVsOthers: true },
+  },
+  insightful_fighting: {
+    name: "Проницательный бой",
+    description: "Скрытая атака по этой цели (source) не требует преимущества; длится минуту",
+    effects: {},
+    service: true,
+  },
+  soul_chance: {
+    name: "Душа рядом",
+    description: "Рядом погибло существо (source): реакцией можно создать Жетон души",
+    effects: {},
+    service: true,
   },
   // Подклассы Воина (fighter-combat.ts)
   fighter_rider: {

@@ -3,6 +3,7 @@
 // инициативе сортировка недетерминирована и "чей ход" разъезжается между
 // сервером и клиентом.
 import { rollD20 } from "@/lib/dnd/dice";
+import { modInitiativeBonus } from "./feature-mods";
 import type { Combatant } from "./types";
 
 export interface InitiativeRoll {
@@ -16,13 +17,17 @@ type InitiativeInput = Pick<Combatant, "dexMod"> & {
   /** Преимущество на инициативу (Дикий инстинкт варвара) */
   initiativeAdvantage?: boolean;
   abilities?: Combatant["abilities"];
+  /** Для поправок умений (Лихая удаль прибавляет Харизму) */
+  abilityMods?: Combatant["abilityMods"];
+  conditions?: Combatant["conditions"];
 };
 
 export function rollInitiativeFor(c: InitiativeInput): number {
   const mod = typeof c.dexMod === "number" && Number.isFinite(c.dexMod) ? c.dexMod : 0;
   const advantage =
     !!c.initiativeAdvantage || !!c.abilities?.some((a) => a.parameters?.srdKey === "barbarian/feral-instinct");
-  const roll = rollD20(mod, advantage).total;
+  const bonus = c.abilities?.length ? modInitiativeBonus(c as Combatant) : 0;
+  const roll = rollD20(mod + bonus, advantage).total;
   return Number.isFinite(roll) ? Math.round(roll) : 10;
 }
 

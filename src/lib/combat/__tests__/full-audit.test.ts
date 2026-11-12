@@ -405,8 +405,8 @@ describe("Combat Engine Full Audit & Stress Suite", () => {
       caster.spells.slots = { 1: { max: 2, used: 0 } };
       targetMelee.hpCurrent = Math.max(1, targetMelee.hpMax - 5);
 
-      // Скрытая атака — пассивное умение: «применить» её нельзя, она срабатывает сама при попадании
-      if (isSneakAttackAbility(ability)) {
+      // Скрытая атака и Невероятное уклонение — пассивные умения: «применить» их нельзя, они срабатывают сами
+      if (isSneakAttackAbility(ability) || abDef.parameters.passive) {
         expect(() => useAbility(state, caster.id, abId, { targetIds, center, skipTurnCheck: true })).toThrow(
           EngineError
         );

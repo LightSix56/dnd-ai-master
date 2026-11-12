@@ -21,6 +21,7 @@ import {
   rollDamage,
   rollDeathSave,
   rollSave,
+  type AttackResolution,
   type DamagePart,
 } from "./rules";
 import {
@@ -443,10 +444,16 @@ export function dealDamage(
 
   // Невероятное уклонение (Плут 5 ур): реакцией уполовинивает урон от атаки
   const hasUncannyDodge =
+    !!classFeature(target, "rogue/uncanny-dodge", "hunter/uncanny-dodge") ||
     (target.level >= 5 && (target.className?.toLowerCase().includes("плут") || target.className?.toLowerCase().includes("rogue"))) ||
     target.abilities.some((a) => a.name.includes("Невероятное уклонение") || a.name.includes("Uncanny Dodge"));
+  // «Атакующий, которого вы видите»: ослеплённый не видит никого, невидимый и скрытый атакующий не виден
+  const dodgeAttacker = attackerId ? state.get(attackerId) : undefined;
+  const canSeeAttacker =
+    !hasCondition(target, "blinded") &&
+    !(dodgeAttacker && (dodgeAttacker.isHidden || dodgeAttacker.conditions.some((c) => c.type === "invisible" || c.type === "greater_invisibility")));
 
-  if (hasUncannyDodge && !target.reactionUsed && opts.isAttack && actualAmount > 1) {
+  if (hasUncannyDodge && canSeeAttacker && !target.reactionUsed && canAct(target) && opts.isAttack && actualAmount > 1) {
     const halved = Math.floor(actualAmount / 2);
     target.reactionUsed = true;
     state.addLog(
@@ -641,6 +648,7 @@ export function dealDamage(
       { type: "prone" },
     ];
     state.addLog(`${target.name} падает без сознания!`, "damage", target.name);
+    classHooks.creatureDown(state, target);
 
     // Благословение Тёмного (колдун Исчадия): опустив хиты врага до 0, получает временные хиты
     const killer = attackerId ? state.get(attackerId) : undefined;
@@ -1020,7 +1028,7 @@ function allyAdjacentTo(state: CombatState, attacker: Combatant, target: Combata
       c.hpCurrent > 0 &&
       !isHostile(attacker.type, c.type) &&
       isHostile(c.type, target.type) &&
-      !c.conditions.some((cond) => ["unconscious", "paralyzed", "petrified", "stunned"].includes(cond.type)) &&
+      !c.conditions.some((cond) => ["unconscious", "paralyzed", "petrified", "stunned", "incapacitated"].includes(cond.type)) &&
       distanceFt(c, target) <= 5
   );
 }
@@ -1247,7 +1255,7 @@ function findSneakAttack(
   attack: Attack,
   advantage: boolean,
   hasDisadvantage: boolean
-): { dice: string; ability?: CombatAbility } | null {
+): { dice: string; ability?: CombatAbility; reason?: string } | null {
   const isRogue =
     attacker.className?.toLowerCase().includes("плут") ||
     attacker.className?.toLowerCase().includes("rogue") ||
@@ -1269,11 +1277,37 @@ function findSneakAttack(
   if (!eligible) return null;
 
   // 3. Условие срабатывания: Преимущество ИЛИ дееспособный союзник в 5 фт от цели
+  // Умения подклассов разрешают её и без этого (Лихая удаль, Проницательный бой)
   const hasAllyAdjacent = allyAdjacentTo(state, attacker, target);
-  if (!advantage && !hasAllyAdjacent) return null;
+  const reason = advantage || hasAllyAdjacent ? undefined : classHooks.sneakAllowed(state, attacker, target, attack) ?? undefined;
+  if (!advantage && !hasAllyAdjacent && !reason) return null;
 
   const dice = ability?.parameters?.damage?.[0]?.dice || sneakAttackDice(attacker.level || 1);
-  return { dice, ability };
+  return { dice, ability, reason };
+}
+
+/**
+ * Скрытая атака при попадании: бросает кости, прибавляет урон к попаданию и отмечает ход.
+ * Возвращает текст для строки атаки (пустой, если Скрытая атака не сработала).
+ */
+function applySneakAttack(
+  state: CombatState,
+  attacker: Combatant,
+  target: Combatant,
+  attack: Attack,
+  res: Pick<AttackResolution, "roll" | "hasDisadvantage" | "crit" | "damage" | "damageParts">
+): string {
+  const sneak = findSneakAttack(state, attacker, target, attack, res.roll.mode === "advantage", res.hasDisadvantage);
+  if (!sneak) return "";
+  const bonus = rollDamage([{ dice: sneak.dice, mod: 0, type: attack.damage[0]?.type ?? "piercing" }], res.crit);
+  res.damage += bonus.total;
+  res.damageParts.push({ amount: bonus.total, type: res.damageParts[0]?.type ?? "piercing", magical: res.damageParts[0]?.magical });
+  if (sneak.ability) sneak.ability.usesUsed += 1;
+  markSneakAttackUsed(state, attacker);
+  let text = `, скрытая атака ${sneak.dice}${res.crit ? " (удвоена критом)" : ""} = ${bonus.total}`;
+  if (sneak.reason) text += ` (${sneak.reason})`;
+  text += classHooks.sneakDealt(state, attacker, target, attack, { dice: sneak.dice, amount: bonus.total, crit: res.crit });
+  return text;
 }
 
 export function performAttack(
@@ -1404,28 +1438,9 @@ function performAttackUnmarked(
     let sneakUsedOn1 = false;
     if (res1.hit) {
       extra1 += applyWeaponHitRiders(state, attacker, target, strike1Attack, res1);
-      const sneak = findSneakAttack(
-        state,
-        attacker,
-        target,
-        strike1Attack,
-        res1.roll.mode === "advantage",
-        res1.hasDisadvantage
-      );
-      if (sneak) {
-        const bonus = rollDamage(
-          [{ dice: sneak.dice, mod: 0, type: dmg1[0]?.type ?? "piercing" }],
-          res1.crit
-        );
-        res1.damage += bonus.total;
-      res1.damageParts.push({ amount: bonus.total, type: res1.damageParts[0]?.type ?? "piercing", magical: res1.damageParts[0]?.magical });
-        if (sneak.ability) {
-          sneak.ability.usesUsed += 1;
-        }
-        markSneakAttackUsed(state, attacker);
-        sneakUsedOn1 = true;
-        extra1 += `, скрытая атака ${sneak.dice}${res1.crit ? " (удвоена критом)" : ""} = ${bonus.total}`;
-      }
+      const sneakText = applySneakAttack(state, attacker, target, strike1Attack, res1);
+      sneakUsedOn1 = sneakText !== "";
+      extra1 += sneakText;
 
       const mark = target.conditions.find(
         (c) => c.type === "hunters_mark" && c.source === attackerId
@@ -1466,29 +1481,7 @@ function performAttackUnmarked(
     if (res2.hit) {
       extra2 += applyWeaponHitRiders(state, attacker, target, strike2Attack, res2);
       // Скрытая атака применяется ко второму удару ТОЛЬКО если не сработала на первом
-      if (!sneakUsedOn1) {
-        const sneak = findSneakAttack(
-          state,
-          attacker,
-          target,
-          strike2Attack,
-          res2.roll.mode === "advantage",
-          res2.hasDisadvantage
-        );
-        if (sneak) {
-          const bonus = rollDamage(
-            [{ dice: sneak.dice, mod: 0, type: dmg2[0]?.type ?? "piercing" }],
-            res2.crit
-          );
-          res2.damage += bonus.total;
-      res2.damageParts.push({ amount: bonus.total, type: res2.damageParts[0]?.type ?? "piercing", magical: res2.damageParts[0]?.magical });
-          if (sneak.ability) {
-            sneak.ability.usesUsed += 1;
-          }
-          markSneakAttackUsed(state, attacker);
-          extra2 += `, скрытая атака ${sneak.dice}${res2.crit ? " (удвоена критом)" : ""} = ${bonus.total}`;
-        }
-      }
+      if (!sneakUsedOn1) extra2 += applySneakAttack(state, attacker, target, strike2Attack, res2);
 
       const mark = target.conditions.find(
         (c) => c.type === "hunters_mark" && c.source === attackerId
@@ -1583,24 +1576,7 @@ function performAttackUnmarked(
   let extraText = "";
   if (resolution.hit) {
     extraText += applyWeaponHitRiders(state, attacker, target, attack, resolution);
-    const sneak = findSneakAttack(
-      state,
-      attacker,
-      target,
-      attack,
-      resolution.roll.mode === "advantage",
-      resolution.hasDisadvantage
-    );
-    if (sneak) {
-      const bonus = rollDamage([{ dice: sneak.dice, mod: 0, type: attack.damage[0]?.type ?? "piercing" }], resolution.crit);
-      resolution.damage += bonus.total;
-      resolution.damageParts.push({ amount: bonus.total, type: resolution.damageParts[0]?.type ?? "piercing", magical: resolution.damageParts[0]?.magical });
-      if (sneak.ability) {
-        sneak.ability.usesUsed += 1;
-      }
-      markSneakAttackUsed(state, attacker);
-      extraText += `, скрытая атака ${sneak.dice}${resolution.crit ? " (удвоена критом)" : ""} = ${bonus.total}`;
-    }
+    extraText += applySneakAttack(state, attacker, target, attack, resolution);
 
     // Метка охотника: доп. урон от того, кто её поставил
     const mark = target.conditions.find(
@@ -2204,11 +2180,14 @@ export function rollEffectSave(
   ability: AbilityKey,
   dc: number,
   isSpell: boolean,
-  label: string
+  label: string,
+  /** Помеха на спасбросок от умения заклинателя (Магическая засада) */
+  disadvantage?: boolean
 ) {
   const roll = () =>
     rollSave(target, ability, dc, {
       isSpell,
+      disadvantage,
       bonus: auraSaveBonus(state, target),
       bonusText: "Аура защиты",
       all: state.combatants,
@@ -2820,6 +2799,8 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
       ? 1 + spellLevel
       : 0;
   let healedOthers = false;
+  // Умения заклинателя, дающие помеху на спасброски цели (Магическая засада скрытого плута)
+  const ambushReason = (t: Combatant) => (isSpellAction ? classHooks.castSaveDisadvantage(state, caster, t) : null);
 
   for (const target of targets) {
     // Формовка заклинаний: союзники в области воплощения автоматически спасаются и не получают урона
@@ -2843,7 +2824,7 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
       const dice = target.hpCurrent < target.hpMax ? `${mult}d12` : `${mult}d8`;
       targetDamage = [{ dice, mod: 0, type: "necrotic", save: "none" as const }];
 
-      const save = rollEffectSave(state, target, "WIS", saveDC, true, "Погребальный звон");
+      const save = rollEffectSave(state, target, "WIS", saveDC, true, "Погребальный звон", ambushReason(target) !== null);
       saved = save.success;
       state.addLog(`${target.name}: ${save.text} против «Погребального звона»`, "save", target.name);
       if (!save.success) {
@@ -2852,7 +2833,9 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
         amount = 0;
       }
     } else if (params.saveType) {
-      const save = rollEffectSave(state, target, params.saveType as AbilityKey, saveDC, isSpellAction, ctx.label);
+      const ambush = isSpellAction ? ambushReason(target) : null;
+      if (ambush) state.addLog(`${target.name}: помеха на спасбросок (${ambush})`, "save", target.name);
+      const save = rollEffectSave(state, target, params.saveType as AbilityKey, saveDC, isSpellAction, ctx.label, ambush !== null);
       saved = save.success;
       state.addLog(`${target.name}: ${save.text}`, "save", target.name);
       if (damage.length > 0) {
@@ -3717,7 +3700,8 @@ function useAbilityCore(
   abilityId: string,
   opts: { targetIds?: string[]; center?: Cell | null; skipTurnCheck?: boolean } = {}
 ): CastResult {
-  if (!opts.skipTurnCheck) assertTurn(state, combatantId);
+  const offTurn = state.get(combatantId)?.abilities.find((a) => a.id === abilityId)?.parameters?.offTurn;
+  if (!opts.skipTurnCheck && !offTurn) assertTurn(state, combatantId);
   const c = state.require(combatantId);
 
   const ability = c.abilities.find((a) => a.id === abilityId);
@@ -4499,17 +4483,18 @@ export function attemptHide(
   const ambush = c.conditions.find((x) => x.type === "ambush");
   if (ambush) c.conditions = c.conditions.filter((x) => x !== ambush);
   const stealthBonus = dexMod + (isRogue ? c.profBonus * 2 : c.profBonus) + (ambush?.value ?? 0);
-  const roll = rollD20(stealthBonus);
+  const hideAdvantage = classHooks.hideAdvantage(state, c);
+  const roll = rollD20(stealthBonus, !!hideAdvantage);
 
   if (roll.total >= highestPerception) {
     c.isHidden = true;
     state.mark(c.id);
-    const text = `${c.name} прячется в укрытии${actionSuffix}: Скрытность ${roll.total} ([${roll.natural}]+${stealthBonus}) против Внимательности СЛ ${highestPerception} — УСПЕШНО!`;
+    const text = `${c.name} прячется в укрытии${actionSuffix}: Скрытность ${roll.total} ([${roll.natural}]+${stealthBonus}) против Внимательности СЛ ${highestPerception}${hideAdvantage ? ` (преимущество: ${hideAdvantage})` : ""} — УСПЕШНО!`;
     state.addLog(text, "ability", c.name);
     return { success: true, text };
   } else {
     state.mark(c.id);
-    const text = `${c.name} пытается спрятаться в укрытии${actionSuffix}: Скрытность ${roll.total} ([${roll.natural}]+${stealthBonus}) против Внимательности СЛ ${highestPerception} — ЗАМЕЧЕН!`;
+    const text = `${c.name} пытается спрятаться в укрытии${actionSuffix}: Скрытность ${roll.total} ([${roll.natural}]+${stealthBonus}) против Внимательности СЛ ${highestPerception}${hideAdvantage ? ` (преимущество: ${hideAdvantage})` : ""} — ЗАМЕЧЕН!`;
     state.addLog(text, "ability", c.name);
     return { success: false, text };
   }

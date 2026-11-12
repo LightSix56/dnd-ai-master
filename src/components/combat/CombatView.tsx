@@ -706,8 +706,10 @@ export function CombatView({ combatId, campaignId, roomCode, onClose, onCombatEn
   );
   // Ходит бот — игрок не действует, только смотрит и жмёт «Ход бота»
   const isBotTurn = !!currentCombatant?.isAIControlled;
-  // Атакующий — тот, чей сейчас ход; выбор токена нужен только для осмотра
-  const actorId = currentTurnId;
+  // Боец с хотбаром: ведущему — тот, чей ход; игроку — его герой (в чужой ход ему доступны реакции)
+  const hotbarCombatant = isDM ? currentCombatant : isMyTurn ? currentCombatant : myCombatant;
+  // Действует тот, чей сейчас ход; вне своего хода игрок может только применить реакцию своего героя
+  const actorId = hotbarCombatant?.id ?? currentTurnId;
 
   async function createCombat() {
     setCreating(true);
@@ -830,8 +832,8 @@ export function CombatView({ combatId, campaignId, roomCode, onClose, onCombatEn
   }
 
   async function startAbility(abilityId: string) {
-    const ab = currentCombatant?.abilities.find((a) => a.id === abilityId);
-    if (!ab || !currentCombatant) return;
+    const ab = hotbarCombatant?.abilities.find((a) => a.id === abilityId);
+    if (!ab || !hotbarCombatant) return;
 
     // Способности телепортации или нацеливания на клетку (Теневой шаг, Туманный шаг, Шаг сквозь тень)
     const isTeleport =
@@ -860,7 +862,7 @@ export function CombatView({ combatId, campaignId, roomCode, onClose, onCombatEn
     const needsTarget = mode === "creature" || mode === "ally";
     if (!needsTarget) {
       await doAction("use-ability", {
-        combatantId: currentCombatant.id,
+        combatantId: hotbarCombatant.id,
         abilityId,
         targetIds: [],
       });

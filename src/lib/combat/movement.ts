@@ -316,6 +316,10 @@ export function findOpportunityAttackers(
     if (c.id === mover.id) continue;
     if (c.hpCurrent <= 0) continue;
     if (c.reactionUsed) continue;
+    // Ловкое маневрирование плута: по нему, ударившему это существо в рукопашной, провоцированных атак нет
+    if (mover.conditions.some((x) => x.type === "fancy_footwork" && x.source === c.id)) continue;
+    // Щегольство: очарованный блеском плута враг не бьёт по другим провоцированными атаками
+    if (c.conditions.some((x) => x.type === "panache" && x.source && x.source !== mover.id)) continue;
     // Провоцируют только дееспособные противники
     const hostile = isHostile(mover.type, c.type);
     if (!hostile) continue;

@@ -56,6 +56,10 @@ export interface Mods {
   alliesMeleeAdvantageNear?: number;
   /** Враги в стольких футах от бойца атакуют других с помехой (Гармония медведя) */
   foesDisadvantageVsOthersNear?: number;
+  /** Преимущество на спасброски от смерти (безделушка с душой Фантома) */
+  deathSaveAdvantage?: boolean;
+  /** Прибавка к броску инициативы (Лихая удаль: модификатор Харизмы) */
+  initiativeBonus?: number;
 }
 
 export interface ModRule {
@@ -183,6 +187,16 @@ export function modAcBonus(c: Combatant, all?: Combatant[]): number {
 
 export function modSpeedBonus(c: Combatant): number {
   return modSources(c).reduce((sum, s) => sum + (s.mods.speedBonus ?? 0), 0);
+}
+
+/** Название умения, дающего преимущество на спасброски от смерти, или null */
+export function modDeathSaveAdvantage(c: Combatant): string | null {
+  return modSources(c).find((s) => s.mods.deathSaveAdvantage)?.name ?? null;
+}
+
+/** Сумма прибавок к броску инициативы */
+export function modInitiativeBonus(c: Combatant): number {
+  return modSources(c).reduce((sum, s) => sum + (s.mods.initiativeBonus ?? 0), 0);
 }
 
 export function modReachBonus(c: Combatant): number {

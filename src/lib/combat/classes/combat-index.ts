@@ -2,3 +2,4 @@
 // Движок импортирует этот список один раз; чтобы добавить класс, допишите строку сюда.
 import "../fighter-combat";
 import "./barbarian-combat";
+import "./rogue-combat";

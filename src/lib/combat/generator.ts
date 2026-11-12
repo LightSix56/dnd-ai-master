@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 import { abilityModifier, proficiencyBonus } from "@/lib/dnd/dice";
 import { rollInitiativeForAll, sortByInitiative } from "./initiative";
 import { SIZE_CELLS } from "./types";
-import type { Attack, CombatPotion, CombatantType, CreatureSize, MapElementType, HotbarItem } from "./types";
+import type { Attack, CombatAbility, CombatPotion, CombatantType, CreatureSize, MapElementType, HotbarItem } from "./types";
 import {
   extractAttacksFromCharacter,
   extractSpellsFromCharacter,
@@ -914,8 +914,8 @@ export async function createPartyCombatants({
   startIndex?: number;
   /** Герои застигнуты врасплох: первый ход пропускают (состояние surprised) */
   surprised?: boolean;
-}): Promise<Array<{ id: string; dexMod: number; initiativeAdvantage?: boolean }>> {
-  const created: Array<{ id: string; dexMod: number; initiativeAdvantage?: boolean }> = [];
+}): Promise<Array<{ id: string; dexMod: number; initiativeAdvantage?: boolean; abilities?: CombatAbility[]; abilityMods?: Record<string, number> }>> {
+  const created: Array<{ id: string; dexMod: number; initiativeAdvantage?: boolean; abilities?: CombatAbility[]; abilityMods?: Record<string, number> }> = [];
 
 
   // Расставляем союзников (слева, со сдвигом от края)
@@ -1642,6 +1642,9 @@ export async function createPartyCombatants({
       id: combatant.id,
       dexMod,
       initiativeAdvantage: charAbilities.some((a) => a.parameters?.srdKey === "barbarian/feral-instinct"),
+      // Умения с прибавкой к инициативе (Лихая удаль плута) читают их из бойца
+      abilities: charAbilities,
+      abilityMods,
     });
   }
 

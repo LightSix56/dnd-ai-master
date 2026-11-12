@@ -2,3 +2,4 @@
 // к движку: при загрузке регистрируют себя в class-defs.ts и feature-mods.ts.
 // Чтобы добавить класс, допишите строку сюда и в combat-index.ts.
 import "./barbarian";
+import "./rogue";

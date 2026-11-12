@@ -328,7 +328,12 @@ export function extractSpellsFromCharacter(
   const sheetObj: any = char.sheet && typeof char.sheet === "object" ? char.sheet : null;
 
   const lowerClass = String(char.class || char.className || "").trim().toLowerCase();
-  const isInt = /волшеб|маг|wizard|изобретатель|artificer/i.test(lowerClass);
+  // Подклассы-заклинатели «на треть»: Мистический рыцарь (воин) и Мистический ловкач (плут) колдуют на Интеллекте
+  const subclassText = String(char.subclass || "").toLowerCase();
+  const isThirdCaster =
+    (/воин|fighter/.test(lowerClass) && /мистическ\S* рыцар|eldritch knight/.test(subclassText)) ||
+    (/плут|rogue/.test(lowerClass) && /мистическ\S* ловкач|arcane trickster/.test(subclassText));
+  const isInt = /волшеб|маг|wizard|изобретатель|artificer/i.test(lowerClass) || isThirdCaster;
   const isWis = /жрец|cleric|друид|druid|следопыт|ranger/i.test(lowerClass);
   const isCha = /чародей|sorcerer|колдун|warlock|бард|bard|паладин|paladin/i.test(lowerClass);
   const isCaster = isInt || isWis || isCha;
@@ -394,7 +399,13 @@ export function extractSpellsFromCharacter(
   // Fallback слотов по классу и уровню
   if (Object.keys(slots).length === 0 && isCaster) {
     const lvl = Math.max(1, char.level || 1);
-    if (/паладин|paladin|следопыт|ranger/i.test(lowerClass)) {
+    if (isThirdCaster) {
+      // Ячейки подкласса-заклинателя «на треть» (3 ур. — 2 ячейки 1 круга, 7 ур. — 2 круга, 13 ур. — 3 круга…)
+      if (lvl >= 3) slots[1] = { max: lvl >= 7 ? 4 : lvl >= 4 ? 3 : 2, used: 0 };
+      if (lvl >= 7) slots[2] = { max: lvl >= 10 ? 3 : 2, used: 0 };
+      if (lvl >= 13) slots[3] = { max: lvl >= 16 ? 3 : 2, used: 0 };
+      if (lvl >= 19) slots[4] = { max: 1, used: 0 };
+    } else if (/паладин|paladin|следопыт|ranger/i.test(lowerClass)) {
       if (lvl >= 2) slots[1] = { max: 2, used: 0 };
       if (lvl >= 3) slots[1] = { max: 3, used: 0 };
       if (lvl >= 5) { slots[1] = { max: 4, used: 0 }; slots[2] = { max: 2, used: 0 }; }

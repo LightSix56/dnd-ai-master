@@ -18,12 +18,14 @@ import {
 } from "./types";
 import { hasLineOfSight, isInVisionCone } from "./movement";
 import { dynamicAcBonus, spendPrecisionAttack } from "./fighter-pool";
+import { spendHomingStrike } from "./rogue-pool";
 import {
   modAcBonus,
   modAttackAdvantage,
   modAttackBonusDice,
   modAttackInfluence,
   modCritFrom,
+  modDeathSaveAdvantage,
   modSaveAdvantage,
   modSaveBonus,
   modSpeedBonus,
@@ -253,14 +255,7 @@ export function computeAttackAdvantage(
   }
 
   // Ликвидация (Ассасин/Плут-Убийца): преимущество против любого существа, которое ещё не совершало ход в этом бою
-  const isAssassin =
-    attacker.abilities?.some((a) => {
-      const n = (a.name || "").toLowerCase();
-      const id = (a.id || "").toLowerCase();
-      return n.includes("ликвидация") || n.includes("assassinate") || id.includes("assassin");
-    }) ||
-    ((attacker.className?.toLowerCase().includes("ассасин") || attacker.className?.toLowerCase().includes("убийца")) &&
-      (attacker.level ?? 1) >= 3);
+  const isAssassin = hasAssassinate(attacker);
 
   if (isAssassin && !target.hasActed) {
     adv = true;
@@ -454,6 +449,17 @@ export interface SaveResult {
  * Спасбросок. saves[ability].mod уже содержит бонус мастерства,
  * поэтому profBonus здесь повторно НЕ добавляется.
  */
+/** Ликвидация убийцы: умение подкласса (assassin/assassinate) или, для старых боёв, ликвидация по названию */
+export function hasAssassinate(c: Combatant): boolean {
+  return (
+    !!classFeature(c, "assassin/assassinate") ||
+    !!c.abilities?.some((a) => {
+      const n = (a.name || "").toLowerCase();
+      return n.includes("ликвидация") || n.includes("assassinate");
+    })
+  );
+}
+
 export function rollSave(
   c: Combatant,
   ability: AbilityKey,
@@ -575,13 +581,14 @@ export interface DeathSaveResult {
  * <10: 1 провал.
  */
 export function rollDeathSave(c: Combatant): DeathSaveResult {
-  const roll = rollD20(0);
+  const advantage = modDeathSaveAdvantage(c);
+  const roll = rollD20(0, !!advantage);
   const nat = roll.natural;
   const criticalSuccess = nat === 20;
   const criticalFailure = nat === 1;
   const success = criticalSuccess || (!criticalFailure && nat >= 10);
 
-  let text = `спасбросок от смерти [${nat}] — `;
+  let text = `спасбросок от смерти [${nat}]${advantage ? ` (преимущество: ${advantage})` : ""} — `;
   if (criticalSuccess) text += "КРИТИЧЕСКИЙ УСПЕХ (натуральная 20! Восстанавливает 1 HP)";
   else if (criticalFailure) text += "КРИТИЧЕСКИЙ ПРОВАЛ (2 провала)";
   else text += success ? "успех" : "провал";
@@ -791,14 +798,7 @@ export function resolveAttack(
   const fumble = roll.natural === 1;
   const inMeleeRange = (options.distanceFt ?? 5) <= 5;
   const isHelpless = hasCondition(target, "paralyzed") || hasCondition(target, "unconscious");
-  const isAssassin =
-    attacker.abilities?.some((a) => {
-      const n = (a.name || "").toLowerCase();
-      const id = (a.id || "").toLowerCase();
-      return n.includes("ликвидация") || n.includes("assassinate") || id.includes("assassin");
-    }) ||
-    ((attacker.className?.toLowerCase().includes("ассасин") || attacker.className?.toLowerCase().includes("убийца")) &&
-      (attacker.level ?? 1) >= 3);
+  const isAssassin = hasAssassinate(attacker);
   const isSurprised = hasCondition(target, "surprised");
 
   // Вдохновение барда спасает промах (не критический)
@@ -817,6 +817,16 @@ export function resolveAttack(
       roll.modifier += precision.bonus;
       roll.total += precision.bonus;
       precisionText = ` (Точная атака +${precision.bonus})`;
+    }
+  }
+
+  // Самонаводящиеся удары Клинка души: кость псионической энергии исправляет промах психическим клинком
+  if (!natCrit && !fumble && roll.total < targetAC) {
+    const homing = spendHomingStrike(attacker, attackToUse, targetAC - roll.total);
+    if (homing) {
+      roll.modifier += homing.bonus;
+      roll.total += homing.bonus;
+      precisionText += ` (Самонаводящиеся удары +${homing.bonus})`;
     }
   }
 

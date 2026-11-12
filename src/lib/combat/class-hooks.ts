@@ -52,6 +52,28 @@ export interface ClassModule {
   endTurn?(state: CombatState, c: Combatant, phase: "before" | "after"): void;
   afterAbility?(state: CombatState, c: Combatant, srdKey: string | undefined): void;
   afterSpell?(state: CombatState, caster: Combatant, spellLevel: number): void;
+  /**
+   * Скрытая атака разрешена и без преимущества и без союзника у цели (Лихая удаль, Проницательный бой).
+   * Помеха на бросок по-прежнему запрещает её. Возвращает причину для журнала или null
+   */
+  sneakAllowed?(state: CombatState, attacker: Combatant, target: Combatant, attack: Attack): string | null;
+  /** Скрытая атака нанесла урон: умения, срабатывающие после неё (Загробные вопли, Раздирание разума). Возвращает текст для строки атаки */
+  sneakDealt?(state: CombatState, attacker: Combatant, target: Combatant, attack: Attack, info: SneakInfo): string;
+  /** Боец упал до 0 хитов (для существ вне игроков — погиб): Жетон души */
+  creatureDown?(state: CombatState, target: Combatant): void;
+  /** Спрятаться: умение даёт преимущество на проверку Скрытности (Высокая скрытность) */
+  hideAdvantage?(state: CombatState, c: Combatant): string | null;
+  /** Помеха на спасброски цели против заклинания, которое накладывает caster (Магическая засада) */
+  castSaveDisadvantage?(state: CombatState, caster: Combatant, target: Combatant): string | null;
+}
+
+/** Сведения о сработавшей Скрытой атаке */
+export interface SneakInfo {
+  /** Кости урона, например «3d6» */
+  dice: string;
+  /** Выпавший урон Скрытой атаки */
+  amount: number;
+  crit: boolean;
 }
 
 const MODULES: ClassModule[] = [];
@@ -137,5 +159,34 @@ export const classHooks = {
   },
   afterSpell(state: CombatState, caster: Combatant, spellLevel: number): void {
     for (const m of MODULES) m.afterSpell?.(state, caster, spellLevel);
+  },
+  sneakAllowed(state: CombatState, attacker: Combatant, target: Combatant, attack: Attack): string | null {
+    for (const m of MODULES) {
+      const out = m.sneakAllowed?.(state, attacker, target, attack);
+      if (out) return out;
+    }
+    return null;
+  },
+  sneakDealt(state: CombatState, attacker: Combatant, target: Combatant, attack: Attack, info: SneakInfo): string {
+    let text = "";
+    for (const m of MODULES) text += m.sneakDealt?.(state, attacker, target, attack, info) ?? "";
+    return text;
+  },
+  creatureDown(state: CombatState, target: Combatant): void {
+    for (const m of MODULES) m.creatureDown?.(state, target);
+  },
+  hideAdvantage(state: CombatState, c: Combatant): string | null {
+    for (const m of MODULES) {
+      const out = m.hideAdvantage?.(state, c);
+      if (out) return out;
+    }
+    return null;
+  },
+  castSaveDisadvantage(state: CombatState, caster: Combatant, target: Combatant): string | null {
+    for (const m of MODULES) {
+      const out = m.castSaveDisadvantage?.(state, caster, target);
+      if (out) return out;
+    }
+    return null;
   },
 };

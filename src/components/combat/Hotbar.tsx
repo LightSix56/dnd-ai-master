@@ -355,9 +355,11 @@ export function Hotbar({
             ? false
             : !actionAvailable;
         const isTargetingThis = activeTargeting?.type === "ability" && activeTargeting.id === ab.id;
+        // Реакция вне своего хода (Зачинщик скаута, Частица души фантома) доступна и в чужой ход
+        const turnBlocked = !isMyTurn && !ab.parameters?.offTurn;
         const warning = isTargetingThis
           ? undefined
-          : !isMyTurn
+          : turnBlocked
           ? "Не ваш ход"
           : noUses
           ? "Использования закончились"
@@ -376,7 +378,7 @@ export function Hotbar({
             barClass="bg-purple-500"
             cost={kind}
             active={isTargetingThis}
-            unavailable={!isTargetingThis && (disabled || noUses || costBlocked)}
+            unavailable={!isTargetingThis && (isDead || turnBlocked || noUses || costBlocked)}
             onClick={() => abilityClick(ab, isTargetingThis)}
             tooltip={{
               title: ab.name,

@@ -623,9 +623,11 @@ describe("умения SRD в бою: волна проверки", () => {
     expect(attacksPerAction("Колдун", 5, warlock)).toBe(2);
     expect(attacksPerAction("Колдун", 5, [])).toBe(1);
 
-    const names = (sub: string) => abilitiesForClass("Плут", 3, sub).map((a) => a.name);
-    expect(names("Убийца")).toContain("Ликвидация (Убийца)");
-    expect(names("Вор")).not.toContain("Ликвидация (Убийца)");
+    // Ликвидация приходит из правил подкласса (classes/rogue.ts), а не из библиотеки умений
+    const keys = (sub: string) =>
+      extractAbilitiesFromCharacter({ id: "r", class: "Плут", subclass: sub }, 3, 3, { DEX: 3 }).map((a) => a.parameters?.srdKey);
+    expect(keys("Убийца")).toContain("assassin/assassinate");
+    expect(keys("Вор")).not.toContain("assassin/assassinate");
 
     const ws = { usesFormula: "wildShape" as const };
     expect(resolveAbilityUses(ws, { level: 19, profBonus: 6 }).usesMax).toBe(2);
