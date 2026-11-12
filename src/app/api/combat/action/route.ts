@@ -261,6 +261,7 @@ export async function POST(req: Request) {
               ok: true,
               x: act.x,
               y: act.y,
+              path: res.path,
               costFt: res.costFt,
               remainingFt: res.remainingFt,
               opportunityAttacks: res.opportunityAttacks,
@@ -374,6 +375,7 @@ export async function POST(req: Request) {
       const result = moveCombatant(state, combatantId, { x, y });
       await saveState(combatId, state);
       return respond(combatId, {
+        path: result.path,
         costFt: result.costFt,
         remainingFt: result.remainingFt,
         opportunityAttacks: result.opportunityAttacks,

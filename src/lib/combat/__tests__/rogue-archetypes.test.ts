@@ -310,6 +310,7 @@ describe("Дуэлянт (Головорез): Щегольство", () => {
     foe.speed = 100;
     state.turnOrder = ["orc", "r", "friend"];
     state.currentTurnIndex = 0;
+    for (const c of state.combatants) if (c.id !== "orc") c.reactionUsed = true; // без остановки на удар
     moveCombatant(state, "orc", { x: 17, y: 5 });
     expect(cond(foe, "panache")).toBeUndefined();
   });

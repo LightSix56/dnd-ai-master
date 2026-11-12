@@ -130,9 +130,69 @@ describe("Opportunity Attacks & Reactions Enhancement", () => {
     const updatedEnemy = state.require("enemy");
     expect(updatedEnemy.reactionUsed).toBe(true);
 
+    // Боец остановился в последней клетке досягаемости (2,3), а не дошёл до (2,4)
     const updatedMover = state.require("mover");
     expect(updatedMover.x).toBe(2);
-    expect(updatedMover.y).toBe(4);
+    expect(updatedMover.y).toBe(3);
+    expect(result.path).toEqual([{ x: 2, y: 3 }]);
+    expect(result.costFt).toBe(5);
+    expect(updatedMover.movementUsed).toBe(5);
+  });
+
+  it("Test 1b: после остановки боец идёт дальше без повторной атаки по нему", () => {
+    const mover = createMockCombatant({ id: "mover", type: "player", x: 2, y: 2, hpCurrent: 30, hpMax: 30 });
+    const enemy = createMockCombatant({ id: "enemy", type: "enemy", x: 3, y: 2, attacks: [mockMeleeAttack] });
+    const state = createTestCombatState([mover, enemy]);
+
+    moveCombatant(state, mover.id, { x: 2, y: 4 }, { skipTurnCheck: true });
+    const hpAfterFirst = state.require("mover").hpCurrent;
+    const second = moveCombatant(state, mover.id, { x: 2, y: 4 }, { skipTurnCheck: true });
+
+    expect(second.opportunityAttacks).toHaveLength(0);
+    expect(state.require("mover").hpCurrent).toBe(hpAfterFirst);
+    expect(state.require("mover").y).toBe(4);
+    expect(state.require("mover").movementUsed).toBe(10);
+  });
+
+  it("Test 1c: выход первым же шагом — боец остаётся на месте, движение не тратится", () => {
+    const mover = createMockCombatant({ id: "mover", type: "player", x: 2, y: 2, hpCurrent: 30, hpMax: 30 });
+    const enemy = createMockCombatant({ id: "enemy", type: "enemy", x: 3, y: 2, attacks: [mockMeleeAttack] });
+    const state = createTestCombatState([mover, enemy]);
+
+    const res = moveCombatant(state, mover.id, { x: 1, y: 2 }, { skipTurnCheck: true });
+
+    expect(res.opportunityAttacks).toHaveLength(1);
+    expect(res.path).toEqual([]);
+    expect(res.costFt).toBe(0);
+    expect(state.require("mover").x).toBe(2);
+    expect(state.require("mover").movementUsed).toBe(0);
+  });
+
+  it("Test 1d: несколько провоцирующих с разными клетками выхода — первый останавливает бойца, второй бьёт позже", () => {
+    const mover = createMockCombatant({ id: "mover", type: "player", x: 2, y: 2, hpCurrent: 60, hpMax: 60 });
+    const near = createMockCombatant({ id: "near", type: "enemy", x: 3, y: 2, attacks: [mockMeleeAttack] });
+    const far = createMockCombatant({ id: "far", type: "enemy", x: 3, y: 5, attacks: [mockMeleeAttack] });
+    const state = createTestCombatState([mover, near, far]);
+
+    const first = moveCombatant(state, mover.id, { x: 2, y: 8 }, { skipTurnCheck: true });
+    expect(first.opportunityAttacks.map((o) => o.attackerId)).toEqual(["near"]);
+    expect(state.require("mover").y).toBe(3);
+    expect(state.require("far").reactionUsed).toBe(false);
+
+    const second = moveCombatant(state, mover.id, { x: 2, y: 8 }, { skipTurnCheck: true });
+    expect(second.opportunityAttacks.map((o) => o.attackerId)).toEqual(["far"]);
+    expect(state.require("mover").y).toBe(6);
+  });
+
+  it("Test 1e: двое с одной клеткой выхода бьют оба", () => {
+    const mover = createMockCombatant({ id: "mover", type: "player", x: 2, y: 2, hpCurrent: 60, hpMax: 60 });
+    const a = createMockCombatant({ id: "a", type: "enemy", x: 3, y: 2, attacks: [mockMeleeAttack] });
+    const b = createMockCombatant({ id: "b", type: "enemy", x: 1, y: 2, attacks: [mockMeleeAttack] });
+    const state = createTestCombatState([mover, a, b]);
+
+    const res = moveCombatant(state, mover.id, { x: 2, y: 5 }, { skipTurnCheck: true });
+    expect(res.opportunityAttacks.map((o) => o.attackerId).sort()).toEqual(["a", "b"]);
+    expect(state.require("mover").y).toBe(3);
   });
 
   it("Test 2: Moving with condition disengaging does NOT provoke opportunity attack", () => {
@@ -206,9 +266,9 @@ describe("Opportunity Attacks & Reactions Enhancement", () => {
 
     const updatedMover = state.require("mover");
     expect(updatedMover.hpCurrent).toBeLessThanOrEqual(0);
-    // Mover must NOT complete movement to (2, 4)
+    // Mover must NOT complete movement to (2, 4): он падает в клетке удара (2, 3)
     expect(updatedMover.x).toBe(2);
-    expect(updatedMover.y).toBe(2);
+    expect(updatedMover.y).toBe(3);
     // Mover must fall prone
     expect(updatedMover.conditions.some((c) => c.type === "prone")).toBe(true);
 
@@ -364,9 +424,9 @@ describe("Opportunity Attacks & Reactions Enhancement", () => {
 
     const updatedMover = state.require("mover");
     expect(updatedMover.hpCurrent).toBe(45);
-    // Mover halted at start position (2, 2)
+    // Mover halted in the exit cell (2, 3), where he was hit
     expect(updatedMover.x).toBe(2);
-    expect(updatedMover.y).toBe(2);
+    expect(updatedMover.y).toBe(3);
     // Movement used set to effective speed (remaining movement = 0)
     expect(updatedMover.movementUsed).toBe(30);
 

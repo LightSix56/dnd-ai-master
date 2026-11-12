@@ -293,6 +293,21 @@ export function findOpportunityAttackers(
   reachFt = 5,
   mapElements: MapElement[] = []
 ): Combatant[] {
+  return findOpportunityExits(mover, path, combatants, reachFt, mapElements).map((e) => e.attacker);
+}
+
+/**
+ * Те же провокации, но с клеткой выхода: `exitIndex` — индекс клетки маршрута `path`,
+ * последней внутри досягаемости врага (-1 — боец стоит в исходной клетке и выходит из
+ * досягаемости первым же шагом). Именно там враг бьёт по возможности.
+ */
+export function findOpportunityExits(
+  mover: Combatant,
+  path: Cell[],
+  combatants: Combatant[],
+  reachFt = 5,
+  mapElements: MapElement[] = []
+): { attacker: Combatant; exitIndex: number }[] {
   if (path.length === 0) return [];
 
   // Отход (disengaging) полностью отменяет провоцированные атаки
@@ -309,7 +324,7 @@ export function findOpportunityAttackers(
   const inReach = (a: Cell, b: Cell) =>
     Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y)) <= reachCells;
 
-  const attackers: Combatant[] = [];
+  const attackers: { attacker: Combatant; exitIndex: number }[] = [];
   const fullRoute: Cell[] = [{ x: mover.x, y: mover.y }, ...path];
 
   for (const c of combatants) {
@@ -332,19 +347,19 @@ export function findOpportunityAttackers(
 
     // Проверяем, вышел ли бегущий из зоны досягаемости врага на каком-либо шаге маршрута
     let wasInReach = inReach(fullRoute[0], c);
-    let provoked = false;
+    let exitIndex: number | null = null;
 
     for (let i = 1; i < fullRoute.length; i++) {
       const nowInReach = inReach(fullRoute[i], c);
       if (wasInReach && !nowInReach) {
-        provoked = true;
+        exitIndex = i - 2;
         break;
       }
       wasInReach = nowInReach;
     }
 
-    if (provoked) {
-      attackers.push(c);
+    if (exitIndex !== null) {
+      attackers.push({ attacker: c, exitIndex });
     }
   }
   return attackers;

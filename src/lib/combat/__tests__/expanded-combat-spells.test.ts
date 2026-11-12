@@ -274,6 +274,7 @@ describe("Expanded Combat Spells Test Suite", () => {
 
       // Enemy moves 1 cell
       state.currentTurnIndex = 1; // enemy turn
+      caster.reactionUsed = true; // без провоцированной атаки, которая остановила бы орка
       moveCombatant(state, enemy.id, { x: 4, y: 2 });
 
       // Enemy took secondary thunder damage from movement (2d8 at lvl 5)

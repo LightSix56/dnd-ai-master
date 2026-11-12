@@ -1248,7 +1248,10 @@ export function CombatView({ combatId, campaignId, roomCode, onClose, onCombatEn
     const opps = data?.opportunityAttacks || data?.result?.opportunityAttacks;
     if (opps?.length && combat) {
       toast.warning(`Провокация: ${opps.length} атак(и) вслед!`);
-      const mover = combat.combatants.find((c) => c.id === combatantId);
+      // Боец остановился в клетке выхода из досягаемости — удар играем по нему там
+      const stop = (data?.path ?? data?.result?.path)?.at(-1);
+      const moverBefore = combat.combatants.find((c) => c.id === combatantId);
+      const mover = moverBefore && stop ? { ...moverBefore, x: stop.x, y: stop.y } : moverBefore;
       for (const opp of opps) {
         const attacker = combat.combatants.find((c) => c.id === opp.attackerId);
         if (attacker && mover) {

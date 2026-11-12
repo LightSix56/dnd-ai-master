@@ -35,7 +35,7 @@ import {
   coversCell,
   hasCoverBetween,
   determineFacingTowards,
-  findOpportunityAttackers,
+  findOpportunityExits,
   findPath,
   getAoeCells,
   hasLineOfSight,
@@ -1786,117 +1786,73 @@ export function moveCombatant(
   );
   if (!result.ok) throw new EngineError(result.reason ?? "Путь не найден");
 
-  // Провокации ищем до перемещения — по фактическому маршруту
+  // Провокации ищем до перемещения — по фактическому маршруту. Боец останавливается
+  // в клетке выхода из досягаемости первого, кто реально может ударить: удар
+  // (и его анимация) приходится на ту клетку, где боец стоит, а не на конечную точку.
   const disengaging = mover.conditions.some((c) => c.type === "disengaging");
-  const attackers = disengaging
+  const exits = disengaging
     ? []
-    : findOpportunityAttackers(mover, result.path, state.combatants, 5, state.mapElements);
+    : findOpportunityExits(mover, result.path, state.combatants, 5, state.mapElements);
 
   const initialMovementUsed = mover.movementUsed;
   const startCell = { x: mover.x, y: mover.y };
-  mover.movementUsed += result.costFt;
-  state.mark(combatantId);
-  state.addLog(
-    `${mover.name} перемещается на ${result.costFt} фт (осталось ${remainingMovement(mover)} фт)`,
-    "move",
-    mover.name
-  );
 
-  // Провокации разрешаем, пока боец ещё в исходной клетке: checkReach меряет
-  // расстояние по текущим координатам, а из конечной точки атака была бы «далеко»
-  const opportunityAttacks: AttackOutcome[] = [];
-  let movementInterrupted = false;
-
-  for (const attacker of attackers) {
-    const melee = attacker.attacks.find((a) => a.kind === "melee");
-    if (!melee) continue;
-    // Реакция расходуется вне очереди ходов, поэтому экономику действий обходим
-    const reach = checkReach(attacker, mover, melee, state.mapElements);
-    if (!reach.ok) continue;
-
-    const resolution = resolveAttack(attacker, mover, melee, {
-      distanceFt: reach.distanceFt,
-      allCombatants: state.combatants,
-      manualDisadvantage: !!modOpportunityDisadvantage(mover),
-    });
-    attacker.reactionUsed = true;
-    state.mark(attacker.id);
-
-    const text = `Провоцированная атака: ${attacker.name} → ${mover.name}: ${resolution.text}`;
-    state.addLog(text, "attack", attacker.name);
-    if (resolution.hit && resolution.damage > 0) {
-      dealDamage(state, mover.id, resolution.damage, {
-        damageType: melee.damage[0]?.type,
-        parts: resolution.damageParts,
-        isCritical: resolution.crit,
-        isAttack: true,
-        attackerId: attacker.id,
-        source: attacker.id,
+  let stopIdx: number | null = null;
+  let stopAttackers: Combatant[] = [];
+  const exitIndexes = [...new Set(exits.map((e) => e.exitIndex))].sort((x, y) => x - y);
+  for (const idx of exitIndexes) {
+    const cell = idx < 0 ? startCell : result.path[idx];
+    const probe = { ...mover, x: cell.x, y: cell.y };
+    const group = exits
+      .filter((e) => e.exitIndex === idx)
+      .map((e) => e.attacker)
+      .filter((att) => {
+        const melee = att.attacks.find((a) => a.kind === "melee");
+        return !!melee && checkReach(att, probe, melee, state.mapElements).ok;
       });
-    }
-    opportunityAttacks.push({
-      attackerId: attacker.id,
-      targetId: mover.id,
-      attack: melee,
-      hit: resolution.hit,
-      crit: resolution.crit,
-      damage: resolution.damage,
-      text,
-      targetHp: state.require(mover.id).hpCurrent,
-    });
-
-    if (mover.hpCurrent <= 0) {
-      mover.movementUsed = initialMovementUsed;
-      if (!mover.conditions.some((c) => c.type === "prone")) {
-        mover.conditions.push({ type: "prone" });
-      }
-      state.addLog(
-        `${mover.name} падает без сознания от провоцированной атаки и прерывает движение!`,
-        "damage",
-        mover.name
-      );
-      state.mark(mover.id);
-      movementInterrupted = true;
+    if (group.length > 0) {
+      stopIdx = idx;
+      stopAttackers = group;
       break;
     }
+  }
 
-    if (resolution.hit) {
-      const hasSentinel =
-        attacker.monsterTraits?.some((t) => {
-          const n = (t.name || "").toLowerCase();
-          return n.includes("страж") || n.includes("sentinel");
-        }) ||
-        attacker.conditions.some((c) => {
-          const t = (c.type || "").toLowerCase();
-          return t === "sentinel" || t === "страж";
-        }) ||
-        Boolean((melee as any).stopsSpeed);
-
-      if (hasSentinel) {
-        mover.movementUsed = effectiveSpeed(mover);
-        state.addLog(
-          `${attacker.name} («Страж») останавливает ${mover.name} на месте!`,
-          "system",
-          attacker.name
-        );
-        state.mark(mover.id);
-        movementInterrupted = true;
-        break;
-      }
+  const walkPath = stopIdx === null ? result.path : result.path.slice(0, stopIdx + 1);
+  let walkCost = result.costFt;
+  if (stopIdx !== null) {
+    if (stopIdx < 0) {
+      walkCost = 0;
+    } else {
+      const partial = findPath(
+        mover,
+        result.path[stopIdx],
+        budget,
+        state.mapElements,
+        state.combatants,
+        state.gridWidth,
+        state.gridHeight,
+        avoid
+      );
+      walkCost = partial.ok ? partial.costFt : (stopIdx + 1) * 5;
     }
   }
+  const finalCell = walkPath.length > 0 ? walkPath[walkPath.length - 1] : startCell;
 
-  if (movementInterrupted) {
-    return {
-      path: [],
-      costFt: 0,
-      remainingFt: remainingMovement(state.require(combatantId)),
-      opportunityAttacks,
-    };
+  mover.movementUsed += walkCost;
+  state.mark(combatantId);
+  if (walkCost > 0 || stopIdx === null) {
+    state.addLog(
+      `${mover.name} перемещается на ${walkCost} фт (осталось ${remainingMovement(mover)} фт)`,
+      "move",
+      mover.name
+    );
   }
 
-  for (let stepIdx = 0; stepIdx < result.path.length; stepIdx++) {
-    const stepCell = result.path[stepIdx];
+  let movementInterrupted = false;
+  const opportunityAttacks: AttackOutcome[] = [];
+
+  for (let stepIdx = 0; stepIdx < walkPath.length; stepIdx++) {
+    const stepCell = walkPath[stepIdx];
     mover.x = stepCell.x;
     mover.y = stepCell.y;
 
@@ -1957,18 +1913,18 @@ export function moveCombatant(
 
   if (movementInterrupted) {
     return {
-      path: result.path.slice(0, result.path.findIndex((c) => c.x === mover.x && c.y === mover.y) + 1),
+      path: walkPath.slice(0, walkPath.findIndex((c) => c.x === mover.x && c.y === mover.y) + 1),
       costFt: mover.movementUsed - initialMovementUsed,
       remainingFt: remainingMovement(state.require(combatantId)),
       opportunityAttacks,
     };
   }
 
-  mover.x = target.x;
-  mover.y = target.y;
+  mover.x = finalCell.x;
+  mover.y = finalCell.y;
 
   // D&D 5e: Громовой резонанс (Booming Blade) — урон при перемещении в другую клетку
-  if (result.costFt > 0) {
+  if (walkCost > 0) {
     const boomCond = mover.conditions.find((c) => c.type === "booming_resonance");
     if (boomCond && mover.hpCurrent > 0) {
       const val = boomCond.value ?? mover.level ?? 1;
@@ -1992,8 +1948,7 @@ export function moveCombatant(
 
   // D&D 5e: Проверка лавы и воды при перемещении
   const enteredLava =
-    result.path.some((cell) => isLavaTerrain(cell, state.mapElements)) ||
-    isLavaTerrain(target, state.mapElements);
+    walkPath.some((cell) => isLavaTerrain(cell, state.mapElements));
 
   if (enteredLava && mover.hpCurrent > 0) {
     const fireDmg = rollDice("2d10").total;
@@ -2002,8 +1957,7 @@ export function moveCombatant(
   }
 
   const enteredWater =
-    result.path.some((cell) => isWaterTerrain(cell, state.mapElements)) ||
-    isWaterTerrain(target, state.mapElements);
+    walkPath.some((cell) => isWaterTerrain(cell, state.mapElements));
 
   if (enteredWater) {
     const hasWaterWalk =
@@ -2018,11 +1972,90 @@ export function moveCombatant(
   }
 
   // Подклассы Воина: разбег, колючие кусты, Держать строй, эхо
-  classHooks.onMove(state, mover, startCell, result.path);
+  if (walkPath.length > 0) classHooks.onMove(state, mover, startCell, walkPath);
+
+
+  // Провоцированные атаки: боец уже стоит в клетке выхода, checkReach меряет по ней
+  for (const attacker of stopAttackers) {
+    if (mover.hpCurrent <= 0) break;
+    const melee = attacker.attacks.find((a) => a.kind === "melee");
+    if (!melee) continue;
+    // Реакция расходуется вне очереди ходов, поэтому экономику действий обходим
+    const reach = checkReach(attacker, mover, melee, state.mapElements);
+    if (!reach.ok) continue;
+
+    const resolution = resolveAttack(attacker, mover, melee, {
+      distanceFt: reach.distanceFt,
+      allCombatants: state.combatants,
+      manualDisadvantage: !!modOpportunityDisadvantage(mover),
+    });
+    attacker.reactionUsed = true;
+    state.mark(attacker.id);
+
+    const text = `Провоцированная атака: ${attacker.name} → ${mover.name}: ${resolution.text}`;
+    state.addLog(text, "attack", attacker.name);
+    if (resolution.hit && resolution.damage > 0) {
+      dealDamage(state, mover.id, resolution.damage, {
+        damageType: melee.damage[0]?.type,
+        parts: resolution.damageParts,
+        isCritical: resolution.crit,
+        isAttack: true,
+        attackerId: attacker.id,
+        source: attacker.id,
+      });
+    }
+    opportunityAttacks.push({
+      attackerId: attacker.id,
+      targetId: mover.id,
+      attack: melee,
+      hit: resolution.hit,
+      crit: resolution.crit,
+      damage: resolution.damage,
+      text,
+      targetHp: state.require(mover.id).hpCurrent,
+    });
+
+    if (mover.hpCurrent <= 0) {
+      if (!mover.conditions.some((c) => c.type === "prone")) {
+        mover.conditions.push({ type: "prone" });
+      }
+      state.addLog(
+        `${mover.name} падает без сознания от провоцированной атаки и прерывает движение!`,
+        "damage",
+        mover.name
+      );
+      state.mark(mover.id);
+      break;
+    }
+
+    if (resolution.hit) {
+      const hasSentinel =
+        attacker.monsterTraits?.some((t) => {
+          const n = (t.name || "").toLowerCase();
+          return n.includes("страж") || n.includes("sentinel");
+        }) ||
+        attacker.conditions.some((c) => {
+          const t = (c.type || "").toLowerCase();
+          return t === "sentinel" || t === "страж";
+        }) ||
+        Boolean((melee as any).stopsSpeed);
+
+      if (hasSentinel) {
+        mover.movementUsed = effectiveSpeed(mover);
+        state.addLog(
+          `${attacker.name} («Страж») останавливает ${mover.name} на месте!`,
+          "system",
+          attacker.name
+        );
+        state.mark(mover.id);
+        break;
+      }
+    }
+  }
 
   return {
-    path: result.path,
-    costFt: result.costFt,
+    path: walkPath,
+    costFt: walkCost,
     remainingFt: remainingMovement(state.require(combatantId)),
     opportunityAttacks,
   };
