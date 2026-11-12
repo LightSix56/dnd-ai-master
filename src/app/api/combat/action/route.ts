@@ -4,6 +4,8 @@
 
 import { denyCombatAccess } from "@/lib/auth/campaign-access";
 import { db } from "@/lib/db";
+import { randomUUID } from "node:crypto";
+import { rethrowIfPrompt, ReactionPrompt, type ReactionContext } from "@/lib/combat/reactions";
 import {
   CombatState,
   EngineError,
@@ -32,8 +34,10 @@ import {
   toggleDoor,
 } from "@/lib/combat/engine";
 import { runBotTurn, isBotTurn } from "@/lib/combat/bot";
-import { hydrateCombat, dehydrateCombatant, safeParse } from "@/lib/combat/serialize";
-import { TYPE_COLORS, type ActionParameters, type Cell } from "@/lib/combat/types";
+import { hydrateCombat, hydratePendingReaction, dehydrateCombatant, safeParse } from "@/lib/combat/serialize";
+import { runWithReactions } from "@/lib/combat/reaction-runtime";
+import { DECLINE } from "@/lib/combat/reactions";
+import { TYPE_COLORS, type ActionParameters, type Cell, type PendingReactionView } from "@/lib/combat/types";
 import { buildTurnOrder, rollInitiativeForAll } from "@/lib/combat/initiative";
 import { getSpellDefinition } from "@/lib/combat/library-data";
 import { awardCombatVictoryXP } from "@/lib/combat/xp-award";
@@ -56,6 +60,10 @@ async function loadState(combatId: string): Promise<CombatState> {
     include: { combatants: true, mapElements: true },
   });
   if (!row) throw new EngineError("Бой не найден");
+  const pending = hydratePendingReaction(row.pendingReaction);
+  if (pending) {
+    throw new EngineError(`Ожидается решение о реакции: ${pending.prompt.reactorName}`);
+  }
   const state = new CombatState(hydrateCombat(row));
   loadedVersion.set(state, row.updatedAt);
   return state;
@@ -174,6 +182,80 @@ async function syncCharacterPotionConsumed(
   }
 }
 
+/** Ожидающее решение, как оно хранится в `Combat.pendingReaction` */
+interface PendingRecord {
+  id: string;
+  action: string;
+  body: Record<string, unknown>;
+  seed: number;
+  decisions: Record<string, string>;
+  prompt: PendingReactionView["prompt"];
+  createdAt: string;
+}
+
+/**
+ * Выполняет действие с воспроизводимыми бросками. Если герою игрока можно потратить реакцию,
+ * движок бросает ReactionPrompt: состояние не сохраняется, запрос и seed записываются в бой,
+ * клиенты получают окно выбора. Ответ игрока повторяет это же действие (`reaction-response`).
+ */
+async function executeAction(
+  req: Request,
+  body: Record<string, any>,
+  combatId: string,
+  replay?: { seed: number; decisions: Record<string, string> }
+): Promise<Response> {
+  const seed = replay?.seed ?? Math.floor(Math.random() * 4294967296);
+  const ctx: ReactionContext = { decisions: { ...(replay?.decisions ?? {}) }, seq: 0 };
+  try {
+    return await runWithReactions(ctx, seed, () => dispatchAction(req, body));
+  } catch (error) {
+    if (!(error instanceof ReactionPrompt)) throw error;
+    const record: PendingRecord = {
+      id: randomUUID(),
+      action: String(body.action),
+      body,
+      seed,
+      decisions: ctx.decisions,
+      prompt: error.prompt,
+      createdAt: new Date().toISOString(),
+    };
+    await db.combat.update({ where: { id: combatId }, data: { pendingReaction: JSON.stringify(record) } });
+    return respond(combatId, { pendingReaction: hydratePendingReaction(JSON.stringify(record)) });
+  }
+}
+
+/** Ответ игрока на окно реакции: вариант или отказ; действие повторяется с этим решением */
+async function respondToReaction(req: Request, body: Record<string, any>, combatId: string): Promise<Response> {
+  const row = await db.combat.findUnique({ where: { id: combatId }, select: { pendingReaction: true } });
+  const pending = safeParse<PendingRecord | null>(row?.pendingReaction ?? null, null);
+  if (!pending) {
+    return Response.json({ error: "Окно реакции уже закрыто" }, { status: 409 });
+  }
+  if (body.promptId !== pending.id) {
+    return Response.json({ error: "Окно реакции устарело", conflict: true }, { status: 409 });
+  }
+  if (body.combatantId !== pending.prompt.reactorId) {
+    return Response.json({ error: "Это решение принимает другой боец" }, { status: 403 });
+  }
+  const choice = String(body.choice ?? DECLINE);
+  if (choice !== DECLINE && !pending.prompt.options.some((o) => o.id === choice)) {
+    return Response.json({ error: "Такого варианта реакции нет" }, { status: 400 });
+  }
+  // Снимаем ожидание до повтора: если действие снова дойдёт до решения, запишется новое окно.
+  // updateMany с id окна — гарантия, что ответ примет ровно один запрос
+  const cleared = await db.combat.updateMany({
+    where: { id: combatId, pendingReaction: row!.pendingReaction },
+    data: { pendingReaction: null },
+  });
+  if (cleared.count === 0) {
+    return Response.json({ error: "Окно реакции уже закрыто", conflict: true }, { status: 409 });
+  }
+  return executeAction(req, pending.body, combatId, {
+    seed: pending.seed,
+    decisions: { ...pending.decisions, [pending.prompt.key]: choice },
+  });
+}
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
@@ -192,6 +274,35 @@ export async function POST(req: Request) {
     if (denied) {
       return Response.json({ error: denied }, { status: 403 });
     }
+
+    if (action === "reaction-response") return await respondToReaction(req, body, combatId);
+    return await executeAction(req, body, combatId);
+  } catch (error) {
+    return errorResponse(error);
+  }
+}
+
+function errorResponse(error: unknown): Response {
+  // Нарушение правил — это ошибка запроса, а не сбой сервера
+  if (error instanceof EngineError) {
+    return Response.json({ error: error.message }, { status: 400 });
+  }
+  if (error instanceof ConflictError) {
+    return Response.json({ error: error.message, conflict: true }, { status: 409 });
+  }
+  console.error("[combat/action] error:", error);
+  return Response.json(
+    {
+      error: "Не удалось выполнить действие",
+      details: error instanceof Error ? error.message : String(error),
+    },
+    { status: 500 }
+  );
+}
+
+async function dispatchAction(req: Request, body: any): Promise<Response> {
+  try {
+    const { action, combatId } = body as { action: string; combatId: string };
 
     // ===================== ЦИКЛ ХОДОВ =====================
 
@@ -359,6 +470,7 @@ export async function POST(req: Request) {
             stepResults.push({ action: "end-turn", ok: true, nextCombatantId: res.nextId });
           }
         } catch (err: any) {
+          rethrowIfPrompt(err);
           stepResults.push({ action: act.action, ok: false, error: err.message });
         }
       }
@@ -1075,20 +1187,8 @@ export async function POST(req: Request) {
 
     return Response.json({ error: `Неизвестное действие: ${action}` }, { status: 400 });
   } catch (error) {
-    // Нарушение правил — это ошибка запроса, а не сбой сервера
-    if (error instanceof EngineError) {
-      return Response.json({ error: error.message }, { status: 400 });
-    }
-    if (error instanceof ConflictError) {
-      return Response.json({ error: error.message, conflict: true }, { status: 409 });
-    }
-    console.error("[combat/action] error:", error);
-    return Response.json(
-      {
-        error: "Не удалось выполнить действие",
-        details: error instanceof Error ? error.message : String(error),
-      },
-      { status: 500 }
-    );
+    // Окно реакции — не ошибка: его обрабатывает executeAction
+    if (error instanceof ReactionPrompt) throw error;
+    return errorResponse(error);
   }
 }

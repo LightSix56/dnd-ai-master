@@ -203,6 +203,8 @@ model Combat {
   sheetSyncedAt DateTime?
   // Когда за бой начислен опыт (отметка не даёт начислить его дважды)
   xpAwardedAt   DateTime?
+  // Окно выбора реакции, ожидающее ответа игрока: JSON { id, action, body, seed, decisions, prompt }
+  pendingReaction String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

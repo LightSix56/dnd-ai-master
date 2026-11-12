@@ -2,6 +2,8 @@
 // и игрок (через API), и бот. Никаких обращений к БД — роут сам сохраняет
 // изменённых бойцов. Это единственное место, где меняется состояние боя.
 
+import { rand } from "@/lib/rng";
+import { askReaction, rethrowIfPrompt } from "./reactions";
 import { rollDice, rollD20 } from "@/lib/dnd/dice";
 import { distanceFt } from "./grid";
 import {
@@ -455,13 +457,20 @@ export function dealDamage(
 
   if (hasUncannyDodge && canSeeAttacker && !target.reactionUsed && canAct(target) && opts.isAttack && actualAmount > 1) {
     const halved = Math.floor(actualAmount / 2);
-    target.reactionUsed = true;
-    state.addLog(
-      `🛡️ ${target.name} использует «Невероятное уклонение» реакцией! (урон снижен вдвое: ${actualAmount} → ${halved})`,
-      "ability",
-      target.name
-    );
-    actualAmount = halved;
+    const choice = askReaction(target, {
+      title: "Использовать «Невероятное уклонение»?",
+      text: `${dodgeAttacker?.name ?? "Противник"} попадает по цели: ${target.name} — ${actualAmount} урона.`,
+      options: [{ id: "uncanny-dodge", label: `Невероятное уклонение: урон ${actualAmount} → ${halved}` }],
+    });
+    if (choice) {
+      target.reactionUsed = true;
+      state.addLog(
+        `🛡️ ${target.name} использует «Невероятное уклонение» реакцией! (урон снижен вдвое: ${actualAmount} → ${halved})`,
+        "ability",
+        target.name
+      );
+      actualAmount = halved;
+    }
   }
 
   // Подклассы Воина: Парирование, Защитное поле, ослабленные атаки
@@ -1738,6 +1747,7 @@ export function performMultiattack(
           damage: dmgDealt,
         });
       } catch (e: any) {
+        rethrowIfPrompt(e);
         state.addLog(`Атака ${attack.name}: промах/недоступно (${e.message})`, "system", attacker.name);
       }
     }
@@ -1808,7 +1818,15 @@ export function moveCombatant(
       .map((e) => e.attacker)
       .filter((att) => {
         const melee = att.attacks.find((a) => a.kind === "melee");
-        return !!melee && checkReach(att, probe, melee, state.mapElements).ok;
+        if (!melee || !checkReach(att, probe, melee, state.mapElements).ok) return false;
+        // Герой игрока сам решает, тратить ли реакцию; отказавшийся не останавливает бойца
+        return (
+          askReaction(att, {
+            title: "Совершить атаку по возможности?",
+            text: `${mover.name} покидает зону досягаемости: ${att.name}.`,
+            options: [{ id: "opportunity-attack", label: `Атака по возможности: ${melee.name}` }],
+          }) !== null
+        );
       });
     if (group.length > 0) {
       stopIdx = idx;
@@ -3151,7 +3169,7 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
 
     for (const cell of cells) {
       const zoneEl: MapElement = {
-        id: `spell_zone_${detectedZoneType}_${cell.x}_${cell.y}_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+        id: `spell_zone_${detectedZoneType}_${cell.x}_${cell.y}_${Date.now()}_${rand().toString(36).slice(2, 7)}`,
         type: "difficult",
         x: cell.x,
         y: cell.y,

@@ -1,3 +1,4 @@
+import { rand } from "@/lib/rng";
 // Утилита для бросков кубиков D&D 5e
 
 export interface DiceRoll {
@@ -89,7 +90,7 @@ export function rollDice(notation: string): DiceRoll {
           const count = dMatch[1] ? parseInt(dMatch[1], 10) : 1;
           const sides = parseInt(dMatch[2], 10);
           for (let i = 0; i < count; i++) {
-            const r = 1 + Math.floor(Math.random() * sides);
+            const r = 1 + Math.floor(rand() * sides);
             rolls.push(isNeg ? -r : r);
           }
         }
@@ -106,7 +107,7 @@ export function rollDice(notation: string): DiceRoll {
   const { count, sides, modifier } = parseDiceNotation(notation);
   const rolls: number[] = [];
   for (let i = 0; i < count; i++) {
-    rolls.push(1 + Math.floor(Math.random() * sides));
+    rolls.push(1 + Math.floor(rand() * sides));
   }
   const sum = rolls.reduce((a, b) => a + b, 0);
   const total = sum + modifier;
@@ -166,7 +167,7 @@ export function rollD20(
     else mode = "normal";
   }
 
-  const roll1 = 1 + Math.floor(Math.random() * 20);
+  const roll1 = 1 + Math.floor(rand() * 20);
   if (mode === "normal") {
     return {
       d20: roll1,
@@ -181,7 +182,7 @@ export function rollD20(
     };
   }
 
-  const roll2 = 1 + Math.floor(Math.random() * 20);
+  const roll2 = 1 + Math.floor(rand() * 20);
   const chosen = mode === "advantage" ? Math.max(roll1, roll2) : Math.min(roll1, roll2);
   const other = chosen === roll1 ? roll2 : roll1;
 

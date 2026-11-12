@@ -1,3 +1,4 @@
+import { rand } from "@/lib/rng";
 import type { CombatState } from "./engine";
 import type { Cell, Combatant } from "./types";
 
@@ -79,7 +80,7 @@ export function resolveMoraleCheck(
   d20RollOverride?: number
 ): { passed: boolean; roll: number; dc: number } {
   const wisMod = combatant.saves?.WIS?.mod ?? combatant.abilityMods?.WIS ?? 0;
-  const d20 = d20RollOverride ?? Math.floor(Math.random() * 20) + 1;
+  const d20 = d20RollOverride ?? Math.floor(rand() * 20) + 1;
   const total = d20 + wisMod;
   return {
     passed: total >= dc,

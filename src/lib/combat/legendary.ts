@@ -1,3 +1,4 @@
+import { rethrowIfPrompt } from "./reactions";
 import { distanceFt } from "./grid";
 import { performAttack, type CombatState } from "./engine";
 import { canAct } from "./rules";
@@ -55,6 +56,7 @@ export function performLegendaryAction(
       try {
         performAttack(state, boss.id, targetId, attack.id);
       } catch (e) {
+        rethrowIfPrompt(e);
         state.addLog(`Действие: ${opt.description}`, "system", boss.name);
       }
       return;

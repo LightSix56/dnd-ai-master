@@ -10,6 +10,8 @@
 //
 // Движок вызывает функции этого файла из engine.ts; сам файл берёт у движка урон, эффекты и атаки.
 
+import { rand } from "@/lib/rng";
+import { rethrowIfPrompt } from "./reactions";
 import { rollDice, rollD20 } from "@/lib/dnd/dice";
 import { getLineCells, isCellBlocked } from "./movement";
 import { distanceFt } from "./grid";
@@ -1416,7 +1418,7 @@ function passiveHitRiders(state: CombatState, attacker: Combatant, target: Comba
 }
 
 function randomPick<T>(list: T[]): T | undefined {
-  return list[Math.floor(Math.random() * list.length)];
+  return list[Math.floor(rand() * list.length)];
 }
 
 /**
@@ -1658,7 +1660,8 @@ export function fighterOnMove(state: CombatState, mover: Combatant, start: { x: 
           mover.y = start.y;
           try {
             attackFromEcho(state, k, e, mover, { skipCost: true, kind: "melee" });
-          } catch {
+          } catch (e) {
+            rethrowIfPrompt(e);
             k.reactionUsed = false;
           } finally {
             mover.x = end.x;

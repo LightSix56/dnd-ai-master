@@ -61,6 +61,7 @@ import { AttacksAbilitiesEditor } from "./AttacksAbilitiesEditor";
 import { LibraryManagerModal } from "./LibraryManagerModal";
 import { RoleSelectorModal } from "./RoleSelectorModal";
 import { WildShapeModal } from "./WildShapeModal";
+import { ReactionPrompt } from "./ReactionPrompt";
 import { PresetsModal } from "./PresetsModal";
 import { MapPresetsModal } from "./MapPresetsModal";
 import { createPresetFromCombatant } from "@/lib/combat/preset-data";
@@ -170,6 +171,7 @@ export function CombatView({ combatId, campaignId, roomCode, onClose, onCombatEn
   // Шаги хода бота: показываем и ждём «Продолжить»
   const [botSteps, setBotSteps] = useState<string[] | null>(null);
   const [botRunning, setBotRunning] = useState(false);
+  const [reactionBusy, setReactionBusy] = useState(false);
   const [outcome, setOutcome] = useState<"players" | "enemies" | null>(null);
   const [spellNames, setSpellNames] = useState<Record<string, string>>({});
   /** Параметры заклинаний из библиотеки — нужны, чтобы понять AoE это или точечная цель */
@@ -540,8 +542,9 @@ export function CombatView({ combatId, campaignId, roomCode, onClose, onCombatEn
             JSON.stringify(prev.combatants) !== JSON.stringify(data.combat.combatants);
           const hasMapChange =
             JSON.stringify(prev.mapElements) !== JSON.stringify(data.combat.mapElements);
+          const hasReactionChange = (prev.pendingReaction?.id ?? null) !== (data.combat.pendingReaction?.id ?? null);
 
-          if (hasLogChange || hasTurnChange || hasCombatantChange || hasMapChange) {
+          if (hasLogChange || hasTurnChange || hasCombatantChange || hasMapChange || hasReactionChange) {
             // Визуализируем новые атаки из лога боя (ходы ИИ-Мастера и других участников)
             if (prev.log.length < data.combat.log.length) {
               const newEntries = data.combat.log.slice(prev.log.length);
@@ -1041,44 +1044,48 @@ export function CombatView({ combatId, campaignId, roomCode, onClose, onCombatEn
     setDisadvantage(false);
   }
 
+  /** Шаги хода бота: журнал и анимации. Окно реакции откладывает ход — он дойдёт до конца после ответа */
+  function presentBotTurn(data: Record<string, any> | null) {
+    if (!data || data.pendingReaction) return;
+    const steps: string[] = (data.steps ?? []).map((s: { text: string }) => s.text);
+    setBotSteps(steps.length ? steps : ["Бот не нашёл, что сделать"]);
+    // Воспроизводим анимации из шагов бота
+    if (combat) {
+      for (const step of data.steps ?? []) {
+        const match = step.text.match(/^([^→]+)\s*→\s*([^:]+):\s*(.*)$/);
+        if (match) {
+          const attackerName = match[1].trim();
+          const targetName = match[2].trim();
+          const rest = match[3];
+          const attacker = combat.combatants.find((c) => c.name === attackerName);
+          const target = combat.combatants.find((c) => c.name === targetName);
+          if (attacker && target) {
+            const isCrit = rest.includes("крит") || rest.includes("КРИТ");
+            const isMiss = rest.includes("промах") || rest.includes("не попал");
+            const isHit = isCrit || !isMiss;
+            const dmgMatch = rest.match(/(?:,\s*|\s+)(\d+)\s*(?:урона|урон|ед\.\s*урона)/i) ||
+                             rest.match(/урон[^\d]*(\d+)/i) ||
+                             rest.match(/(\d+)\s*(?:хитов|хита)/i);
+            const dmg = dmgMatch ? parseInt(dmgMatch[1], 10) : undefined;
+            const actionName = rest.split(":")[0]?.trim() || "Атака";
+            playCombatAnimation(attacker, target, { name: actionName }, {
+              hit: isHit,
+              crit: isCrit,
+              damage: isHit ? dmg : undefined,
+              isDodge: isMiss,
+            });
+          }
+        }
+      }
+    }
+  }
+
   /** Ход бота: считаем, показываем шаги, ждём «Продолжить» */
   async function runBotTurn() {
     setBotRunning(true);
     try {
       const data = await doAction("bot-turn");
-      if (data) {
-        const steps: string[] = (data.steps ?? []).map((s: { text: string }) => s.text);
-        setBotSteps(steps.length ? steps : ["Бот не нашёл, что сделать"]);
-        // Воспроизводим анимации из шагов бота
-        if (combat) {
-          for (const step of data.steps ?? []) {
-            const match = step.text.match(/^([^→]+)\s*→\s*([^:]+):\s*(.*)$/);
-            if (match) {
-              const attackerName = match[1].trim();
-              const targetName = match[2].trim();
-              const rest = match[3];
-              const attacker = combat.combatants.find((c) => c.name === attackerName);
-              const target = combat.combatants.find((c) => c.name === targetName);
-              if (attacker && target) {
-                const isCrit = rest.includes("крит") || rest.includes("КРИТ");
-                const isMiss = rest.includes("промах") || rest.includes("не попал");
-                const isHit = isCrit || !isMiss;
-                const dmgMatch = rest.match(/(?:,\s*|\s+)(\d+)\s*(?:урона|урон|ед\.\s*урона)/i) ||
-                                 rest.match(/урон[^\d]*(\d+)/i) ||
-                                 rest.match(/(\d+)\s*(?:хитов|хита)/i);
-                const dmg = dmgMatch ? parseInt(dmgMatch[1], 10) : undefined;
-                const actionName = rest.split(":")[0]?.trim() || "Атака";
-                playCombatAnimation(attacker, target, { name: actionName }, {
-                  hit: isHit,
-                  crit: isCrit,
-                  damage: isHit ? dmg : undefined,
-                  isDodge: isMiss,
-                });
-              }
-            }
-          }
-        }
-      }
+      presentBotTurn(data);
     } finally {
       setBotRunning(false);
     }
@@ -1245,23 +1252,49 @@ export function CombatView({ combatId, campaignId, roomCode, onClose, onCombatEn
       return;
     }
     const data = await doAction("move-combatant", { combatantId, x, y });
+    presentMoveOutcome(data);
+  }
+
+  /** Ответ на окно реакции: действие повторяется на сервере с этим решением и его итог показываем как обычно */
+  async function answerReaction(choice: string) {
+    const pending = combat?.pendingReaction;
+    if (!pending) return;
+    setReactionBusy(true);
+    try {
+      const data = await doAction("reaction-response", {
+        combatantId: pending.prompt.reactorId,
+        promptId: pending.id,
+        choice,
+      });
+      if (!data) {
+        await loadCombat();
+        return;
+      }
+      presentMoveOutcome(data);
+      presentBotTurn(data);
+    } finally {
+      setReactionBusy(false);
+    }
+  }
+
+  /** Провоцированные атаки после перемещения: тост и анимации удара по бойцу в клетке остановки */
+  function presentMoveOutcome(data: Record<string, any> | null) {
     const opps = data?.opportunityAttacks || data?.result?.opportunityAttacks;
-    if (opps?.length && combat) {
-      toast.warning(`Провокация: ${opps.length} атак(и) вслед!`);
-      // Боец остановился в клетке выхода из досягаемости — удар играем по нему там
-      const stop = (data?.path ?? data?.result?.path)?.at(-1);
-      const moverBefore = combat.combatants.find((c) => c.id === combatantId);
+    if (!opps?.length || !combat) return;
+    toast.warning(`Провокация: ${opps.length} атак(и) вслед!`);
+    // Боец остановился в клетке выхода из досягаемости — удар играем по нему там
+    const stop = (data?.path ?? data?.result?.path)?.at(-1);
+    for (const opp of opps) {
+      const attacker = combat.combatants.find((c) => c.id === opp.attackerId);
+      const moverBefore = combat.combatants.find((c) => c.id === opp.targetId);
       const mover = moverBefore && stop ? { ...moverBefore, x: stop.x, y: stop.y } : moverBefore;
-      for (const opp of opps) {
-        const attacker = combat.combatants.find((c) => c.id === opp.attackerId);
-        if (attacker && mover) {
-          playCombatAnimation(attacker, mover, opp.attack || { name: "Удар оружием" }, {
-            hit: opp.hit,
-            crit: opp.crit,
-            damage: opp.damage,
-            isDodge: !opp.hit,
-          });
-        }
+      if (attacker && mover) {
+        playCombatAnimation(attacker, mover, opp.attack || { name: "Удар оружием" }, {
+          hit: opp.hit,
+          crit: opp.crit,
+          damage: opp.damage,
+          isDodge: !opp.hit,
+        });
       }
     }
   }
@@ -2128,6 +2161,16 @@ export function CombatView({ combatId, campaignId, roomCode, onClose, onCombatEn
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Окно выбора реакции: решает владелец героя или ведущий, остальные ждут */}
+      {combat.pendingReaction && (
+        <ReactionPrompt
+          pending={combat.pendingReaction}
+          canAnswer={isDM || userRole === combat.pendingReaction.prompt.reactorId}
+          busy={reactionBusy}
+          onAnswer={answerReaction}
+        />
+      )}
 
       {/* Модальное окно выбора роли / персонажа */}
       {showRoleSelector && (

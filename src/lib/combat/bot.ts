@@ -5,6 +5,8 @@
 // 3. Способности — баффы, телепорты, лечение, Action Surge.
 // 4. Тактическое позиционирование — кайтинг стрелками и магами, использование укрытий.
 
+import { rand } from "@/lib/rng";
+import { rethrowIfPrompt } from "./reactions";
 import { distanceFt } from "./grid";
 import {
   CombatState,
@@ -538,13 +540,13 @@ function getScanningDirections(initialFacing: FacingDirection): FacingDirection[
 /** Выбирает направление взгляда при патрулировании со смещением вероятности в сторону скрытых врагов */
 function pickWeightedFacing(actor: Combatant, targets: Combatant[]): FacingDirection {
   if (targets.length === 0) {
-    return FACING_CYCLE[Math.floor(Math.random() * FACING_CYCLE.length)];
+    return FACING_CYCLE[Math.floor(rand() * FACING_CYCLE.length)];
   }
 
   const nearest = [...targets].sort((a, b) => distanceFt(actor, a) - distanceFt(actor, b))[0];
   const dirToEnemy = determineFacingTowards(actor, nearest);
   const idx = FACING_CYCLE.indexOf(dirToEnemy);
-  if (idx < 0) return FACING_CYCLE[Math.floor(Math.random() * FACING_CYCLE.length)];
+  if (idx < 0) return FACING_CYCLE[Math.floor(rand() * FACING_CYCLE.length)];
 
   const left = (idx - 1 + 8) % 8;
   const right = (idx + 1) % 8;
@@ -561,7 +563,7 @@ function pickWeightedFacing(actor: Combatant, targets: Combatant[]): FacingDirec
     ...FACING_CYCLE,
   ];
 
-  return pool[Math.floor(Math.random() * pool.length)];
+  return pool[Math.floor(rand() * pool.length)];
 }
 
 /** Применение заклинаний (AoE и одиночные) — разряжает при первой возможности */
@@ -649,7 +651,8 @@ function tryCastOffensiveSpell(
             kind: "ability",
             text: `${actor.name} применяет «${spell.name}» (${slotToUse} круг) — задето ${hitEnemies.length} враг(ов): ${res.text}`,
           };
-        } catch {
+        } catch (e) {
+          rethrowIfPrompt(e);
           continue;
         }
       }
@@ -697,7 +700,8 @@ function tryCastOffensiveSpell(
           kind: "ability",
           text: `${actor.name} творит «${spell.name}»${slotToUse > 0 ? ` (${slotToUse} круг)` : ""} на ${target.name}: ${res.text}`,
         };
-      } catch {
+      } catch (e) {
+        rethrowIfPrompt(e);
         continue;
       }
     }
@@ -730,7 +734,7 @@ function tryPreAttackBuffsAndHealing(
             skipTurnCheck: true,
           });
           return { kind: "ability", text: `${actor.name}: ${healAbility.name} — ${res.text}` };
-        } catch {}
+        } catch (e) { rethrowIfPrompt(e); }
       }
     }
   }
@@ -755,7 +759,7 @@ function tryPreAttackBuffsAndHealing(
           skipTurnCheck: true,
         });
         return { kind: "ability", text: `${actor.name} впадает в Ярость!` };
-      } catch {}
+      } catch (e) { rethrowIfPrompt(e); }
     }
 
     // Метка охотника / Сглаз на цель
@@ -777,7 +781,7 @@ function tryPreAttackBuffsAndHealing(
             kind: "ability",
             text: `${actor.name} накладывает «${markAbility.name}» на ${primeTarget.name}`,
           };
-        } catch {}
+        } catch (e) { rethrowIfPrompt(e); }
       }
     }
 
@@ -820,7 +824,7 @@ function tryPreAttackBuffsAndHealing(
               kind: "ability",
               text: `${actor.name} использует «${teleportAbility.name}» и материализуется рядом с ${primeTarget.name}!`,
             };
-          } catch {}
+          } catch (e) { rethrowIfPrompt(e); }
         }
       }
     }
@@ -950,7 +954,8 @@ function tryRangedKiting(
         kind: "move",
         text: `${actor.name} разрывает дистанцию ближнего боя (${move.costFt} фт)`,
       };
-    } catch {
+    } catch (e) {
+      rethrowIfPrompt(e);
       return null;
     }
   }
@@ -1142,7 +1147,7 @@ export function runBotTurn(state: CombatState, actorOverride?: Combatant): BotTu
       try {
         standUp(state, actor.id, { skipTurnCheck: true });
         steps.push({ kind: "move", text: `${actor.name} поднимается на ноги (${cost} фт движения)` });
-      } catch {}
+      } catch (e) { rethrowIfPrompt(e); }
     }
   }
 
@@ -1207,7 +1212,7 @@ export function runBotTurn(state: CombatState, actorOverride?: Combatant): BotTu
             candidates = candidates.slice(0, Math.max(1, Math.ceil(candidates.length * 0.6)));
           }
 
-          const randomCell = candidates[Math.floor(Math.random() * candidates.length)];
+          const randomCell = candidates[Math.floor(rand() * candidates.length)];
           try {
             const move = moveCombatant(state, actor.id, randomCell, { skipTurnCheck: true, avoidHazards: true });
             const smartFacing = pickWeightedFacing(actor, allLivingHostiles);
@@ -1217,7 +1222,7 @@ export function runBotTurn(state: CombatState, actorOverride?: Combatant): BotTu
               kind: "move",
               text: `${actor.name} никого не видит, патрулирует территорию (${move.costFt} фт) и осматривается в сторону ${smartFacing}`,
             });
-          } catch {}
+          } catch (e) { rethrowIfPrompt(e); }
         } else {
           const smartFacing = pickWeightedFacing(actor, allLivingHostiles);
           actor.facing = smartFacing;
@@ -1302,7 +1307,7 @@ export function runBotTurn(state: CombatState, actorOverride?: Combatant): BotTu
               text: `${actor.name}: ${readyAbility.name} — ${res.text}`,
             });
           }
-        } catch {}
+        } catch (e) { rethrowIfPrompt(e); }
       }
     }
   }
@@ -1530,7 +1535,7 @@ export function runBotTurn(state: CombatState, actorOverride?: Combatant): BotTu
             steps.push({ kind: "attack", text: atkRes.text });
           }
         }
-      } catch {}
+      } catch (e) { rethrowIfPrompt(e); }
     }
   }
 

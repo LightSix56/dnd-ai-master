@@ -12,6 +12,7 @@ import type {
   CreatureSize,
   LogEntry,
   MapElement,
+  PendingReactionView,
   SpellData,
   LegendaryState,
   MonsterCombatTrait,
@@ -254,6 +255,14 @@ export function hydrateMapElement(row: Record<string, any>): MapElement {
 }
 
 /** Запись Combat со включёнными связями → объект движка */
+/** Запись `Combat.pendingReaction` → то, что показывают клиенты (без запроса и seed) */
+export function hydratePendingReaction(raw: unknown): PendingReactionView | null {
+  if (!raw || typeof raw !== "string") return null;
+  const rec = safeParse<{ id?: string; createdAt?: string; prompt?: PendingReactionView["prompt"] } | null>(raw, null);
+  if (!rec?.id || !rec.prompt) return null;
+  return { id: rec.id, createdAt: rec.createdAt ?? "", prompt: rec.prompt };
+}
+
 export function hydrateCombat(row: Record<string, any>): Combat {
   return {
     id: row.id,
@@ -269,6 +278,7 @@ export function hydrateCombat(row: Record<string, any>): Combat {
     log: safeParse<LogEntry[]>(row.log, []),
     combatants: (row.combatants ?? []).map(hydrateCombatant),
     mapElements: (row.mapElements ?? []).map(hydrateMapElement),
+    pendingReaction: hydratePendingReaction(row.pendingReaction),
     createdAt: String(row.createdAt),
     updatedAt: String(row.updatedAt),
   };

@@ -1105,8 +1105,24 @@ export interface Combat {
   log: LogEntry[];
   combatants: Combatant[];
   mapElements: MapElement[];
+  /** Окно реакции, ожидающее ответа игрока; пока оно есть, остальные действия боя отклоняются */
+  pendingReaction?: PendingReactionView | null;
   createdAt: string;
   updatedAt: string;
+}
+
+/** Ожидающее решение о реакции — то, что видят клиенты (запрос и броски остаются на сервере) */
+export interface PendingReactionView {
+  id: string;
+  createdAt: string;
+  prompt: {
+    key: string;
+    reactorId: string;
+    reactorName: string;
+    title: string;
+    text: string;
+    options: Array<{ id: string; label: string }>;
+  };
 }
 
 // Цвета по типу персонажа

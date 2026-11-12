@@ -1,3 +1,4 @@
+import { rand } from "@/lib/rng";
 import { resolveSheetAttacks } from "@/lib/dnd/sheet-attacks";
 import type { Character } from "@/lib/store";
 
@@ -242,10 +243,10 @@ export function formatD20RollResult(
 
 /** Генерирует случайный бросок d20 (1-20). */
 export function rollD20(): number {
-  return Math.floor(Math.random() * 20) + 1;
+  return Math.floor(rand() * 20) + 1;
 }
 
 /** Генерирует случайный бросок кубика с заданным числом граней. */
 export function rollDie(sides: number): number {
-  return Math.floor(Math.random() * sides) + 1;
+  return Math.floor(rand() * sides) + 1;
 }

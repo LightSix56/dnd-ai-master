@@ -2,6 +2,7 @@
 // Порядок фиксируется один раз в Combat.turnOrder (массив id) — иначе при равной
 // инициативе сортировка недетерминирована и "чей ход" разъезжается между
 // сервером и клиентом.
+import { rand } from "@/lib/rng";
 import { rollD20 } from "@/lib/dnd/dice";
 import { modInitiativeBonus } from "./feature-mods";
 import type { Combatant } from "./types";
@@ -37,7 +38,7 @@ export function rollInitiativeForAll(
   return combatants.map((c) => ({
     id: c.id,
     initiative: rollInitiativeFor(c),
-    tiebreak: Math.floor(Math.random() * 1_000_000),
+    tiebreak: Math.floor(rand() * 1_000_000),
   }));
 }
 

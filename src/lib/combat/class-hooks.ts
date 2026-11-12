@@ -8,6 +8,7 @@
 // Здесь только типы и реестр: ни движок, ни классы не импортируются, поэтому циклов нет.
 
 import type { CastResult, CombatState } from "./engine";
+import { openScope } from "./reactions";
 import type { AttackResolution, SaveResult } from "./rules";
 import type { AbilityKey, ActionParameters, Attack, CombatAbility, Combatant } from "./types";
 
@@ -84,6 +85,22 @@ export function registerClassModule(mod: ClassModule): void {
   else MODULES.push(mod);
 }
 
+/**
+ * Обход модулей в области реакций: если у героя игрока есть реакция и модуль её тратит,
+ * игроку показывают окно выбора (reactions.ts). Без контекста роута — обычный обход.
+ */
+function scoped<T>(
+  state: CombatState,
+  describe: () => string,
+  body: (run: <R>(m: ClassModule, fn: () => R) => R) => T
+): T {
+  const scope = openScope(state, describe);
+  if (!scope) return body((_m, fn) => fn());
+  const out = body((m, fn) => scope.run(m.id, fn));
+  scope.close();
+  return out;
+}
+
 export const classHooks = {
   useFeature(state: CombatState, c: Combatant, ability: CombatAbility, params: ActionParameters, opts: FeatureOpts): CastResult | null {
     for (const m of MODULES) {
@@ -93,35 +110,47 @@ export const classHooks = {
     return null;
   },
   preAttack(state: CombatState, attacker: Combatant, target: Combatant, attack: Attack): { text: string } | null {
-    for (const m of MODULES) {
-      const out = m.preAttack?.(state, attacker, target, attack);
-      if (out) return out;
-    }
-    return null;
+    return scoped(state, () => `${attacker.name} атакует: ${target.name} (${attack.name})`, (run) => {
+      for (const m of MODULES) {
+        const out = run(m, () => m.preAttack?.(state, attacker, target, attack));
+        if (out) return out;
+      }
+      return null;
+    });
   },
   defense(state: CombatState, attacker: Combatant, target: Combatant, attack: Attack, res: AttackResolution, allowRedirect = true): Combatant {
-    let current = target;
-    for (const m of MODULES) current = m.defense?.(state, attacker, current, attack, res, allowRedirect) ?? current;
-    return current;
+    return scoped(state, () => `${attacker.name} атакует: ${target.name} (${attack.name})`, (run) => {
+      let current = target;
+      for (const m of MODULES) current = run(m, () => m.defense?.(state, attacker, current, attack, res, allowRedirect)) ?? current;
+      return current;
+    });
   },
   hitRiders(state: CombatState, attacker: Combatant, target: Combatant, attack: Attack, res: HitResolution): string {
-    let text = "";
-    for (const m of MODULES) text += m.hitRiders?.(state, attacker, target, attack, res) ?? "";
-    return text;
+    return scoped(state, () => `${attacker.name} попадает по цели: ${target.name} (${attack.name})`, (run) => {
+      let text = "";
+      for (const m of MODULES) text += run(m, () => m.hitRiders?.(state, attacker, target, attack, res)) ?? "";
+      return text;
+    });
   },
   attackResolved(state: CombatState, attacker: Combatant, target: Combatant, attack: Attack, res: HitResolution): void {
-    for (const m of MODULES) m.attackResolved?.(state, attacker, target, attack, res);
+    scoped(state, () => `${attacker.name} атакует: ${target.name} (${attack.name})`, (run) => {
+      for (const m of MODULES) run(m, () => m.attackResolved?.(state, attacker, target, attack, res));
+    });
   },
   afterAttack(state: CombatState, attacker: Combatant, target: Combatant, attack?: Attack): void {
-    for (const m of MODULES) m.afterAttack?.(state, attacker, target, attack);
+    scoped(state, () => `${attacker.name} закончил атаку по цели: ${target.name}`, (run) => {
+      for (const m of MODULES) run(m, () => m.afterAttack?.(state, attacker, target, attack));
+    });
   },
   reduceDamage(state: CombatState, target: Combatant, amount: number, opts: { isAttack?: boolean; attackerId?: string; damageType?: string }): number {
-    let left = amount;
-    for (const m of MODULES) {
-      if (left <= 0) return 0;
-      left = m.reduceDamage?.(state, target, left, opts) ?? left;
-    }
-    return Math.max(0, left);
+    return scoped(state, () => `${target.name} получает урон: ${amount}`, (run) => {
+      let left = amount;
+      for (const m of MODULES) {
+        if (left <= 0) return 0;
+        left = run(m, () => m.reduceDamage?.(state, target, left, opts)) ?? left;
+      }
+      return Math.max(0, left);
+    });
   },
   shield(target: Combatant): boolean {
     return MODULES.some((m) => m.shield?.(target));
@@ -130,20 +159,28 @@ export const classHooks = {
     for (const m of MODULES) m.noteDamage?.(state, attackerId, targetId);
   },
   damaged(state: CombatState, target: Combatant, attacker: Combatant | undefined, amount: number, opts: { isAttack?: boolean; damageType?: string }): void {
-    for (const m of MODULES) m.damaged?.(state, target, attacker, amount, opts);
+    scoped(state, () => `${target.name} получил урон: ${amount}`, (run) => {
+      for (const m of MODULES) run(m, () => m.damaged?.(state, target, attacker, amount, opts));
+    });
   },
   onDrop(state: CombatState, target: Combatant, hpBefore: number, amount: number): boolean {
-    return MODULES.some((m) => m.onDrop?.(state, target, hpBefore, amount));
+    return scoped(state, () => `${target.name} падает на 0 хитов`, (run) =>
+      MODULES.some((m) => run(m, () => m.onDrop?.(state, target, hpBefore, amount)))
+    );
   },
   saveFailed(state: CombatState, c: Combatant, ability: AbilityKey, dc: number, reroll: () => SaveResult): SaveResult | null {
-    for (const m of MODULES) {
-      const out = m.saveFailed?.(state, c, ability, dc, reroll);
-      if (out) return out;
-    }
-    return null;
+    return scoped(state, () => `${c.name} проваливает спасбросок (${ability}, СЛ ${dc})`, (run) => {
+      for (const m of MODULES) {
+        const out = run(m, () => m.saveFailed?.(state, c, ability, dc, reroll));
+        if (out) return out;
+      }
+      return null;
+    });
   },
   onMove(state: CombatState, mover: Combatant, start: { x: number; y: number }, path: Array<{ x: number; y: number }>): void {
-    for (const m of MODULES) m.onMove?.(state, mover, start, path);
+    scoped(state, () => `${mover.name} перемещается`, (run) => {
+      for (const m of MODULES) run(m, () => m.onMove?.(state, mover, start, path));
+    });
   },
   startTurn(state: CombatState, c: Combatant): void {
     for (const m of MODULES) m.startTurn?.(state, c);
@@ -158,7 +195,9 @@ export const classHooks = {
     for (const m of MODULES) m.afterAbility?.(state, c, srdKey);
   },
   afterSpell(state: CombatState, caster: Combatant, spellLevel: number): void {
-    for (const m of MODULES) m.afterSpell?.(state, caster, spellLevel);
+    scoped(state, () => `${caster.name} закончил заклинание`, (run) => {
+      for (const m of MODULES) run(m, () => m.afterSpell?.(state, caster, spellLevel));
+    });
   },
   sneakAllowed(state: CombatState, attacker: Combatant, target: Combatant, attack: Attack): string | null {
     for (const m of MODULES) {
@@ -173,7 +212,9 @@ export const classHooks = {
     return text;
   },
   creatureDown(state: CombatState, target: Combatant): void {
-    for (const m of MODULES) m.creatureDown?.(state, target);
+    scoped(state, () => `${target.name} падает`, (run) => {
+      for (const m of MODULES) run(m, () => m.creatureDown?.(state, target));
+    });
   },
   hideAdvantage(state: CombatState, c: Combatant): string | null {
     for (const m of MODULES) {
