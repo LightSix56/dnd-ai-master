@@ -5,7 +5,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Search, Sparkles, Check, Wrench, Zap, ExternalLink } from "lucide-react";
 
 export interface ModelOption {
@@ -204,7 +203,8 @@ export function ModelPickerModal({
         )}
 
         {/* Список моделей */}
-        <ScrollArea className="flex-1 max-h-[50vh] pr-2">
+        {/* Обычный блок с прокруткой: у Radix ScrollArea с max-h вьюпорт растёт по содержимому и не скроллится */}
+        <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain pr-2">
           <div className="space-y-1.5">
             {filteredModels.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground text-sm">
@@ -288,7 +288,7 @@ export function ModelPickerModal({
               })
             )}
           </div>
-        </ScrollArea>
+        </div>
 
         {/* Футер с пояснением */}
         <div className="pt-2 border-t flex items-center justify-between text-xs text-muted-foreground">
