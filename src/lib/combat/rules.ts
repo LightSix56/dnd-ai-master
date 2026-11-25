@@ -26,7 +26,9 @@ import {
   modAttackInfluence,
   modCritFrom,
   modDeathSaveAdvantage,
+  modRerollOnes,
   modSaveAdvantage,
+  modSaveAdvantageForContext,
   modSaveBonus,
   modSpeedBonus,
 } from "./feature-mods";
@@ -466,6 +468,8 @@ export function rollSave(
   dc: number,
   opts: {
     isSpell?: boolean;
+    isMagical?: boolean;
+    condition?: string;
     advantage?: boolean;
     disadvantage?: boolean;
     /** Бонус со стороны (Аура защиты паладина) */
@@ -496,7 +500,16 @@ export function rollSave(
   // Оплот силы: укрытие наполовину даёт +2 к спасброскам Ловкости
   if (ability === "DEX" && hasCondition(c, "bulwark_of_force")) bonus += 2;
 
-  let adv = effects.some((e) => e.saveAdvantage?.includes(ability)) || !!opts.advantage || modSaveAdvantage(c, ability, opts.all);
+  let adv =
+    effects.some((e) => e.saveAdvantage?.includes(ability)) ||
+    !!opts.advantage ||
+    modSaveAdvantage(c, ability, opts.all) ||
+    modSaveAdvantageForContext(
+      c,
+      ability,
+      { condition: opts.condition, isSpell: opts.isSpell, isMagical: opts.isMagical },
+      opts.all
+    );
   let dis = effects.some((e) => e.saveDisadvantage?.includes(ability)) || !!opts.disadvantage;
 
   // Чувство опасности варвара: преимущество на спасброски Ловкости, если он видит и слышит
@@ -529,7 +542,7 @@ export function rollSave(
   const blessDice = effects.find((e) => e.attackBonusDice)?.attackBonusDice;
   const blessBonus = blessDice ? rollDice(blessDice).total : 0;
 
-  const roll = rollD20(bonus + blessBonus, adv, dis);
+  const roll = rollD20(bonus + blessBonus, adv, dis, { rerollOnes: modRerollOnes(c) });
 
   if (autoFail) {
     return {
@@ -789,7 +802,8 @@ export function resolveAttack(
   const roll = rollD20(
     attackToUse.attackBonus + blessBonus + archery + modDice,
     advResult.advantage,
-    advResult.disadvantage
+    advResult.disadvantage,
+    { rerollOnes: modRerollOnes(attacker) }
   );
 
   const coverBonus = options.coverBonus ?? 0;

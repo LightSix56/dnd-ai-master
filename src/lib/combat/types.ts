@@ -65,6 +65,13 @@ export interface Combatant {
   suppressRegenerationUntilRound?: number;
   potions?: CombatPotion[];
   challengeRating?: number;
+  race?: string;
+  subrace?: string;
+  raceId?: string;
+  subraceId?: string;
+  darkvision?: number;
+  speeds?: { fly?: number; swim?: number; climb?: number; burrow?: number };
+  racialVariants?: string[];
 }
 
 export interface CombatPotion {
@@ -237,6 +244,8 @@ export interface AppliedEffect {
   value?: number;
   /** Эффект держится концентрацией заклинателя */
   concentration?: boolean;
+  /** Магическое усыпление (для проверки иммунитета Фейского наследия) */
+  isMagicalSleep?: boolean;
 }
 
 export interface ActionParameters {

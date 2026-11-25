@@ -60,6 +60,8 @@ import {
   modOpportunityDisadvantage,
   modReachBonus,
   modResistance,
+  modSaveAdvantageForContext,
+  modSleepImmune,
 } from "./feature-mods";
 import { armedRider } from "./fighter-pool";
 import {
@@ -870,7 +872,7 @@ export function applyEffect(
     state.addLog(`${target.name} имеет иммунитет к состоянию «${effect.condition}»`, "system", target.name);
     return;
   }
-  const immuneBy = featureConditionImmunity(state, target, effect.condition);
+  const immuneBy = featureConditionImmunity(state, target, effect.condition, effect);
   if (immuneBy) {
     const label = CONDITION_EFFECTS[effect.condition]?.name ?? effect.condition;
     state.addLog(`${target.name} не поддаётся состоянию «${label}» (${immuneBy})`, "system", target.name);
@@ -1086,7 +1088,11 @@ export function lastAttackThisTurn(state: CombatState, c: Combatant): { targetId
  * Аура отваги (испуг) и Аура преданности (очарование) паладина рядом, Чистота тела и
  * Покровительство природы (отравление). Возвращает название умения или null.
  */
-function featureConditionImmunity(state: CombatState, target: Combatant, condition: string): string | null {
+function featureConditionImmunity(state: CombatState, target: Combatant, condition: string, effect?: AppliedEffect): string | null {
+  if (condition === "sleep" || (condition === "unconscious" && effect?.isMagicalSleep)) {
+    const sleepImm = modSleepImmune(target, state.combatants);
+    if (sleepImm) return sleepImm;
+  }
   if ((condition === "charmed" || condition === "frightened") && hasCondition(target, "raging")) {
     const f = classFeature(target, "path-of-the-berserker/mindless-rage");
     if (f) return f.name;
@@ -2233,11 +2239,14 @@ export function rollEffectSave(
   isSpell: boolean,
   label: string,
   /** Помеха на спасбросок от умения заклинателя (Магическая засада) */
-  disadvantage?: boolean
+  disadvantage?: boolean,
+  opts?: { condition?: string; isMagical?: boolean }
 ) {
   const roll = () =>
     rollSave(target, ability, dc, {
       isSpell,
+      isMagical: opts?.isMagical,
+      condition: opts?.condition,
       disadvantage,
       bonus: auraSaveBonus(state, target),
       bonusText: "Аура защиты",
@@ -2886,7 +2895,14 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
     } else if (params.saveType) {
       const ambush = isSpellAction ? ambushReason(target) : null;
       if (ambush) state.addLog(`${target.name}: помеха на спасбросок (${ambush})`, "save", target.name);
-      const save = rollEffectSave(state, target, params.saveType as AbilityKey, saveDC, isSpellAction, ctx.label, ambush !== null);
+      const saveTypeKey = params.saveType as AbilityKey;
+      const saveCondition =
+        params.effects?.find((e) =>
+          modSaveAdvantageForContext(target, saveTypeKey, { condition: e.condition, isSpell: isSpellAction }, state.combatants)
+        )?.condition ?? params.effects?.[0]?.condition;
+      const save = rollEffectSave(state, target, saveTypeKey, saveDC, isSpellAction, ctx.label, ambush !== null, {
+        condition: saveCondition,
+      });
       saved = save.success;
       state.addLog(`${target.name}: ${save.text}`, "save", target.name);
       if (damage.length > 0) {
@@ -3011,8 +3027,10 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
     // Эффекты накладываются при провале спасброска или при попадании
     const effectApplies = saved === undefined ? hit !== false : !saved;
     if (effectApplies) {
+      const isSleepSpell = isSpellAction && (actLower.includes("усыплен") || /\bsleep\b/i.test(actLower));
       for (const eff of params.effects ?? []) {
-        applyEffect(state, target.id, { ...eff, ...concFlag }, caster.id);
+        const sleepFlag = isSleepSpell && eff.condition === "unconscious" ? { isMagicalSleep: true } : {};
+        applyEffect(state, target.id, { ...eff, ...concFlag, ...sleepFlag }, caster.id);
       }
       
       // Специфические эффекты перемещения

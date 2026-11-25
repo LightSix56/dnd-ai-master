@@ -60,6 +60,16 @@ export interface Mods {
   deathSaveAdvantage?: boolean;
   /** Прибавка к броску инициативы (Лихая удаль: модификатор Харизмы) */
   initiativeBonus?: number;
+  /** Переброс единицы на к20 один раз (Везучий полурослик) */
+  rerollOnes?: boolean;
+  /** Преимущество на спасброски против наложения указанных состояний («charmed», «frightened», «poisoned») */
+  saveAdvantageConditions?: string[];
+  /** Преимущество на спасброски ИНТ/МУД/ХАР против магии (Гномья хитрость, Бесстрастие ведалкена) */
+  magicMentalSaveAdvantage?: boolean;
+  /** Преимущество на спасброски против заклинаний (Сатир, Юань-ти) */
+  spellSaveAdvantage?: boolean;
+  /** Иммунитет к магическому усыплению (Фейское наследие) */
+  sleepImmune?: boolean;
 }
 
 export interface ModRule {
@@ -171,6 +181,42 @@ export function modConditionImmunity(c: Combatant, condition: string, all?: Comb
 /** Преимущество на спасбросок характеристики */
 export function modSaveAdvantage(c: Combatant, ability: AbilityKey, all?: Combatant[]): boolean {
   return modSources(c, all).some((s) => s.mods.saveAdvantage === "all" || (Array.isArray(s.mods.saveAdvantage) && s.mods.saveAdvantage.includes(ability)));
+}
+
+const MENTAL_ABILITIES: AbilityKey[] = ["INT", "WIS", "CHA"];
+
+/** Контекстное преимущество на спасбросок (против состояний, магии ИНТ/МУД/ХАР, заклинаний) */
+export function modSaveAdvantageForContext(
+  c: Combatant,
+  ability: AbilityKey,
+  opts: { condition?: string; isSpell?: boolean; isMagical?: boolean },
+  all?: Combatant[]
+): boolean {
+  const condLower = opts.condition?.toLowerCase();
+  const isMental = MENTAL_ABILITIES.includes(ability);
+  const isMagic = Boolean(opts.isSpell || opts.isMagical);
+  return modSources(c, all).some((s) => {
+    if (condLower && s.mods.saveAdvantageConditions?.some((entry) => entry.toLowerCase() === condLower)) {
+      return true;
+    }
+    if (s.mods.magicMentalSaveAdvantage && isMagic && isMental) {
+      return true;
+    }
+    if (s.mods.spellSaveAdvantage && opts.isSpell) {
+      return true;
+    }
+    return false;
+  });
+}
+
+/** Переброс единицы на к20 (Везучий) */
+export function modRerollOnes(c: Combatant): boolean {
+  return modSources(c).some((s) => Boolean(s.mods.rerollOnes));
+}
+
+/** Название умения, дающего иммунитет к магическому усыплению, или null */
+export function modSleepImmune(c: Combatant, all?: Combatant[]): string | null {
+  return modSources(c, all).find((s) => Boolean(s.mods.sleepImmune))?.name ?? null;
 }
 
 /** Сумма бонусов к спасброску характеристики */
