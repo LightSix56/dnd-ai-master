@@ -659,7 +659,8 @@ export function innateSpellToCombatAbility(
   profBonus: number,
   idPrefix: string
 ): CombatAbility {
-  const def = getSpellDefinition(spell.spellId) ?? getSpellDefinition(spell.name);
+  const defCandidate = getSpellDefinition(spell.spellId) ?? getSpellDefinition(spell.name);
+  const def = defCandidate && (spell.level === 0 ? defCandidate.level === 0 : true) ? defCandidate : undefined;
   const srdKey = `race/${raceId}/innate/${spell.spellId}`;
   const spellSlotLevel = spell.level > 0 ? spell.level : null;
   const castMod = abilityMods[spell.castingAbility] ?? 0;

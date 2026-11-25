@@ -2,9 +2,9 @@
 // Math.random в тестах фиксируется через vi.spyOn(Math, "random").
 
 import { proficiencyBonus } from "@/lib/dnd/dice";
-import { extractAbilitiesFromCharacter } from "../../character-adapter";
+import { extractAbilitiesFromCharacter, innateSpellToCombatAbility } from "../../character-adapter";
 import { resolveRaceForCharacter } from "../../races/race-defs";
-import type { Combatant } from "../../types";
+import type { CombatAbility, Combatant } from "../../types";
 import { hero, type HeroOptions } from "./fighter-harness";
 
 export { ally, bySrd, enemy, hasLog, makeState } from "./fighter-harness";
@@ -15,6 +15,12 @@ export interface RaceHeroOptions extends HeroOptions {
   subclass?: string;
   racialVariants?: string[];
   profBonus?: number;
+  hpMax?: number;
+  hpCurrent?: number;
+  ac?: number;
+  attacks?: Combatant["attacks"];
+  saves?: Combatant["saves"];
+  isAIControlled?: boolean;
 }
 
 /** Герой с расой (и опциональной подрасой), собранный поверх fighter/class-harness */
@@ -29,6 +35,12 @@ export function raceHero(
   const profBonus = o.profBonus ?? proficiencyBonus(level);
   c.profBonus = profBonus;
   if (o.className !== undefined) c.className = o.className;
+  if (o.hpMax !== undefined) c.hpMax = o.hpMax;
+  if (o.hpCurrent !== undefined) c.hpCurrent = o.hpCurrent;
+  if (o.ac !== undefined) c.ac = o.ac;
+  if (o.attacks !== undefined) c.attacks = [...o.attacks];
+  if (o.saves !== undefined) c.saves = { ...o.saves };
+  if (o.isAIControlled !== undefined) c.isAIControlled = o.isAIControlled;
 
   if (o.className !== undefined || o.subclass || profBonus !== 3) {
     c.abilities = extractAbilitiesFromCharacter(
@@ -70,7 +82,18 @@ export function raceHero(
   c.size = loadout.size;
   c.racialVariants = loadout.racialVariants;
 
-  c.abilities = [...c.abilities, ...loadout.abilities];
+  const innateAbilities = loadout.innateSpells.map((s) =>
+    innateSpellToCombatAbility(s, loadout.raceId, c.abilityMods, c.profBonus, id)
+  );
+  const seen = new Set<string>();
+  const merged: CombatAbility[] = [];
+  for (const ab of [...c.abilities, ...loadout.abilities, ...innateAbilities]) {
+    const key = ab.parameters?.srdKey ? `srd:${ab.parameters.srdKey}` : `name:${ab.name.toLowerCase()}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    merged.push(ab);
+  }
+  c.abilities = merged;
   if (loadout.naturalAttacks.length > 0) {
     c.attacks = [...c.attacks, ...loadout.naturalAttacks];
   }

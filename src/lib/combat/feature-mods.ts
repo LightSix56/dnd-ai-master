@@ -160,6 +160,7 @@ const PHYSICAL = ["slashing", "piercing", "bludgeoning", "рубящий", "ко
 
 function typeMatches(entry: string, damageType: string): boolean {
   const type = damageType.toLowerCase();
+  if (entry === "all") return true;
   if (entry === "physical") return PHYSICAL.some((p) => type.includes(p));
   if (entry === "all-but-psychic") return !(type === "psychic" || type.includes("психич"));
   return entry.toLowerCase() === type;

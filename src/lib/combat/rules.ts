@@ -596,7 +596,7 @@ export interface DeathSaveResult {
  */
 export function rollDeathSave(c: Combatant): DeathSaveResult {
   const advantage = modDeathSaveAdvantage(c);
-  const roll = rollD20(0, !!advantage);
+  const roll = rollD20(0, !!advantage, false, { rerollOnes: modRerollOnes(c) });
   const nat = roll.natural;
   const criticalSuccess = nat === 20;
   const criticalFailure = nat === 1;

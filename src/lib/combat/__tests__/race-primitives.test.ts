@@ -6,6 +6,7 @@ import {
   modRerollOnes,
   modSaveAdvantageForContext,
   modSleepImmune,
+  unregisterFeatureMod,
 } from "../feature-mods";
 import { resolveAttack, rollSave } from "../rules";
 import type { CombatAbility, Combatant } from "../types";
@@ -28,21 +29,12 @@ function makeAbility(srdKey: string, name: string): CombatAbility {
   };
 }
 
-// Register test racial feature modifiers
-featureMods("race/halfling/lucky", { name: "Везучий", rerollOnes: true });
-featureMods("race/elf/fey-ancestry", {
-  name: "Фейское наследие",
-  saveAdvantageConditions: ["charmed"],
-  sleepImmune: true,
-});
-featureMods("race/gnome/cunning", {
-  name: "Гномья хитрость",
-  magicMentalSaveAdvantage: true,
-});
-featureMods("race/satyr/magic-resistance", {
-  name: "Сопротивление магии",
-  spellSaveAdvantage: true,
-});
+const TEST_MOD_KEYS = [
+  "test/race/halfling/lucky",
+  "test/race/elf/fey-ancestry",
+  "test/race/gnome/cunning",
+  "test/race/satyr/magic-resistance",
+] as const;
 
 function seqRandom(...values: number[]) {
   let idx = 0;
@@ -53,7 +45,27 @@ function seqRandom(...values: number[]) {
   });
 }
 
+beforeEach(() => {
+  featureMods("test/race/halfling/lucky", { name: "Везучий", rerollOnes: true });
+  featureMods("test/race/elf/fey-ancestry", {
+    name: "Фейское наследие",
+    saveAdvantageConditions: ["charmed"],
+    sleepImmune: true,
+  });
+  featureMods("test/race/gnome/cunning", {
+    name: "Гномья хитрость",
+    magicMentalSaveAdvantage: true,
+  });
+  featureMods("test/race/satyr/magic-resistance", {
+    name: "Сопротивление магии",
+    spellSaveAdvantage: true,
+  });
+});
+
 afterEach(() => {
+  for (const key of TEST_MOD_KEYS) {
+    unregisterFeatureMod(key);
+  }
   vi.restoreAllMocks();
 });
 
@@ -114,7 +126,7 @@ describe("rollD20 with rerollOnes", () => {
 describe("feature-mods racial helpers & resolveAttack", () => {
   it("modRerollOnes detects race/halfling/lucky and resolveAttack hits after rerolling 1", () => {
     const halfling = ally("halfling", 5, 5, {
-      abilities: [makeAbility("race/halfling/lucky", "Везучий")],
+      abilities: [makeAbility("test/race/halfling/lucky", "Везучий")],
     });
     const foe = enemy("orc", 6, 5, { ac: 15 });
     expect(modRerollOnes(halfling)).toBe(true);
@@ -132,7 +144,7 @@ describe("feature-mods racial helpers & resolveAttack", () => {
 describe("rollSave conditional racial advantages", () => {
   it("Fey Ancestry: advantage on saves against charmed, no advantage on DEX fireball save", () => {
     const elf = ally("elf", 5, 5, {
-      abilities: [makeAbility("race/elf/fey-ancestry", "Фейское наследие")],
+      abilities: [makeAbility("test/race/elf/fey-ancestry", "Фейское наследие")],
       saves: { WIS: { prof: false, mod: 0 }, DEX: { prof: false, mod: 0 } },
     });
 
@@ -156,7 +168,7 @@ describe("rollSave conditional racial advantages", () => {
 
   it("Gnome Cunning: advantage on INT/WIS/CHA vs spell or magical effect, not physical or non-magical", () => {
     const gnome = ally("gnome", 5, 5, {
-      abilities: [makeAbility("race/gnome/cunning", "Гномья хитрость")],
+      abilities: [makeAbility("test/race/gnome/cunning", "Гномья хитрость")],
     });
 
     for (const ab of ["INT", "WIS", "CHA"] as const) {
@@ -177,7 +189,7 @@ describe("rollSave conditional racial advantages", () => {
 
   it("Satyr Magic Resistance: advantage on ANY ability save when isSpell is true", () => {
     const satyr = ally("satyr", 5, 5, {
-      abilities: [makeAbility("race/satyr/magic-resistance", "Сопротивление магии")],
+      abilities: [makeAbility("test/race/satyr/magic-resistance", "Сопротивление магии")],
     });
 
     for (const ab of ["STR", "DEX", "CON", "INT", "WIS", "CHA"] as const) {
@@ -197,10 +209,10 @@ describe("engine integration: rollEffectSave, castSpellOrAbility, sleep immunity
 
   it("rollEffectSave forwards condition and isMagical to rollSave", () => {
     const elf = ally("elf", 5, 5, {
-      abilities: [makeAbility("race/elf/fey-ancestry", "Фейское наследие")],
+      abilities: [makeAbility("test/race/elf/fey-ancestry", "Фейское наследие")],
     });
     const gnome = ally("gnome", 6, 5, {
-      abilities: [makeAbility("race/gnome/cunning", "Гномья хитрость")],
+      abilities: [makeAbility("test/race/gnome/cunning", "Гномья хитрость")],
     });
     const state = makeState([elf, gnome]);
 
@@ -217,7 +229,7 @@ describe("engine integration: rollEffectSave, castSpellOrAbility, sleep immunity
 
   it("castSpellOrAbility forwards condition from params.effects into rollEffectSave", () => {
     const elf = ally("elf", 5, 5, {
-      abilities: [makeAbility("race/elf/fey-ancestry", "Фейское наследие")],
+      abilities: [makeAbility("test/race/elf/fey-ancestry", "Фейское наследие")],
       saves: { WIS: { prof: false, mod: 0 } },
     });
     const caster = enemy("mage", 6, 5, {
@@ -251,7 +263,7 @@ describe("engine integration: rollEffectSave, castSpellOrAbility, sleep immunity
 
   it("modSleepImmune & featureConditionImmunity block magical sleep while allowing normal unconscious", () => {
     const elf = ally("elf", 5, 5, {
-      abilities: [makeAbility("race/elf/fey-ancestry", "Фейское наследие")],
+      abilities: [makeAbility("test/race/elf/fey-ancestry", "Фейское наследие")],
     });
     const caster = enemy("mage", 6, 5, {
       abilities: [

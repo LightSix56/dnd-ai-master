@@ -116,6 +116,7 @@ export type UsesSpec = Rule["uses"] | "profBonus" | "level" | { max: number; ref
 export interface RaceOptionRule extends Omit<OptionRule, "uses"> {
   uses?: UsesSpec;
   refresh?: Refresh;
+  resistances?: string[];
 }
 
 export interface RaceFeatureRule extends Omit<FeatureRule, "uses" | "options"> {
@@ -145,11 +146,14 @@ export interface InnateSpellSpec {
   usesMax?: number;
   refresh?: "long" | "short";
   castingAbility?: AbilityKey;
+  when?: (c: Calc) => boolean;
 }
 
 export interface SubraceRules {
   pattern?: RegExp;
   traits: Record<string, RaceFeatureRule>;
+  replacesTraits?: string[];
+  replacesInnateSpells?: boolean;
   naturalWeapons?: NaturalWeaponSpec[];
   resistances?: string[];
   conditionImmunities?: string[];
@@ -387,6 +391,7 @@ export function resolveRaceForCharacter(ctx: RaceHeroContext, idPrefix = "hero")
   for (const v of variants) c.tokens.add(v);
 
   const defs: SrdAbilityDefinition[] = [];
+  const optionResSet = new Set<string>();
   const processRuleWithOptions = (
     ownerId: string,
     rule: RaceFeatureRule,
@@ -422,20 +427,24 @@ export function resolveRaceForCharacter(ctx: RaceHeroContext, idPrefix = "hero")
       }
       if (chosenSet.has(o)) {
         variants.add(o.id);
+        for (const r of o.resistances ?? []) optionResSet.add(r);
       }
     }
   };
 
+  const replacedTraits = new Set(subRules?.replacesTraits ?? []);
   const processFeatureSet = (
     ownerId: string,
     traitsData: RaceTraitData[],
     traitRules: Record<string, RaceFeatureRule> | undefined,
-    extraRules: Array<RaceFeatureRule & { name: string; description: string; minLevel?: number }> | undefined
+    extraRules: Array<RaceFeatureRule & { name: string; description: string; minLevel?: number }> | undefined,
+    skipIds?: Set<string>
   ) => {
     if (!traitRules && !extraRules) return;
     const matchedKeys = new Set<string>();
 
     for (const t of traitsData) {
+      if (skipIds?.has(t.id)) continue;
       const ruleKey = traitRules && (t.id in traitRules ? t.id : t.name in traitRules ? t.name : null);
       if (!ruleKey || !traitRules) continue;
       matchedKeys.add(ruleKey);
@@ -447,7 +456,7 @@ export function resolveRaceForCharacter(ctx: RaceHeroContext, idPrefix = "hero")
     // Синтетические или дополнительные правила, заданные по ключу без записи в traits JSON
     if (traitRules) {
       for (const [key, rule] of Object.entries(traitRules)) {
-        if (matchedKeys.has(key)) continue;
+        if (matchedKeys.has(key) || skipIds?.has(key)) continue;
         if (!rule.name && rule.kind === "skip" && !(rule.options?.length)) continue;
         processRuleWithOptions(ownerId, rule, rule.name ?? key, rule.description ?? "", rule.minLevel ?? 1);
       }
@@ -458,7 +467,7 @@ export function resolveRaceForCharacter(ctx: RaceHeroContext, idPrefix = "hero")
     }
   };
 
-  processFeatureSet(race.id, race.traits, rules?.traits, rules?.extra);
+  processFeatureSet(race.id, race.traits, rules?.traits, rules?.extra, replacedTraits);
   if (subrace) {
     processFeatureSet(subrace.id, subrace.traits, subRules?.traits, subRules?.extra);
   }
@@ -506,6 +515,8 @@ export function resolveRaceForCharacter(ctx: RaceHeroContext, idPrefix = "hero")
     for (const r of subrace.resistances ?? []) resSet.add(r);
   }
 
+  for (const r of optionResSet) resSet.add(r);
+
   const ciSet = new Set<string>([
     ...(race.conditionImmunities ?? []),
     ...(subrace?.conditionImmunities ?? []),
@@ -518,8 +529,9 @@ export function resolveRaceForCharacter(ctx: RaceHeroContext, idPrefix = "hero")
     ...(subRules?.naturalWeapons ?? []),
   ].map((nw) => toNaturalAttack(nw, ctx));
 
-  const innateSpells = [...(rules?.innateSpells ?? []), ...(subRules?.innateSpells ?? [])]
-    .filter((s) => (s.minCharacterLevel ?? 1) <= c.level)
+  const baseInnate = subRules?.replacesInnateSpells ? [] : (rules?.innateSpells ?? []);
+  const innateSpells = [...baseInnate, ...(subRules?.innateSpells ?? [])]
+    .filter((s) => (s.minCharacterLevel ?? 1) <= c.level && (!s.when || s.when(c)))
     .map((s) => ({
       spellId: s.spellId,
       name: s.name,

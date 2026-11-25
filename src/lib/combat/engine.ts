@@ -4384,8 +4384,10 @@ export function endTurn(state: CombatState, depth = 0): { nextId: string | null 
       for (const cond of [...current.conditions]) {
         if (cond.saveType && cond.saveDC && cond.type !== "restrained") {
           const save = rollSave(current, cond.saveType, cond.saveDC, {
+            condition: cond.type,
             bonus: auraSaveBonus(state, current),
             bonusText: "Аура защиты",
+            all: state.combatants,
           });
           const label = CONDITION_EFFECTS[cond.type]?.name || cond.type;
           state.addLog(
