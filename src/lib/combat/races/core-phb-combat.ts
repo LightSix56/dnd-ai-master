@@ -197,9 +197,10 @@ registerKit({
       const dc = dcBy(c, "CHA");
       const origin = { x: c.x, y: c.y };
 
-      if (season === "vesna" && ctx.opts.targetIds?.[0]) {
-        const allyTarget = state.get(ctx.opts.targetIds[0]);
-        if (!allyTarget || allyTarget.id === c.id || !friendly(c, allyTarget) || !alive(allyTarget)) {
+      const springTargetId = ctx.opts.targetIds?.[0];
+      if (season === "vesna" && springTargetId && springTargetId !== c.id) {
+        const allyTarget = state.get(springTargetId);
+        if (!allyTarget || !friendly(c, allyTarget) || !alive(allyTarget)) {
           throw new EngineError("Весна: выберите согласного союзника");
         }
         if (distanceFt(c, allyTarget) > 5) throw new EngineError(`${allyTarget.name} дальше 5 фт`);
@@ -215,23 +216,21 @@ registerKit({
             hostilesOf(state, c, 5).sort((a, b) => distanceFt(origin, a) - distanceFt(origin, b))[0]
           : undefined;
 
-      if (winterTarget && isHostile(c.type, winterTarget.type) && alive(winterTarget) && distanceFt(origin, winterTarget) <= 5) {
-        if (!saves(state, winterTarget, "WIS", dc, "Фейский шаг (Зима)")) {
-          applyEffect(state, winterTarget.id, { condition: "frightened", durationRounds: 2 }, c.id);
-        }
-      }
-
       teleportCombatant(state, c.id, center, 30, { skipTurnCheck: true });
       ctx.pay();
 
-      if (season === "osen") {
+      if (winterTarget && winterTarget.id !== c.id && isHostile(c.type, winterTarget.type) && alive(winterTarget) && distanceFt(origin, winterTarget) <= 5) {
+        if (!saves(state, winterTarget, "WIS", dc, "Фейский шаг (Зима)")) {
+          applyEffect(state, winterTarget.id, { condition: "frightened", durationRounds: 2 }, c.id);
+        }
+      } else if (season === "osen") {
         const picked = (ctx.opts.targetIds ?? [])
           .map((id) => state.get(id))
           .filter((t): t is Combatant => Boolean(t && alive(t) && isHostile(c.type, t.type) && distanceFt(c, t) <= 10));
         const foes = (picked.length > 0 ? picked : hostilesOf(state, c, 10)).slice(0, 2);
         for (const f of foes) {
           if (!saves(state, f, "WIS", dc, "Фейский шаг (Осень)")) {
-            applyEffect(state, f.id, { condition: "charmed", durationRounds: 2 }, c.id);
+            applyEffect(state, f.id, { condition: "charmed", durationRounds: 10 }, c.id);
           }
         }
       } else if (season === "leto") {

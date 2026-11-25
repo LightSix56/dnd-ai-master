@@ -339,8 +339,8 @@ defineRace("human", {
         "zaklinaniya-metki": skip("zaklinaniya-metki"),
       },
       innateSpells: [
-        spell("animal-friendship", "Дружба с животными", 1, 1, "WIS", 1),
-        spell("speak-with-animals", "Разговор с животными", 1, 1, "WIS", 1),
+        spell("animal-friendship", "Дружба с животными", 1, 1, "WIS", 1, "short"),
+        spell("speak-with-animals", "Разговор с животными", 1, 1, "WIS", 1, "short"),
       ],
     },
     "mark-of-making": {
@@ -655,7 +655,7 @@ defineRace("dragonborn", {
     "nasledie-drakonov": {
       id: "nasledie-drakonov",
       kind: "skip",
-      pick: "sheet-or-all",
+      pick: "sheet",
       options: buildDragonOptions("dragonborn", "draconic", PHB_ANCESTRIES),
     },
     "oruzhie-dykhaniya": {
@@ -709,7 +709,7 @@ defineRace("dragonborn", {
         "nasledie-tsvetnogo-drakona": {
           id: "nasledie-tsvetnogo-drakona",
           kind: "skip",
-          pick: "sheet-or-all",
+          pick: "sheet",
           options: buildDragonOptions(
             "chromatic-dragonborn",
             "chromatic",
@@ -751,7 +751,7 @@ defineRace("dragonborn", {
         "nasledie-metallicheskogo-drakona": {
           id: "nasledie-metallicheskogo-drakona",
           kind: "skip",
-          pick: "sheet-or-all",
+          pick: "sheet",
           options: buildDragonOptions(
             "metallic-dragonborn",
             "metallic",
@@ -819,7 +819,7 @@ defineRace("dragonborn", {
         "nasledie-samotsvetnogo-drakona": {
           id: "nasledie-samotsvetnogo-drakona",
           kind: "skip",
-          pick: "sheet-or-all",
+          pick: "sheet",
           options: buildDragonOptions("gem-dragonborn", "gem", GEM_ANCESTRIES, { shape: "cone", sizeFt: 15 }),
         },
         "oruzhie-dykhaniya": {
@@ -930,8 +930,8 @@ defineRace("half-elf", {
         "zaklinaniya-metki": skip("zaklinaniya-metki"),
       },
       innateSpells: [
-        spell("detect-magic", "Обнаружение магии", 1, 1, "INT", 1),
-        spell("see-invisibility", "Видение невидимого", 2, 5, "INT", 1),
+        spell("detect-magic", "Обнаружение магии", 1, 1, "WIS", 1),
+        spell("see-invisibility", "Видение невидимого", 2, 3, "WIS", 1),
       ],
     },
     "mark-of-storm": {

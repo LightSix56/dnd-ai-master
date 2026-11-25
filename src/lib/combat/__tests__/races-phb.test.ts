@@ -96,8 +96,12 @@ describe("PHB 2014 Races & Subraces (core-phb)", () => {
       expect(bySrd(finding, "race/human/innate/locate-object").usesMax).toBe(1);
 
       const handling = raceHero("Человек", "Метка ухода", "h-hand", 1, { mods: { WIS: 2 } });
-      expect(bySrd(handling, "race/human/innate/animal-friendship").usesMax).toBe(1);
-      expect(bySrd(handling, "race/human/innate/speak-with-animals").usesMax).toBe(1);
+      const af = bySrd(handling, "race/human/innate/animal-friendship");
+      const swa = bySrd(handling, "race/human/innate/speak-with-animals");
+      expect(af.usesMax).toBe(1);
+      expect(af.refresh).toBe("short");
+      expect(swa.usesMax).toBe(1);
+      expect(swa.refresh).toBe("short");
     });
 
     it("Mark of Sentinel: innate Shield + Vigilant Guardian swaps places and redirects attack (auto & ReactionPrompt)", () => {
@@ -290,7 +294,7 @@ describe("PHB 2014 Races & Subraces (core-phb)", () => {
     });
 
     it("Eladrin: Fey Step 1/short + lvl 3 seasonal riders (Autumn, Winter, Spring, Summer)", () => {
-      // Autumn: up to 2 enemies within 10 ft of arrival save WIS or charmed
+      // Autumn: up to 2 enemies within 10 ft of arrival save WIS or charmed (1 minute = 10 rounds)
       const autumn = raceHero("Эльф", "Эладрин", "el-aut", 3, { x: 1, y: 1, mods: { CHA: 3 }, racialVariants: ["osen"] });
       const f1 = enemy("f1", 6, 1, { saves: { WIS: { prof: false, mod: -1 } } });
       const f2 = enemy("f2", 7, 2, { saves: { WIS: { prof: false, mod: -1 } } });
@@ -300,19 +304,27 @@ describe("PHB 2014 Races & Subraces (core-phb)", () => {
       expect(stepAut.refresh).toBe("short");
       useAbility(stAut, "el-aut", stepAut.id, { center: { x: 5, y: 1 } });
       expect(autumn.x).toBe(5);
-      expect(hasCondition(f1, "charmed")).toBe(true);
-      expect(hasCondition(f2, "charmed")).toBe(true);
+      expect(cond(f1, "charmed")?.duration).toBe(10);
+      expect(cond(f2, "charmed")?.duration).toBe(10);
 
-      // Winter: 1 enemy within 5 ft of origin saves WIS or frightened
+      // Winter: failed teleport (out of range / occupied) must NOT frighten enemies
       const winter = raceHero("Эльф", "Эладрин", "el-win", 3, { x: 2, y: 2, mods: { CHA: 3 }, racialVariants: ["zima"] });
       const fw = enemy("fw", 3, 2, { saves: { WIS: { prof: false, mod: -1 } } });
       const stWin = makeState([winter, fw]);
+      seqRandom(0.05);
+      expect(() =>
+        useAbility(stWin, "el-win", bySrd(winter, "race/eladrin/feyskiy-shag").id, { center: { x: 15, y: 2 } })
+      ).toThrow();
+      expect(hasCondition(fw, "frightened")).toBe(false);
+      expect(winter.bonusActionUsed).toBe(false);
+
+      // Winter: valid teleport frightens 1 enemy within 5 ft of origin on failed WIS save
       seqRandom(0.05);
       useAbility(stWin, "el-win", bySrd(winter, "race/eladrin/feyskiy-shag").id, { center: { x: 7, y: 2 } });
       expect(winter.x).toBe(7);
       expect(hasCondition(fw, "frightened")).toBe(true);
 
-      // Spring: teleport willing ally within 5 ft instead of self
+      // Spring: teleport willing ally within 5 ft instead of self, or self when targetIds === [self.id]
       const spring = raceHero("Эльф", "Эладрин", "el-spr", 3, { x: 2, y: 2, racialVariants: ["vesna"] });
       const pal = ally("pal", 3, 2);
       const stSpr = makeState([spring, pal]);
@@ -322,6 +334,14 @@ describe("PHB 2014 Races & Subraces (core-phb)", () => {
       });
       expect(spring.x).toBe(2);
       expect(pal.x).toBe(7);
+
+      const springSelf = raceHero("Эльф", "Эладрин", "el-spr-self", 3, { x: 2, y: 2, racialVariants: ["vesna"] });
+      const stSprSelf = makeState([springSelf]);
+      useAbility(stSprSelf, "el-spr-self", bySrd(springSelf, "race/eladrin/feyskiy-shag").id, {
+        targetIds: ["el-spr-self"],
+        center: { x: 7, y: 2 },
+      });
+      expect(springSelf.x).toBe(7);
 
       // Summer: enemies within 5 ft of arrival take max(1, CHA) fire damage
       const summer = raceHero("Эльф", "Эладрин", "el-sum", 3, { x: 1, y: 1, mods: { CHA: 3 }, racialVariants: ["leto"] });
@@ -410,6 +430,15 @@ describe("PHB 2014 Races & Subraces (core-phb)", () => {
       useAbility(st, "db1", bw1.id, { center: { x: 4, y: 2 } });
       expect(fFail.hpCurrent).toBe(22);
       expect(fPass.hpCurrent).toBe(26);
+
+      // Unconfigured Dragonborn (no ancestry in sheet) must NOT gain all elemental resistances at once
+      for (const sub of [null, "Цветные драконорождённые", "Металлические драконорождённые", "Самоцветные драконорождённые"] as const) {
+        const plainDb = raceHero("Драконорождённый", sub, `db-plain-${sub ?? "base"}`, 5);
+        expect(plainDb.damageResistances ?? []).toEqual([]);
+        for (const elem of ["fire", "cold", "acid", "lightning", "poison", "force", "psychic"]) {
+          expect(modResistance(plainDb, elem)).toBeNull();
+        }
+      }
 
       // Level 6 scales to 3d6; blue dragon uses 30-ft line DEX
       const db6 = raceHero("Драконорождённый", null, "db6", 6, {
@@ -570,9 +599,13 @@ describe("PHB 2014 Races & Subraces (core-phb)", () => {
       expect(modResistance(storm, "lightning")).not.toBeNull();
       expect(bySrd(storm, "race/half-elf/innate/gust-of-wind").usesMax).toBe(1);
 
-      const det = raceHero("Полуэльф", "Метка обнаружения", "he-det", 5);
-      expect(bySrd(det, "race/half-elf/innate/detect-magic").usesMax).toBe(1);
-      expect(bySrd(det, "race/half-elf/innate/see-invisibility").usesMax).toBe(1);
+      const det = raceHero("Полуэльф", "Метка обнаружения", "he-det", 3, { mods: { INT: 0, WIS: 4 } });
+      const detMagic = bySrd(det, "race/half-elf/innate/detect-magic");
+      const seeInv = bySrd(det, "race/half-elf/innate/see-invisibility");
+      expect(detMagic.usesMax).toBe(1);
+      expect(seeInv.usesMax).toBe(1);
+      expect(detMagic.parameters?.saveDC).toBe(8 + 2 + 4);
+      expect(seeInv.parameters?.saveDC).toBe(8 + 2 + 4);
     });
   });
 
@@ -598,6 +631,15 @@ describe("PHB 2014 Races & Subraces (core-phb)", () => {
       dealDamage(stInst, "ho-inst", 30, { damageType: "slashing" });
       expect(hoInst.hpCurrent).toBe(0);
       expect(bySrd(hoInst, "race/half-orc/nepokolebimaya-stoykost").usesUsed).toBe(0);
+
+      // Temp HP absorbs overflow so 30 dmg with 15 temp HP is NOT instant death -> Relentless Endurance saves to 1 HP
+      const hoTemp = raceHero("Полуорк", null, "ho-temp", 4, { hpMax: 20, hpCurrent: 10 });
+      hoTemp.hpTemp = 15;
+      const stTemp = makeState([hoTemp]);
+      dealDamage(stTemp, "ho-temp", 30, { damageType: "slashing" });
+      expect(hoTemp.hpTemp).toBe(0);
+      expect(hoTemp.hpCurrent).toBe(1);
+      expect(bySrd(hoTemp, "race/half-orc/nepokolebimaya-stoykost").usesUsed).toBe(1);
 
       // Savage Attacks: melee crit adds 1 extra weapon die (1d8)
       const hoAtk = raceHero("Полуорк", null, "ho-atk", 4, {

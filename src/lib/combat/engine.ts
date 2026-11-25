@@ -591,7 +591,7 @@ export function dealDamage(
 
   if (wasAlive && target.hpCurrent <= 0) {
     // Стойкость перед смертью самурая: сознание держится до дополнительного хода
-    if (classHooks.onDrop(state, target, hpBefore, actualAmount)) return;
+    if (classHooks.onDrop(state, target, hpBefore, actualAmount - res.absorbed)) return;
 
     // Непреклонная ярость варвара: в ярости спасбросок ТЕЛ Сл 10 (+5 за каждое срабатывание) — остаётся 1 хит
     if (hasCondition(target, "raging") && classFeature(target, "barbarian/relentless-rage")) {
