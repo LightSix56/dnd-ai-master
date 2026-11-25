@@ -1,11 +1,21 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+
+vi.mock("@/lib/supabase/client", () => ({
+  getAuthUserFromRequest: vi.fn(async () => ({ user: { id: "test-user-api" }, error: null })),
+  getSupabaseAdminClient: vi.fn(() => ({})),
+  getSupabaseServerClient: vi.fn(),
+}));
+
 import { GET as getMaps, POST as postMap } from "../maps/route";
 import { GET as getMonsters } from "../monsters/route";
 import { POST as postCreateCombat } from "../create/route";
 import { db } from "@/lib/db";
 
+const AUTH = { Authorization: "Bearer test-tok" };
+
 describe("Combat API Routes", () => {
   let combatId: string;
+  let campaignId: string;
   const createdCombatIds: string[] = [];
 
   afterEach(async () => {
@@ -15,11 +25,20 @@ describe("Combat API Routes", () => {
       await db.combat.deleteMany({ where: { id: { in: createdCombatIds } } });
       createdCombatIds.length = 0;
     }
+    if (campaignId) {
+      await db.campaign.deleteMany({ where: { id: campaignId } });
+      campaignId = "";
+    }
   });
 
   beforeEach(async () => {
+    const camp = await db.campaign.create({
+      data: { userId: "test-user-api", name: "API Test Camp", isActive: false },
+    });
+    campaignId = camp.id;
     const combat = await db.combat.create({
       data: {
+        campaignId,
         name: "Test Arena",
         gridWidth: 30,
         gridHeight: 30,
@@ -46,7 +65,7 @@ describe("Combat API Routes", () => {
     it("готовый пресет больше не применяется к бою", async () => {
       const req = new Request("http://localhost/api/combat/maps", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...AUTH },
         body: JSON.stringify({ combatId, mapPresetId: "preset-lava-cave" }),
       });
       const res = await postMap(req);
@@ -56,7 +75,7 @@ describe("Combat API Routes", () => {
     it("returns 404 for unknown mapPresetId", async () => {
       const req = new Request("http://localhost/api/combat/maps", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...AUTH },
         body: JSON.stringify({
           combatId,
           mapPresetId: "non_existent_preset",
@@ -99,8 +118,9 @@ describe("Combat API Routes", () => {
     it("creates combat using procedural encounter generator when biome and difficulty are provided", async () => {
       const req = new Request("http://localhost/api/combat/create", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...AUTH },
         body: JSON.stringify({
+          campaignId,
           name: "Битва в подземелье",
           biome: "dungeon",
           difficulty: "easy",
@@ -124,7 +144,7 @@ describe("Combat API Routes", () => {
       const { POST: postSpawnPreset } = await import("../presets/spawn/route");
       const req = new Request("http://localhost/api/combat/presets/spawn", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...AUTH },
         body: JSON.stringify({
           combatId,
           slug: "wolf",

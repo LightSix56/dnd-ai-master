@@ -1,6 +1,7 @@
 // API: получить список доступных моделей с Polza.ai (или другого OpenAI-compatible провайдера)
 import { FEATURED_MODELS } from "@/lib/ai/models";
 import { resolveApiKey } from "@/lib/ai/api-key";
+import { safeFetch, SsrfError } from "@/lib/security/ssrf";
 
 export const maxDuration = 15;
 
@@ -27,7 +28,7 @@ export async function GET(req: Request) {
       headers["Authorization"] = `Bearer ${apiKey}`;
     }
 
-    const res = await fetch(url, {
+    const res = await safeFetch(url, {
       method: "GET",
       headers,
       signal: AbortSignal.timeout(10000),
@@ -129,6 +130,9 @@ export async function GET(req: Request) {
       baseURL,
     });
   } catch (error: any) {
+    if (error instanceof SsrfError) {
+      return Response.json({ error: error.message }, { status: 400 });
+    }
     console.error("[models] error:", error);
     return Response.json({
       models: FEATURED_MODELS.map((m) => ({

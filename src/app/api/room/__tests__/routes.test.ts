@@ -111,6 +111,10 @@ describe("Room API Routes (Phase 1)", () => {
 
   describe("GET /api/room/[code]", () => {
     it("returns 404 if room not found", async () => {
+      vi.mocked(getAuthUserFromRequest).mockResolvedValueOnce({
+        user: { id: "user-123" } as any,
+        error: null,
+      });
       vi.mocked(getSupabaseAdminClient).mockReturnValue({
         from: vi.fn().mockReturnValue({
           select: vi.fn().mockReturnValue({
@@ -127,6 +131,10 @@ describe("Room API Routes (Phase 1)", () => {
     });
 
     it("returns room with campaign characters and assignment status", async () => {
+      vi.mocked(getAuthUserFromRequest).mockResolvedValueOnce({
+        user: { id: "user-123" } as any,
+        error: null,
+      });
       const mockRoom = {
         id: "room-id-1",
         code: "DRAGON-99",

@@ -11,10 +11,15 @@ import { resolveActiveRoomTurnHelper } from "@/lib/room/resolve-turn-helper";
 export const maxDuration = 300;
 
 export async function GET(
-  _request: Request,
+  request: Request,
   props: { params: Promise<{ code: string }> }
 ) {
   try {
+    const { user, error: authError } = await getAuthUserFromRequest(request);
+    if (!user) {
+      return NextResponse.json({ error: authError || "Необходима авторизация" }, { status: 401 });
+    }
+
     const params = await props.params;
     const code = params?.code?.trim();
     if (!code) {
@@ -25,6 +30,12 @@ export async function GET(
     const room = await roomService.getRoomByCode(code);
     if (!room) {
       return NextResponse.json({ error: "Комната не найдена" }, { status: 404 });
+    }
+
+    const isMember =
+      room.hostUserId === user.id || room.participants?.some((p) => p.userId === user.id);
+    if (!isMember) {
+      return NextResponse.json({ error: "Вы не являетесь участником этой комнаты" }, { status: 403 });
     }
 
     const turn = await roomService.getActiveTurn(room.id);

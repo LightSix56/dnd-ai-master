@@ -1,20 +1,39 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+
+vi.mock("@/lib/supabase/client", () => ({
+  getAuthUserFromRequest: vi.fn(async () => ({ user: { id: "test-user-complete" }, error: null })),
+  getSupabaseAdminClient: vi.fn(() => ({})),
+  getSupabaseServerClient: vi.fn(),
+}));
+
 import { POST as postCompleteCombat } from "../[id]/complete/route";
 import { db } from "@/lib/db";
 
+const AUTH = { Authorization: "Bearer test-tok" };
+
 describe("POST /api/combat/[id]/complete (Combat Loot & Rewards API)", () => {
   let testCombatId: string;
+  let testCampaignId: string;
 
   afterEach(async () => {
     if (testCombatId) {
       await db.combatant.deleteMany({ where: { combatId: testCombatId } });
       await db.combat.deleteMany({ where: { id: testCombatId } });
     }
+    if (testCampaignId) {
+      await db.campaign.deleteMany({ where: { id: testCampaignId } });
+      testCampaignId = "";
+    }
   });
 
   beforeEach(async () => {
+    const camp = await db.campaign.create({
+      data: { userId: "test-user-complete", name: "Complete Test Camp", isActive: false },
+    });
+    testCampaignId = camp.id;
     const combat = await db.combat.create({
       data: {
+        campaignId: testCampaignId,
         name: "Арена славы",
         gridWidth: 20,
         gridHeight: 15,
@@ -88,7 +107,7 @@ describe("POST /api/combat/[id]/complete (Combat Loot & Rewards API)", () => {
       `http://localhost/api/combat/${testCombatId}/complete`,
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...AUTH },
         body: JSON.stringify({ biome: "dungeon" }),
       }
     );
@@ -134,6 +153,7 @@ describe("POST /api/combat/[id]/complete (Combat Loot & Rewards API)", () => {
       `http://localhost/api/combat/${testCombatId}/complete`,
       {
         method: "POST",
+        headers: AUTH,
       }
     );
 
@@ -166,6 +186,7 @@ describe("POST /api/combat/[id]/complete (Combat Loot & Rewards API)", () => {
       `http://localhost/api/combat/${testCombatId}/complete`,
       {
         method: "POST",
+        headers: AUTH,
       }
     );
 
@@ -198,7 +219,7 @@ describe("POST /api/combat/[id]/complete (Combat Loot & Rewards API)", () => {
       `http://localhost/api/combat/${testCombatId}/complete`,
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...AUTH },
         body: JSON.stringify({ force: true }),
       }
     );

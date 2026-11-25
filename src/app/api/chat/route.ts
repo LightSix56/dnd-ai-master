@@ -9,7 +9,8 @@
 //  3. Изменчивый срез сцены (caching/ephemeral-tail.ts) — в хвосте последнего сообщения игрока.
 // Всё, что совпало с прошлым запросом, провайдер читает из кэша по цене в десятки раз ниже.
 
-import { denyCampaignAccess, getRequestUserId } from "@/lib/auth/campaign-access";
+import { AUTH_REQUIRED_MESSAGE, denyCampaignAccess, getRequestUserId } from "@/lib/auth/campaign-access";
+import { safeErrorDetails } from "@/lib/security/errors";
 import { after } from "next/server";
 import {
   streamText,
@@ -107,6 +108,11 @@ export async function POST(req: Request) {
       return Response.json({ error: "messages is required" }, { status: 400 });
     }
 
+    const requestUserId = await getRequestUserId(req);
+    if (!requestUserId) {
+      return Response.json({ error: AUTH_REQUIRED_MESSAGE }, { status: 401 });
+    }
+
     // Проверка API-ключа до запроса к LLM
     const cleanKey = resolveApiKey(userApiKey);
     if (!cleanKey) {
@@ -124,14 +130,16 @@ export async function POST(req: Request) {
     if (!activeCampaignId) {
       // Без явного id — активная кампания самого пользователя, а не «любая активная в базе»
       const active = await db.campaign.findFirst({
-        where: { isActive: true, userId: await getRequestUserId(req) },
+        where: { isActive: true, userId: requestUserId },
         orderBy: { updatedAt: "desc" },
       });
       activeCampaignId = active?.id;
     }
 
-    const denied = await denyCampaignAccess(req, activeCampaignId);
-    if (denied) return denied;
+    if (activeCampaignId) {
+      const denied = await denyCampaignAccess(req, activeCampaignId);
+      if (denied) return denied;
+    }
 
     // Последнее действие/реплика игрока: идёт в запрос и в контекст фонового летописца
     const lastUiUserMessage = [...messages].reverse().find((m) => m.role === "user");
@@ -463,7 +471,7 @@ export async function POST(req: Request) {
     return Response.json(
       {
         error: "Failed to process chat",
-        details: error instanceof Error ? error.message : String(error),
+        details: safeErrorDetails(error),
       },
       { status: 500 }
     );

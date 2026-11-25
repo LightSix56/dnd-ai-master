@@ -1,10 +1,26 @@
 // API: заполнить библиотеку ударами, заклинаниями и способностями из library-data.
 // Идемпотентно: существующие записи обновляются, чтобы правки в данных доезжали.
+import { AUTH_REQUIRED_MESSAGE, getRequestUserId } from "@/lib/auth/campaign-access";
 import { db } from "@/lib/db";
 import { ATTACK_LIBRARY, SPELL_LIBRARY, ABILITY_LIBRARY } from "@/lib/combat/library-data";
+import { safeErrorDetails } from "@/lib/security/errors";
 
-export async function POST() {
+const SEED_COOLDOWN_MS = 60_000;
+const seedLastCall = new Map<string, number>();
+
+export async function POST(req?: Request) {
   try {
+    const userId = req ? await getRequestUserId(req) : null;
+    if (!userId) {
+      return Response.json({ error: AUTH_REQUIRED_MESSAGE }, { status: 401 });
+    }
+    const now = Date.now();
+    const prev = seedLastCall.get(userId) ?? 0;
+    if (now - prev < SEED_COOLDOWN_MS) {
+      return Response.json({ error: "Синхронизацию можно запускать не чаще раза в минуту" }, { status: 429 });
+    }
+    if (seedLastCall.size > 1000) seedLastCall.clear();
+    seedLastCall.set(userId, now);
     let attacksCreated = 0;
     let attacksUpdated = 0;
 
@@ -82,7 +98,7 @@ export async function POST() {
   } catch (error) {
     console.error("[library/seed] error:", error);
     return Response.json(
-      { error: "Не удалось заполнить библиотеку", details: String(error) },
+      { error: "Не удалось заполнить библиотеку", details: safeErrorDetails(error) },
       { status: 500 }
     );
   }

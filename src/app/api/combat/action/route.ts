@@ -46,6 +46,7 @@ import { findNonParticipants } from "@/lib/combat/non-participants";
 import { createPartyCombatants } from "@/lib/combat/generator";
 import { checkCombatControl } from "@/lib/room/combat-access";
 import { resolveAbilityUses } from "@/lib/combat/ability-uses";
+import { safeErrorDetails } from "@/lib/security/errors";
 
 /** Версия боя (Combat.updatedAt) на момент загрузки — для защиты от одновременных запросов */
 const loadedVersion = new WeakMap<CombatState, Date>();
@@ -67,6 +68,19 @@ async function loadState(combatId: string): Promise<CombatState> {
   const state = new CombatState(hydrateCombat(row));
   loadedVersion.set(state, row.updatedAt);
   return state;
+}
+
+/** Для ручных правок в обход loadState: бой должен существовать и не ждать решения о реакции */
+async function assertNoPendingReaction(combatId: string): Promise<void> {
+  const row = await db.combat.findUnique({
+    where: { id: combatId },
+    select: { pendingReaction: true },
+  });
+  if (!row) throw new EngineError("Бой не найден");
+  const pending = hydratePendingReaction(row.pendingReaction);
+  if (pending) {
+    throw new EngineError(`Ожидается решение о реакции: ${pending.prompt.reactorName}`);
+  }
 }
 
 /**
@@ -294,7 +308,7 @@ function errorResponse(error: unknown): Response {
   return Response.json(
     {
       error: "Не удалось выполнить действие",
-      details: error instanceof Error ? error.message : String(error),
+      details: safeErrorDetails(error),
     },
     { status: 500 }
   );
@@ -356,6 +370,13 @@ async function dispatchAction(req: Request, body: any): Promise<Response> {
       const { actions }: { actions: Array<{ action: string; [key: string]: any }> } = body;
       const state = await loadState(combatId);
       const stepResults: any[] = [];
+      const pendingPotionSyncs: Array<{
+        characterId: string;
+        potionId: string;
+        potionName: string;
+        hpCurrent: number;
+        hpTemp: number;
+      }> = [];
 
       const activeId = state.turnOrder[state.currentTurnIndex];
 
@@ -447,13 +468,13 @@ async function dispatchAction(req: Request, body: any): Promise<Response> {
             const c = state.require(cid);
             const res = drinkPotion(state, cid, act.potionId);
             if (c.characterId) {
-              syncCharacterPotionConsumed(
-                c.characterId,
-                res.potion.id,
-                res.potion.name,
-                c.hpCurrent,
-                c.hpTemp
-              ).catch((e) => console.error("[drink-potion] sync error:", e));
+              pendingPotionSyncs.push({
+                characterId: c.characterId,
+                potionId: res.potion.id,
+                potionName: res.potion.name,
+                hpCurrent: c.hpCurrent,
+                hpTemp: c.hpTemp,
+              });
             }
             stepResults.push({
               action: act.action,
@@ -476,6 +497,15 @@ async function dispatchAction(req: Request, body: any): Promise<Response> {
       }
 
       await saveState(combatId, state);
+      for (const sync of pendingPotionSyncs) {
+        syncCharacterPotionConsumed(
+          sync.characterId,
+          sync.potionId,
+          sync.potionName,
+          sync.hpCurrent,
+          sync.hpTemp
+        ).catch((e) => console.error("[drink-potion] sync error:", e));
+      }
       return respond(combatId, { stepResults, outcome: checkCombatOver(state) });
     }
 
@@ -748,6 +778,7 @@ async function dispatchAction(req: Request, body: any): Promise<Response> {
       const c = state.require(combatantId);
 
       const res = drinkPotion(state, combatantId, potionId);
+      await saveState(combatId, state);
 
       if (c.characterId) {
         syncCharacterPotionConsumed(
@@ -759,7 +790,6 @@ async function dispatchAction(req: Request, body: any): Promise<Response> {
         ).catch((e) => console.error("[drink-potion] sync character error:", e));
       }
 
-      await saveState(combatId, state);
       return respond(combatId, {
         potionResult: {
           potionName: res.potion.name,
@@ -823,6 +853,8 @@ async function dispatchAction(req: Request, body: any): Promise<Response> {
 
     if (action === "update-combatant") {
       const { combatantId, updates }: { combatantId: string; updates: Record<string, any> } = body;
+      if (!combatantId) return Response.json({ error: "combatantId required" }, { status: 400 });
+      await assertNoPendingReaction(combatId);
       const allowedScalars = [
         "hpCurrent", "hpMax", "hpTemp", "ac", "speed", "initiative", "isHidden",
         "color", "name", "className", "level", "size", "dexMod", "profBonus",
@@ -831,15 +863,21 @@ async function dispatchAction(req: Request, body: any): Promise<Response> {
       const allowedJson = ["conditions", "attacks", "spells", "abilities", "hotbar", "saves", "abilityMods"];
       const data: Record<string, unknown> = {};
       for (const key of allowedScalars) {
-        if (updates[key] !== undefined) data[key] = updates[key];
+        if (updates?.[key] !== undefined) data[key] = updates[key];
       }
       for (const key of allowedJson) {
-        if (updates[key] !== undefined) data[key] = JSON.stringify(updates[key]);
+        if (updates?.[key] !== undefined) data[key] = JSON.stringify(updates[key]);
       }
-      await db.combatant.update({ where: { id: combatantId }, data: data as any });
+      const updated = await db.combatant.updateMany({
+        where: { id: combatantId, combatId },
+        data: data as any,
+      });
+      if (updated.count === 0) {
+        return Response.json({ error: "Боец не найден в этом бою" }, { status: 404 });
+      }
 
       // Если изменилась инициатива, пересчитываем очередь ходов
-      if (updates.initiative !== undefined) {
+      if (updates?.initiative !== undefined) {
         const state = await loadState(combatId);
         syncTurnOrder(state);
         await saveState(combatId, state);
@@ -864,24 +902,34 @@ async function dispatchAction(req: Request, body: any): Promise<Response> {
 
     if (action === "update-resources") {
       const { combatantId, updates }: { combatantId: string; updates: Record<string, any> } = body;
+      if (!combatantId) return Response.json({ error: "combatantId required" }, { status: 400 });
+      await assertNoPendingReaction(combatId);
       const data: Record<string, unknown> = {};
       for (const key of [
         "actionUsed", "bonusActionUsed", "reactionUsed", "movementUsed",
         "hpCurrent", "hpMax", "hpTemp", "attacksMadeThisAction", "extraActions",
       ]) {
-        if (updates[key] !== undefined) data[key] = updates[key];
+        if (updates?.[key] !== undefined) data[key] = updates[key];
       }
       for (const key of ["hotbar", "attacks", "spells", "abilities"]) {
-        if (updates[key] !== undefined) data[key] = JSON.stringify(updates[key]);
+        if (updates?.[key] !== undefined) data[key] = JSON.stringify(updates[key]);
       }
-      await db.combatant.update({ where: { id: combatantId }, data: data as any });
+      const updated = await db.combatant.updateMany({
+        where: { id: combatantId, combatId },
+        data: data as any,
+      });
+      if (updated.count === 0) {
+        return Response.json({ error: "Боец не найден в этом бою" }, { status: 404 });
+      }
       return respond(combatId);
     }
 
     if (action === "reset-turn") {
       const { combatantId }: { combatantId: string } = body;
-      await db.combatant.update({
-        where: { id: combatantId },
+      if (!combatantId) return Response.json({ error: "combatantId required" }, { status: 400 });
+      await assertNoPendingReaction(combatId);
+      const updated = await db.combatant.updateMany({
+        where: { id: combatantId, combatId },
         data: {
           actionUsed: false,
           bonusActionUsed: false,
@@ -891,12 +939,16 @@ async function dispatchAction(req: Request, body: any): Promise<Response> {
           hasActed: false,
         },
       });
+      if (updated.count === 0) {
+        return Response.json({ error: "Боец не найден в этом бою" }, { status: 404 });
+      }
       return respond(combatId);
     }
 
     // ===================== СОСТАВ БОЯ И КАРТА =====================
 
     if (action === "add-combatant") {
+      await assertNoPendingReaction(combatId);
       const src = body.payload && typeof body.payload === "object" ? { ...body, ...body.payload } : body;
       const {
         name, type, x, y, hpMax, ac, speed, dexMod, color, className, level,
@@ -932,7 +984,12 @@ async function dispatchAction(req: Request, body: any): Promise<Response> {
 
     if (action === "remove-combatant") {
       const { combatantId }: { combatantId: string } = body;
-      await db.combatant.delete({ where: { id: combatantId } });
+      if (!combatantId) return Response.json({ error: "combatantId required" }, { status: 400 });
+      await assertNoPendingReaction(combatId);
+      const deleted = await db.combatant.deleteMany({ where: { id: combatantId, combatId } });
+      if (deleted.count === 0) {
+        return Response.json({ error: "Боец не найден в этом бою" }, { status: 404 });
+      }
       const state = await loadState(combatId);
       syncTurnOrder(state);
       await saveState(combatId, state);
@@ -940,6 +997,7 @@ async function dispatchAction(req: Request, body: any): Promise<Response> {
     }
 
     if (action === "add-party-member") {
+      await assertNoPendingReaction(combatId);
       // Ведущий вводит в идущий бой героя или спутника, который не был выбран при старте
       const { characterId }: { characterId?: string } = body;
       if (!characterId) return Response.json({ error: "Не указан герой" }, { status: 400 });
@@ -963,8 +1021,8 @@ async function dispatchAction(req: Request, body: any): Promise<Response> {
         startIndex: combat.combatants.filter((c) => c.type !== "enemy").length,
       });
       for (const roll of rollInitiativeForAll(created)) {
-        await db.combatant.update({
-          where: { id: roll.id },
+        await db.combatant.updateMany({
+          where: { id: roll.id, combatId },
           data: { initiative: roll.initiative, initiativeTiebreak: roll.tiebreak },
         });
       }
@@ -976,6 +1034,7 @@ async function dispatchAction(req: Request, body: any): Promise<Response> {
     }
 
     if (action === "add-element") {
+      await assertNoPendingReaction(combatId);
       const { type, x, y, width = 1, height = 1 }: any = body;
       await db.mapElement.create({
         data: {
@@ -993,7 +1052,12 @@ async function dispatchAction(req: Request, body: any): Promise<Response> {
 
     if (action === "remove-element") {
       const { elementId }: { elementId: string } = body;
-      await db.mapElement.delete({ where: { id: elementId } });
+      if (!elementId) return Response.json({ error: "elementId required" }, { status: 400 });
+      await assertNoPendingReaction(combatId);
+      const deleted = await db.mapElement.deleteMany({ where: { id: elementId, combatId } });
+      if (deleted.count === 0) {
+        return Response.json({ error: "Элемент карты не найден в этом бою" }, { status: 404 });
+      }
       return respond(combatId);
     }
 
@@ -1009,6 +1073,7 @@ async function dispatchAction(req: Request, body: any): Promise<Response> {
     }
 
     if (action === "resize-grid" || action === "update-grid") {
+      await assertNoPendingReaction(combatId);
       const { gridWidth, gridHeight, cellSize }: { gridWidth?: number; gridHeight?: number; cellSize?: number } = body;
       const data: Record<string, number> = {};
       if (gridWidth && gridWidth >= 5 && gridWidth <= 100) data.gridWidth = Math.round(gridWidth);
@@ -1025,6 +1090,7 @@ async function dispatchAction(req: Request, body: any): Promise<Response> {
     }
 
     if (action === "expand-grid-direction") {
+      await assertNoPendingReaction(combatId);
       const { direction, count = 2 }: { direction: "top" | "bottom" | "left" | "right"; count?: number } = body;
       const combatRow = await db.combat.findUnique({ where: { id: combatId } });
       if (!combatRow) return Response.json({ error: "Бой не найден" }, { status: 404 });
@@ -1061,8 +1127,8 @@ async function dispatchAction(req: Request, body: any): Promise<Response> {
         for (const el of state.mapElements) {
           el.x += shiftX;
           el.y += shiftY;
-          await db.mapElement.update({
-            where: { id: el.id },
+          await db.mapElement.updateMany({
+            where: { id: el.id, combatId },
             data: { x: el.x, y: el.y },
           });
         }

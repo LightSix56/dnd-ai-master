@@ -1,12 +1,18 @@
 import { NextResponse } from "next/server";
+import { getAuthUserFromRequest } from "@/lib/supabase/client";
 import { RoomService } from "@/lib/room/room-service";
 import { db } from "@/lib/db";
 
 export async function GET(
-  _request: Request,
+  request: Request,
   props: { params: Promise<{ code: string }> }
 ) {
   try {
+    const { user, error: authError } = await getAuthUserFromRequest(request);
+    if (!user) {
+      return NextResponse.json({ error: authError || "Необходима авторизация" }, { status: 401 });
+    }
+
     const params = await props.params;
     const code = params?.code?.trim();
     if (!code) {
@@ -19,6 +25,10 @@ export async function GET(
     if (!room) {
       return NextResponse.json({ error: "Комната не найдена" }, { status: 404 });
     }
+
+    const participants = room.participants || [];
+    const isMember =
+      room.hostUserId === user.id || participants.some((p) => p.userId === user.id);
 
     const campaignId =
       room.campaignId ||
@@ -33,12 +43,28 @@ export async function GET(
           orderBy: { createdAt: "asc" },
         });
 
-        const participants = room.participants || [];
         campaignCharacters = chars.map((c) => {
           // Герой занят, если его лист выбран участником комнаты
           const assignedParticipant = c.sheetCharacterId
             ? participants.find((p) => p.characterId === c.sheetCharacterId)
             : undefined;
+
+          if (!isMember) {
+            return {
+              id: c.id,
+              name: c.name,
+              race: c.race || "Гуманоид",
+              className: c.class || "Приключенец",
+              subclass: c.subclass,
+              level: c.level || room.startingLevel || 1,
+              assignedTo: assignedParticipant
+                ? {
+                    userId: assignedParticipant.userId,
+                    characterName: c.name,
+                  }
+                : null,
+            };
+          }
 
           return {
             id: c.id,
@@ -74,10 +100,17 @@ export async function GET(
       }
     }
 
+    const safeRoom = isMember
+      ? room
+      : {
+          ...room,
+          storyArc: undefined,
+        };
+
     return NextResponse.json(
       {
-        room,
-        participants: room.participants || [],
+        room: safeRoom,
+        participants,
         campaignCharacters,
       },
       { status: 200 }

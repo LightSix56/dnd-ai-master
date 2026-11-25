@@ -1,4 +1,5 @@
 // DuckDuckGo поиск для AI DM — поиск правил D&D 5e в интернете
+import { safeFetch } from "@/lib/security/ssrf";
 
 const DDG_HTML_URL = "https://html.duckduckgo.com/html/";
 
@@ -117,7 +118,7 @@ function stripTags(html: string): string {
  */
 export async function fetchPageText(url: string): Promise<string> {
   try {
-    const res = await fetch(url, {
+    const res = await safeFetch(url, {
       headers: {
         "User-Agent":
           "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/120.0 Safari/537.36",

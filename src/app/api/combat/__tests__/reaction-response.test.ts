@@ -1,6 +1,17 @@
 // Окно реакции через настоящий роут: запрос → окно → ответ → повтор действия.
 
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+
+vi.mock("@/lib/supabase/client", async () => {
+  const { fakeSupabase } = await import("@/lib/testing/fake-supabase");
+  const sb = fakeSupabase({ tables: { rooms: [], room_participants: [] } });
+  return {
+    getAuthUserFromRequest: vi.fn(async () => ({ user: { id: "test-user-react" }, error: null })),
+    getSupabaseAdminClient: vi.fn(() => sb),
+    getSupabaseServerClient: vi.fn(),
+  };
+});
+
 import { POST } from "../action/route";
 import { db } from "@/lib/db";
 import { dehydrateCombatant } from "@/lib/combat/serialize";
@@ -10,7 +21,7 @@ const call = async (body: Record<string, unknown>) => {
   const res = await POST(
     new Request("http://localhost/api/combat/action", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", Authorization: "Bearer test-tok" },
       body: JSON.stringify(body),
     })
   );
@@ -19,10 +30,15 @@ const call = async (body: Record<string, unknown>) => {
 
 describe("reaction-response", () => {
   let combatId: string;
+  let campaignId: string;
 
   beforeEach(async () => {
+    const camp = await db.campaign.create({
+      data: { userId: "test-user-react", name: "React Camp", isActive: false },
+    });
+    campaignId = camp.id;
     const combat = await db.combat.create({
-      data: { name: "Окно реакции", gridWidth: 30, gridHeight: 30, status: "active", round: 1, turnOrder: "[]", log: "[]" },
+      data: { campaignId, name: "Окно реакции", gridWidth: 30, gridHeight: 30, status: "active", round: 1, turnOrder: "[]", log: "[]" },
     });
     combatId = combat.id;
     const h = hero("h", "", 1, { x: 5, y: 5 });
@@ -41,6 +57,7 @@ describe("reaction-response", () => {
   afterEach(async () => {
     await db.combatant.deleteMany({ where: { combatId } });
     await db.combat.deleteMany({ where: { id: combatId } });
+    if (campaignId) await db.campaign.deleteMany({ where: { id: campaignId } });
   });
 
   const ids = () => (globalThis as any).__ids as { h: string; e: string };

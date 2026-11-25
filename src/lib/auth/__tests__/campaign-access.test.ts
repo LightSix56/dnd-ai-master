@@ -83,11 +83,13 @@ describe("checkCampaignAccess", () => {
     expect((await checkCampaignAccess(req("late"), "c1")).ok).toBe(true);
   });
 
-  it("кампания без владельца и несуществующая кампания не блокируются", async () => {
+  it("кампания без владельца блокируется, а несуществующая пускает только после авторизации", async () => {
     dbMock.campaign.findUnique.mockResolvedValueOnce({ userId: null });
-    expect((await checkCampaignAccess(req(), "legacy")).ok).toBe(true);
+    expect(await checkCampaignAccess(req("owner"), "legacy")).toMatchObject({ ok: false, status: 403 });
     dbMock.campaign.findUnique.mockResolvedValueOnce(null);
-    expect((await checkCampaignAccess(req(), "missing")).ok).toBe(true);
+    expect(await checkCampaignAccess(req(), "missing")).toMatchObject({ ok: false, status: 401 });
+    dbMock.campaign.findUnique.mockResolvedValueOnce(null);
+    expect((await checkCampaignAccess(req("owner"), "missing")).ok).toBe(true);
   });
 
   it("сбой проверки комнаты не открывает доступ постороннему", async () => {
@@ -114,10 +116,13 @@ describe("denyCampaignAccess / denyCombatAccess", () => {
     expect(await denyCombatAccess(req("owner"), "b1")).toBeNull();
   });
 
-  it("бой без кампании (арена) и несуществующий бой не блокируются", async () => {
+  it("бой без кампании блокируется (401/403), а несуществующий пропускается для 404 только с авторизацией", async () => {
+    expect((await denyCombatAccess(req(), "arena"))?.status).toBe(401);
+    resetCampaignAccessCaches();
     dbMock.combat.findUnique.mockResolvedValueOnce({ campaignId: null });
-    expect(await denyCombatAccess(req(), "arena")).toBeNull();
+    expect((await denyCombatAccess(req("owner"), "arena"))?.status).toBe(403);
+    expect((await denyCombatAccess(req(), "missing"))?.status).toBe(401);
     dbMock.combat.findUnique.mockResolvedValueOnce(null);
-    expect(await denyCombatAccess(req(), "missing")).toBeNull();
+    expect(await denyCombatAccess(req("owner"), "missing")).toBeNull();
   });
 });

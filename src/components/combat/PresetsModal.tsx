@@ -35,6 +35,7 @@ import {
 } from "lucide-react";
 import type { CharacterPreset, Combatant } from "@/lib/combat/types";
 import { DEFAULT_PRESETS } from "@/lib/combat/preset-data";
+import { parseChallengeRating } from "@/lib/combat/cr-parser";
 import { BestiaryBrowser } from "./BestiaryBrowser";
 
 interface PresetsModalProps {
@@ -96,7 +97,7 @@ export function PresetsModal({
 
       // 1.5 По CR (Опасности)
       if (crFilter !== "all" && p.cr) {
-        const crNum = parseFloat(eval(p.cr) || p.cr);
+        const crNum = parseChallengeRating(p.cr);
         if (crFilter === "0" && crNum !== 0) return false;
         if (crFilter === "1/8" && crNum !== 0.125) return false;
         if (crFilter === "1/4" && crNum !== 0.25) return false;

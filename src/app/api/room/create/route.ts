@@ -14,21 +14,20 @@ export async function POST(request: Request) {
         ? body.campaignId.trim()
         : undefined;
 
-    // Ведущий — только тот, кто подтверждён токеном. Раньше id ведущего можно было передать
-    // в теле запроса и создать комнату от чужого имени.
-    const hostUserId = user?.id || (campaignId ? `host_campaign_${campaignId}` : null);
-
-    if (!hostUserId) {
+    // Ведущий — только тот, кто подтверждён токеном.
+    if (!user?.id) {
       return NextResponse.json(
-        { error: authError || "Необходима авторизация или привязка к кампании" },
+        { error: authError || "Необходима авторизация" },
         { status: 401 }
       );
     }
+    const hostUserId = user.id;
 
-    // Открыть стол для кампании может только тот, у кого есть к ней доступ: иначе чужую
-    // кампанию можно было бы «захватить», создав для неё комнату и став её ведущим
-    const denied = await denyCampaignAccess(request, campaignId);
-    if (denied) return denied;
+    // Если комната открывается для существующей кампании, проверяем доступ к ней
+    if (campaignId) {
+      const denied = await denyCampaignAccess(request, campaignId);
+      if (denied) return denied;
+    }
 
     if (typeof body.name === "string" && !body.name.trim()) {
       return NextResponse.json({ error: "Необходимо указать название комнаты" }, { status: 400 });

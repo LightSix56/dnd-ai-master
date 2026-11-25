@@ -1,13 +1,26 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+
+vi.mock("@/lib/supabase/client", () => ({
+  getAuthUserFromRequest: vi.fn(async () => ({ user: { id: "test-user-imp" }, error: null })),
+  getSupabaseAdminClient: vi.fn(() => ({})),
+  getSupabaseServerClient: vi.fn(),
+}));
+
 import { POST as importCharacterRoute } from "../import-character/route";
 import { db } from "@/lib/db";
 
 describe("POST /api/combat/import-character (Slots and Stats Integrity)", () => {
   let testCombatId: string;
+  let testCampaignId: string;
 
   beforeEach(async () => {
+    const camp = await db.campaign.create({
+      data: { userId: "test-user-imp", name: "Import Combat Camp", isActive: false },
+    });
+    testCampaignId = camp.id;
     const combat = await db.combat.create({
       data: {
+        campaignId: testCampaignId,
         name: "Тестовый бой",
         gridWidth: 20,
         gridHeight: 15,
@@ -23,6 +36,10 @@ describe("POST /api/combat/import-character (Slots and Stats Integrity)", () => 
     if (testCombatId) {
       await db.combatant.deleteMany({ where: { combatId: testCombatId } });
       await db.combat.deleteMany({ where: { id: testCombatId } });
+    }
+    if (testCampaignId) {
+      await db.campaign.deleteMany({ where: { id: testCampaignId } });
+      testCampaignId = "";
     }
   });
 
@@ -74,7 +91,7 @@ describe("POST /api/combat/import-character (Slots and Stats Integrity)", () => 
 
     const req = new Request("http://localhost/api/combat/import-character", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", Authorization: "Bearer test-tok" },
       body: JSON.stringify({
         combatId: testCombatId,
         characterJson,

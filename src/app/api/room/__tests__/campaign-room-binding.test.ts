@@ -11,6 +11,10 @@ vi.mock("@/lib/supabase/client", () => {
   };
 });
 
+vi.mock("@/lib/auth/campaign-access", () => ({
+  denyCampaignAccess: vi.fn().mockResolvedValue(null),
+}));
+
 import { getAuthUserFromRequest, getSupabaseAdminClient } from "@/lib/supabase/client";
 
 describe("Campaign Room Binding API", () => {
@@ -87,15 +91,15 @@ describe("Campaign Room Binding API", () => {
     vi.mocked(getSupabaseAdminClient).mockReturnValue(mockAdmin as any);
   });
 
-  it("creates a room for a campaign even without Supabase user session (local DM)", async () => {
+  it("creates a room for a campaign for authenticated host user", async () => {
     vi.mocked(getAuthUserFromRequest).mockResolvedValueOnce({
-      user: null,
-      error: "No token",
+      user: { id: "user-host-1" } as any,
+      error: null,
     });
 
     const req = new Request("http://localhost/api/room/create", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", Authorization: "Bearer tok" },
       body: JSON.stringify({
         campaignId: "camp-alpha-123",
         name: "Поход в Подземелье",
@@ -109,13 +113,13 @@ describe("Campaign Room Binding API", () => {
     expect(data.room).toBeDefined();
     expect(data.room.campaignId).toBe("camp-alpha-123");
     expect(data.room.startingLevel).toBe(5);
-    expect(data.room.hostUserId).toBe("host_campaign_camp-alpha-123");
+    expect(data.room.hostUserId).toBe("user-host-1");
   });
 
   it("returns existing active room when called again for the same campaignId", async () => {
     vi.mocked(getAuthUserFromRequest).mockResolvedValue({
-      user: null,
-      error: "No token",
+      user: { id: "user-host-1" } as any,
+      error: null,
     });
 
     // 1. Create first time

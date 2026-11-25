@@ -1,5 +1,5 @@
 // API: получить активный бой
-import { denyCampaignAccess } from "@/lib/auth/campaign-access";
+import { AUTH_REQUIRED_MESSAGE, denyCampaignAccess, getRequestUserId } from "@/lib/auth/campaign-access";
 import { db } from "@/lib/db";
 import { hydrateCombat } from "@/lib/combat/serialize";
 import { RoomService } from "@/lib/room/room-service";
@@ -51,6 +51,11 @@ function getHostPort(req: Request): number {
 
 export async function GET(req: Request) {
   try {
+    const userId = await getRequestUserId(req);
+    if (!userId) {
+      return Response.json({ error: AUTH_REQUIRED_MESSAGE }, { status: 401 });
+    }
+
     const url = new URL(req.url);
     let campaignId = url.searchParams.get("campaignId");
     const roomCode = url.searchParams.get("roomCode") || url.searchParams.get("code");
@@ -67,26 +72,18 @@ export async function GET(req: Request) {
       }
     }
 
-    const where: { status: string; campaignId?: string } = { status: "active" };
-    if (campaignId) {
-      where.campaignId = campaignId;
-      const denied = await denyCampaignAccess(req, campaignId);
-      if (denied) return denied;
+    if (!campaignId) {
+      return Response.json({ combat: null });
     }
 
+    const denied = await denyCampaignAccess(req, campaignId);
+    if (denied) return denied;
+
     const row = await db.combat.findFirst({
-      where,
+      where: { status: "active", campaignId },
       orderBy: { updatedAt: "desc" },
       include: { combatants: true, mapElements: true },
     });
-
-    // Без campaignId находится «последний активный бой в базе» — он может быть чужим
-    if (!campaignId && row) {
-      const denied = await denyCampaignAccess(req, row.campaignId);
-      if (denied) {
-        return Response.json({ combat: null });
-      }
-    }
 
     const ips = getLanIps();
     const port = getHostPort(req);

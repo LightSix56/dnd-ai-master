@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
+import { AUTH_REQUIRED_MESSAGE, getRequestUserId } from "@/lib/auth/campaign-access";
 import { db } from "@/lib/db";
 import { DEFAULT_PRESETS } from "@/lib/combat/preset-data";
 import type { CharacterPreset } from "@/lib/combat/types";
+import { safeErrorDetails } from "@/lib/security/errors";
+
+const CR_PATTERN = /^(\d+(\.\d+)?|\d+\/\d+)$/;
 
 export async function GET(req: NextRequest) {
   try {
@@ -71,6 +75,11 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
+    const userId = await getRequestUserId(req);
+    if (!userId) {
+      return NextResponse.json({ error: AUTH_REQUIRED_MESSAGE }, { status: 401 });
+    }
+
     const body = await req.json();
     const {
       id,
@@ -96,8 +105,11 @@ export async function POST(req: NextRequest) {
       tags = [],
     } = body;
 
-    if (!name) {
-      return NextResponse.json({ error: "Имя пресета обязательно" }, { status: 400 });
+    if (!name || typeof name !== "string" || !name.trim() || name.trim().length > 120) {
+      return NextResponse.json({ error: "Некорректное имя пресета" }, { status: 400 });
+    }
+    if (cr !== undefined && cr !== null && cr !== "" && !CR_PATTERN.test(String(cr).trim())) {
+      return NextResponse.json({ error: "Некорректный формат CR (ожидается число или дробь, например 1/4)" }, { status: 400 });
     }
 
     const data = {
@@ -167,12 +179,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ preset });
   } catch (error: any) {
     console.error("POST /api/combat/presets error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: "Не удалось сохранить пресет", details: safeErrorDetails(error) }, { status: 500 });
   }
 }
 
 export async function DELETE(req: NextRequest) {
   try {
+    const userId = await getRequestUserId(req);
+    if (!userId) {
+      return NextResponse.json({ error: AUTH_REQUIRED_MESSAGE }, { status: 401 });
+    }
+
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
     if (!id) {
@@ -190,6 +207,6 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ success: true, deletedId: id });
   } catch (error: any) {
     console.error("DELETE /api/combat/presets error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: "Не удалось удалить пресет", details: safeErrorDetails(error) }, { status: 500 });
   }
 }

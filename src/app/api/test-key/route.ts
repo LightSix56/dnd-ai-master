@@ -1,4 +1,5 @@
-// API: проверка валидности API-ключа через простой запрос к claudehub.fun
+// API: проверка валидности API-ключа через простой запрос к провайдеру
+import { safeFetch, SsrfError } from "@/lib/security/ssrf";
 
 export const maxDuration = 30;
 
@@ -54,7 +55,7 @@ export async function POST(req: Request) {
 
     // Делаем минимальный тестовый запрос напрямую,
     // чтобы получить точный код ответа и сообщение
-    const testRes = await fetch(`${selectedBaseURL}/chat/completions`, {
+    const testRes = await safeFetch(`${selectedBaseURL}/chat/completions`, {
       method: "POST",
       headers,
       body: JSON.stringify({
@@ -119,6 +120,9 @@ export async function POST(req: Request) {
       statusCode: testRes.status,
     });
   } catch (error: any) {
+    if (error instanceof SsrfError) {
+      return Response.json({ valid: false, error: error.message }, { status: 400 });
+    }
     console.error("[test-key] error:", error);
     const msg = error?.message || String(error);
     if (msg.includes("timeout") || msg.includes("abort")) {

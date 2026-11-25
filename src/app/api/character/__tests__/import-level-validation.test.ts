@@ -1,6 +1,19 @@
-import { describe, it, expect, beforeAll, afterAll } from "vitest";
+import { describe, it, expect, beforeAll, afterAll, vi } from "vitest";
+
+vi.mock("@/lib/supabase/client", async () => {
+  const { fakeSupabase } = await import("@/lib/testing/fake-supabase");
+  const sb = fakeSupabase();
+  return {
+    getAuthUserFromRequest: vi.fn(async () => ({ user: { id: "test-user-lvl" }, error: null })),
+    getSupabaseAdminClient: vi.fn(() => sb),
+    getSupabaseServerClient: vi.fn(),
+  };
+});
+
 import { POST } from "../import/route";
 import { db } from "@/lib/db";
+
+const AUTH = { Authorization: "Bearer test-tok" };
 
 describe("POST /api/character/import level validation", () => {
   let testCampaignId: string;
@@ -8,6 +21,7 @@ describe("POST /api/character/import level validation", () => {
   beforeAll(async () => {
     const campaign = await db.campaign.create({
       data: {
+        userId: "test-user-lvl",
         name: "Test Level 1 Campaign",
         startingLevel: 1,
         levelFrom: 1,
@@ -50,7 +64,7 @@ describe("POST /api/character/import level validation", () => {
   it("rejects player character with level 3 when campaign requires level 1 (422)", async () => {
     const req = new Request("http://localhost:3000/api/character/import", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...AUTH },
       body: JSON.stringify({
         campaignId: testCampaignId,
         type: "player",
@@ -67,7 +81,7 @@ describe("POST /api/character/import level validation", () => {
   it("allows player character with level 1 in a level 1 campaign (200)", async () => {
     const req = new Request("http://localhost:3000/api/character/import", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...AUTH },
       body: JSON.stringify({
         campaignId: testCampaignId,
         type: "player",
@@ -85,7 +99,7 @@ describe("POST /api/character/import level validation", () => {
   it("allows NPC / enemy / companion with higher level (200)", async () => {
     const req = new Request("http://localhost:3000/api/character/import", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...AUTH },
       body: JSON.stringify({
         campaignId: testCampaignId,
         type: "npc",
@@ -101,20 +115,24 @@ describe("POST /api/character/import level validation", () => {
   });
 
   it("dynamically adapts target level when party levels up in the campaign", async () => {
-    // 1. Manually update or add a level 2 character to the campaign
-    await db.character.updateMany({
-      where: { campaignId: testCampaignId, type: "player" },
-      data: { level: 2 },
+    // 1. Add a level 2 character (without linked sheet) so party max level becomes 2
+    await db.character.create({
+      data: {
+        campaignId: testCampaignId,
+        name: "Партиец 2 ур",
+        type: "player",
+        level: 2,
+      },
     });
 
     // 2. Importing a level 1 character should now be rejected because party is now level 2
     const reqLevel1 = new Request("http://localhost:3000/api/character/import", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...AUTH },
       body: JSON.stringify({
         campaignId: testCampaignId,
         type: "player",
-        character: validSheetLevel1,
+        character: { ...validSheetLevel1, name: "Ещё новичок 1 ур" },
       }),
     });
     const resLevel1 = await POST(reqLevel1);
@@ -130,7 +148,7 @@ describe("POST /api/character/import level validation", () => {
     };
     const reqLevel2 = new Request("http://localhost:3000/api/character/import", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...AUTH },
       body: JSON.stringify({
         campaignId: testCampaignId,
         type: "player",

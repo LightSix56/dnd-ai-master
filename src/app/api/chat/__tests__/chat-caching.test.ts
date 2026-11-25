@@ -47,6 +47,12 @@ vi.mock("@/lib/db", () => ({
   },
 }));
 
+vi.mock("@/lib/auth/campaign-access", () => ({
+  AUTH_REQUIRED_MESSAGE: "Войдите в аккаунт, чтобы продолжить.",
+  getRequestUserId: vi.fn().mockResolvedValue("user-1"),
+  denyCampaignAccess: vi.fn().mockResolvedValue(null),
+}));
+
 vi.mock("next/server", async (importOriginal) => {
   const actual = await importOriginal<typeof import("next/server")>();
   return { ...actual, after: vi.fn() };

@@ -1,23 +1,20 @@
-// Кто имеет доступ к кампании.
+// Кто имеет доступ к кампании и бою (строгий fail-closed режим).
 //
 // Правило:
-//  - владелец кампании (Campaign.userId) — всегда;
-//  - участник или ведущий сетевой комнаты, привязанной к кампании, — пока комната не закрыта;
-//  - без входа в аккаунт — никто.
-//
-// Кампании без владельца (userId = null) — наследие времён, когда кампанию можно было
-// создать без входа. Новых таких не появляется (создание требует входа). В списках они
-// никому не показываются; по прямой ссылке остаются доступными, чтобы старые партии не
-// оборвались, пока владелец не закрепит их за собой (scripts/migrations/005_*.sql).
+//  - без валидной авторизации доступ запрещён (401);
+//  - владелец кампании (Campaign.userId === userId) — всегда;
+//  - участник или ведущий активной сетевой комнаты, привязанной к кампании;
+//  - кампании без владельца (userId = null) и бои без campaignId не открываются посторонним (403).
 
+import { createHash } from "node:crypto";
 import { db } from "@/lib/db";
 import { getAuthUserFromRequest } from "@/lib/supabase/client";
 import { RoomService } from "@/lib/room/room-service";
 
-const USER_TTL_MS = 60_000;
-const OWNER_TTL_MS = 30_000;
-const ROOM_TTL_MS = 15_000;
-const COMBAT_TTL_MS = 5 * 60_000;
+const USER_TTL_MS = 30_000;
+const OWNER_TTL_MS = 10_000;
+const ROOM_TTL_MS = 5_000;
+const COMBAT_TTL_MS = 60_000;
 
 const userCache = new Map<string, { id: string | null; at: number }>();
 const ownerCache = new Map<string, { exists: boolean; userId: string | null; at: number }>();
@@ -27,11 +24,16 @@ const combatCache = new Map<string, { campaignId: string | null; at: number }>()
 export const AUTH_REQUIRED_MESSAGE = "Войдите в аккаунт, чтобы продолжить.";
 export const FORBIDDEN_MESSAGE = "Доступ запрещён: это кампания другого пользователя.";
 
-/** id пользователя из заголовка Authorization (с коротким кэшем, чтобы не ходить в Supabase на каждый запрос) */
+function hashAuthHeader(header: string): string {
+  return createHash("sha256").update(header).digest("hex");
+}
+
+/** id пользователя из заголовка Authorization (с коротким кэшем по SHA-256 хэшу) */
 export async function getRequestUserId(request: Request): Promise<string | null> {
   const header = request.headers?.get("Authorization");
   if (!header) return null;
-  const cached = userCache.get(header);
+  const cacheKey = hashAuthHeader(header);
+  const cached = userCache.get(cacheKey);
   if (cached && Date.now() - cached.at < USER_TTL_MS) return cached.id;
   let id: string | null = null;
   try {
@@ -42,7 +44,7 @@ export async function getRequestUserId(request: Request): Promise<string | null>
   }
   if (userCache.size > 2000) userCache.clear();
   // Неудачу кэшируем ненадолго: токен мог обновиться
-  userCache.set(header, { id, at: id ? Date.now() : Date.now() - USER_TTL_MS + 5_000 });
+  userCache.set(cacheKey, { id, at: id ? Date.now() : Date.now() - USER_TTL_MS + 5_000 });
   return id;
 }
 
@@ -77,25 +79,25 @@ export type CampaignAccess =
   | { ok: true; userId: string | null }
   | { ok: false; status: 401 | 403; error: string; userId: string | null };
 
-/** Проверяет доступ пользователя запроса к кампании */
+/** Проверяет доступ пользователя запроса к кампании (fail-closed) */
 export async function checkCampaignAccess(
   request: Request,
   campaignId: string | null | undefined
 ): Promise<CampaignAccess> {
   const userId = await getRequestUserId(request);
-  if (!campaignId) return { ok: true, userId };
+  if (!userId) return { ok: false, status: 401, error: AUTH_REQUIRED_MESSAGE, userId: null };
+  if (!campaignId) return { ok: false, status: 403, error: FORBIDDEN_MESSAGE, userId };
 
   const owner = await campaignOwner(campaignId);
-  // Несуществующую кампанию обработает сам маршрут (404); кампания без владельца — см. шапку файла
-  if (!owner.exists || !owner.userId) return { ok: true, userId };
-
-  if (!userId) return { ok: false, status: 401, error: AUTH_REQUIRED_MESSAGE, userId };
+  // Несуществующую кампанию обработает сам маршрут (404), но только для авторизованного запроса
+  if (!owner.exists) return { ok: true, userId };
+  // Кампания без владельца (legacy) закрыта для доступа через API
+  if (!owner.userId) return { ok: false, status: 403, error: FORBIDDEN_MESSAGE, userId };
   if (owner.userId === userId) return { ok: true, userId };
 
   const hadCachedRoom = roomCache.has(campaignId);
   let members = await roomMembers(campaignId);
   if (!members.includes(userId) && hadCachedRoom) {
-    // Игрок мог войти в комнату только что — перечитываем состав мимо кэша
     roomCache.delete(campaignId);
     members = await roomMembers(campaignId);
   }
@@ -119,11 +121,17 @@ export async function denyCombatAccess(
   request: Request,
   combatId: string | null | undefined
 ): Promise<Response | null> {
-  if (!combatId) return null;
+  const userId = await getRequestUserId(request);
+  if (!userId) {
+    return Response.json({ error: AUTH_REQUIRED_MESSAGE }, { status: 401 });
+  }
+  if (!combatId) {
+    return Response.json({ error: FORBIDDEN_MESSAGE }, { status: 403 });
+  }
   let entry = combatCache.get(combatId);
   if (!entry || Date.now() - entry.at >= COMBAT_TTL_MS) {
     const row = await db.combat.findUnique({ where: { id: combatId }, select: { campaignId: true } });
-    // Несуществующий бой не кэшируем: его мог ещё не успеть создать параллельный запрос
+    // Несуществующий бой обработает сам маршрут (404)
     if (!row) return null;
     entry = { campaignId: row.campaignId ?? null, at: Date.now() };
     if (combatCache.size > 2000) combatCache.clear();

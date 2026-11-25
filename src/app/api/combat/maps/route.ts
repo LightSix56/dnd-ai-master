@@ -1,8 +1,34 @@
 // API: применение своей карты (ссылка или .dd2vtt) к бою
+import { denyCombatAccess } from "@/lib/auth/campaign-access";
 import { db } from "@/lib/db";
 import { hydrateCombat, hydrateCombatant } from "@/lib/combat/serialize";
 import { assignTacticalSpawns } from "@/lib/combat/maps/spawn-director";
 import type { TacticalMapPreset } from "@/lib/combat/maps/types";
+import { parsePublicHttpsUrlSyntax } from "@/lib/security/ssrf";
+import { safeErrorDetails } from "@/lib/security/errors";
+
+function isSafeBackgroundUrl(url: string): boolean {
+  const trimmed = url.trim();
+  if (!trimmed) return false;
+  if (trimmed.startsWith("/")) {
+    return !trimmed.startsWith("//") && !trimmed.includes("..") && !trimmed.includes("\\");
+  }
+  if (trimmed.startsWith("procgen://")) {
+    return /^[a-z0-9_/:?=&.-]+$/i.test(trimmed);
+  }
+  if (/^data:image\/(png|jpeg|jpg|webp|gif);base64,[A-Za-z0-9+/=]+$/i.test(trimmed)) {
+    return trimmed.length <= 10 * 1024 * 1024;
+  }
+  if (trimmed.startsWith("https://")) {
+    try {
+      parsePublicHttpsUrlSyntax(trimmed);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+  return false;
+}
 
 
 // Готовые карты убраны: карта боя собирается генератором (procgen), сюда остаётся
@@ -20,6 +46,14 @@ export async function POST(req: Request) {
       return Response.json({ error: "combatId и либо mapPresetId, либо customMap обязательны" }, { status: 400 });
     }
 
+    const denied = await denyCombatAccess(req, combatId);
+    if (denied) return denied;
+
+    const existingCombat = await db.combat.findUnique({ where: { id: combatId }, select: { id: true } });
+    if (!existingCombat) {
+      return Response.json({ error: "Бой не найден" }, { status: 404 });
+    }
+
     let mapName = "";
     let gridWidth = 20;
     let gridHeight = 20;
@@ -27,11 +61,17 @@ export async function POST(req: Request) {
     let elements: any[] = [];
 
     if (customMap) {
-      mapName = customMap.name || "Пользовательская карта VTT";
-      gridWidth = customMap.gridWidth || 20;
-      gridHeight = customMap.gridHeight || 20;
-      backgroundUrl = customMap.backgroundUrl || null;
-      elements = customMap.elements || [];
+      mapName = String(customMap.name || "Пользовательская карта VTT").slice(0, 120);
+      gridWidth = Math.max(5, Math.min(100, Math.round(Number(customMap.gridWidth) || 20)));
+      gridHeight = Math.max(5, Math.min(100, Math.round(Number(customMap.gridHeight) || 20)));
+      if (customMap.backgroundUrl != null && customMap.backgroundUrl !== "") {
+        const bg = String(customMap.backgroundUrl);
+        if (!isSafeBackgroundUrl(bg)) {
+          return Response.json({ error: "Недопустимый URL фонового изображения карты" }, { status: 400 });
+        }
+        backgroundUrl = bg;
+      }
+      elements = Array.isArray(customMap.elements) ? customMap.elements.slice(0, 2000) : [];
     } else {
       return Response.json(
         { error: "Готовые карты больше не используются: карта боя собирается генератором" },
@@ -115,7 +155,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error("[combat/maps POST] error:", error);
     return Response.json(
-      { error: "Не удалось применить карту", details: error instanceof Error ? error.message : String(error) },
+      { error: "Не удалось применить карту", details: safeErrorDetails(error) },
       { status: 500 }
     );
   }
