@@ -182,13 +182,35 @@ export function raceRules(raceId: string): RaceRules | undefined {
   return RACES.get(raceId);
 }
 
+export function unregisterRace(raceId: string): void {
+  RACES.delete(raceId);
+}
+
 // ============ ПОИСК РАСЫ И ПОДРАСЫ ============
+
+function substringMatchScore(
+  names: Array<string | undefined>,
+  aliases: string[] | undefined,
+  want: string
+): number {
+  let best = 0;
+  for (const raw of names) {
+    if (!raw) continue;
+    const n = norm(raw);
+    if (n && want.includes(n)) best = Math.max(best, n.length);
+  }
+  for (const raw of aliases ?? []) {
+    const n = norm(raw);
+    if (n.length >= 4 && want.includes(n)) best = Math.max(best, n.length);
+  }
+  return best;
+}
 
 function matchSubrace(race: RaceData, subraceQuery?: string | null): SubraceData | undefined {
   const want = norm(String(subraceQuery || ""));
   if (!want || race.subraces.length === 0) return undefined;
   const rules = RACES.get(race.id);
-  return (
+  const exactOrPattern =
     race.subraces.find(
       (s) =>
         norm(s.id) === want ||
@@ -196,16 +218,16 @@ function matchSubrace(race: RaceData, subraceQuery?: string | null): SubraceData
         norm(s.nameEn) === want ||
         (s.aliases ?? []).some((a) => norm(a) === want)
     ) ??
-    race.subraces.find((s) => rules?.subraces?.[s.id]?.pattern?.test(want)) ??
-    race.subraces.find(
-      (s) =>
-        want.includes(norm(s.name)) ||
-        want.includes(norm(s.nameEn)) ||
-        (s.aliases ?? []).some((a) => norm(a).length >= 4 && want.includes(norm(a)))
-    ) ??
-    race.subraces.find((s) => norm(s.name).includes(want) && want.length >= 5) ??
-    undefined
-  );
+    race.subraces.find((s) => rules?.subraces?.[s.id]?.pattern?.test(want));
+  if (exactOrPattern) return exactOrPattern;
+
+  const subMatches = race.subraces
+    .map((s) => ({ s, score: substringMatchScore([s.name, s.nameEn], s.aliases, want) }))
+    .filter((x) => x.score > 0)
+    .sort((a, b) => b.score - a.score);
+  if (subMatches.length > 0) return subMatches[0].s;
+
+  return race.subraces.find((s) => norm(s.name).includes(want) && want.length >= 5) ?? undefined;
 }
 
 /**
@@ -235,12 +257,7 @@ export function findRaceData(
     candidates = RACES_2014.filter((r) => RACES.get(r.id)?.pattern?.test(want));
   }
   if (candidates.length === 0) {
-    candidates = RACES_2014.filter(
-      (r) =>
-        want.includes(norm(r.name)) ||
-        want.includes(norm(r.nameEn)) ||
-        r.aliases.some((a) => norm(a).length >= 4 && want.includes(norm(a)))
-    );
+    candidates = RACES_2014.filter((r) => substringMatchScore([r.name, r.nameEn], r.aliases, want) > 0);
   }
   if (candidates.length === 0) {
     candidates = RACES_2014.filter((r) => norm(r.name).includes(want) && want.length >= 5);
@@ -248,6 +265,9 @@ export function findRaceData(
   if (candidates.length === 0) return null;
 
   const sorted = [...candidates].sort((a, b) => {
+    const aScore = substringMatchScore([a.name, a.nameEn], a.aliases, want);
+    const bScore = substringMatchScore([b.name, b.nameEn], b.aliases, want);
+    if (aScore !== bScore) return bScore - aScore;
     const aMpmm = a.editionVariant === "mpmm" || a.id.endsWith("-mpmm");
     const bMpmm = b.editionVariant === "mpmm" || b.id.endsWith("-mpmm");
     if (aMpmm !== bMpmm) return wantsMpmm ? (aMpmm ? -1 : 1) : (aMpmm ? 1 : -1);
@@ -367,9 +387,43 @@ export function resolveRaceForCharacter(ctx: RaceHeroContext, idPrefix = "hero")
   for (const v of variants) c.tokens.add(v);
 
   const defs: SrdAbilityDefinition[] = [];
-  const pushRule = (ownerId: string, rule: RaceFeatureRule | RaceOptionRule, name: string, description: string) => {
-    if (rule.kind === "skip" || (rule.when && !rule.when(c))) return;
-    defs.push(buildDefinition(`race/${ownerId}/${rule.id}`, rule.name ?? name, description, toRule(rule), c));
+  const processRuleWithOptions = (
+    ownerId: string,
+    rule: RaceFeatureRule,
+    name: string,
+    description: string,
+    minLvl: number
+  ) => {
+    if (minLvl > c.level) return;
+    if (rule.when && !rule.when(c)) return;
+    if (rule.kind !== "skip") {
+      defs.push(buildDefinition(`race/${ownerId}/${rule.id}`, rule.name ?? name, description, toRule(rule), c));
+    }
+
+    const options = (rule.options ?? []).filter(
+      (o) => (o.minLevel ?? minLvl) <= c.level && (!o.when || o.when(c))
+    );
+    if (options.length === 0) return;
+
+    const chosen = options.filter((o) => optionChosen(toOptionRule(o), c));
+    const chosenSet = new Set(chosen);
+    const shown =
+      rule.pick === "all"
+        ? options
+        : chosen.length > 0 || rule.pick === "sheet"
+          ? chosen
+          : rule.pick === "sheet-or-all"
+            ? options
+            : chosen;
+
+    for (const o of shown) {
+      if (o.kind !== "skip") {
+        defs.push(buildDefinition(`race/${ownerId}/${o.id}`, o.name, o.description, toRule(o), c));
+      }
+      if (chosenSet.has(o)) {
+        variants.add(o.id);
+      }
+    }
   };
 
   const processFeatureSet = (
@@ -387,53 +441,20 @@ export function resolveRaceForCharacter(ctx: RaceHeroContext, idPrefix = "hero")
       matchedKeys.add(ruleKey);
       const rule = traitRules[ruleKey];
       const minLvl = rule.minLevel ?? t.minLevel ?? 1;
-      if (minLvl > c.level) continue;
-
-      pushRule(ownerId, rule, t.name, rule.description ?? t.description);
-
-      const options = (rule.options ?? []).filter((o) => (o.minLevel ?? minLvl) <= c.level);
-      const chosen = options.filter((o) => optionChosen(toOptionRule(o), c));
-      const shown =
-        rule.pick === "all"
-          ? options
-          : chosen.length > 0 || rule.pick === "sheet"
-            ? chosen
-            : rule.pick === "sheet-or-all"
-              ? options
-              : chosen;
-      for (const o of shown) {
-        pushRule(ownerId, o, o.name, o.description);
-        variants.add(o.id);
-      }
+      processRuleWithOptions(ownerId, rule, t.name, rule.description ?? t.description, minLvl);
     }
 
     // Синтетические или дополнительные правила, заданные по ключу без записи в traits JSON
     if (traitRules) {
       for (const [key, rule] of Object.entries(traitRules)) {
         if (matchedKeys.has(key)) continue;
-        if ((rule.minLevel ?? 1) > c.level) continue;
-        if (!rule.name && rule.kind === "skip") continue;
-        pushRule(ownerId, rule, rule.name ?? key, rule.description ?? "");
+        if (!rule.name && rule.kind === "skip" && !(rule.options?.length)) continue;
+        processRuleWithOptions(ownerId, rule, rule.name ?? key, rule.description ?? "", rule.minLevel ?? 1);
       }
     }
 
     for (const x of extraRules ?? []) {
-      if ((x.minLevel ?? 1) > c.level) continue;
-      pushRule(ownerId, x, x.name, x.description);
-      const options = (x.options ?? []).filter((o) => (o.minLevel ?? x.minLevel ?? 1) <= c.level);
-      const chosen = options.filter((o) => optionChosen(toOptionRule(o), c));
-      const shown =
-        x.pick === "all"
-          ? options
-          : chosen.length > 0 || x.pick === "sheet"
-            ? chosen
-            : x.pick === "sheet-or-all"
-              ? options
-              : chosen;
-      for (const o of shown) {
-        pushRule(ownerId, o, o.name, o.description);
-        variants.add(o.id);
-      }
+      processRuleWithOptions(ownerId, x, x.name, x.description, x.minLevel ?? 1);
     }
   };
 
@@ -476,6 +497,7 @@ export function resolveRaceForCharacter(ctx: RaceHeroContext, idPrefix = "hero")
     for (const r of rules.defaultResistances) resSet.add(r);
   } else {
     addTraitRes(race.traits);
+    for (const r of race.resistances ?? []) resSet.add(r);
   }
   if (subRules?.resistances) {
     for (const r of subRules.resistances) resSet.add(r);
@@ -483,7 +505,6 @@ export function resolveRaceForCharacter(ctx: RaceHeroContext, idPrefix = "hero")
     addTraitRes(subrace.traits);
     for (const r of subrace.resistances ?? []) resSet.add(r);
   }
-  for (const r of race.resistances ?? []) resSet.add(r);
 
   const ciSet = new Set<string>([
     ...(race.conditionImmunities ?? []),

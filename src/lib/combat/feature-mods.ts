@@ -94,6 +94,10 @@ export function featureMods(srdKey: string, rule: ModRule | Mods): void {
   FEATURE_MODS.set(srdKey, "mods" in rule ? (rule as ModRule) : { mods: rule as Mods });
 }
 
+export function unregisterFeatureMod(srdKey: string): void {
+  FEATURE_MODS.delete(srdKey);
+}
+
 /** Поправки состояния по его типу («raging») */
 export function conditionMods(type: string, rule: ModRule | Mods): void {
   CONDITION_MODS.set(type, "mods" in rule ? (rule as ModRule) : { mods: rule as Mods });

@@ -1,6 +1,7 @@
 // Общая обвязка для боевых тестов рас: герой с выбранной расой, подрасой и классом.
 // Math.random в тестах фиксируется через vi.spyOn(Math, "random").
 
+import { proficiencyBonus } from "@/lib/dnd/dice";
 import { extractAbilitiesFromCharacter } from "../../character-adapter";
 import { resolveRaceForCharacter } from "../../races/race-defs";
 import type { Combatant } from "../../types";
@@ -13,6 +14,7 @@ export interface RaceHeroOptions extends HeroOptions {
   className?: string;
   subclass?: string;
   racialVariants?: string[];
+  profBonus?: number;
 }
 
 /** Герой с расой (и опциональной подрасой), собранный поверх fighter/class-harness */
@@ -24,14 +26,18 @@ export function raceHero(
   o: RaceHeroOptions = {}
 ): Combatant {
   const c = hero(id, "", level, o);
-  if (o.className) c.className = o.className;
+  const profBonus = o.profBonus ?? proficiencyBonus(level);
+  c.profBonus = profBonus;
+  if (o.className !== undefined) c.className = o.className;
 
-  c.abilities = extractAbilitiesFromCharacter(
-    { id, class: o.className ?? "Воин", subclass: o.subclass ?? "", ...(o.sheet ?? {}) },
-    level,
-    c.profBonus,
-    c.abilityMods
-  );
+  if (o.className !== undefined || o.subclass || profBonus !== 3) {
+    c.abilities = extractAbilitiesFromCharacter(
+      { id, class: o.className ?? c.className, subclass: o.subclass ?? "", ...(o.sheet ?? {}) },
+      level,
+      profBonus,
+      c.abilityMods
+    );
+  }
 
   const loadout = resolveRaceForCharacter(
     {

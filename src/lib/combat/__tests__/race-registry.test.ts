@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { dealDamage, useAbility } from "../engine";
-import { featureMods } from "../feature-mods";
+import { featureMods, unregisterFeatureMod } from "../feature-mods";
+import { unregisterClassModule } from "../class-hooks";
 import { registerKit } from "../class-kit";
 import { rollSave } from "../rules";
 import {
@@ -10,8 +11,45 @@ import {
   raceRuleKeys,
   raceRules,
   resolveRaceForCharacter,
+  unregisterRace,
+  type RaceRules,
 } from "../races/race-defs";
 import { ally, bySrd, enemy, hasLog, makeState, raceHero } from "./helpers/race-harness";
+
+const savedRaces = new Map<string, RaceRules | undefined>();
+const testFeatureModKeys: string[] = [];
+const testKitIds: string[] = [];
+
+function defineTestRace(raceId: string, rules: RaceRules): void {
+  if (!savedRaces.has(raceId)) {
+    savedRaces.set(raceId, raceRules(raceId));
+  }
+  defineRace(raceId, rules);
+}
+
+function registerTestFeatureMod(srdKey: string, mod: Parameters<typeof featureMods>[1]): void {
+  testFeatureModKeys.push(srdKey);
+  featureMods(srdKey, mod);
+}
+
+function registerTestKit(kit: Parameters<typeof registerKit>[0]): void {
+  testKitIds.push(kit.id);
+  registerKit(kit);
+}
+
+function cleanupTestRegistries(): void {
+  for (const [raceId, prev] of savedRaces) {
+    if (prev) defineRace(raceId, prev);
+    else unregisterRace(raceId);
+  }
+  savedRaces.clear();
+  while (testFeatureModKeys.length > 0) {
+    unregisterFeatureMod(testFeatureModKeys.pop()!);
+  }
+  while (testKitIds.length > 0) {
+    unregisterClassModule(testKitIds.pop()!);
+  }
+}
 
 describe("RACES_2014 catalog & findRaceData", () => {
   it("loads all 84 official 2014 races (54 legacy + 30 mpmm) and 69 subraces", () => {
@@ -59,13 +97,22 @@ describe("RACES_2014 catalog & findRaceData", () => {
     expect(findRaceData("Неизвестная раса")).toBeNull();
     expect(findRaceData(null)).toBeNull();
   });
+
+  it("ranks more specific substring matches ahead of shorter superstrings", () => {
+    const halfElf = findRaceData("Полуэльф (вариант)");
+    expect(halfElf?.race.id).toBe("half-elf");
+
+    const halfElfScag = findRaceData("Полуэльф (SCAG)");
+    expect(halfElfScag?.race.id).toBe("half-elf");
+
+    const halfOrc = findRaceData("Полуорк (вариант)");
+    expect(halfOrc?.race.id).toBe("half-orc");
+  });
 });
 
 describe("defineRace, resolveRaceForCharacter, level gating & options", () => {
-  const prevAasimar = raceRules("aasimar");
-
   beforeEach(() => {
-    defineRace("aasimar", {
+    defineTestRace("aasimar", {
       defaultResistances: ["necrotic", "radiant"],
       traits: {
         "istselyayushchie-ruki": {
@@ -129,7 +176,7 @@ describe("defineRace, resolveRaceForCharacter, level gating & options", () => {
   });
 
   afterEach(() => {
-    if (prevAasimar) defineRace("aasimar", prevAasimar);
+    cleanupTestRegistries();
   });
 
   it("filters abilities by minLevel (3 / 5 / 6) and resolves uses + srdKey format", () => {
@@ -160,7 +207,8 @@ describe("defineRace, resolveRaceForCharacter, level gating & options", () => {
     expect(radiantSoul!.usesMax).toBe(2);
     expect(radiantSoul!.refresh).toBe("long");
 
-    // At level 5 with sheet-or-all and nothing in sheet: aspect-sun (minLevel 5) appears, aspect-star (minLevel 6) does not
+    // At level 5 with sheet-or-all and nothing in sheet: aspect-sun (minLevel 5) appears, aspect-star (minLevel 6) does not,
+    // and unchosen fallback options do NOT pollute racialVariants
     const lvl5 = resolveRaceForCharacter({
       race: "Аасимар",
       subrace: "Защитник",
@@ -171,8 +219,10 @@ describe("defineRace, resolveRaceForCharacter, level gating & options", () => {
     const keys5 = lvl5.abilities.map((a) => a.parameters?.srdKey);
     expect(keys5).toContain("race/protector-aasimar/aspect-sun");
     expect(keys5).not.toContain("race/protector-aasimar/aspect-star");
+    expect(lvl5.racialVariants).not.toContain("aspect-sun");
+    expect(lvl5.racialVariants).toEqual([]);
 
-    // At level 6 with sheet choice matching only aspect-star: sheet-or-all narrows to aspect-star
+    // At level 6 with sheet choice matching only aspect-star: sheet-or-all narrows to aspect-star and records only chosen variant
     const lvl6Chosen = resolveRaceForCharacter({
       race: "Аасимар",
       subrace: "Защитник",
@@ -184,10 +234,11 @@ describe("defineRace, resolveRaceForCharacter, level gating & options", () => {
     const keys6 = lvl6Chosen.abilities.map((a) => a.parameters?.srdKey);
     expect(keys6).toContain("race/protector-aasimar/aspect-star");
     expect(keys6).not.toContain("race/protector-aasimar/aspect-sun");
+    expect(lvl6Chosen.racialVariants).toEqual(["aspect-star"]);
   });
 
-  it("supports pick: 'sheet' filtering strictly by sheet tokens/text", () => {
-    defineRace("elf", {
+  it("supports pick: 'sheet' filtering strictly by sheet tokens/text and does not add unchosen 'all' options to racialVariants", () => {
+    defineTestRace("elf", {
       traits: {
         "nasledie-fey": {
           id: "fey-ancestry",
@@ -211,10 +262,41 @@ describe("defineRace, resolveRaceForCharacter, level gating & options", () => {
           ],
         },
       },
+      extra: [
+        {
+          id: "trance-stance",
+          kind: "passive",
+          name: "Вариант транса",
+          description: "Выбор транса",
+          pick: "all",
+          options: [
+            {
+              id: "trance-dawn",
+              kind: "passive",
+              name: "Рассветный транс",
+              description: "Утро",
+              tokens: ["elf-trance-dawn"],
+            },
+            {
+              id: "trance-dusk",
+              kind: "passive",
+              name: "Сумеречный транс",
+              description: "Вечер",
+              tokens: ["elf-trance-dusk"],
+            },
+          ],
+        },
+      ],
     });
 
     const none = resolveRaceForCharacter({ race: "Эльф", level: 1, profBonus: 2, abilityMods: {} })!;
-    expect(none.abilities.map((a) => a.parameters?.srdKey)).toEqual(["race/elf/fey-ancestry"]);
+    expect(none.abilities.map((a) => a.parameters?.srdKey)).toEqual([
+      "race/elf/fey-ancestry",
+      "race/elf/trance-stance",
+      "race/elf/trance-dawn",
+      "race/elf/trance-dusk",
+    ]);
+    expect(none.racialVariants).toEqual([]);
 
     const moon = resolveRaceForCharacter({
       race: "Эльф",
@@ -226,7 +308,112 @@ describe("defineRace, resolveRaceForCharacter, level gating & options", () => {
     expect(moon.abilities.map((a) => a.parameters?.srdKey)).toEqual([
       "race/elf/fey-ancestry",
       "race/elf/mark-moon",
+      "race/elf/trance-stance",
+      "race/elf/trance-dawn",
+      "race/elf/trance-dusk",
     ]);
+    expect(moon.racialVariants).toEqual(["mark-moon"]);
+  });
+
+  it("gates child options on parent 'when' guard across traits, unmatched traitRules, and extra", () => {
+    defineTestRace("elf", {
+      traits: {
+        "nasledie-fey": {
+          id: "fey-ancestry",
+          kind: "passive",
+          when: (c) => c.tokens.has("allow-fey"),
+          pick: "sheet-or-all",
+          options: [
+            {
+              id: "fey-child",
+              kind: "passive",
+              name: "Дитя Фей",
+              description: "Скрытая опция",
+              tokens: ["fey-child-tok"],
+            },
+          ],
+        },
+        "synthetic-gate": {
+          id: "synthetic-parent",
+          kind: "passive",
+          name: "Синтетическая черта",
+          description: "Из traitRules без JSON",
+          when: (c) => c.tokens.has("allow-synth"),
+          pick: "sheet-or-all",
+          options: [
+            {
+              id: "synth-child",
+              kind: "passive",
+              name: "Синтетический вариант",
+              description: "Опция",
+            },
+          ],
+        },
+      },
+      extra: [
+        {
+          id: "extra-parent",
+          kind: "passive",
+          name: "Дополнительная черта",
+          description: "Из extra",
+          when: (c) => c.tokens.has("allow-extra"),
+          pick: "all",
+          options: [
+            {
+              id: "extra-child",
+              kind: "passive",
+              name: "Доп. вариант",
+              description: "Опция",
+            },
+          ],
+        },
+      ],
+    });
+
+    const gatedOut = resolveRaceForCharacter({
+      race: "Эльф",
+      level: 1,
+      profBonus: 2,
+      abilityMods: {},
+      sheet: { traitsList: [{ id: "fey-child-tok", name: "Дитя Фей" }] },
+    })!;
+    expect(gatedOut.abilities).toEqual([]);
+    expect(gatedOut.racialVariants).toEqual([]);
+
+    const gatedIn = resolveRaceForCharacter({
+      race: "Эльф",
+      level: 1,
+      profBonus: 2,
+      abilityMods: {},
+      racialVariants: ["allow-fey", "allow-synth", "allow-extra"],
+      sheet: { traitsList: [{ id: "fey-child-tok", name: "Дитя Фей" }] },
+    })!;
+    expect(gatedIn.abilities.map((a) => a.parameters?.srdKey)).toEqual([
+      "race/elf/fey-ancestry",
+      "race/elf/fey-child",
+      "race/elf/synthetic-parent",
+      "race/elf/synth-child",
+      "race/elf/extra-parent",
+      "race/elf/extra-child",
+    ]);
+    expect(gatedIn.racialVariants).toEqual(["allow-fey", "allow-synth", "allow-extra", "fey-child"]);
+  });
+
+  it("replaces race.resistances symmetrically when rules.defaultResistances is defined", () => {
+    // Aasimar JSON carries necrotic + radiant resistances; overriding with ["fire"] must replace, not merge
+    defineTestRace("aasimar", {
+      defaultResistances: ["fire"],
+      traits: {},
+    });
+    const replaced = resolveRaceForCharacter({ race: "Аасимар", level: 1, profBonus: 2, abilityMods: {} })!;
+    expect(replaced.resistances).toEqual(["fire"]);
+
+    defineTestRace("aasimar", {
+      defaultResistances: [],
+      traits: {},
+    });
+    const cleared = resolveRaceForCharacter({ race: "Аасимар", level: 1, profBonus: 2, abilityMods: {} })!;
+    expect(cleared.resistances).toEqual([]);
   });
 
   it("exposes raceRuleKeys for completeness audits", () => {
@@ -241,14 +428,15 @@ describe("raceHero harness & engine integration (classHooks / featureMods)", () 
     vi.spyOn(Math, "random").mockReturnValue(0.5);
   });
   afterEach(() => {
+    cleanupTestRegistries();
     vi.restoreAllMocks();
   });
 
   it("populates racial Combatant fields and integrates with featureMods & classHooks", () => {
-    defineRace("halfling", {
+    defineTestRace("halfling", {
       traits: {
         vezenchiy: { id: "lucky", kind: "passive" },
-        khrabryy: { id: "brave", kind: "passive" },
+        khrabryy: { id: "test-brave-mod", kind: "passive" },
       },
       subraces: {
         "stout-halfling": {
@@ -259,7 +447,7 @@ describe("raceHero harness & engine integration (classHooks / featureMods)", () 
           },
           extra: [
             {
-              id: "stout-boost",
+              id: "test-stout-boost",
               kind: "active",
               cost: "bonus",
               minLevel: 1,
@@ -272,14 +460,14 @@ describe("raceHero harness & engine integration (classHooks / featureMods)", () 
       },
     });
 
-    featureMods("race/halfling/brave", {
+    registerTestFeatureMod("race/halfling/test-brave-mod", {
       name: "Храбрый",
       saveAdvantageConditions: ["frightened"],
     });
-    registerKit({
+    registerTestKit({
       id: "test-race-stout",
       actions: {
-        "race/stout-halfling/stout-boost": ({ state, c, pay }) => {
+        "race/stout-halfling/test-stout-boost": ({ state, c, pay }) => {
           pay();
           state.addLog(`${c.name} активирует Рывок стойкости`, "ability", c.name);
           return { text: "Рывок стойкости сработал", targets: [] };
@@ -319,10 +507,47 @@ describe("raceHero harness & engine integration (classHooks / featureMods)", () 
     expect(h.hpCurrent).toBe(hpBefore - 5);
 
     // classHooks / registerKit integration: active racial ability runs through useAbility
-    const boost = bySrd(h, "race/stout-halfling/stout-boost");
+    const boost = bySrd(h, "race/stout-halfling/test-stout-boost");
     const out = useAbility(state, "pip", boost.id);
     expect(out.text).toContain("Рывок стойкости");
     expect(hasLog(state, "Рывок стойкости")).toBe(true);
     expect(h.bonusActionUsed).toBe(true);
+  });
+
+  it("scales profBonus by level in raceHero (1 -> 2, 5 -> 3, 9 -> 4) for uses and natural attacks", () => {
+    defineTestRace("aasimar", {
+      naturalWeapons: [
+        {
+          id: "test-wings-bash",
+          name: "Удар крылом",
+          dice: "1d4",
+          damageType: "bludgeoning",
+          ability: "STR",
+        },
+      ],
+      traits: {
+        "istselyayushchie-ruki": {
+          id: "healing-hands",
+          kind: "active",
+          cost: "action",
+          uses: "profBonus",
+        },
+      },
+    });
+
+    const h1 = raceHero("Аасимар", null, "a1", 1, { mods: { STR: 2 } });
+    expect(h1.profBonus).toBe(2);
+    expect(bySrd(h1, "race/aasimar/healing-hands").usesMax).toBe(2);
+    expect(h1.attacks.find((a) => a.id === "test-wings-bash")?.attackBonus).toBe(4);
+
+    const h5 = raceHero("Аасимар", null, "a5", 5, { mods: { STR: 2 } });
+    expect(h5.profBonus).toBe(3);
+    expect(bySrd(h5, "race/aasimar/healing-hands").usesMax).toBe(3);
+    expect(h5.attacks.find((a) => a.id === "test-wings-bash")?.attackBonus).toBe(5);
+
+    const h9 = raceHero("Аасимар", null, "a9", 9, { mods: { STR: 2 } });
+    expect(h9.profBonus).toBe(4);
+    expect(bySrd(h9, "race/aasimar/healing-hands").usesMax).toBe(4);
+    expect(h9.attacks.find((a) => a.id === "test-wings-bash")?.attackBonus).toBe(6);
   });
 });

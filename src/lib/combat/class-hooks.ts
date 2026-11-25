@@ -85,6 +85,11 @@ export function registerClassModule(mod: ClassModule): void {
   else MODULES.push(mod);
 }
 
+export function unregisterClassModule(id: string): void {
+  const at = MODULES.findIndex((m) => m.id === id);
+  if (at >= 0) MODULES.splice(at, 1);
+}
+
 /**
  * Обход модулей в области реакций: если у героя игрока есть реакция и модуль её тратит,
  * игроку показывают окно выбора (reactions.ts). Без контекста роута — обычный обход.
