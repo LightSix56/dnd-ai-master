@@ -43,8 +43,8 @@ export interface ClassModule {
   damaged?(state: CombatState, target: Combatant, attacker: Combatant | undefined, amount: number, opts: { isAttack?: boolean; damageType?: string }): void;
   /** Хиты упали до 0; true — умение удержало бойца на ногах, дальше движок ничего не делает */
   onDrop?(state: CombatState, target: Combatant, hpBefore: number, amount: number): boolean;
-  /** Спасбросок провален: умение может перебросить его. Возвращает новый результат или null */
-  saveFailed?(state: CombatState, c: Combatant, ability: AbilityKey, dc: number, reroll: () => SaveResult): SaveResult | null;
+  /** Спасбросок провален: умение может перебросить его или добавить бонус. Возвращает новый результат или null */
+  saveFailed?(state: CombatState, c: Combatant, ability: AbilityKey, dc: number, reroll: () => SaveResult, failedSave?: SaveResult): SaveResult | null;
   onMove?(state: CombatState, mover: Combatant, start: { x: number; y: number }, path: Array<{ x: number; y: number }>): void;
   startTurn?(state: CombatState, c: Combatant): void;
   /** Первый ход бойца в бою (бросок инициативы) */
@@ -173,10 +173,10 @@ export const classHooks = {
       MODULES.some((m) => run(m, () => m.onDrop?.(state, target, hpBefore, amount)))
     );
   },
-  saveFailed(state: CombatState, c: Combatant, ability: AbilityKey, dc: number, reroll: () => SaveResult): SaveResult | null {
+  saveFailed(state: CombatState, c: Combatant, ability: AbilityKey, dc: number, reroll: () => SaveResult, failedSave?: SaveResult): SaveResult | null {
     return scoped(state, () => `${c.name} проваливает спасбросок (${ability}, СЛ ${dc})`, (run) => {
       for (const m of MODULES) {
-        const out = run(m, () => m.saveFailed?.(state, c, ability, dc, reroll));
+        const out = run(m, () => m.saveFailed?.(state, c, ability, dc, reroll, failedSave));
         if (out) return out;
       }
       return null;

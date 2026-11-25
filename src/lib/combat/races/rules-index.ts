@@ -1,3 +1,4 @@
 // Правила умений рас и их постоянные поправки (defineRace + featureMods).
 // Импортируется из rules.ts; пакеты рас подключаются сюда по мере реализации.
 import "./core-phb";
+import "./legacy-volo-mtf";

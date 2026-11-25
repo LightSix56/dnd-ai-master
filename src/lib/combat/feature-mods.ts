@@ -48,8 +48,14 @@ export interface Mods {
   attackAdvantage?: AttackFilter;
   /** Постоянная прибавка к урону атак */
   damageBonus?: { amount: number; attacks: AttackFilter; label?: string };
+  /** Бонус к броскам атаки (числом) */
+  attackBonus?: number;
   /** Кость, прибавляемая к броскам атаки («1d3» — Подпитка магией) */
   attackBonusDice?: string;
+  /** Минимальный базовый КД (Природный доспех 13 + ЛОВ) */
+  minBaseAC?: (owner: Combatant) => number;
+  /** Преимущество на атаки, если в пределах N фт от цели есть дееспособный союзник (Тактика стаи) */
+  attackAdvantageNearAlly?: number;
   /** Провоцированные атаки по бойцу идут с помехой */
   opportunityDisadvantage?: boolean;
   /** Союзники бьют с преимуществом в ближнем бою по врагам в стольких футах от бойца (Тотем волка) */
@@ -236,6 +242,14 @@ export function modAcBonus(c: Combatant, all?: Combatant[]): number {
   return modSources(c, all).reduce((sum, s) => sum + (s.mods.acBonus ?? 0), 0);
 }
 
+export function modMinBaseAC(c: Combatant, all?: Combatant[]): number {
+  return modSources(c, all).reduce((max, s) => Math.max(max, s.mods.minBaseAC?.(c) ?? 0), 0);
+}
+
+export function modAttackBonus(c: Combatant): number {
+  return modSources(c).reduce((sum, s) => sum + (s.mods.attackBonus ?? 0), 0);
+}
+
 export function modSpeedBonus(c: Combatant): number {
   return modSources(c).reduce((sum, s) => sum + (s.mods.speedBonus ?? 0), 0);
 }
@@ -318,6 +332,21 @@ export function modAttackInfluence(
   all: Combatant[] | undefined
 ): { advantage: string[]; disadvantage: string[] } {
   const out = { advantage: [] as string[], disadvantage: [] as string[] };
+  for (const s of modSources(attacker)) {
+    const nearAlly = s.mods.attackAdvantageNearAlly;
+    if (
+      nearAlly &&
+      all?.some(
+        (p) =>
+          p.id !== attacker.id &&
+          !isHostile(p.type, attacker.type) &&
+          conscious(p) &&
+          distanceFt(p, target) <= nearAlly
+      )
+    ) {
+      out.advantage.push(`${s.name} (союзник в ${nearAlly} фт)`);
+    }
+  }
   for (const p of all ?? []) {
     if (p.id === attacker.id || !conscious(p)) continue;
     const allyOfAttacker = !isHostile(p.type, attacker.type);

@@ -117,6 +117,7 @@ export interface RaceOptionRule extends Omit<OptionRule, "uses"> {
   uses?: UsesSpec;
   refresh?: Refresh;
   resistances?: string[];
+  darkvision?: number;
 }
 
 export interface RaceFeatureRule extends Omit<FeatureRule, "uses" | "options"> {
@@ -392,6 +393,7 @@ export function resolveRaceForCharacter(ctx: RaceHeroContext, idPrefix = "hero")
 
   const defs: SrdAbilityDefinition[] = [];
   const optionResSet = new Set<string>();
+  let optionDarkvision = 0;
   const processRuleWithOptions = (
     ownerId: string,
     rule: RaceFeatureRule,
@@ -428,6 +430,9 @@ export function resolveRaceForCharacter(ctx: RaceHeroContext, idPrefix = "hero")
       if (chosenSet.has(o)) {
         variants.add(o.id);
         for (const r of o.resistances ?? []) optionResSet.add(r);
+        if (typeof o.darkvision === "number" && o.darkvision > 0) {
+          optionDarkvision = Math.max(optionDarkvision, o.darkvision);
+        }
       }
     }
   };
@@ -491,7 +496,8 @@ export function resolveRaceForCharacter(ctx: RaceHeroContext, idPrefix = "hero")
   }
 
   // Тёмное зрение
-  const darkvision = subRules?.darkvision ?? rules?.darkvision ?? subrace?.darkvision ?? race.darkvision ?? 0;
+  const baseDarkvision = subRules?.darkvision ?? rules?.darkvision ?? subrace?.darkvision ?? race.darkvision ?? 0;
+  const darkvision = Math.max(baseDarkvision, optionDarkvision);
 
   // Сопротивления и иммунитеты к состояниям
   const resSet = new Set<string>();

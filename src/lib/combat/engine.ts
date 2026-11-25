@@ -2253,8 +2253,8 @@ export function rollEffectSave(
       all: state.combatants,
     });
   let save = roll();
-  // Провал может перебросить умение класса (Фанатичная сосредоточенность)
-  if (!save.success && !save.autoFail) save = classHooks.saveFailed(state, target, ability, dc, roll) ?? save;
+  // Провал может перебросить или усилить умение (Фанатичная сосредоточенность, Сохранить лицо)
+  if (!save.success && !save.autoFail) save = classHooks.saveFailed(state, target, ability, dc, roll, save) ?? save;
   if (!save.success && checkLegendaryResistance(target, state, label)) {
     return { ...save, success: true, text: `${save.text} → успех (Легендарное сопротивление)` };
   }
@@ -4495,7 +4495,7 @@ export function checkCombatOver(state: CombatState): "players" | "enemies" | nul
 export function attemptHide(
   state: CombatState,
   combatantId: string,
-  opts: { skipTurnCheck?: boolean } = {}
+  opts: { skipTurnCheck?: boolean; skipCost?: boolean } = {}
 ): { success: boolean; text: string } {
   if (!opts.skipTurnCheck) assertTurn(state, combatantId);
   const c = state.require(combatantId);
@@ -4514,19 +4514,21 @@ export function attemptHide(
   const hasCunningAction = (c.level >= 2 && isRogue) || c.abilities.some((a) => a.name.includes("Хитрое действие"));
 
   let spentBonus = false;
-  if (hasCunningAction && !c.bonusActionUsed) {
-    c.bonusActionUsed = true;
-    spentBonus = true;
-  } else {
-    if (c.actionUsed && c.extraActions <= 0) {
-      throw new EngineError("Действие уже использовано");
-    }
-    if (c.actionUsed && c.extraActions > 0) {
-      c.extraActions -= 1;
+  if (!opts.skipCost) {
+    if (hasCunningAction && !c.bonusActionUsed) {
+      c.bonusActionUsed = true;
+      spentBonus = true;
     } else {
-      c.actionUsed = true;
+      if (c.actionUsed && c.extraActions <= 0) {
+        throw new EngineError("Действие уже использовано");
+      }
+      if (c.actionUsed && c.extraActions > 0) {
+        c.extraActions -= 1;
+      } else {
+        c.actionUsed = true;
+      }
+      c.attacksMadeThisAction = c.attacksPerAction;
     }
-    c.attacksMadeThisAction = c.attacksPerAction;
   }
 
   const actionSuffix = spentBonus ? " (Хитрое действие)" : "";

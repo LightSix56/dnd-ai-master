@@ -2,3 +2,4 @@
 // Импортируется из classes/combat-index.ts, чтобы движок подхватывал расовые механики один раз.
 import "./race-combat";
 import "./core-phb-combat";
+import "./legacy-volo-mtf-combat";

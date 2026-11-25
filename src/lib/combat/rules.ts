@@ -22,10 +22,12 @@ import { spendHomingStrike } from "./rogue-pool";
 import {
   modAcBonus,
   modAttackAdvantage,
+  modAttackBonus,
   modAttackBonusDice,
   modAttackInfluence,
   modCritFrom,
   modDeathSaveAdvantage,
+  modMinBaseAC,
   modRerollOnes,
   modSaveAdvantage,
   modSaveAdvantageForContext,
@@ -97,7 +99,8 @@ export function effectiveAC(c: Combatant, all?: Combatant[]): number {
     0
   );
   // Поправки от умений и аур союзников (feature-mods.ts); ауры считаются, когда известны все бойцы
-  return c.ac + bonus + dynamicAcBonus(c) + modAcBonus(c, all);
+  const baseAc = Math.max(c.ac, modMinBaseAC(c, all));
+  return baseAc + bonus + dynamicAcBonus(c) + modAcBonus(c, all);
 }
 
 /** Итоговая скорость с учётом состояний и Рывка */
@@ -203,6 +206,14 @@ export function computeAttackAdvantage(
   if (target.conditions.some((x) => x.type === "distracted" && x.source !== attacker.id)) {
     adv = true;
     reasons.push("цель: Отвлекающий удар");
+  }
+  const cower = target.conditions.find((x) => x.type === "kobold_cower" && x.source && x.source !== attacker.id);
+  if (cower) {
+    const distractor = context.allCombatants?.find((x) => x.id === cower.source);
+    if (!distractor || !isHostile(distractor.type, attacker.type)) {
+      adv = true;
+      reasons.push("цель: Склонись, съёжься и умоляй");
+    }
   }
   if (attacker.conditions.some((x) => x.type === "goaded" && x.source !== target.id)) {
     dis = true;
@@ -801,7 +812,7 @@ export function resolveAttack(
   const modDice = modAttackBonusDice(attacker).reduce((sum, d) => sum + rollDice(d.dice).total, 0);
 
   const roll = rollD20(
-    attackToUse.attackBonus + blessBonus + archery + modDice,
+    attackToUse.attackBonus + blessBonus + archery + modDice + modAttackBonus(attacker),
     advResult.advantage,
     advResult.disadvantage,
     { rerollOnes: modRerollOnes(attacker) }
