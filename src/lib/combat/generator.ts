@@ -9,6 +9,8 @@ import {
   extractAttacksFromCharacter,
   extractSpellsFromCharacter,
   extractAbilitiesFromCharacter,
+  resolveRaceForCombatant,
+  mergeRaceIntoCombatantData,
 } from "./character-adapter";
 import { ATTACK_LIBRARY, attacksPerAction } from "./library-data";
 import { generateEncounter } from "./encounters/encounter-generator";
@@ -1482,6 +1484,21 @@ export async function createPartyCombatants({
     }
   }
 
+    const raceIdPrefix = `abl_p_${char.id}`;
+    const raceLoadout = resolveRaceForCombatant(char, abilityMods, charProfBonus, raceIdPrefix);
+    const mergedRace = mergeRaceIntoCombatantData({
+      loadout: raceLoadout,
+      char,
+      abilityMods,
+      profBonus: charProfBonus,
+      idPrefix: raceIdPrefix,
+      attacks: charAttacks,
+      abilities: charAbilities,
+      speed: char.speed,
+    });
+    charAttacks = mergedRace.attacks;
+    charAbilities = mergedRace.abilities;
+
     let posX = allyStartX + Math.floor(allyIndex / 4);
     let posY = Math.max(
       2,
@@ -1611,13 +1628,13 @@ export async function createPartyCombatants({
           ...(surprised ? [{ type: "surprised" }] : []),
         ]),
         ac: char.ac,
-        speed: char.speed,
+        speed: mergedRace.speed,
         dexMod,
         initiative: 0,
         initiativeTiebreak: Math.floor(Math.random() * 1_000_000),
         className: char.class || "",
         level: char.level,
-        size: "medium",
+        size: mergedRace.size,
         attacks: JSON.stringify(charAttacks),
         hotbar: JSON.stringify(hotbarItems),
         spells: resolvedSpells,
@@ -1635,6 +1652,7 @@ export async function createPartyCombatants({
         attacksPerAction: attacksPerAction(char.class || "", char.level || 1, charAbilities),
         isAIControlled: false,
         potions: JSON.stringify(combatPotions),
+        monsterData: packMonsterData(mergedRace.racialMeta),
       },
     });
 
