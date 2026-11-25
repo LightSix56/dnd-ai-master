@@ -196,14 +196,14 @@ export function mentions(text: string, name: string): boolean {
   return re.test(text);
 }
 
-function optionChosen(o: OptionRule, c: Calc): boolean {
+export function optionChosen(o: OptionRule, c: Calc): boolean {
   if (o.tokens?.some((t) => c.tokens.has(t))) return true;
   return [o.name, ...(o.aliases ?? [])].some((a) => mentions(c.text, a));
 }
 
 // ============ СБОРКА СПОСОБНОСТЕЙ ============
 
-function buildDefinition(key: string, name: string, description: string, rule: Rule, c: Calc): SrdAbilityDefinition {
+export function buildDefinition(key: string, name: string, description: string, rule: Rule, c: Calc): SrdAbilityDefinition {
   const uses = rule.uses?.(c) ?? { max: 0, refresh: "none" as Refresh };
   const note = rule.note?.(c);
   const common = {

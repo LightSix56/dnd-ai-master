@@ -33,6 +33,7 @@ import {
   modSpeedBonus,
 } from "./feature-mods";
 import "./classes/rules-index";
+import "./races/rules-index";
 
 // ============ СОСТОЯНИЯ ============
 
