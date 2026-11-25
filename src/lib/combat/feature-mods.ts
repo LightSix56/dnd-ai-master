@@ -46,6 +46,8 @@ export interface Mods {
   reachBonus?: number;
   /** Преимущество на свои атаки */
   attackAdvantage?: AttackFilter;
+  /** Преимущество на свои атаки по произвольному предикату (владелец, атака) */
+  attackAdvantageWhen?: (owner: Combatant, attack: Attack) => boolean;
   /** Постоянная прибавка к урону атак */
   damageBonus?: { amount: number; attacks: AttackFilter; label?: string };
   /** Бонус к броскам атаки (числом) */
@@ -296,7 +298,11 @@ export function attackMatches(c: Combatant, attack: Attack, filter: AttackFilter
 /** Причины преимущества на атаку от собственных поправок атакующего */
 export function modAttackAdvantage(c: Combatant, attack: Attack): string[] {
   return modSources(c)
-    .filter((s) => s.mods.attackAdvantage && attackMatches(c, attack, s.mods.attackAdvantage))
+    .filter(
+      (s) =>
+        (s.mods.attackAdvantage && attackMatches(c, attack, s.mods.attackAdvantage)) ||
+        s.mods.attackAdvantageWhen?.(c, attack)
+    )
     .map((s) => s.name);
 }
 

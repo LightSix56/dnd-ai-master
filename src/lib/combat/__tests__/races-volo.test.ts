@@ -177,7 +177,7 @@ describe("Batch 2 Legacy Races (VGM / MTF / POA / TCE / VRGR)", () => {
       expect(a.hpCurrent).toBe(39);
     });
 
-    it("Fallen Aasimar lvl 3: Necrotic Shroud frightens foes in 10 ft on failed CHA save + adds level necrotic", () => {
+    it("Fallen Aasimar lvl 3: Necrotic Shroud frightens seeing foes in 10 ft until end of Aasimar's next turn + adds level necrotic", () => {
       const a = raceHero("Аасимар", "Падший аасимар", "aas-fal", 4, {
         x: 5,
         y: 5,
@@ -185,17 +185,35 @@ describe("Batch 2 Legacy Races (VGM / MTF / POA / TCE / VRGR)", () => {
         attacks: SURE_SWORD,
       });
       const foe = enemy("orc", 6, 5, { hpMax: 50, hpCurrent: 50, ac: 10, saves: { CHA: { prof: false, mod: -1 } } });
-      const st = makeState([a, foe]);
+      const blindFoe = enemy("blind", 5, 6, {
+        hpMax: 50,
+        hpCurrent: 50,
+        ac: 10,
+        saves: { CHA: { prof: false, mod: -1 } },
+        conditions: [{ type: "blinded" }],
+      });
+      const st = makeState([a, foe, blindFoe]);
 
       seqRandom(0.05); // foe fails CHA save
       useAbility(st, "aas-fal", bySrd(a, "race/fallen-aasimar/savan-smerti").id);
       expect(hasCondition(a, "aasimar_necrotic_shroud")).toBe(true);
       expect(hasCondition(foe, "frightened")).toBe(true);
+      expect(hasCondition(blindFoe, "frightened")).toBe(false);
 
       a.actionUsed = false;
       seqRandom(0.5, 0.5); // 8 + 4 necrotic = 12
       const hit = performAttack(st, "aas-fal", "orc", "sword");
       expect(hit.damage).toBe(12);
+
+      // End Aasimar turn 1 -> still frightened through foe & blindFoe turns
+      endTurn(st);
+      expect(hasCondition(foe, "frightened")).toBe(true);
+      endTurn(st); // orc
+      endTurn(st); // blindFoe
+      expect(hasCondition(foe, "frightened")).toBe(true);
+      // End Aasimar turn 2 -> expires at end of Fallen Aasimar's next turn
+      endTurn(st);
+      expect(hasCondition(foe, "frightened")).toBe(false);
     });
   });
 
@@ -222,37 +240,69 @@ describe("Batch 2 Legacy Races (VGM / MTF / POA / TCE / VRGR)", () => {
   });
 
   describe("4. Dhampir (Дампир)", () => {
-    it("walk 35, climb 35, dv 60, Spider Climb lvl 1, Vampire Bite 1d4+CON + empowerment heals on hit", () => {
+    it("walk 35, climb 35, dv 60, Spider Climb lvl 1, Vampire Bite 1d4+CON, half-HP adv, full-HP bonus, non-Undead guard", () => {
       const d = raceHero("Дампир", null, "dh-1", 1, {
         x: 5,
         y: 5,
         hpMax: 30,
         hpCurrent: 20,
         mods: { CON: 3, STR: 0 },
+        attacks: SURE_SWORD,
       });
       expect(d.speed).toBe(35);
       expect(d.speeds?.climb).toBe(35);
       expect(d.darkvision).toBe(60);
       expect(bySrd(d, "race/dhampir/pauche-lazanie")).toBeDefined();
 
-      const bite = d.attacks.find((a) => a.id === "dhampir_bite");
+      const bite = d.attacks.find((a) => a.id === "dhampir_bite")!;
       expect(bite).toBeDefined();
-      expect(bite!.attackBonus).toBe(3 + 2);
-      expect(bite!.damage).toEqual([{ dice: "1d4", mod: 3, type: "piercing" }]);
+      expect(bite.attackBonus).toBe(3 + 2);
+      expect(bite.damage).toEqual([{ dice: "1d4", mod: 3, type: "piercing" }]);
 
       const emp = bySrd(d, "race/dhampir/ukus-vampira");
       expect(emp.usesMax).toBe(2);
       expect(emp.refresh).toBe("long");
 
-      const foe = enemy("orc", 6, 5, { ac: 10, hpMax: 40, hpCurrent: 40 });
-      const st = makeState([d, foe]);
+      const foe = enemy("orc", 6, 5, { ac: 10, hpMax: 60, hpCurrent: 60 });
+      const undead = enemy("zombie", 5, 6, { className: "Нежить", ac: 10, hpMax: 40, hpCurrent: 40 });
+      const st = makeState([d, foe, undead]);
+
+      // Advantage on Vampire Bite ONLY when hpCurrent <= floor(hpMax / 2)
+      expect(computeAttackAdvantage(d, foe, bite, {}, { allCombatants: st.combatants }).advantage).toBe(false);
+      d.hpCurrent = 15;
+      expect(computeAttackAdvantage(d, foe, bite, {}, { allCombatants: st.combatants }).advantage).toBe(true);
+      expect(computeAttackAdvantage(d, foe, SURE_SWORD[0], {}, { allCombatants: st.combatants }).advantage).toBe(false);
+
+      // Empowerment heals on hit against living foe
+      d.hpCurrent = 20;
       useAbility(st, "dh-1", emp.id);
       seqRandom(0.9, 0.5); // hit, 1d4=3+3=6 piercing -> heals 6 HP
-      const atk = performAttack(st, "dh-1", "orc", bite!.id);
+      const atk = performAttack(st, "dh-1", "orc", bite.id);
       expect(atk.hit).toBe(true);
       expect(atk.damage).toBe(6);
       expect(d.hpCurrent).toBe(26);
       expect(emp.usesUsed).toBe(1);
+
+      // Empowerment does NOT trigger or spend use against Undead
+      d.actionUsed = false;
+      useAbility(st, "dh-1", emp.id);
+      seqRandom(0.9, 0.5);
+      performAttack(st, "dh-1", "zombie", bite.id);
+      expect(d.hpCurrent).toBe(26);
+      expect(emp.usesUsed).toBe(1);
+
+      // At full HP, empowerment grants dhampir_bite_bonus to next attack roll and is consumed after it
+      d.hpCurrent = 30;
+      d.actionUsed = false;
+      seqRandom(0.9, 0.5); // hit 6 dmg -> grants +6 bonus
+      performAttack(st, "dh-1", "orc", bite.id);
+      expect(hasCondition(d, "dhampir_bite_bonus")).toBe(true);
+      expect(cond(d, "dhampir_bite_bonus")?.value).toBe(6);
+      d.actionUsed = false;
+      seqRandom(0.5, 0.5); // d20=11 + 20 sword + 6 bonus = 37
+      const nextAtk = performAttack(st, "dh-1", "orc", "sword");
+      expect(nextAtk.text).toContain("37");
+      expect(hasCondition(d, "dhampir_bite_bonus")).toBe(false);
     });
   });
 
@@ -303,6 +353,7 @@ describe("Batch 2 Legacy Races (VGM / MTF / POA / TCE / VRGR)", () => {
       const water = raceHero("Дженази", "Дженази воды", "g-water", 3, { mods: { CON: 2 } });
       expect(water.speeds?.swim).toBe(30);
       expect(modResistance(water, "acid")).not.toBeNull();
+      expect(bySrd(water, "race/genasi/innate/shape-water").usesMax).toBe(0);
       expect(bySrd(water, "race/genasi/innate/create-or-destroy-water").usesMax).toBe(1);
     });
   });
@@ -324,7 +375,7 @@ describe("Batch 2 Legacy Races (VGM / MTF / POA / TCE / VRGR)", () => {
   });
 
   describe("8. Goblin (Гоблин)", () => {
-    it("Small, dv 60, Fury of the Small (+level vs larger only), Nimble Escape Disengage & Hide; Dankwood has no duplicates", () => {
+    it("Small, dv 60, Fury of the Small (+level vs larger only), Nimble Escape Disengage & Hide; Dankwood has no Fury or duplicates", () => {
       const gob = raceHero("Гоблин", null, "gob-1", 4, { x: 5, y: 5, attacks: SURE_SWORD });
       expect(gob.size).toBe("small");
       expect(gob.darkvision).toBe(60);
@@ -356,9 +407,19 @@ describe("Batch 2 Legacy Races (VGM / MTF / POA / TCE / VRGR)", () => {
       expect(hasCondition(gob, "disengaging")).toBe(true);
       expect(gob.bonusActionUsed).toBe(true);
 
-      // Dankwood Goblin has no duplicate Nimble Escape buttons
+      // Nimble Escape: Hide bonus action succeeds behind wall
+      const gobHide = raceHero("Гоблин", null, "gob-h", 2, { x: 2, y: 5 });
+      const wallFoe = enemy("wfoe", 6, 5);
+      const stHide = makeState([gobHide, wallFoe]);
+      stHide.mapElements = [{ id: "w1", type: "wall", x: 4, y: 3, width: 1, height: 5, properties: {} }];
+      useAbility(stHide, "gob-h", bySrd(gobHide, "race/goblin/nimble-hide").id);
+      expect(gobHide.isHidden).toBe(true);
+      expect(gobHide.bonusActionUsed).toBe(true);
+
+      // Dankwood Goblin has no duplicate Nimble Escape and NO Fury of the Small
       const dank = raceHero("Гоблин", "Гоблины Данквуда", "gob-dw", 2);
       expect(dank.abilities.filter((a) => a.parameters?.srdKey === "race/goblin/nimble-disengage")).toHaveLength(1);
+      expect(dank.abilities.some((a) => a.parameters?.srdKey === "race/goblin/razyarennaya-melkota")).toBe(false);
     });
   });
 
@@ -547,17 +608,30 @@ describe("Batch 2 Legacy Races (VGM / MTF / POA / TCE / VRGR)", () => {
   });
 
   describe("15. Orc (Орк)", () => {
-    it("dv 60 and Aggressive bonus action moves toward enemy up to full speed; RLW/EGW have no duplicate Aggressive", () => {
-      const orc = raceHero("Орк", null, "orc-1", 2, { x: 2, y: 5 });
+    it("dv 60, Aggressive moves via moveCombatant (triggers OA, respects difficult terrain, freeMove); RLW/EGW have no duplicate Aggressive", () => {
+      const orc = raceHero("Орк", null, "orc-1", 2, { x: 2, y: 5, hpMax: 40, hpCurrent: 40, ac: 10 });
       expect(orc.darkvision).toBe(60);
+      const sentinel = enemy("guard", 4, 6, { attacks: SURE_SWORD }); // reach covers (3..5,5): leaving (5,5) provokes OA
       const foe = enemy("elf", 10, 5);
-      const st = makeState([orc, foe]);
+      const st = makeState([orc, sentinel, foe]);
 
       const agg = bySrd(orc, "race/orc/agressivnyy");
+      seqRandom(0.9, 0.5); // OA hits orc when leaving sentinel's reach at (5,5)
       useAbility(st, "orc-1", agg.id, { targetIds: ["elf"] });
       expect(orc.bonusActionUsed).toBe(true);
-      expect(orc.x).toBeGreaterThan(2);
+      expect(orc.x).toBe(5);
       expect(orc.movementUsed).toBe(0);
+      expect(sentinel.reactionUsed).toBe(true);
+      expect(orc.hpCurrent).toBeLessThan(40);
+
+      // Difficult terrain cuts Aggressive distance in half (30 ft budget -> 15 ft = 3 cells)
+      const orcDiff = raceHero("Орк", null, "orc-2", 2, { x: 1, y: 5 });
+      const farFoe = enemy("elf2", 10, 5);
+      const stDiff = makeState([orcDiff, farFoe]);
+      stDiff.mapElements = [{ id: "mud", type: "difficult", x: 2, y: 0, width: 8, height: 20, properties: {} }];
+      useAbility(stDiff, "orc-2", bySrd(orcDiff, "race/orc/agressivnyy").id, { targetIds: ["elf2"] });
+      expect(orcDiff.x).toBe(4);
+      expect(orcDiff.movementUsed).toBe(0);
 
       const ebw = raceHero("Орк", "Orc (Eberron)", "orc-e", 2);
       expect(ebw.abilities.filter((a) => a.name.includes("Агрессивный"))).toHaveLength(1);
@@ -582,6 +656,8 @@ describe("Batch 2 Legacy Races (VGM / MTF / POA / TCE / VRGR)", () => {
       const know = bySrd(reb, "race/reborn/znaniya-iz-proshloy-zhizni");
       expect(know.usesMax).toBe(3);
       expect(know.refresh).toBe("long");
+      useAbility(st, "reb-1", know.id);
+      expect(know.usesUsed).toBe(1);
     });
   });
 

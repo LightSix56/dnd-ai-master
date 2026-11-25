@@ -207,12 +207,15 @@ export function computeAttackAdvantage(
     adv = true;
     reasons.push("цель: Отвлекающий удар");
   }
-  const cower = target.conditions.find((x) => x.type === "kobold_cower" && x.source && x.source !== attacker.id);
-  if (cower) {
-    const distractor = context.allCombatants?.find((x) => x.id === cower.source);
-    if (!distractor || !isHostile(distractor.type, attacker.type)) {
+  for (const cond of target.conditions) {
+    const def = CONDITION_EFFECTS[cond.type];
+    if (!def?.effects.attackAdvantageAgainstNonHostilesOfSource || !cond.source || cond.source === attacker.id) {
+      continue;
+    }
+    const sourceCombatant = context.allCombatants?.find((x) => x.id === cond.source);
+    if (!sourceCombatant || !isHostile(sourceCombatant.type, attacker.type)) {
       adv = true;
-      reasons.push("цель: Склонись, съёжься и умоляй");
+      reasons.push(`цель: ${def.name}`);
     }
   }
   if (attacker.conditions.some((x) => x.type === "goaded" && x.source !== target.id)) {

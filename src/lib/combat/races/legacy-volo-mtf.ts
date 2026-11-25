@@ -53,6 +53,12 @@ conditionMods("dhampir_bite_bonus", {
   mods: (_owner, { condition }) => ({ attackBonus: condition?.value ?? 0 }),
 });
 
+featureMods("race/dhampir/ukus-vampira", {
+  name: "Укус вампира (≤50% ХП)",
+  attackAdvantageWhen: (owner, attack) =>
+    attack.id === "dhampir_bite" && owner.hpCurrent <= Math.floor(owner.hpMax / 2),
+});
+
 featureMods("race/fire-genasi/soprotivlenie-ognyu", {
   name: "Сопротивление огню",
   resist: ["fire"],
@@ -332,9 +338,12 @@ defineRace("genasi", {
         "soprotivlenie-kislote": passive("soprotivlenie-kislote"),
         amfibiya: skip("amfibiya"),
         plovets: skip("plovets"),
-        "prizyv-volny": skip("prizyv-volny"),
+        "prizyv-volny": { ...skip("prizyv-volny"), minLevel: 1 },
       },
-      innateSpells: [spell("create-or-destroy-water", "Создание или уничтожение воды", 2, 3, "CON", 1)],
+      innateSpells: [
+        spell("shape-water", "Формование воды", 0, 1, "CON", 0),
+        spell("create-or-destroy-water", "Создание или уничтожение воды", 2, 3, "CON", 1),
+      ],
     },
   },
 });
@@ -416,6 +425,7 @@ defineRace("goblin", {
   },
   subraces: {
     "dankwood-goblin": {
+      replacesTraits: ["razyarennaya-melkota"],
       traits: {
         "uvelichenie-kharakteristik": skip("uvelichenie-kharakteristik"),
         razmer: skip("razmer"),

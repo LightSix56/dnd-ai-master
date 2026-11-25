@@ -1059,7 +1059,7 @@ function isUndead(c: Combatant): boolean {
   return /нежит|undead/.test((c.className || "").toLowerCase());
 }
 
-function isUndeadOrConstruct(c: Combatant): boolean {
+export function isUndeadOrConstruct(c: Combatant): boolean {
   return /нежит|undead|конструкт|construct/.test((c.className || "").toLowerCase());
 }
 
@@ -1775,7 +1775,7 @@ export function moveCombatant(
   state: CombatState,
   combatantId: string,
   target: Cell,
-  opts: { skipTurnCheck?: boolean; avoidHazards?: boolean } = {}
+  opts: { skipTurnCheck?: boolean; avoidHazards?: boolean; freeMove?: boolean; budgetFt?: number } = {}
 ): MoveOutcome {
   if (!opts.skipTurnCheck) assertTurn(state, combatantId);
 
@@ -1784,7 +1784,7 @@ export function moveCombatant(
     throw new EngineError(`${mover.name} не может двигаться`);
   }
 
-  const budget = remainingMovement(mover);
+  const budget = opts.budgetFt ?? remainingMovement(mover);
   // Бот не идёт через лаву, если сам в ней не стоит
   const avoid =
     opts.avoidHazards && !isLavaTerrain(mover, state.mapElements)
@@ -1862,7 +1862,7 @@ export function moveCombatant(
   }
   const finalCell = walkPath.length > 0 ? walkPath[walkPath.length - 1] : startCell;
 
-  mover.movementUsed += walkCost;
+  if (!opts.freeMove) mover.movementUsed += walkCost;
   state.mark(combatantId);
   if (walkCost > 0 || stopIdx === null) {
     state.addLog(
@@ -1893,7 +1893,7 @@ export function moveCombatant(
         source: spikeZones[0].properties?.casterId,
       });
       if (mover.hpCurrent <= 0) {
-        mover.movementUsed = initialMovementUsed + (stepIdx + 1) * 5;
+        if (!opts.freeMove) mover.movementUsed = initialMovementUsed + (stepIdx + 1) * 5;
         movementInterrupted = true;
         break;
       }
@@ -1910,7 +1910,7 @@ export function moveCombatant(
       if (!save.success) {
         applyEffect(state, mover.id, { condition: "restrained", concentration: zone.properties?.concentration }, zone.properties?.casterId);
         state.addLog(`🕸️ ${mover.name} наступает в паутину, проваливает спасбросок ЛОВ (${save.text}) и опутывается!`, "system", mover.name);
-        mover.movementUsed = effectiveSpeed(mover);
+        if (!opts.freeMove) mover.movementUsed = effectiveSpeed(mover);
         movementInterrupted = true;
         break;
       } else {

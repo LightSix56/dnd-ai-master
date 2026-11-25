@@ -368,6 +368,8 @@ export interface ConditionEffect {
   consumedOnAttack?: boolean;
   // Помеха на атаки по всем, кроме наложившего состояние (source)
   disadvantageVsOthers?: boolean;
+  // Преимущество на атаки по этой цели для не-врагов наложившего состояние (source)
+  attackAdvantageAgainstNonHostilesOfSource?: boolean;
 }
 
 export const CONDITION_EFFECTS: Record<string, {
@@ -1053,6 +1055,43 @@ export const CONDITION_EFFECTS: Record<string, {
     name: "В панике / Бегство",
     description: "Существо сломлено страхом и стремится покинуть поле боя",
     effects: { attackDisadvantage: true },
+  },
+  kobold_cower: {
+    name: "Склонись, съёжься и умоляй",
+    description: "Союзники отвлёкшего получают преимущество на атаки по этой цели",
+    effects: { attackAdvantageAgainstNonHostilesOfSource: true },
+  },
+  kobold_cower_aura: {
+    name: "kobold_cower_aura",
+    description: "Служебная отметка",
+    effects: {},
+    service: true,
+  },
+  dhampir_bite_bonus: {
+    name: "Укус вампира (усиление)",
+    description: "Бонус к следующему броску атаки от укуса вампира",
+    effects: {},
+  },
+  aasimar_radiant_soul: {
+    name: "Сияющая душа",
+    description: "Полёт 30 фт и дополнительный урон излучением раз в ход",
+    effects: {},
+  },
+  aasimar_radiant_consumption: {
+    name: "Испускание сияния",
+    description: "Аура урона излучением 10 фт в конце хода и доп. урон раз в ход",
+    effects: {},
+  },
+  aasimar_necrotic_shroud: {
+    name: "Саван смерти",
+    description: "Дополнительный урон некротической энергией раз в ход",
+    effects: {},
+  },
+  aasimar_shroud_fear_aura: {
+    name: "aasimar_shroud_fear_aura",
+    description: "Служебная отметка",
+    effects: {},
+    service: true,
   },
 };
 

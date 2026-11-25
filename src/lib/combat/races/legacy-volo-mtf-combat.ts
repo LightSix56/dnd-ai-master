@@ -2,7 +2,7 @@
 // Аасимар, Багбир, Дампир, Фирболг, Гоблин, Голиаф, Хобгоблин, Кобольд, Людоящер, Орк, Табакси.
 
 import { distanceFt } from "../grid";
-import { findPath, isCellBlocked, isTerrainBlocked } from "../movement";
+import { computeReachable, findPath } from "../movement";
 import { canAct, checkReach, effectiveSpeed, hasCondition } from "../rules";
 import {
   EngineError,
@@ -11,6 +11,8 @@ import {
   dealDamage,
   grantTempHp,
   heal,
+  isUndeadOrConstruct,
+  moveCombatant,
   performAttack,
   spendAbilityUse,
   type CombatState,
@@ -95,33 +97,31 @@ function findAggressiveStep(state: CombatState, c: Combatant, foe: Combatant, ma
   if (startDist <= 5) {
     throw new EngineError(`${c.name} уже вплотную к ${foe.name}`);
   }
-  const maxSteps = Math.max(1, Math.floor(maxFt / 5));
-  let cur = { x: c.x, y: c.y };
-  for (let i = 0; i < maxSteps; i++) {
-    if (distanceFt(cur, foe) <= 5) break;
-    const candidates: Array<{ x: number; y: number; dist: number }> = [];
-    for (let dx = -1; dx <= 1; dx++) {
-      for (let dy = -1; dy <= 1; dy++) {
-        if (dx === 0 && dy === 0) continue;
-        const nx = cur.x + dx;
-        const ny = cur.y + dy;
-        if (nx < 0 || ny < 0 || nx >= state.gridWidth || ny >= state.gridHeight) continue;
-        const cell = { x: nx, y: ny };
-        if (isTerrainBlocked(cell, state.mapElements) || isCellBlocked(cell, state.mapElements, state.combatants, c.id)) {
-          continue;
-        }
-        const d = distanceFt(cell, foe);
-        if (d < distanceFt(cur, foe)) candidates.push({ x: nx, y: ny, dist: d });
-      }
+  const reachable = computeReachable(
+    { x: c.x, y: c.y },
+    maxFt,
+    state.mapElements,
+    state.combatants,
+    state.gridWidth,
+    state.gridHeight,
+    c.id,
+    c
+  );
+  let best: { x: number; y: number; dist: number; cost: number } | null = null;
+  for (const [key, node] of reachable.entries()) {
+    if (node.cost <= 0) continue;
+    const [xs, ys] = key.split(",").map(Number);
+    const cell = { x: xs, y: ys };
+    const d = distanceFt(cell, foe);
+    if (d >= startDist) continue;
+    if (!best || d < best.dist || (d === best.dist && node.cost < best.cost)) {
+      best = { x: xs, y: ys, dist: d, cost: node.cost };
     }
-    if (candidates.length === 0) break;
-    candidates.sort((a, b) => a.dist - b.dist);
-    cur = { x: candidates[0].x, y: candidates[0].y };
   }
-  if (distanceFt(cur, foe) >= startDist) {
+  if (!best) {
     throw new EngineError(`Не удаётся приблизиться к ${foe.name}`);
   }
-  return cur;
+  return { x: best.x, y: best.y };
 }
 
 function clearHiddenStep(state: CombatState, c: Combatant): void {
@@ -140,6 +140,14 @@ function clearCowerTargets(state: CombatState, kobold: Combatant): void {
   }
 }
 
+function clearShroudFearTargets(state: CombatState, aasimar: Combatant): void {
+  for (const t of state.combatants) {
+    if (!t.conditions.some((x) => x.type === "frightened" && x.source === aasimar.id)) continue;
+    t.conditions = t.conditions.filter((x) => !(x.type === "frightened" && x.source === aasimar.id));
+    state.mark(t.id);
+  }
+}
+
 registerKit({
   id: "races-volo-mtf",
 
@@ -154,6 +162,7 @@ registerKit({
 
   endsWhenDown: [
     ...AASIMAR_FORMS.map((f) => f.condition),
+    "aasimar_shroud_fear_aura",
     "kobold_cower_aura",
     "feline_agility",
   ],
@@ -169,6 +178,10 @@ registerKit({
     "race/protector-aasimar/siyayushchaya-dusha": {
       condition: "aasimar_radiant_soul",
       run: (state, c) => restoreFlySpeed(state, c, "aasimar_fly_prev"),
+    },
+    "race/fallen-aasimar/savan-smerti": {
+      condition: "aasimar_shroud_fear_aura",
+      run: (state, c) => clearShroudFearTargets(state, c),
     },
     "race/kobold/sklonis-sezhsya-i-umolyay": {
       condition: "kobold_cower_aura",
@@ -249,13 +262,17 @@ registerKit({
       ctx.pay();
       applyEffect(state, c.id, { condition: "aasimar_necrotic_shroud", durationRounds: 10 }, c.id);
       fireConditionStart(state, c, "aasimar_necrotic_shroud", ctx.opts);
+      applyEffect(state, c.id, { condition: "aasimar_shroud_fear_aura", durationRounds: 2 }, c.id);
+      fireConditionStart(state, c, "aasimar_shroud_fear_aura", ctx.opts);
       const dc = dcBy(c, "CHA");
-      const nearby = state.combatants.filter((t) => t.id !== c.id && alive(t) && distanceFt(c, t) <= 10);
+      const nearby = state.combatants.filter(
+        (t) => t.id !== c.id && alive(t) && distanceFt(c, t) <= 10 && !hasCondition(t, "blinded")
+      );
       const outcomes: Array<{ name: string; saved: boolean; amount: number }> = [];
       for (const t of nearby) {
         const saved = saves(state, t, "CHA", dc, ability.name);
         if (!saved) {
-          applyEffect(state, t.id, { condition: "frightened", durationRounds: 2 }, c.id);
+          applyEffect(state, t.id, { condition: "frightened" }, c.id);
         }
         outcomes.push({ name: t.name, saved, amount: 0 });
       }
@@ -347,7 +364,7 @@ registerKit({
       }
     },
 
-    // Орк: Агрессивный
+    // Орк: Агрессивный (перемещение к врагу через moveCombatant с учётом провокаций, трудной местности и зон)
     "race/orc/agressivnyy": (ctx: ActionCtx) => {
       const { state, c } = ctx;
       const maxFt = effectiveSpeed(c);
@@ -372,10 +389,12 @@ registerKit({
       }
 
       ctx.pay();
-      c.x = dest.x;
-      c.y = dest.y;
-      state.mark(c.id);
-      log(state, c, `${c.name}: Агрессивный — устремляется к ${foe.name}`, "move");
+      const moveRes = moveCombatant(state, c.id, dest, {
+        skipTurnCheck: true,
+        freeMove: true,
+        budgetFt: maxFt,
+      });
+      log(state, c, `${c.name}: Агрессивный — устремляется к ${foe.name} (${moveRes.costFt} фт)`, "move");
       return result(`${c.name} устремляется к ${foe.name}`, [{ name: foe.name, amount: 0 }]);
     },
   },
@@ -399,14 +418,14 @@ registerKit({
       },
     },
 
-    // Дампир: Укус вампира (усиление при попадании)
+    // Дампир: Укус вампира (усиление при попадании, не действует на Нежить и Конструктов; берёт только колющий урон укуса)
     "race/dhampir/ukus-vampira": {
       attacks: "melee",
       armed: true,
       spendUse: true,
-      when: (ctx) => ctx.attack.id === "dhampir_bite",
+      when: (ctx) => ctx.attack.id === "dhampir_bite" && !isUndeadOrConstruct(ctx.target),
       apply: (ctx) => {
-        const amount = ctx.res.damage;
+        const amount = ctx.res.damageParts[0]?.amount ?? 0;
         if (amount <= 0) return "";
         if (ctx.attacker.hpCurrent < ctx.attacker.hpMax) {
           heal(ctx.state, ctx.attacker.id, amount);
