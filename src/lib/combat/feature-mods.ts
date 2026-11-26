@@ -78,6 +78,8 @@ export interface Mods {
   spellSaveAdvantage?: boolean;
   /** Иммунитет к магическому усыплению (Фейское наследие) */
   sleepImmune?: boolean;
+  /** Запрещает преимущество на атаки по владельцу для атакующих в пределах N фт (Дикий охотник шифтер) */
+  preventAdvantageWithinFt?: number;
 }
 
 export interface ModRule {
@@ -325,6 +327,22 @@ export function modAttackBonusDice(c: Combatant): Array<{ label: string; dice: s
 
 export function modOpportunityDisadvantage(c: Combatant): string | null {
   return modSources(c).find((s) => s.mods.opportunityDisadvantage)?.name ?? null;
+}
+
+/** Причина, по которой атакующий в пределах радиуса не может иметь преимущество по цели */
+export function modPreventAdvantageAgainst(
+  target: Combatant,
+  attacker: Combatant,
+  distanceFtValue: number | undefined,
+  all?: Combatant[]
+): string | null {
+  if (!conscious(target)) return null;
+  const dist = distanceFtValue ?? distanceFt(attacker, target);
+  for (const s of modSources(target, all)) {
+    const maxFt = s.mods.preventAdvantageWithinFt;
+    if (maxFt !== undefined && dist <= maxFt) return s.name;
+  }
+  return null;
 }
 
 /**

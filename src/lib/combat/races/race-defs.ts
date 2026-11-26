@@ -21,7 +21,7 @@ import {
 } from "../class-defs";
 import type { AbilityKey, ActionCost, Attack, CombatAbility, CreatureSize } from "../types";
 
-export { calcOf, mentions, type Calc, type FeatureRule, type OptionRule, type Rule };
+export { calcOf, mentions, optionChosen, type Calc, type FeatureRule, type OptionRule, type Rule };
 
 // ============ ДАННЫЕ РАС ============
 
@@ -137,6 +137,8 @@ export interface NaturalWeaponSpec {
   reach?: number;
   description?: string;
   actionCost?: ActionCost;
+  minLevel?: number;
+  when?: (c: Calc) => boolean;
 }
 
 export interface InnateSpellSpec {
@@ -533,7 +535,9 @@ export function resolveRaceForCharacter(ctx: RaceHeroContext, idPrefix = "hero")
   const naturalAttacks = [
     ...(rules?.naturalWeapons ?? []),
     ...(subRules?.naturalWeapons ?? []),
-  ].map((nw) => toNaturalAttack(nw, ctx));
+  ]
+    .filter((nw) => (nw.minLevel ?? 1) <= c.level && (!nw.when || nw.when(c)))
+    .map((nw) => toNaturalAttack(nw, ctx));
 
   const baseInnate = subRules?.replacesInnateSpells ? [] : (rules?.innateSpells ?? []);
   const innateSpells = [...baseInnate, ...(subRules?.innateSpells ?? [])]

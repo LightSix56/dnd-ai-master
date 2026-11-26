@@ -28,6 +28,7 @@ import {
   modCritFrom,
   modDeathSaveAdvantage,
   modMinBaseAC,
+  modPreventAdvantageAgainst,
   modRerollOnes,
   modSaveAdvantage,
   modSaveAdvantageForContext,
@@ -308,6 +309,15 @@ export function computeAttackAdvantage(
   ) {
     adv = false;
     reasons.push("цель: Неуловимость (без преимущества)");
+  }
+
+  // Запрет преимущества на атаки против цели в радиусе (Дикий охотник шифтер и т.п.)
+  if (adv) {
+    const preventedBy = modPreventAdvantageAgainst(target, attacker, context.distanceFt, context.allCombatants);
+    if (preventedBy) {
+      adv = false;
+      reasons.push(`цель: ${preventedBy} (без преимущества)`);
+    }
   }
 
   // Скрытность цели

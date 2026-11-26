@@ -2254,7 +2254,7 @@ export function rollEffectSave(
     });
   let save = roll();
   // Провал может перебросить или усилить умение (Фанатичная сосредоточенность, Сохранить лицо)
-  if (!save.success && !save.autoFail) save = classHooks.saveFailed(state, target, ability, dc, roll, save) ?? save;
+  if (!save.success && !save.autoFail) save = classHooks.saveFailed(state, target, ability, dc, roll, save, opts?.condition) ?? save;
   if (!save.success && checkLegendaryResistance(target, state, label)) {
     return { ...save, success: true, text: `${save.text} → успех (Легендарное сопротивление)` };
   }
@@ -4383,12 +4383,17 @@ export function endTurn(state: CombatState, depth = 0): { nextId: string | null 
     if (current.hpCurrent > 0) {
       for (const cond of [...current.conditions]) {
         if (cond.saveType && cond.saveDC && cond.type !== "restrained") {
-          const save = rollSave(current, cond.saveType, cond.saveDC, {
-            condition: cond.type,
-            bonus: auraSaveBonus(state, current),
-            bonusText: "Аура защиты",
-            all: state.combatants,
-          });
+          const endRoll = () =>
+            rollSave(current, cond.saveType!, cond.saveDC!, {
+              condition: cond.type,
+              bonus: auraSaveBonus(state, current),
+              bonusText: "Аура защиты",
+              all: state.combatants,
+            });
+          let save = endRoll();
+          if (!save.success && !save.autoFail) {
+            save = classHooks.saveFailed(state, current, cond.saveType, cond.saveDC, endRoll, save, cond.type) ?? save;
+          }
           const label = CONDITION_EFFECTS[cond.type]?.name || cond.type;
           state.addLog(
             `${current.name}: спасбросок от «${label}» (${save.text})`,

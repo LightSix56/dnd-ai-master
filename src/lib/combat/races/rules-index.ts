@@ -2,3 +2,4 @@
 // Импортируется из rules.ts; пакеты рас подключаются сюда по мере реализации.
 import "./core-phb";
 import "./legacy-volo-mtf";
+import "./legacy-settings";

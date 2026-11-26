@@ -1093,6 +1093,33 @@ export const CONDITION_EFFECTS: Record<string, {
     effects: {},
     service: true,
   },
+  kender_taunted: {
+    name: "Насмешка кендера",
+    description: "Помеха на броски атаки по всем целям, кроме кендера (до начала его следующего хода)",
+    effects: { disadvantageVsOthers: true },
+  },
+  tortle_shell: {
+    name: "Панцирная защита",
+    description: "+4 к КД, преимущество на спасброски СИЛ и ТЕЛ, помеха на спасброски ЛОВ, скорость 0, нет реакций",
+    effects: {
+      acBonus: 4,
+      speedSetTo: 0,
+      saveAdvantage: ["STR", "CON"],
+      saveDisadvantage: ["DEX"],
+      noReactions: true,
+    },
+  },
+  shifter_shifted: {
+    name: "Смена формы",
+    description: "Звериный облик шифтера",
+    effects: {},
+  },
+  leonin_roar_aura: {
+    name: "leonin_roar_aura",
+    description: "Служебная отметка",
+    effects: {},
+    service: true,
+  },
 };
 
 export interface MapElementProperties {

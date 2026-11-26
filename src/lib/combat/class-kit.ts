@@ -129,8 +129,15 @@ export function inReach(state: CombatState, c: Combatant, target: Combatant, att
 }
 
 /** Спасбросок цели с записью в журнал; true — спасбросок успешен */
-export function saves(state: CombatState, target: Combatant, ability: AbilityKey, dc: number, label: string): boolean {
-  const save = rollEffectSave(state, target, ability, dc, false, label);
+export function saves(
+  state: CombatState,
+  target: Combatant,
+  ability: AbilityKey,
+  dc: number,
+  label: string,
+  opts?: { condition?: string; isMagical?: boolean }
+): boolean {
+  const save = rollEffectSave(state, target, ability, dc, false, label, undefined, opts);
   state.addLog(`${target.name}: ${save.text} против «${label}»`, "save", target.name);
   return save.success;
 }
