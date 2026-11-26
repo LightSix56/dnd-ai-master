@@ -3031,13 +3031,19 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
             target.name
           );
         }
+        const isSpellLike =
+          isSpellAction || params.spellSlotLevel !== undefined || Boolean(params.school);
         dealDamage(state, target.id, amount, {
           damageType: targetDamage[0]?.type,
           parts: amountParts,
-          isMagicalAttack: isSpellAction,
+          isMagicalAttack: isSpellLike,
           isCritical: crit,
           isAttack: params.attackType !== undefined,
-          isWeaponAttack: !isSpellAction && params.attackType !== undefined && params.attackType !== "spell",
+          isWeaponAttack:
+            hit === undefined &&
+            !isSpellLike &&
+            params.attackType !== undefined &&
+            params.attackType !== "spell",
           attackerId: caster.id,
           source: caster.id,
         });

@@ -1,12 +1,14 @@
 // Боевая механика всех 30 MPMM-рас (*-mpmm).
 // Повторно использует общие хелперы из race-combat.ts без дублирования.
 
+import { distanceFt } from "../grid";
 import { hasCondition } from "../rules";
 import {
   EngineError,
   applyEffect,
   attemptHide,
   grantTempHp,
+  heal,
   type CombatState,
 } from "../engine";
 import { registerClassModule } from "../class-hooks";
@@ -30,7 +32,6 @@ import { AASIMAR_FORMS } from "./legacy-volo-mtf";
 import {
   aasimarExtraDamageRider,
   aasimarRadiantConsumptionEndTurn,
-  aasimarShroudAction,
   allyCountSaveRescueFailed,
   centaurChargeAction,
   clearConditionBySource,
@@ -44,6 +45,7 @@ import {
   hiddenStepAfterAbility,
   hungryJawsAction,
   longtoothBiteAttackFor,
+  makeAasimarShroudAction,
   makeNimbleHideAction,
   minotaurGoringRushAction,
   minotaurHammeringHornsAction,
@@ -200,18 +202,17 @@ registerKit({
       if (!friendly(ctx.c, target) || !alive(target)) {
         throw new EngineError("Выберите живого союзника или себя");
       }
-      if (Math.max(Math.abs(ctx.c.x - target.x), Math.abs(ctx.c.y - target.y)) * 5 > 5) {
+      if (distanceFt(ctx.c, target) > 5) {
         throw new EngineError(`${target.name} дальше 5 фт`);
       }
       ctx.pay();
       const diceCount = ctx.c.profBonus || 2;
       const amount = rollOf(`${diceCount}d4`);
-      target.hpCurrent = Math.min(target.hpMax, target.hpCurrent + amount);
-      ctx.state.mark(target.id);
+      heal(ctx.state, target.id, amount);
       log(ctx.state, ctx.c, `${ctx.c.name}: Исцеляющие руки — ${target.name} восстанавливает ${amount} хитов (${diceCount}к4)`);
       return result(`${target.name} восстанавливает ${amount} хитов`, [{ name: target.name, amount }]);
     },
-    "race/aasimar-mpmm/savan-smerti": aasimarShroudAction,
+    "race/aasimar-mpmm/savan-smerti": makeAasimarShroudAction({ hostilesOnly: true }),
 
     // Гоблин MPMM: Шустрый побег
     "race/goblin-mpmm/nimble-disengage": nimbleDisengageAction,

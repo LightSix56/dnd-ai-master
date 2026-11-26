@@ -177,28 +177,35 @@ export function eladrinFeyStepAction(
   };
 }
 
-export const aasimarShroudAction: ActionRule = (ctx) => {
-  const { state, c, ability } = ctx;
-  ctx.pay();
-  applyEffect(state, c.id, { condition: "aasimar_necrotic_shroud", durationRounds: 10 }, c.id);
-  fireConditionStart(state, c, "aasimar_necrotic_shroud", ctx.opts);
-  applyEffect(state, c.id, { condition: "aasimar_shroud_fear_aura", durationRounds: 2 }, c.id);
-  fireConditionStart(state, c, "aasimar_shroud_fear_aura", ctx.opts);
-  const dc = dcBy(c, "CHA");
-  const nearby = state.combatants.filter(
-    (t) => t.id !== c.id && alive(t) && distanceFt(c, t) <= 10 && !hasCondition(t, "blinded")
-  );
-  const outcomes: Array<{ name: string; saved: boolean; amount: number }> = [];
-  for (const t of nearby) {
-    const saved = saves(state, t, "CHA", dc, ability.name);
-    if (!saved) {
-      applyEffect(state, t.id, { condition: "frightened" }, c.id);
+export function makeAasimarShroudAction(opts: { hostilesOnly?: boolean } = {}): ActionRule {
+  return (ctx) => {
+    const { state, c, ability } = ctx;
+    ctx.pay();
+    applyEffect(state, c.id, { condition: "aasimar_necrotic_shroud", durationRounds: 10 }, c.id);
+    fireConditionStart(state, c, "aasimar_necrotic_shroud", ctx.opts);
+    applyEffect(state, c.id, { condition: "aasimar_shroud_fear_aura", durationRounds: 2 }, c.id);
+    fireConditionStart(state, c, "aasimar_shroud_fear_aura", ctx.opts);
+    const dc = dcBy(c, "CHA");
+    const nearby = state.combatants.filter(
+      (t) =>
+        t.id !== c.id &&
+        alive(t) &&
+        (!opts.hostilesOnly || isHostile(c.type, t.type)) &&
+        distanceFt(c, t) <= 10 &&
+        !hasCondition(t, "blinded")
+    );
+    const outcomes: Array<{ name: string; saved: boolean; amount: number }> = [];
+    for (const t of nearby) {
+      const saved = saves(state, t, "CHA", dc, ability.name, { condition: "frightened" });
+      if (!saved) {
+        applyEffect(state, t.id, { condition: "frightened" }, c.id);
+      }
+      outcomes.push({ name: t.name, saved, amount: 0 });
     }
-    outcomes.push({ name: t.name, saved, amount: 0 });
-  }
-  log(state, c, `${c.name}: Саван смерти (СЛ ${dc})`);
-  return result(`${c.name} активирует «Саван смерти»`, outcomes);
-};
+    log(state, c, `${c.name}: Саван смерти (СЛ ${dc})`);
+    return result(`${c.name} активирует «Саван смерти»`, outcomes);
+  };
+}
 
 export function aasimarRadiantConsumptionEndTurn(
   state: CombatState,

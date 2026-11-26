@@ -32,7 +32,6 @@ import { AASIMAR_FORMS } from "./legacy-volo-mtf";
 import {
   aasimarExtraDamageRider,
   aasimarRadiantConsumptionEndTurn,
-  aasimarShroudAction,
   allyCountSaveRescueFailed,
   clearConditionBySource,
   clearHiddenStep,
@@ -41,6 +40,7 @@ import {
   hiddenStepAction,
   hiddenStepAfterAbility,
   hungryJawsAction,
+  makeAasimarShroudAction,
   makeNimbleHideAction,
   nimbleDisengageAction,
   restoreFlySpeed,
@@ -184,7 +184,7 @@ registerKit({
     },
 
     // Падший аасимар: Саван смерти
-    "race/fallen-aasimar/savan-smerti": aasimarShroudAction,
+    "race/fallen-aasimar/savan-smerti": makeAasimarShroudAction(),
 
     // Фирболг: Незримая поступь
     "race/firbolg/nezrimaya-postup": hiddenStepAction,

@@ -133,9 +133,8 @@ describe("Batch 4: 30 MPMM Races (*-mpmm)", () => {
       // Celestial Revelation is level 3+ only (even though JSON omits minLevel)
       expect(a1.abilities.some((a) => a.parameters?.srdKey === "race/aasimar-mpmm/nebesnoe-otkrovenie")).toBe(false);
 
-      const allyT = ally("pal", 6, 5, { hpMax: 30, hpCurrent: 5 });
-      const st1 = makeState([a1, allyT]);
-      const hh = bySrd(a1, "race/aasimar-mpmm/istselyayushchie-ruki");
+      const hh1 = bySrd(a1, "race/aasimar-mpmm/istselyayushchie-ruki");
+      expect(hh1.usesMax).toBe(1);
       // Level 5 profBonus = 3 -> 3d4
       const a5 = raceHero("aasimar-mpmm", null, "aas-5", 5, {
         x: 5,
@@ -143,23 +142,31 @@ describe("Batch 4: 30 MPMM Races (*-mpmm)", () => {
         mods: { CHA: 3 },
         attacks: SURE_SWORD,
       });
-      const ally5 = ally("pal5", 6, 5, { hpMax: 40, hpCurrent: 5 });
+      const ally5 = ally("pal5", 6, 5, { hpMax: 40, hpCurrent: 5, saves: { CHA: { prof: false, mod: -5 } } });
       const st5 = makeState([a5, ally5]);
       // 3d4 with Math.random = 0.5 -> 3 * 3 = 9
       useAbility(st5, "aas-5", bySrd(a5, "race/aasimar-mpmm/istselyayushchie-ruki").id, { targetIds: ["pal5"] });
       expect(ally5.hpCurrent).toBe(14);
-      expect(hh.usesMax).toBe(1);
 
-      // Necrotic Shroud (Саван смерти): bonus action, AoE 10 ft CHA save, +profBonus (3) necrotic once/turn, shares pool 1/long
+      // Necrotic Shroud (Саван смерти): bonus action, AoE 10 ft non-allies only CHA save (with frightened adv), +profBonus (3) necrotic once/turn, shares pool 1/long
       a5.actionUsed = false;
       const foe5 = enemy("orc5", 6, 6, { hpMax: 60, hpCurrent: 60, ac: 10, saves: { CHA: { prof: false, mod: 0 } } });
-      const stShroud = makeState([a5, foe5]);
+      const braveFoe = raceHero("githzerai-mpmm", null, "gz-foe", 3, {
+        x: 5,
+        y: 6,
+        saves: { CHA: { prof: false, mod: 0 } },
+      });
+      braveFoe.type = "enemy";
+      const stShroud = makeState([a5, ally5, foe5, braveFoe]);
       const shroud = bySrd(a5, "race/aasimar-mpmm/savan-smerti");
       expect(shroud.parameters?.actionCost).toBe("bonus");
-      seqRandom(0.1);
+      // foe5 rolls 3 (fails); braveFoe has Mental Discipline advantage vs frightened -> rolls 3 and 19 (succeeds!)
+      seqRandom(0.1, 0.1, 0.9);
       useAbility(stShroud, "aas-5", shroud.id);
       expect(hasCondition(a5, "aasimar_necrotic_shroud")).toBe(true);
+      expect(hasCondition(ally5, "frightened")).toBe(false);
       expect(hasCondition(foe5, "frightened")).toBe(true);
+      expect(hasCondition(braveFoe, "frightened")).toBe(false);
       expect(bySrd(a5, "race/aasimar-mpmm/nebesnoe-otkrovenie").usesUsed).toBe(1);
       // Cannot activate a second revelation form in the same day
       expect(() => useAbility(stShroud, "aas-5", bySrd(a5, "race/aasimar-mpmm/siyayushchaya-dusha").id)).toThrow();
@@ -390,7 +397,29 @@ describe("Batch 4: 30 MPMM Races (*-mpmm)", () => {
       expect(merge5.usesMax).toBe(3);
 
       const fighter = enemy("fig", 6, 5, { attacks: SURE_SWORD });
-      const mage = enemy("mag", 7, 5, { attacks: SURE_SPELL_ATTACK });
+      const mage = enemy("mag", 7, 5, {
+        attacks: SURE_SPELL_ATTACK,
+        abilities: [
+          {
+            id: "innate_thorn_whip",
+            name: "Терновый хлыст",
+            usesMax: 0,
+            usesUsed: 0,
+            refresh: "none",
+            parameters: {
+              name: "Терновый хлыст",
+              type: "ability",
+              actionCost: "action",
+              targeting: "creature",
+              range: { type: "ranged", value: 30 },
+              attackType: "ranged",
+              attackBonus: 20,
+              spellSlotLevel: null,
+              damage: [{ dice: "1d8", mod: 3, type: "piercing" }],
+            },
+          },
+        ],
+      });
       const st = makeState([eg5, fighter, mage]);
 
       useAbility(st, "eg-5", merge5.id);
@@ -410,9 +439,14 @@ describe("Batch 4: 30 MPMM Races (*-mpmm)", () => {
       performAttack(st, "mag", "eg-5", "spell_bolt");
       expect(eg5.hpCurrent).toBe(38);
 
+      // Innate spell attack (type: "ability", spellSlotLevel: null) dealing piercing is ALSO NOT halved by Blade Ward
+      mage.actionUsed = false;
+      useAbility(st, "mag", "innate_thorn_whip", { targetIds: ["eg-5"] });
+      expect(eg5.hpCurrent).toBe(30);
+
       // Fire damage is NOT halved by Blade Ward
       dealDamage(st, "eg-5", 10, { damageType: "fire", isAttack: true });
-      expect(eg5.hpCurrent).toBe(28);
+      expect(eg5.hpCurrent).toBe(20);
 
       // End of earth genasi's NEXT turn clears blade_ward
       endTurn(st); // mage -> eg5
@@ -1037,12 +1071,29 @@ describe("Batch 4: 30 MPMM Races (*-mpmm)", () => {
       const step = bySrd(el, "race/eladrin-mpmm/feyskiy-shag");
       expect(step.usesMax).toBe(3);
       expect(step.refresh).toBe("long");
+      expect(step.parameters?.saveDC).toBe(8 + 3 + 4);
 
       const foe = enemy("orc", 6, 5, { hpMax: 30, hpCurrent: 30 });
       const st = makeState([el, foe]);
       useAbility(st, "el-5", step.id, { center: { x: 5, y: 5 } });
       // Summer (leto) deals profBonus (3) fire damage
       expect(foe.hpCurrent).toBe(27);
+
+      // Winter (zima) uses chosen mental ability DC (8 + 3 + 4 = 15) on WIS save
+      const elWin = raceHero("eladrin-mpmm", null, "el-win", 5, {
+        x: 2,
+        y: 5,
+        racialVariants: ["zima", "int"],
+        mods: { INT: 4, CHA: 0 },
+      });
+      const stepWin = bySrd(elWin, "race/eladrin-mpmm/feyskiy-shag");
+      expect(stepWin.parameters?.saveDC).toBe(15);
+      // Roll 11 + WIS(3) = 14 < 15 (fails INT-based DC 15, would pass CHA-based DC 11!)
+      const foeWin = enemy("orcW", 3, 5, { saves: { WIS: { prof: false, mod: 3 } } });
+      const stWin = makeState([elWin, foeWin]);
+      seqRandom(0.5);
+      useAbility(stWin, "el-win", stepWin.id, { center: { x: 6, y: 5 }, targetIds: ["orcW"] });
+      expect(hasCondition(foeWin, "frightened")).toBe(true);
     });
   });
 
