@@ -88,6 +88,8 @@ export interface Rule {
   description?: string;
   /** Реакция, применимая и не в свой ход */
   offTurn?: boolean;
+  /** Способность снимает это состояние и может применяться даже при preventOffensiveActions (Панцирная защита) */
+  exitsCondition?: string;
 }
 
 /** Вариант умения на выбор (тотем, стихия ауры, форма зверя) */
@@ -235,6 +237,7 @@ export function buildDefinition(key: string, name: string, description: string, 
     ...(rule.manual ? { manual: true } : {}),
     ...(rule.defer ? { deferCost: true } : {}),
     ...(rule.offTurn ? { offTurn: true } : {}),
+    ...(rule.exitsCondition ? { exitsCondition: rule.exitsCondition } : {}),
     ...(rule.dieFallback ? { dieFallback: rule.dieFallback } : {}),
     ...(value !== undefined ? { featureValue: value } : {}),
   };

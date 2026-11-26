@@ -18,7 +18,7 @@
 
 import { rollDice } from "@/lib/dnd/dice";
 import { distanceFt } from "./grid";
-import { canAct, checkReach, hasCondition, type SaveResult } from "./rules";
+import { canAct, checkReach, hasCondition, hasNoReactions, type SaveResult } from "./rules";
 import {
   EngineError,
   applyEffect,
@@ -95,7 +95,7 @@ export function removeConditions(state: CombatState, c: Combatant, ...types: str
 export function featureReady(c: Combatant, key: string, opts: { reaction?: boolean; pool?: string } = {}): CombatAbility | null {
   const ability = abilityByKey(c, key);
   if (!ability || !alive(c) || !canAct(c)) return null;
-  if (opts.reaction && c.reactionUsed) return null;
+  if (opts.reaction && (c.reactionUsed || hasNoReactions(c))) return null;
   if (ability.usesMax > 0 && ability.usesUsed >= ability.usesMax) return null;
   if (opts.pool && poolLeft(c, opts.pool) < 1) return null;
   return ability;
@@ -541,6 +541,10 @@ export function registerKit(kit: ClassKit): void {
     afterAttack(state, attacker, target, attack) {
       if (!attack) return;
       for (const [, run, ability] of ownedAbilities(attacker, kit.afterAttack)) run(state, attacker, ability, target, attack);
+    },
+
+    creatureDown(state, target) {
+      if (kit.conditionEnd || kit.endsWhenDown) sweepStances(state, target);
     },
   };
   registerClassModule(mod);

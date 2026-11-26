@@ -25,7 +25,7 @@ const spell = (
   name: string,
   level: number,
   minCharacterLevel: number,
-  castingAbility: AbilityKey,
+  castingAbility: AbilityKey | ((c: Calc) => AbilityKey),
   usesMax = level === 0 ? 0 : 1,
   refresh: "long" | "short" = "long",
   when?: (c: Calc) => boolean
@@ -39,6 +39,21 @@ const spell = (
   castingAbility,
   ...(when ? { when } : {}),
 });
+
+const MENTAL_ABILITY_TOKENS: Array<{ ability: AbilityKey; aliases: string[] }> = [
+  { ability: "INT", aliases: ["int", "инт", "интеллект", "intelligence"] },
+  { ability: "WIS", aliases: ["wis", "муд", "мдр", "мудрость", "wisdom"] },
+  { ability: "CHA", aliases: ["cha", "хар", "харизма", "charisma"] },
+];
+
+const chosenMentalAbility = (fallback: AbilityKey) => (c: Calc): AbilityKey => {
+  for (const { ability, aliases } of MENTAL_ABILITY_TOKENS) {
+    if (aliases.some((a) => c.tokens.has(a) || c.tokens.has(`spell-${a}`) || mentions(c.text, a))) {
+      return ability;
+    }
+  }
+  return fallback;
+};
 
 const skipTraits = (...ids: string[]): Record<string, RaceFeatureRule> =>
   Object.fromEntries(ids.map((id) => [id, skip(id)]));
@@ -69,7 +84,6 @@ featureMods("race/autognome/mekhanicheskaya-priroda", {
   name: "Механическая природа",
   resist: ["poison"],
   saveAdvantageConditions: ["paralyzed", "poisoned"],
-  sleepImmune: true,
 });
 
 // Астральный эльф
@@ -95,7 +109,7 @@ featureMods("race/verdan/telepaticheskaya-pronitsatelnost", {
 // Гибрид Симиков (Панцирь)
 featureMods("race/simic-hybrid/carapace", {
   name: "Панцирь (Гибрид Симиков)",
-  mods: (owner) => ((owner as { armorType?: string }).armorType === "heavy" ? null : { acBonus: 1 }),
+  mods: (owner) => (owner.armorType === "heavy" ? null : { acBonus: 1 }),
 });
 
 // Гифф
@@ -126,10 +140,6 @@ featureMods("race/kalashtar/mentalnaya-distsiplina", {
   name: "Ментальная дисциплина",
   resist: ["psychic"],
 });
-featureMods("race/kalashtar/otdelennyy-ot-snov", {
-  name: "Отделённый от снов",
-  sleepImmune: true,
-});
 
 // Кендер
 featureMods("race/kender/besstrashie", {
@@ -153,8 +163,7 @@ featureMods("race/warforged/vstroennaya-zashchita", {
 registerNaturalAC("race/locathah/prirodnyy-dospekh", "Природный доспех", 12, "DEX");
 featureMods("race/locathah/volya-leviafana", {
   name: "Воля Левиафана",
-  saveAdvantageConditions: ["charmed", "frightened", "paralyzed", "poisoned", "stunned"],
-  sleepImmune: true,
+  saveAdvantageConditions: ["charmed", "frightened", "paralyzed", "poisoned", "stunned", "sleep"],
 });
 
 // Локсодон
@@ -187,10 +196,6 @@ featureMods("race/tortle/prirodnyy-dospekh", {
   minBaseAC: () => 17,
 });
 registerNaturalAC("race/thri-kreen/pantsir-khameleon", "Панцирь-хамелеон", 13, "DEX");
-featureMods("race/thri-kreen/bessonnoe-vosstanovlenie", {
-  name: "Бессонное восстановление",
-  sleepImmune: true,
-});
 
 // Шифтер (Зверошкуры, Быстроноги, Дикие охотники)
 registerShifterMod("beasthide", "Зверошкур (Смена формы)", { acBonus: 1 });
@@ -342,15 +347,15 @@ defineRace("astral-elf", {
       "Священное пламя",
       0,
       1,
-      "WIS",
+      chosenMentalAbility("WIS"),
       0,
       "long",
       (c) => astralCantripChosen(c, "sacred-flame", "Священное пламя", "Sacred Flame") || !hasAnyAstralCantrip(c)
     ),
-    spell("light", "Свет", 0, 1, "WIS", 0, "long", (c) =>
+    spell("light", "Свет", 0, 1, chosenMentalAbility("WIS"), 0, "long", (c) =>
       astralCantripChosen(c, "light", "Свет", "Light")
     ),
-    spell("dancing-lights", "Пляшущие огоньки", 0, 1, "WIS", 0, "long", (c) =>
+    spell("dancing-lights", "Пляшущие огоньки", 0, 1, chosenMentalAbility("WIS"), 0, "long", (c) =>
       astralCantripChosen(c, "dancing-lights", "Пляшущие огоньки", "Dancing Lights")
     ),
   ],
@@ -647,6 +652,7 @@ defineRace("tortle", {
       id: "pantsirnaya-zashchita",
       kind: "active",
       cost: "action",
+      exitsCondition: "tortle_shell",
       uses: { max: 0, refresh: "none" },
       note: () => "Вход действием (+4 к КД, преимущество на спас СИЛ/ТЕЛ, скорость 0); выход бонусным действием.",
     },
@@ -672,9 +678,9 @@ defineRace("fairy", {
     polet: passive("polet"),
   },
   innateSpells: [
-    spell("druidcraft", "Искусство друидов", 0, 1, "CHA", 0),
-    spell("faerie-fire", "Огонь фей", 1, 3, "CHA", 1),
-    spell("enlarge-reduce", "Увеличение/уменьшение", 2, 5, "CHA", 1),
+    spell("druidcraft", "Искусство друидов", 0, 1, chosenMentalAbility("CHA"), 0),
+    spell("faerie-fire", "Огонь фей", 1, 3, chosenMentalAbility("CHA"), 1),
+    spell("enlarge-reduce", "Увеличение/уменьшение", 2, 5, chosenMentalAbility("CHA"), 1),
   ],
 });
 

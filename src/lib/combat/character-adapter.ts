@@ -697,6 +697,61 @@ export function innateSpellToCombatAbility(
   };
 }
 
+function classifyArmorItem(item: Record<string, any> | undefined | null): Combatant["armorType"] | undefined {
+  if (!item || typeof item !== "object") return undefined;
+  const cat = String(item.armorCategory ?? item.category ?? item.armorType ?? item.type ?? "").toLowerCase();
+  if (/тяж|heavy/.test(cat)) return "heavy";
+  if (/средн|medium/.test(cat)) return "medium";
+  if (/л[её]гк|light/.test(cat)) return "light";
+
+  const name = String(item.name ?? item.nameEn ?? "").toLowerCase();
+  if (!name) return undefined;
+  if (/полулат|half\s*plate|кольчужная\s*руба|chain\s*shirt|кирас|breastplate|чешуйчат|scale\s*mail|шкур|hide/.test(name)) {
+    return "medium";
+  }
+  if (/\b(plate|splint|chain\s*mail|ring\s*mail)\b|латы|латн|наборн|кольчуг|кольчат/.test(name)) {
+    return "heavy";
+  }
+  if (/кожан|прост[её]ган|кл[её]пан|leather|padded|studded/.test(name)) {
+    return "light";
+  }
+  return undefined;
+}
+
+/** Определяет категорию надетого доспеха из карточки/листа персонажа для расовых и классовых правил. */
+export function detectArmorType(char: Record<string, any>): Combatant["armorType"] | undefined {
+  const explicit = String(char.armorType ?? char.sheet?.armorType ?? "").trim().toLowerCase();
+  if (explicit === "none" || explicit === "light" || explicit === "medium" || explicit === "heavy") {
+    return explicit;
+  }
+
+  const sheetObj = char.sheet && typeof char.sheet === "object" ? char.sheet : char;
+  const equippedArmor = sheetObj?.equippedSlots?.armor;
+  const fromSlot = classifyArmorItem(equippedArmor);
+  if (fromSlot) return fromSlot;
+
+  const rawInv = char.inventory ?? sheetObj?.inventory;
+  let inv: unknown = rawInv;
+  if (typeof rawInv === "string") {
+    try {
+      inv = JSON.parse(rawInv);
+    } catch {
+      inv = null;
+    }
+  }
+  if (Array.isArray(inv)) {
+    for (const item of inv) {
+      if (!item || typeof item !== "object") continue;
+      if (item.equipped === false) continue;
+      const isArmorEntry = item.equipped === true || item.slot === "armor" || /armor|доспех/i.test(String(item.type ?? item.category ?? ""));
+      if (!isArmorEntry) continue;
+      const classified = classifyArmorItem(item);
+      if (classified) return classified;
+    }
+  }
+  return undefined;
+}
+
 export interface MergeRaceInput {
   loadout: ResolvedRaceLoadout | null;
   char: Record<string, any>;
@@ -728,6 +783,7 @@ export interface MergedRaceCombatantData {
       | "racialVariants"
       | "damageResistances"
       | "conditionImmunities"
+      | "armorType"
     >
   >;
 }
@@ -735,6 +791,7 @@ export interface MergedRaceCombatantData {
 /** Сливает расовые умения, врождённые заклинания, природное оружие, сопротивления, скорость и размер. */
 export function mergeRaceIntoCombatantData(input: MergeRaceInput): MergedRaceCombatantData {
   const { loadout, char, abilityMods, profBonus, idPrefix } = input;
+  const armorType = detectArmorType(char);
   if (!loadout) {
     const explicitSize = normalizeCreatureSize(String(char.size ?? char.sheet?.size ?? "").trim().toLowerCase());
     return {
@@ -745,6 +802,7 @@ export function mergeRaceIntoCombatantData(input: MergeRaceInput): MergedRaceCom
       racialMeta: {
         ...(input.damageResistances?.length ? { damageResistances: input.damageResistances } : {}),
         ...(input.conditionImmunities?.length ? { conditionImmunities: input.conditionImmunities } : {}),
+        ...(armorType ? { armorType } : {}),
       },
     };
   }
@@ -794,6 +852,7 @@ export function mergeRaceIntoCombatantData(input: MergeRaceInput): MergedRaceCom
       ...(loadout.racialVariants.length > 0 ? { racialVariants: loadout.racialVariants } : {}),
       ...(damageResistances.length > 0 ? { damageResistances } : {}),
       ...(conditionImmunities.length > 0 ? { conditionImmunities } : {}),
+      ...(armorType ? { armorType } : {}),
     },
   };
 }

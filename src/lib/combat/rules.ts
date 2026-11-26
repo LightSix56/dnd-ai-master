@@ -93,6 +93,16 @@ export function canAct(c: Combatant): boolean {
   return !getConditionEffects(c.conditions).some((e) => e.noActions);
 }
 
+/** Запрещены ли бойцу реакции (паралич, оглушение, замедление, панцирь и т.п.) */
+export function hasNoReactions(c: Combatant): boolean {
+  return getConditionEffects(c.conditions).some((e) => e.noReactions);
+}
+
+/** Запрещены ли бойцу атаки, заклинания и прочие боевые действия (Панцирная защита и т.п.) */
+export function hasPreventOffensiveActions(c: Combatant): boolean {
+  return getConditionEffects(c.conditions).some((e) => e.preventOffensiveActions);
+}
+
 /** Итоговый AC с учётом бонусов от состояний (Щит, Ускорение, Укрытия) */
 export function effectiveAC(c: Combatant, all?: Combatant[]): number {
   const bonus = getConditionEffects(c.conditions).reduce(
@@ -944,6 +954,7 @@ export interface ActionCostCheck {
  */
 export function canPayForAttack(c: Combatant, attack: Attack): ActionCostCheck {
   if (!canAct(c)) return { ok: false, reason: "Не может действовать" };
+  if (hasPreventOffensiveActions(c)) return { ok: false, reason: "Не может атаковать в текущем состоянии" };
 
   if (attack.actionCost === "action+bonus") {
     if (c.actionUsed && c.extraActions <= 0) {

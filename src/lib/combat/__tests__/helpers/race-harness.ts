@@ -2,7 +2,7 @@
 // Math.random в тестах фиксируется через vi.spyOn(Math, "random").
 
 import { proficiencyBonus } from "@/lib/dnd/dice";
-import { extractAbilitiesFromCharacter, innateSpellToCombatAbility } from "../../character-adapter";
+import { detectArmorType, extractAbilitiesFromCharacter, innateSpellToCombatAbility } from "../../character-adapter";
 import { resolveRaceForCharacter } from "../../races/race-defs";
 import type { CombatAbility, Combatant } from "../../types";
 import { hero, type HeroOptions } from "./fighter-harness";
@@ -41,6 +41,11 @@ export function raceHero(
   if (o.attacks !== undefined) c.attacks = [...o.attacks];
   if (o.saves !== undefined) c.saves = { ...o.saves };
   if (o.isAIControlled !== undefined) c.isAIControlled = o.isAIControlled;
+  if (o.armorType !== undefined) c.armorType = o.armorType;
+  else if (o.sheet) {
+    const detected = detectArmorType({ sheet: o.sheet });
+    if (detected) c.armorType = detected;
+  }
 
   if (o.className !== undefined || o.subclass || profBonus !== 3) {
     c.abilities = extractAbilitiesFromCharacter(

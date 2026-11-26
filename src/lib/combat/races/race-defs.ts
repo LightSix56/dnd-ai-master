@@ -148,7 +148,7 @@ export interface InnateSpellSpec {
   minCharacterLevel?: number;
   usesMax?: number;
   refresh?: "long" | "short";
-  castingAbility?: AbilityKey;
+  castingAbility?: AbilityKey | ((c: Calc) => AbilityKey);
   when?: (c: Calc) => boolean;
 }
 
@@ -549,7 +549,7 @@ export function resolveRaceForCharacter(ctx: RaceHeroContext, idPrefix = "hero")
       minCharacterLevel: s.minCharacterLevel ?? 1,
       usesMax: s.usesMax ?? (s.level === 0 ? 0 : 1),
       refresh: s.refresh ?? ("long" as const),
-      castingAbility: s.castingAbility ?? ("CHA" as const),
+      castingAbility: typeof s.castingAbility === "function" ? s.castingAbility(c) : (s.castingAbility ?? ("CHA" as const)),
     }));
 
   return {

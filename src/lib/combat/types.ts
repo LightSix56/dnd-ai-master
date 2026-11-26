@@ -72,6 +72,7 @@ export interface Combatant {
   darkvision?: number;
   speeds?: { fly?: number; swim?: number; climb?: number; burrow?: number };
   racialVariants?: string[];
+  armorType?: "none" | "light" | "medium" | "heavy";
 }
 
 export interface CombatPotion {
@@ -320,6 +321,8 @@ export interface ActionParameters {
   offTurn?: boolean;
   /** Когда использования кончились, умение можно повторить за кость этого запаса (Пси-прыжок, Оплот силы…) */
   dieFallback?: string;
+  /** Способность снимает это состояние и может применяться даже при preventOffensiveActions */
+  exitsCondition?: string;
   /** Число умения на уровне героя: лишние кости крита, порог крита, лечение Уцелевшего, бонус ауры */
   featureValue?: number;
   refresh?: "short" | "long" | "none" | "turn" | "round";
@@ -356,6 +359,8 @@ export interface ConditionEffect {
   rangedDisadvantageAgainst?: boolean;
   noActions?: boolean;
   noReactions?: boolean;
+  /** Запрещает атаки, заклинания и прочие способности (кроме снимающих само состояние) */
+  preventOffensiveActions?: boolean;
   autoFailStrSave?: boolean;
   autoFailDexSave?: boolean;
   damagePerTurn?: { dice: string; type: string };
@@ -1100,13 +1105,17 @@ export const CONDITION_EFFECTS: Record<string, {
   },
   tortle_shell: {
     name: "Панцирная защита",
-    description: "+4 к КД, преимущество на спасброски СИЛ и ТЕЛ, помеха на спасброски ЛОВ, скорость 0, нет реакций",
+    description: "+4 к КД, преимущество на спасброски СИЛ и ТЕЛ, помеха на спасброски ЛОВ, скорость 0, ничком, нет реакций и атак/заклинаний; выход бонусным действием",
     effects: {
       acBonus: 4,
       speedSetTo: 0,
       saveAdvantage: ["STR", "CON"],
       saveDisadvantage: ["DEX"],
+      attackDisadvantage: true,
+      meleeAdvantageAgainst: true,
+      rangedDisadvantageAgainst: true,
       noReactions: true,
+      preventOffensiveActions: true,
     },
   },
   shifter_shifted: {
@@ -1116,6 +1125,12 @@ export const CONDITION_EFFECTS: Record<string, {
   },
   leonin_roar_aura: {
     name: "leonin_roar_aura",
+    description: "Служебная отметка",
+    effects: {},
+    service: true,
+  },
+  kender_taunt_aura: {
+    name: "kender_taunt_aura",
     description: "Служебная отметка",
     effects: {},
     service: true,

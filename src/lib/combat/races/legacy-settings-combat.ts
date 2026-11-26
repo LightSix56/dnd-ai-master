@@ -5,7 +5,7 @@ import { rollDice } from "@/lib/dnd/dice";
 import { distanceFt } from "../grid";
 import { computeReachable } from "../movement";
 import { askReaction } from "../reactions";
-import { canAct, checkReach, effectiveSpeed, hasCondition } from "../rules";
+import { canAct, checkReach, effectiveSpeed, hasCondition, hasNoReactions } from "../rules";
 import {
   EngineError,
   applyEffect,
@@ -109,7 +109,7 @@ registerKit({
     },
   },
 
-  endsWhenDown: ["shifter_shifted", "leonin_roar_aura", "tortle_shell"],
+  endsWhenDown: ["shifter_shifted", "leonin_roar_aura", "tortle_shell", "kender_taunt_aura"],
 
   conditionStart: {
     "race/shifter/smena-formy": {
@@ -129,10 +129,17 @@ registerKit({
       condition: "leonin_roar_aura",
       run: (state, c) => clearConditionBySource(state, "frightened", c.id),
     },
+    "race/kender/nasmeshka": {
+      condition: "kender_taunt_aura",
+      run: (state, c) => clearConditionBySource(state, "kender_taunted", c.id),
+    },
   },
 
   startTurn: {
-    "race/kender/nasmeshka": (state, c) => clearConditionBySource(state, "kender_taunted", c.id),
+    "race/kender/nasmeshka": (state, c) => {
+      removeConditions(state, c, "kender_taunt_aura");
+      clearConditionBySource(state, "kender_taunted", c.id);
+    },
   },
 
   actions: {
@@ -190,6 +197,7 @@ registerKit({
         throw new EngineError("Выберите живого врага");
       }
       if (distanceFt(c, target) > 60) throw new EngineError(`${target.name} дальше 60 фт`);
+      if (hasCondition(target, "deafened")) throw new EngineError(`${target.name} оглушён и не слышит насмешку`);
       ctx.pay();
 
       const maxMental = Math.max(modOf(c, "INT"), modOf(c, "WIS"), modOf(c, "CHA"));
@@ -197,6 +205,8 @@ registerKit({
       const saved = saves(state, target, "WIS", dc, ability.name);
       if (!saved) {
         applyEffect(state, target.id, { condition: "kender_taunted" }, c.id);
+        applyEffect(state, c.id, { condition: "kender_taunt_aura" }, c.id);
+        fireConditionStart(state, c, "kender_taunt_aura", ctx.opts);
       }
       log(state, c, `${c.name}: Насмешка на ${target.name} (СЛ ${dc}) — ${saved ? "устоял" : "спровоцирован"}`);
       return result(`Насмешка: ${saved ? `${target.name} устоял` : `${target.name} получает помеху по другим`}`, [
@@ -359,14 +369,14 @@ registerKit({
   },
 
   damaged: {
-    // Грунг: Ядовитая кожа при прямом контакте (атака в пределах 5 фт -> спас ТЕЛ СЛ 12)
+    // Грунг: Ядовитая кожа при прямом контакте (атака в пределах 5 фт -> спас ТЕЛ СЛ 12, отравлен до 1 минуты с повтором спаса в конце хода)
     "race/grung/yadovitaya-kozha": (ctx) => {
       const { state, owner, ability, attacker, isAttack } = ctx;
       if (!isAttack || !attacker || attacker.id === owner.id || !alive(attacker)) return;
       if (distanceFt(owner, attacker) > 5) return;
       const saved = saves(state, attacker, "CON", 12, ability.name, { condition: "poisoned" });
       if (!saved) {
-        applyEffect(state, attacker.id, { condition: "poisoned", durationRounds: 1 }, owner.id);
+        applyEffect(state, attacker.id, { condition: "poisoned", durationRounds: 10, saveType: "CON", saveDC: 12 }, owner.id);
       }
     },
   },
@@ -394,10 +404,11 @@ registerClassModule({
       }
     }
 
-    // Зайцегон: Сильные ноги — реакцией +1к4 к проваленному спасброску Ловкости (если не ничком и скорость > 0)
+    // Зайцегон: Сильные ноги — реакцией +1к4 к проваленному спасброску Ловкости (если не ничком, скорость > 0 и реакции не запрещены)
     if (
       ability === "DEX" &&
       !c.reactionUsed &&
+      !hasNoReactions(c) &&
       alive(c) &&
       canAct(c) &&
       !hasCondition(c, "prone") &&
@@ -429,7 +440,7 @@ registerClassModule({
   endTurn(state, current, phase) {
     if (phase !== "before") return;
     for (const shifter of state.combatants) {
-      if (shifter.id === current.id || !alive(shifter) || !canAct(shifter) || shifter.reactionUsed) continue;
+      if (shifter.id === current.id || !alive(shifter) || !canAct(shifter) || shifter.reactionUsed || hasNoReactions(shifter)) continue;
       if (!isHostile(shifter.type, current.type) || !hasCondition(shifter, "shifter_shifted")) continue;
       if (!abilityByKey(shifter, "race/swiftstride/osobennosti-smeny-formy")) continue;
       if (distanceFt(shifter, current) > 5 || effectiveSpeed(shifter) <= 0) continue;

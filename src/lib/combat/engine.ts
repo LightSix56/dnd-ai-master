@@ -15,6 +15,8 @@ import {
   consumeAttackConditions,
   classFeature,
   hasCondition,
+  hasNoReactions,
+  hasPreventOffensiveActions,
   effectiveSpeed,
   payForAttack,
   remainingMovement,
@@ -457,7 +459,7 @@ export function dealDamage(
     !hasCondition(target, "blinded") &&
     !(dodgeAttacker && (dodgeAttacker.isHidden || dodgeAttacker.conditions.some((c) => c.type === "invisible" || c.type === "greater_invisibility")));
 
-  if (hasUncannyDodge && canSeeAttacker && !target.reactionUsed && canAct(target) && opts.isAttack && actualAmount > 1) {
+  if (hasUncannyDodge && canSeeAttacker && !target.reactionUsed && !hasNoReactions(target) && canAct(target) && opts.isAttack && actualAmount > 1) {
     const halved = Math.floor(actualAmount / 2);
     const choice = askReaction(target, {
       title: "Использовать «Невероятное уклонение»?",
@@ -1368,6 +1370,7 @@ function performAttackUnmarked(
   let target = state.require(targetId);
 
   if (target.hpCurrent <= 0) throw new EngineError(`${target.name} уже выведен из боя`);
+  if (hasPreventOffensiveActions(attacker)) throw new EngineError(`${attacker.name} не может атаковать в текущем состоянии`);
 
   const attack = attacker.attacks.find((a) => a.id === attackId);
   if (!attack) throw new EngineError("Атака не найдена");
@@ -1705,6 +1708,7 @@ export function performMultiattack(
 
   const target = state.require(targetId);
   if (target.hpCurrent <= 0) throw new EngineError(`${target.name} уже выведен из боя`);
+  if (hasPreventOffensiveActions(attacker)) throw new EngineError(`${attacker.name} не может атаковать в текущем состоянии`);
 
   attacker.actionUsed = true;
   state.mark(attacker.id);
@@ -3304,6 +3308,7 @@ function castSpellUnsafe(
   if (!canAct(caster)) throw new EngineError(`${caster.name} не может действовать`);
   if (caster.wildShape) throw new EngineError("Нельзя сотворять заклинания в облике зверя!");
   if (hasCondition(caster, "raging")) throw new EngineError("В Ярости нельзя сотворять заклинания");
+  if (hasPreventOffensiveActions(caster)) throw new EngineError(`${caster.name} не может сотворять заклинания в текущем состоянии`);
 
   let spell: SpellDefinitionLike;
   if (typeof spellOrId === "string") {
@@ -3792,6 +3797,13 @@ function useAbilityCore(
   if (!params) throw new EngineError(`«${ability.name}» без параметров — нечего применять`);
   if (!canAct(c) && params.actionCost !== "free") {
     throw new EngineError(`${c.name} не может действовать`);
+  }
+  if (
+    hasPreventOffensiveActions(c) &&
+    params.actionCost !== "free" &&
+    !(params.exitsCondition && hasCondition(c, params.exitsCondition))
+  ) {
+    throw new EngineError(`${c.name} не может применять способности в текущем состоянии`);
   }
 
   if (params.isResource) {
@@ -4751,6 +4763,7 @@ export function shoveCombatant(
   }
 
   if (target.hpCurrent <= 0) throw new EngineError(`${target.name} уже выведен из боя`);
+  if (hasPreventOffensiveActions(shover)) throw new EngineError(`${shover.name} не может атаковать в текущем состоянии`);
 
   // Толчок заменяет одну атаку действия «Атака» — проверяем, что она доступна
   const shoveAsAttack: Attack = {

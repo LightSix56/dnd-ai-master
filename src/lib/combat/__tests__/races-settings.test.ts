@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   applyEffect,
+  castSpell,
   dealDamage,
   endTurn,
   moveCombatant,
@@ -10,7 +11,7 @@ import {
 import { kitHandles } from "../class-kit";
 import { modDamageImmunity, modResistance } from "../feature-mods";
 import { rollInitiativeFor } from "../initiative";
-import { DECLINE, ReactionPrompt, type ReactionContext } from "../reactions";
+import { DECLINE, ReactionPrompt, askReaction, type ReactionContext } from "../reactions";
 import { runWithReactions } from "../reaction-runtime";
 import { RACES_2014, raceRuleKeys, raceRules } from "../races/race-defs";
 import {
@@ -20,6 +21,7 @@ import {
   hasCondition,
   rollSave,
 } from "../rules";
+import { hydrateCombatant, packMonsterData } from "../serialize";
 import { ally, bySrd, cond, enemy, makeState, raceHero } from "./helpers/race-harness";
 
 import type { Combatant } from "../types";
@@ -83,7 +85,7 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
   });
 
   describe("1. Autognome (Автогном)", () => {
-    it("Small, Armored Casing 13+DEX, poison resist, paralyzed/poisoned save adv, sleep immune, Built for Success profBonus/long", () => {
+    it("Small, Armored Casing 13+DEX, poison resist, paralyzed/poisoned save adv, Built for Success profBonus/long", () => {
       const ag = raceHero("Автогном", null, "ag-1", 5, {
         ac: 10,
         mods: { DEX: 3 },
@@ -97,8 +99,9 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
       expect(rollSave(ag, "CON", 15, { condition: "paralyzed" }).advantage).toBe(true);
 
       const st = makeState([ag]);
+      // Autognome Sentry's Rest does NOT grant sleep immunity in 2014 rules
       applyEffect(st, "ag-1", { condition: "unconscious", durationRounds: 5, isMagicalSleep: true });
-      expect(hasCondition(ag, "unconscious")).toBe(false);
+      expect(hasCondition(ag, "unconscious")).toBe(true);
 
       const bfs = bySrd(ag, "race/autognome/sozdan-dlya-uspekha");
       expect(bfs.usesMax).toBe(3);
@@ -110,15 +113,17 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
   });
 
   describe("2. Astral Elf (Астральный эльф)", () => {
-    it("dv 60, charmed save adv, sleep immune, Astral Fire cantrip, Starlight Step bonus 30ft teleport profBonus/long", () => {
+    it("dv 60, charmed save adv, sleep immune, Astral Fire cantrip & INT/WIS/CHA choice, Starlight Step bonus 30ft teleport", () => {
       const ae = raceHero("Астральный эльф", null, "ae-1", 5, {
         x: 2,
         y: 5,
-        mods: { WIS: 3 },
+        mods: { INT: 1, WIS: 3, CHA: 0 },
       });
       expect(ae.darkvision).toBe(60);
       expect(rollSave(ae, "WIS", 15, { condition: "charmed" }).advantage).toBe(true);
-      expect(bySrd(ae, "race/astral-elf/innate/sacred-flame").usesMax).toBe(0);
+      const sf = bySrd(ae, "race/astral-elf/innate/sacred-flame");
+      expect(sf.usesMax).toBe(0);
+      expect(sf.parameters?.saveDC).toBe(8 + 3 + 3);
 
       const st = makeState([ae]);
       applyEffect(st, "ae-1", { condition: "sleep", durationRounds: 3 });
@@ -133,8 +138,12 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
       expect(ae.bonusActionUsed).toBe(true);
       expect(step.usesUsed).toBe(1);
 
-      const aeLight = raceHero("Астральный эльф", null, "ae-l", 1, { racialVariants: ["light"] });
-      expect(bySrd(aeLight, "race/astral-elf/innate/light").usesMax).toBe(0);
+      const aeInt = raceHero("Астральный эльф", null, "ae-i", 1, {
+        racialVariants: ["light", "int"],
+        mods: { INT: 4, WIS: 1 },
+      });
+      expect(bySrd(aeInt, "race/astral-elf/innate/light").usesMax).toBe(0);
+      expect(bySrd(aeInt, "race/astral-elf/innate/light").parameters?.saveDC).toBe(8 + 2 + 4);
     });
   });
 
@@ -161,7 +170,7 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
   });
 
   describe("5. Simic Hybrid (Гибрид Симиков)", () => {
-    it("dv 60, L1 & L5 options: Grappling Appendages 1d6+STR, Carapace +1 AC, Acid Spit 2d10->3d10->4d10 CON-mod/long", () => {
+    it("dv 60, L1 & L5 options: Grappling Appendages 1d6+STR, Carapace +1 AC (unless heavy armor), Acid Spit 2d10->3d10->4d10", () => {
       const l1 = raceHero("Гибрид Симиков", null, "sim-1", 1, {
         racialVariants: ["manta-glide", "grappling-appendages", "carapace", "acid-spit"],
         mods: { STR: 3, CON: 2 },
@@ -185,6 +194,32 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
       expect(app).toBeDefined();
       expect(app!.damage).toEqual([{ dice: "1d6", mod: 3, type: "bludgeoning" }]);
 
+      // Heavy armor disables Carapace +1 AC and survives monsterData pack/hydrate roundtrip
+      const l5Heavy = raceHero("Гибрид Симиков", null, "sim-heavy", 5, {
+        racialVariants: ["carapace"],
+        ac: 18,
+        sheet: { equippedSlots: { armor: { name: "Латы", category: "heavy" } } },
+      });
+      expect(l5Heavy.armorType).toBe("heavy");
+      expect(effectiveAC(l5Heavy)).toBe(18);
+      const packed = packMonsterData(l5Heavy);
+      const hydrated = hydrateCombatant({
+        id: l5Heavy.id,
+        name: l5Heavy.name,
+        type: l5Heavy.type,
+        color: "#000",
+        x: 0,
+        y: 0,
+        hpCurrent: 40,
+        hpMax: 40,
+        ac: 18,
+        speed: 30,
+        abilities: JSON.stringify(l5Heavy.abilities),
+        monsterData: packed,
+      });
+      expect(hydrated.armorType).toBe("heavy");
+      expect(effectiveAC(hydrated)).toBe(18);
+
       const foe = enemy("orc", 8, 5, { hpMax: 60, hpCurrent: 60, saves: { DEX: { prof: false, mod: 0 } } });
       const st = makeState([l5, foe]);
       const spit = bySrd(l5, "race/simic-hybrid/acid-spit");
@@ -205,7 +240,7 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
       });
       const foe11 = enemy("orc11", 8, 5, { hpMax: 80, hpCurrent: 80, saves: { DEX: { prof: false, mod: 0 } } });
       const st11 = makeState([l11, foe11]);
-      seqRandom(0.1, 0.5, 0.5, 0.5); // 3d10 (6*3=18)
+      seqRandom(0.1, 0.5, 0.5, 0.5);
       useAbility(st11, "sim-11", bySrd(l11, "race/simic-hybrid/acid-spit").id, { targetIds: ["orc11"] });
       expect(foe11.hpCurrent).toBe(62);
 
@@ -217,7 +252,7 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
       });
       const foe17 = enemy("orc17", 8, 5, { hpMax: 80, hpCurrent: 80, saves: { DEX: { prof: false, mod: 0 } } });
       const st17 = makeState([l17, foe17]);
-      seqRandom(0.1, 0.5, 0.5, 0.5, 0.5); // 4d10 (6*4=24)
+      seqRandom(0.1, 0.5, 0.5, 0.5, 0.5);
       useAbility(st17, "sim-17", bySrd(l17, "race/simic-hybrid/acid-spit").id, { targetIds: ["orc17"] });
       expect(foe17.hpCurrent).toBe(56);
     });
@@ -241,12 +276,11 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
 
       giff.attacksPerAction = 2;
       useAbility(st, "giff-1", spark.id);
-      seqRandom(0.5, 0.5); // 1d8=5+3=8 + 3 force = 11
+      seqRandom(0.5, 0.5);
       const h1 = performAttack(st, "giff-1", "orc", "sword");
       expect(h1.damage).toBe(11);
       expect(spark.usesUsed).toBe(1);
 
-      // Even if armed again on same turn, oncePerTurn prevents second Astral Spark
       useAbility(st, "giff-1", spark.id);
       seqRandom(0.5, 0.5);
       const h2 = performAttack(st, "giff-1", "orc", "sword");
@@ -256,7 +290,7 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
   });
 
   describe("7. Grung (Грунг)", () => {
-    it("Small, walk 25, climb 25, poison damage & poisoned condition immunity, Poisonous Skin CON DC 12", () => {
+    it("Small, walk 25, climb 25, poison damage & poisoned condition immunity, Poisonous Skin CON DC 12 for 1 min with Save Ends", () => {
       const gr = raceHero("Грунг", null, "gr-1", 1, { x: 5, y: 5, hpMax: 30, hpCurrent: 30 });
       expect(gr.size).toBe("small");
       expect(gr.speed).toBe(25);
@@ -275,15 +309,28 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
       applyEffect(st, "gr-1", { condition: "poisoned", durationRounds: 5 });
       expect(hasCondition(gr, "poisoned")).toBe(false);
 
-      // Melee attack against Grung triggers Poisonous Skin CON DC 12 save
-      seqRandom(0.9, 0.5, 0.1); // foe hits (0.9), dmg (0.5), foe fails CON save (0.1 -> 3 < 12)
+      // Melee attack against Grung triggers Poisonous Skin CON DC 12 (duration 10, saveEnds CON DC 12)
+      seqRandom(0.9, 0.5, 0.1);
       performAttack(st, "orc", "gr-1", "sword");
+      const poisoned = cond(foe, "poisoned");
+      expect(poisoned).toBeDefined();
+      expect(poisoned!.duration).toBe(10);
+      expect(poisoned!.saveType).toBe("CON");
+      expect(poisoned!.saveDC).toBe(12);
+
+      // End orc turn with failed CON save -> stays poisoned; next orc turn with successful CON save -> cleared
+      seqRandom(0.1);
+      endTurn(st);
       expect(hasCondition(foe, "poisoned")).toBe(true);
+      endTurn(st); // grung
+      seqRandom(0.9);
+      endTurn(st); // orc Save Ends succeeds
+      expect(hasCondition(foe, "poisoned")).toBe(false);
     });
   });
 
   describe("8. Harengon (Зайцегон)", () => {
-    it("Hare-Trigger adds profBonus to initiative, Lucky Footwork rescues failed DEX save via reaction (+ReactionPrompt), Rabbit Hop jumps 5*profBonus without OA", () => {
+    it("Hare-Trigger adds profBonus to initiative, Lucky Footwork rescues failed DEX save (+ReactionPrompt accept/decline), Rabbit Hop jumps 5*profBonus without OA", () => {
       const h = raceHero("Зайцегон", null, "har-1", 5, {
         x: 5,
         y: 5,
@@ -291,11 +338,9 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
         saves: { DEX: { prof: false, mod: 2 } },
       });
       h.dexMod = 2;
-      // d20=11 (0.5) + DEX 2 + prof 3 = 16
       seqRandom(0.5);
       expect(rollInitiativeFor(h)).toBe(16);
 
-      // Lucky Footwork: DEX save against DC 15; rolls 11 + 2 = 13 (fails by 2) -> reaction 1d4 (0.5 -> 3) -> 16 >= 15 (SUCCESS!)
       const mage = enemy("mage", 8, 5, {
         abilities: [
           {
@@ -318,17 +363,17 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
         ],
       });
       const st = makeState([mage, h]);
-      seqRandom(0.5, 0.5, 0.5, 0.5); // d20=11 (total 13 < 15), 1d4=3 -> 16 >= 15, 2d6=8 -> half=4
+      seqRandom(0.5, 0.5, 0.5, 0.5);
       const res = useAbility(st, "mage", "fire_blast", { targetIds: ["har-1"] });
       expect(res.targets[0]?.saved).toBe(true);
       expect(h.reactionUsed).toBe(true);
 
-      // ReactionPrompt path in runWithReactions (seed=1 rolls 13; +0 mod = 13 < 15, +1d4 can rescue)
+      // ReactionPrompt path in runWithReactions (seed=1 rolls 13; +1 mod = 14 < 15, any 1d4 >= 1 rescues to 15+)
       mage.actionUsed = false;
       const h2 = raceHero("Зайцегон", null, "har-2", 5, {
         x: 5,
         y: 5,
-        saves: { DEX: { prof: false, mod: 0 } },
+        saves: { DEX: { prof: false, mod: 1 } },
       });
       const st2 = makeState([mage, h2]);
       let caught: ReactionPrompt | null = null;
@@ -344,12 +389,28 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
       expect(caught).not.toBeNull();
       expect(caught!.prompt.reactorId).toBe("har-2");
 
+      // Accepting Lucky Footwork via ReactionPrompt adds 1d4 and turns 14 -> 15+ (success)
+      mage.actionUsed = false;
+      const hAccept = raceHero("Зайцегон", null, "har-2", 5, {
+        x: 5,
+        y: 5,
+        saves: { DEX: { prof: false, mod: 1 } },
+      });
+      const stAccept = makeState([mage, hAccept]);
+      const acceptOut = runWithReactions(
+        { decisions: { [caught!.prompt.key]: caught!.prompt.options[0].id }, seq: 0 },
+        1,
+        () => useAbility(stAccept, "mage", "fire_blast", { targetIds: ["har-2"] })
+      );
+      expect(acceptOut.targets[0]?.saved).toBe(true);
+      expect(hAccept.reactionUsed).toBe(true);
+
       // Declining Lucky Footwork leaves reaction unused and keeps failed save
       mage.actionUsed = false;
       const hDecline = raceHero("Зайцегон", null, "har-2", 5, {
         x: 5,
         y: 5,
-        saves: { DEX: { prof: false, mod: 0 } },
+        saves: { DEX: { prof: false, mod: 1 } },
       });
       const stDecline = makeState([mage, hDecline]);
       const declineOut = runWithReactions({ decisions: { [caught!.prompt.key]: DECLINE }, seq: 0 }, 1, () =>
@@ -364,7 +425,7 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
       h.bonusActionUsed = false;
       const hop = bySrd(h, "race/harengon/krolichiy-pryzhok");
       expect(hop.usesMax).toBe(3);
-      useAbility(stHop, "har-1", hop.id, { center: { x: 8, y: 5 } }); // 15 ft
+      useAbility(stHop, "har-1", hop.id, { center: { x: 8, y: 5 } });
       expect(h.x).toBe(8);
       expect(sentinel.reactionUsed).toBe(false);
       expect(hop.usesUsed).toBe(1);
@@ -372,7 +433,7 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
   });
 
   describe("9. Kalashtar (Калаштар)", () => {
-    it("WIS save adv, psychic resistance, magical sleep immunity", () => {
+    it("WIS save adv, psychic resistance (and NOT immune to magical sleep per 2014 JSON)", () => {
       const kal = raceHero("Калаштар", null, "kal-1", 1, { hpMax: 30, hpCurrent: 30 });
       expect(rollSave(kal, "WIS", 15).advantage).toBe(true);
       expect(modResistance(kal, "psychic")).not.toBeNull();
@@ -380,15 +441,17 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
       dealDamage(st, "kal-1", 10, { damageType: "psychic" });
       expect(kal.hpCurrent).toBe(25);
       applyEffect(st, "kal-1", { condition: "unconscious", durationRounds: 5, isMagicalSleep: true });
-      expect(hasCondition(kal, "unconscious")).toBe(false);
+      expect(hasCondition(kal, "unconscious")).toBe(true);
     });
   });
 
   describe("10. Kender (Кендер)", () => {
-    it("Small, Fearless (adv vs frightened + 1/long auto-success on fail), Taunt gives foe disadvantage vs others until start of next turn", () => {
+    it("Small, Fearless (adv vs frightened + 1/long auto-success on cast & endTurn Save Ends), Taunt ignores deafened and clears on Kender drop", () => {
       const ken = raceHero("Кендер", null, "ken-1", 3, {
         x: 5,
         y: 5,
+        hpMax: 20,
+        hpCurrent: 20,
         mods: { CHA: 3 },
         saves: { WIS: { prof: false, mod: -2 } },
       });
@@ -396,6 +459,7 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
       expect(rollSave(ken, "WIS", 15, { condition: "frightened" }).advantage).toBe(true);
 
       const ally1 = ally("ally", 7, 5, { ac: 15 });
+      const deafFoe = enemy("deaf", 5, 6, { conditions: [{ type: "deafened" }] });
       const mage = enemy("mage", 6, 5, {
         saves: { WIS: { prof: false, mod: 0 } },
         attacks: SURE_SWORD,
@@ -419,38 +483,51 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
           },
         ],
       });
-      const st = makeState([ken, ally1, mage]);
+      const st = makeState([ken, ally1, mage, deafFoe]);
+
+      const taunt = bySrd(ken, "race/kender/nasmeshka");
+      expect(taunt.usesMax).toBe(2);
+      // Deafened target cannot hear Taunt
+      expect(() => useAbility(st, "ken-1", taunt.id, { targetIds: ["deaf"] })).toThrow();
 
       // Taunt: bonus action, WIS DC = 8 + 2 + 3 = 13; mage fails (0.1 -> 3)
       seqRandom(0.1);
-      const taunt = bySrd(ken, "race/kender/nasmeshka");
-      expect(taunt.usesMax).toBe(2);
       useAbility(st, "ken-1", taunt.id, { targetIds: ["mage"] });
       expect(hasCondition(mage, "kender_taunted")).toBe(true);
       expect(computeAttackAdvantage(mage, ally1, SURE_SWORD[0], {}, { allCombatants: st.combatants }).disadvantage).toBe(true);
       expect(computeAttackAdvantage(mage, ken, SURE_SWORD[0], {}, { allCombatants: st.combatants }).disadvantage).toBe(false);
 
-      // End kender turn -> still taunted during ally & mage turns
+      // End kender turn -> still taunted during ally, mage, deafFoe turns
       endTurn(st);
       expect(hasCondition(mage, "kender_taunted")).toBe(true);
       endTurn(st); // ally
-      endTurn(st); // mage -> start of Kender's next turn clears kender_taunted
+      endTurn(st); // mage
+      endTurn(st); // deafFoe -> start of Kender's next turn clears kender_taunted
       expect(hasCondition(mage, "kender_taunted")).toBe(false);
 
-      // Fearless turns failed frightened save (DC 20) into success 1/long
+      // Taunt clears immediately if Kender drops to 0 HP
+      ken.bonusActionUsed = false;
+      seqRandom(0.1);
+      useAbility(st, "ken-1", taunt.id, { targetIds: ["mage"] });
+      expect(hasCondition(mage, "kender_taunted")).toBe(true);
+      dealDamage(st, "ken-1", 50);
+      expect(hasCondition(mage, "kender_taunted")).toBe(false);
+
+      // Revive Kender & verify Fearless turns failed frightened save (DC 20) into success on endTurn Save Ends
+      ken.hpCurrent = 20;
       const fearless = bySrd(ken, "race/kender/besstrashie");
       expect(fearless.usesMax).toBe(1);
       expect(fearless.refresh).toBe("long");
+      applyEffect(st, "ken-1", { condition: "frightened", durationRounds: 3, saveType: "WIS", saveDC: 20 }, "mage");
       seqRandom(0.1, 0.1);
-      const fearOut = useAbility(st, "mage", "fear_hex", { targetIds: ["ken-1"], skipTurnCheck: true });
-      expect(fearOut.targets[0]?.saved).toBe(true);
+      endTurn(st); // Kender endTurn Save Ends fails DC 20 -> Fearless rescues!
       expect(hasCondition(ken, "frightened")).toBe(false);
       expect(fearless.usesUsed).toBe(1);
     });
   });
 
   describe("11. Centaur (Кентавр)", () => {
-    it("walk 40, Hooves 1d4+STR, Charge grants bonus hooves attack after moving >=30 ft and hitting melee attack", () => {
+    it("walk 40, Hooves 1d4+STR, Charge requires >=30 ft movement + melee hit before bonus hooves", () => {
       const cen = raceHero("Кентавр", null, "cen-1", 3, {
         x: 0,
         y: 5,
@@ -464,8 +541,13 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
 
       const foe = enemy("orc", 7, 5, { ac: 10, hpMax: 50, hpCurrent: 50 });
       const st = makeState([cen, foe]);
+      const charge = bySrd(cen, "race/centaur/razbeg");
 
-      // Move 30 ft (6 cells: x=0 -> x=6) then hit with melee weapon -> unlocks Charge bonus hooves
+      // Negative guard: moving only 10 ft is not enough for Charge
+      moveCombatant(st, "cen-1", { x: 2, y: 5 });
+      expect(() => useAbility(st, "cen-1", charge.id, { targetIds: ["orc"] })).toThrow();
+
+      // Move remaining 20 ft (total 30 ft) then hit with melee weapon -> unlocks Charge bonus hooves
       moveCombatant(st, "cen-1", { x: 6, y: 5 });
       expect(cen.movementUsed).toBe(30);
       seqRandom(0.9, 0.5);
@@ -473,7 +555,7 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
 
       const hpAfterSword = foe.hpCurrent;
       seqRandom(0.9, 0.5);
-      useAbility(st, "cen-1", bySrd(cen, "race/centaur/razbeg").id, { targetIds: ["orc"] });
+      useAbility(st, "cen-1", charge.id, { targetIds: ["orc"] });
       expect(cen.bonusActionUsed).toBe(true);
       expect(foe.hpCurrent).toBeLessThan(hpAfterSword);
     });
@@ -516,7 +598,6 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
       expect(leo.bonusActionUsed).toBe(true);
       expect(hasCondition(foe, "frightened")).toBe(true);
 
-      // Expires at end of Leonin's NEXT turn
       endTurn(st);
       expect(hasCondition(foe, "frightened")).toBe(true);
       endTurn(st); // orc turn
@@ -527,16 +608,16 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
   });
 
   describe("14. Locathah (Локата)", () => {
-    it("swim 30, Natural Armor 12+DEX, Leviathan Will adv vs charmed/frightened/paralyzed/poisoned/stunned + sleep immune", () => {
+    it("swim 30, Natural Armor 12+DEX, Leviathan Will adv vs charmed/frightened/paralyzed/poisoned/stunned/sleep", () => {
       const loc = raceHero("Локата", null, "loc-1", 1, { ac: 10, mods: { DEX: 3 } });
       expect(loc.speeds?.swim).toBe(30);
       expect(effectiveAC(loc)).toBe(15);
-      for (const condType of ["charmed", "frightened", "paralyzed", "poisoned", "stunned"]) {
+      for (const condType of ["charmed", "frightened", "paralyzed", "poisoned", "stunned", "sleep"]) {
         expect(rollSave(loc, "WIS", 15, { condition: condType }).advantage).toBe(true);
       }
       const st = makeState([loc]);
       applyEffect(st, "loc-1", { condition: "unconscious", durationRounds: 5, isMagicalSleep: true });
-      expect(hasCondition(loc, "unconscious")).toBe(false);
+      expect(hasCondition(loc, "unconscious")).toBe(true);
     });
   });
 
@@ -550,7 +631,7 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
   });
 
   describe("16. Minotaur (Минотавр)", () => {
-    it("Horns 1d6+STR piercing, Goring Rush after Dash+20ft, Hammering Horns pushes 10ft on failed STR save", () => {
+    it("Horns 1d6+STR piercing, Goring Rush after Dash+20ft, Hammering Horns pushes 10ft & rejects >1 size larger", () => {
       const mino = raceHero("Минотавр", null, "mino-1", 3, {
         x: 1,
         y: 5,
@@ -562,9 +643,9 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
       expect(horns!.damage).toEqual([{ dice: "1d6", mod: 3, type: "piercing" }]);
 
       const foe = enemy("orc", 7, 5, { ac: 10, hpMax: 60, hpCurrent: 60, saves: { STR: { prof: false, mod: 0 } } });
-      const st = makeState([mino, foe]);
+      const hugeFoe = enemy("giant", 6, 6, { size: "huge", ac: 10, hpMax: 80, hpCurrent: 80 });
+      const st = makeState([mino, foe, hugeFoe]);
 
-      // Goring Rush: Dash + move >=20ft (x=1 -> x=6 = 25ft) -> bonus horns attack
       applyEffect(st, "mino-1", { condition: "dashing", durationRounds: 1 }, "mino-1");
       moveCombatant(st, "mino-1", { x: 6, y: 5 });
       seqRandom(0.9, 0.5);
@@ -572,13 +653,17 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
       expect(mino.bonusActionUsed).toBe(true);
       expect(foe.hpCurrent).toBeLessThan(60);
 
-      // Hammering Horns on next turn after melee hit -> pushes foe 10 ft (x=7 -> x=9)
+      // Hammering Horns rejects huge target (>1 size larger than medium)
+      endTurn(st);
       endTurn(st);
       endTurn(st);
       seqRandom(0.9, 0.5);
       performAttack(st, "mino-1", "orc", "sword");
-      seqRandom(0.1); // foe fails STR save DC 13
-      useAbility(st, "mino-1", bySrd(mino, "race/minotaur/sokrushitelnye-roga").id, { targetIds: ["orc"] });
+      const hh = bySrd(mino, "race/minotaur/sokrushitelnye-roga");
+      expect(() => useAbility(st, "mino-1", hh.id, { targetIds: ["giant"] })).toThrow();
+
+      seqRandom(0.1);
+      useAbility(st, "mino-1", hh.id, { targetIds: ["orc"] });
       expect(mino.bonusActionUsed).toBe(true);
       expect(foe.x).toBe(9);
     });
@@ -619,14 +704,30 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
   });
 
   describe("20. Tortle (Тортл)", () => {
-    it("Claws 1d4+STR, Natural Armor 17, Shell Defense toggles tortle_shell (AC 21, STR/CON adv, speed 0, bonus exit)", () => {
-      const tor = raceHero("Тортл", null, "tor-1", 1, { ac: 10, mods: { STR: 3 } });
+    it("Claws 1d4+STR, Natural Armor 17, Shell Defense enforces AC 21, STR/CON adv, DEX disadv, prone, noReactions, blocks attacks/spells, bonus exit", () => {
+      const tor = raceHero("Тортл", null, "tor-1", 3, {
+        x: 5,
+        y: 5,
+        ac: 10,
+        mods: { STR: 3 },
+        attacks: SURE_SWORD,
+      });
       expect(tor.attacks.find((a) => a.id === "tortle_claws")?.damage).toEqual([
         { dice: "1d4", mod: 3, type: "slashing" },
       ]);
       expect(effectiveAC(tor)).toBe(17);
 
-      const st = makeState([tor]);
+      const foe = enemy("orc", 6, 5, { ac: 10, hpMax: 40, hpCurrent: 40, attacks: SURE_SWORD });
+      const bowAttack: Combatant["attacks"][number] = {
+        id: "bow",
+        name: "Лук",
+        kind: "ranged",
+        range: { normal: 80 },
+        attackBonus: 5,
+        damage: [{ dice: "1d8", mod: 2, type: "piercing" }],
+        actionCost: "action",
+      };
+      const st = makeState([tor, foe]);
       const shell = bySrd(tor, "race/tortle/pantsirnaya-zashchita");
       useAbility(st, "tor-1", shell.id);
       expect(hasCondition(tor, "tortle_shell")).toBe(true);
@@ -635,6 +736,21 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
       expect(effectiveSpeed(tor)).toBe(0);
       expect(rollSave(tor, "STR", 15).advantage).toBe(true);
       expect(rollSave(tor, "CON", 15).advantage).toBe(true);
+      expect(rollSave(tor, "DEX", 15).advantage).toBe(false);
+      // DEX save disadvantage: 0.9 (19) and 0.1 (3) -> takes 3
+      seqRandom(0.9, 0.1);
+      expect(rollSave(tor, "DEX", 15).roll.natural).toBe(3);
+
+      // Prone-like attack modifiers & attackDisadvantage
+      expect(computeAttackAdvantage(foe, tor, SURE_SWORD[0]).advantage).toBe(true);
+      expect(computeAttackAdvantage(foe, tor, bowAttack).disadvantage).toBe(true);
+      expect(computeAttackAdvantage(tor, foe, SURE_SWORD[0]).disadvantage).toBe(true);
+
+      // noReactions blocks askReaction and opportunity attacks
+      expect(askReaction(tor, { title: "t", text: "t", options: [{ id: "oa", label: "oa" }] })).toBeNull();
+      // Offensive attacks & spells are blocked while inside shell
+      expect(() => performAttack(st, "tor-1", "orc", "sword", { skipCost: true })).toThrow();
+      expect(() => castSpell(st, "tor-1", "Огненная стрела", { targetIds: ["orc"] })).toThrow();
 
       // Exit with bonus action even while actionUsed is true
       useAbility(st, "tor-1", shell.id);
@@ -646,31 +762,36 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
   });
 
   describe("21. Thri-kreen (Три-крин)", () => {
-    it("dv 60, Chameleon Carapace 13+DEX, Sleepless Revitalization sleep immune", () => {
+    it("dv 60, Chameleon Carapace 13+DEX (and NOT immune to magical sleep per 2014 JSON)", () => {
       const tk = raceHero("Три-крин", null, "tk-1", 1, { ac: 10, mods: { DEX: 4 } });
       expect(tk.darkvision).toBe(60);
       expect(effectiveAC(tk)).toBe(17);
       const st = makeState([tk]);
       applyEffect(st, "tk-1", { condition: "unconscious", durationRounds: 5, isMagicalSleep: true });
-      expect(hasCondition(tk, "unconscious")).toBe(false);
+      expect(hasCondition(tk, "unconscious")).toBe(true);
     });
   });
 
   describe("22. Fairy (Фэйри)", () => {
-    it("Small, fly 30, Fairy Magic grants Druidcraft L1, Faerie Fire L3, Enlarge/Reduce L5", () => {
+    it("Small, fly 30, Fairy Magic grants Druidcraft L1, Faerie Fire L3, Enlarge/Reduce L5 with INT/WIS/CHA choice", () => {
       const f1 = raceHero("Фэйри", null, "fai-1", 1);
       expect(f1.size).toBe("small");
       expect(f1.speeds?.fly).toBe(30);
       expect(bySrd(f1, "race/fairy/innate/druidcraft").usesMax).toBe(0);
 
-      const f5 = raceHero("Фэйри", null, "fai-5", 5);
-      expect(bySrd(f5, "race/fairy/innate/faerie-fire").usesMax).toBe(1);
+      const f5 = raceHero("Фэйри", null, "fai-5", 5, {
+        racialVariants: ["wis"],
+        mods: { WIS: 4, CHA: 1 },
+      });
+      const ff = bySrd(f5, "race/fairy/innate/faerie-fire");
+      expect(ff.usesMax).toBe(1);
+      expect(ff.parameters?.saveDC).toBe(8 + 3 + 4);
       expect(bySrd(f5, "race/fairy/innate/enlarge-reduce").usesMax).toBe(1);
     });
   });
 
   describe("23. Hadozee (Хадози)", () => {
-    it("climb 30, Hadozee Dodge reduces damage by 1d6+profBonus via reaction and ReactionPrompt", () => {
+    it("climb 30, Hadozee Dodge reduces damage by 1d6+profBonus via reaction and ReactionPrompt (accept & decline)", () => {
       const had = raceHero("Хадози", null, "had-1", 5, { hpMax: 40, hpCurrent: 40 });
       expect(had.speeds?.climb).toBe(30);
       const dodge = bySrd(had, "race/hadozee/vertkost-khadozi");
@@ -679,7 +800,7 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
       expect(dodge.parameters?.offTurn).toBe(true);
 
       const st = makeState([had]);
-      seqRandom(0.5); // 1d6 = 4 + prof 3 = 7 reduction on 15 dmg -> takes 8
+      seqRandom(0.5);
       dealDamage(st, "had-1", 15, { damageType: "slashing" });
       expect(had.hpCurrent).toBe(32);
       expect(had.reactionUsed).toBe(true);
@@ -699,6 +820,16 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
       }
       expect(caught).not.toBeNull();
       expect(caught!.prompt.reactorId).toBe("had-2");
+
+      // Accepting reduces damage and consumes 1 reaction & 1 use
+      const hadAccept = raceHero("Хадози", null, "had-2", 5, { hpMax: 40, hpCurrent: 40 });
+      const stAccept = makeState([hadAccept]);
+      runWithReactions({ decisions: { [caught!.prompt.key]: caught!.prompt.options[0].id }, seq: 0 }, 1, () => {
+        dealDamage(stAccept, "had-2", 15, { damageType: "slashing" });
+      });
+      expect(hadAccept.hpCurrent).toBeGreaterThan(25);
+      expect(hadAccept.reactionUsed).toBe(true);
+      expect(bySrd(hadAccept, "race/hadozee/vertkost-khadozi").usesUsed).toBe(1);
 
       // Declining takes full 15 damage and keeps reaction + use
       const hadDecline = raceHero("Хадози", null, "had-2", 5, { hpMax: 40, hpCurrent: 40 });
@@ -729,7 +860,7 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
       });
       expect(sh.darkvision).toBe(60);
       const st = makeState([sh]);
-      seqRandom(0.5); // 1d6 = 4 + (4+2) = 10 temp HP
+      seqRandom(0.5);
       useAbility(st, "sh-bh", bySrd(sh, "race/shifter/smena-formy").id);
       expect(hasCondition(sh, "shifter_shifted")).toBe(true);
       expect(sh.hpTemp).toBe(10);
@@ -745,17 +876,16 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
       const foe = enemy("orc", 6, 5, { ac: 10, hpMax: 40, hpCurrent: 40 });
       const st = makeState([sh, foe]);
       const bite = bySrd(sh, "race/longtooth/osobennosti-smeny-formy");
-      // Cannot bite before shifting
       expect(() => useAbility(st, "sh-lt", bite.id, { targetIds: ["orc"] })).toThrow();
 
       useAbility(st, "sh-lt", bySrd(sh, "race/shifter/smena-formy").id);
       sh.bonusActionUsed = false;
-      seqRandom(0.9, 0.5); // hit, 1d6=4+3=7
+      seqRandom(0.9, 0.5);
       useAbility(st, "sh-lt", bite.id, { targetIds: ["orc"] });
       expect(foe.hpCurrent).toBe(33);
     });
 
-    it("Swiftstride: +10 speed while shifted + reaction move 10 ft without OA when enemy ends turn within 5 ft (+ReactionPrompt)", () => {
+    it("Swiftstride: +10 speed while shifted + reaction move 10 ft without OA (+ReactionPrompt accept/decline)", () => {
       const sh = raceHero("Шифтер", "Быстроноги", "sh-sw", 3, {
         x: 5,
         y: 5,
@@ -776,7 +906,8 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
       // ReactionPrompt path in runWithReactions
       const sh2 = raceHero("Шифтер", "Быстроноги", "sh-sw2", 3, { x: 5, y: 5 });
       const foe2 = enemy("orc2", 6, 5, { attacks: SURE_SWORD });
-      const st2 = makeState([foe2, sh2]);
+      const watcher2 = ally("watcher2", 0, 0);
+      const st2 = makeState([foe2, watcher2, sh2]);
       applyEffect(st2, "sh-sw2", { condition: "shifter_shifted", durationRounds: 10 }, "sh-sw2");
       let caught: ReactionPrompt | null = null;
       try {
@@ -789,15 +920,26 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
       }
       expect(caught).not.toBeNull();
       expect(caught!.prompt.reactorId).toBe("sh-sw2");
+
+      // Accepting moves shifter 10 ft away and spends reaction
+      const shAcc = raceHero("Шифтер", "Быстроноги", "sh-sw2", 3, { x: 5, y: 5 });
+      const foeAcc = enemy("orc2", 6, 5, { attacks: SURE_SWORD });
+      const watcherAcc = ally("watcher2", 0, 0);
+      const stAcc = makeState([foeAcc, watcherAcc, shAcc]);
+      applyEffect(stAcc, "sh-sw2", { condition: "shifter_shifted", durationRounds: 10 }, "sh-sw2");
+      runWithReactions({ decisions: { [caught!.prompt.key]: caught!.prompt.options[0].id }, seq: 0 }, 1, () => {
+        endTurn(stAcc);
+      });
+      expect(shAcc.reactionUsed).toBe(true);
+      expect(Math.abs(shAcc.x - foeAcc.x)).toBeGreaterThanOrEqual(2);
     });
 
     it("Wildhunt: prevents attackers within 30 ft from having advantage while shifted & conscious", () => {
       const sh = raceHero("Шифтер", "Дикие охотники", "sh-wh", 3, { x: 5, y: 5 });
       const nearFoe = enemy("orc-near", 7, 5, { conditions: [{ type: "vow_of_enmity" }] });
-      const farFoe = enemy("orc-far", 15, 5, { conditions: [{ type: "vow_of_enmity" }] }); // 50 ft > 30 ft
+      const farFoe = enemy("orc-far", 15, 5, { conditions: [{ type: "vow_of_enmity" }] });
       const st = makeState([sh, nearFoe, farFoe]);
 
-      // Before shifting: enemy has advantage
       expect(
         computeAttackAdvantage(nearFoe, sh, SURE_SWORD[0], { advantage: true }, { distanceFt: 10, allCombatants: st.combatants }).advantage
       ).toBe(true);
@@ -806,12 +948,10 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
       expect(
         computeAttackAdvantage(nearFoe, sh, SURE_SWORD[0], { advantage: true }, { distanceFt: 10, allCombatants: st.combatants }).advantage
       ).toBe(false);
-      // Outside 30 ft still gets advantage
       expect(
         computeAttackAdvantage(farFoe, sh, SURE_SWORD[0], { advantage: true }, { distanceFt: 50, allCombatants: st.combatants }).advantage
       ).toBe(true);
 
-      // Incapacitated Wildhunt loses the protection
       applyEffect(st, "sh-wh", { condition: "incapacitated", durationRounds: 1 });
       expect(
         computeAttackAdvantage(nearFoe, sh, SURE_SWORD[0], { advantage: true }, { distanceFt: 10, allCombatants: st.combatants }).advantage

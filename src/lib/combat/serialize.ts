@@ -41,6 +41,7 @@ export interface MonsterData {
   darkvision?: number;
   speeds?: Combatant["speeds"];
   racialVariants?: string[];
+  armorType?: Combatant["armorType"];
 }
 
 const MONSTER_DATA_KEYS: (keyof MonsterData)[] = [
@@ -62,6 +63,7 @@ const MONSTER_DATA_KEYS: (keyof MonsterData)[] = [
   "darkvision",
   "speeds",
   "racialVariants",
+  "armorType",
 ];
 
 /** Собирает JSON для колонки monsterData из объекта бойца (пустые поля пропускаются) */
