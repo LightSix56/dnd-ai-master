@@ -116,7 +116,7 @@ const MENTAL_ABILITY_SPECS: Array<{
   {
     ability: "INT",
     tokens: ["int", "spell-int", "mpmm-int"],
-    pattern: /(?<![\p{L}])(?:int|intelligence|инт|интеллект[ауе]?)(?![\p{L}])/iu,
+    pattern: /(?<![\p{L}])(?:int|intelligence|инт|интеллект(?:ом|[ауе])?)(?![\p{L}])/iu,
   },
   {
     ability: "WIS",
@@ -126,12 +126,12 @@ const MENTAL_ABILITY_SPECS: Array<{
   {
     ability: "CHA",
     tokens: ["cha", "spell-cha", "mpmm-cha"],
-    pattern: /(?<![\p{L}])(?:cha|charisma|хар|харизм[аыеу]?)(?![\p{L}])/iu,
+    pattern: /(?<![\p{L}])(?:cha|charisma|хар|харизм(?:ой|[аыеу])?)(?![\p{L}])/iu,
   },
 ];
 
 const RACIAL_SPELL_CONTEXT_RE =
-  /заклинательн|базов\S*\s+характеристик|spellcasting\s*ability|innate\s*spellcasting|маги[яией]|псионик|астральн|фэйри|звездн|дар\s+свирфнеблин|змеин|зовущ\S*\s+ветер|общение\s+с\s+ветром|слияние\s+с\s+камнем|выброс\s+пламени|призыв\s+волны|управление\s+воздухом\s+и\s+водой|наследие\s+кобольдов/i;
+  /заклинательн|базов\S*\s+характеристик|spellcasting\s*ability|innate\s*spellcasting|magic|fairy|astral|psionic|маги[яией]|псионик|астральн|фэйри|звездн|дар\s+свирфнеблин|змеин|зовущ\S*\s+ветер|общение\s+с\s+ветром|слияние\s+с\s+камнем|выброс\s+пламени|призыв\s+волны|управление\s+воздухом\s+и\s+водой|наследие\s+кобольдов/i;
 
 const RACIAL_TRAIT_LINES = new WeakMap<Calc, string[]>();
 

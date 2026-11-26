@@ -3,7 +3,7 @@
 
 import { distanceFt } from "../grid";
 import { getAoeCells } from "../movement";
-import { canAct, checkReach, hasCondition } from "../rules";
+import { canAct, checkReach, hasCondition, hasNoReactions } from "../rules";
 import {
   EngineError,
   applyEffect,
@@ -242,7 +242,7 @@ registerKit({
     "race/ravenite/mstitelnoe-napadenie": (ctx) => {
       const { state, owner, ability, attacker } = ctx;
       if (!attacker || attacker.id === owner.id || !alive(attacker) || !isHostile(owner.type, attacker.type)) return;
-      if (!alive(owner) || !canAct(owner) || owner.reactionUsed) return;
+      if (!alive(owner) || !canAct(owner) || owner.reactionUsed || hasNoReactions(owner)) return;
       if (ability.usesMax > 0 && ability.usesUsed >= ability.usesMax) return;
       const weapon = weaponOf(owner, "melee") ?? weaponOf(owner);
       if (!weapon || !inReach(state, owner, attacker, weapon)) return;
@@ -266,7 +266,7 @@ registerClassModule({
     if (!allowRedirect || !res.hit) return target;
     for (const guardian of state.combatants) {
       if (guardian.id === target.id || !alive(guardian) || !friendly(guardian, target)) continue;
-      if (guardian.reactionUsed || !canAct(guardian) || distanceFt(guardian, target) > 5) continue;
+      if (guardian.reactionUsed || hasNoReactions(guardian) || !canAct(guardian) || distanceFt(guardian, target) > 5) continue;
       const ability = abilityByKey(guardian, "race/mark-of-sentinel/bditelnyy-strazh");
       if (!ability || (ability.usesMax > 0 && ability.usesUsed >= ability.usesMax)) continue;
 

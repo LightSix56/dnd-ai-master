@@ -435,7 +435,7 @@ defineRace("genasi-mpmm", {
       },
       innateSpells: [
         spell("shocking-grasp", "Электрошок", 0, 1, chosenMentalAbility("CHA"), 0),
-        spell("feather-fall", "Падение пёрышком", 1, 3, chosenMentalAbility("CHA"), 1),
+        spell("feather-fall", "Плавное падение", 1, 3, chosenMentalAbility("CHA"), 1),
         spell("levitate", "Левитация", 2, 5, chosenMentalAbility("CHA"), 1),
       ],
     },
@@ -470,7 +470,7 @@ defineRace("genasi-mpmm", {
       innateSpells: [
         spell("produce-flame", "Сотворение пламени", 0, 1, chosenMentalAbility("CHA"), 0),
         spell("burning-hands", "Огненные ладони", 1, 3, chosenMentalAbility("CHA"), 1),
-        spell("flame-blade", "Горящий клинок", 2, 5, chosenMentalAbility("CHA"), 1),
+        spell("flame-blade", "Пламенеющий клинок", 2, 5, chosenMentalAbility("CHA"), 1),
       ],
     },
     "water-genasi": {
@@ -484,7 +484,7 @@ defineRace("genasi-mpmm", {
       innateSpells: [
         spell("acid-splash", "Брызги кислоты", 0, 1, chosenMentalAbility("CHA"), 0),
         spell("create-or-destroy-water", "Создание или уничтожение воды", 1, 3, chosenMentalAbility("CHA"), 1),
-        spell("water-walk", "Хождение по воде", 3, 5, chosenMentalAbility("CHA"), 1),
+        spell("water-walk", "Водохождение", 3, 5, chosenMentalAbility("CHA"), 1),
       ],
     },
   },
@@ -767,7 +767,7 @@ defineRace("triton-mpmm", {
   innateSpells: [
     spell("fog-cloud", "Туманное облако", 1, 1, chosenMentalAbility("CHA"), 1),
     spell("gust-of-wind", "Порыв ветра", 2, 3, chosenMentalAbility("CHA"), 1),
-    spell("water-walk", "Хождение по воде", 3, 5, chosenMentalAbility("CHA"), 1),
+    spell("water-walk", "Водохождение", 3, 5, chosenMentalAbility("CHA"), 1),
   ],
 });
 

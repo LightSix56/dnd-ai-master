@@ -52,8 +52,14 @@ import {
   transformWildShape,
   useAbility,
 } from "../engine";
+import { hasCondition } from "../rules";
 import { ally, bySrd, enemy, makeState, raceHero } from "./helpers/race-harness";
 import type { Combatant } from "../types";
+
+function seqRandom(...vals: number[]) {
+  let i = 0;
+  vi.spyOn(Math, "random").mockImplementation(() => vals[Math.min(i++, vals.length - 1)]);
+}
 
 registerKit({
   id: "test-deferred-fixes-kit",
@@ -243,6 +249,39 @@ describe("Task 6 deferred fixes", () => {
           inventory: [{ name: "Усиленная накидка", equipped: true, type: "item", armorCategory: "medium" }],
         })
       ).toBe("medium");
+      expect(
+        detectArmorType({
+          inventory: [{ name: "Латы", equipped: true }],
+        })
+      ).toBe("heavy");
+      expect(
+        detectArmorType({
+          inventory: [{ name: "Кольчужная рубаха", equipped: true, type: "armor" }],
+        })
+      ).toBe("medium");
+      expect(
+        detectArmorType({
+          inventory: [{ name: "Ring Mail", equipped: true }],
+        })
+      ).toBe("heavy");
+    });
+
+    it("ignores heavy weapons, light weapons, and unslotted leather gear", () => {
+      expect(
+        detectArmorType({
+          inventory: [{ name: "Тяжёлый арбалет", type: "Тяжёлое оружие" }],
+        })
+      ).toBeUndefined();
+      expect(
+        detectArmorType({
+          inventory: [{ name: "Shortbow", category: "light weapon", equipped: true }],
+        })
+      ).toBeUndefined();
+      expect(
+        detectArmorType({
+          inventory: [{ name: "Leather Gloves", equipped: true }],
+        })
+      ).toBeUndefined();
     });
   });
 
@@ -453,6 +492,186 @@ describe("Task 6 deferred fixes", () => {
         },
       });
       expect(bySrd(aeText, "race/astral-elf/innate/sacred-flame").parameters?.saveDC).toBe(14);
+    });
+
+    it("recognizes Russian instrumental endings (Интеллектом/Харизмой) and English context keywords", () => {
+      const instInt = raceHero("Фэйри", null, "fai-inst-int", 3, {
+        mods: { INT: 4, WIS: 1, CHA: 0 },
+        sheet: {
+          featuresTraits: "Магия фей — заклинательная характеристика задаётся Интеллектом",
+        },
+      });
+      expect(bySrd(instInt, "race/fairy/innate/faerie-fire").parameters?.saveDC).toBe(14);
+
+      const instCha = raceHero("Астральный эльф", null, "ae-inst-cha", 3, {
+        mods: { INT: 0, WIS: 1, CHA: 4 },
+        sheet: {
+          featuresTraits: "Астральное пламя — творится Харизмой",
+        },
+      });
+      expect(bySrd(instCha, "race/astral-elf/innate/sacred-flame").parameters?.saveDC).toBe(14);
+
+      const enTraits = raceHero("Фэйри", null, "fai-en", 3, {
+        mods: { INT: 4, WIS: 3, CHA: 0 },
+        sheet: {
+          traitsList: [
+            { id: "keen-mind", name: "Keen Mind", description: "Wisdom +1" },
+            { id: "fairy-magic", name: "Fairy Magic", description: "Your spellcasting uses Intelligence" },
+          ],
+        },
+      });
+      expect(bySrd(enTraits, "race/fairy/innate/faerie-fire").parameters?.saveDC).toBe(14);
+
+      const enAstral = raceHero("Астральный эльф", null, "ae-en", 3, {
+        mods: { INT: 0, WIS: 1, CHA: 4 },
+        sheet: {
+          traitsList: [{ id: "astral-fire", name: "Astral Fire", description: "Charisma" }],
+        },
+      });
+      expect(bySrd(enAstral, "race/astral-elf/innate/sacred-flame").parameters?.saveDC).toBe(14);
+    });
+  });
+
+  describe("6. Final review fixes: innate spell saves/sleep, MPMM non-manual spells, hasNoReactions in PHB", () => {
+    it("innate racial spells (type: ability with spellSlotLevel) trigger spellSaveAdvantage, magicMentalSaveAdvantage, and magical sleep immunity", () => {
+      const satyr = raceHero("satyr-mpmm", null, "sat-1", 3, { saves: { WIS: { prof: false, mod: 0 } } });
+      const gnome = raceHero("Гном", "Скальный гном", "gno-1", 3, { saves: { WIS: { prof: false, mod: 0 } } });
+      const elf = raceHero("Эльф", "Высший эльф", "elf-1", 3);
+      const astral = raceHero("astral-elf", null, "ast-1", 3);
+
+      const caster = enemy("tiefling_caster", 6, 5, {
+        abilities: [
+          {
+            id: "innate_charm",
+            name: "Врождённое очарование",
+            usesMax: 1,
+            usesUsed: 0,
+            refresh: "long",
+            parameters: {
+              name: "Врождённое очарование",
+              type: "ability",
+              spellSlotLevel: 1,
+              actionCost: "action",
+              targeting: "creature",
+              range: { type: "ranged", value: 30 },
+              saveType: "WIS",
+              saveDC: 15,
+              effects: [{ condition: "charmed", durationRounds: 10 }],
+            },
+          },
+          {
+            id: "innate_sleep",
+            name: "Усыпление",
+            usesMax: 1,
+            usesUsed: 0,
+            refresh: "long",
+            parameters: {
+              name: "Усыпление",
+              type: "ability",
+              spellSlotLevel: 1,
+              actionCost: "action",
+              targeting: "creature",
+              range: { type: "ranged", value: 90 },
+              effects: [{ condition: "unconscious", durationRounds: 10 }],
+            },
+          },
+        ],
+      });
+      const st = makeState([caster, satyr, gnome, elf, astral]);
+
+      // Satyr rolls 1 (0.0) then 19 (0.9) -> succeeds via spellSaveAdvantage!
+      seqRandom(0.0, 0.9);
+      const outSatyr = useAbility(st, "tiefling_caster", "innate_charm", { targetIds: ["sat-1"] });
+      expect(outSatyr.targets[0]?.saved).toBe(true);
+      expect(hasCondition(satyr, "charmed")).toBe(false);
+
+      // Gnome rolls 1 (0.0) then 19 (0.9) -> succeeds via magicMentalSaveAdvantage!
+      caster.actionUsed = false;
+      caster.abilities[0].usesUsed = 0;
+      seqRandom(0.0, 0.9);
+      const outGnome = useAbility(st, "tiefling_caster", "innate_charm", { targetIds: ["gno-1"] });
+      expect(outGnome.targets[0]?.saved).toBe(true);
+      expect(hasCondition(gnome, "charmed")).toBe(false);
+
+      // Innate Sleep spell triggers magical sleep immunity on Elf and Astral Elf
+      caster.actionUsed = false;
+      useAbility(st, "tiefling_caster", "innate_sleep", { targetIds: ["elf-1"] });
+      expect(hasCondition(elf, "unconscious")).toBe(false);
+
+      caster.actionUsed = false;
+      caster.abilities[1].usesUsed = 0;
+      useAbility(st, "tiefling_caster", "innate_sleep", { targetIds: ["ast-1"] });
+      expect(hasCondition(astral, "unconscious")).toBe(false);
+    });
+
+    it("MPMM innate spells feather-fall, flame-blade, and water-walk resolve SRD spells instead of manual: true placeholders", () => {
+      const air5 = raceHero("genasi-mpmm", "Дженази воздуха", "air-mpmm", 5);
+      const ff = bySrd(air5, "race/genasi-mpmm/innate/feather-fall");
+      expect(ff.parameters?.manual).not.toBe(true);
+      expect(ff.parameters?.actionCost).toBe("reaction");
+      expect(ff.parameters?.offTurn).toBe(true);
+
+      const fire5 = raceHero("genasi-mpmm", "Дженази огня", "fire-mpmm", 5);
+      const fb = bySrd(fire5, "race/genasi-mpmm/innate/flame-blade");
+      expect(fb.parameters?.manual).not.toBe(true);
+
+      const water5 = raceHero("genasi-mpmm", "Дженази воды", "water-mpmm", 5);
+      const ww1 = bySrd(water5, "race/genasi-mpmm/innate/water-walk");
+      expect(ww1.parameters?.manual).not.toBe(true);
+
+      const triton5 = raceHero("triton-mpmm", null, "triton-mpmm", 5);
+      const ww2 = bySrd(triton5, "race/triton-mpmm/innate/water-walk");
+      expect(ww2.parameters?.manual).not.toBe(true);
+    });
+
+    it("slowed (hasNoReactions) Ravenite and Mark of Sentinel do not fire reaction traits", () => {
+      const sureSword = [
+        {
+          id: "sword",
+          name: "Меч",
+          kind: "melee" as const,
+          range: { normal: 5 },
+          attackBonus: 20,
+          damage: [{ dice: "1d8", mod: 3, type: "slashing" }],
+          actionCost: "action" as const,
+        },
+      ];
+
+      const rav = raceHero("Драконорождённый", "Равенит", "rav-slow", 3, {
+        x: 5,
+        y: 5,
+        ac: 5,
+        hpMax: 40,
+        hpCurrent: 40,
+      });
+      rav.conditions.push({ type: "slow", durationRounds: 2 });
+      const foe = enemy("orc-rav", 6, 5, { ac: 10, hpMax: 30, hpCurrent: 30, attacks: sureSword });
+      const stRav = makeState([foe, rav]);
+      seqRandom(0.9, 0.5, 0.9, 0.5);
+      performAttack(stRav, "orc-rav", "rav-slow", "sword");
+      expect(rav.reactionUsed).toBe(false);
+      expect(bySrd(rav, "race/ravenite/mstitelnoe-napadenie").usesUsed).toBe(0);
+      expect(foe.hpCurrent).toBe(30);
+
+      const guardian = raceHero("Человек", "Метка стража", "guard-slow", 3, {
+        x: 5,
+        y: 5,
+        ac: 18,
+        hpMax: 40,
+        hpCurrent: 40,
+      });
+      guardian.conditions.push({ type: "slow", durationRounds: 2 });
+      const friend = ally("wiz-slow", 6, 5, { ac: 5, hpMax: 20, hpCurrent: 20 });
+      const orc2 = enemy("orc-guard", 7, 5, { attacks: sureSword });
+      const stGuard = makeState([orc2, guardian, friend]);
+      seqRandom(0.9, 0.5);
+      performAttack(stGuard, "orc-guard", "wiz-slow", "sword");
+      expect(guardian.x).toBe(5);
+      expect(friend.x).toBe(6);
+      expect(friend.hpCurrent).toBeLessThan(20);
+      expect(guardian.hpCurrent).toBe(40);
+      expect(guardian.reactionUsed).toBe(false);
+      expect(bySrd(guardian, "race/mark-of-sentinel/bditelnyy-strazh").usesUsed).toBe(0);
     });
   });
 });

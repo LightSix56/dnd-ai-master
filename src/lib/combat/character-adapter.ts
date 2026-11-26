@@ -659,7 +659,10 @@ export function innateSpellToCombatAbility(
   profBonus: number,
   idPrefix: string
 ): CombatAbility {
-  const defCandidate = getSpellDefinition(spell.spellId) ?? getSpellDefinition(spell.name);
+  const defCandidate =
+    getSpellDefinition(spell.spellId) ??
+    getSpellDefinition(spell.spellId.replace(/-/g, " ")) ??
+    getSpellDefinition(spell.name);
   const def = defCandidate && (spell.level === 0 ? defCandidate.level === 0 : true) ? defCandidate : undefined;
   const srdKey = `race/${raceId}/innate/${spell.spellId}`;
   const spellSlotLevel = spell.level > 0 ? spell.level : null;
@@ -740,25 +743,27 @@ export function detectArmorType(char: Record<string, any>): Combatant["armorType
     }
   }
   if (Array.isArray(inv)) {
-    const armorKindRe = /armor|доспех|light|medium|heavy|л[её]гк|средн|тяж/i;
+    const nonArmorRe =
+      /weapon|оружи|shield|щит|boot|сапог|glove|перчат|cloak|плащ|belt|пояс|bracer|наруч|amulet|амулет|crossbow|арбалет|\bring(?!\s*mail)\b|кольц[оаеу]|колец/i;
+    const armorKindRe = /armor|доспех/i;
     for (const item of inv) {
       if (!item || typeof item !== "object") continue;
       if (item.equipped === false) continue;
       const slot = String(item.slot ?? "").trim().toLowerCase();
-      if (slot && !["armor", "body", "доспех", "тело"].includes(slot)) continue;
+      const armorSlot = slot === "armor" || slot === "body" || slot === "доспех" || slot === "тело";
+      if (slot && !armorSlot) continue;
       const hasArmorCategory = Boolean(String(item.armorCategory ?? "").trim());
       const typeVal = String(item.type ?? "").trim();
       const catVal = String(item.category ?? "").trim();
       const typeCatCombined = [typeVal, catVal].filter(Boolean).join(" ");
-      if (!hasArmorCategory && typeCatCombined && !armorKindRe.test(typeCatCombined)) continue;
+      const nameCombined = [item.name, item.nameEn].filter(Boolean).join(" ");
+      if (nonArmorRe.test(typeCatCombined) || nonArmorRe.test(nameCombined)) continue;
+      if (!hasArmorCategory && !armorSlot && typeCatCombined && !armorKindRe.test(typeCatCombined)) continue;
       const isArmorEntry =
-        item.equipped === true ||
-        slot === "armor" ||
-        slot === "body" ||
-        slot === "доспех" ||
-        slot === "тело" ||
+        armorSlot ||
         hasArmorCategory ||
-        armorKindRe.test(typeCatCombined);
+        armorKindRe.test(typeCatCombined) ||
+        (item.equipped === true && !typeCatCombined);
       if (!isArmorEntry) continue;
       const classified = classifyArmorItem(item);
       if (classified) return classified;

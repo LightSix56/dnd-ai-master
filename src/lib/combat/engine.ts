@@ -2853,6 +2853,7 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
   }
   const concFlag = params.concentration ? { concentration: true } : {};
   const isSpellAction = params.type === "spell";
+  const isSpellLike = isSpellAction || params.spellSlotLevel !== undefined || Boolean(params.school);
 
   const targets = resolveTargets(state, caster, params, ctx.targetIds, ctx.center);
   const damage = prepareDamage(params, caster, slotLevel);
@@ -2885,7 +2886,7 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
       : 0;
   let healedOthers = false;
   // Умения заклинателя, дающие помеху на спасброски цели (Магическая засада скрытого плута)
-  const ambushReason = (t: Combatant) => (isSpellAction ? classHooks.castSaveDisadvantage(state, caster, t) : null);
+  const ambushReason = (t: Combatant) => (isSpellLike ? classHooks.castSaveDisadvantage(state, caster, t) : null);
 
   for (const target of targets) {
     // Формовка заклинаний: союзники в области воплощения автоматически спасаются и не получают урона
@@ -2918,14 +2919,14 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
         amount = 0;
       }
     } else if (params.saveType) {
-      const ambush = isSpellAction ? ambushReason(target) : null;
+      const ambush = isSpellLike ? ambushReason(target) : null;
       if (ambush) state.addLog(`${target.name}: помеха на спасбросок (${ambush})`, "save", target.name);
       const saveTypeKey = params.saveType as AbilityKey;
       const saveCondition =
         params.effects?.find((e) =>
-          modSaveAdvantageForContext(target, saveTypeKey, { condition: e.condition, isSpell: isSpellAction }, state.combatants)
+          modSaveAdvantageForContext(target, saveTypeKey, { condition: e.condition, isSpell: isSpellLike }, state.combatants)
         )?.condition ?? params.effects?.[0]?.condition;
-      const save = rollEffectSave(state, target, saveTypeKey, saveDC, isSpellAction, ctx.label, ambush !== null, {
+      const save = rollEffectSave(state, target, saveTypeKey, saveDC, isSpellLike, ctx.label, ambush !== null, {
         condition: saveCondition,
       });
       saved = save.success;
@@ -3031,8 +3032,6 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
             target.name
           );
         }
-        const isSpellLike =
-          isSpellAction || params.spellSlotLevel !== undefined || Boolean(params.school);
         dealDamage(state, target.id, amount, {
           damageType: targetDamage[0]?.type,
           parts: amountParts,
@@ -3059,7 +3058,7 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
     // Эффекты накладываются при провале спасброска или при попадании
     const effectApplies = saved === undefined ? hit !== false : !saved;
     if (effectApplies) {
-      const isSleepSpell = isSpellAction && (actLower.includes("усыплен") || /\bsleep\b/i.test(actLower));
+      const isSleepSpell = isSpellLike && (actLower.includes("усыплен") || /\bsleep\b/i.test(actLower));
       for (const eff of params.effects ?? []) {
         const sleepFlag = isSleepSpell && eff.condition === "unconscious" ? { isMagicalSleep: true } : {};
         applyEffect(state, target.id, { ...eff, ...concFlag, ...sleepFlag }, caster.id);
