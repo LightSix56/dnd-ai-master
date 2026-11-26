@@ -426,7 +426,7 @@ export function registerKit(kit: ClassKit): void {
         if (rule.ownTurn && !isOwnTurn(state, attacker)) continue;
         if (rule.armed && !armedRider(attacker, key)) continue;
         if (rule.oncePerTurn && usedThisTurn(state, attacker, key)) continue;
-        if (rule.reaction && attacker.reactionUsed) continue;
+        if (rule.reaction && (attacker.reactionUsed || hasNoReactions(attacker) || !canAct(attacker))) continue;
         if (rule.spendUse && ability.usesMax > 0 && ability.usesUsed >= ability.usesMax) {
           if (rule.armed) disarmRider(attacker, key);
           continue;

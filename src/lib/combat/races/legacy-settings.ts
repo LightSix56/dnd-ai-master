@@ -4,6 +4,7 @@
 import { featureMods, type Mods } from "../feature-mods";
 import type { AbilityKey } from "../types";
 import {
+  chosenMentalAbility,
   defineRace,
   mentions,
   optionChosen,
@@ -39,21 +40,6 @@ const spell = (
   castingAbility,
   ...(when ? { when } : {}),
 });
-
-const MENTAL_ABILITY_TOKENS: Array<{ ability: AbilityKey; aliases: string[] }> = [
-  { ability: "INT", aliases: ["int", "инт", "интеллект", "intelligence"] },
-  { ability: "WIS", aliases: ["wis", "муд", "мдр", "мудрость", "wisdom"] },
-  { ability: "CHA", aliases: ["cha", "хар", "харизма", "charisma"] },
-];
-
-const chosenMentalAbility = (fallback: AbilityKey) => (c: Calc): AbilityKey => {
-  for (const { ability, aliases } of MENTAL_ABILITY_TOKENS) {
-    if (aliases.some((a) => c.tokens.has(a) || c.tokens.has(`spell-${a}`) || mentions(c.text, a))) {
-      return ability;
-    }
-  }
-  return fallback;
-};
 
 const skipTraits = (...ids: string[]): Record<string, RaceFeatureRule> =>
   Object.fromEntries(ids.map((id) => [id, skip(id)]));

@@ -108,6 +108,72 @@ export const RACES_2014 = data as RaceData[];
 
 const norm = (s: string) => s.toLowerCase().replace(/ё/g, "е").replace(/\s+/g, " ").trim();
 
+const MENTAL_ABILITY_SPECS: Array<{
+  ability: AbilityKey;
+  tokens: string[];
+  pattern: RegExp;
+}> = [
+  {
+    ability: "INT",
+    tokens: ["int", "spell-int", "mpmm-int"],
+    pattern: /(?<![\p{L}])(?:int|intelligence|инт|интеллект[ауе]?)(?![\p{L}])/iu,
+  },
+  {
+    ability: "WIS",
+    tokens: ["wis", "spell-wis", "mpmm-wis"],
+    pattern: /(?<![\p{L}])(?:wis|wisdom|муд|мдр|мудрост[иью]?)(?![\p{L}])/iu,
+  },
+  {
+    ability: "CHA",
+    tokens: ["cha", "spell-cha", "mpmm-cha"],
+    pattern: /(?<![\p{L}])(?:cha|charisma|хар|харизм[аыеу]?)(?![\p{L}])/iu,
+  },
+];
+
+const RACIAL_SPELL_CONTEXT_RE =
+  /заклинательн|базов\S*\s+характеристик|spellcasting\s*ability|innate\s*spellcasting|маги[яией]|псионик|астральн|фэйри|звездн|дар\s+свирфнеблин|змеин|зовущ\S*\s+ветер|общение\s+с\s+ветром|слияние\s+с\s+камнем|выброс\s+пламени|призыв\s+волны|управление\s+воздухом\s+и\s+водой|наследие\s+кобольдов/i;
+
+const RACIAL_TRAIT_LINES = new WeakMap<Calc, string[]>();
+
+function pickSingleMentalAbility(fragment: string): AbilityKey | null {
+  const matched: AbilityKey[] = [];
+  for (const spec of MENTAL_ABILITY_SPECS) {
+    if (spec.pattern.test(fragment)) {
+      matched.push(spec.ability);
+    }
+  }
+  return matched.length === 1 ? matched[0] : null;
+}
+
+/**
+ * Определяет выбранную ментальную характеристику (ИНТ/МУД/ХАР) для расовых заклинаний.
+ * Игнорирует посторонние черты/умения в листе, проверяя только явные токены и строки контекста расовой магии.
+ */
+export function chosenMentalAbility(fallback: AbilityKey): (c: Calc) => AbilityKey {
+  return (c: Calc): AbilityKey => {
+    const lowerTokens = new Set([...c.tokens].map((t) => t.toLowerCase()));
+    for (const spec of MENTAL_ABILITY_SPECS) {
+      if (spec.tokens.some((t) => lowerTokens.has(t))) {
+        return spec.ability;
+      }
+    }
+
+    for (const line of RACIAL_TRAIT_LINES.get(c) ?? []) {
+      const picked = pickSingleMentalAbility(line);
+      if (picked) return picked;
+    }
+
+    for (const rawLine of c.text.split(/[\r\n.;]+/)) {
+      const line = rawLine.trim();
+      if (!line || !RACIAL_SPELL_CONTEXT_RE.test(line)) continue;
+      const picked = pickSingleMentalAbility(line);
+      if (picked) return picked;
+    }
+
+    return fallback;
+  };
+}
+
 // ============ ПРАВИЛА РАС ============
 
 type Refresh = CombatAbility["refresh"];
@@ -387,6 +453,25 @@ export function resolveRaceForCharacter(ctx: RaceHeroContext, idPrefix = "hero")
   const subRules = subrace ? rules?.subraces?.[subrace.id] : undefined;
 
   const c = calcOf({ className: null, level: ctx.level, profBonus: ctx.profBonus, abilityMods: ctx.abilityMods, sheet: ctx.sheet });
+  const scopedLines: string[] = [];
+  for (const key of ["featuresTraits", "additionalFeaturesTraits"] as const) {
+    const raw = ctx.sheet?.[key];
+    if (typeof raw !== "string") continue;
+    for (const segment of raw.split(/[\r\n.;]+/)) {
+      const line = norm(segment);
+      if (line && RACIAL_SPELL_CONTEXT_RE.test(line)) scopedLines.push(line);
+    }
+  }
+  if (Array.isArray(ctx.sheet?.traitsList)) {
+    for (const t of ctx.sheet.traitsList) {
+      const header = norm(`${t?.id ?? ""} ${t?.name ?? ""}`);
+      const body = norm(String(t?.description ?? ""));
+      if (RACIAL_SPELL_CONTEXT_RE.test(header) || RACIAL_SPELL_CONTEXT_RE.test(body)) {
+        scopedLines.push(`${header}: ${body}`);
+      }
+    }
+  }
+  if (scopedLines.length > 0) RACIAL_TRAIT_LINES.set(c, scopedLines);
   const variants = new Set<string>(ctx.racialVariants ?? []);
   if (Array.isArray(ctx.sheet?.racialVariants)) {
     for (const v of ctx.sheet.racialVariants) variants.add(String(v));

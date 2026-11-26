@@ -102,6 +102,7 @@ describe("Batch 3 Legacy Settings & Adventure Races (25 races)", () => {
       // Autognome Sentry's Rest does NOT grant sleep immunity in 2014 rules
       applyEffect(st, "ag-1", { condition: "unconscious", durationRounds: 5, isMagicalSleep: true });
       expect(hasCondition(ag, "unconscious")).toBe(true);
+      ag.conditions = [];
 
       const bfs = bySrd(ag, "race/autognome/sozdan-dlya-uspekha");
       expect(bfs.usesMax).toBe(3);

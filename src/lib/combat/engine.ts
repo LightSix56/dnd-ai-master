@@ -35,6 +35,7 @@ import {
   reconcileTurnOrder,
 } from "./initiative";
 import {
+  cellCost,
   computeVisibilityStatus,
   coversCell,
   hasCoverBetween,
@@ -787,6 +788,12 @@ export function drinkPotion(
 
   if (c.hpCurrent <= 0) {
     throw new EngineError("Боец без сознания не может пить зелье");
+  }
+  if (!canAct(c)) {
+    throw new EngineError(`${c.name} не может действовать`);
+  }
+  if (hasPreventOffensiveActions(c)) {
+    throw new EngineError(`${c.name} не может пить зелье в текущем состоянии`);
   }
 
   if (c.bonusActionUsed) {
@@ -1877,10 +1884,12 @@ export function moveCombatant(
   }
 
   let movementInterrupted = false;
+  let interruptedCostFt = 0;
   const opportunityAttacks: AttackOutcome[] = [];
 
   for (let stepIdx = 0; stepIdx < walkPath.length; stepIdx++) {
     const stepCell = walkPath[stepIdx];
+    interruptedCostFt += cellCost(stepCell, state.mapElements, mover);
     mover.x = stepCell.x;
     mover.y = stepCell.y;
 
@@ -1942,7 +1951,7 @@ export function moveCombatant(
   if (movementInterrupted) {
     return {
       path: walkPath.slice(0, walkPath.findIndex((c) => c.x === mover.x && c.y === mover.y) + 1),
-      costFt: mover.movementUsed - initialMovementUsed,
+      costFt: opts.freeMove ? interruptedCostFt : mover.movementUsed - initialMovementUsed,
       remainingFt: remainingMovement(state.require(combatantId)),
       opportunityAttacks,
     };
@@ -3795,12 +3804,11 @@ function useAbilityCore(
 
   const params = ability.parameters;
   if (!params) throw new EngineError(`«${ability.name}» без параметров — нечего применять`);
-  if (!canAct(c) && params.actionCost !== "free") {
+  if (!canAct(c)) {
     throw new EngineError(`${c.name} не может действовать`);
   }
   if (
     hasPreventOffensiveActions(c) &&
-    params.actionCost !== "free" &&
     !(params.exitsCondition && hasCondition(c, params.exitsCondition))
   ) {
     throw new EngineError(`${c.name} не может применять способности в текущем состоянии`);
@@ -3961,6 +3969,9 @@ export function transformWildShape(
   const c = state.require(combatantId);
 
   if (!canAct(c)) throw new EngineError(`${c.name} не может действовать`);
+  if (hasPreventOffensiveActions(c)) {
+    throw new EngineError(`${c.name} не может менять облик в текущем состоянии`);
+  }
   if (c.wildShape) throw new EngineError(`${c.name} уже находится в облике зверя`);
 
   const form = getBeastFormById(formId);
@@ -4517,6 +4528,9 @@ export function attemptHide(
   if (!opts.skipTurnCheck) assertTurn(state, combatantId);
   const c = state.require(combatantId);
   if (!canAct(c)) throw new EngineError(`${c.name} не может действовать`);
+  if (hasPreventOffensiveActions(c)) {
+    throw new EngineError(`${c.name} не может прятаться в текущем состоянии`);
+  }
   if (c.isHidden) {
     throw new EngineError("Персонаж уже находится в скрытности");
   }

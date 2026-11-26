@@ -740,10 +740,25 @@ export function detectArmorType(char: Record<string, any>): Combatant["armorType
     }
   }
   if (Array.isArray(inv)) {
+    const armorKindRe = /armor|доспех|light|medium|heavy|л[её]гк|средн|тяж/i;
     for (const item of inv) {
       if (!item || typeof item !== "object") continue;
       if (item.equipped === false) continue;
-      const isArmorEntry = item.equipped === true || item.slot === "armor" || /armor|доспех/i.test(String(item.type ?? item.category ?? ""));
+      const slot = String(item.slot ?? "").trim().toLowerCase();
+      if (slot && !["armor", "body", "доспех", "тело"].includes(slot)) continue;
+      const hasArmorCategory = Boolean(String(item.armorCategory ?? "").trim());
+      const typeVal = String(item.type ?? "").trim();
+      const catVal = String(item.category ?? "").trim();
+      const typeCatCombined = [typeVal, catVal].filter(Boolean).join(" ");
+      if (!hasArmorCategory && typeCatCombined && !armorKindRe.test(typeCatCombined)) continue;
+      const isArmorEntry =
+        item.equipped === true ||
+        slot === "armor" ||
+        slot === "body" ||
+        slot === "доспех" ||
+        slot === "тело" ||
+        hasArmorCategory ||
+        armorKindRe.test(typeCatCombined);
       if (!isArmorEntry) continue;
       const classified = classifyArmorItem(item);
       if (classified) return classified;

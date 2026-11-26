@@ -46,6 +46,7 @@ import { findNonParticipants } from "@/lib/combat/non-participants";
 import { createPartyCombatants } from "@/lib/combat/generator";
 import { checkCombatControl } from "@/lib/room/combat-access";
 import { resolveAbilityUses } from "@/lib/combat/ability-uses";
+import { canAct, hasPreventOffensiveActions } from "@/lib/combat/rules";
 import { safeErrorDetails } from "@/lib/security/errors";
 
 /** Версия боя (Combat.updatedAt) на момент загрузки — для защиты от одновременных запросов */
@@ -673,6 +674,12 @@ async function dispatchAction(req: Request, body: any): Promise<Response> {
       if (!current || current.id !== combatantId) {
         return Response.json({ error: "Не ваш ход" }, { status: 400 });
       }
+      if (!canAct(c)) {
+        return Response.json({ error: `${c.name} не может действовать` }, { status: 400 });
+      }
+      if (hasPreventOffensiveActions(c)) {
+        return Response.json({ error: `${c.name} не может выполнять это действие в текущем состоянии` }, { status: 400 });
+      }
       if (c.actionUsed && c.extraActions <= 0) {
         return Response.json({ error: "Действие уже использовано" }, { status: 400 });
       }
@@ -700,6 +707,13 @@ async function dispatchAction(req: Request, body: any): Promise<Response> {
       if (!current || current.id !== combatantId) {
         return Response.json({ error: "Не ваш ход" }, { status: 400 });
       }
+      if (!canAct(c)) {
+        return Response.json({ error: `${c.name} не может действовать` }, { status: 400 });
+      }
+      if (hasPreventOffensiveActions(c)) {
+        return Response.json({ error: `${c.name} не может выполнять это действие в текущем состоянии` }, { status: 400 });
+      }
+      state.require(targetId);
       if (c.actionUsed && c.extraActions <= 0) {
         return Response.json({ error: "Действие уже использовано" }, { status: 400 });
       }
