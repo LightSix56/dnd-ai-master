@@ -121,7 +121,7 @@ export function effectiveSpeed(c: Combatant): number {
   const setTo = effects.find((e) => e.speedSetTo !== undefined)?.speedSetTo;
   if (setTo !== undefined) return setTo;
 
-  let speed = c.speed + modSpeedBonus(c);
+  let speed = c.speed + modSpeedBonus(c) + effects.reduce((sum, e) => sum + (e.speedBonus ?? 0), 0);
   for (const e of effects) {
     if (e.speedMultiplier) speed = Math.floor(speed * e.speedMultiplier);
   }
@@ -220,13 +220,15 @@ export function computeAttackAdvantage(
   }
   for (const cond of target.conditions) {
     const def = CONDITION_EFFECTS[cond.type];
-    if (!def?.effects.attackAdvantageAgainstNonHostilesOfSource || !cond.source || cond.source === attacker.id) {
+    const matchesAlliesOnly = def?.effects.attackAdvantageAgainstNonHostilesOfSource && cond.source !== attacker.id;
+    const matchesAlliesAndSelf = def?.effects.attackAdvantageAgainstAlliesAndSelfOfSource;
+    if ((!matchesAlliesOnly && !matchesAlliesAndSelf) || !cond.source) {
       continue;
     }
     const sourceCombatant = context.allCombatants?.find((x) => x.id === cond.source);
     if (!sourceCombatant || !isHostile(sourceCombatant.type, attacker.type)) {
       adv = true;
-      reasons.push(`цель: ${def.name}`);
+      reasons.push(`цель: ${def!.name}`);
     }
   }
   if (attacker.conditions.some((x) => x.type === "goaded" && x.source !== target.id)) {

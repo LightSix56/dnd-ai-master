@@ -369,12 +369,16 @@ export interface ConditionEffect {
   attackBonusDice?: string;
   // Не может атаковать источник (испуган не может приближаться — упрощено)
   cannotApproachSource?: boolean;
+  // Бонус к скорости (Дар фей: Проход и т.п.)
+  speedBonus?: number;
   // Расходуется на первую атаку (Помощь / преимущество от союзника)
   consumedOnAttack?: boolean;
   // Помеха на атаки по всем, кроме наложившего состояние (source)
   disadvantageVsOthers?: boolean;
   // Преимущество на атаки по этой цели для не-врагов наложившего состояние (source)
   attackAdvantageAgainstNonHostilesOfSource?: boolean;
+  // Преимущество на атаки по этой цели для самого source и его не-врагов (Рёв дракона MPMM)
+  attackAdvantageAgainstAlliesAndSelfOfSource?: boolean;
 }
 
 export const CONDITION_EFFECTS: Record<string, {
@@ -1071,6 +1075,38 @@ export const CONDITION_EFFECTS: Record<string, {
     description: "Служебная отметка",
     effects: {},
     service: true,
+  },
+  kobold_draconic_cry: {
+    name: "Рёв дракона",
+    description: "Кобольд и его союзники получают преимущество на атаки по этой цели",
+    effects: { attackAdvantageAgainstAlliesAndSelfOfSource: true },
+  },
+  kobold_draconic_cry_aura: {
+    name: "kobold_draconic_cry_aura",
+    description: "Служебная отметка",
+    effects: {},
+    service: true,
+  },
+  blade_ward: {
+    name: "Защита от оружия",
+    description: "Сопротивление дробящему, колющему и рубящему урону от атак оружием",
+    effects: {},
+  },
+  hobgoblin_passage: {
+    name: "Дар фей: Проход",
+    description: "+10 фт к скорости до начала следующего хода хобгоблина",
+    effects: { speedBonus: 10 },
+  },
+  hobgoblin_spite_buff: {
+    name: "Дар фей: Злость",
+    description: "Первое попадание этого существа до начала следующего хода хобгоблина наложит на цель помеху на следующую атаку",
+    effects: {},
+    service: true,
+  },
+  spite_disadvantage: {
+    name: "Дар фей: Злость (помеха)",
+    description: "Помеха на следующий бросок атаки в течение 1 минуты",
+    effects: { attackDisadvantage: true, consumedOnAttack: true },
   },
   dhampir_bite_bonus: {
     name: "Укус вампира (усиление)",

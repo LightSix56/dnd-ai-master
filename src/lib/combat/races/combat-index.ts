@@ -4,3 +4,4 @@ import "./race-combat";
 import "./core-phb-combat";
 import "./legacy-volo-mtf-combat";
 import "./legacy-settings-combat";
+import "./mpmm-combat";

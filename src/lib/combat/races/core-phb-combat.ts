@@ -34,6 +34,14 @@ import {
 } from "../class-kit";
 import { isHostile, type AbilityKey, type Combatant } from "../types";
 import { dragonbornAncestry, eladrinSeason, ftdBreathDice, phbBreathDice } from "./core-phb";
+import {
+  clearRavenQueenBlessing,
+  eladrinFeyStepAction,
+  relentlessEnduranceOnDrop,
+  restoreFlySpeed,
+  setFlySpeed,
+  shadarKaiBlessingAction,
+} from "./race-combat";
 
 const singleDie = (dice: string) => dice.replace(/^\d*d/i, "1d");
 
@@ -136,112 +144,31 @@ registerKit({
   conditionStart: {
     "race/gem-dragonborn/polet-samotsvetnogo-drakona": {
       condition: "gem_flight",
-      run: (_state, c) => {
-        const prevFly = c.speeds?.fly ?? 0;
-        c.conditions = [
-          ...c.conditions.filter((x) => x.type !== "gem_flight_prev"),
-          { type: "gem_flight_prev", value: prevFly },
-        ];
-        c.speeds = { ...(c.speeds ?? {}), fly: Math.max(prevFly, c.speed || 30) };
-      },
+      run: (_state, c) => setFlySpeed(c, c.speed || 30, "gem_flight_prev"),
     },
   },
 
   conditionEnd: {
     "race/gem-dragonborn/polet-samotsvetnogo-drakona": {
       condition: "gem_flight",
-      run: (state, c) => {
-        const prev = c.conditions.find((x) => x.type === "gem_flight_prev")?.value ?? 0;
-        c.conditions = c.conditions.filter((x) => x.type !== "gem_flight_prev");
-        if (prev > 0) {
-          c.speeds = { ...(c.speeds ?? {}), fly: prev };
-        } else if (c.speeds) {
-          const rest = { ...c.speeds };
-          delete rest.fly;
-          c.speeds = rest;
-        }
-        state.mark(c.id);
-      },
+      run: (state, c) => restoreFlySpeed(state, c, "gem_flight_prev"),
     },
   },
 
   startTurn: {
-    "race/shadar-kai/blagoslovenie-korolevy-voronov": (state, c) => {
-      if (!hasCondition(c, "raven_queen_blessing")) return;
-      c.conditions = c.conditions.filter((x) => x.type !== "raven_queen_blessing");
-      state.mark(c.id);
-    },
+    "race/shadar-kai/blagoslovenie-korolevy-voronov": clearRavenQueenBlessing,
   },
 
   actions: {
     // Шадар-кай: Благословение Королевы воронов
-    "race/shadar-kai/blagoslovenie-korolevy-voronov": (ctx) => {
-      const { state, c } = ctx;
-      const center = ctx.opts.center;
-      if (!center) throw new EngineError("Выберите клетку для телепортации");
-      teleportCombatant(state, c.id, center, 30, { skipTurnCheck: true });
-      ctx.pay();
-      if ((c.level || 1) >= 3) {
-        applyEffect(state, c.id, { condition: "raven_queen_blessing" }, c.id);
-        log(state, c, `${c.name}: Благословение Королевы воронов — сопротивление всему урону до следующего хода`);
-      }
-      return result(`${c.name} телепортируется («Благословение Королевы воронов»)`);
-    },
+    "race/shadar-kai/blagoslovenie-korolevy-voronov": shadarKaiBlessingAction,
 
     // Эладрин: Фейский шаг + сезоны с 3 уровня
-    "race/eladrin/feyskiy-shag": (ctx) => {
-      const { state, c } = ctx;
-      const center = ctx.opts.center;
-      if (!center) throw new EngineError("Выберите клетку для телепортации");
-      const season = (c.level || 1) >= 3 ? eladrinSeason(c) : null;
-      const dc = dcBy(c, "CHA");
-      const origin = { x: c.x, y: c.y };
-
-      const springTargetId = ctx.opts.targetIds?.[0];
-      if (season === "vesna" && springTargetId && springTargetId !== c.id) {
-        const allyTarget = state.get(springTargetId);
-        if (!allyTarget || !friendly(c, allyTarget) || !alive(allyTarget)) {
-          throw new EngineError("Весна: выберите согласного союзника");
-        }
-        if (distanceFt(c, allyTarget) > 5) throw new EngineError(`${allyTarget.name} дальше 5 фт`);
-        teleportCombatant(state, allyTarget.id, center, 30, { skipTurnCheck: true });
-        ctx.pay();
-        log(state, c, `${c.name}: Фейский шаг (Весна) — переносит ${allyTarget.name}`);
-        return result(`${c.name} телепортирует ${allyTarget.name}`);
-      }
-
-      const winterTarget =
-        season === "zima"
-          ? (ctx.opts.targetIds?.[0] ? state.get(ctx.opts.targetIds[0]) : undefined) ??
-            hostilesOf(state, c, 5).sort((a, b) => distanceFt(origin, a) - distanceFt(origin, b))[0]
-          : undefined;
-
-      teleportCombatant(state, c.id, center, 30, { skipTurnCheck: true });
-      ctx.pay();
-
-      if (winterTarget && winterTarget.id !== c.id && isHostile(c.type, winterTarget.type) && alive(winterTarget) && distanceFt(origin, winterTarget) <= 5) {
-        if (!saves(state, winterTarget, "WIS", dc, "Фейский шаг (Зима)")) {
-          applyEffect(state, winterTarget.id, { condition: "frightened", durationRounds: 2 }, c.id);
-        }
-      } else if (season === "osen") {
-        const picked = (ctx.opts.targetIds ?? [])
-          .map((id) => state.get(id))
-          .filter((t): t is Combatant => Boolean(t && alive(t) && isHostile(c.type, t.type) && distanceFt(c, t) <= 10));
-        const foes = (picked.length > 0 ? picked : hostilesOf(state, c, 10)).slice(0, 2);
-        for (const f of foes) {
-          if (!saves(state, f, "WIS", dc, "Фейский шаг (Осень)")) {
-            applyEffect(state, f.id, { condition: "charmed", durationRounds: 10 }, c.id);
-          }
-        }
-      } else if (season === "leto") {
-        const fireDmg = Math.max(1, modOf(c, "CHA"));
-        for (const f of hostilesOf(state, c, 5)) {
-          dealDamage(state, f.id, fireDmg, { damageType: "fire", attackerId: c.id, source: c.id });
-        }
-      }
-
-      return result(`${c.name} совершает «Фейский шаг»`);
-    },
+    "race/eladrin/feyskiy-shag": eladrinFeyStepAction(
+      eladrinSeason,
+      (c) => Math.max(1, modOf(c, "CHA")),
+      (c) => dcBy(c, "CHA")
+    ),
 
     // Драконорождённые: Оружие дыхания (PHB + FTD) и Защита цветного дракона
     "race/dragonborn/oruzhie-dykhaniya": breathWeaponAction("phb"),
@@ -328,15 +255,7 @@ registerKit({
 
   onDrop: {
     // Полуорк: Непоколебимая стойкость — остаётся с 1 хитом 1/длинный отдых (если не мгновенная смерть)
-    "race/half-orc/nepokolebimaya-stoykost": (state, c, ability, hpBefore, amount) => {
-      if (amount - hpBefore >= c.hpMax) return false;
-      if (ability.usesMax > 0 && ability.usesUsed >= ability.usesMax) return false;
-      spendAbilityUse(c, ability);
-      c.hpCurrent = 1;
-      state.mark(c.id);
-      log(state, c, `${c.name}: Непоколебимая стойкость — остаётся с 1 хитом`);
-      return true;
-    },
+    "race/half-orc/nepokolebimaya-stoykost": relentlessEnduranceOnDrop,
   },
 });
 

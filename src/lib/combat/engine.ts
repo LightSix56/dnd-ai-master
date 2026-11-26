@@ -335,6 +335,7 @@ export function dealDamage(
     kindLabel?: string;
     damageType?: string;
     isAttack?: boolean;
+    isWeaponAttack?: boolean;
     attackerId?: string;
     isMagicalAttack?: boolean;
     isCritical?: boolean;
@@ -423,12 +424,16 @@ export function dealDamage(
     const rageResists =
       (isPhysical && hasCondition(target, "hill_rune")) ||
       ((type === "psychic" || type.includes("психич")) && !!classFeature(target, "psi-warrior/guarded-mind"));
+    const bladeWardResists =
+      isPhysical &&
+      hasCondition(target, "blade_ward") &&
+      (opts.isWeaponAttack ?? (!!opts.isAttack && !opts.isMagicalAttack));
     const modImmune = modDamageImmunity(target, type, state.combatants);
     if (modImmune) {
       state.addLog(`${target.name}: иммунитет к урону «${part.type}» (${modImmune})`, "system", target.name);
       continue;
     }
-    if (rageResists || modResistance(target, type, state.combatants) || target.damageResistances?.some((res) => matchesTyped(res, type, isPhysical, isNonmagical))) {
+    if (rageResists || bladeWardResists || modResistance(target, type, state.combatants) || target.damageResistances?.some((res) => matchesTyped(res, type, isPhysical, isNonmagical))) {
       const halved = Math.floor(part.amount / 2);
       state.addLog(`${target.name} имеет сопротивление к «${part.type}» (урон: ${part.amount} → ${halved})`, "system", target.name);
       actualAmount += halved;
@@ -1554,6 +1559,7 @@ function performAttackUnmarked(
         parts: res1.damageParts,
         isCritical: res1.crit,
         isAttack: true,
+        isWeaponAttack: true,
         attackerId: attacker.id,
         source: attacker.id,
       });
@@ -1564,6 +1570,7 @@ function performAttackUnmarked(
         parts: res2.damageParts,
         isCritical: res2.crit,
         isAttack: true,
+        isWeaponAttack: true,
         attackerId: attacker.id,
         source: attacker.id,
       });
@@ -1669,6 +1676,7 @@ function performAttackUnmarked(
       parts: resolution.damageParts,
       isCritical: resolution.crit,
       isAttack: true,
+      isWeaponAttack: attack.kind !== "spell" && !attack.usesSpellAttack,
       attackerId: attacker.id,
       source: attacker.id,
     });
@@ -2037,6 +2045,7 @@ export function moveCombatant(
         parts: resolution.damageParts,
         isCritical: resolution.crit,
         isAttack: true,
+        isWeaponAttack: melee.kind !== "spell" && !melee.usesSpellAttack,
         attackerId: attacker.id,
         source: attacker.id,
       });
@@ -2526,6 +2535,7 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
       parts: resolution.damageParts,
       isCritical: resolution.crit,
       isAttack: true,
+      isWeaponAttack: true,
       attackerId: caster.id,
       source: caster.id,
     });
@@ -2616,6 +2626,7 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
       parts: resolution.damageParts,
       isCritical: resolution.crit,
       isAttack: true,
+      isWeaponAttack: true,
       attackerId: caster.id,
       source: caster.id,
     });
@@ -2728,6 +2739,7 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
         isMagicalAttack: true,
         isCritical: attackResolution.crit,
         isAttack: true,
+        isWeaponAttack: false,
         attackerId: caster.id,
         source: caster.id,
       });
@@ -3025,6 +3037,7 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
           isMagicalAttack: isSpellAction,
           isCritical: crit,
           isAttack: params.attackType !== undefined,
+          isWeaponAttack: !isSpellAction && params.attackType !== undefined && params.attackType !== "spell",
           attackerId: caster.id,
           source: caster.id,
         });

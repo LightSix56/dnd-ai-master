@@ -1,21 +1,14 @@
 // Боевая механика 25 рас сеттингов и приключений (Автогном, Астральный эльф, Гибрид Симиков,
 // Гифф, Грунг, Зайцегон, Кендер, Кентавр, Леонин, Минотавр, Тортл, Хадози, Шифтер).
 
-import { rollDice } from "@/lib/dnd/dice";
 import { distanceFt } from "../grid";
-import { computeReachable } from "../movement";
-import { askReaction } from "../reactions";
-import { canAct, checkReach, effectiveSpeed, hasCondition, hasNoReactions } from "../rules";
+import { hasCondition } from "../rules";
 import {
   EngineError,
   applyEffect,
   dealDamage,
   grantTempHp,
-  payActionCost,
-  pushCombatantAway,
   spendAbilityUse,
-  teleportCombatant,
-  type CombatState,
 } from "../engine";
 import { registerClassModule } from "../class-hooks";
 import {
@@ -24,7 +17,6 @@ import {
   dcBy,
   fireConditionStart,
   hostilesOf,
-  isOwnTurn,
   log,
   markTurn,
   modOf,
@@ -33,70 +25,21 @@ import {
   result,
   rollOf,
   saves,
-  strikeWith,
-  usedThisTurn,
-  type ActionCtx,
 } from "../class-kit";
-import { isHostile, type Attack, type Combatant, type CreatureSize } from "../types";
-
-const SIZE_ORDER: CreatureSize[] = ["tiny", "small", "medium", "large", "huge", "gargantuan"];
-const sizeStepDiff = (target: Combatant, actor: Combatant) =>
-  SIZE_ORDER.indexOf(target.size ?? "medium") - SIZE_ORDER.indexOf(actor.size ?? "medium");
-
-function clearConditionBySource(state: CombatState, type: string, sourceId: string): void {
-  for (const t of state.combatants) {
-    if (!t.conditions.some((x) => x.type === type && x.source === sourceId)) continue;
-    t.conditions = t.conditions.filter((x) => !(x.type === type && x.source === sourceId));
-    state.mark(t.id);
-  }
-}
-
-function naturalStrikeAction(
-  ctx: ActionCtx,
-  label: string,
-  attack: Attack,
-  guard?: () => void
-) {
-  guard?.();
-  const target = ctx.target(label);
-  if (!isHostile(ctx.c.type, target.type) || !alive(target)) {
-    throw new EngineError("Выберите живого врага");
-  }
-  if (!checkReach(ctx.c, target, attack, ctx.state.mapElements).ok) {
-    throw new EngineError(`${target.name} вне досягаемости`);
-  }
-  ctx.pay();
-  const hit = strikeWith(ctx.state, ctx.c, target, attack);
-  return result(`${label}: ${hit.text}`, [hit]);
-}
-
-function hoovesAttackFor(c: Combatant): Attack {
-  return (
-    c.attacks.find((a) => a.id === "centaur_hooves") ?? {
-      id: "centaur_hooves",
-      name: "Копыта",
-      kind: "melee",
-      range: { normal: 5 },
-      attackBonus: modOf(c, "STR") + (c.profBonus || 2),
-      damage: [{ dice: "1d4", mod: modOf(c, "STR"), type: "bludgeoning" }],
-      actionCost: "bonus",
-    }
-  );
-}
-
-function hornsAttackFor(c: Combatant): Attack {
-  return (
-    c.attacks.find((a) => a.id === "minotaur_horns") ?? {
-      id: "minotaur_horns",
-      name: "Рога",
-      kind: "melee",
-      range: { normal: 5 },
-      attackBonus: modOf(c, "STR") + (c.profBonus || 2),
-      damage: [{ dice: "1d6", mod: modOf(c, "STR"), type: "piercing" }],
-      actionCost: "bonus",
-    }
-  );
-}
+import { isHostile } from "../types";
+import {
+  centaurChargeAction,
+  clearConditionBySource,
+  dexSaveRescueFailed,
+  longtoothBiteAttackFor,
+  minotaurGoringRushAction,
+  minotaurHammeringHornsAction,
+  naturalStrikeAction,
+  rabbitHopAction,
+  runSwiftstrideEndTurn,
+  teleportAction,
+  tortleShellDefenseAction,
+} from "./race-combat";
 
 registerKit({
   id: "races-settings",
@@ -144,13 +87,7 @@ registerKit({
 
   actions: {
     // Астральный эльф: Звёздный шаг
-    "race/astral-elf/zvezdnyy-shag": (ctx) => {
-      const center = ctx.opts.center;
-      if (!center) throw new EngineError("Выберите клетку для телепортации");
-      teleportCombatant(ctx.state, ctx.c.id, center, 30, { skipTurnCheck: true });
-      ctx.pay();
-      return result(`${ctx.c.name} телепортируется («Звёздный шаг»)`);
-    },
+    "race/astral-elf/zvezdnyy-shag": teleportAction(30, "Звёздный шаг"),
 
     // Гибрид Симиков: Кислотный плевок
     "race/simic-hybrid/acid-spit": (ctx) => {
@@ -178,16 +115,7 @@ registerKit({
     },
 
     // Зайцегон: Кроличий прыжок (без провоцированных атак, если скорость > 0)
-    "race/harengon/krolichiy-pryzhok": (ctx) => {
-      const { state, c } = ctx;
-      if (effectiveSpeed(c) <= 0) throw new EngineError(`${c.name} не может прыгать (скорость 0)`);
-      const center = ctx.opts.center;
-      if (!center) throw new EngineError("Выберите клетку для прыжка");
-      const maxFt = 5 * (c.profBonus || 2);
-      teleportCombatant(state, c.id, center, maxFt, { skipTurnCheck: true });
-      ctx.pay();
-      return result(`${c.name} совершает «Кроличий прыжок» (до ${maxFt} фт)`);
-    },
+    "race/harengon/krolichiy-pryzhok": rabbitHopAction,
 
     // Кендер: Насмешка
     "race/kender/nasmeshka": (ctx) => {
@@ -215,12 +143,7 @@ registerKit({
     },
 
     // Кентавр: Разбег (бонусная атака копытами после >= 30 фт движения и попадания рукопашной атакой)
-    "race/centaur/razbeg": (ctx) =>
-      naturalStrikeAction(ctx, "Разбег", hoovesAttackFor(ctx.c), () => {
-        if (ctx.c.movementUsed < 30 || !usedThisTurn(ctx.state, ctx.c, "centaur_charge_hit")) {
-          throw new EngineError("«Разбег» требует переместиться на 30+ фт и попасть рукопашной атакой в этом ходу");
-        }
-      }),
+    "race/centaur/razbeg": (ctx) => centaurChargeAction(ctx, "1d4"),
 
     // Леонин: Устрашающий рёв (AoE 10 фт, спас МУД до конца след. хода леонина)
     "race/leonin/ustrashayushchiy-rev": (ctx) => {
@@ -245,55 +168,12 @@ registerKit({
       return result(`${c.name} издаёт «Устрашающий рёв»`, outcomes);
     },
 
-    // Минотавр: Пронзающий натиск (бонусная атака рогами после Рывка и >= 20 фт движения)
-    "race/minotaur/pronzayushchiy-natisk": (ctx) =>
-      naturalStrikeAction(ctx, "Пронзающий натиск", hornsAttackFor(ctx.c), () => {
-        if (!hasCondition(ctx.c, "dashing") || ctx.c.movementUsed < 20) {
-          throw new EngineError("«Пронзающий натиск» требует Рывка и перемещения минимум на 20 фт");
-        }
-      }),
-
-    // Минотавр: Сокрушительные рога (бонусное отталкивание на 10 фт после попадания рукопашной атакой)
-    "race/minotaur/sokrushitelnye-roga": (ctx) => {
-      const { state, c, ability } = ctx;
-      if (!usedThisTurn(state, c, "minotaur_melee_hit")) {
-        throw new EngineError("«Сокрушительные рога» применяются после попадания рукопашной атакой в этом ходу");
-      }
-      const target = ctx.target("Сокрушительные рога");
-      if (!isHostile(c.type, target.type) || !alive(target)) {
-        throw new EngineError("Выберите живого врага");
-      }
-      if (distanceFt(c, target) > 5) throw new EngineError(`${target.name} дальше 5 фт`);
-      if (sizeStepDiff(target, c) > 1) {
-        throw new EngineError(`${target.name} слишком велик для отталкивания рогами`);
-      }
-      ctx.pay();
-      const dc = dcBy(c, "STR");
-      const saved = saves(state, target, "STR", dc, ability.name);
-      if (!saved) {
-        pushCombatantAway(state, target, { x: c.x, y: c.y }, 2);
-      }
-      log(state, c, `${c.name}: Сокрушительные рога против ${target.name} (СЛ ${dc}) — ${saved ? "устоял" : "оттолкнут на 10 фт"}`);
-      return result(`Сокрушительные рога: ${saved ? "цель устояла" : `${target.name} оттолкнут на 10 фт`}`, [
-        { name: target.name, saved, amount: 0 },
-      ]);
-    },
+    // Минотавр: Пронзающий натиск и Сокрушительные рога
+    "race/minotaur/pronzayushchiy-natisk": minotaurGoringRushAction,
+    "race/minotaur/sokrushitelnye-roga": minotaurHammeringHornsAction,
 
     // Тортл: Панцирная защита (действие — спрятаться; бонусное действие — выйти)
-    "race/tortle/pantsirnaya-zashchita": (ctx) => {
-      const { state, c } = ctx;
-      if (hasCondition(c, "tortle_shell")) {
-        payActionCost(state, c, "bonus");
-        removeConditions(state, c, "tortle_shell");
-        log(state, c, `${c.name}: выходит из панциря`);
-        return result(`${c.name} выходит из панциря`);
-      }
-      ctx.pay();
-      applyEffect(state, c.id, { condition: "tortle_shell" }, c.id);
-      fireConditionStart(state, c, "tortle_shell", ctx.opts);
-      log(state, c, `${c.name}: Панцирная защита (+4 к КД, преимущество на спас СИЛ/ТЕЛ, скорость 0)`);
-      return result(`${c.name} прячется в панцирь («Панцирная защита»)`);
-    },
+    "race/tortle/pantsirnaya-zashchita": tortleShellDefenseAction,
 
     // Хадози: ручной клик напоминает о срабатывании реакцией
     "race/hadozee/vertkost-khadozi": () => {
@@ -302,24 +182,11 @@ registerKit({
 
     // Шифтер-Длиннозуб: укус бонусным действием в изменённой форме
     "race/longtooth/osobennosti-smeny-formy": (ctx) =>
-      naturalStrikeAction(
-        ctx,
-        "Укус длиннозуба",
-        {
-          id: "longtooth_bite",
-          name: "Клыки длиннозуба",
-          kind: "melee",
-          range: { normal: 5 },
-          attackBonus: modOf(ctx.c, "STR") + (ctx.c.profBonus || 2),
-          damage: [{ dice: "1d6", mod: modOf(ctx.c, "STR"), type: "piercing" }],
-          actionCost: "bonus",
-        },
-        () => {
-          if (!hasCondition(ctx.c, "shifter_shifted")) {
-            throw new EngineError("Укус длиннозуба доступен только во время «Смены формы»");
-          }
+      naturalStrikeAction(ctx, "Укус длиннозуба", longtoothBiteAttackFor(ctx.c), () => {
+        if (!hasCondition(ctx.c, "shifter_shifted")) {
+          throw new EngineError("Укус длиннозуба доступен только во время «Смены формы»");
         }
-      ),
+      }),
   },
 
   riders: {
@@ -404,81 +271,20 @@ registerClassModule({
       }
     }
 
-    // Зайцегон: Сильные ноги — реакцией +1к4 к проваленному спасброску Ловкости (если не ничком, скорость > 0 и реакции не запрещены)
-    if (
-      ability === "DEX" &&
-      !c.reactionUsed &&
-      !hasNoReactions(c) &&
-      alive(c) &&
-      canAct(c) &&
-      !hasCondition(c, "prone") &&
-      effectiveSpeed(c) > 0 &&
-      failedSave.roll.total + 4 >= dc &&
-      abilityByKey(c, "race/harengon/silnye-nogi")
-    ) {
-      c.reactionUsed = true;
-      const bonus = rollDice("1d4").total;
-      const nextTotal = failedSave.roll.total + bonus;
-      const success = nextTotal >= dc;
-      state.mark(c.id);
-      log(state, c, `${c.name}: Сильные ноги — +${bonus} к спасброску ЛОВ (${nextTotal} против СЛ ${dc})`);
-      return {
-        ...failedSave,
-        success,
-        roll: {
-          ...failedSave.roll,
-          modifier: failedSave.roll.modifier + bonus,
-          total: nextTotal,
-        },
-        text: `${nextTotal} vs DC ${dc} (${success ? "Успех" : "Провал"}, Сильные ноги +${bonus})`,
-      };
-    }
-
-    return null;
+    // Зайцегон: Сильные ноги — реакцией +1к4 к проваленному спасброску Ловкости
+    return dexSaveRescueFailed(
+      state,
+      c,
+      ability,
+      dc,
+      failedSave,
+      "race/harengon/silnye-nogi",
+      "Сильные ноги"
+    );
   },
 
   endTurn(state, current, phase) {
     if (phase !== "before") return;
-    for (const shifter of state.combatants) {
-      if (shifter.id === current.id || !alive(shifter) || !canAct(shifter) || shifter.reactionUsed || hasNoReactions(shifter)) continue;
-      if (!isHostile(shifter.type, current.type) || !hasCondition(shifter, "shifter_shifted")) continue;
-      if (!abilityByKey(shifter, "race/swiftstride/osobennosti-smeny-formy")) continue;
-      if (distanceFt(shifter, current) > 5 || effectiveSpeed(shifter) <= 0) continue;
-
-      const stepBudget = Math.min(10, effectiveSpeed(shifter));
-      const reachable = computeReachable(
-        { x: shifter.x, y: shifter.y },
-        stepBudget,
-        state.mapElements,
-        state.combatants,
-        state.gridWidth,
-        state.gridHeight,
-        shifter.id,
-        shifter
-      );
-      let best: { x: number; y: number; dist: number; cost: number } | null = null;
-      for (const [key, node] of reachable.entries()) {
-        if (node.cost <= 0) continue;
-        const [xs, ys] = key.split(",").map(Number);
-        const d = distanceFt({ x: xs, y: ys }, current);
-        if (!best || d > best.dist || (d === best.dist && node.cost < best.cost)) {
-          best = { x: xs, y: ys, dist: d, cost: node.cost };
-        }
-      }
-      if (!best) continue;
-
-      const choice = askReaction(shifter, {
-        title: "Использовать реакцию?",
-        text: `${current.name} заканчивает ход в пределах 5 фт от ${shifter.name}.`,
-        options: [{ id: "swiftstride_move", label: "Быстроног: отступить до 10 фт без провоцированных атак" }],
-      });
-      if (!choice) continue;
-
-      shifter.reactionUsed = true;
-      shifter.x = best.x;
-      shifter.y = best.y;
-      state.mark(shifter.id);
-      log(state, shifter, `${shifter.name}: Быстроног — отходит на ${best.cost} фт без провоцированных атак`, "move");
-    }
+    runSwiftstrideEndTurn(state, current, ["race/swiftstride/osobennosti-smeny-formy"]);
   },
 });

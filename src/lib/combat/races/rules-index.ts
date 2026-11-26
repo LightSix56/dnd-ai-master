@@ -3,3 +3,4 @@
 import "./core-phb";
 import "./legacy-volo-mtf";
 import "./legacy-settings";
+import "./mpmm";

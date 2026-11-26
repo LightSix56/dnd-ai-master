@@ -198,7 +198,7 @@ conditionMods("chromatic_warding", {
 
 export type EladrinSeason = "osen" | "zima" | "vesna" | "leto";
 
-const ELADRIN_SEASONS: Array<{ id: EladrinSeason; name: string; aliases: string[]; desc: string }> = [
+export const ELADRIN_SEASONS: Array<{ id: EladrinSeason; name: string; aliases: string[]; desc: string }> = [
   { id: "osen", name: "Осень", aliases: ["Autumn"], desc: "После телепортации до 2 врагов в 10 фт — спас МУД или очарованы." },
   { id: "zima", name: "Зима", aliases: ["Winter"], desc: "До телепортации 1 враг в 5 фт — спас МУД или испуган." },
   { id: "vesna", name: "Весна", aliases: ["Spring"], desc: "Можно телепортировать согласного союзника в 5 фт вместо себя." },
@@ -208,7 +208,7 @@ const ELADRIN_SEASONS: Array<{ id: EladrinSeason; name: string; aliases: string[
 export function eladrinSeason(c: Combatant): EladrinSeason | null {
   for (const s of ELADRIN_SEASONS) {
     if (c.racialVariants?.includes(s.id) || c.racialVariants?.includes(s.aliases[0].toLowerCase())) return s.id;
-    if (c.abilities.some((a) => a.parameters?.srdKey === `race/eladrin/${s.id}`)) return s.id;
+    if (c.abilities.some((a) => a.parameters?.srdKey === `race/eladrin/${s.id}` || a.parameters?.srdKey === `race/eladrin-mpmm/${s.id}`)) return s.id;
   }
   return null;
 }
