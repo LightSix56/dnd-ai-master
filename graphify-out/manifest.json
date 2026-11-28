@@ -18,9 +18,9 @@
     "semantic_hash": "6a8f1b475f9a4fff1dc59fbd31f6939f"
   },
   "package.json": {
-    "mtime": 1795857442.042899,
-    "seen": 1795857716.7773435,
-    "ast_hash": "70353c1bc93b121d4e0bf5d3280e9e8d",
+    "mtime": 1795860237.471903,
+    "seen": 1795860522.2220948,
+    "ast_hash": "35ca076d8ea5b6e59b0a77cc4d2fb53d",
     "semantic_hash": ""
   },
   "postcss.config.mjs": {
@@ -18444,10 +18444,10 @@
     "semantic_hash": "0b424f7327aae6cfe955ae07a4b1f5c2"
   },
   "src/lib/combat/monsters/monster-adapter.ts": {
-    "mtime": 1794482487.1797616,
-    "seen": 1795590344.6831524,
-    "ast_hash": "9369dc9bc3e939dcd1cef3459d60e4bc",
-    "semantic_hash": "9369dc9bc3e939dcd1cef3459d60e4bc"
+    "mtime": 1795860241.259099,
+    "seen": 1795860523.55128,
+    "ast_hash": "c12fd00c9c6955f5d0f01e167cdf29e1",
+    "semantic_hash": ""
   },
   "src/lib/combat/monsters/monster-parser-engine.ts": {
     "mtime": 1791442478.8627346,
@@ -18474,28 +18474,16 @@
     "semantic_hash": "2e3db85f083503b015546ac0c79b5abd"
   },
   "src/lib/combat/srd/adapter.ts": {
-    "mtime": 1795857447.1466649,
-    "seen": 1795857718.0797467,
-    "ast_hash": "3f74c23b262832a8968c062415dea36a",
+    "mtime": 1795860240.0280898,
+    "seen": 1795860523.5717428,
+    "ast_hash": "62fc8c223e83f3717bd1401aa4f38832",
     "semantic_hash": ""
-  },
-  "src/lib/combat/srd/data/conditions.json": {
-    "mtime": 1791442478.916155,
-    "seen": 1795590344.6832845,
-    "ast_hash": "ea0598b1235e1cf7651874426b2bcfb9",
-    "semantic_hash": "ea0598b1235e1cf7651874426b2bcfb9"
   },
   "src/lib/combat/srd/data/features.json": {
     "mtime": 1791442478.921482,
     "seen": 1795590344.6832895,
     "ast_hash": "a236ad7f045dfccaa4d737b7e4af6b79",
     "semantic_hash": "a236ad7f045dfccaa4d737b7e4af6b79"
-  },
-  "src/lib/combat/srd/data/monsters.json": {
-    "mtime": 1791442478.9295564,
-    "seen": 1795590344.6832924,
-    "ast_hash": "16af8070a49c3e7ae4366f58c48a7fa0",
-    "semantic_hash": "16af8070a49c3e7ae4366f58c48a7fa0"
   },
   "src/lib/combat/srd/data/spells.json": {
     "mtime": 1791447286.352186,
@@ -21189,6 +21177,12 @@
     "mtime": 1795856780.6336312,
     "seen": 1795857718.1297138,
     "ast_hash": "14232ffdf6f8b190d23898f1dacc791b",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-11-28-dnd-shared-stage-4-final.md": {
+    "mtime": 1795858039.7265673,
+    "seen": 1795860523.6196578,
+    "ast_hash": "50a5c8af032b89397f8ce8d42aad8d4f",
     "semantic_hash": ""
   }
 }

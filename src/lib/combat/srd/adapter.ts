@@ -4,7 +4,7 @@ import type { AttackDefinition, SpellDefinition, AbilityDefinition } from "../li
 
 import { SPELLS, findSpell } from "dnd-shared";
 import { SRD_WEAPONS } from "dnd-shared/items";
-import monstersData from "./data/monsters.json";
+import { MONSTERS } from "dnd-shared/monsters";
 
 export interface SRDSpell {
   id: string;
@@ -55,7 +55,7 @@ function combatSpells(source: "srd" | "expanded"): SRDSpell[] {
 const spellsList: SRDSpell[] = combatSpells("srd");
 const expandedList: SRDSpell[] = combatSpells("expanded");
 const allCombatSpellsList: SRDSpell[] = [...spellsList, ...expandedList];
-const monstersList: CharacterPreset[] = monstersData as unknown as CharacterPreset[];
+const monstersList: CharacterPreset[] = MONSTERS as unknown as CharacterPreset[];
 const weaponsList: SRDWeapon[] = SRD_WEAPONS as unknown as SRDWeapon[];
 
 const spellsByName = new Map<string, SRDSpell>();
