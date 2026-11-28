@@ -1,13 +1,12 @@
 // Декларативный реестр рас D&D 5e (2014 Legacy + MPMM) для тактического боя.
 //
-// Данные рас берутся из data/races-2014.json (синхронизируется scripts/sync-dnd-shared-races.mjs
-// из C:\antig\dnd-shared\data\races.json). Боевые правила рас регистрируются через defineRace
-// в src/lib/combat/races/*.ts, а срабатывания в бою — через registerKit / featureMods.
+// Данные рас берутся из общей библиотеки dnd-shared/races. Боевые правила рас регистрируются
+// через defineRace в src/lib/combat/races/*.ts, а срабатывания в бою — через registerKit / featureMods.
 //
 // Переиспользует примитивы правил из ../class-defs (Calc, Rule, OptionRule, FeatureRule, calcOf,
 // optionChosen, buildDefinition) без дублирования.
 
-import data from "../data/races-2014.json";
+import { RACES as SHARED_RACES, findRace } from "dnd-shared/races";
 import type { SrdAbilityDefinition } from "../class-features";
 import {
   buildDefinition,
@@ -104,7 +103,7 @@ export interface RaceData {
   conditionImmunities?: string[];
 }
 
-export const RACES_2014 = data as RaceData[];
+export const RACES_2014 = SHARED_RACES as unknown as RaceData[];
 
 const norm = (s: string) => s.toLowerCase().replace(/ё/g, "е").replace(/\s+/g, " ").trim();
 
@@ -314,6 +313,15 @@ export function findRaceData(
 ): { race: RaceData; subrace?: SubraceData } | null {
   const want = norm(String(raceQuery || ""));
   if (!want) return null;
+
+  const shared = findRace(raceQuery, subraceQuery);
+  if (shared) {
+    const race = shared.race as unknown as RaceData;
+    const subrace =
+      (shared.subrace as unknown as SubraceData | undefined) ??
+      matchSubrace(race, subraceQuery);
+    return { race, subrace };
+  }
 
   const combinedQuery = `${raceQuery ?? ""} ${subraceQuery ?? ""}`;
   const wantsMpmm = /\bmpmm\b|\(mpmm\)|-mpmm|мультивселен/i.test(combinedQuery);

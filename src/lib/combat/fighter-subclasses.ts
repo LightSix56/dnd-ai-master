@@ -1,6 +1,6 @@
 // Подклассы Воина (редакция 2014) с dnd.su: умения и варианты на выбор для боя.
 //
-// Данные — data/fighter-dndsu.json (собираются scripts/import-dndsu-fighter.py): 10 официальных
+// Данные — из общей библиотеки dnd-shared/fighter: 10 официальных
 // подклассов, 56 умений, 42 варианта (приёмы Мастера боевых искусств, магические выстрелы,
 // псионические силы, руны). Чемпион уже есть в умениях SRD (class-features.ts) — здесь его умения
 // не дублируются.
@@ -11,7 +11,7 @@
 // движок тратит действие и заряды, пишет в журнал и показывает мастеру описание с уже посчитанными
 // числами (СЛ, кость, количество). Срабатывающие сами и справочные умения — passive.
 
-import data from "./data/fighter-dndsu.json";
+import { FIGHTER_DATA } from "dnd-shared/fighter";
 import type { HeroFeatureContext, SrdAbilityDefinition } from "./class-features";
 import { ARCANE_SHOT_POOL, PSIONIC_POOL, SUPERIORITY_POOL } from "./fighter-pool";
 import type { AbilityKey, ActionCost, ActionParameters, CombatAbility } from "./types";
@@ -35,8 +35,8 @@ export interface FighterFeature {
   options: FighterOption[];
 }
 
-export const FIGHTER_SUBCLASSES = data.subclasses as Array<{ id: string; name: string }>;
-export const FIGHTER_FEATURES = data.features as FighterFeature[];
+export const FIGHTER_SUBCLASSES = FIGHTER_DATA.subclasses as Array<{ id: string; name: string }>;
+export const FIGHTER_FEATURES = FIGHTER_DATA.features as FighterFeature[];
 
 /** Название архетипа из листа → идентификатор подкласса (названия dnd.su и английские) */
 const SUBCLASS_PATTERNS: Array<[string, RegExp]> = [

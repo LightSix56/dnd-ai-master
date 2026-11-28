@@ -18,10 +18,10 @@
     "semantic_hash": "6a8f1b475f9a4fff1dc59fbd31f6939f"
   },
   "package.json": {
-    "mtime": 1794482486.9640663,
-    "seen": 1795590344.673036,
-    "ast_hash": "f8c6da01895cf2779111f5eb27d5d655",
-    "semantic_hash": "f8c6da01895cf2779111f5eb27d5d655"
+    "mtime": 1795849973.9420884,
+    "seen": 1795850566.9500093,
+    "ast_hash": "f9b000a0549faf954f2119c9eba50fbc",
+    "semantic_hash": ""
   },
   "postcss.config.mjs": {
     "mtime": 1791442474.05344,
@@ -102,10 +102,10 @@
     "semantic_hash": "5a758ec6060d4011c9285a8fbd158a31"
   },
   "src/app/api/combat/action/route.ts": {
-    "mtime": 1795589010.06868,
-    "seen": 1795590344.6733243,
-    "ast_hash": "614cdaeb9db03f6925034d35771a992e",
-    "semantic_hash": "614cdaeb9db03f6925034d35771a992e"
+    "mtime": 1795678895.0430262,
+    "seen": 1795684521.9432092,
+    "ast_hash": "04be9c519d6be4d0af54f4df3a5e7e34",
+    "semantic_hash": ""
   },
   "src/app/api/combat/active/route.ts": {
     "mtime": 1795588950.3763478,
@@ -120,10 +120,10 @@
     "semantic_hash": "fcb9fbaed07560c9507822d35a038d61"
   },
   "src/app/api/combat/import-character/route.ts": {
-    "mtime": 1794486800.6083846,
-    "seen": 1795590344.6733406,
-    "ast_hash": "4fa90b008389a6019012a56a0a065080",
-    "semantic_hash": "4fa90b008389a6019012a56a0a065080"
+    "mtime": 1795595911.4986875,
+    "seen": 1795597132.2390513,
+    "ast_hash": "39faf9842fc41dcc5b841c7e9e7db288",
+    "semantic_hash": ""
   },
   "src/app/api/library/route.ts": {
     "mtime": 1795588957.1398106,
@@ -600,16 +600,16 @@
     "semantic_hash": "a67918ccd2c3fbcf3d89a458d2195694"
   },
   "src/lib/combat/engine.ts": {
-    "mtime": 1794489260.025755,
-    "seen": 1795590344.683029,
-    "ast_hash": "56d60c027a7bc86127949ecdeb00f6ba",
-    "semantic_hash": "56d60c027a7bc86127949ecdeb00f6ba"
+    "mtime": 1795683689.404158,
+    "seen": 1795684523.0882974,
+    "ast_hash": "2c4df347e0061403610ec42239c007ba",
+    "semantic_hash": ""
   },
   "src/lib/combat/generator.ts": {
-    "mtime": 1794485815.588191,
-    "seen": 1795590344.6830444,
-    "ast_hash": "8ddc9ec91d66fd4a3714c488d55b4fc3",
-    "semantic_hash": "8ddc9ec91d66fd4a3714c488d55b4fc3"
+    "mtime": 1795595910.5698426,
+    "seen": 1795597133.4480581,
+    "ast_hash": "a14f738e7cff5dc951917cda60f35e03",
+    "semantic_hash": ""
   },
   "src/lib/combat/grid.ts": {
     "mtime": 1791442478.517079,
@@ -636,10 +636,10 @@
     "semantic_hash": "b4891c6dad17e85793ae1a2d6792bfef"
   },
   "src/lib/combat/rules.ts": {
-    "mtime": 1794486386.909078,
-    "seen": 1795590344.6832733,
-    "ast_hash": "6513b6ff41ba1a19822b682cfa42d6f8",
-    "semantic_hash": "6513b6ff41ba1a19822b682cfa42d6f8"
+    "mtime": 1795679859.2230766,
+    "seen": 1795684523.1290023,
+    "ast_hash": "03a214f6f40169884b10d25c21be1154",
+    "semantic_hash": ""
   },
   "src/lib/combat/seed.ts": {
     "mtime": 1791442478.910926,
@@ -648,16 +648,16 @@
     "semantic_hash": "dd373b0e0196bec6179b85b457275759"
   },
   "src/lib/combat/serialize.ts": {
-    "mtime": 1794489351.4586222,
-    "seen": 1795590344.6832783,
-    "ast_hash": "063c53554e5335f76ccd86515ea55752",
-    "semantic_hash": "063c53554e5335f76ccd86515ea55752"
+    "mtime": 1795676912.8159027,
+    "seen": 1795678107.9260168,
+    "ast_hash": "44c2106feb31334e9f851cc723f8a2f4",
+    "semantic_hash": ""
   },
   "src/lib/combat/types.ts": {
-    "mtime": 1794489339.584367,
-    "seen": 1795590344.6833034,
-    "ast_hash": "bfe7b43506584054e3d0165f8d8f167e",
-    "semantic_hash": "bfe7b43506584054e3d0165f8d8f167e"
+    "mtime": 1795679858.080838,
+    "seen": 1795684523.1340811,
+    "ast_hash": "931fd1b0a63ab8f06e91368a06695fba",
+    "semantic_hash": ""
   },
   "src/lib/db.ts": {
     "mtime": 1791442478.9408784,
@@ -666,10 +666,10 @@
     "semantic_hash": "b805534a402b183593a044d6f13a8902"
   },
   "src/lib/dnd/dice.ts": {
-    "mtime": 1794489103.0208821,
-    "seen": 1795590344.6833334,
-    "ast_hash": "791a543ce38774d7a46e3d2b64f60615",
-    "semantic_hash": "791a543ce38774d7a46e3d2b64f60615"
+    "mtime": 1795593403.147809,
+    "seen": 1795593590.8536372,
+    "ast_hash": "11cbc56f0691cc7b634a442e555aaa84",
+    "semantic_hash": ""
   },
   "src/lib/dnd/import-character.ts": {
     "mtime": 1791442478.9589975,
@@ -708,33 +708,33 @@
     "semantic_hash": "b4edb978ead2215e5c1f2c76ab661b61"
   },
   "AGENTS.md": {
-    "mtime": 1790016425.1364522,
-    "seen": 1790018746.4276092,
-    "ast_hash": "edfe2ee6f1143390c488833287528a4e",
+    "mtime": 1794490083.741146,
+    "seen": 1795593590.8717325,
+    "ast_hash": "c9b8489614f0202fe6e12793e2924ff2",
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1789942560.0269783,
-    "seen": 1789942691.0082095,
-    "ast_hash": "fc7919f2e832410387c7ce033eb43349",
+    "mtime": 1791442473.338288,
+    "seen": 1795593590.8717365,
+    "ast_hash": "771faa62feb60b7de901a397aebb29b0",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1785947140.0,
-    "seen": 1789940139.320787,
-    "ast_hash": "41dc2acbe03d565565aaa1983ecb1ef1",
+    "mtime": 1791442473.3409152,
+    "seen": 1795593590.8717394,
+    "ast_hash": "62ddba45e47b46061f64d46e7bd6d579",
     "semantic_hash": ""
   },
   "public/robots.txt": {
-    "mtime": 1778580365.0,
-    "seen": 1789940139.3207893,
-    "ast_hash": "f9dff89adf98833e676de2205921996a",
+    "mtime": 1791442474.0626442,
+    "seen": 1795593590.871837,
+    "ast_hash": "a9b03494151fe90e5decd2405400e106",
     "semantic_hash": ""
   },
   "public/logo.svg": {
-    "mtime": 1778580365.0,
-    "seen": 1789940139.3207936,
-    "ast_hash": "42f46ee1967225126315578016f0f9b6",
+    "mtime": 1791442474.0600188,
+    "seen": 1795593590.8718812,
+    "ast_hash": "018c9d41fac1aec570870db154693656",
     "semantic_hash": ""
   },
   "src/components/dnd/D20RollModal.tsx": {
@@ -18474,10 +18474,10 @@
     "semantic_hash": "2e3db85f083503b015546ac0c79b5abd"
   },
   "src/lib/combat/srd/adapter.ts": {
-    "mtime": 1794482487.187577,
-    "seen": 1795590344.6832814,
-    "ast_hash": "680e0613e70f7c9685d75a9f511eb31c",
-    "semantic_hash": "680e0613e70f7c9685d75a9f511eb31c"
+    "mtime": 1795850199.4741132,
+    "seen": 1795850568.4407442,
+    "ast_hash": "bd9936345c5c88f4583c2d846bcec4d1",
+    "semantic_hash": ""
   },
   "src/lib/combat/srd/data/conditions.json": {
     "mtime": 1791442478.916155,
@@ -19038,15 +19038,15 @@
     "semantic_hash": "a2fe5c005917b1b6b13290073beb0f8c"
   },
   "docs/superpowers/plans/2026-09-23-battle-ai-inventory-potions-plan.md": {
-    "mtime": 1790181102.05984,
-    "seen": 1790182006.714784,
-    "ast_hash": "864f9e98c7633cf73471ca25da618e66",
+    "mtime": 1791442473.5401785,
+    "seen": 1795593590.8717432,
+    "ast_hash": "03969588a47cf346c8858a821cfb35d1",
     "semantic_hash": ""
   },
   "docs/superpowers/specs/2026-09-23-battle-ai-inventory-potions-design.md": {
-    "mtime": 1790181088.4020426,
-    "seen": 1790182006.7147906,
-    "ast_hash": "3494f3eac576e48ba11632054bb9a4ec",
+    "mtime": 1791442473.555089,
+    "seen": 1795593590.8717961,
+    "ast_hash": "4274712b4309a614db31c4ef8c666c7b",
     "semantic_hash": ""
   },
   "src/components/dnd/CharacterInventoryModal.tsx": {
@@ -19092,249 +19092,249 @@
     "semantic_hash": "3c828b15173db93f0652bc6d239cdb87"
   },
   ".agents/skills/supabase-postgres-best-practices/CHANGELOG.md": {
-    "mtime": 1790192334.6236877,
-    "seen": 1790234593.5542603,
+    "mtime": 1791442473.2872846,
+    "seen": 1795593590.871558,
     "ast_hash": "fdd0ba418e6744556f0029ffb76711b1",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/SKILL.md": {
-    "mtime": 1790192334.6236877,
-    "seen": 1790234593.554265,
+    "mtime": 1791442473.2882824,
+    "seen": 1795593590.8715644,
     "ast_hash": "845c64575b6d28856ea6a9735a372225",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/_contributing.md": {
-    "mtime": 1790192334.6246903,
-    "seen": 1790234593.5542681,
+    "mtime": 1791442473.2896445,
+    "seen": 1795593590.8715684,
     "ast_hash": "32c800fa6621705288dc651da22c9366",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/_sections.md": {
-    "mtime": 1790192334.6256852,
-    "seen": 1790234593.554272,
+    "mtime": 1791442473.291813,
+    "seen": 1795593590.871572,
     "ast_hash": "8547fba7fd9fae3b6be916c6f55b0f62",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/_template.md": {
-    "mtime": 1790192334.6256852,
-    "seen": 1790234593.5542758,
+    "mtime": 1791442473.2928026,
+    "seen": 1795593590.8715758,
     "ast_hash": "74ec7e2bdd6c8ddbb354fcceec038bc2",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/advanced-full-text-search.md": {
-    "mtime": 1790192334.626686,
-    "seen": 1790234593.5542789,
+    "mtime": 1791442473.2938023,
+    "seen": 1795593590.8715801,
     "ast_hash": "327f8367de51b0982b963f2928184c35",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/advanced-jsonb-indexing.md": {
-    "mtime": 1790192334.626686,
-    "seen": 1790234593.5542824,
+    "mtime": 1791442473.2948017,
+    "seen": 1795593590.8715837,
     "ast_hash": "413ba907ff4408d6fd3545f839101ebf",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/conn-idle-timeout.md": {
-    "mtime": 1790192334.626686,
-    "seen": 1790234593.554286,
+    "mtime": 1791442473.2958791,
+    "seen": 1795593590.8715866,
     "ast_hash": "8bbe8b609d5241351672cefc19036db6",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/conn-limits.md": {
-    "mtime": 1790192334.6276855,
-    "seen": 1790234593.554289,
+    "mtime": 1791442473.2969675,
+    "seen": 1795593590.8715909,
     "ast_hash": "661b3efcf0e35136352b3923ff265d5c",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/conn-pooling.md": {
-    "mtime": 1790192334.6276855,
-    "seen": 1790234593.554294,
+    "mtime": 1791442473.298961,
+    "seen": 1795593590.871595,
     "ast_hash": "c90dab7d0ab47443b41f17d5bc9f04b3",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/conn-prepared-statements.md": {
-    "mtime": 1790192334.6286852,
-    "seen": 1790234593.5542986,
+    "mtime": 1791442473.2999628,
+    "seen": 1795593590.8715997,
     "ast_hash": "b53eb9dea11d6da338a8b6f9e67a3622",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/data-batch-inserts.md": {
-    "mtime": 1790192334.6286852,
-    "seen": 1790234593.5543025,
+    "mtime": 1791442473.3009603,
+    "seen": 1795593590.8716037,
     "ast_hash": "6801a3a2d414dfd6a4c79970a37e795d",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/data-n-plus-one.md": {
-    "mtime": 1790192334.6296954,
-    "seen": 1790234593.5543058,
+    "mtime": 1791442473.3023834,
+    "seen": 1795593590.8716073,
     "ast_hash": "c3ed0702a116d654602120bd5cd7713e",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/data-pagination.md": {
-    "mtime": 1790192334.6296954,
-    "seen": 1790234593.5543091,
+    "mtime": 1791442473.3023834,
+    "seen": 1795593590.8716116,
     "ast_hash": "59be210a420d34780949ce16d5b4a8d5",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/data-upsert.md": {
-    "mtime": 1790192334.6306863,
-    "seen": 1790234593.5543122,
+    "mtime": 1791442473.3036287,
+    "seen": 1795593590.871617,
     "ast_hash": "3ae132bce8b5368e1e4a426d55ca4567",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/lock-advisory.md": {
-    "mtime": 1790192334.6306863,
-    "seen": 1790234593.5543146,
+    "mtime": 1791442473.3046262,
+    "seen": 1795593590.8716214,
     "ast_hash": "ff943eb307d8b6e12cc6ab2bcb6e2d18",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/lock-deadlock-prevention.md": {
-    "mtime": 1790192334.6316879,
-    "seen": 1790234593.554317,
+    "mtime": 1791442473.3046262,
+    "seen": 1795593590.8716245,
     "ast_hash": "685b04bcae3a0720e84f1507d243e959",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/lock-short-transactions.md": {
-    "mtime": 1790192334.6316879,
-    "seen": 1790234593.5543203,
+    "mtime": 1791442473.306133,
+    "seen": 1795593590.8716276,
     "ast_hash": "3c947d59e0359f3b236bf2ad1da52c61",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/lock-skip-locked.md": {
-    "mtime": 1790192334.632689,
-    "seen": 1790234593.5543237,
+    "mtime": 1791442473.3071356,
+    "seen": 1795593590.8716314,
     "ast_hash": "098d38542f44b656aa55923f06db74c1",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/monitor-explain-analyze.md": {
-    "mtime": 1790192334.632689,
-    "seen": 1790234593.5543258,
+    "mtime": 1791442473.3091354,
+    "seen": 1795593590.8716357,
     "ast_hash": "1fd19c373a0ff272129edd215a96e3a1",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/monitor-pg-stat-statements.md": {
-    "mtime": 1790192334.6336904,
-    "seen": 1790234593.5543294,
+    "mtime": 1791442473.310137,
+    "seen": 1795593590.8716395,
     "ast_hash": "2f0cab7f72ad9dfe2cba469aaaacc733",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/monitor-vacuum-analyze.md": {
-    "mtime": 1790192334.6336904,
-    "seen": 1790234593.5543334,
+    "mtime": 1791442473.311137,
+    "seen": 1795593590.871643,
     "ast_hash": "25e738451079707ac54d21364b5538e1",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/query-composite-indexes.md": {
-    "mtime": 1790192334.63469,
-    "seen": 1790234593.5543373,
+    "mtime": 1791442473.3121362,
+    "seen": 1795593590.8716464,
     "ast_hash": "5017f09940ed04b5b3ad836e426d9084",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/query-covering-indexes.md": {
-    "mtime": 1790192334.63469,
-    "seen": 1790234593.5543408,
+    "mtime": 1791442473.3131354,
+    "seen": 1795593590.8716502,
     "ast_hash": "fd05c38771229d97f2d4065d0af0df70",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/query-index-types.md": {
-    "mtime": 1790192334.6356957,
-    "seen": 1790234593.5543437,
+    "mtime": 1791442473.3141358,
+    "seen": 1795593590.8716533,
     "ast_hash": "e2395c6ef69ea2f147c9ab1d18c7f879",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/query-missing-indexes.md": {
-    "mtime": 1790192334.6356957,
-    "seen": 1790234593.5543466,
+    "mtime": 1791442473.316135,
+    "seen": 1795593590.8716567,
     "ast_hash": "786767ec677862bad060fc1b4ae0a94f",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/query-partial-indexes.md": {
-    "mtime": 1790192334.6366906,
-    "seen": 1790234593.55435,
+    "mtime": 1791442473.3171356,
+    "seen": 1795593590.8716593,
     "ast_hash": "249d8fccca68c332e946b499531f21d8",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/schema-constraints.md": {
-    "mtime": 1790192334.6366906,
-    "seen": 1790234593.5543544,
+    "mtime": 1791442473.3181353,
+    "seen": 1795593590.8716621,
     "ast_hash": "476ca283cfda6c5517d94c25c41de775",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/schema-data-types.md": {
-    "mtime": 1790192334.6376905,
-    "seen": 1790234593.554357,
+    "mtime": 1791442473.3196602,
+    "seen": 1795593590.871665,
     "ast_hash": "cd65e34969ebce0bce84f622f5072477",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/schema-foreign-key-indexes.md": {
-    "mtime": 1790192334.6376905,
-    "seen": 1790234593.5543604,
+    "mtime": 1791442473.3206656,
+    "seen": 1795593590.8716683,
     "ast_hash": "8b99b21a07cadd2d85c6c16f416b5464",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/schema-lowercase-identifiers.md": {
-    "mtime": 1790192334.638685,
-    "seen": 1790234593.5543637,
+    "mtime": 1791442473.321663,
+    "seen": 1795593590.8716707,
     "ast_hash": "632ea53a0da6fe7651e354f3744d998e",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/schema-partitioning.md": {
-    "mtime": 1790192334.638685,
-    "seen": 1790234593.5543673,
+    "mtime": 1791442473.322664,
+    "seen": 1795593590.8716733,
     "ast_hash": "0f2fe9016bf9aa79dd30d7d6a4a03358",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/schema-primary-keys.md": {
-    "mtime": 1790192334.6396854,
-    "seen": 1790234593.5543697,
+    "mtime": 1791442473.323664,
+    "seen": 1795593590.8716764,
     "ast_hash": "a732b1a95b6c231d47af14b715c6b9b0",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/security-privileges.md": {
-    "mtime": 1790192334.6396854,
-    "seen": 1790234593.5543728,
+    "mtime": 1791442473.324662,
+    "seen": 1795593590.8716803,
     "ast_hash": "e6fbc325f8f3af1cab3e1cb99d9f146a",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/security-rls-basics.md": {
-    "mtime": 1790192334.6406853,
-    "seen": 1790234593.554376,
+    "mtime": 1791442473.325663,
+    "seen": 1795593590.8716846,
     "ast_hash": "82ee8b214f39f78c9e88061b6f890508",
     "semantic_hash": ""
   },
   ".agents/skills/supabase-postgres-best-practices/references/security-rls-performance.md": {
-    "mtime": 1790192334.6406853,
-    "seen": 1790234593.5543783,
+    "mtime": 1791442473.326272,
+    "seen": 1795593590.8716888,
     "ast_hash": "ad2ccf01dfd325527b18256c3e25b842",
     "semantic_hash": ""
   },
   ".agents/skills/supabase/CHANGELOG.md": {
-    "mtime": 1790192334.6416857,
-    "seen": 1790234593.554381,
+    "mtime": 1791442473.3282857,
+    "seen": 1795593590.8716934,
     "ast_hash": "2f4622961a8c9f3a3b2c40086309447b",
     "semantic_hash": ""
   },
   ".agents/skills/supabase/SKILL.md": {
-    "mtime": 1790192334.6426845,
-    "seen": 1790234593.5543847,
+    "mtime": 1791442473.3302853,
+    "seen": 1795593590.8716989,
     "ast_hash": "7b96fab7659e7953872489fcadff75a7",
     "semantic_hash": ""
   },
   ".agents/skills/supabase/assets/feedback-issue-template.md": {
-    "mtime": 1790192334.6426845,
-    "seen": 1790234593.5543883,
+    "mtime": 1791442473.3312895,
+    "seen": 1795593590.8717031,
     "ast_hash": "e2c8b4f1a20e46315dd7609540d9b8d4",
     "semantic_hash": ""
   },
   ".agents/skills/supabase/references/skill-feedback.md": {
-    "mtime": 1790192334.6436863,
-    "seen": 1790234593.5543907,
+    "mtime": 1791442473.3332844,
+    "seen": 1795593590.8717065,
     "ast_hash": "c9fa098e2ec8bdce9d6a0f8a64d2c6c0",
     "semantic_hash": ""
   },
   "public/map_annotator.html": {
-    "mtime": 1790024929.7512476,
-    "seen": 1790234593.5558126,
-    "ast_hash": "ef11b826b4ba30f6ade89a2b6bc3e768",
+    "mtime": 1791442474.0613916,
+    "seen": 1795593590.8718328,
+    "ast_hash": "436374a7ace349220b49fd893c9dce9c",
     "semantic_hash": ""
   },
   "src/components/room/JoinRoomModal.tsx": {
@@ -19356,15 +19356,15 @@
     "semantic_hash": "308591caf8af324ebd967686d727b44d"
   },
   "docs/superpowers/plans/2026-09-24-cooperative-party-turns.md": {
-    "mtime": 1790239100.5796752,
-    "seen": 1790239935.4644938,
-    "ast_hash": "ed3c446de0ed9d63d5b89fc082199011",
+    "mtime": 1791442473.5412416,
+    "seen": 1795593590.8717468,
+    "ast_hash": "a15f27fe2d79a95b4be805926911f560",
     "semantic_hash": ""
   },
   "docs/superpowers/specs/2026-09-24-cooperative-party-turns-design.md": {
-    "mtime": 1790236970.7990677,
-    "seen": 1790237849.3383596,
-    "ast_hash": "065d4304950ae495f347c09776e9ef5a",
+    "mtime": 1791442473.5560894,
+    "seen": 1795593590.8717997,
+    "ast_hash": "937f227d56f89d6a0f6d58f393dfba78",
     "semantic_hash": ""
   },
   "src/components/room/PartyTurnBar.tsx": {
@@ -19416,15 +19416,15 @@
     "semantic_hash": "bca74fee581e8ba764ed7b92fc24f5b4"
   },
   "docs/superpowers/plans/2026-09-24-prompt-caching-architecture.md": {
-    "mtime": 1790261993.7749908,
-    "seen": 1790262058.0530152,
-    "ast_hash": "c1a88a46fd13170f06eda85f646901d1",
+    "mtime": 1791442473.5442402,
+    "seen": 1795593590.8717542,
+    "ast_hash": "1830f9b9558ef32e8d98b05a57486310",
     "semantic_hash": ""
   },
   "docs/superpowers/specs/2026-09-24-prompt-caching-architecture-design.md": {
-    "mtime": 1790260001.892577,
-    "seen": 1790260441.1090584,
-    "ast_hash": "678c22fb9d97502de93bd0ef75cf2e40",
+    "mtime": 1791442473.5580888,
+    "seen": 1795593590.8718033,
+    "ast_hash": "f49c406e245fa774271967da79f89564",
     "semantic_hash": ""
   },
   "src/app/api/chat/__tests__/chat-caching.test.ts": {
@@ -19470,9 +19470,9 @@
     "semantic_hash": "4db759b9e4be304b398365e6efa94cfe"
   },
   "docs/superpowers/plans/2026-09-24-multiplayer-network-resilience.md": {
-    "mtime": 1790263292.2279112,
-    "seen": 1790263922.6447043,
-    "ast_hash": "f27c3affd701697737dbc18924f7efc0",
+    "mtime": 1791442473.54324,
+    "seen": 1795593590.8717504,
+    "ast_hash": "b6697bcbf8db2223f694a03f7ebdb739",
     "semantic_hash": ""
   },
   "src/lib/room/__tests__/room-combat-tool.test.ts": {
@@ -19560,15 +19560,15 @@
     "semantic_hash": "7bed14c8c68fcbca7cc42210681cca7a"
   },
   "docs/superpowers/plans/2026-09-25-page-routing-architecture.md": {
-    "mtime": 1790337207.7169158,
-    "seen": 1790338058.740414,
-    "ast_hash": "da24575c6a1803fc31f6d30e3088b8a3",
+    "mtime": 1791442473.5456548,
+    "seen": 1795593590.871762,
+    "ast_hash": "a65aa85763a1fb87a90299fb8d6d5d42",
     "semantic_hash": ""
   },
   "docs/superpowers/specs/2026-09-25-page-routing-architecture-design.md": {
-    "mtime": 1790337178.6907516,
-    "seen": 1790338058.741311,
-    "ast_hash": "4e246445dc4a5e42293e1b5b037ba188",
+    "mtime": 1791442473.559086,
+    "seen": 1795593590.8718069,
+    "ast_hash": "92cad30e29bbfbf9cd8c8cb0ec702937",
     "semantic_hash": ""
   },
   "src/app/api/combat/__tests__/import-character-slots-and-stats.test.ts": {
@@ -19608,15 +19608,15 @@
     "semantic_hash": "aeb1b0c6f93d456ab72233b07eac3606"
   },
   "docs/superpowers/plans/2026-09-25-room-streaming-and-sync.md": {
-    "mtime": 1790343034.3418941,
-    "seen": 1790343883.160038,
-    "ast_hash": "862d1429ed5f342ffa2377305de3e064",
+    "mtime": 1791442473.5488887,
+    "seen": 1795593590.8717685,
+    "ast_hash": "ace460eb9fb39df5c854812e1fdd1289",
     "semantic_hash": ""
   },
   "docs/superpowers/specs/2026-09-25-room-streaming-and-sync-design.md": {
-    "mtime": 1790342980.292094,
-    "seen": 1790343883.1621509,
-    "ast_hash": "2cde3aef3dbe176d321bd1a36a6d7989",
+    "mtime": 1791442473.5601966,
+    "seen": 1795593590.8718097,
+    "ast_hash": "cbaf5307c873e28c86a50d6e2e9cc8e3",
     "semantic_hash": ""
   },
   "src/lib/ai/__tests__/cost.test.ts": {
@@ -19626,9 +19626,9 @@
     "semantic_hash": "16eadae125a83bcae67a3c9b02cec2f7"
   },
   "docs/superpowers/plans/2026-09-25-prompt-cache-telemetry.md": {
-    "mtime": 1790344605.6996322,
-    "seen": 1790345103.0765328,
-    "ast_hash": "5b7801a9e74d00c6756b9f7cf5410f81",
+    "mtime": 1791442473.5477216,
+    "seen": 1795593590.8717651,
+    "ast_hash": "1ed52b1a98371486e3bcbc5b1c745f02",
     "semantic_hash": ""
   },
   "src/app/api/combat/[id]/route.ts": {
@@ -19662,9 +19662,9 @@
     "semantic_hash": "35d7dc14fe62dd82862c878e07ce91ea"
   },
   "docs/superpowers/plans/2026-09-25-combat-binding-and-view-fix.md": {
-    "mtime": 1790347443.872793,
-    "seen": 1790348255.0205266,
-    "ast_hash": "2a1cdade8c88d2c2ba06b4aa65f7ee01",
+    "mtime": 1791442473.5442402,
+    "seen": 1795593590.871758,
+    "ast_hash": "2740f29d77fa39d3ada249580290a816",
     "semantic_hash": ""
   },
   "src/lib/combat/__tests__/character-card-attacks-and-spells.test.ts": {
@@ -19674,10 +19674,10 @@
     "semantic_hash": "21fddd7d78bbe5c41f567a246c628325"
   },
   "src/lib/combat/character-adapter.ts": {
-    "mtime": 1794485890.4982586,
-    "seen": 1795590344.6829183,
-    "ast_hash": "755f51c36a133d42e513f811d057a352",
-    "semantic_hash": "755f51c36a133d42e513f811d057a352"
+    "mtime": 1795683678.7601924,
+    "seen": 1795684523.0733051,
+    "ast_hash": "3c85f057e5546891af59ba9c13f19f0e",
+    "semantic_hash": ""
   },
   "src/lib/combat/__tests__/bestiary-resolver.test.ts": {
     "mtime": 1791442478.4347198,
@@ -19694,8 +19694,8 @@
   "prisma/schema.sql": {
     "mtime": 1794482486.967399,
     "seen": 1795590344.6730437,
-    "ast_hash": "cfe0c0e800ca85254c41b5fdb62aed10",
-    "semantic_hash": "cfe0c0e800ca85254c41b5fdb62aed10"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "scripts/import-dndsu-fighter.py": {
     "mtime": 1794482486.968415,
@@ -19718,74 +19718,74 @@
   "scripts/migrations/001_create_rooms_schema.sql": {
     "mtime": 1791442474.1090825,
     "seen": 1795590344.673102,
-    "ast_hash": "f3ac45bc0a5a0c93fbef9f811fe26f2e",
-    "semantic_hash": "f3ac45bc0a5a0c93fbef9f811fe26f2e"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "scripts/migrations/002_add_combatant_monster_data.sql": {
     "mtime": 1791442474.110498,
     "seen": 1795590344.6731052,
-    "ast_hash": "b85b29ebd159ad59299e2240770ed63b",
-    "semantic_hash": "b85b29ebd159ad59299e2240770ed63b"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "scripts/migrations/003_room_turn_safety.sql": {
     "mtime": 1791442474.1126962,
     "seen": 1795590344.6731086,
-    "ast_hash": "082684bf5d3e53523f015a88b24f4282",
-    "semantic_hash": "082684bf5d3e53523f015a88b24f4282"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "scripts/migrations/004_room_read_policies.sql": {
     "mtime": 1791442474.114765,
     "seen": 1795590344.673111,
-    "ast_hash": "5a85123ca3db30f49a8d0b8c02201293",
-    "semantic_hash": "5a85123ca3db30f49a8d0b8c02201293"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "scripts/migrations/005_claim_orphan_campaigns.sql": {
     "mtime": 1791442474.1157632,
     "seen": 1795590344.6731138,
-    "ast_hash": "ef847bf5d0581d2172b97bb573cf1916",
-    "semantic_hash": "ef847bf5d0581d2172b97bb573cf1916"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "scripts/migrations/006_remove_default_stat_characters.sql": {
     "mtime": 1791442474.116764,
     "seen": 1795590344.6731167,
-    "ast_hash": "36328b73cda9a7e5f917a0aad6130a0e",
-    "semantic_hash": "36328b73cda9a7e5f917a0aad6130a0e"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "scripts/migrations/007_character_campaign_versions.sql": {
     "mtime": 1791442474.1191156,
     "seen": 1795590344.67312,
-    "ast_hash": "05568d8175ecadc4670effa8d286bf3a",
-    "semantic_hash": "05568d8175ecadc4670effa8d286bf3a"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "scripts/migrations/008_drop_character_snapshot.sql": {
     "mtime": 1791442474.1203082,
     "seen": 1795590344.6731234,
-    "ast_hash": "5bc0bc702ac1db61596a692fe5ba95fd",
-    "semantic_hash": "5bc0bc702ac1db61596a692fe5ba95fd"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "scripts/migrations/009_function_security_hardening.sql": {
     "mtime": 1791442474.1215706,
     "seen": 1795590344.6731265,
-    "ast_hash": "30b01311e58958a04cf3015e102dd374",
-    "semantic_hash": "30b01311e58958a04cf3015e102dd374"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "scripts/migrations/010_campaign_mode.sql": {
     "mtime": 1791442474.1225731,
     "seen": 1795590344.6731296,
-    "ast_hash": "2f6a13f168bb0c8ddae6e47c6ad64271",
-    "semantic_hash": "2f6a13f168bb0c8ddae6e47c6ad64271"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "scripts/migrations/011_campaign_starting_situation.sql": {
     "mtime": 1794482486.9727361,
     "seen": 1795590344.6731322,
-    "ast_hash": "ed32dba4590cce517a2a56f410a23fe6",
-    "semantic_hash": "ed32dba4590cce517a2a56f410a23fe6"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "scripts/migrations/012_combat_pending_reaction.sql": {
     "mtime": 1794489351.6190097,
     "seen": 1795590344.6731346,
-    "ast_hash": "c05dc280366911c7edbeca8253306c61",
-    "semantic_hash": "c05dc280366911c7edbeca8253306c61"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "src/app/api/campaign/__tests__/campaign-delete-versions.test.ts": {
     "mtime": 1794482486.97798,
@@ -19916,8 +19916,8 @@
   "src/data/compendium/monsters/monsters-manifest.json": {
     "mtime": 1791442477.5812538,
     "seen": 1795590344.6808019,
-    "ast_hash": "0df8afe803d75036445d743e56b934af",
-    "semantic_hash": "0df8afe803d75036445d743e56b934af"
+    "ast_hash": "",
+    "semantic_hash": ""
   },
   "src/hooks/__tests__/auth-redirect.test.ts": {
     "mtime": 1791442478.3776326,
@@ -20172,10 +20172,10 @@
     "semantic_hash": "b57d514b20c8005020a7eb810b15ce2c"
   },
   "src/lib/combat/__tests__/helpers/fighter-harness.ts": {
-    "mtime": 1794482487.1025217,
-    "seen": 1795590344.6828268,
-    "ast_hash": "72f6414ecdb235de7cbbbba1a4d65297",
-    "semantic_hash": "72f6414ecdb235de7cbbbba1a4d65297"
+    "mtime": 1795676962.2838185,
+    "seen": 1795678107.865789,
+    "ast_hash": "233c039a65f71d1f01a3bffcc127e8a7",
+    "semantic_hash": ""
   },
   "src/lib/combat/__tests__/invisibility.test.ts": {
     "mtime": 1791447560.4887526,
@@ -20256,10 +20256,10 @@
     "semantic_hash": "658a85326fc5839b22f519358ed2791c"
   },
   "src/lib/combat/class-defs.ts": {
-    "mtime": 1794485776.13176,
-    "seen": 1795590344.6829207,
-    "ast_hash": "0d466463cedf063231074efca22c8721",
-    "semantic_hash": "0d466463cedf063231074efca22c8721"
+    "mtime": 1795676945.4400532,
+    "seen": 1795678107.8789322,
+    "ast_hash": "03c4e311a5336bcb9a816d371953b49e",
+    "semantic_hash": ""
   },
   "src/lib/combat/class-features.ts": {
     "mtime": 1794482487.1162586,
@@ -20268,16 +20268,16 @@
     "semantic_hash": "a4cbf7d099f83037d4a62c3b186b3d60"
   },
   "src/lib/combat/class-hooks.ts": {
-    "mtime": 1794489176.648255,
-    "seen": 1795590344.6829255,
-    "ast_hash": "8e6cc4a946ce140f6dc19a461ab8a4b9",
-    "semantic_hash": "8e6cc4a946ce140f6dc19a461ab8a4b9"
+    "mtime": 1795676107.5003445,
+    "seen": 1795678107.879289,
+    "ast_hash": "68c6d5dbbac38c424a9a8d22d5116052",
+    "semantic_hash": ""
   },
   "src/lib/combat/class-kit.ts": {
-    "mtime": 1794482487.119024,
-    "seen": 1795590344.682928,
-    "ast_hash": "438a2e73e04baf676551b7d9544440aa",
-    "semantic_hash": "438a2e73e04baf676551b7d9544440aa"
+    "mtime": 1795678904.4617748,
+    "seen": 1795684523.0743043,
+    "ast_hash": "fd1425f9419bdd577aa8921e4be55bb6",
+    "semantic_hash": ""
   },
   "src/lib/combat/classes/barbarian-combat.ts": {
     "mtime": 1794482487.122019,
@@ -20292,10 +20292,10 @@
     "semantic_hash": "a52abeb4f45333914046bda18b388ffe"
   },
   "src/lib/combat/classes/combat-index.ts": {
-    "mtime": 1794486204.3757305,
-    "seen": 1795590344.6829357,
-    "ast_hash": "7db98cd14d8d13243460601967611cb6",
-    "semantic_hash": "7db98cd14d8d13243460601967611cb6"
+    "mtime": 1795593971.7807949,
+    "seen": 1795594539.6515214,
+    "ast_hash": "478704eecf6257732c113ed12898512b",
+    "semantic_hash": ""
   },
   "src/lib/combat/classes/rogue-combat.ts": {
     "mtime": 1794486187.8991687,
@@ -20332,12 +20332,6 @@
     "seen": 1795590344.6829505,
     "ast_hash": "85a275115826e972cfe5d529f196d072",
     "semantic_hash": "85a275115826e972cfe5d529f196d072"
-  },
-  "src/lib/combat/data/fighter-dndsu.json": {
-    "mtime": 1794482487.1367843,
-    "seen": 1795590344.6829562,
-    "ast_hash": "07e324a8cbe8dcd7338b5cfb577d7fea",
-    "semantic_hash": "07e324a8cbe8dcd7338b5cfb577d7fea"
   },
   "src/lib/combat/data/srd-class-features-ru.json": {
     "mtime": 1794482487.137918,
@@ -20388,10 +20382,10 @@
     "semantic_hash": "0f99e931945f542ef3ddf3428c16d90f"
   },
   "src/lib/combat/feature-mods.ts": {
-    "mtime": 1794486381.6551247,
-    "seen": 1795590344.6830313,
-    "ast_hash": "e7ebbb7e527837606e24f3bb575abea1",
-    "semantic_hash": "e7ebbb7e527837606e24f3bb575abea1"
+    "mtime": 1795676104.0663433,
+    "seen": 1795678107.8916147,
+    "ast_hash": "adfb5d1619c4ac67e03ea176e661caa0",
+    "semantic_hash": ""
   },
   "src/lib/combat/fighter-combat.ts": {
     "mtime": 1794489260.0277624,
@@ -20406,10 +20400,10 @@
     "semantic_hash": "426b6a9ddc245e9b65ad743b2dd790f2"
   },
   "src/lib/combat/fighter-subclasses.ts": {
-    "mtime": 1794482487.1647496,
-    "seen": 1795590344.6830385,
-    "ast_hash": "38b20d3760000260bfc1879245887075",
-    "semantic_hash": "38b20d3760000260bfc1879245887075"
+    "mtime": 1795850197.937392,
+    "seen": 1795850568.4054978,
+    "ast_hash": "a7a325f4b29c6b4baffb9cfbde97aec9",
+    "semantic_hash": ""
   },
   "src/lib/combat/formation.ts": {
     "mtime": 1794482487.166235,
@@ -20610,10 +20604,10 @@
     "semantic_hash": "90bdd8d92bee5492264dd0d26639dc1d"
   },
   "src/lib/combat/reactions.ts": {
-    "mtime": 1794489339.5818362,
-    "seen": 1795590344.6832595,
-    "ast_hash": "eb7092536a9a4f041c056e494e2e0d48",
-    "semantic_hash": "eb7092536a9a4f041c056e494e2e0d48"
+    "mtime": 1795676948.9703531,
+    "seen": 1795678107.9243894,
+    "ast_hash": "778c3a8ed42f95a68e27fc6db4061f3c",
+    "semantic_hash": ""
   },
   "src/lib/combat/rogue-pool.ts": {
     "mtime": 1794486086.1252496,
@@ -20812,5 +20806,395 @@
     "seen": 1795590344.6834507,
     "ast_hash": "9e1ca5bcf441dd3c552c11e9b59e64ee",
     "semantic_hash": "9e1ca5bcf441dd3c552c11e9b59e64ee"
+  },
+  "src/lib/combat/__tests__/race-primitives.test.ts": {
+    "mtime": 1795596447.784583,
+    "seen": 1795597133.4192948,
+    "ast_hash": "2f1c51ca7b048098cfc8896f6be85a9e",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-10-05-campaign-versions-1-db-and-sheet-site.md": {
+    "mtime": 1791442473.5500884,
+    "seen": 1795593590.8717718,
+    "ast_hash": "f0da1e626c4361d55aa685aff5f52de9",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-10-05-campaign-versions-2-master-site.md": {
+    "mtime": 1791442473.552088,
+    "seen": 1795593590.8717744,
+    "ast_hash": "53376d17551d0da2fa66654e5d613dd2",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-10-06-procedural-biome-maps.md": {
+    "mtime": 1791442473.553089,
+    "seen": 1795593590.8717778,
+    "ast_hash": "228d617a1b741b20ac1933afacbd48c5",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-10-06-procedural-cave-maps.md": {
+    "mtime": 1791442473.55409,
+    "seen": 1795593590.8717813,
+    "ast_hash": "e97304fd1eb1b39c60631c85e93119fc",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-10-08-spell-zones-and-mechanics.md": {
+    "mtime": 1791443790.6495607,
+    "seen": 1795593590.8717842,
+    "ast_hash": "785696292c88e03810d032f09d976434",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-10-09-campaign-setup-unification.md": {
+    "mtime": 1794482486.9533317,
+    "seen": 1795593590.871787,
+    "ast_hash": "4cfaaf98a05e00608a41546f5f96f4b8",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-11-25-dnd-shared-races-combat.md": {
+    "mtime": 1795591727.4119358,
+    "seen": 1795593590.8717902,
+    "ast_hash": "b8a69bb48d74d1f8e801fca4366179e2",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-11-25-security-hardening.md": {
+    "mtime": 1795588631.8661776,
+    "seen": 1795593590.8717923,
+    "ast_hash": "9cfa326b6e1d46aaa0edb0e609f13343",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-10-05-campaign-character-versions-design.md": {
+    "mtime": 1791442473.5616214,
+    "seen": 1795593590.8718126,
+    "ast_hash": "6cf992a896b3a029cd7116237f68e3ba",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-10-06-procedural-biome-maps-design.md": {
+    "mtime": 1791442473.5626428,
+    "seen": 1795593590.871815,
+    "ast_hash": "db6cc172495d9be5d7fad82341ef528c",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-10-06-procedural-cave-maps-design.md": {
+    "mtime": 1791442473.5636392,
+    "seen": 1795593590.8718176,
+    "ast_hash": "c84034500293b22609b8a800a07a5cdc",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-10-08-spell-zones-and-mechanics-design.md": {
+    "mtime": 1791443763.2744613,
+    "seen": 1795593590.8718195,
+    "ast_hash": "2208c21ee80ca7248f2369e98c9d1f80",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-10-09-campaign-setup-unification-design.md": {
+    "mtime": 1794482486.95494,
+    "seen": 1795593590.871823,
+    "ast_hash": "5dab8b41882f4b2e796f3fc9303ad6f3",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-11-25-dnd-shared-races-combat-design.md": {
+    "mtime": 1795591570.4024904,
+    "seen": 1795593590.8718257,
+    "ast_hash": "5eb03624d853466b4032ecc740c0f76b",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-11-25-security-hardening-design.md": {
+    "mtime": 1795588556.8194845,
+    "seen": 1795593590.8718283,
+    "ast_hash": "5a33156d86aca64915ddff172062d7f6",
+    "semantic_hash": ""
+  },
+  "public/textures/cc0/LICENSE.txt": {
+    "mtime": 1791442474.064648,
+    "seen": 1795593590.871841,
+    "ast_hash": "64a023e4104919df532d1168e491ac16",
+    "semantic_hash": ""
+  },
+  "src/lib/combat/data/README.md": {
+    "mtime": 1794482487.1290507,
+    "seen": 1795593590.8718445,
+    "ast_hash": "69908b5e36147f194aa92fffb671f61d",
+    "semantic_hash": ""
+  },
+  "archive/maps/arena.jpg": {
+    "mtime": 1791442473.3580694,
+    "seen": 1795593590.8718476,
+    "ast_hash": "69cd3b7a9f03b383d237ce24cfeacb75",
+    "semantic_hash": ""
+  },
+  "archive/maps/city.jpg": {
+    "mtime": 1791442473.3780725,
+    "seen": 1795593590.871851,
+    "ast_hash": "ecc08898f38c23c02d4543e427b14694",
+    "semantic_hash": ""
+  },
+  "archive/maps/desert.jpg": {
+    "mtime": 1791442473.4155111,
+    "seen": 1795593590.8718534,
+    "ast_hash": "d5de546f990144e0c4cabd32da59ca18",
+    "semantic_hash": ""
+  },
+  "archive/maps/dungeon.png": {
+    "mtime": 1791442473.4344516,
+    "seen": 1795593590.8718562,
+    "ast_hash": "35486f76a2f77ba5876a1128e748da08",
+    "semantic_hash": ""
+  },
+  "archive/maps/forest.jpg": {
+    "mtime": 1791442473.4548626,
+    "seen": 1795593590.8718584,
+    "ast_hash": "42516a4042e252d79a412010440e10a2",
+    "semantic_hash": ""
+  },
+  "archive/maps/lava.jpg": {
+    "mtime": 1791442473.463865,
+    "seen": 1795593590.871862,
+    "ast_hash": "6690be2f337efd21bb7e73cde064bab7",
+    "semantic_hash": ""
+  },
+  "archive/maps/ship.jpg": {
+    "mtime": 1791442473.4758523,
+    "seen": 1795593590.8718657,
+    "ast_hash": "a8a55358dcbd76163160508b81d3e68e",
+    "semantic_hash": ""
+  },
+  "archive/maps/snowy_mountain.jpg": {
+    "mtime": 1791442473.489851,
+    "seen": 1795593590.8718684,
+    "ast_hash": "65640d305a1f2759e4f858e4558db468",
+    "semantic_hash": ""
+  },
+  "archive/maps/swamp.jpg": {
+    "mtime": 1791442473.504299,
+    "seen": 1795593590.8718708,
+    "ast_hash": "bc451ff7545aac271af02979abed0c31",
+    "semantic_hash": ""
+  },
+  "archive/maps/tavern.jpg": {
+    "mtime": 1791442473.5168624,
+    "seen": 1795593590.8718743,
+    "ast_hash": "1d0c93d96441ed0d66fed0c97932d2cd",
+    "semantic_hash": ""
+  },
+  "archive/maps/temple.jpg": {
+    "mtime": 1791442473.5317116,
+    "seen": 1795593590.8718774,
+    "ast_hash": "5f1f362254d3cb3f8fb3cb78bb5fc2c5",
+    "semantic_hash": ""
+  },
+  "public/textures/cc0/brick.png": {
+    "mtime": 1791442474.067075,
+    "seen": 1795593590.8718848,
+    "ast_hash": "6749e56d264d2800654a712c33d8f846",
+    "semantic_hash": ""
+  },
+  "public/textures/cc0/cave-floor-a.png": {
+    "mtime": 1791442474.0680761,
+    "seen": 1795593590.8718877,
+    "ast_hash": "f363353ba5fe4f3b1d7cd0b989ccd8bb",
+    "semantic_hash": ""
+  },
+  "public/textures/cc0/cave-floor-b.png": {
+    "mtime": 1791442474.0701144,
+    "seen": 1795593590.87189,
+    "ast_hash": "2348581d82c4d0382bda95af4e8ebaff",
+    "semantic_hash": ""
+  },
+  "public/textures/cc0/cave-rock.png": {
+    "mtime": 1791442474.0725374,
+    "seen": 1795593590.8718927,
+    "ast_hash": "6580b2956deaa2f8a2f9d6f0824c0bab",
+    "semantic_hash": ""
+  },
+  "public/textures/cc0/cobble.png": {
+    "mtime": 1791442474.0735385,
+    "seen": 1795593590.8718953,
+    "ast_hash": "dc4c51fc35b9035f849160d1323da639",
+    "semantic_hash": ""
+  },
+  "public/textures/cc0/dirt-path.png": {
+    "mtime": 1791442474.076591,
+    "seen": 1795593590.8718977,
+    "ast_hash": "3259bea6955942bb13ba5baeaad6062b",
+    "semantic_hash": ""
+  },
+  "public/textures/cc0/grass-a.png": {
+    "mtime": 1791442474.078588,
+    "seen": 1795593590.8719003,
+    "ast_hash": "836aa6491c986747c698cf390a736c78",
+    "semantic_hash": ""
+  },
+  "public/textures/cc0/grass-b.png": {
+    "mtime": 1791442474.0799937,
+    "seen": 1795593590.8719027,
+    "ast_hash": "1de36e34782abd40e811ba2b0b6d5b49",
+    "semantic_hash": ""
+  },
+  "public/textures/cc0/roof.png": {
+    "mtime": 1791442474.0819943,
+    "seen": 1795593590.8719063,
+    "ast_hash": "52c35e8e3f11cb8a22531d6106386bbf",
+    "semantic_hash": ""
+  },
+  "public/textures/cc0/sand-a.png": {
+    "mtime": 1791442474.084206,
+    "seen": 1795593590.8719091,
+    "ast_hash": "3db2f39fb6ece1abe97e1fd1aee003a5",
+    "semantic_hash": ""
+  },
+  "public/textures/cc0/sand-b.png": {
+    "mtime": 1791442474.085639,
+    "seen": 1795593590.8719122,
+    "ast_hash": "0008d7304241cdcfa408134159c059ea",
+    "semantic_hash": ""
+  },
+  "public/textures/cc0/stone-tiles.png": {
+    "mtime": 1791442474.088205,
+    "seen": 1795593590.8719153,
+    "ast_hash": "f1dda8a72f2438cde539561fc9e3ebd9",
+    "semantic_hash": ""
+  },
+  "public/textures/cc0/wood-floor.png": {
+    "mtime": 1791442474.0897048,
+    "seen": 1795593590.8719187,
+    "ast_hash": "d69732ae8093f1b0a5f680b3b21c959e",
+    "semantic_hash": ""
+  },
+  "src/lib/combat/__tests__/helpers/race-harness.ts": {
+    "mtime": 1795676963.5231888,
+    "seen": 1795678107.8657973,
+    "ast_hash": "18e600acbf9771eb4c36913a68a7e3f9",
+    "semantic_hash": ""
+  },
+  "src/lib/combat/__tests__/race-registry.test.ts": {
+    "mtime": 1795595346.7588792,
+    "seen": 1795597133.4193027,
+    "ast_hash": "766cdc34eefab505042554f9fcedbd4b",
+    "semantic_hash": ""
+  },
+  "src/lib/combat/races/combat-index.ts": {
+    "mtime": 1795679949.5045252,
+    "seen": 1795684523.125269,
+    "ast_hash": "d89c0d3614324ed30d227d6142233d36",
+    "semantic_hash": ""
+  },
+  "src/lib/combat/races/race-combat.ts": {
+    "mtime": 1795680730.8785298,
+    "seen": 1795684523.125778,
+    "ast_hash": "7cdb9ae7363325581779599c4708e629",
+    "semantic_hash": ""
+  },
+  "src/lib/combat/races/race-defs.ts": {
+    "mtime": 1795850209.6277585,
+    "seen": 1795850568.4376588,
+    "ast_hash": "43b3af9fe04125ff30a9a2aaaa99ab84",
+    "semantic_hash": ""
+  },
+  "src/lib/combat/races/rules-index.ts": {
+    "mtime": 1795679948.3579323,
+    "seen": 1795684523.1257904,
+    "ast_hash": "e49327b234a7159304e7f502a22c2e74",
+    "semantic_hash": ""
+  },
+  "src/lib/combat/__tests__/race-adapter.test.ts": {
+    "mtime": 1795595946.565773,
+    "seen": 1795597133.4192827,
+    "ast_hash": "c615c4b3b40ccb1fede2f37367c7e9cc",
+    "semantic_hash": ""
+  },
+  "src/lib/combat/__tests__/races-phb.test.ts": {
+    "mtime": 1795597425.3936043,
+    "seen": 1795597574.6192267,
+    "ast_hash": "1bbcb0bf5e935fdfdb9d637e90bae68e",
+    "semantic_hash": ""
+  },
+  "src/lib/combat/races/core-phb-combat.ts": {
+    "mtime": 1795683680.8727777,
+    "seen": 1795684523.125279,
+    "ast_hash": "48f7264030c3cdf002714f16b69d79e4",
+    "semantic_hash": ""
+  },
+  "src/lib/combat/races/core-phb.ts": {
+    "mtime": 1795679946.6667418,
+    "seen": 1795684523.1252868,
+    "ast_hash": "a76a3123e429296fcd8d776eb92761a1",
+    "semantic_hash": ""
+  },
+  "src/lib/combat/__tests__/races-volo.test.ts": {
+    "mtime": 1795599606.8514318,
+    "seen": 1795599753.4661033,
+    "ast_hash": "d65cd358d4e409a0d8dd58dbc122c838",
+    "semantic_hash": ""
+  },
+  "src/lib/combat/races/legacy-volo-mtf-combat.ts": {
+    "mtime": 1795680733.6991253,
+    "seen": 1795684523.125309,
+    "ast_hash": "4ff0db513e947312d2a13f88888a4396",
+    "semantic_hash": ""
+  },
+  "src/lib/combat/races/legacy-volo-mtf.ts": {
+    "mtime": 1795599347.1558466,
+    "seen": 1795599753.5206566,
+    "ast_hash": "9229deab49e2b1a3d446ca76dfd47092",
+    "semantic_hash": ""
+  },
+  "src/lib/combat/__tests__/races-settings.test.ts": {
+    "mtime": 1795678976.9789145,
+    "seen": 1795684523.0674555,
+    "ast_hash": "9e6daaa0a6f34e8ce20f84cdc8aa292b",
+    "semantic_hash": ""
+  },
+  "src/lib/combat/races/legacy-settings-combat.ts": {
+    "mtime": 1795680064.213873,
+    "seen": 1795684523.1252947,
+    "ast_hash": "e149dde5456665e060dd9bd212392118",
+    "semantic_hash": ""
+  },
+  "src/lib/combat/races/legacy-settings.ts": {
+    "mtime": 1795678909.081931,
+    "seen": 1795684523.125301,
+    "ast_hash": "d3fa5a7af850afbe2f0ac9755b6f9f10",
+    "semantic_hash": ""
+  },
+  "src/lib/combat/__tests__/deferred-fixes.test.ts": {
+    "mtime": 1795683621.4393823,
+    "seen": 1795684523.0524147,
+    "ast_hash": "3abee3e79388d725f86f985addb93c8e",
+    "semantic_hash": ""
+  },
+  "src/lib/combat/__tests__/races-completeness.test.ts": {
+    "mtime": 1795679812.1584928,
+    "seen": 1795684523.0671184,
+    "ast_hash": "9d7ed28cd0f8af09a8d9d0a6c0075d5d",
+    "semantic_hash": ""
+  },
+  "src/lib/combat/__tests__/races-mpmm.test.ts": {
+    "mtime": 1795680773.0665686,
+    "seen": 1795684523.067123,
+    "ast_hash": "301482d23626442127d688cb44b1de55",
+    "semantic_hash": ""
+  },
+  "src/lib/combat/races/mpmm-combat.ts": {
+    "mtime": 1795680770.3280175,
+    "seen": 1795684523.1257622,
+    "ast_hash": "2fe834b31ea2f5333b6f5e352f9dcb68",
+    "semantic_hash": ""
+  },
+  "src/lib/combat/races/mpmm.ts": {
+    "mtime": 1795683679.7552152,
+    "seen": 1795684523.1257694,
+    "ast_hash": "f7ea081862f0ce494e27e00d2234dcee",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-11-28-dnd-shared-stage-1-core.md": {
+    "mtime": 1795848332.931338,
+    "seen": 1795850568.4921021,
+    "ast_hash": "43a7522c0d5e5b8d0ff66d322ad13809",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/specs/2026-11-28-dnd-shared-unification-design.md": {
+    "mtime": 1795848127.697427,
+    "seen": 1795850568.4982178,
+    "ast_hash": "ebd288ea004cece424c2cf1bac69c946",
+    "semantic_hash": ""
   }
 }

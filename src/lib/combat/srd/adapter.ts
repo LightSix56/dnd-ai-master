@@ -2,7 +2,7 @@
 import type { ActionParameters, AttackKind, ActionCost, DamageRoll, CharacterPreset } from "../types";
 import type { AttackDefinition, SpellDefinition, AbilityDefinition } from "../library-data";
 
-import { SPELLS } from "dnd-shared";
+import { SPELLS, findSpell } from "dnd-shared";
 import monstersData from "./data/monsters.json";
 import weaponsData from "./data/equipment.json";
 
@@ -97,18 +97,33 @@ export const getAllSpells = getAllCombatSpells;
 export const getSpell = getSRDSpell;
 export const searchSpells = searchSRDSpells;
 
+function toCombatSRDSpell(spell: ReturnType<typeof findSpell>): SRDSpell | undefined {
+  if (!spell) return undefined;
+  const byMasterId = spell.masterRecord?.id
+    ? spellsByName.get(spell.masterRecord.id.toLowerCase())
+    : undefined;
+  if (byMasterId) return byMasterId;
+  return (
+    spellsByName.get(spell.id.toLowerCase()) ||
+    spellsByName.get(spell.name.toLowerCase()) ||
+    spellsByNameEn.get(spell.nameEn.toLowerCase())
+  );
+}
+
 export function getSRDSpell(nameOrQuery: string): SRDSpell | undefined {
   if (!nameOrQuery) return undefined;
   const q = nameOrQuery.trim().toLowerCase();
-  return (
-    spellsByName.get(q) ||
-    spellsByNameEn.get(q) ||
-    allCombatSpellsList.find(
-      (s) =>
-        s.name.toLowerCase().includes(q) ||
-        s.nameEn.toLowerCase().includes(q) ||
-        s.id.toLowerCase() === q
-    )
+  const exact = spellsByName.get(q) || spellsByNameEn.get(q);
+  if (exact) return exact;
+
+  const shared = toCombatSRDSpell(findSpell(nameOrQuery));
+  if (shared) return shared;
+
+  return allCombatSpellsList.find(
+    (s) =>
+      s.name.toLowerCase().includes(q) ||
+      s.nameEn.toLowerCase().includes(q) ||
+      s.id.toLowerCase() === q
   );
 }
 
