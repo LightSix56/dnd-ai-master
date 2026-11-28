@@ -314,14 +314,18 @@ export function findRaceData(
   const want = norm(String(raceQuery || ""));
   if (!want) return null;
 
+  // Расу выбирает общий поиск dnd-shared (с разрешением Legacy vs MPMM). Подраса сначала ищется
+  // локально: только здесь есть pattern из правил подрас; поиск dnd-shared мягче (startsWith/includes)
+  // и остаётся запасным вариантом.
   const shared = findRace(raceQuery, subraceQuery);
   if (shared) {
     const race = shared.race as unknown as RaceData;
     const subrace =
-      (shared.subrace as unknown as SubraceData | undefined) ??
-      matchSubrace(race, subraceQuery);
+      matchSubrace(race, subraceQuery) ?? (shared.subrace as unknown as SubraceData | undefined);
     return { race, subrace };
   }
+
+  // Запасной путь для запросов, которые общий поиск не знает (pattern из правил рас).
 
   const combinedQuery = `${raceQuery ?? ""} ${subraceQuery ?? ""}`;
   const wantsMpmm = /\bmpmm\b|\(mpmm\)|-mpmm|мультивселен/i.test(combinedQuery);

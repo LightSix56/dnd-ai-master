@@ -85,7 +85,8 @@
   - `src/lib/combat/srd/adapter.ts` переходит на `findSpell` из `dnd-shared` там, где это упрощает поиск (сохраняя `combatSpells("srd" | "expanded")` и все экспорты `library-data.ts`).
 - Этапы 2–4:
   - `class-defs.ts` и `class-features.ts` переходят с `class-subclasses.json` и `srd-class-features*.json` на `dnd-shared/classes` (удаляется `scripts/import-sheet-classes.mjs`).
-  - `srd/adapter.ts` переходит с `srd/data/equipment.json`, `srd/data/monsters.json`, `srd/data/conditions.json` на `dnd-shared/items`, `dnd-shared/monsters`, `dnd-shared/conditions`.
+  - `srd/adapter.ts` переходит с `srd/data/equipment.json`, `srd/data/monsters.json` на `dnd-shared/items`, `dnd-shared/monsters`. `srd/data/conditions.json` в коде мастера никто не читал (состояния боя описаны в движке), поэтому файл просто удалён, а `dnd-shared/conditions` на сайте мастера не подключается: он нужен листу.
+  - В `dnd-shared/classes` три подкласса, которых не было в прежних данных мастера: Рыцарь Пурпурного дракона (Воин, правила есть в `fighter-subclasses.ts`), Лунное чародейство (Чародей) и Магия гравитургии (Волшебник). Правила для двух последних появятся вместе с классами Чародей и Волшебник (см. план в `AGENTS.md`).
   - Боевая логика в `src/lib/combat/classes/*`, `src/lib/combat/races/*` и `engine.ts` не переносится в `dnd-shared` и продолжает работать поверх общих данных.
 
 ---
