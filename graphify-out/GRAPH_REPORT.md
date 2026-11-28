@@ -1,16 +1,16 @@
 # Graph Report - ai_master_n_battle  (2026-11-28)
 
 ## Corpus Check
-- 3504 files · ~2,325,986 words
+- 3504 files · ~2,325,109 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 4138 nodes · 12243 edges · 182 communities (134 shown, 42 thin omitted)
+- 4146 nodes · 12250 edges · 189 communities (142 shown, 42 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 180 edges (avg confidence: 0.82)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `a2caf3ec`
+- Built from commit: `4e2d47f4`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -19,60 +19,60 @@
 - engine.ts
 - class-kit.ts
 - package.json
-- CombatView.tsx
+- react
 - fighter-combat.ts
 - race-combat.ts
 - bot.ts
 - dependencies
 - Combatant
-- vitest
-- supabase/client.ts
+- db.ts
+- getSupabaseAdminClient
 - rules.ts
-- performAttack
+- vitest
 - manual-combat-runner.ts
 - procgen/index.ts
-- party-leveled.ts
+- createClient
 - race-adapter.test.ts
 - library-data.ts
-- dm-context.test.ts
+- compact.ts
 - Field
-- core-phb.ts
-- MonsterManifestEntry
+- chat/route.ts
+- system-prompt.ts
 - story-arc.ts
 - maps/types.ts
-- d20-helper.ts
+- D20RollModal.tsx
 - fake-supabase.ts
 - import-character.ts
 - ssrf.ts
-- Attack
-- CombatGrid.tsx
+- serialize.ts
+- CombatView
 - race-defs.ts
 - AI Dungeon Master — D&D 5e Solo
 - sheet-store.ts
 - render-map.ts
 - tools.ts
 - Hotbar.tsx
-- react
+- RoomLobby.tsx
 - Review Focus
-- reactions.ts
-- generateEncounter
+- races-settings.test.ts
+- CombatGrid.tsx
 - monsters/types.ts
-- legacy-settings.ts
-- DnDApp
+- core-phb.ts
+- DnDApp.tsx
 - TacticalMapPreset
 - cave.ts
 - use-toast.ts
-- import-character/route.ts
+- class-features.test.ts
 - archetype-solver.ts
 - alert-dialog.tsx
-- core-phb-combat.ts
+- distanceFt
 - setup-params.ts
-- party-arc-generator.ts
+- combat/types.ts
 - fighter-subclasses.ts
 - formation.ts
-- abilityByKey
+- .mark
 - class-features.ts
-- MapElement
+- presets/index.ts
 - bestiary-resolver.ts
 - sheet-attacks.ts
 - loot-generator.ts
@@ -84,7 +84,7 @@
 - Supabase
 - components.json
 - layout.tsx
-- barbarian-combat.ts
+- barbarian.ts
 - Review Focus
 - canonical-biomes.ts
 - Review Focus
@@ -93,26 +93,26 @@
 - File Structure
 - CharacterCard.tsx
 - import-foundry-class-features.py
-- distanceFt
+- rogue-combat.ts
 - Спецификация: Система совместного пошагового хода отряда (Cooperative Party Turns)
 - Дизайн: Объединение всех справочников D&D 5e (2014) в общую библиотеку `dnd-shared`
 - room-service.ts
 - Review Focus
 - Архитектурная спецификация: Оптимизация Prompt Caching по стандартам DeepSeek Harness
 - Architecture Design: Multi-Page Routing Architecture
-- Cell
-- combat/types.ts
+- carousel.tsx
+- monster-adapter.ts
 - Global Constraints
 - Global Constraints
 - Архитектурный дизайн: Синхронизация комнаты, живой стриминг ответов Мастера и учёт токенов
 - Процедурные карты боя: пещера
-- class-defs.ts
+- ai
 - Section Definitions
 - Глобальные ограничения
 - Global Constraints
 - Changelog
 - Changelog
-- encounter-generator.test.ts
+- models.ts
 - callback/route.ts
 - Архитектура
 - generator.ts
@@ -121,7 +121,7 @@
 - Global Constraints
 - Global Constraints
 - Architecture & Changes
-- generator-lvl1-matrix.test.ts
+- ephemeral-tail.ts
 - supabase/types.ts
 - Global Constraints
 - Multiplayer Network Infrastructure & Gameplay Resilience Implementation Plan
@@ -135,12 +135,13 @@
 - network-banner.js
 - prepare-prisma-for-env.js
 - redirects.test.tsx
-- bot-tactics.test.ts
-- ReactionScope
-- multiattack.test.ts
+- movement.ts
+- scripts
+- CoopTurnBar.tsx
 - data/README.md
 - encounter-generator.ts
 - Спецификация: Инвентарь, Зелья и Расходники в ИИ-Мастере и Тактическом Бою
+- srdAbilityDefinitions
 - import-dndsu-fighter.py
 - vercel.json
 - advanced-full-text-search.md
@@ -178,14 +179,21 @@
 - eslint.config.mjs
 - .mcp.json
 - postcss.config.mjs
+- pacing-director.test.ts
 - devDependencies
-- c
+- validation.ts
+- frozen-prefix.ts
 - open-map-service.ts
+- File Structure
 - zones.ts
-- biome-matcher.ts
+- animations.ts
+- AttacksAbilitiesEditor
 - spawn-director.ts
+- CharacterInventoryModal
+- grid.ts
+- collapsible.tsx
 - aoe-templates.ts
-- DnDApp.tsx
+- CharacterPickerModal.tsx
 - combat-access.ts
 - form.tsx
 - LibraryItemEditorModal
@@ -205,181 +213,181 @@
 10. `db` - 69 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `main()` --calls--> `resolveStoryModel()`  [EXTRACTED]
+  scripts/check-polza-ping.ts → src/lib/ai/models.ts
 - `checkAllTables()` --calls--> `getSupabaseAdminClient()`  [EXTRACTED]
   scripts/check-supabase-rooms.ts → src/lib/supabase/client.ts
+- `main()` --calls--> `createClient()`  [EXTRACTED]
+  scripts/consult-dm-prompt.ts → src/lib/ai/client.ts
 - `inspectCharactersSchema()` --calls--> `getSupabaseAdminClient()`  [EXTRACTED]
   scripts/inspect-characters.ts → src/lib/supabase/client.ts
 - `inspectData()` --calls--> `getSupabaseAdminClient()`  [EXTRACTED]
   scripts/inspect-data.ts → src/lib/supabase/client.ts
-- `listCharacters()` --calls--> `getSupabaseAdminClient()`  [EXTRACTED]
-  scripts/list-chars.ts → src/lib/supabase/client.ts
-- `listUsers()` --calls--> `getSupabaseAdminClient()`  [EXTRACTED]
-  scripts/list-users.ts → src/lib/supabase/client.ts
 
 ## Import Cycles
-- 3-file cycle: `src/lib/combat/classes/combat-index.ts -> src/lib/combat/fighter-combat.ts -> src/lib/combat/engine.ts -> src/lib/combat/classes/combat-index.ts`
 - 3-file cycle: `src/lib/combat/classes/barbarian-combat.ts -> src/lib/combat/engine.ts -> src/lib/combat/classes/combat-index.ts -> src/lib/combat/classes/barbarian-combat.ts`
 - 3-file cycle: `src/lib/combat/classes/combat-index.ts -> src/lib/combat/classes/rogue-combat.ts -> src/lib/combat/engine.ts -> src/lib/combat/classes/combat-index.ts`
-- 4-file cycle: `src/lib/combat/classes/combat-index.ts -> src/lib/combat/races/combat-index.ts -> src/lib/combat/races/race-combat.ts -> src/lib/combat/engine.ts -> src/lib/combat/classes/combat-index.ts`
+- 3-file cycle: `src/lib/combat/classes/combat-index.ts -> src/lib/combat/fighter-combat.ts -> src/lib/combat/engine.ts -> src/lib/combat/classes/combat-index.ts`
 - 4-file cycle: `src/lib/combat/class-kit.ts -> src/lib/combat/engine.ts -> src/lib/combat/classes/combat-index.ts -> src/lib/combat/classes/barbarian-combat.ts -> src/lib/combat/class-kit.ts`
 - 4-file cycle: `src/lib/combat/class-kit.ts -> src/lib/combat/engine.ts -> src/lib/combat/classes/combat-index.ts -> src/lib/combat/classes/rogue-combat.ts -> src/lib/combat/class-kit.ts`
 - 4-file cycle: `src/lib/combat/classes/combat-index.ts -> src/lib/combat/races/combat-index.ts -> src/lib/combat/races/core-phb-combat.ts -> src/lib/combat/engine.ts -> src/lib/combat/classes/combat-index.ts`
 - 4-file cycle: `src/lib/combat/classes/combat-index.ts -> src/lib/combat/races/combat-index.ts -> src/lib/combat/races/legacy-settings-combat.ts -> src/lib/combat/engine.ts -> src/lib/combat/classes/combat-index.ts`
 - 4-file cycle: `src/lib/combat/classes/combat-index.ts -> src/lib/combat/races/combat-index.ts -> src/lib/combat/races/legacy-volo-mtf-combat.ts -> src/lib/combat/engine.ts -> src/lib/combat/classes/combat-index.ts`
 - 4-file cycle: `src/lib/combat/classes/combat-index.ts -> src/lib/combat/races/combat-index.ts -> src/lib/combat/races/mpmm-combat.ts -> src/lib/combat/engine.ts -> src/lib/combat/classes/combat-index.ts`
-- 5-file cycle: `src/lib/combat/class-kit.ts -> src/lib/combat/engine.ts -> src/lib/combat/classes/combat-index.ts -> src/lib/combat/races/combat-index.ts -> src/lib/combat/races/race-combat.ts -> src/lib/combat/class-kit.ts`
-- 5-file cycle: `src/lib/combat/classes/combat-index.ts -> src/lib/combat/races/combat-index.ts -> src/lib/combat/races/core-phb-combat.ts -> src/lib/combat/races/race-combat.ts -> src/lib/combat/engine.ts -> src/lib/combat/classes/combat-index.ts`
-- 5-file cycle: `src/lib/combat/classes/combat-index.ts -> src/lib/combat/races/combat-index.ts -> src/lib/combat/races/legacy-settings-combat.ts -> src/lib/combat/races/race-combat.ts -> src/lib/combat/engine.ts -> src/lib/combat/classes/combat-index.ts`
-- 5-file cycle: `src/lib/combat/classes/combat-index.ts -> src/lib/combat/races/combat-index.ts -> src/lib/combat/races/legacy-volo-mtf-combat.ts -> src/lib/combat/races/race-combat.ts -> src/lib/combat/engine.ts -> src/lib/combat/classes/combat-index.ts`
-- 5-file cycle: `src/lib/combat/classes/combat-index.ts -> src/lib/combat/races/combat-index.ts -> src/lib/combat/races/mpmm-combat.ts -> src/lib/combat/races/race-combat.ts -> src/lib/combat/engine.ts -> src/lib/combat/classes/combat-index.ts`
+- 4-file cycle: `src/lib/combat/classes/combat-index.ts -> src/lib/combat/races/combat-index.ts -> src/lib/combat/races/race-combat.ts -> src/lib/combat/engine.ts -> src/lib/combat/classes/combat-index.ts`
 - 5-file cycle: `src/lib/combat/class-kit.ts -> src/lib/combat/engine.ts -> src/lib/combat/classes/combat-index.ts -> src/lib/combat/races/combat-index.ts -> src/lib/combat/races/core-phb-combat.ts -> src/lib/combat/class-kit.ts`
+- 5-file cycle: `src/lib/combat/classes/combat-index.ts -> src/lib/combat/races/combat-index.ts -> src/lib/combat/races/core-phb-combat.ts -> src/lib/combat/races/race-combat.ts -> src/lib/combat/engine.ts -> src/lib/combat/classes/combat-index.ts`
 - 5-file cycle: `src/lib/combat/class-kit.ts -> src/lib/combat/engine.ts -> src/lib/combat/classes/combat-index.ts -> src/lib/combat/races/combat-index.ts -> src/lib/combat/races/legacy-settings-combat.ts -> src/lib/combat/class-kit.ts`
+- 5-file cycle: `src/lib/combat/classes/combat-index.ts -> src/lib/combat/races/combat-index.ts -> src/lib/combat/races/legacy-settings-combat.ts -> src/lib/combat/races/race-combat.ts -> src/lib/combat/engine.ts -> src/lib/combat/classes/combat-index.ts`
 - 5-file cycle: `src/lib/combat/class-kit.ts -> src/lib/combat/engine.ts -> src/lib/combat/classes/combat-index.ts -> src/lib/combat/races/combat-index.ts -> src/lib/combat/races/legacy-volo-mtf-combat.ts -> src/lib/combat/class-kit.ts`
+- 5-file cycle: `src/lib/combat/classes/combat-index.ts -> src/lib/combat/races/combat-index.ts -> src/lib/combat/races/legacy-volo-mtf-combat.ts -> src/lib/combat/races/race-combat.ts -> src/lib/combat/engine.ts -> src/lib/combat/classes/combat-index.ts`
 - 5-file cycle: `src/lib/combat/class-kit.ts -> src/lib/combat/engine.ts -> src/lib/combat/classes/combat-index.ts -> src/lib/combat/races/combat-index.ts -> src/lib/combat/races/mpmm-combat.ts -> src/lib/combat/class-kit.ts`
+- 5-file cycle: `src/lib/combat/classes/combat-index.ts -> src/lib/combat/races/combat-index.ts -> src/lib/combat/races/mpmm-combat.ts -> src/lib/combat/races/race-combat.ts -> src/lib/combat/engine.ts -> src/lib/combat/classes/combat-index.ts`
+- 5-file cycle: `src/lib/combat/class-kit.ts -> src/lib/combat/engine.ts -> src/lib/combat/classes/combat-index.ts -> src/lib/combat/races/combat-index.ts -> src/lib/combat/races/race-combat.ts -> src/lib/combat/class-kit.ts`
 
-## Communities (182 total, 42 thin omitted)
+## Communities (189 total, 42 thin omitted)
 
 ### Community 0 - "cn"
 Cohesion: 0.02
-Nodes (128): cmdk, input-otp, @radix-ui/react-accordion, @radix-ui/react-context-menu, @radix-ui/react-dialog, @radix-ui/react-dropdown-menu, @radix-ui/react-menubar, @radix-ui/react-navigation-menu (+120 more)
+Nodes (118): cmdk, @radix-ui/react-context-menu, @radix-ui/react-dialog, @radix-ui/react-dropdown-menu, @radix-ui/react-menubar, @radix-ui/react-navigation-menu, @radix-ui/react-slot, @radix-ui/react-tooltip (+110 more)
 
 ### Community 1 - "engine.ts"
-Cohesion: 0.07
-Nodes (88): assertNoPendingReaction(), ConflictError, dispatchAction(), errorResponse(), executeAction(), loadedVersion, loadState(), respond() (+80 more)
+Cohesion: 0.08
+Nodes (73): assertNoPendingReaction(), ConflictError, dispatchAction(), errorResponse(), executeAction(), loadedVersion, loadState(), POST() (+65 more)
 
 ### Community 2 - "class-kit.ts"
-Cohesion: 0.13
-Nodes (18): FeatureOpts, HitResolution, MODULES, registerClassModule(), SneakInfo, ActionCtx, ActionRule, KITS (+10 more)
+Cohesion: 0.09
+Nodes (23): FeatureOpts, HitResolution, MODULES, SneakInfo, ActionRule, inReach(), KITS, markTurn() (+15 more)
 
 ### Community 3 - "package.json"
 Cohesion: 0.02
-Nodes (82): name, private, version, @ai-sdk/react, bun-types, class-variance-authority, clsx, date-fns (+74 more)
+Nodes (76): name, private, version, @ai-sdk/react, bun-types, class-variance-authority, clsx, date-fns (+68 more)
 
-### Community 4 - "CombatView.tsx"
-Cohesion: 0.08
-Nodes (56): lucide-react, @radix-ui/react-slot, sonner, BestiaryBrowser(), BestiaryBrowserProps, CR_OPTIONS, CREATURE_TYPES, CombatViewProps (+48 more)
+### Community 4 - "react"
+Cohesion: 0.06
+Nodes (72): lucide-react, react, sonner, PendingRecord, SupabaseAuthModal(), SupabaseAuthModalProps, CreateCampaignModal(), CreateCampaignModalProps (+64 more)
 
 ### Community 5 - "fighter-combat.ts"
 Cohesion: 0.07
-Nodes (70): spendAbilityUse(), abilityName(), ACTIONS, addDamage(), alive(), alliesOf(), applyArrowToTarget(), armHandler() (+62 more)
+Nodes (78): featureReady(), spendAbilityUse(), turnKey(), abilityName(), ACTIONS, addDamage(), alive(), alliesOf() (+70 more)
 
 ### Community 6 - "race-combat.ts"
-Cohesion: 0.13
-Nodes (51): fireConditionStart(), log(), removeConditions(), result(), runStance(), StanceRule, strikeWith(), usedThisTurn() (+43 more)
+Cohesion: 0.11
+Nodes (59): registerClassModule(), ActionCtx, fireConditionStart(), log(), modOf(), registerKit(), removeConditions(), result() (+51 more)
 
 ### Community 7 - "bot.ts"
-Cohesion: 0.07
-Nodes (91): GET(), alliesOf(), bestAttack(), BotArchetype, BotStep, BotTurnResult, determineFacingTowards(), evaluateTargetScore() (+83 more)
+Cohesion: 0.09
+Nodes (63): alliesOf(), bestAttack(), BotArchetype, BotStep, BotTurnResult, determineFacingTowards(), evaluateTargetScore(), FACING_CYCLE (+55 more)
 
 ### Community 8 - "dependencies"
 Cohesion: 0.03
 Nodes (75): dependencies, ai, @ai-sdk/openai, @ai-sdk/react, class-variance-authority, clsx, cmdk, date-fns (+67 more)
 
 ### Community 9 - "Combatant"
-Cohesion: 0.06
-Nodes (23): Props, RoleSelectorModalProps, ClassModule, DMAssistAction, evaluateCombatPacing(), PacingEvaluation, PacingThreatLevel, shouldTriggerEncounterRelief() (+15 more)
+Cohesion: 0.04
+Nodes (39): Props, InitiativeTrackerProps, Props, RoleSelectorModalProps, WildShapeModalProps, BEAST_FORMS, BeastForm, getBeastFormById() (+31 more)
 
-### Community 10 - "vitest"
-Cohesion: 0.05
-Nodes (69): @prisma/client, vitest, DELETE(), GET(), PATCH(), POST(), GET(), POST() (+61 more)
+### Community 10 - "db.ts"
+Cohesion: 0.07
+Nodes (43): @prisma/client, POST(), GET(), GET(), GET(), PATCH(), POST(), DELETE() (+35 more)
 
-### Community 11 - "supabase/client.ts"
-Cohesion: 0.08
-Nodes (33): checkAllTables(), inspectCharactersSchema(), inspectData(), listCharacters(), listUsers(), GET(), guestHits, guestRateLimited() (+25 more)
+### Community 11 - "getSupabaseAdminClient"
+Cohesion: 0.15
+Nodes (10): checkAllTables(), inspectCharactersSchema(), inspectData(), listCharacters(), listUsers(), GET(), guestHits, guestRateLimited() (+2 more)
 
 ### Community 12 - "rules.ts"
 Cohesion: 0.07
-Nodes (63): CombatantDetails(), featureConditionImmunity(), attackMatches(), auraRadius(), CONDITION_MODS, conscious(), FEATURE_MODS, has() (+55 more)
+Nodes (62): CombatantDetails(), attackMatches(), auraRadius(), CONDITION_MODS, conscious(), FEATURE_MODS, has(), INCAPACITATING (+54 more)
 
-### Community 13 - "performAttack"
-Cohesion: 0.07
-Nodes (75): classRules, SUBCLASSES, subclassRuleKeys(), kitHandles(), endTurn(), performAttack(), useAbility(), modResistance() (+67 more)
+### Community 13 - "vitest"
+Cohesion: 0.10
+Nodes (56): vitest, call(), extractAbilitiesFromCharacter(), classRules, SUBCLASSES, subclassRuleKeys(), classHooks, endTurn() (+48 more)
 
 ### Community 14 - "manual-combat-runner.ts"
-Cohesion: 0.09
-Nodes (29): createHeroes(), ensureDir(), initCombat(), initDragonCombat(), loadSession(), main(), printStatus(), saveState() (+21 more)
+Cohesion: 0.14
+Nodes (22): createHeroes(), ensureDir(), initCombat(), initDragonCombat(), loadSession(), main(), printStatus(), saveState() (+14 more)
 
 ### Community 15 - "procgen/index.ts"
 Cohesion: 0.08
 Nodes (42): Tile(), buildAreaZones(), BIOME_NAMES, DECOR_CELL, LIQUID, PROCGEN_BIOMES, resolveProcgenBiome(), STEMS (+34 more)
 
-### Community 16 - "party-leveled.ts"
-Cohesion: 0.16
-Nodes (22): failure(), GET(), POST(), resolveCampaign(), GET(), POST(), resolveRoom(), RouteProps (+14 more)
+### Community 16 - "createClient"
+Cohesion: 0.12
+Nodes (20): @ai-sdk/openai, main(), extractJson(), main(), main(), main(), GET(), maxDuration (+12 more)
 
 ### Community 17 - "race-adapter.test.ts"
-Cohesion: 0.22
-Nodes (14): unregisterClassModule(), unregisterFeatureMod(), defineRace(), unregisterRace(), dehydrateCombatant(), {
+Cohesion: 0.18
+Nodes (17): unregisterClassModule(), unregisterFeatureMod(), defineRace(), unregisterRace(), {
   combatantCreateMock,
   combatFindUniqueMock,
   campaignFindUniqueMock,
   spellLibraryFindManyMock,
   abilityLibraryFindManyMock,
-}, registerDragonbornRules(), registeredFeatureKeys (+6 more)
+}, registerDragonbornRules(), registeredFeatureKeys, registerTestFeatureMod() (+9 more)
 
 ### Community 18 - "library-data.ts"
-Cohesion: 0.06
-Nodes (59): dnd-shared, LibraryAbility, LibrarySpell, EditableLibraryItem, AbilityItem, AttackItem, SpellItem, PresetsModalProps (+51 more)
+Cohesion: 0.05
+Nodes (56): dnd-shared, cleric, fighter, runSimulation(), wizard, LibraryAbility, LibrarySpell, AbilityItem (+48 more)
 
-### Community 19 - "dm-context.test.ts"
-Cohesion: 0.09
-Nodes (29): { mockStreamText }, buildDmHistory(), CHRONICLE_HEADER, COMPACT_BLOCK, DmHistory, formatChronicleMessage(), isServiceStub(), MAX_VERBATIM_SAFETY (+21 more)
+### Community 19 - "compact.ts"
+Cohesion: 0.14
+Nodes (18): buildDmHistory(), CHRONICLE_HEADER, chronicleFromSummaries(), COMPACT_BLOCK, DmHistory, formatChronicleMessage(), isServiceStub(), MAX_VERBATIM_SAFETY (+10 more)
 
 ### Community 20 - "Field"
 Cohesion: 0.11
 Nodes (36): blurField(), boxPass(), Field, sampleGrid(), SUB, valueNoise(), gaps(), generateCityLayout() (+28 more)
 
-### Community 21 - "core-phb.ts"
-Cohesion: 0.09
-Nodes (20): Calc, conditionMods(), Calc, ALL_ANCESTRIES, CHROMATIC_COLORS, DragonAncestrySpec, eladrinSeason, FTD_REPLACED_BASE (+12 more)
+### Community 21 - "chat/route.ts"
+Cohesion: 0.14
+Nodes (20): clientWithCustomUrl, cost, customCost, cleanAssistantNarrative(), hasNarrative(), maxDuration, POST(), resolveMaxOutputTokens() (+12 more)
 
-### Community 22 - "MonsterManifestEntry"
-Cohesion: 0.11
-Nodes (17): dragons, manifest, MANIFEST_PATH, raw, BossMinionsCandidate, PackCandidate, TacticalCandidate, GenerateEncounterOptions (+9 more)
+### Community 22 - "system-prompt.ts"
+Cohesion: 0.16
+Nodes (18): main(), main(), streamTurn(), main(), StoryArc, buildArcSection(), buildOpeningSceneRules(), buildSystemPrompt() (+10 more)
 
 ### Community 23 - "story-arc.ts"
-Cohesion: 0.03
-Nodes (125): ai, @ai-sdk/openai, zod, main(), main(), main(), main(), streamTurn() (+117 more)
+Cohesion: 0.07
+Nodes (51): zod, main(), maxDuration, POST(), GET(), maxDuration, POST(), AuthMode (+43 more)
 
 ### Community 24 - "maps/types.ts"
-Cohesion: 0.18
-Nodes (15): MapPresetsModal(), GeneratedMapElement, BiomeType, MapTagQuery, SpawnZoneDefinition, UniversalVTT, UVTTLight, UVTTPoint (+7 more)
+Cohesion: 0.21
+Nodes (11): GeneratedMapElement, UniversalVTT, UVTTLight, UVTTPoint, UVTTPortal, UVTTResolution, computeSpawnZones(), ParseOptions (+3 more)
 
-### Community 25 - "d20-helper.ts"
-Cohesion: 0.10
-Nodes (31): zustand, CharacterInventoryModalProps, D20RollModal(), executeRoll(), handleAttackRoll(), handleCustomRoll(), handleSaveRoll(), handleSkillRoll() (+23 more)
+### Community 25 - "D20RollModal.tsx"
+Cohesion: 0.13
+Nodes (30): zustand, CharacterInventoryModalProps, D20RollModal(), executeRoll(), handleAttackRoll(), handleCustomRoll(), handleSaveRoll(), handleSkillRoll() (+22 more)
 
 ### Community 26 - "fake-supabase.ts"
-Cohesion: 0.07
-Nodes (34): setup(), sheetRow(), state, CombatantRow, combatantToSheetPatch(), count(), endActiveCombats(), parseJson() (+26 more)
+Cohesion: 0.05
+Nodes (56): failure(), GET(), POST(), resolveCampaign(), setup(), sheetRow(), state, GET() (+48 more)
 
 ### Community 27 - "import-character.ts"
-Cohesion: 0.08
-Nodes (42): fetchSharedCharacter(), maxDuration, POST(), ShareFetchError, SHEET_BASE_URL, AUTH, handleCreateAndSelect(), buildDossier() (+34 more)
+Cohesion: 0.10
+Nodes (33): fetchSharedCharacter(), maxDuration, POST(), ShareFetchError, SHEET_BASE_URL, AUTH, handleCreateAndSelect(), ABILITY_KEYS (+25 more)
 
 ### Community 28 - "ssrf.ts"
-Cohesion: 0.19
-Nodes (17): GET(), maxDuration, maxDuration, POST(), FEATURED_MODELS, assertSafePublicHttpsUrl(), FORBIDDEN_HOSTNAMES, ipv4ToInt() (+9 more)
+Cohesion: 0.24
+Nodes (14): maxDuration, POST(), assertSafePublicHttpsUrl(), FORBIDDEN_HOSTNAMES, ipv4ToInt(), isForbiddenIp(), isForbiddenIpv4(), isForbiddenIpv6() (+6 more)
 
-### Community 29 - "Attack"
-Cohesion: 0.13
-Nodes (19): TestEnemy, WeaponProfile, BEAST_FORMS, BeastForm, getBeastFormById(), MergedRaceCombatantData, MergeRaceInput, ClassKit (+11 more)
+### Community 29 - "serialize.ts"
+Cohesion: 0.08
+Nodes (46): POST(), GET(), getHostPort(), getLanIps(), POST(), POST(), TEST_ENEMIES, TestEnemy (+38 more)
 
-### Community 30 - "CombatGrid.tsx"
-Cohesion: 0.07
-Nodes (42): CombatEffectsLayer(), CombatEffectsLayerProps, CombatGrid(), getCellFromEvent(), handleGlobalMouseMove(), handleGlobalMouseUp(), handleSvgClick(), handleSvgMouseMove() (+34 more)
+### Community 30 - "CombatView"
+Cohesion: 0.18
+Nodes (19): CombatView(), addCombatant(), answerReaction(), applyMultiSpell(), cancelTargeting(), continueAfterBot(), doAction(), endCombat() (+11 more)
 
 ### Community 31 - "race-defs.ts"
-Cohesion: 0.13
-Nodes (21): findRaceData(), matchSubrace(), MENTAL_ABILITY_SPECS, norm(), normalizeUses(), RaceData, RaceHeroContext, RaceProgressionData (+13 more)
+Cohesion: 0.09
+Nodes (41): buildDefinition(), calcOf(), classAbilityDefinitions(), CLASSES, FeatureRule, findSubclass(), mentions(), norm() (+33 more)
 
 ### Community 32 - "AI Dungeon Master — D&D 5e Solo"
 Cohesion: 0.06
 Nodes (34): AI Dungeon Master — D&D 5e Solo, AI забывает персонажей, API-ключ не работает, "Cannot find module 'xxx'", "Database is readonly" / "SQLite error", "Port 3000 is already in use", Быстрые кнопки, Ввод ключа в приложении (+26 more)
 
 ### Community 33 - "sheet-store.ts"
-Cohesion: 0.07
-Nodes (52): @supabase/supabase-js, GET(), createClient(), applyHeroSheetWrite(), HeroWriteSplit, liveHeroRows(), liveNestedHeroes(), num() (+44 more)
+Cohesion: 0.08
+Nodes (47): @supabase/supabase-js, GET(), createClient(), applyHeroSheetWrite(), HeroWriteSplit, liveHeroRows(), liveNestedHeroes(), num() (+39 more)
 
 ### Community 34 - "render-map.ts"
 Cohesion: 0.12
@@ -387,43 +395,43 @@ Nodes (29): COLORS, DevMaps(), loadImage(), BackgroundSource, loadImage(), loadT
 
 ### Community 35 - "tools.ts"
 Cohesion: 0.09
-Nodes (29): advanceActTool, calculateTool, campaignContextSchema, characterUpdatesSchema, createCharacterTool, dmTools, fetchPageTool, formatAct() (+21 more)
+Nodes (31): StoryAct, advanceActTool, calculateTool, campaignContextSchema, characterUpdatesSchema, createCharacterTool, dmTools, fetchPageTool (+23 more)
 
 ### Community 36 - "Hotbar.tsx"
 Cohesion: 0.08
-Nodes (22): @radix-ui/react-popover, AOE_SHAPE, COST_LABEL, COST_STYLE, CostKind, damageSummary(), DEFAULT_SPELL_ACCENT, diceText() (+14 more)
+Nodes (21): @radix-ui/react-popover, AOE_SHAPE, COST_LABEL, COST_STYLE, CostKind, damageSummary(), DEFAULT_SPELL_ACCENT, diceText() (+13 more)
 
-### Community 37 - "react"
-Cohesion: 0.05
-Nodes (44): @radix-ui/react-avatar, react, testAuth(), CampaignPage(), RoomBattlePage(), RoomPage(), SupabaseAuthModal(), SupabaseAuthModalProps (+36 more)
+### Community 37 - "RoomLobby.tsx"
+Cohesion: 0.12
+Nodes (15): copyRoomLink(), CreateRoomModal(), CampaignSetupFormValues, RoomLobby(), handleCopyInviteLink(), handleStartCampaign(), RoomLobbyProps, consumeRedirectTarget() (+7 more)
 
 ### Community 38 - "Review Focus"
 Cohesion: 0.08
 Nodes (24): Execution Handoff, Global Constraints, Review Focus, Self-review, Task 1: Нормализатор параметров, Task 2: Колонка `startingSituation`, Task 3: Соло API: `POST /api/campaign` и `PATCH /api/campaign`, Task 4: Сетевой старт: маршрут и `room-service` (+16 more)
 
-### Community 39 - "reactions.ts"
-Cohesion: 0.13
-Nodes (19): scoped(), storage, Store, askReaction(), Candidate, context(), ContextProvider, isPlayerReactor() (+11 more)
+### Community 39 - "races-settings.test.ts"
+Cohesion: 0.07
+Nodes (38): detectArmorType(), innateSpellToCombatAbility(), scoped(), kitHandles(), raceRules, RACES_2014, runWithReactions(), storage (+30 more)
 
-### Community 40 - "generateEncounter"
-Cohesion: 0.23
-Nodes (8): main(), createCombatantStub(), generateEncounter(), calculateAwardedXP(), awardCombatVictoryXP(), AwardCombatXPResult, CR_TO_XP_TABLE, enemyXP()
+### Community 40 - "CombatGrid.tsx"
+Cohesion: 0.22
+Nodes (11): CombatEffectsLayer(), CombatEffectsLayerProps, CombatGridProps, HotbarProps, Segment, wallOutlineSegments(), CombatEffect, DamagePopup (+3 more)
 
 ### Community 41 - "monsters/types.ts"
-Cohesion: 0.12
-Nodes (26): cheerio, DAMAGE_TYPE_MAP, normalizeDamageType(), parseAbilities(), parseAction(), parseCR(), parseDamageTypes(), ParseMeta (+18 more)
+Cohesion: 0.09
+Nodes (32): cheerio, DAMAGE_TYPE_MAP, normalizeDamageType(), parseAbilities(), parseAction(), parseCR(), parseDamageTypes(), ParseMeta (+24 more)
 
-### Community 42 - "legacy-settings.ts"
-Cohesion: 0.08
-Nodes (24): mentions(), featureMods(), buildDragonOptions(), ELADRIN_SEASONS, astralCantripChosen(), hasAnyAstralCantrip(), registerNaturalAC(), registerShifterMod() (+16 more)
+### Community 42 - "core-phb.ts"
+Cohesion: 0.05
+Nodes (42): Calc, conditionMods(), featureMods(), Calc, Rule, ALL_ANCESTRIES, buildDragonOptions(), CHROMATIC_COLORS (+34 more)
 
-### Community 43 - "DnDApp"
-Cohesion: 0.07
-Nodes (14): DnDApp(), createCampaign(), handleGenerateStory(), startArcGeneration(), getMessageError(), getMessageText(), AutoScrollChatOptions, shouldAutoScrollChat() (+6 more)
+### Community 43 - "DnDApp.tsx"
+Cohesion: 0.04
+Nodes (35): CampaignPage(), RoomBattlePage(), RoomPage(), CombatEndSummary, CostStatsModal(), CostStatsModalProps, ArcState, ChatMessage (+27 more)
 
 ### Community 44 - "TacticalMapPreset"
-Cohesion: 0.32
-Nodes (3): mapRegistry, MapManifestEntry, TacticalMapPreset
+Cohesion: 0.36
+Nodes (4): mapRegistry, MapManifestEntry, MapTagQuery, TacticalMapPreset
 
 ### Community 45 - "cave.ts"
 Cohesion: 0.12
@@ -433,53 +441,53 @@ Nodes (23): addNiches(), buildFloor(), buildWater(), CaveLayout, Chamber, Chambe
 Cohesion: 0.12
 Nodes (25): @radix-ui/react-toast, Toast, ToastAction, ToastActionElement, ToastClose, ToastDescription, ToastProps, ToastTitle (+17 more)
 
-### Community 47 - "import-character/route.ts"
-Cohesion: 0.19
-Nodes (20): ABILITY_RU_TO_EN, DAMAGE_TYPE_RU, detectActionCost(), detectWeapon(), LEGACY_ABILITY_NAMES, parseBonus(), parseDamageString(), POST() (+12 more)
+### Community 47 - "class-features.test.ts"
+Cohesion: 0.13
+Nodes (10): AbilityUsesFormula, bardicInspirationDie(), martialArtsDie(), rageUses(), resolveAbilityUses(), HeroFeatureContext, SRD_CLASS_FEATURES_NOTICE, SRD_FEATURES (+2 more)
 
 ### Community 48 - "archetype-solver.ts"
-Cohesion: 0.24
-Nodes (16): inferBacklineRole(), isFrontlineCandidate(), RANGED_KEYWORDS, resolveArchetype(), solveBossMinions(), solveGreedyFallback(), solveHorde(), SolveOptions (+8 more)
+Cohesion: 0.12
+Nodes (27): dragons, manifest, MANIFEST_PATH, raw, BossMinionsCandidate, inferBacklineRole(), isFrontlineCandidate(), PackCandidate (+19 more)
 
 ### Community 49 - "alert-dialog.tsx"
 Cohesion: 0.09
 Nodes (20): @radix-ui/react-alert-dialog, react-day-picker, AlertDialogAction(), AlertDialogCancel(), AlertDialogContent(), AlertDialogDescription(), AlertDialogFooter(), AlertDialogHeader() (+12 more)
 
-### Community 50 - "core-phb-combat.ts"
-Cohesion: 0.15
-Nodes (28): alive(), alliesOf(), dcBy(), friendly(), hostilesOf(), inReach(), rollOf(), saves() (+20 more)
+### Community 50 - "distanceFt"
+Cohesion: 0.12
+Nodes (42): alive(), alliesOf(), dcBy(), hostilesOf(), isOwnTurn(), rollOf(), saves(), auraAction() (+34 more)
 
 ### Community 51 - "setup-params.ts"
-Cohesion: 0.10
-Nodes (35): CampaignSetupForm(), baseProps(), StartingSituation, buildNewCampaignPayload(), CampaignSubmitResult, clampLevel(), defaultCampaignSetup(), DEFAULTS (+27 more)
+Cohesion: 0.05
+Nodes (60): CampaignSetupForm(), CampaignSetupFormProps, CampaignSetupPanelProps, baseProps(), JoinRoomModal(), handleSubmit(), JoinRoomModalProps, buildPartyAct1Prompt() (+52 more)
 
-### Community 52 - "party-arc-generator.ts"
-Cohesion: 0.19
-Nodes (13): buildPartyAct1Prompt(), CombatDifficultyConfig, extractJson(), extractPartyRosterFromParticipants(), generatePartyAwareAct1(), getCombatDifficultyConfig(), PartyArcGenerationParams, partyAwareAct1Schema (+5 more)
+### Community 52 - "combat/types.ts"
+Cohesion: 0.14
+Nodes (9): enemy(), hero(), ABILITY_LABELS, ConcentrationData, ConditionEffect, ELEMENT_LABELS, HOSTILE_TO, MapElementProperties (+1 more)
 
 ### Community 53 - "fighter-subclasses.ts"
 Cohesion: 0.08
-Nodes (30): ARCANE_SHOT_POOL, PSIONIC_POOL, SUPERIORITY_POOL, arcaneShot(), buildDefinition(), dcOf(), FEATURE_RULES, FIGHTER_FEATURES (+22 more)
+Nodes (28): SrdAbilityDefinition, arcaneShot(), buildDefinition(), dcOf(), FEATURE_RULES, FIGHTER_FEATURES, FIGHTER_SUBCLASSES, FighterFeature (+20 more)
 
 ### Community 54 - "formation.ts"
-Cohesion: 0.19
+Cohesion: 0.16
 Nodes (18): bySizeDesc(), centroid(), closeContact(), clusterAround(), footprint(), FormationInput, FormationResult, FORMATIONS (+10 more)
 
-### Community 55 - "abilityByKey"
-Cohesion: 0.29
-Nodes (10): featureReady(), sweepStances(), abilityByKey(), defense(), saveFailed(), saveFailed(), saveFailed(), allyCountSaveRescueFailed() (+2 more)
+### Community 55 - ".mark"
+Cohesion: 0.17
+Nodes (20): rageDamageBonus(), sweepStances(), beastForm(), isNaturalWeapon(), setCleaver(), auraSaveBonus(), dropConcentration(), dropConcentrationEffects() (+12 more)
 
 ### Community 56 - "class-features.ts"
-Cohesion: 0.06
-Nodes (43): ACTIVATION_COST, ALWAYS_POOL, CLASS_PATTERNS, damageTypeOf(), ENGINE_ACTIONS, engineActionValues(), evaluateFormula(), featureUses() (+35 more)
+Cohesion: 0.08
+Nodes (29): ACTIVATION_COST, ALWAYS_POOL, CLASS_PATTERNS, damageTypeOf(), ENGINE_ACTIONS, engineActionValues(), evaluateFormula(), featureUses() (+21 more)
 
-### Community 57 - "MapElement"
-Cohesion: 0.15
-Nodes (12): OpenBattlemap, cityStreetPreset, gladiatorArenaPreset, ALL_PRESETS, getPresetByBiome(), getPresetById(), PRESETS_BY_BIOME, PRESETS_BY_ID (+4 more)
+### Community 57 - "presets/index.ts"
+Cohesion: 0.17
+Nodes (10): cityStreetPreset, dungeonPrisonPreset, gladiatorArenaPreset, ALL_PRESETS, getPresetByBiome(), getPresetById(), PRESETS_BY_BIOME, PRESETS_BY_ID (+2 more)
 
 ### Community 58 - "bestiary-resolver.ts"
-Cohesion: 0.35
-Nodes (9): GET(), createMonsterDefinitionFromManifest(), loadDefaultManifest(), loadMonsterDefinition(), CANONICAL_ALIASES, cleanQuery(), findMonsterInManifest(), isPlaceholderAttackList() (+1 more)
+Cohesion: 0.19
+Nodes (16): GET(), MergeRaceInput, createMonsterDefinitionFromManifest(), loadDefaultManifest(), loadMonsterDefinition(), EnemyInput, CANONICAL_ALIASES, cleanQuery() (+8 more)
 
 ### Community 59 - "sheet-attacks.ts"
 Cohesion: 0.18
@@ -521,9 +529,9 @@ Nodes (17): aliases, components, hooks, lib, ui, utils, iconLibrary, rsc (+9 mor
 Cohesion: 0.14
 Nodes (13): nextConfig, SECURITY_HEADERS, next, next-themes, geistMono, geistSans, metadata, AuthFetchBridge() (+5 more)
 
-### Community 69 - "barbarian-combat.ts"
-Cohesion: 0.07
-Nodes (25): modOf(), CLEAVER_TYPES, auraAction(), BEAST_ATTACKS, beastForm(), ENV_NAMES, isNaturalWeapon(), rageDash() (+17 more)
+### Community 69 - "barbarian.ts"
+Cohesion: 0.11
+Nodes (9): defineClass(), CLEAVER_TYPES, hasFeature(), RAGE, spiritShieldDice(), STORM_ENVS, STORM_RESIST, stormEnv (+1 more)
 
 ### Community 70 - "Review Focus"
 Cohesion: 0.17
@@ -550,16 +558,16 @@ Cohesion: 0.22
 Nodes (8): `dnd-shared` Stage 2 (13 Classes, 118+ Subclasses, Progression, Spells & Full Homebrew) Implementation Plan, File Structure, Global Constraints, Task 1: `dnd-shared` — Build Official 13 Classes, 118+ Subclasses, Progression, Spells & Warlock Choices, Task 2: `dnd-shared` — Consolidate All Homebrew (`mousefolk`, `ratfolk`, `alt-barbarian`, `barbarian-exploits`) & Push `<SHA_2>`, Task 3: `dnd5e-character-sheet` (`dev`) — Migrate Classes, Progression, Spells, Warlock Choices & Homebrew to `<SHA_2>` [Parallel Agent A, Hydrogen], Task 4: `ai_master_n_battle` (`dev`) — Migrate `class-defs.ts` to `dnd-shared/classes` (`<SHA_2>`) [Parallel Agent B, Hydrogen], Task 5: Cross-Repo Stage 2 Verification
 
 ### Community 76 - "CharacterCard.tsx"
-Cohesion: 0.16
-Nodes (15): @radix-ui/react-progress, abilityMod(), CharacterCard(), getRelationTier(), modStr(), RelationTier, typeColors, typeLabels (+7 more)
+Cohesion: 0.11
+Nodes (24): @radix-ui/react-avatar, @radix-ui/react-progress, CampaignSetupPanel(), heroesWord(), partySetupDescription(), abilityMod(), CharacterCard(), getRelationTier() (+16 more)
 
 ### Community 77 - "import-foundry-class-features.py"
 Cohesion: 0.22
 Nodes (14): activity(), by_identifier(), consumption(), formula_of(), ident_of(), key_of(), load(), Формула урона/лечения Foundry -> строка вида '2d8 + @mod (+6 more)
 
-### Community 78 - "distanceFt"
-Cohesion: 0.09
-Nodes (29): defineClass(), isOwnTurn(), bolsterTarget(), requireFoe(), castSaveDisadvantage(), cellFree(), contest(), creatureDown() (+21 more)
+### Community 78 - "rogue-combat.ts"
+Cohesion: 0.12
+Nodes (24): friendly(), attackResolved(), bladeStrike(), castSaveDisadvantage(), contest(), creatureDown(), hasFeature(), hideAdvantage() (+16 more)
 
 ### Community 79 - "Спецификация: Система совместного пошагового хода отряда (Cooperative Party Turns)"
 Cohesion: 0.15
@@ -570,8 +578,8 @@ Cohesion: 0.11
 Nodes (17): 1. Цель и ключевые ограничения, 2.1. Официальный контент D&D 5e (2014), 2.2. Хоумбрю в `dnd-shared/homebrew`, 2. Источник истины и политика по хоумбрю, 3.1. Карта сабпат-экспортов (`package.json`), 3.2. Контракты поиска и совместимость с Next.js 16 / `tsx`, 3. Архитектура пакета `dnd-shared`, 4.1. `dnd5e-character-sheet` (ветка `dev`) (+9 more)
 
 ### Community 81 - "room-service.ts"
-Cohesion: 0.06
-Nodes (49): DELETE(), GET(), maxDuration, POST(), GET(), maxDuration, POST(), handleSubmit() (+41 more)
+Cohesion: 0.05
+Nodes (63): testAuth(), DELETE(), GET(), POST(), POST(), POST(), POST(), GET() (+55 more)
 
 ### Community 82 - "Review Focus"
 Cohesion: 0.20
@@ -585,13 +593,13 @@ Nodes (11): 1.1. Механика работы KV-кэша DeepSeek (Prefix Cach
 Cohesion: 0.17
 Nodes (11): 1. Problem Statement & Motivation, 2.1 Route Map, 2. Target Routing Architecture, 3.1 `HomeHubView` (`src/components/home/HomeHubView.tsx`), 3.2 `RoomSessionView` (`src/components/room/RoomSessionView.tsx`), 3.3 `SoloCampaignView` (`src/components/campaign/SoloCampaignView.tsx`), 3.4 Shared State & Context, 3. Component Architecture & Decomposition (+3 more)
 
-### Community 85 - "Cell"
-Cohesion: 0.22
-Nodes (8): DoorRoute, FiringPosition, CastContext, MoveOutcome, ShoveOutcome, ToggleDoorOutcome, PathResult, Cell
+### Community 85 - "carousel.tsx"
+Cohesion: 0.17
+Nodes (14): embla-carousel-react, Carousel(), CarouselApi, CarouselContent(), CarouselContext, CarouselContextProps, CarouselItem(), CarouselNext() (+6 more)
 
-### Community 86 - "combat/types.ts"
-Cohesion: 0.06
-Nodes (50): PendingRecord, GET(), Props, crToProfBonus(), formatCR(), getAttackStem(), MONSTER_TYPE_RU, MonsterAdapterOptions (+42 more)
+### Community 86 - "monster-adapter.ts"
+Cohesion: 0.13
+Nodes (21): crToProfBonus(), formatCR(), getAttackStem(), MONSTER_TYPE_RU, MonsterAdapterOptions, monsterDefinitionToCombatant(), parseCountBeforeStem(), parseMultiattack() (+13 more)
 
 ### Community 87 - "Global Constraints"
 Cohesion: 0.20
@@ -609,9 +617,9 @@ Nodes (10): 1. Контекст и цели, 2.1. Стриминг и Realtime-�
 Cohesion: 0.20
 Nodes (9): Зачем, Модуль `src/lib/combat/procgen/`, Отрисовка в браузере, Подключение к бою, Процедурные карты боя: пещера, Решение, Старые карты, Тесты (+1 more)
 
-### Community 91 - "class-defs.ts"
-Cohesion: 0.17
-Nodes (17): buildDefinition(), calcOf(), classAbilityDefinitions(), CLASSES, FeatureRule, findSubclass(), norm(), optionChosen() (+9 more)
+### Community 91 - "ai"
+Cohesion: 0.25
+Nodes (9): ai, { mockStreamText }, compactHistoryWithMilestones(), DEFAULT_CHUNK_SIZE, DEFAULT_MAX_VERBATIM, extractExistingChronicleBullets(), extractMessageText(), formatMessageBullet() (+1 more)
 
 ### Community 92 - "Section Definitions"
 Cohesion: 0.20
@@ -633,9 +641,9 @@ Nodes (15): [0.1.3](https://github.com/supabase/agent-skills/compare/v0.1.2...v0
 Cohesion: 0.12
 Nodes (16): [1.2.0](https://github.com/supabase/agent-skills/compare/v1.1.1...v1.2.0) (2026-06-02), [1.3.0](https://github.com/supabase/agent-skills/compare/v1.2.0...v1.3.0) (2026-06-05), [1.4.0](https://github.com/supabase/agent-skills/compare/v1.3.0...v1.4.0) (2026-07-10), [1.5.0](https://github.com/supabase/agent-skills/compare/supabase-postgres-best-practices-v1.4.0...supabase-postgres-best-practices-v1.5.0) (2026-07-30), [1.6.0](https://github.com/supabase/agent-skills/compare/supabase-postgres-best-practices-v1.5.0...supabase-postgres-best-practices-v1.6.0) (2026-07-30), Bug Fixes, Bug Fixes, Bug Fixes (+8 more)
 
-### Community 97 - "encounter-generator.test.ts"
-Cohesion: 0.38
-Nodes (3): mockManifest, dungeonPrisonPreset, forestAmbushPreset
+### Community 97 - "models.ts"
+Cohesion: 0.19
+Nodes (10): main(), StoredAiSettings, STORY_MODEL_FALLBACK, BOOKKEEPING_TOOLS, CHEAP_MODEL, DEFAULT_CHEAP_MODEL, DEFAULT_DM_MODEL, DEFAULT_STORY_MODEL (+2 more)
 
 ### Community 98 - "callback/route.ts"
 Cohesion: 0.40
@@ -646,8 +654,8 @@ Cohesion: 0.22
 Nodes (8): 1. Зоны заклинаний (`MapElement` с `isSpellZone: true`), 2. Повторные действия (`Heat Metal` и др.), 3. Действие освобождения (`Escape Action`), 4. Исправление `spells.json`, 5. Высшая невидимость (`Greater Invisibility`), Архитектура, Дизайн: Динамические зоны заклинаний, повторные действия и механики 5e, Цель
 
 ### Community 100 - "generator.ts"
-Cohesion: 0.12
-Nodes (17): extractSpellsFromCharacter(), sheetConditionsForCombat(), Formation, FORMATION_LABELS, CLASS_DEFAULT_SAVING_THROWS, EnvironmentType, generateTacticalMap(), PartyCharacter (+9 more)
+Cohesion: 0.10
+Nodes (22): callStartCombat(), extractSpellsFromCharacter(), Formation, FORMATION_LABELS, applyFormation(), CLASS_DEFAULT_SAVING_THROWS, createTacticalEncounter(), EnvironmentType (+14 more)
 
 ### Community 101 - "AI Dungeon Master — сайт мастера"
 Cohesion: 0.15
@@ -669,9 +677,9 @@ Nodes (7): Global Constraints, Room Streaming, Live Synchronization and Token Tr
 Cohesion: 0.22
 Nodes (8): 1. Core Auth & Access Control, 2. SSRF Protection (`src/lib/security/ssrf.ts`), 3. API Route Hardening & IDOR Fixes, 4. Client XSS, Next.js Config & Headers, 5. Test Updates & Verification, Architecture & Changes, Global Constraints, Security Hardening Design (`dnd-ai-master`)
 
-### Community 106 - "generator-lvl1-matrix.test.ts"
-Cohesion: 0.33
-Nodes (5): applyFormation(), BLOCKING, cases, party, SIZE_CELLS
+### Community 106 - "ephemeral-tail.ts"
+Cohesion: 0.26
+Nodes (11): buildEphemeralSceneTail, EphemeralNpcState, EphemeralPartyMemberState, EphemeralRecentEvent, EphemeralSceneState, fetchEphemeralSceneTail(), fetchRelevantMemories(), formatSceneSnapshot() (+3 more)
 
 ### Community 107 - "supabase/types.ts"
 Cohesion: 0.25
@@ -710,8 +718,8 @@ Cohesion: 0.33
 Nodes (5): Prompt Cache Telemetry & Visibility Implementation Plan, Task 1: Prompt cache extraction helper with TDD (`src/lib/ai/cost.ts`), Task 2: Integrate robust token extraction in API routes, Task 3: UI Transparency in `MessageBubble` & Header Trigger (`DnDApp.tsx`), Task 4: Full Verification, Graphify & Git Push
 
 ### Community 117 - "character-adapter.ts"
-Cohesion: 0.18
-Nodes (18): classifyArmorItem(), collectRawAttacks(), DAMAGE_TYPE_RU, dedupeStringsCaseInsensitive(), detectActionCost(), detectArmorType(), detectWeapon(), extractAttacksFromCharacter() (+10 more)
+Cohesion: 0.10
+Nodes (35): ABILITY_RU_TO_EN, DAMAGE_TYPE_RU, detectActionCost(), detectWeapon(), LEGACY_ABILITY_NAMES, parseBonus(), parseDamageString(), POST() (+27 more)
 
 ### Community 118 - "network-banner.js"
 Cohesion: 0.33
@@ -725,53 +733,85 @@ Nodes (5): fs, isVercel, path, schema, schemaPath
 Cohesion: 0.47
 Nodes (3): HomePage(), mockRedirect, RoomsCodePage()
 
-### Community 121 - "bot-tactics.test.ts"
-Cohesion: 0.29
-Nodes (6): bow, club, dagger, el(), state(), wallWithDoor()
+### Community 121 - "movement.ts"
+Cohesion: 0.07
+Nodes (46): GET(), CombatGrid(), getCellFromEvent(), handleGlobalMouseMove(), handleGlobalMouseUp(), handleSvgClick(), handleSvgMouseMove(), handleSvgMouseUp() (+38 more)
 
-### Community 123 - "multiattack.test.ts"
+### Community 122 - "scripts"
+Cohesion: 0.18
+Nodes (11): scripts, build, db:generate, db:migrate, db:push, db:reset, dev, lint (+3 more)
+
+### Community 123 - "CoopTurnBar.tsx"
 Cohesion: 0.40
-Nodes (3): createTestCombatState(), mockBite, mockClaw
+Nodes (7): canSubmitPlayerTurn(), CoopTurnBar(), validatePlayerAction(), formatTypingMessage(), LiveTypingIndicator(), LiveTypingIndicatorProps, TypingUser
 
 ### Community 125 - "encounter-generator.ts"
-Cohesion: 0.13
-Nodes (24): applyLeaderName(), ARCHETYPE_ALIASES, CAMPAIGN_BUDGET_SCALE, CAMPAIGN_TO_ENCOUNTER, campaignBudgetScale(), normalizeArchetype(), resolveEncounterDifficulty(), gen() (+16 more)
+Cohesion: 0.09
+Nodes (36): main(), BIOME_CONFIGS, BiomeAffinity, entryMatchesKeywords(), factionKeywords(), getBiomeCandidatePool(), getFactionCandidatePool(), UNIVERSAL_FALLBACK_KEYWORDS (+28 more)
 
 ### Community 126 - "Спецификация: Инвентарь, Зелья и Расходники в ИИ-Мастере и Тактическом Бою"
 Cohesion: 0.50
 Nodes (3): 1. Цель, 2. Глобальные ограничения, Спецификация: Инвентарь, Зелья и Расходники в ИИ-Мастере и Тактическом Бою
 
+### Community 127 - "srdAbilityDefinitions"
+Cohesion: 0.29
+Nodes (10): heroClassFeatures(), identOf(), isOptionChosen(), rangeOf(), sheetChoiceTokens(), srdAbilityDefinitions(), srdClassKey(), srdCombatAbilities() (+2 more)
+
+### Community 169 - "pacing-director.test.ts"
+Cohesion: 0.39
+Nodes (6): DMAssistAction, evaluateCombatPacing(), PacingEvaluation, PacingThreatLevel, shouldTriggerEncounterRelief(), createMockState()
+
 ### Community 170 - "devDependencies"
-Cohesion: 0.06
-Nodes (25): devDependencies, bun-types, cheerio, eslint, eslint-config-next, tailwindcss, @tailwindcss/postcss, tw-animate-css (+17 more)
+Cohesion: 0.15
+Nodes (13): devDependencies, bun-types, cheerio, eslint, eslint-config-next, tailwindcss, @tailwindcss/postcss, tw-animate-css (+5 more)
+
+### Community 171 - "validation.ts"
+Cohesion: 0.33
+Nodes (7): CharacterCandidate, EvaluatedCharacter, EvaluatedCharacterList, extractCharacterLevel(), filterUserCharactersForRoom(), LevelValidationResult, validateCharacterForRoom()
+
+### Community 172 - "frozen-prefix.ts"
+Cohesion: 0.15
+Nodes (14): buildDossier(), dossierFromSheet(), sanitizePartyMembers(), SHEET_DOSSIER_FIELDS, stripVolatileNotes(), notesWithoutSheetJson(), summarizeSheetMechanics(), accountCard (+6 more)
 
 ### Community 173 - "open-map-service.ts"
-Cohesion: 0.33
-Nodes (6): GET(), getPopularTags(), OPEN_BATTLEMAP_CATALOG, OpenMapSearchQuery, POPULAR_MAP_TAGS, searchOpenMaps()
+Cohesion: 0.24
+Nodes (9): GET(), getPopularTags(), OPEN_BATTLEMAP_CATALOG, OpenBattlemap, OpenMapSearchQuery, POPULAR_MAP_TAGS, searchOpenMaps(), BiomeType (+1 more)
+
+### Community 174 - "File Structure"
+Cohesion: 0.25
+Nodes (7): `dnd-shared` Stage 3 (Weapons, Armors, Gear, Tools & Potions) Implementation Plan, File Structure, Global Constraints, Task 1: `dnd-shared` — Build Weapons, Armors/Items & Potions (`./items`, `./items-core`) & Push `<SHA_3>`, Task 2: `dnd5e-character-sheet` (`dev`) — Migrate `dnd-weapons.ts`, `items.ts`, `potions-data.ts` to `<SHA_3>` [Parallel Agent A, Hydrogen], Task 3: `ai_master_n_battle` (`dev`) — Migrate `srd/adapter.ts` Weapons to `dnd-shared/items` (`<SHA_3>`) [Parallel Agent B, Hydrogen], Task 4: Cross-Repo Stage 3 Verification
 
 ### Community 175 - "zones.ts"
 Cohesion: 0.44
 Nodes (7): CellKind, anchor(), blocked(), buildSpawnZones(), buildZonesFromAreas(), nearestFloor(), pathDistances()
 
-### Community 176 - "biome-matcher.ts"
-Cohesion: 0.27
-Nodes (9): BIOME_CONFIGS, BiomeAffinity, entryMatchesKeywords(), factionKeywords(), getBiomeCandidatePool(), getFactionCandidatePool(), UNIVERSAL_FALLBACK_KEYWORDS, UNIVERSAL_FALLBACK_TYPES (+1 more)
+### Community 176 - "animations.ts"
+Cohesion: 0.39
+Nodes (6): calculateAttackVector(), CombatOutcomeType, detectWeaponAnimType(), getDodgeOffset(), getRecoilOffset(), WeaponAnimType
+
+### Community 177 - "AttacksAbilitiesEditor"
+Cohesion: 0.29
+Nodes (5): AttacksAbilitiesEditor(), addAbilityFromLibrary(), save(), emptyAttack(), rebuildHotbar()
 
 ### Community 178 - "spawn-director.ts"
-Cohesion: 0.21
-Nodes (11): templePreset, assignTacticalSpawns(), BACKLINE_CLASSES, bodyFits(), BOSS_KEYWORDS, createDefaultSpawnZones(), findClosestPassableCell(), inferCombatantRole() (+3 more)
+Cohesion: 0.18
+Nodes (12): forestAmbushPreset, templePreset, assignTacticalSpawns(), BACKLINE_CLASSES, bodyFits(), BOSS_KEYWORDS, createDefaultSpawnZones(), findClosestPassableCell() (+4 more)
+
+### Community 179 - "CharacterInventoryModal"
+Cohesion: 0.47
+Nodes (6): CharacterInventoryModal(), handleAddPotion(), handleDrinkPotion(), createUniqueId(), getSyncTimestamp(), parseInventory()
 
 ### Community 183 - "aoe-templates.ts"
 Cohesion: 0.30
 Nodes (10): ClassifiedTargets, classifyAoeTargets(), DIRECTION_STEPS, DirStep, getConeCells(), getCubeCells(), getLineCells(), getSphereCells() (+2 more)
 
-### Community 191 - "DnDApp.tsx"
-Cohesion: 0.05
-Nodes (62): @radix-ui/react-select, CampaignSetupFormProps, CampaignSetupPanel(), CampaignSetupPanelProps, heroesWord(), partySetupDescription(), CreateCampaignModal(), CreateCampaignModalProps (+54 more)
+### Community 191 - "CharacterPickerModal.tsx"
+Cohesion: 0.08
+Nodes (26): @radix-ui/react-select, @radix-ui/react-tabs, ImportCharacterModal(), ImportCharacterModalProps, CharacterPickerModal(), CharacterPickerModalProps, DND_CLASSES, DND_RACES (+18 more)
 
 ### Community 194 - "combat-access.ts"
-Cohesion: 0.16
-Nodes (14): { getAuthUserMock, campaignFindUniqueMock, combatFindUniqueMock, combatantFindUniqueMock, getActiveRoomMock }, ACTOR_FIELD, actorIdForAction(), checkCombatControl(), CombatControlDeps, HOST_ONLY_ACTIONS, resetCombatAccessCaches(), resolveRoom() (+6 more)
+Cohesion: 0.22
+Nodes (11): { getAuthUserMock, campaignFindUniqueMock, combatFindUniqueMock, combatantFindUniqueMock, getActiveRoomMock }, ACTOR_FIELD, actorIdForAction(), checkCombatControl(), CombatControlDeps, HOST_ONLY_ACTIONS, resetCombatAccessCaches(), resolveRoom() (+3 more)
 
 ### Community 195 - "form.tsx"
 Cohesion: 0.19
@@ -782,24 +822,24 @@ Cohesion: 0.38
 Nodes (9): besideWall(), carveCells(), center(), connect(), corridor(), dungeonDecor(), generateDungeonLayout(), placeRooms() (+1 more)
 
 ## Knowledge Gaps
-- **1098 isolated node(s):** `supabase`, `$schema`, `style`, `rsc`, `tsx` (+1093 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 1472 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **1103 isolated node(s):** `supabase`, `$schema`, `style`, `rsc`, `tsx` (+1098 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 1478 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **42 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `vitest` connect `vitest` to `engine.ts`, `package.json`, `CombatView.tsx`, `bot.ts`, `Combatant`, `supabase/client.ts`, `rules.ts`, `performAttack`, `manual-combat-runner.ts`, `procgen/index.ts`, `party-leveled.ts`, `race-adapter.test.ts`, `library-data.ts`, `dm-context.test.ts`, `Field`, `MonsterManifestEntry`, `story-arc.ts`, `maps/types.ts`, `d20-helper.ts`, `fake-supabase.ts`, `import-character.ts`, `ssrf.ts`, `Attack`, `CombatGrid.tsx`, `sheet-store.ts`, `render-map.ts`, `react`, `reactions.ts`, `generateEncounter`, `monsters/types.ts`, `DnDApp`, `TacticalMapPreset`, `cave.ts`, `archetype-solver.ts`, `biome-matcher.ts`, `spawn-director.ts`, `setup-params.ts`, `party-arc-generator.ts`, `fighter-subclasses.ts`, `formation.ts`, `aoe-templates.ts`, `class-features.ts`, `MapElement`, `bestiary-resolver.ts`, `loot-generator.ts`, `DnDApp.tsx`, `combat-access.ts`, `room-service.ts`, `combat/types.ts`, `encounter-generator.test.ts`, `generator.ts`, `generator-lvl1-matrix.test.ts`, `character-adapter.ts`, `redirects.test.tsx`, `bot-tactics.test.ts`, `multiattack.test.ts`, `encounter-generator.ts`, `monster-adapter.test.ts`?**
-  _High betweenness centrality (0.176) - this node is a cross-community bridge._
-- **Why does `react` connect `react` to `cn`, `render-map.ts`, `package.json`, `CombatView.tsx`, `Hotbar.tsx`, `form.tsx`, `CharacterCard.tsx`, `use-toast.ts`, `chart.tsx`, `alert-dialog.tsx`, `setup-params.ts`, `CombatGrid.tsx`, `DnDApp.tsx`?**
+- **Why does `vitest` connect `vitest` to `package.json`, `react`, `bot.ts`, `Combatant`, `db.ts`, `getSupabaseAdminClient`, `rules.ts`, `manual-combat-runner.ts`, `procgen/index.ts`, `createClient`, `race-adapter.test.ts`, `library-data.ts`, `compact.ts`, `Field`, `chat/route.ts`, `system-prompt.ts`, `story-arc.ts`, `maps/types.ts`, `D20RollModal.tsx`, `fake-supabase.ts`, `import-character.ts`, `ssrf.ts`, `serialize.ts`, `sheet-store.ts`, `render-map.ts`, `tools.ts`, `RoomLobby.tsx`, `races-settings.test.ts`, `CombatGrid.tsx`, `pacing-director.test.ts`, `monsters/types.ts`, `DnDApp.tsx`, `TacticalMapPreset`, `open-map-service.ts`, `cave.ts`, `class-features.test.ts`, `archetype-solver.ts`, `animations.ts`, `spawn-director.ts`, `setup-params.ts`, `combat/types.ts`, `fighter-subclasses.ts`, `formation.ts`, `aoe-templates.ts`, `presets/index.ts`, `bestiary-resolver.ts`, `loot-generator.ts`, `CharacterPickerModal.tsx`, `combat-access.ts`, `CharacterCard.tsx`, `room-service.ts`, `monster-adapter.ts`, `ai`, `validation.ts`, `frozen-prefix.ts`, `generator.ts`, `ephemeral-tail.ts`, `character-adapter.ts`, `redirects.test.tsx`, `movement.ts`, `CoopTurnBar.tsx`, `encounter-generator.ts`?**
+  _High betweenness centrality (0.175) - this node is a cross-community bridge._
+- **Why does `react` connect `react` to `cn`, `render-map.ts`, `package.json`, `Hotbar.tsx`, `RoomLobby.tsx`, `form.tsx`, `CombatGrid.tsx`, `DnDApp.tsx`, `CharacterCard.tsx`, `use-toast.ts`, `chart.tsx`, `room-service.ts`, `alert-dialog.tsx`, `setup-params.ts`, `carousel.tsx`, `D20RollModal.tsx`, `CoopTurnBar.tsx`, `CharacterPickerModal.tsx`?**
   _High betweenness centrality (0.057) - this node is a cross-community bridge._
-- **Why does `Combatant` connect `Combatant` to `engine.ts`, `class-kit.ts`, `CombatView.tsx`, `fighter-combat.ts`, `race-combat.ts`, `bot.ts`, `vitest`, `rules.ts`, `performAttack`, `manual-combat-runner.ts`, `race-adapter.test.ts`, `library-data.ts`, `core-phb.ts`, `MonsterManifestEntry`, `Attack`, `CombatGrid.tsx`, `Hotbar.tsx`, `reactions.ts`, `TacticalMapPreset`, `spawn-director.ts`, `core-phb-combat.ts`, `fighter-subclasses.ts`, `aoe-templates.ts`, `class-features.ts`, `bestiary-resolver.ts`, `DnDApp.tsx`, `barbarian-combat.ts`, `distanceFt`, `Cell`, `combat/types.ts`, `character-adapter.ts`, `bot-tactics.test.ts`, `ReactionScope`, `multiattack.test.ts`, `encounter-generator.ts`?**
+- **Why does `Combatant` connect `Combatant` to `engine.ts`, `class-kit.ts`, `react`, `fighter-combat.ts`, `race-combat.ts`, `bot.ts`, `rules.ts`, `vitest`, `manual-combat-runner.ts`, `race-adapter.test.ts`, `library-data.ts`, `serialize.ts`, `Hotbar.tsx`, `races-settings.test.ts`, `CombatGrid.tsx`, `pacing-director.test.ts`, `core-phb.ts`, `class-features.test.ts`, `distanceFt`, `spawn-director.ts`, `combat/types.ts`, `fighter-subclasses.ts`, `aoe-templates.ts`, `bestiary-resolver.ts`, `barbarian.ts`, `rogue-combat.ts`, `monster-adapter.ts`, `character-adapter.ts`, `movement.ts`, `encounter-generator.ts`?**
   _High betweenness centrality (0.054) - this node is a cross-community bridge._
 - **What connects `supabase`, `$schema`, `style` to the rest of the system?**
-  _1098 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _1103 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `cn` be split into smaller, more focused modules?**
-  _Cohesion score 0.020263837889296886 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.022374652947901356 - nodes in this community are weakly interconnected._
 - **Should `engine.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.06886446886446887 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07716049382716049 - nodes in this community are weakly interconnected._
 - **Should `class-kit.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.12987012987012986 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.09259259259259259 - nodes in this community are weakly interconnected._

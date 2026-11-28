@@ -3,8 +3,8 @@ import type { ActionParameters, AttackKind, ActionCost, DamageRoll, CharacterPre
 import type { AttackDefinition, SpellDefinition, AbilityDefinition } from "../library-data";
 
 import { SPELLS, findSpell } from "dnd-shared";
+import { SRD_WEAPONS } from "dnd-shared/items";
 import monstersData from "./data/monsters.json";
-import weaponsData from "./data/equipment.json";
 
 export interface SRDSpell {
   id: string;
@@ -56,7 +56,7 @@ const spellsList: SRDSpell[] = combatSpells("srd");
 const expandedList: SRDSpell[] = combatSpells("expanded");
 const allCombatSpellsList: SRDSpell[] = [...spellsList, ...expandedList];
 const monstersList: CharacterPreset[] = monstersData as unknown as CharacterPreset[];
-const weaponsList: SRDWeapon[] = weaponsData as unknown as SRDWeapon[];
+const weaponsList: SRDWeapon[] = SRD_WEAPONS as unknown as SRDWeapon[];
 
 const spellsByName = new Map<string, SRDSpell>();
 const spellsByNameEn = new Map<string, SRDSpell>();

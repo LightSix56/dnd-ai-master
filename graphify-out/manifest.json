@@ -18,9 +18,9 @@
     "semantic_hash": "6a8f1b475f9a4fff1dc59fbd31f6939f"
   },
   "package.json": {
-    "mtime": 1795856049.9391074,
-    "seen": 1795856391.6704268,
-    "ast_hash": "f9b95d84f117d855f74d81d10a93e06b",
+    "mtime": 1795857442.042899,
+    "seen": 1795857716.7773435,
+    "ast_hash": "70353c1bc93b121d4e0bf5d3280e9e8d",
     "semantic_hash": ""
   },
   "postcss.config.mjs": {
@@ -18474,9 +18474,9 @@
     "semantic_hash": "2e3db85f083503b015546ac0c79b5abd"
   },
   "src/lib/combat/srd/adapter.ts": {
-    "mtime": 1795850199.4741132,
-    "seen": 1795850568.4407442,
-    "ast_hash": "bd9936345c5c88f4583c2d846bcec4d1",
+    "mtime": 1795857447.1466649,
+    "seen": 1795857718.0797467,
+    "ast_hash": "3f74c23b262832a8968c062415dea36a",
     "semantic_hash": ""
   },
   "src/lib/combat/srd/data/conditions.json": {
@@ -18484,12 +18484,6 @@
     "seen": 1795590344.6832845,
     "ast_hash": "ea0598b1235e1cf7651874426b2bcfb9",
     "semantic_hash": "ea0598b1235e1cf7651874426b2bcfb9"
-  },
-  "src/lib/combat/srd/data/equipment.json": {
-    "mtime": 1791442478.9171524,
-    "seen": 1795590344.6832871,
-    "ast_hash": "e84140b86bbbb2ec11c8d6d800bf5438",
-    "semantic_hash": "e84140b86bbbb2ec11c8d6d800bf5438"
   },
   "src/lib/combat/srd/data/features.json": {
     "mtime": 1791442478.921482,
@@ -21189,6 +21183,12 @@
     "mtime": 1795855129.9819472,
     "seen": 1795856393.0478923,
     "ast_hash": "60a891b94171043c92ddc43cb9cae687",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-11-28-dnd-shared-stage-3-items.md": {
+    "mtime": 1795856780.6336312,
+    "seen": 1795857718.1297138,
+    "ast_hash": "14232ffdf6f8b190d23898f1dacc791b",
     "semantic_hash": ""
   }
 }

@@ -60,7 +60,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "date-fns": "^4.1.0",
-    "dnd-shared": "git+https://github.com/LightSix56/dnd-shared.git#ad210380a5846036235f702207ae81dbfbe08a7a",
+    "dnd-shared": "git+https://github.com/LightSix56/dnd-shared.git#7855b6a095df61303fe10a56abeb9563de66e558",
     "duckduckgo-search": "^1.0.7",
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.23.2",
