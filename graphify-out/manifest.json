@@ -18,9 +18,9 @@
     "semantic_hash": "6a8f1b475f9a4fff1dc59fbd31f6939f"
   },
   "package.json": {
-    "mtime": 1795849973.9420884,
-    "seen": 1795850566.9500093,
-    "ast_hash": "f9b000a0549faf954f2119c9eba50fbc",
+    "mtime": 1795856049.9391074,
+    "seen": 1795856391.6704268,
+    "ast_hash": "f9b95d84f117d855f74d81d10a93e06b",
     "semantic_hash": ""
   },
   "postcss.config.mjs": {
@@ -19709,12 +19709,6 @@
     "ast_hash": "7146b4dc92ffa6df6394bc7297a32ffa",
     "semantic_hash": "7146b4dc92ffa6df6394bc7297a32ffa"
   },
-  "scripts/import-sheet-classes.mjs": {
-    "mtime": 1794482486.970757,
-    "seen": 1795590344.6730816,
-    "ast_hash": "d53710454425efccab69615ec4a1903d",
-    "semantic_hash": "d53710454425efccab69615ec4a1903d"
-  },
   "scripts/migrations/001_create_rooms_schema.sql": {
     "mtime": 1791442474.1090825,
     "seen": 1795590344.673102,
@@ -20256,9 +20250,9 @@
     "semantic_hash": "658a85326fc5839b22f519358ed2791c"
   },
   "src/lib/combat/class-defs.ts": {
-    "mtime": 1795676945.4400532,
-    "seen": 1795678107.8789322,
-    "ast_hash": "03c4e311a5336bcb9a816d371953b49e",
+    "mtime": 1795856145.9209409,
+    "seen": 1795856392.9491584,
+    "ast_hash": "9778a4e867d158c7b8dbe15abd7eaff8",
     "semantic_hash": ""
   },
   "src/lib/combat/class-features.ts": {
@@ -20326,12 +20320,6 @@
     "seen": 1795590344.682948,
     "ast_hash": "ad0cb20ac051a3647c8bdf4d3f051dc7",
     "semantic_hash": "ad0cb20ac051a3647c8bdf4d3f051dc7"
-  },
-  "src/lib/combat/data/class-subclasses.json": {
-    "mtime": 1794482487.1345499,
-    "seen": 1795590344.6829505,
-    "ast_hash": "85a275115826e972cfe5d529f196d072",
-    "semantic_hash": "85a275115826e972cfe5d529f196d072"
   },
   "src/lib/combat/data/srd-class-features-ru.json": {
     "mtime": 1794482487.137918,
@@ -21195,6 +21183,12 @@
     "mtime": 1795848127.697427,
     "seen": 1795850568.4982178,
     "ast_hash": "ebd288ea004cece424c2cf1bac69c946",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-11-28-dnd-shared-stage-2-classes.md": {
+    "mtime": 1795855129.9819472,
+    "seen": 1795856393.0478923,
+    "ast_hash": "60a891b94171043c92ddc43cb9cae687",
     "semantic_hash": ""
   }
 }

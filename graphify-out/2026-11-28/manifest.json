@@ -18,10 +18,10 @@
     "semantic_hash": "6a8f1b475f9a4fff1dc59fbd31f6939f"
   },
   "package.json": {
-    "mtime": 1794482486.9640663,
-    "seen": 1795590344.673036,
-    "ast_hash": "f8c6da01895cf2779111f5eb27d5d655",
-    "semantic_hash": "f8c6da01895cf2779111f5eb27d5d655"
+    "mtime": 1795849973.9420884,
+    "seen": 1795850566.9500093,
+    "ast_hash": "f9b000a0549faf954f2119c9eba50fbc",
+    "semantic_hash": ""
   },
   "postcss.config.mjs": {
     "mtime": 1791442474.05344,
@@ -18474,10 +18474,10 @@
     "semantic_hash": "2e3db85f083503b015546ac0c79b5abd"
   },
   "src/lib/combat/srd/adapter.ts": {
-    "mtime": 1794482487.187577,
-    "seen": 1795590344.6832814,
-    "ast_hash": "680e0613e70f7c9685d75a9f511eb31c",
-    "semantic_hash": "680e0613e70f7c9685d75a9f511eb31c"
+    "mtime": 1795850199.4741132,
+    "seen": 1795850568.4407442,
+    "ast_hash": "bd9936345c5c88f4583c2d846bcec4d1",
+    "semantic_hash": ""
   },
   "src/lib/combat/srd/data/conditions.json": {
     "mtime": 1791442478.916155,
@@ -20333,12 +20333,6 @@
     "ast_hash": "85a275115826e972cfe5d529f196d072",
     "semantic_hash": "85a275115826e972cfe5d529f196d072"
   },
-  "src/lib/combat/data/fighter-dndsu.json": {
-    "mtime": 1794482487.1367843,
-    "seen": 1795590344.6829562,
-    "ast_hash": "07e324a8cbe8dcd7338b5cfb577d7fea",
-    "semantic_hash": "07e324a8cbe8dcd7338b5cfb577d7fea"
-  },
   "src/lib/combat/data/srd-class-features-ru.json": {
     "mtime": 1794482487.137918,
     "seen": 1795590344.6829586,
@@ -20406,10 +20400,10 @@
     "semantic_hash": "426b6a9ddc245e9b65ad743b2dd790f2"
   },
   "src/lib/combat/fighter-subclasses.ts": {
-    "mtime": 1794482487.1647496,
-    "seen": 1795590344.6830385,
-    "ast_hash": "38b20d3760000260bfc1879245887075",
-    "semantic_hash": "38b20d3760000260bfc1879245887075"
+    "mtime": 1795850197.937392,
+    "seen": 1795850568.4054978,
+    "ast_hash": "a7a325f4b29c6b4baffb9cfbde97aec9",
+    "semantic_hash": ""
   },
   "src/lib/combat/formation.ts": {
     "mtime": 1794482487.166235,
@@ -20819,42 +20813,6 @@
     "ast_hash": "2f1c51ca7b048098cfc8896f6be85a9e",
     "semantic_hash": ""
   },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/progress.md": {
-    "mtime": 1795683044.3198936,
-    "seen": 1795684523.1810665,
-    "ast_hash": "86a3e1ee261ff84a2258437251c6396b",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/task-1-brief.md": {
-    "mtime": 1795591959.8825097,
-    "seen": 1795593590.8717144,
-    "ast_hash": "c89a83b42982e002035b3d94f653468b",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/task-1-diff.txt": {
-    "mtime": 1795592756.4459708,
-    "seen": 1795593590.8717177,
-    "ast_hash": "be111525306c63cdf9eda53993a6c140",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/task-1-fix1-diff.txt": {
-    "mtime": 1795593119.4300017,
-    "seen": 1795593590.871721,
-    "ast_hash": "3de1f58fd15d221894499d8886c37426",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/task-1-report.md": {
-    "mtime": 1795593106.9146352,
-    "seen": 1795593590.8717244,
-    "ast_hash": "60b481a5de897fe2366b66ddb6bcbfc1",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/task-2-brief.md": {
-    "mtime": 1795593208.5028114,
-    "seen": 1795593590.871728,
-    "ast_hash": "a5b5f303ec457043f6cbf947cf71710e",
-    "semantic_hash": ""
-  },
   "docs/superpowers/plans/2026-10-05-campaign-versions-1-db-and-sheet-site.md": {
     "mtime": 1791442473.5500884,
     "seen": 1795593590.8717718,
@@ -21101,12 +21059,6 @@
     "ast_hash": "d69732ae8093f1b0a5f680b3b21c959e",
     "semantic_hash": ""
   },
-  "scripts/sync-dnd-shared-races.mjs": {
-    "mtime": 1795593872.9025447,
-    "seen": 1795594538.280318,
-    "ast_hash": "52e7402ddeafac4ceade0c9212871ed7",
-    "semantic_hash": ""
-  },
   "src/lib/combat/__tests__/helpers/race-harness.ts": {
     "mtime": 1795676963.5231888,
     "seen": 1795678107.8657973,
@@ -21117,12 +21069,6 @@
     "mtime": 1795595346.7588792,
     "seen": 1795597133.4193027,
     "ast_hash": "766cdc34eefab505042554f9fcedbd4b",
-    "semantic_hash": ""
-  },
-  "src/lib/combat/data/races-2014.json": {
-    "mtime": 1795593895.506448,
-    "seen": 1795594539.6558332,
-    "ast_hash": "efd58d86a7a46e767aa1506ae19d7b14",
     "semantic_hash": ""
   },
   "src/lib/combat/races/combat-index.ts": {
@@ -21138,33 +21084,15 @@
     "semantic_hash": ""
   },
   "src/lib/combat/races/race-defs.ts": {
-    "mtime": 1795683660.2889314,
-    "seen": 1795684523.1257844,
-    "ast_hash": "d414815ae762967ca14c40d2f01d384f",
+    "mtime": 1795850209.6277585,
+    "seen": 1795850568.4376588,
+    "ast_hash": "43b3af9fe04125ff30a9a2aaaa99ab84",
     "semantic_hash": ""
   },
   "src/lib/combat/races/rules-index.ts": {
     "mtime": 1795679948.3579323,
     "seen": 1795684523.1257904,
     "ast_hash": "e49327b234a7159304e7f502a22c2e74",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/task-2-diff.txt": {
-    "mtime": 1795593632.9059603,
-    "seen": 1795594539.7460325,
-    "ast_hash": "73ea7e70212669f2be1cf49955d865cf",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/task-2-report.md": {
-    "mtime": 1795593614.8540237,
-    "seen": 1795594539.7460392,
-    "ast_hash": "c572a68326dbd3b39f5f8c8a54d24a18",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/task-3-brief.md": {
-    "mtime": 1795593745.8339822,
-    "seen": 1795594539.7460427,
-    "ast_hash": "b9a8765f433783b85c3af66ba4f054af",
     "semantic_hash": ""
   },
   "src/lib/combat/__tests__/race-adapter.test.ts": {
@@ -21191,66 +21119,6 @@
     "ast_hash": "a76a3123e429296fcd8d776eb92761a1",
     "semantic_hash": ""
   },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/task-3-diff.txt": {
-    "mtime": 1795595015.08192,
-    "seen": 1795597133.523845,
-    "ast_hash": "d4d31b9b3d5c702a58ce6b69960f1766",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/task-3-fix1-diff.txt": {
-    "mtime": 1795595461.0805397,
-    "seen": 1795597133.5238552,
-    "ast_hash": "d917afa13794e2276772c6fb1e3d046c",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/task-3-report.md": {
-    "mtime": 1795595437.597555,
-    "seen": 1795597133.523863,
-    "ast_hash": "44cf14a279f4a7c7ef5cf906a6782096",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/task-4-brief.md": {
-    "mtime": 1795595589.176371,
-    "seen": 1795597133.5238702,
-    "ast_hash": "e2641fb4911e6b08eac320f1e07313f0",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/task-4-diff.txt": {
-    "mtime": 1795596045.0833476,
-    "seen": 1795597133.5238771,
-    "ast_hash": "8353488b6bb93b26cacc670943907ec6",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/task-4-report.md": {
-    "mtime": 1795596026.6815283,
-    "seen": 1795597133.5238836,
-    "ast_hash": "7f230b10d872b36f9c26b88c6e581b9e",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/task-5-brief.md": {
-    "mtime": 1795596241.9296174,
-    "seen": 1795597133.52389,
-    "ast_hash": "f0d0961ba2b1571eb9de0b726edc232a",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/task-5-diff.txt": {
-    "mtime": 1795597174.331947,
-    "seen": 1795597574.7117527,
-    "ast_hash": "a8cd5d83ddc10dfc3984f34c916db047",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/task-5-report.md": {
-    "mtime": 1795597586.7896671,
-    "seen": 1795598207.5370739,
-    "ast_hash": "b18c3d2cd4abad3200388e1a989a2202",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/task-5-fix1-diff.txt": {
-    "mtime": 1795597600.2210026,
-    "seen": 1795598207.5370674,
-    "ast_hash": "bd055be84b1db69e74bf1c6dbf880575",
-    "semantic_hash": ""
-  },
   "src/lib/combat/__tests__/races-volo.test.ts": {
     "mtime": 1795599606.8514318,
     "seen": 1795599753.4661033,
@@ -21269,30 +21137,6 @@
     "ast_hash": "9229deab49e2b1a3d446ca76dfd47092",
     "semantic_hash": ""
   },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/batch-2-brief.md": {
-    "mtime": 1795598185.663909,
-    "seen": 1795598989.5905523,
-    "ast_hash": "2d919b94e3f41d5ee6f6509990589163",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/batch-2-diff.txt": {
-    "mtime": 1795599028.387543,
-    "seen": 1795599753.5670307,
-    "ast_hash": "95b678a8829072af81cc4790433848fe",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/batch-2-report.md": {
-    "mtime": 1795599766.8082538,
-    "seen": 1795599968.4214046,
-    "ast_hash": "e785270a6fe90ad84bb69f64c8436438",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/batch-2-fix1-diff.txt": {
-    "mtime": 1795599788.515819,
-    "seen": 1795599968.4213943,
-    "ast_hash": "844fdd903667a89256dc139a2dd0e40c",
-    "semantic_hash": ""
-  },
   "src/lib/combat/__tests__/races-settings.test.ts": {
     "mtime": 1795678976.9789145,
     "seen": 1795684523.0674555,
@@ -21309,30 +21153,6 @@
     "mtime": 1795678909.081931,
     "seen": 1795684523.125301,
     "ast_hash": "d3fa5a7af850afbe2f0ac9755b6f9f10",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/batch-3-brief.md": {
-    "mtime": 1795675729.077525,
-    "seen": 1795678107.9817326,
-    "ast_hash": "43aa89518c3b82a9d2f7192150a520e0",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/batch-3-diff.txt": {
-    "mtime": 1795676558.009092,
-    "seen": 1795678107.9817407,
-    "ast_hash": "200a30fca2ac88b01c6fc3d281f19789",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/batch-3-fix1-diff.txt": {
-    "mtime": 1795677359.3240068,
-    "seen": 1795678107.9817467,
-    "ast_hash": "b12fe2eb71c86cc9dbdeb3da9d73b92a",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/batch-3-report.md": {
-    "mtime": 1795677337.9780478,
-    "seen": 1795678107.9817524,
-    "ast_hash": "57ca886435bb29ab76fa423218cdd7e0",
     "semantic_hash": ""
   },
   "src/lib/combat/__tests__/deferred-fixes.test.ts": {
@@ -21365,70 +21185,16 @@
     "ast_hash": "f7ea081862f0ce494e27e00d2234dcee",
     "semantic_hash": ""
   },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/batch-4-brief.md": {
-    "mtime": 1795679517.6437576,
-    "seen": 1795684523.1810322,
-    "ast_hash": "3b9dc0918cdddc061ee30b6396a3870d",
+  "docs/superpowers/plans/2026-11-28-dnd-shared-stage-1-core.md": {
+    "mtime": 1795848332.931338,
+    "seen": 1795850568.4921021,
+    "ast_hash": "43a7522c0d5e5b8d0ff66d322ad13809",
     "semantic_hash": ""
   },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/batch-4-diff.txt": {
-    "mtime": 1795680361.5977151,
-    "seen": 1795684523.1810367,
-    "ast_hash": "8341886c2c17ddfb3d3e40d303c364bb",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/batch-4-fix1-diff.txt": {
-    "mtime": 1795680869.8244905,
-    "seen": 1795684523.1810403,
-    "ast_hash": "3f3b70bc8f998f706e86a2ebd40a940d",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/batch-4-report.md": {
-    "mtime": 1795680846.512017,
-    "seen": 1795684523.1810434,
-    "ast_hash": "06e58f8f696bbcb46e365a9d1f010970",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/final-branch-diff.txt": {
-    "mtime": 1795683047.9794197,
-    "seen": 1795684523.1810472,
-    "ast_hash": "8ddc6ee94df206e53105fc56fb0c4d67",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/final-fix-brief.md": {
-    "mtime": 1795683449.3624132,
-    "seen": 1795684523.1810515,
-    "ast_hash": "b512b93f974886ab160b20a8c02072a4",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/final-fix-diff.txt": {
-    "mtime": 1795683804.2820265,
-    "seen": 1795684523.1810565,
-    "ast_hash": "d4f4924902022fa3d79a679a2d6aff68",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/final-fix-report.md": {
-    "mtime": 1795683785.871199,
-    "seen": 1795684523.1810606,
-    "ast_hash": "1818e958864cf61778c568fa690dd72e",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/task-6-brief.md": {
-    "mtime": 1795678542.5561721,
-    "seen": 1795684523.188566,
-    "ast_hash": "b768ba3f02d53876f4c0e61054b0ea24",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/task-6-diff.txt": {
-    "mtime": 1795679225.7556913,
-    "seen": 1795684523.188571,
-    "ast_hash": "6e3e6e29e3b15f4d816ee13fb5349f58",
-    "semantic_hash": ""
-  },
-  ".superpowers/sdd/2026-11-25-dnd-shared-races-combat/task-6-report.md": {
-    "mtime": 1795679200.7622826,
-    "seen": 1795684523.1885757,
-    "ast_hash": "bf301db026cf1376dc58f1e0b88cf90f",
+  "docs/superpowers/specs/2026-11-28-dnd-shared-unification-design.md": {
+    "mtime": 1795848127.697427,
+    "seen": 1795850568.4982178,
+    "ast_hash": "ebd288ea004cece424c2cf1bac69c946",
     "semantic_hash": ""
   }
 }
