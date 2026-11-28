@@ -68,3 +68,6 @@ scripts/test-pg.js
 /BATTLE/
 /scratch/
 combat-battle-log.txt
+
+# Граф кода (graphify): генерируется локально, в репозитории не хранится
+graphify-out/
