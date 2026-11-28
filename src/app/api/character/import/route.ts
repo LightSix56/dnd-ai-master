@@ -82,10 +82,14 @@ export async function POST(req: Request) {
 
     let sheet: SheetCharacter;
     if (shareCode) {
-      const code = String(shareCode).trim();
-      // Принимаем и полную ссылку, и просто код.
-      const fromUrl = code.match(/([A-Za-z0-9_-]{4,})\/?$/);
-      sheet = await fetchSharedCharacter(fromUrl ? fromUrl[1] : code);
+      const rawCode = String(shareCode).trim();
+      // Принимаем и полную ссылку, и просто код; строго проверяем формат кода
+      const fromUrl = rawCode.match(/([A-Za-z0-9_-]{4,128})\/?$/);
+      const extracted = fromUrl ? fromUrl[1] : rawCode;
+      if (!/^[A-Za-z0-9_-]{4,128}$/.test(extracted)) {
+        return Response.json({ error: "Некорректный формат кода персонажа" }, { status: 400 });
+      }
+      sheet = await fetchSharedCharacter(extracted);
     } else if (character) {
       sheet = character as SheetCharacter;
     } else {

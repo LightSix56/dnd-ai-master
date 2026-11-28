@@ -8,9 +8,10 @@ import { NextRequest } from "next/server";
 import { TYPE_COLORS, type Attack, type CombatAbility } from "@/lib/combat/types";
 import { abilitiesForClass, attacksPerAction, libraryAbilityNamesForClass, sneakAttackDice } from "@/lib/combat/library-data";
 import { abilityModifier, proficiencyBonus } from "@/lib/dnd/dice";
-import { safeParse } from "@/lib/combat/serialize";
+import { packMonsterData, safeParse } from "@/lib/combat/serialize";
 import { resolveAbilityUses } from "@/lib/combat/ability-uses";
 import { srdCombatAbilities } from "@/lib/combat/class-features";
+import { mergeRaceIntoCombatantData, resolveRaceForCombatant } from "@/lib/combat/character-adapter";
 
 /** Старые имена способностей, переименованных в коде (записи БД с ними устарели) */
 const LEGACY_ABILITY_NAMES = new Set(["порыв к действию", "поступь ветра", "ликвидация (убийца)"]);
@@ -181,6 +182,7 @@ export async function POST(req: NextRequest) {
     const level = cj.level || 1;
     const className = cj.className || cj.class || "";
     const race = cj.race || "";
+    const subrace = cj.subrace || "";
     const profBonus = proficiencyBonus(level);
 
     // Характеристики и спасброски: суммируем базу, расовые бонусы и ASI
@@ -343,16 +345,34 @@ export async function POST(req: NextRequest) {
     });
     // Остальные умения класса и архетипа из SRD: заряды, общие запасы, срабатывания при попадании.
     // Записи БД с тем же названием не дублируем — у SRD-версии есть механика
+    const idPrefix = `abl_${Date.now()}`;
     const srd = srdCombatAbilities(
       { className, subclass: cj.subclass, level, profBonus, abilityMods, sheet: cj },
-      `abl_${Date.now()}`
+      idPrefix
     );
     const srdNames = new Set(srd.map((a) => a.name.toLowerCase()));
-    const abilities: CombatAbility[] = [
+    const baseAbilities: CombatAbility[] = [
       ...handMade.filter((a) => !a.libraryId),
       ...srd,
       ...handMade.filter((a) => a.libraryId && !srdNames.has(a.name.toLowerCase())),
     ];
+
+    const raceLoadout = resolveRaceForCombatant(cj, abilityMods, profBonus, idPrefix);
+    const mergedRace = mergeRaceIntoCombatantData({
+      loadout: raceLoadout,
+      char: cj,
+      abilityMods,
+      profBonus,
+      idPrefix,
+      attacks,
+      abilities: baseAbilities,
+      speed,
+      size: cj.size || "medium",
+    });
+    const finalAttacks = mergedRace.attacks;
+    const abilities = mergedRace.abilities;
+    const finalSpeed = mergedRace.speed;
+    const finalSize = mergedRace.size;
 
     // ============ СБОРКА ============
     const color = TYPE_COLORS[type] || "#6b7280";
@@ -360,7 +380,7 @@ export async function POST(req: NextRequest) {
     const posY = y ?? Math.floor(combat.gridHeight / 2);
 
     const hotbar = [
-      ...attacks.map((a) => ({ id: a.id, type: "attack" as const, name: a.name })),
+      ...finalAttacks.map((a) => ({ id: a.id, type: "attack" as const, name: a.name })),
       ...knownSpells.map((s) => ({
         id: `spell_${s.id}`,
         type: "spell" as const,
@@ -384,13 +404,13 @@ export async function POST(req: NextRequest) {
         hpCurrent,
         hpTemp: cj.hpTemp || 0,
         ac,
-        speed,
+        speed: finalSpeed,
         initiative: 0,
         initiativeTiebreak: Math.floor(Math.random() * 1_000_000),
         dexMod,
         className,
         level,
-        size: cj.size || "medium",
+        size: finalSize,
         conditions: "[]",
         isHidden: type === "enemy",
         hasActed: false,
@@ -402,7 +422,7 @@ export async function POST(req: NextRequest) {
         attacksMadeThisAction: 0,
         extraActions: 0,
         hotbar: JSON.stringify(hotbar),
-        attacks: JSON.stringify(attacks),
+        attacks: JSON.stringify(finalAttacks),
         spells: JSON.stringify(spells),
         abilities: JSON.stringify(abilities),
         concentration: null,
@@ -410,6 +430,7 @@ export async function POST(req: NextRequest) {
         abilityMods: JSON.stringify(abilityMods),
         profBonus,
         isAIControlled: type !== "player",
+        monsterData: packMonsterData(mergedRace.racialMeta),
       },
     });
 
@@ -421,11 +442,14 @@ export async function POST(req: NextRequest) {
         level,
         className,
         race,
+        subrace,
+        raceId: mergedRace.racialMeta.raceId,
+        subraceId: mergedRace.racialMeta.subraceId,
         hpMax,
         ac,
-        speed,
+        speed: finalSpeed,
         dexMod,
-        attacks: attacks.length,
+        attacks: finalAttacks.length,
         attacksPerAction: attacksPerAction(className, level, abilities),
         abilities: abilities.map((a) => a.name),
         spells: knownSpells.map((s) => s.name),

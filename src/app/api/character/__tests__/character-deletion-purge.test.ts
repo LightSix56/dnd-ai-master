@@ -1,4 +1,11 @@
-import { describe, it, expect, beforeAll, afterAll } from "vitest";
+import { describe, it, expect, beforeAll, afterAll, vi } from "vitest";
+
+vi.mock("@/lib/supabase/client", () => ({
+  getAuthUserFromRequest: vi.fn(async () => ({ user: { id: "test-user-purge" }, error: null })),
+  getSupabaseAdminClient: vi.fn(() => ({})),
+  getSupabaseServerClient: vi.fn(),
+}));
+
 import { DELETE } from "../route";
 import { db } from "@/lib/db";
 
@@ -12,6 +19,7 @@ describe("DELETE /api/character trace purging", () => {
     // 1. Создаем тестовую кампанию с сюжетной аркой и personalHooks
     const campaign = await db.campaign.create({
       data: {
+        userId: "test-user-purge",
         name: "Test Purge Campaign",
         startingLevel: 3,
         storyArc: JSON.stringify({
@@ -127,6 +135,7 @@ describe("DELETE /api/character trace purging", () => {
   it("purges all traces of deleted character from memories, combatants, events and story hooks", async () => {
     const req = new Request(`http://localhost/api/character?id=${encodeURIComponent(testCharId)}`, {
       method: "DELETE",
+      headers: { Authorization: "Bearer test-tok" },
     });
 
     const res = await DELETE(req);

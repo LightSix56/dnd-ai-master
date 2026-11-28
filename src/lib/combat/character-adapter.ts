@@ -4,8 +4,11 @@
 
 import { resolveSheetAttacks } from "@/lib/dnd/sheet-attacks";
 import type {
+  ActionParameters,
   Attack,
   CombatAbility,
+  Combatant,
+  CreatureSize,
   HotbarItem,
   SpellData,
   DamageRoll,
@@ -14,6 +17,7 @@ import type {
 } from "./types";
 import {
   abilitiesForClass,
+  getSpellDefinition,
   sneakAttackDice,
   SPELL_LIBRARY,
   ATTACK_LIBRARY,
@@ -21,6 +25,7 @@ import {
 import { proficiencyBonus } from "@/lib/dnd/dice";
 import { resolveAbilityUses } from "./ability-uses";
 import { srdCombatAbilities } from "./class-features";
+import { resolveRaceForCharacter, type ResolvedRaceLoadout } from "./races/race-defs";
 
 const DAMAGE_TYPE_RU: Record<string, string> = {
   кол: "piercing",
@@ -559,4 +564,315 @@ export function extractAbilitiesFromCharacter(
     `abl_p_${char.id || "char"}`
   );
   return [...handMade, ...srd];
+}
+
+// ============ РАСЫ В БОЮ ============
+
+function dedupeStringsCaseInsensitive(base: string[] = [], extra: string[] = []): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const item of [...base, ...extra]) {
+    const trimmed = item.trim();
+    if (!trimmed) continue;
+    const key = trimmed.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(trimmed);
+  }
+  return out;
+}
+
+function normalizeCreatureSize(raw: string): CreatureSize | null {
+  if (raw === "tiny" || raw === "крошечный") return "tiny";
+  if (raw === "small" || raw === "маленький") return "small";
+  if (raw === "medium" || raw === "средний") return "medium";
+  if (raw === "large" || raw === "большой") return "large";
+  if (raw === "huge" || raw === "огромный") return "huge";
+  if (raw === "gargantuan" || raw === "громадный") return "gargantuan";
+  return null;
+}
+
+function resolveSpeedWithRace(
+  char: Record<string, any>,
+  currentSpeed: number | undefined,
+  raceWalk: number
+): number {
+  const sheetSpeed = char.sheet?.speed;
+  if (typeof sheetSpeed === "number" && sheetSpeed > 0) {
+    return currentSpeed && currentSpeed > 0 ? currentSpeed : sheetSpeed;
+  }
+  if (!currentSpeed || currentSpeed === 30) {
+    return raceWalk;
+  }
+  return currentSpeed;
+}
+
+function resolveSizeWithRace(
+  char: Record<string, any>,
+  currentSize: CreatureSize | undefined,
+  raceSize: CreatureSize
+): CreatureSize {
+  const explicitRaw = String(char.size ?? char.sheet?.size ?? "").trim().toLowerCase();
+  const explicitSize = normalizeCreatureSize(explicitRaw);
+  if (explicitSize && !(explicitSize === "medium" && raceSize === "small")) {
+    return explicitSize;
+  }
+  if (!explicitRaw && currentSize && !(currentSize === "medium" && raceSize === "small")) {
+    return currentSize;
+  }
+  return raceSize;
+}
+
+function extractExtraSpeeds(speeds: ResolvedRaceLoadout["speeds"]): Combatant["speeds"] | undefined {
+  const extra: NonNullable<Combatant["speeds"]> = {};
+  if (speeds.fly && speeds.fly > 0) extra.fly = speeds.fly;
+  if (speeds.swim && speeds.swim > 0) extra.swim = speeds.swim;
+  if (speeds.climb && speeds.climb > 0) extra.climb = speeds.climb;
+  if (speeds.burrow && speeds.burrow > 0) extra.burrow = speeds.burrow;
+  return Object.keys(extra).length > 0 ? extra : undefined;
+}
+
+/** Определяет боевой набор расы и подрасы для персонажа/листа. */
+export function resolveRaceForCombatant(
+  char: Record<string, any>,
+  abilityMods: Record<string, number>,
+  profBonus: number,
+  idPrefix?: string
+): ResolvedRaceLoadout | null {
+  const race = char.race ?? char.sheet?.race;
+  const subrace = char.subrace ?? char.sheet?.subrace;
+  const level = Math.max(1, Number(char.level || char.sheet?.level || 1));
+  const sheet = char.sheet && typeof char.sheet === "object" ? char.sheet : char;
+  const racialVariants = Array.isArray(char.racialVariants) ? char.racialVariants : undefined;
+
+  return resolveRaceForCharacter(
+    { race, subrace, level, profBonus, abilityMods, sheet, racialVariants },
+    idPrefix
+  );
+}
+
+/** Преобразует врождённое расовое заклинание в CombatAbility без расхода ячеек класса. */
+export function innateSpellToCombatAbility(
+  spell: ResolvedRaceLoadout["innateSpells"][number],
+  raceId: string,
+  abilityMods: Record<string, number>,
+  profBonus: number,
+  idPrefix: string
+): CombatAbility {
+  const defCandidate =
+    getSpellDefinition(spell.spellId) ??
+    getSpellDefinition(spell.spellId.replace(/-/g, " ")) ??
+    getSpellDefinition(spell.name);
+  const def = defCandidate && (spell.level === 0 ? defCandidate.level === 0 : true) ? defCandidate : undefined;
+  const srdKey = `race/${raceId}/innate/${spell.spellId}`;
+  const spellSlotLevel = spell.level > 0 ? spell.level : null;
+  const castMod = abilityMods[spell.castingAbility] ?? 0;
+
+  const parameters: ActionParameters = def
+    ? {
+        ...structuredClone(def.parameters),
+        type: "ability",
+        srdKey,
+        spellSlotLevel,
+        saveDC: 8 + profBonus + castMod,
+        attackBonus: profBonus + castMod,
+        offTurn: def.parameters.actionCost === "reaction" ? true : def.parameters.offTurn,
+      }
+    : {
+        name: spell.name,
+        type: "ability",
+        actionCost: "action",
+        range: { type: "self" },
+        targeting: "self",
+        manual: true,
+        srdKey,
+        spellSlotLevel,
+        description: `Врождённое заклинание (${spell.name})`,
+      };
+
+  return {
+    id: `${idPrefix}_race_spell_${spell.spellId}`,
+    name: def?.name ?? spell.name,
+    usesMax: spell.usesMax,
+    usesUsed: 0,
+    refresh: spell.refresh,
+    parameters,
+  };
+}
+
+function classifyArmorItem(item: Record<string, any> | undefined | null): Combatant["armorType"] | undefined {
+  if (!item || typeof item !== "object") return undefined;
+  const cat = String(item.armorCategory ?? item.category ?? item.armorType ?? item.type ?? "").toLowerCase();
+  if (/тяж|heavy/.test(cat)) return "heavy";
+  if (/средн|medium/.test(cat)) return "medium";
+  if (/л[её]гк|light/.test(cat)) return "light";
+
+  const name = String(item.name ?? item.nameEn ?? "").toLowerCase();
+  if (!name) return undefined;
+  if (/полулат|half\s*plate|кольчужная\s*руба|chain\s*shirt|кирас|breastplate|чешуйчат|scale\s*mail|шкур|hide/.test(name)) {
+    return "medium";
+  }
+  if (/\b(plate|splint|chain\s*mail|ring\s*mail)\b|латы|латн|наборн|кольчуг|кольчат/.test(name)) {
+    return "heavy";
+  }
+  if (/кожан|прост[её]ган|кл[её]пан|leather|padded|studded/.test(name)) {
+    return "light";
+  }
+  return undefined;
+}
+
+/** Определяет категорию надетого доспеха из карточки/листа персонажа для расовых и классовых правил. */
+export function detectArmorType(char: Record<string, any>): Combatant["armorType"] | undefined {
+  const explicit = String(char.armorType ?? char.sheet?.armorType ?? "").trim().toLowerCase();
+  if (explicit === "none" || explicit === "light" || explicit === "medium" || explicit === "heavy") {
+    return explicit;
+  }
+
+  const sheetObj = char.sheet && typeof char.sheet === "object" ? char.sheet : char;
+  const equippedArmor = sheetObj?.equippedSlots?.armor;
+  const fromSlot = classifyArmorItem(equippedArmor);
+  if (fromSlot) return fromSlot;
+
+  const rawInv = char.inventory ?? sheetObj?.inventory;
+  let inv: unknown = rawInv;
+  if (typeof rawInv === "string") {
+    try {
+      inv = JSON.parse(rawInv);
+    } catch {
+      inv = null;
+    }
+  }
+  if (Array.isArray(inv)) {
+    const nonArmorRe =
+      /weapon|оружи|shield|щит|boot|сапог|glove|перчат|cloak|плащ|belt|пояс|bracer|наруч|amulet|амулет|crossbow|арбалет|\bring(?!\s*mail)\b|кольц[оаеу]|колец/i;
+    const armorKindRe = /armor|доспех/i;
+    for (const item of inv) {
+      if (!item || typeof item !== "object") continue;
+      if (item.equipped === false) continue;
+      const slot = String(item.slot ?? "").trim().toLowerCase();
+      const armorSlot = slot === "armor" || slot === "body" || slot === "доспех" || slot === "тело";
+      if (slot && !armorSlot) continue;
+      const hasArmorCategory = Boolean(String(item.armorCategory ?? "").trim());
+      const typeVal = String(item.type ?? "").trim();
+      const catVal = String(item.category ?? "").trim();
+      const typeCatCombined = [typeVal, catVal].filter(Boolean).join(" ");
+      const nameCombined = [item.name, item.nameEn].filter(Boolean).join(" ");
+      if (nonArmorRe.test(typeCatCombined) || nonArmorRe.test(nameCombined)) continue;
+      if (!hasArmorCategory && !armorSlot && typeCatCombined && !armorKindRe.test(typeCatCombined)) continue;
+      const isArmorEntry =
+        armorSlot ||
+        hasArmorCategory ||
+        armorKindRe.test(typeCatCombined) ||
+        (item.equipped === true && !typeCatCombined);
+      if (!isArmorEntry) continue;
+      const classified = classifyArmorItem(item);
+      if (classified) return classified;
+    }
+  }
+  return undefined;
+}
+
+export interface MergeRaceInput {
+  loadout: ResolvedRaceLoadout | null;
+  char: Record<string, any>;
+  abilityMods: Record<string, number>;
+  profBonus: number;
+  idPrefix: string;
+  attacks: Attack[];
+  abilities: CombatAbility[];
+  speed?: number;
+  size?: CreatureSize;
+  damageResistances?: string[];
+  conditionImmunities?: string[];
+}
+
+export interface MergedRaceCombatantData {
+  attacks: Attack[];
+  abilities: CombatAbility[];
+  speed: number;
+  size: CreatureSize;
+  racialMeta: Partial<
+    Pick<
+      Combatant,
+      | "race"
+      | "subrace"
+      | "raceId"
+      | "subraceId"
+      | "darkvision"
+      | "speeds"
+      | "racialVariants"
+      | "damageResistances"
+      | "conditionImmunities"
+      | "armorType"
+    >
+  >;
+}
+
+/** Сливает расовые умения, врождённые заклинания, природное оружие, сопротивления, скорость и размер. */
+export function mergeRaceIntoCombatantData(input: MergeRaceInput): MergedRaceCombatantData {
+  const { loadout, char, abilityMods, profBonus, idPrefix } = input;
+  const armorType = detectArmorType(char);
+  if (!loadout) {
+    const explicitSize = normalizeCreatureSize(String(char.size ?? char.sheet?.size ?? "").trim().toLowerCase());
+    return {
+      attacks: input.attacks,
+      abilities: input.abilities,
+      speed: input.speed ?? 30,
+      size: input.size ?? explicitSize ?? "medium",
+      racialMeta: {
+        ...(input.damageResistances?.length ? { damageResistances: input.damageResistances } : {}),
+        ...(input.conditionImmunities?.length ? { conditionImmunities: input.conditionImmunities } : {}),
+        ...(armorType ? { armorType } : {}),
+      },
+    };
+  }
+
+  const innateAbilities = loadout.innateSpells.map((s) =>
+    innateSpellToCombatAbility(s, loadout.raceId, abilityMods, profBonus, idPrefix)
+  );
+  const seenAbilities = new Set<string>();
+  const abilities: CombatAbility[] = [];
+  for (const ab of [...input.abilities, ...loadout.abilities, ...innateAbilities]) {
+    const key = ab.parameters?.srdKey
+      ? `srd:${ab.parameters.srdKey}`
+      : `name:${ab.name.trim().toLowerCase()}`;
+    if (seenAbilities.has(key)) continue;
+    seenAbilities.add(key);
+    abilities.push(ab);
+  }
+
+  const seenAttacks = new Set(input.attacks.map((a) => a.name.trim().toLowerCase()));
+  const attacks: Attack[] = [...input.attacks];
+  for (const nw of loadout.naturalAttacks) {
+    const key = nw.name.trim().toLowerCase();
+    if (seenAttacks.has(key)) continue;
+    seenAttacks.add(key);
+    attacks.push(nw);
+  }
+
+  const damageResistances = dedupeStringsCaseInsensitive(input.damageResistances, loadout.resistances);
+  const conditionImmunities = dedupeStringsCaseInsensitive(
+    input.conditionImmunities,
+    loadout.conditionImmunities
+  );
+  const speeds = extractExtraSpeeds(loadout.speeds);
+
+  return {
+    attacks,
+    abilities,
+    speed: resolveSpeedWithRace(char, input.speed, loadout.speeds.walk),
+    size: resolveSizeWithRace(char, input.size, loadout.size),
+    racialMeta: {
+      race: loadout.raceName,
+      ...(loadout.subraceName ? { subrace: loadout.subraceName } : {}),
+      raceId: loadout.raceId,
+      ...(loadout.subraceId ? { subraceId: loadout.subraceId } : {}),
+      darkvision: loadout.darkvision,
+      ...(speeds ? { speeds } : {}),
+      ...(loadout.racialVariants.length > 0 ? { racialVariants: loadout.racialVariants } : {}),
+      ...(damageResistances.length > 0 ? { damageResistances } : {}),
+      ...(conditionImmunities.length > 0 ? { conditionImmunities } : {}),
+      ...(armorType ? { armorType } : {}),
+    },
+  };
 }

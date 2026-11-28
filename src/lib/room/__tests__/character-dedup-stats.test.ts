@@ -1,9 +1,22 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+
+vi.mock("@/lib/supabase/client", async () => {
+  const { fakeSupabase } = await import("@/lib/testing/fake-supabase");
+  const sb = fakeSupabase();
+  return {
+    getAuthUserFromRequest: vi.fn(async () => ({ user: { id: "test-user-dedup" }, error: null })),
+    getSupabaseAdminClient: vi.fn(() => sb),
+    getSupabaseServerClient: vi.fn(),
+  };
+});
+
 import { db } from "@/lib/db";
 import { RoomService } from "@/lib/room/room-service";
 import { extractCharacterStats, mapSheetToCharacter, isSheetCharacter } from "@/lib/dnd/import-character";
 import { POST as importPost } from "@/app/api/character/import/route";
 import { POST as characterPost } from "@/app/api/character/route";
+
+const AUTH = { Authorization: "Bearer test-tok" };
 
 describe("Character De-duplication and Stat Preservation", () => {
   let testCampaignId: string;
@@ -11,11 +24,12 @@ describe("Character De-duplication and Stat Preservation", () => {
   beforeEach(async () => {
     const campaign = await db.campaign.create({
       data: {
+        userId: "test-user-dedup",
         name: "Stat & Dedup Test Campaign",
         startingLevel: 1,
         levelFrom: 1,
         levelTo: 5,
-        isActive: true,
+        isActive: false,
       },
     });
     testCampaignId = campaign.id;
@@ -164,10 +178,10 @@ describe("Character De-duplication and Stat Preservation", () => {
       // 1. First import
       const req1 = new Request("http://localhost:3000/api/character/import", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...AUTH },
         body: JSON.stringify({
           campaignId: testCampaignId,
-          type: "player",
+          type: "companion",
           character: {
             name: "Лира Серебряная",
             level: 1,
@@ -186,10 +200,10 @@ describe("Character De-duplication and Stat Preservation", () => {
       // 2. Second import of the same character with different case
       const req2 = new Request("http://localhost:3000/api/character/import", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...AUTH },
         body: JSON.stringify({
           campaignId: testCampaignId,
-          type: "player",
+          type: "companion",
           character: {
             name: "лира серебряная",
             level: 1,
@@ -220,7 +234,7 @@ describe("Character De-duplication and Stat Preservation", () => {
     it("de-duplicates if character with same name exists, and does not default stats to 10 if missing", async () => {
       const req1 = new Request("http://localhost:3000/api/character", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...AUTH },
         body: JSON.stringify({
           campaignId: testCampaignId,
           name: "Быстрый Герой",
@@ -243,7 +257,7 @@ describe("Character De-duplication and Stat Preservation", () => {
       // Call POST again with same name -> should update, not create duplicate
       const req2 = new Request("http://localhost:3000/api/character", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...AUTH },
         body: JSON.stringify({
           campaignId: testCampaignId,
           name: "  быстрый герой  ",

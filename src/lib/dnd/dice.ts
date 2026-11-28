@@ -154,7 +154,8 @@ export interface D20Roll {
 export function rollD20(
   modifier: number = 0,
   advOrAdvantage?: boolean | "normal" | "advantage" | "disadvantage",
-  disadvantage?: boolean
+  disadvantage?: boolean,
+  opts?: { rerollOnes?: boolean }
 ): D20Roll {
   let mode: "normal" | "advantage" | "disadvantage" = "normal";
   if (typeof advOrAdvantage === "string") {
@@ -167,7 +168,12 @@ export function rollD20(
     else mode = "normal";
   }
 
-  const roll1 = 1 + Math.floor(rand() * 20);
+  const rollDie = () => {
+    const r = 1 + Math.floor(rand() * 20);
+    return opts?.rerollOnes && r === 1 ? 1 + Math.floor(rand() * 20) : r;
+  };
+
+  const roll1 = rollDie();
   if (mode === "normal") {
     return {
       d20: roll1,
@@ -182,7 +188,7 @@ export function rollD20(
     };
   }
 
-  const roll2 = 1 + Math.floor(rand() * 20);
+  const roll2 = rollDie();
   const chosen = mode === "advantage" ? Math.max(roll1, roll2) : Math.min(roll1, roll2);
   const other = chosen === roll1 ? roll2 : roll1;
 

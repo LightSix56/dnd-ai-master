@@ -46,10 +46,18 @@ export interface Mods {
   reachBonus?: number;
   /** Преимущество на свои атаки */
   attackAdvantage?: AttackFilter;
+  /** Преимущество на свои атаки по произвольному предикату (владелец, атака) */
+  attackAdvantageWhen?: (owner: Combatant, attack: Attack) => boolean;
   /** Постоянная прибавка к урону атак */
   damageBonus?: { amount: number; attacks: AttackFilter; label?: string };
+  /** Бонус к броскам атаки (числом) */
+  attackBonus?: number;
   /** Кость, прибавляемая к броскам атаки («1d3» — Подпитка магией) */
   attackBonusDice?: string;
+  /** Минимальный базовый КД (Природный доспех 13 + ЛОВ) */
+  minBaseAC?: (owner: Combatant) => number;
+  /** Преимущество на атаки, если в пределах N фт от цели есть дееспособный союзник (Тактика стаи) */
+  attackAdvantageNearAlly?: number;
   /** Провоцированные атаки по бойцу идут с помехой */
   opportunityDisadvantage?: boolean;
   /** Союзники бьют с преимуществом в ближнем бою по врагам в стольких футах от бойца (Тотем волка) */
@@ -60,6 +68,18 @@ export interface Mods {
   deathSaveAdvantage?: boolean;
   /** Прибавка к броску инициативы (Лихая удаль: модификатор Харизмы) */
   initiativeBonus?: number;
+  /** Переброс единицы на к20 один раз (Везучий полурослик) */
+  rerollOnes?: boolean;
+  /** Преимущество на спасброски против наложения указанных состояний («charmed», «frightened», «poisoned») */
+  saveAdvantageConditions?: string[];
+  /** Преимущество на спасброски ИНТ/МУД/ХАР против магии (Гномья хитрость, Бесстрастие ведалкена) */
+  magicMentalSaveAdvantage?: boolean;
+  /** Преимущество на спасброски против заклинаний (Сатир, Юань-ти) */
+  spellSaveAdvantage?: boolean;
+  /** Иммунитет к магическому усыплению (Фейское наследие) */
+  sleepImmune?: boolean;
+  /** Запрещает преимущество на атаки по владельцу для атакующих в пределах N фт (Дикий охотник шифтер) */
+  preventAdvantageWithinFt?: number;
 }
 
 export interface ModRule {
@@ -82,6 +102,10 @@ const CONDITION_MODS = new Map<string, ModRule>();
 /** Поправки умения по его ключу («totem-warrior/spirit-bear») */
 export function featureMods(srdKey: string, rule: ModRule | Mods): void {
   FEATURE_MODS.set(srdKey, "mods" in rule ? (rule as ModRule) : { mods: rule as Mods });
+}
+
+export function unregisterFeatureMod(srdKey: string): void {
+  FEATURE_MODS.delete(srdKey);
 }
 
 /** Поправки состояния по его типу («raging») */
@@ -146,6 +170,7 @@ const PHYSICAL = ["slashing", "piercing", "bludgeoning", "рубящий", "ко
 
 function typeMatches(entry: string, damageType: string): boolean {
   const type = damageType.toLowerCase();
+  if (entry === "all") return true;
   if (entry === "physical") return PHYSICAL.some((p) => type.includes(p));
   if (entry === "all-but-psychic") return !(type === "psychic" || type.includes("психич"));
   return entry.toLowerCase() === type;
@@ -173,6 +198,42 @@ export function modSaveAdvantage(c: Combatant, ability: AbilityKey, all?: Combat
   return modSources(c, all).some((s) => s.mods.saveAdvantage === "all" || (Array.isArray(s.mods.saveAdvantage) && s.mods.saveAdvantage.includes(ability)));
 }
 
+const MENTAL_ABILITIES: AbilityKey[] = ["INT", "WIS", "CHA"];
+
+/** Контекстное преимущество на спасбросок (против состояний, магии ИНТ/МУД/ХАР, заклинаний) */
+export function modSaveAdvantageForContext(
+  c: Combatant,
+  ability: AbilityKey,
+  opts: { condition?: string; isSpell?: boolean; isMagical?: boolean },
+  all?: Combatant[]
+): boolean {
+  const condLower = opts.condition?.toLowerCase();
+  const isMental = MENTAL_ABILITIES.includes(ability);
+  const isMagic = Boolean(opts.isSpell || opts.isMagical);
+  return modSources(c, all).some((s) => {
+    if (condLower && s.mods.saveAdvantageConditions?.some((entry) => entry.toLowerCase() === condLower)) {
+      return true;
+    }
+    if (s.mods.magicMentalSaveAdvantage && isMagic && isMental) {
+      return true;
+    }
+    if (s.mods.spellSaveAdvantage && opts.isSpell) {
+      return true;
+    }
+    return false;
+  });
+}
+
+/** Переброс единицы на к20 (Везучий) */
+export function modRerollOnes(c: Combatant): boolean {
+  return modSources(c).some((s) => Boolean(s.mods.rerollOnes));
+}
+
+/** Название умения, дающего иммунитет к магическому усыплению, или null */
+export function modSleepImmune(c: Combatant, all?: Combatant[]): string | null {
+  return modSources(c, all).find((s) => Boolean(s.mods.sleepImmune))?.name ?? null;
+}
+
 /** Сумма бонусов к спасброску характеристики */
 export function modSaveBonus(c: Combatant, ability: AbilityKey, all?: Combatant[]): number {
   return modSources(c, all).reduce((sum, s) => {
@@ -183,6 +244,14 @@ export function modSaveBonus(c: Combatant, ability: AbilityKey, all?: Combatant[
 
 export function modAcBonus(c: Combatant, all?: Combatant[]): number {
   return modSources(c, all).reduce((sum, s) => sum + (s.mods.acBonus ?? 0), 0);
+}
+
+export function modMinBaseAC(c: Combatant, all?: Combatant[]): number {
+  return modSources(c, all).reduce((max, s) => Math.max(max, s.mods.minBaseAC?.(c) ?? 0), 0);
+}
+
+export function modAttackBonus(c: Combatant): number {
+  return modSources(c).reduce((sum, s) => sum + (s.mods.attackBonus ?? 0), 0);
 }
 
 export function modSpeedBonus(c: Combatant): number {
@@ -231,7 +300,11 @@ export function attackMatches(c: Combatant, attack: Attack, filter: AttackFilter
 /** Причины преимущества на атаку от собственных поправок атакующего */
 export function modAttackAdvantage(c: Combatant, attack: Attack): string[] {
   return modSources(c)
-    .filter((s) => s.mods.attackAdvantage && attackMatches(c, attack, s.mods.attackAdvantage))
+    .filter(
+      (s) =>
+        (s.mods.attackAdvantage && attackMatches(c, attack, s.mods.attackAdvantage)) ||
+        s.mods.attackAdvantageWhen?.(c, attack)
+    )
     .map((s) => s.name);
 }
 
@@ -256,6 +329,22 @@ export function modOpportunityDisadvantage(c: Combatant): string | null {
   return modSources(c).find((s) => s.mods.opportunityDisadvantage)?.name ?? null;
 }
 
+/** Причина, по которой атакующий в пределах радиуса не может иметь преимущество по цели */
+export function modPreventAdvantageAgainst(
+  target: Combatant,
+  attacker: Combatant,
+  distanceFtValue: number | undefined,
+  all?: Combatant[]
+): string | null {
+  if (!conscious(target)) return null;
+  const dist = distanceFtValue ?? distanceFt(attacker, target);
+  for (const s of modSources(target, all)) {
+    const maxFt = s.mods.preventAdvantageWithinFt;
+    if (maxFt !== undefined && dist <= maxFt) return s.name;
+  }
+  return null;
+}
+
 /**
  * Преимущество и помеха на атаку от чужих умений: союзник-«волк» рядом с целью, враг-«медведь» рядом
  * с атакующим. Возвращает причины для журнала.
@@ -267,6 +356,21 @@ export function modAttackInfluence(
   all: Combatant[] | undefined
 ): { advantage: string[]; disadvantage: string[] } {
   const out = { advantage: [] as string[], disadvantage: [] as string[] };
+  for (const s of modSources(attacker)) {
+    const nearAlly = s.mods.attackAdvantageNearAlly;
+    if (
+      nearAlly &&
+      all?.some(
+        (p) =>
+          p.id !== attacker.id &&
+          !isHostile(p.type, attacker.type) &&
+          conscious(p) &&
+          distanceFt(p, target) <= nearAlly
+      )
+    ) {
+      out.advantage.push(`${s.name} (союзник в ${nearAlly} фт)`);
+    }
+  }
   for (const p of all ?? []) {
     if (p.id === attacker.id || !conscious(p)) continue;
     const allyOfAttacker = !isHostile(p.type, attacker.type);

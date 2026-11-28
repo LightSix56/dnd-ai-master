@@ -2,9 +2,9 @@
 import type { ActionParameters, AttackKind, ActionCost, DamageRoll, CharacterPreset } from "../types";
 import type { AttackDefinition, SpellDefinition, AbilityDefinition } from "../library-data";
 
-import { SPELLS } from "dnd-shared";
-import monstersData from "./data/monsters.json";
-import weaponsData from "./data/equipment.json";
+import { SPELLS, findSpell } from "dnd-shared";
+import { SRD_WEAPONS } from "dnd-shared/items";
+import { MONSTERS } from "dnd-shared/monsters";
 
 export interface SRDSpell {
   id: string;
@@ -55,8 +55,8 @@ function combatSpells(source: "srd" | "expanded"): SRDSpell[] {
 const spellsList: SRDSpell[] = combatSpells("srd");
 const expandedList: SRDSpell[] = combatSpells("expanded");
 const allCombatSpellsList: SRDSpell[] = [...spellsList, ...expandedList];
-const monstersList: CharacterPreset[] = monstersData as unknown as CharacterPreset[];
-const weaponsList: SRDWeapon[] = weaponsData as unknown as SRDWeapon[];
+const monstersList: CharacterPreset[] = MONSTERS as unknown as CharacterPreset[];
+const weaponsList: SRDWeapon[] = SRD_WEAPONS as unknown as SRDWeapon[];
 
 const spellsByName = new Map<string, SRDSpell>();
 const spellsByNameEn = new Map<string, SRDSpell>();
@@ -97,18 +97,33 @@ export const getAllSpells = getAllCombatSpells;
 export const getSpell = getSRDSpell;
 export const searchSpells = searchSRDSpells;
 
+function toCombatSRDSpell(spell: ReturnType<typeof findSpell>): SRDSpell | undefined {
+  if (!spell) return undefined;
+  const byMasterId = spell.masterRecord?.id
+    ? spellsByName.get(spell.masterRecord.id.toLowerCase())
+    : undefined;
+  if (byMasterId) return byMasterId;
+  return (
+    spellsByName.get(spell.id.toLowerCase()) ||
+    spellsByName.get(spell.name.toLowerCase()) ||
+    spellsByNameEn.get(spell.nameEn.toLowerCase())
+  );
+}
+
 export function getSRDSpell(nameOrQuery: string): SRDSpell | undefined {
   if (!nameOrQuery) return undefined;
   const q = nameOrQuery.trim().toLowerCase();
-  return (
-    spellsByName.get(q) ||
-    spellsByNameEn.get(q) ||
-    allCombatSpellsList.find(
-      (s) =>
-        s.name.toLowerCase().includes(q) ||
-        s.nameEn.toLowerCase().includes(q) ||
-        s.id.toLowerCase() === q
-    )
+  const exact = spellsByName.get(q) || spellsByNameEn.get(q);
+  if (exact) return exact;
+
+  const shared = toCombatSRDSpell(findSpell(nameOrQuery));
+  if (shared) return shared;
+
+  return allCombatSpellsList.find(
+    (s) =>
+      s.name.toLowerCase().includes(q) ||
+      s.nameEn.toLowerCase().includes(q) ||
+      s.id.toLowerCase() === q
   );
 }
 

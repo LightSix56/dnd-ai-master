@@ -1,10 +1,14 @@
 // API: удалить кампанию по id с проверкой владельца
 import { db } from "@/lib/db";
 import { getAuthUserFromRequest, getSupabaseAdminClient } from "@/lib/supabase/client";
+import { safeErrorDetails } from "@/lib/security/errors";
 
 export async function POST(req: Request) {
   try {
     const { user } = await getAuthUserFromRequest(req);
+    if (!user) {
+      return Response.json({ error: "Войдите в аккаунт, чтобы удалить кампанию" }, { status: 401 });
+    }
     const { campaignId }: { campaignId: string } = await req.json();
     if (!campaignId) {
       return Response.json({ error: "campaignId required" }, { status: 400 });
@@ -16,8 +20,8 @@ export async function POST(req: Request) {
       return Response.json({ error: "Campaign not found" }, { status: 404 });
     }
 
-    // Защита: нельзя удалить чужую кампанию
-    if (existing.userId && existing.userId !== user?.id) {
+    // Защита: нельзя удалить чужую или безвладельческую кампанию
+    if (!existing.userId || existing.userId !== user.id) {
       return Response.json({ error: "Доступ запрещён: нельзя удалить чужую кампанию" }, { status: 403 });
     }
 
@@ -89,7 +93,7 @@ export async function POST(req: Request) {
     return Response.json(
       {
         error: "Failed to delete campaign",
-        details: error instanceof Error ? error.message : String(error),
+        details: safeErrorDetails(error),
       },
       { status: 500 }
     );

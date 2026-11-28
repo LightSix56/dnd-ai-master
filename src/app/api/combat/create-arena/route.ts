@@ -1,19 +1,32 @@
-// API: Создать готовую тестовую арену с Магом 3-го круга, Друидом и стихийным ландшафтом
+// API: Создать готовую тестовую арену с Магом 3-го круга, Друидом и стихийным ландшафтом (только dev)
+import { denyCampaignAccess } from "@/lib/auth/campaign-access";
 import { db } from "@/lib/db";
 import { endActiveCombats } from "@/lib/combat/combat-sheet-sync";
-import { packMonsterData } from "@/lib/combat/serialize";
-import { hydrateCombat } from "@/lib/combat/serialize";
+import { packMonsterData, hydrateCombat } from "@/lib/combat/serialize";
 import { CAMPAIGN_HEROES_PRESETS, createCombatantFromPreset } from "@/lib/combat/preset-data";
 import { getSRDMonster } from "@/lib/combat/srd/adapter";
+import { safeErrorDetails } from "@/lib/security/errors";
 
-export async function POST() {
+export async function POST(req?: Request) {
   try {
-    // 1. Завершаем активные бои
-    await endActiveCombats();
+    if (process.env.NODE_ENV === "production" && process.env.ALLOW_TEST_ARENA !== "true") {
+      return Response.json({ error: "Not found" }, { status: 404 });
+    }
+    if (!req) {
+      return Response.json({ error: "Требуется запрос с авторизацией" }, { status: 401 });
+    }
+    const body = await req.json().catch(() => ({}));
+    const campaignId = typeof body?.campaignId === "string" ? body.campaignId.trim() : "";
+    const denied = await denyCampaignAccess(req, campaignId || null);
+    if (denied) return denied;
+
+    // 1. Завершаем активные бои только в этой кампании
+    await endActiveCombats({ campaignId });
 
     // 2. Создаем бой
     const combat = await db.combat.create({
       data: {
+        campaignId,
         name: "Тестовая Арена: Магия 3-го круга и Дикий облик",
         status: "active",
         gridWidth: 20,
@@ -174,7 +187,7 @@ export async function POST() {
   } catch (error) {
     console.error("[combat/create-arena] error:", error);
     return Response.json(
-      { error: "Не удалось создать арену", details: String(error) },
+      { error: "Не удалось создать арену", details: safeErrorDetails(error) },
       { status: 500 }
     );
   }

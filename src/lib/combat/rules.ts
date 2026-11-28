@@ -22,15 +22,21 @@ import { spendHomingStrike } from "./rogue-pool";
 import {
   modAcBonus,
   modAttackAdvantage,
+  modAttackBonus,
   modAttackBonusDice,
   modAttackInfluence,
   modCritFrom,
   modDeathSaveAdvantage,
+  modMinBaseAC,
+  modPreventAdvantageAgainst,
+  modRerollOnes,
   modSaveAdvantage,
+  modSaveAdvantageForContext,
   modSaveBonus,
   modSpeedBonus,
 } from "./feature-mods";
 import "./classes/rules-index";
+import "./races/rules-index";
 
 // ============ СОСТОЯНИЯ ============
 
@@ -87,6 +93,16 @@ export function canAct(c: Combatant): boolean {
   return !getConditionEffects(c.conditions).some((e) => e.noActions);
 }
 
+/** Запрещены ли бойцу реакции (паралич, оглушение, замедление, панцирь и т.п.) */
+export function hasNoReactions(c: Combatant): boolean {
+  return getConditionEffects(c.conditions).some((e) => e.noReactions);
+}
+
+/** Запрещены ли бойцу атаки, заклинания и прочие боевые действия (Панцирная защита и т.п.) */
+export function hasPreventOffensiveActions(c: Combatant): boolean {
+  return getConditionEffects(c.conditions).some((e) => e.preventOffensiveActions);
+}
+
 /** Итоговый AC с учётом бонусов от состояний (Щит, Ускорение, Укрытия) */
 export function effectiveAC(c: Combatant, all?: Combatant[]): number {
   const bonus = getConditionEffects(c.conditions).reduce(
@@ -94,7 +110,8 @@ export function effectiveAC(c: Combatant, all?: Combatant[]): number {
     0
   );
   // Поправки от умений и аур союзников (feature-mods.ts); ауры считаются, когда известны все бойцы
-  return c.ac + bonus + dynamicAcBonus(c) + modAcBonus(c, all);
+  const baseAc = Math.max(c.ac, modMinBaseAC(c, all));
+  return baseAc + bonus + dynamicAcBonus(c) + modAcBonus(c, all);
 }
 
 /** Итоговая скорость с учётом состояний и Рывка */
@@ -104,7 +121,7 @@ export function effectiveSpeed(c: Combatant): number {
   const setTo = effects.find((e) => e.speedSetTo !== undefined)?.speedSetTo;
   if (setTo !== undefined) return setTo;
 
-  let speed = c.speed + modSpeedBonus(c);
+  let speed = c.speed + modSpeedBonus(c) + effects.reduce((sum, e) => sum + (e.speedBonus ?? 0), 0);
   for (const e of effects) {
     if (e.speedMultiplier) speed = Math.floor(speed * e.speedMultiplier);
   }
@@ -201,6 +218,19 @@ export function computeAttackAdvantage(
     adv = true;
     reasons.push("цель: Отвлекающий удар");
   }
+  for (const cond of target.conditions) {
+    const def = CONDITION_EFFECTS[cond.type];
+    const matchesAlliesOnly = def?.effects.attackAdvantageAgainstNonHostilesOfSource && cond.source !== attacker.id;
+    const matchesAlliesAndSelf = def?.effects.attackAdvantageAgainstAlliesAndSelfOfSource;
+    if ((!matchesAlliesOnly && !matchesAlliesAndSelf) || !cond.source) {
+      continue;
+    }
+    const sourceCombatant = context.allCombatants?.find((x) => x.id === cond.source);
+    if (!sourceCombatant || !isHostile(sourceCombatant.type, attacker.type)) {
+      adv = true;
+      reasons.push(`цель: ${def!.name}`);
+    }
+  }
   if (attacker.conditions.some((x) => x.type === "goaded" && x.source !== target.id)) {
     dis = true;
     reasons.push("Провоцирующая атака (цель не источник)");
@@ -291,6 +321,15 @@ export function computeAttackAdvantage(
   ) {
     adv = false;
     reasons.push("цель: Неуловимость (без преимущества)");
+  }
+
+  // Запрет преимущества на атаки против цели в радиусе (Дикий охотник шифтер и т.п.)
+  if (adv) {
+    const preventedBy = modPreventAdvantageAgainst(target, attacker, context.distanceFt, context.allCombatants);
+    if (preventedBy) {
+      adv = false;
+      reasons.push(`цель: ${preventedBy} (без преимущества)`);
+    }
   }
 
   // Скрытность цели
@@ -466,6 +505,8 @@ export function rollSave(
   dc: number,
   opts: {
     isSpell?: boolean;
+    isMagical?: boolean;
+    condition?: string;
     advantage?: boolean;
     disadvantage?: boolean;
     /** Бонус со стороны (Аура защиты паладина) */
@@ -496,7 +537,16 @@ export function rollSave(
   // Оплот силы: укрытие наполовину даёт +2 к спасброскам Ловкости
   if (ability === "DEX" && hasCondition(c, "bulwark_of_force")) bonus += 2;
 
-  let adv = effects.some((e) => e.saveAdvantage?.includes(ability)) || !!opts.advantage || modSaveAdvantage(c, ability, opts.all);
+  let adv =
+    effects.some((e) => e.saveAdvantage?.includes(ability)) ||
+    !!opts.advantage ||
+    modSaveAdvantage(c, ability, opts.all) ||
+    modSaveAdvantageForContext(
+      c,
+      ability,
+      { condition: opts.condition, isSpell: opts.isSpell, isMagical: opts.isMagical },
+      opts.all
+    );
   let dis = effects.some((e) => e.saveDisadvantage?.includes(ability)) || !!opts.disadvantage;
 
   // Чувство опасности варвара: преимущество на спасброски Ловкости, если он видит и слышит
@@ -529,7 +579,7 @@ export function rollSave(
   const blessDice = effects.find((e) => e.attackBonusDice)?.attackBonusDice;
   const blessBonus = blessDice ? rollDice(blessDice).total : 0;
 
-  const roll = rollD20(bonus + blessBonus, adv, dis);
+  const roll = rollD20(bonus + blessBonus, adv, dis, { rerollOnes: modRerollOnes(c) });
 
   if (autoFail) {
     return {
@@ -582,7 +632,7 @@ export interface DeathSaveResult {
  */
 export function rollDeathSave(c: Combatant): DeathSaveResult {
   const advantage = modDeathSaveAdvantage(c);
-  const roll = rollD20(0, !!advantage);
+  const roll = rollD20(0, !!advantage, false, { rerollOnes: modRerollOnes(c) });
   const nat = roll.natural;
   const criticalSuccess = nat === 20;
   const criticalFailure = nat === 1;
@@ -787,9 +837,10 @@ export function resolveAttack(
   const modDice = modAttackBonusDice(attacker).reduce((sum, d) => sum + rollDice(d.dice).total, 0);
 
   const roll = rollD20(
-    attackToUse.attackBonus + blessBonus + archery + modDice,
+    attackToUse.attackBonus + blessBonus + archery + modDice + modAttackBonus(attacker),
     advResult.advantage,
-    advResult.disadvantage
+    advResult.disadvantage,
+    { rerollOnes: modRerollOnes(attacker) }
   );
 
   const coverBonus = options.coverBonus ?? 0;
@@ -905,6 +956,7 @@ export interface ActionCostCheck {
  */
 export function canPayForAttack(c: Combatant, attack: Attack): ActionCostCheck {
   if (!canAct(c)) return { ok: false, reason: "Не может действовать" };
+  if (hasPreventOffensiveActions(c)) return { ok: false, reason: "Не может атаковать в текущем состоянии" };
 
   if (attack.actionCost === "action+bonus") {
     if (c.actionUsed && c.extraActions <= 0) {

@@ -65,6 +65,14 @@ export interface Combatant {
   suppressRegenerationUntilRound?: number;
   potions?: CombatPotion[];
   challengeRating?: number;
+  race?: string;
+  subrace?: string;
+  raceId?: string;
+  subraceId?: string;
+  darkvision?: number;
+  speeds?: { fly?: number; swim?: number; climb?: number; burrow?: number };
+  racialVariants?: string[];
+  armorType?: "none" | "light" | "medium" | "heavy";
 }
 
 export interface CombatPotion {
@@ -237,6 +245,8 @@ export interface AppliedEffect {
   value?: number;
   /** Эффект держится концентрацией заклинателя */
   concentration?: boolean;
+  /** Магическое усыпление (для проверки иммунитета Фейского наследия) */
+  isMagicalSleep?: boolean;
 }
 
 export interface ActionParameters {
@@ -311,6 +321,8 @@ export interface ActionParameters {
   offTurn?: boolean;
   /** Когда использования кончились, умение можно повторить за кость этого запаса (Пси-прыжок, Оплот силы…) */
   dieFallback?: string;
+  /** Способность снимает это состояние и может применяться даже при preventOffensiveActions */
+  exitsCondition?: string;
   /** Число умения на уровне героя: лишние кости крита, порог крита, лечение Уцелевшего, бонус ауры */
   featureValue?: number;
   refresh?: "short" | "long" | "none" | "turn" | "round";
@@ -347,6 +359,8 @@ export interface ConditionEffect {
   rangedDisadvantageAgainst?: boolean;
   noActions?: boolean;
   noReactions?: boolean;
+  /** Запрещает атаки, заклинания и прочие способности (кроме снимающих само состояние) */
+  preventOffensiveActions?: boolean;
   autoFailStrSave?: boolean;
   autoFailDexSave?: boolean;
   damagePerTurn?: { dice: string; type: string };
@@ -355,10 +369,16 @@ export interface ConditionEffect {
   attackBonusDice?: string;
   // Не может атаковать источник (испуган не может приближаться — упрощено)
   cannotApproachSource?: boolean;
+  // Бонус к скорости (Дар фей: Проход и т.п.)
+  speedBonus?: number;
   // Расходуется на первую атаку (Помощь / преимущество от союзника)
   consumedOnAttack?: boolean;
   // Помеха на атаки по всем, кроме наложившего состояние (source)
   disadvantageVsOthers?: boolean;
+  // Преимущество на атаки по этой цели для не-врагов наложившего состояние (source)
+  attackAdvantageAgainstNonHostilesOfSource?: boolean;
+  // Преимущество на атаки по этой цели для самого source и его не-врагов (Рёв дракона MPMM)
+  attackAdvantageAgainstAlliesAndSelfOfSource?: boolean;
 }
 
 export const CONDITION_EFFECTS: Record<string, {
@@ -1044,6 +1064,112 @@ export const CONDITION_EFFECTS: Record<string, {
     name: "В панике / Бегство",
     description: "Существо сломлено страхом и стремится покинуть поле боя",
     effects: { attackDisadvantage: true },
+  },
+  kobold_cower: {
+    name: "Склонись, съёжься и умоляй",
+    description: "Союзники отвлёкшего получают преимущество на атаки по этой цели",
+    effects: { attackAdvantageAgainstNonHostilesOfSource: true },
+  },
+  kobold_cower_aura: {
+    name: "kobold_cower_aura",
+    description: "Служебная отметка",
+    effects: {},
+    service: true,
+  },
+  kobold_draconic_cry: {
+    name: "Рёв дракона",
+    description: "Кобольд и его союзники получают преимущество на атаки по этой цели",
+    effects: { attackAdvantageAgainstAlliesAndSelfOfSource: true },
+  },
+  kobold_draconic_cry_aura: {
+    name: "kobold_draconic_cry_aura",
+    description: "Служебная отметка",
+    effects: {},
+    service: true,
+  },
+  blade_ward: {
+    name: "Защита от оружия",
+    description: "Сопротивление дробящему, колющему и рубящему урону от атак оружием",
+    effects: {},
+  },
+  hobgoblin_passage: {
+    name: "Дар фей: Проход",
+    description: "+10 фт к скорости до начала следующего хода хобгоблина",
+    effects: { speedBonus: 10 },
+  },
+  hobgoblin_spite_buff: {
+    name: "Дар фей: Злость",
+    description: "Первое попадание этого существа до начала следующего хода хобгоблина наложит на цель помеху на следующую атаку",
+    effects: {},
+    service: true,
+  },
+  spite_disadvantage: {
+    name: "Дар фей: Злость (помеха)",
+    description: "Помеха на следующий бросок атаки в течение 1 минуты",
+    effects: { attackDisadvantage: true, consumedOnAttack: true },
+  },
+  dhampir_bite_bonus: {
+    name: "Укус вампира (усиление)",
+    description: "Бонус к следующему броску атаки от укуса вампира",
+    effects: {},
+  },
+  aasimar_radiant_soul: {
+    name: "Сияющая душа",
+    description: "Полёт 30 фт и дополнительный урон излучением раз в ход",
+    effects: {},
+  },
+  aasimar_radiant_consumption: {
+    name: "Испускание сияния",
+    description: "Аура урона излучением 10 фт в конце хода и доп. урон раз в ход",
+    effects: {},
+  },
+  aasimar_necrotic_shroud: {
+    name: "Саван смерти",
+    description: "Дополнительный урон некротической энергией раз в ход",
+    effects: {},
+  },
+  aasimar_shroud_fear_aura: {
+    name: "aasimar_shroud_fear_aura",
+    description: "Служебная отметка",
+    effects: {},
+    service: true,
+  },
+  kender_taunted: {
+    name: "Насмешка кендера",
+    description: "Помеха на броски атаки по всем целям, кроме кендера (до начала его следующего хода)",
+    effects: { disadvantageVsOthers: true },
+  },
+  tortle_shell: {
+    name: "Панцирная защита",
+    description: "+4 к КД, преимущество на спасброски СИЛ и ТЕЛ, помеха на спасброски ЛОВ, скорость 0, ничком, нет реакций и атак/заклинаний; выход бонусным действием",
+    effects: {
+      acBonus: 4,
+      speedSetTo: 0,
+      saveAdvantage: ["STR", "CON"],
+      saveDisadvantage: ["DEX"],
+      attackDisadvantage: true,
+      meleeAdvantageAgainst: true,
+      rangedDisadvantageAgainst: true,
+      noReactions: true,
+      preventOffensiveActions: true,
+    },
+  },
+  shifter_shifted: {
+    name: "Смена формы",
+    description: "Звериный облик шифтера",
+    effects: {},
+  },
+  leonin_roar_aura: {
+    name: "leonin_roar_aura",
+    description: "Служебная отметка",
+    effects: {},
+    service: true,
+  },
+  kender_taunt_aura: {
+    name: "kender_taunt_aura",
+    description: "Служебная отметка",
+    effects: {},
+    service: true,
   },
 };
 

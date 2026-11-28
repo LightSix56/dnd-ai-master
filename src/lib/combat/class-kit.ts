@@ -18,7 +18,7 @@
 
 import { rollDice } from "@/lib/dnd/dice";
 import { distanceFt } from "./grid";
-import { canAct, checkReach, hasCondition, type SaveResult } from "./rules";
+import { canAct, checkReach, hasCondition, hasNoReactions, type SaveResult } from "./rules";
 import {
   EngineError,
   applyEffect,
@@ -95,7 +95,7 @@ export function removeConditions(state: CombatState, c: Combatant, ...types: str
 export function featureReady(c: Combatant, key: string, opts: { reaction?: boolean; pool?: string } = {}): CombatAbility | null {
   const ability = abilityByKey(c, key);
   if (!ability || !alive(c) || !canAct(c)) return null;
-  if (opts.reaction && c.reactionUsed) return null;
+  if (opts.reaction && (c.reactionUsed || hasNoReactions(c))) return null;
   if (ability.usesMax > 0 && ability.usesUsed >= ability.usesMax) return null;
   if (opts.pool && poolLeft(c, opts.pool) < 1) return null;
   return ability;
@@ -129,8 +129,15 @@ export function inReach(state: CombatState, c: Combatant, target: Combatant, att
 }
 
 /** Спасбросок цели с записью в журнал; true — спасбросок успешен */
-export function saves(state: CombatState, target: Combatant, ability: AbilityKey, dc: number, label: string): boolean {
-  const save = rollEffectSave(state, target, ability, dc, false, label);
+export function saves(
+  state: CombatState,
+  target: Combatant,
+  ability: AbilityKey,
+  dc: number,
+  label: string,
+  opts?: { condition?: string; isMagical?: boolean }
+): boolean {
+  const save = rollEffectSave(state, target, ability, dc, false, label, undefined, opts);
   state.addLog(`${target.name}: ${save.text} против «${label}»`, "save", target.name);
   return save.success;
 }
@@ -419,7 +426,7 @@ export function registerKit(kit: ClassKit): void {
         if (rule.ownTurn && !isOwnTurn(state, attacker)) continue;
         if (rule.armed && !armedRider(attacker, key)) continue;
         if (rule.oncePerTurn && usedThisTurn(state, attacker, key)) continue;
-        if (rule.reaction && attacker.reactionUsed) continue;
+        if (rule.reaction && (attacker.reactionUsed || hasNoReactions(attacker) || !canAct(attacker))) continue;
         if (rule.spendUse && ability.usesMax > 0 && ability.usesUsed >= ability.usesMax) {
           if (rule.armed) disarmRider(attacker, key);
           continue;
@@ -534,6 +541,10 @@ export function registerKit(kit: ClassKit): void {
     afterAttack(state, attacker, target, attack) {
       if (!attack) return;
       for (const [, run, ability] of ownedAbilities(attacker, kit.afterAttack)) run(state, attacker, ability, target, attack);
+    },
+
+    creatureDown(state, target) {
+      if (kit.conditionEnd || kit.endsWhenDown) sweepStances(state, target);
     },
   };
   registerClassModule(mod);

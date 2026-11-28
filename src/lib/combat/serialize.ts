@@ -34,6 +34,14 @@ export interface MonsterData {
   tacticalRole?: TacticalRole;
   suppressRegenerationUntilRound?: number;
   challengeRating?: number;
+  race?: string;
+  subrace?: string;
+  raceId?: string;
+  subraceId?: string;
+  darkvision?: number;
+  speeds?: Combatant["speeds"];
+  racialVariants?: string[];
+  armorType?: Combatant["armorType"];
 }
 
 const MONSTER_DATA_KEYS: (keyof MonsterData)[] = [
@@ -48,6 +56,14 @@ const MONSTER_DATA_KEYS: (keyof MonsterData)[] = [
   "tacticalRole",
   "suppressRegenerationUntilRound",
   "challengeRating",
+  "race",
+  "subrace",
+  "raceId",
+  "subraceId",
+  "darkvision",
+  "speeds",
+  "racialVariants",
+  "armorType",
 ];
 
 /** Собирает JSON для колонки monsterData из объекта бойца (пустые поля пропускаются) */

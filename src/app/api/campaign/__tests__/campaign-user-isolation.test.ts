@@ -197,7 +197,7 @@ describe("Campaign User Isolation API", () => {
       const { __mocks } = await import("@/lib/supabase/client") as any;
       const { __dbMocks } = await import("@/lib/db") as any;
 
-      __mocks.getAuthUserFromRequestMock.mockResolvedValueOnce({
+      __mocks.getAuthUserFromRequestMock.mockResolvedValue({
         user: { id: "user-delta" },
         error: null,
       });

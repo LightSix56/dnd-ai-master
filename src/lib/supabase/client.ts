@@ -1,11 +1,17 @@
 // Клиенты Supabase для battle+ai
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://npcayouvvwjaqxqgxqxc.supabase.co";
-const supabaseAnonKey =
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5wY2F5b3V2dndqYXF4cWd4cXhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3NDAyMDEsImV4cCI6MjA5NTMxNjIwMX0.t9KyKMwAEPlrhZn0z8lgQ9oSKjdWiFc14h1bdeiXmzw";
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
+
+function requirePublicEnv(): { url: string; anonKey: string } {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || supabaseUrl;
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || supabaseAnonKey;
+  if (!url || !anonKey) {
+    throw new Error("Supabase public configuration (NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY) is missing.");
+  }
+  return { url, anonKey };
+}
 
 let browserClientInstance: SupabaseClient | null = null;
 
@@ -13,11 +19,12 @@ let browserClientInstance: SupabaseClient | null = null;
  * Возвращает singleton клиент для браузера (React компоненты, Realtime)
  */
 export function getSupabaseBrowserClient(): SupabaseClient {
+  const { url, anonKey } = requirePublicEnv();
   if (typeof window === "undefined") {
-    return createClient(supabaseUrl, supabaseAnonKey);
+    return createClient(url, anonKey);
   }
   if (!browserClientInstance) {
-    browserClientInstance = createClient(supabaseUrl, supabaseAnonKey, {
+    browserClientInstance = createClient(url, anonKey, {
       auth: {
         persistSession: true,
         autoRefreshToken: true,
@@ -31,7 +38,8 @@ export function getSupabaseBrowserClient(): SupabaseClient {
  * Создаёт серверный клиент для API Route с пробросом Authorization токена пользователя
  */
 export function getSupabaseServerClient(authHeader?: string | null): SupabaseClient {
-  return createClient(supabaseUrl, supabaseAnonKey, {
+  const { url, anonKey } = requirePublicEnv();
+  return createClient(url, anonKey, {
     global: {
       headers: authHeader ? { Authorization: authHeader } : {},
     },
@@ -45,8 +53,14 @@ export function getSupabaseServerClient(authHeader?: string | null): SupabaseCli
  * Возвращает сервисный админ-клиент для серверных операций (Service Role)
  */
 export function getSupabaseAdminClient(): SupabaseClient {
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+  if (!key) {
+    throw new Error("SUPABASE_SERVICE_ROLE_KEY is not configured.");
+  }
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL || supabaseUrl;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || supabaseServiceKey || supabaseAnonKey;
+  if (!url) {
+    throw new Error("NEXT_PUBLIC_SUPABASE_URL is not configured.");
+  }
   return createClient(url, key, {
     auth: {
       persistSession: false,

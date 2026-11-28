@@ -14,7 +14,7 @@ import type {
   DamageRoll,
 } from "../types";
 import type { MonsterDefinition, MonsterAction } from "./types";
-import srdMonsters from "../srd/data/monsters.json";
+import { MONSTERS as srdMonsters } from "dnd-shared/monsters";
 
 interface SrdDefenses {
   damageResistances?: string[];

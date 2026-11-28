@@ -3,6 +3,7 @@
 
 import { createOpenAI } from "@ai-sdk/openai";
 import { MISSING_API_KEY_MESSAGE, resolveApiKey } from "./api-key";
+import { parsePublicHttpsUrlSyntax, safeFetch } from "@/lib/security/ssrf";
 
 export type AuthMode = "bearer" | "x-api-key" | "raw";
 
@@ -122,9 +123,10 @@ export function createClient(
   // Триммим ключ — частая причина "Неверный формат API ключа"
   const cleanKey = resolveApiKey(userApiKey);
   if (!cleanKey) throw new Error(MISSING_API_KEY_MESSAGE);
-  const baseURL = (userBaseURL || process.env.AI_BASE_URL || "https://polza.ai/api/v1")
+  const rawBaseURL = (userBaseURL || process.env.AI_BASE_URL || "https://polza.ai/api/v1")
     .trim()
     .replace(/\/+$/, "");
+  const baseURL = parsePublicHttpsUrlSyntax(rawBaseURL).toString().replace(/\/+$/, "");
   const mode = authMode || "bearer";
 
   const customFetch: typeof fetch = async (input, init) => {
@@ -146,7 +148,7 @@ export function createClient(
       if (reasoning) body = addReasoningEffort(body, reasoning);
     }
 
-    const res = await fetch(input, { ...init, headers, body });
+    const res = await safeFetch(url, { ...init, headers, body });
 
     // Стрим и ошибки отдаём как есть: чанки читаются построчно, а не целиком
     const contentType = res.headers.get("content-type") || "";

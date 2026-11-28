@@ -1,7 +1,6 @@
 // Умения классов и подклассов для боя, описанные правилами-данными.
 //
-// Тексты умений берутся из data/class-subclasses.json (собирается scripts/import-sheet-classes.mjs из
-// данных сайта листа: 115 официальных подклассов). Что умение значит в бою, описывает правило (Rule):
+// Тексты умений берутся из dnd-shared/classes (115 официальных подклассов). Что умение значит в бою, описывает правило (Rule):
 // когда применяется (действие, бонусное, реакция), сколько зарядов и когда они возвращаются, из какого
 // запаса тратится, какой спасбросок вызывает. Правила лежат в classes/<класс>.ts и регистрируются
 // через defineClass. Что происходит при применении — в classes/<класс>-combat.ts (см. class-kit.ts).
@@ -11,29 +10,21 @@
 //
 // Файл без обращений к движку: им пользуются сервер и редактор способностей в браузере.
 
-import data from "./data/class-subclasses.json";
+import {
+  SUBCLASSES as SHARED_SUBCLASSES,
+  type FlatSubclassData,
+  type SubclassFeature,
+} from "dnd-shared/classes";
 import type { HeroFeatureContext, SrdAbilityDefinition } from "./class-features";
 import type { AbilityKey, ActionCost, ActionParameters, CombatAbility } from "./types";
 
 // ============ ДАННЫЕ ============
 
-export interface SubclassFeatureData {
-  level: number;
-  name: string;
-  description: string;
-}
+export type SubclassFeatureData = SubclassFeature;
 
-export interface SubclassData {
-  classId: string;
-  className: string;
-  id: string;
-  name: string;
-  nameEn: string;
-  source: string;
-  features: SubclassFeatureData[];
-}
+export type SubclassData = FlatSubclassData;
 
-export const SUBCLASSES = data.subclasses as SubclassData[];
+export const SUBCLASSES: SubclassData[] = SHARED_SUBCLASSES;
 
 const norm = (s: string) => s.toLowerCase().replace(/ё/g, "е").replace(/\s+/g, " ").trim();
 
@@ -88,6 +79,8 @@ export interface Rule {
   description?: string;
   /** Реакция, применимая и не в свой ход */
   offTurn?: boolean;
+  /** Способность снимает это состояние и может применяться даже при preventOffensiveActions (Панцирная защита) */
+  exitsCondition?: string;
 }
 
 /** Вариант умения на выбор (тотем, стихия ауры, форма зверя) */
@@ -196,14 +189,14 @@ export function mentions(text: string, name: string): boolean {
   return re.test(text);
 }
 
-function optionChosen(o: OptionRule, c: Calc): boolean {
+export function optionChosen(o: OptionRule, c: Calc): boolean {
   if (o.tokens?.some((t) => c.tokens.has(t))) return true;
   return [o.name, ...(o.aliases ?? [])].some((a) => mentions(c.text, a));
 }
 
 // ============ СБОРКА СПОСОБНОСТЕЙ ============
 
-function buildDefinition(key: string, name: string, description: string, rule: Rule, c: Calc): SrdAbilityDefinition {
+export function buildDefinition(key: string, name: string, description: string, rule: Rule, c: Calc): SrdAbilityDefinition {
   const uses = rule.uses?.(c) ?? { max: 0, refresh: "none" as Refresh };
   const note = rule.note?.(c);
   const common = {
@@ -235,6 +228,7 @@ function buildDefinition(key: string, name: string, description: string, rule: R
     ...(rule.manual ? { manual: true } : {}),
     ...(rule.defer ? { deferCost: true } : {}),
     ...(rule.offTurn ? { offTurn: true } : {}),
+    ...(rule.exitsCondition ? { exitsCondition: rule.exitsCondition } : {}),
     ...(rule.dieFallback ? { dieFallback: rule.dieFallback } : {}),
     ...(value !== undefined ? { featureValue: value } : {}),
   };

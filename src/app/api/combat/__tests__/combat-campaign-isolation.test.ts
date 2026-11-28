@@ -1,7 +1,16 @@
-import { describe, it, expect, beforeAll, afterAll } from "vitest";
+import { describe, it, expect, beforeAll, afterAll, vi } from "vitest";
+
+vi.mock("@/lib/supabase/client", () => ({
+  getAuthUserFromRequest: vi.fn(async () => ({ user: { id: "test-user-iso" }, error: null })),
+  getSupabaseAdminClient: vi.fn(() => ({})),
+  getSupabaseServerClient: vi.fn(),
+}));
+
 import { GET as getActiveCombat } from "../active/route";
 import { POST as createCombat } from "../create/route";
 import { db } from "@/lib/db";
+
+const AUTH_HEADERS = { Authorization: "Bearer test-token" };
 
 describe("Combat Campaign Isolation", () => {
   let campaignAId: string;
@@ -11,6 +20,7 @@ describe("Combat Campaign Isolation", () => {
   beforeAll(async () => {
     const cA = await db.campaign.create({
       data: {
+        userId: "test-user-iso",
         name: "Campaign Alpha",
         isActive: false,
       },
@@ -19,6 +29,7 @@ describe("Combat Campaign Isolation", () => {
 
     const cB = await db.campaign.create({
       data: {
+        userId: "test-user-iso",
         name: "Campaign Beta",
         isActive: false,
       },
@@ -63,7 +74,9 @@ describe("Combat Campaign Isolation", () => {
   });
 
   it("returns active combat for Campaign A when requesting Campaign A", async () => {
-    const req = new Request(`http://localhost:3000/api/combat/active?campaignId=${campaignAId}`);
+    const req = new Request(`http://localhost:3000/api/combat/active?campaignId=${campaignAId}`, {
+      headers: AUTH_HEADERS,
+    });
     const res = await getActiveCombat(req as any);
     expect(res.status).toBe(200);
     const json = await res.json();
@@ -72,7 +85,9 @@ describe("Combat Campaign Isolation", () => {
   });
 
   it("returns null for Campaign B when Campaign B has no active combat", async () => {
-    const req = new Request(`http://localhost:3000/api/combat/active?campaignId=${campaignBId}`);
+    const req = new Request(`http://localhost:3000/api/combat/active?campaignId=${campaignBId}`, {
+      headers: AUTH_HEADERS,
+    });
     const res = await getActiveCombat(req as any);
     expect(res.status).toBe(200);
     const json = await res.json();
@@ -82,7 +97,7 @@ describe("Combat Campaign Isolation", () => {
   it("creates combat in Campaign B without ending combat in Campaign A", async () => {
     const createReq = new Request("http://localhost:3000/api/combat/create", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...AUTH_HEADERS },
       body: JSON.stringify({
         campaignId: campaignBId,
         name: "Beta Battle",
@@ -93,14 +108,18 @@ describe("Combat Campaign Isolation", () => {
     expect(createRes.status).toBe(200);
 
     // Combat A should still be active
-    const checkAReq = new Request(`http://localhost:3000/api/combat/active?campaignId=${campaignAId}`);
+    const checkAReq = new Request(`http://localhost:3000/api/combat/active?campaignId=${campaignAId}`, {
+      headers: AUTH_HEADERS,
+    });
     const checkARes = await getActiveCombat(checkAReq as any);
     const jsonA = await checkARes.json();
     expect(jsonA.combat).not.toBeNull();
     expect(jsonA.combat.id).toBe(combatAId);
 
     // Combat B should now be active
-    const checkBReq = new Request(`http://localhost:3000/api/combat/active?campaignId=${campaignBId}`);
+    const checkBReq = new Request(`http://localhost:3000/api/combat/active?campaignId=${campaignBId}`, {
+      headers: AUTH_HEADERS,
+    });
     const checkBRes = await getActiveCombat(checkBReq as any);
     const jsonB = await checkBRes.json();
     expect(jsonB.combat).not.toBeNull();

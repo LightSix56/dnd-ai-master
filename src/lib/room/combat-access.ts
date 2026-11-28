@@ -1,18 +1,21 @@
-// Кто чьим бойцом управляет в бою сетевой комнаты.
+// Кто чьим бойцом управляет в бою сетевой комнаты (fail-closed).
 //
-// Правило намеренно узкое: игрок комнаты не может действовать за героя ДРУГОГО игрока.
-// Ведущий может всё; враги, спутники и NPC не закреплены ни за кем (их ходы запускает
-// любой клиент); бой вне комнаты и запросы без токена не ограничиваются. Это защита от
-// случайного и намеренного «хода за товарища», а не полноценное разграничение прав:
-// клиент, не приславший токен, по-прежнему проходит.
+// Правило:
+//  - требуется валидный пользователь (userId);
+//  - ведущий может всё;
+//  - игрок комнаты не может действовать за героя другого игрока;
+//  - административные/мастерские действия (урон/хил вручную, правка статов, удаление боя, карта)
+//    в сетевой комнате доступны только ведущему (hostUserId);
+//  - при ошибке проверки доступ запрещается.
 
+import { createHash } from "node:crypto";
 import { db } from "@/lib/db";
 import { getAuthUserFromRequest } from "@/lib/supabase/client";
 import { RoomService } from "./room-service";
 import type { RoomWithParticipants } from "./types";
 
-const USER_TTL_MS = 60_000;
-const ROOM_TTL_MS = 15_000;
+const USER_TTL_MS = 30_000;
+const ROOM_TTL_MS = 5_000;
 const userCache = new Map<string, { id: string | null; at: number }>();
 const roomCache = new Map<string, { room: RoomWithParticipants | null; at: number }>();
 
@@ -36,7 +39,38 @@ const ACTOR_FIELD: Record<string, string> = {
   teleport: "combatantId",
   "drink-potion": "combatantId",
   "use-potion": "combatantId",
+  "death-save": "combatantId",
+  "reaction-response": "combatantId",
 };
+
+/** Действия мастера/ведущего: в сетевой комнате доступны только hostUserId */
+const HOST_ONLY_ACTIONS = new Set([
+  "apply-damage",
+  "apply-healing",
+  "update-combatant",
+  "update-resources",
+  "reset-turn",
+  "add-combatant",
+  "remove-combatant",
+  "add-party-member",
+  "add-from-library",
+  "add-element",
+  "remove-element",
+  "toggle-door",
+  "resize-grid",
+  "update-grid",
+  "expand-grid-direction",
+  "roll-initiative",
+  "set-initiative",
+  "reposition-combatant",
+  "dm-move",
+  "add-condition",
+  "remove-condition",
+  "end-combat",
+  "delete-combat",
+  "batch-actions",
+  "ai-turn",
+]);
 
 export function actorIdForAction(action: string, body: Record<string, unknown>): string | null {
   const field = ACTOR_FIELD[action];
@@ -48,12 +82,13 @@ export function actorIdForAction(action: string, body: Record<string, unknown>):
 async function resolveUserId(request: Request): Promise<string | null> {
   const header = request.headers.get("Authorization");
   if (!header) return null;
-  const cached = userCache.get(header);
+  const key = createHash("sha256").update(header).digest("hex");
+  const cached = userCache.get(key);
   if (cached && Date.now() - cached.at < USER_TTL_MS) return cached.id;
   const { user } = await getAuthUserFromRequest(request);
   const id = user?.id ?? null;
   if (userCache.size > 2000) userCache.clear();
-  userCache.set(header, { id, at: Date.now() });
+  userCache.set(key, { id, at: id ? Date.now() : Date.now() - USER_TTL_MS + 5_000 });
   return id;
 }
 
@@ -72,8 +107,7 @@ export interface CombatControlDeps {
 }
 
 /**
- * Возвращает текст отказа, если этот игрок не вправе управлять бойцом, иначе null.
- * Любой сбой проверки трактуется как «разрешено»: бой не должен останавливаться из-за неё.
+ * Возвращает текст отказа, если пользователь не вправе выполнить действие боя, иначе null.
  */
 export async function checkCombatControl(
   request: Request,
@@ -83,17 +117,14 @@ export async function checkCombatControl(
   deps: CombatControlDeps = {}
 ): Promise<string | null> {
   try {
-    const actorId = actorIdForAction(action, body);
-    if (!actorId) return null;
-
     const userId = deps.userId !== undefined ? deps.userId : await resolveUserId(request);
-    if (!userId) return null;
+    if (!userId) {
+      return "Требуется авторизация для управления боем.";
+    }
 
-    const actor = await db.combatant.findUnique({
-      where: { id: actorId },
-      select: { name: true, type: true, combatId: true, characterId: true },
-    });
-    if (!actor || actor.combatId !== combatId || actor.type !== "player") return null;
+    const isHostOnly = HOST_ONLY_ACTIONS.has(action);
+    const actorId = actorIdForAction(action, body);
+    if (!isHostOnly && !actorId) return null;
 
     const combat = await db.combat.findUnique({ where: { id: combatId }, select: { campaignId: true } });
     if (!combat?.campaignId) return null;
@@ -103,9 +134,19 @@ export async function checkCombatControl(
     if (room.hostUserId === userId) return null;
 
     const me = room.participants.find((p) => p.userId === userId);
-    if (!me) return null;
+    if (!me) return "Вы не являетесь участником комнаты этого боя.";
 
-    // Владелец бойца — участник, чей лист привязан к герою; для героев без листа — по имени
+    if (isHostOnly) {
+      return "Это действие доступно только ведущему комнаты.";
+    }
+
+    if (!actorId) return null;
+    const actor = await db.combatant.findUnique({
+      where: { id: actorId },
+      select: { name: true, type: true, combatId: true, characterId: true },
+    });
+    if (!actor || actor.combatId !== combatId || actor.type !== "player") return null;
+
     let ownerSheetId: string | null = null;
     if (actor.characterId) {
       const hero = await db.character.findUnique({
@@ -125,8 +166,8 @@ export async function checkCombatControl(
     }
     return null;
   } catch (e) {
-    console.warn("[combat-access] проверка пропущена из-за ошибки:", e);
-    return null;
+    console.warn("[combat-access] проверка отклонена из-за ошибки:", e);
+    return "Не удалось проверить права управления боем.";
   }
 }
 

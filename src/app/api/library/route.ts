@@ -1,7 +1,9 @@
 // API библиотеки: список ударов, заклинаний и способностей + создание/правка/удаление.
+import { AUTH_REQUIRED_MESSAGE, getRequestUserId } from "@/lib/auth/campaign-access";
 import { db } from "@/lib/db";
 import { safeParse } from "@/lib/combat/serialize";
 import type { ActionParameters, DamageRoll, AttackKind, ActionCost } from "@/lib/combat/types";
+import { safeErrorDetails } from "@/lib/security/errors";
 
 export async function GET() {
   try {
@@ -67,6 +69,11 @@ export async function GET() {
 /** Создание или обновление записи библиотеки */
 export async function POST(req: Request) {
   try {
+    const userId = await getRequestUserId(req);
+    if (!userId) {
+      return Response.json({ error: AUTH_REQUIRED_MESSAGE }, { status: 401 });
+    }
+
     const body = await req.json();
     const {
       kind,
@@ -110,6 +117,9 @@ export async function POST(req: Request) {
 
     if (!id && !name?.trim()) {
       return Response.json({ error: "Нужно название" }, { status: 400 });
+    }
+    if (name && name.trim().length > 200) {
+      return Response.json({ error: "Название слишком длинное" }, { status: 400 });
     }
 
     if (kind === "attack") {
@@ -187,7 +197,7 @@ export async function POST(req: Request) {
     return Response.json(
       {
         error: "Не удалось сохранить в библиотеку",
-        details: error instanceof Error ? error.message : String(error),
+        details: safeErrorDetails(error),
       },
       { status: 500 }
     );
@@ -196,8 +206,15 @@ export async function POST(req: Request) {
 
 export async function DELETE(req: Request) {
   try {
+    const userId = await getRequestUserId(req);
+    if (!userId) {
+      return Response.json({ error: AUTH_REQUIRED_MESSAGE }, { status: 401 });
+    }
+
     const { kind, id }: { kind: "attack" | "spell" | "ability"; id: string } = await req.json();
-    if (!id) return Response.json({ error: "Нужен id" }, { status: 400 });
+    if (!id || (kind !== "attack" && kind !== "spell" && kind !== "ability")) {
+      return Response.json({ error: "Нужны корректные kind и id" }, { status: 400 });
+    }
 
     if (kind === "attack") await db.attackLibrary.delete({ where: { id } });
     else if (kind === "spell") await db.spellLibrary.delete({ where: { id } });

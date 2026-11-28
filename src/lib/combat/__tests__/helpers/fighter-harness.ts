@@ -10,6 +10,7 @@ export interface HeroOptions {
   y?: number;
   mods?: Partial<Record<string, number>>;
   attackBonus?: number;
+  armorType?: "none" | "light" | "medium" | "heavy";
 }
 
 export function hero(id: string, subclass: string, level: number, o: HeroOptions = {}): Combatant {
@@ -64,6 +65,7 @@ export function hero(id: string, subclass: string, level: number, o: HeroOptions
     spells: { slots: {}, known: [] },
     hotbar: [],
     concentration: null,
+    ...(o.armorType ? { armorType: o.armorType } : {}),
   };
   c.abilities = extractAbilitiesFromCharacter({ id, class: "Воин", subclass, ...(o.sheet ?? {}) }, level, 3, c.abilityMods);
   return c;

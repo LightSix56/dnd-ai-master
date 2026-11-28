@@ -201,11 +201,11 @@ describe("управление бойцом в бою комнаты", () => {
     expect(await checkCombatControl(req, "cb-1", "attack", { attackerId: "x" }, { userId: "host", roomService })).toBeNull();
   });
 
-  it("враги и запросы без токена не ограничиваются", async () => {
+  it("враги для участника не ограничиваются, а запросы без токена отклоняются", async () => {
     asCombatant("Гоблин", "enemy");
     expect(await checkCombatControl(req, "cb-1", "attack", { attackerId: "x" }, { userId: "u1", roomService })).toBeNull();
     asCombatant("Лира");
-    expect(await checkCombatControl(req, "cb-1", "attack", { attackerId: "x" }, { userId: null, roomService })).toBeNull();
+    expect(await checkCombatControl(req, "cb-1", "attack", { attackerId: "x" }, { userId: null, roomService })).toContain("авторизац");
   });
 
   it("служебные действия (конец хода, ход бота) не привязаны к бойцу", () => {

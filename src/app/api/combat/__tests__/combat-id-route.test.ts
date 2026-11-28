@@ -1,5 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
+vi.mock("@/lib/auth/campaign-access", () => ({
+  denyCampaignAccess: vi.fn().mockResolvedValue(null),
+}));
+
 // Mock db
 vi.mock("@/lib/db", () => {
   return {

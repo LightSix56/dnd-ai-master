@@ -15,6 +15,8 @@ import {
   consumeAttackConditions,
   classFeature,
   hasCondition,
+  hasNoReactions,
+  hasPreventOffensiveActions,
   effectiveSpeed,
   payForAttack,
   remainingMovement,
@@ -33,6 +35,7 @@ import {
   reconcileTurnOrder,
 } from "./initiative";
 import {
+  cellCost,
   computeVisibilityStatus,
   coversCell,
   hasCoverBetween,
@@ -60,6 +63,8 @@ import {
   modOpportunityDisadvantage,
   modReachBonus,
   modResistance,
+  modSaveAdvantageForContext,
+  modSleepImmune,
 } from "./feature-mods";
 import { armedRider } from "./fighter-pool";
 import {
@@ -330,6 +335,7 @@ export function dealDamage(
     kindLabel?: string;
     damageType?: string;
     isAttack?: boolean;
+    isWeaponAttack?: boolean;
     attackerId?: string;
     isMagicalAttack?: boolean;
     isCritical?: boolean;
@@ -418,12 +424,16 @@ export function dealDamage(
     const rageResists =
       (isPhysical && hasCondition(target, "hill_rune")) ||
       ((type === "psychic" || type.includes("психич")) && !!classFeature(target, "psi-warrior/guarded-mind"));
+    const bladeWardResists =
+      isPhysical &&
+      hasCondition(target, "blade_ward") &&
+      (opts.isWeaponAttack ?? (!!opts.isAttack && !opts.isMagicalAttack));
     const modImmune = modDamageImmunity(target, type, state.combatants);
     if (modImmune) {
       state.addLog(`${target.name}: иммунитет к урону «${part.type}» (${modImmune})`, "system", target.name);
       continue;
     }
-    if (rageResists || modResistance(target, type, state.combatants) || target.damageResistances?.some((res) => matchesTyped(res, type, isPhysical, isNonmagical))) {
+    if (rageResists || bladeWardResists || modResistance(target, type, state.combatants) || target.damageResistances?.some((res) => matchesTyped(res, type, isPhysical, isNonmagical))) {
       const halved = Math.floor(part.amount / 2);
       state.addLog(`${target.name} имеет сопротивление к «${part.type}» (урон: ${part.amount} → ${halved})`, "system", target.name);
       actualAmount += halved;
@@ -455,7 +465,7 @@ export function dealDamage(
     !hasCondition(target, "blinded") &&
     !(dodgeAttacker && (dodgeAttacker.isHidden || dodgeAttacker.conditions.some((c) => c.type === "invisible" || c.type === "greater_invisibility")));
 
-  if (hasUncannyDodge && canSeeAttacker && !target.reactionUsed && canAct(target) && opts.isAttack && actualAmount > 1) {
+  if (hasUncannyDodge && canSeeAttacker && !target.reactionUsed && !hasNoReactions(target) && canAct(target) && opts.isAttack && actualAmount > 1) {
     const halved = Math.floor(actualAmount / 2);
     const choice = askReaction(target, {
       title: "Использовать «Невероятное уклонение»?",
@@ -589,7 +599,7 @@ export function dealDamage(
 
   if (wasAlive && target.hpCurrent <= 0) {
     // Стойкость перед смертью самурая: сознание держится до дополнительного хода
-    if (classHooks.onDrop(state, target, hpBefore, actualAmount)) return;
+    if (classHooks.onDrop(state, target, hpBefore, actualAmount - res.absorbed)) return;
 
     // Непреклонная ярость варвара: в ярости спасбросок ТЕЛ Сл 10 (+5 за каждое срабатывание) — остаётся 1 хит
     if (hasCondition(target, "raging") && classFeature(target, "barbarian/relentless-rage")) {
@@ -784,6 +794,12 @@ export function drinkPotion(
   if (c.hpCurrent <= 0) {
     throw new EngineError("Боец без сознания не может пить зелье");
   }
+  if (!canAct(c)) {
+    throw new EngineError(`${c.name} не может действовать`);
+  }
+  if (hasPreventOffensiveActions(c)) {
+    throw new EngineError(`${c.name} не может пить зелье в текущем состоянии`);
+  }
 
   if (c.bonusActionUsed) {
     throw new EngineError("Бонусное действие уже использовано в этом раунде");
@@ -870,7 +886,7 @@ export function applyEffect(
     state.addLog(`${target.name} имеет иммунитет к состоянию «${effect.condition}»`, "system", target.name);
     return;
   }
-  const immuneBy = featureConditionImmunity(state, target, effect.condition);
+  const immuneBy = featureConditionImmunity(state, target, effect.condition, effect);
   if (immuneBy) {
     const label = CONDITION_EFFECTS[effect.condition]?.name ?? effect.condition;
     state.addLog(`${target.name} не поддаётся состоянию «${label}» (${immuneBy})`, "system", target.name);
@@ -1057,7 +1073,7 @@ function isUndead(c: Combatant): boolean {
   return /нежит|undead/.test((c.className || "").toLowerCase());
 }
 
-function isUndeadOrConstruct(c: Combatant): boolean {
+export function isUndeadOrConstruct(c: Combatant): boolean {
   return /нежит|undead|конструкт|construct/.test((c.className || "").toLowerCase());
 }
 
@@ -1086,7 +1102,11 @@ export function lastAttackThisTurn(state: CombatState, c: Combatant): { targetId
  * Аура отваги (испуг) и Аура преданности (очарование) паладина рядом, Чистота тела и
  * Покровительство природы (отравление). Возвращает название умения или null.
  */
-function featureConditionImmunity(state: CombatState, target: Combatant, condition: string): string | null {
+function featureConditionImmunity(state: CombatState, target: Combatant, condition: string, effect?: AppliedEffect): string | null {
+  if (condition === "sleep" || (condition === "unconscious" && effect?.isMagicalSleep)) {
+    const sleepImm = modSleepImmune(target, state.combatants);
+    if (sleepImm) return sleepImm;
+  }
   if ((condition === "charmed" || condition === "frightened") && hasCondition(target, "raging")) {
     const f = classFeature(target, "path-of-the-berserker/mindless-rage");
     if (f) return f.name;
@@ -1362,6 +1382,7 @@ function performAttackUnmarked(
   let target = state.require(targetId);
 
   if (target.hpCurrent <= 0) throw new EngineError(`${target.name} уже выведен из боя`);
+  if (hasPreventOffensiveActions(attacker)) throw new EngineError(`${attacker.name} не может атаковать в текущем состоянии`);
 
   const attack = attacker.attacks.find((a) => a.id === attackId);
   if (!attack) throw new EngineError("Атака не найдена");
@@ -1538,6 +1559,7 @@ function performAttackUnmarked(
         parts: res1.damageParts,
         isCritical: res1.crit,
         isAttack: true,
+        isWeaponAttack: true,
         attackerId: attacker.id,
         source: attacker.id,
       });
@@ -1548,6 +1570,7 @@ function performAttackUnmarked(
         parts: res2.damageParts,
         isCritical: res2.crit,
         isAttack: true,
+        isWeaponAttack: true,
         attackerId: attacker.id,
         source: attacker.id,
       });
@@ -1653,6 +1676,7 @@ function performAttackUnmarked(
       parts: resolution.damageParts,
       isCritical: resolution.crit,
       isAttack: true,
+      isWeaponAttack: attack.kind !== "spell" && !attack.usesSpellAttack,
       attackerId: attacker.id,
       source: attacker.id,
     });
@@ -1699,6 +1723,7 @@ export function performMultiattack(
 
   const target = state.require(targetId);
   if (target.hpCurrent <= 0) throw new EngineError(`${target.name} уже выведен из боя`);
+  if (hasPreventOffensiveActions(attacker)) throw new EngineError(`${attacker.name} не может атаковать в текущем состоянии`);
 
   attacker.actionUsed = true;
   state.mark(attacker.id);
@@ -1769,7 +1794,7 @@ export function moveCombatant(
   state: CombatState,
   combatantId: string,
   target: Cell,
-  opts: { skipTurnCheck?: boolean; avoidHazards?: boolean } = {}
+  opts: { skipTurnCheck?: boolean; avoidHazards?: boolean; freeMove?: boolean; budgetFt?: number } = {}
 ): MoveOutcome {
   if (!opts.skipTurnCheck) assertTurn(state, combatantId);
 
@@ -1778,7 +1803,7 @@ export function moveCombatant(
     throw new EngineError(`${mover.name} не может двигаться`);
   }
 
-  const budget = remainingMovement(mover);
+  const budget = opts.budgetFt ?? remainingMovement(mover);
   // Бот не идёт через лаву, если сам в ней не стоит
   const avoid =
     opts.avoidHazards && !isLavaTerrain(mover, state.mapElements)
@@ -1856,7 +1881,7 @@ export function moveCombatant(
   }
   const finalCell = walkPath.length > 0 ? walkPath[walkPath.length - 1] : startCell;
 
-  mover.movementUsed += walkCost;
+  if (!opts.freeMove) mover.movementUsed += walkCost;
   state.mark(combatantId);
   if (walkCost > 0 || stopIdx === null) {
     state.addLog(
@@ -1867,10 +1892,12 @@ export function moveCombatant(
   }
 
   let movementInterrupted = false;
+  let interruptedCostFt = 0;
   const opportunityAttacks: AttackOutcome[] = [];
 
   for (let stepIdx = 0; stepIdx < walkPath.length; stepIdx++) {
     const stepCell = walkPath[stepIdx];
+    interruptedCostFt += cellCost(stepCell, state.mapElements, mover);
     mover.x = stepCell.x;
     mover.y = stepCell.y;
 
@@ -1887,7 +1914,7 @@ export function moveCombatant(
         source: spikeZones[0].properties?.casterId,
       });
       if (mover.hpCurrent <= 0) {
-        mover.movementUsed = initialMovementUsed + (stepIdx + 1) * 5;
+        if (!opts.freeMove) mover.movementUsed = initialMovementUsed + (stepIdx + 1) * 5;
         movementInterrupted = true;
         break;
       }
@@ -1904,7 +1931,7 @@ export function moveCombatant(
       if (!save.success) {
         applyEffect(state, mover.id, { condition: "restrained", concentration: zone.properties?.concentration }, zone.properties?.casterId);
         state.addLog(`🕸️ ${mover.name} наступает в паутину, проваливает спасбросок ЛОВ (${save.text}) и опутывается!`, "system", mover.name);
-        mover.movementUsed = effectiveSpeed(mover);
+        if (!opts.freeMove) mover.movementUsed = effectiveSpeed(mover);
         movementInterrupted = true;
         break;
       } else {
@@ -1932,7 +1959,7 @@ export function moveCombatant(
   if (movementInterrupted) {
     return {
       path: walkPath.slice(0, walkPath.findIndex((c) => c.x === mover.x && c.y === mover.y) + 1),
-      costFt: mover.movementUsed - initialMovementUsed,
+      costFt: opts.freeMove ? interruptedCostFt : mover.movementUsed - initialMovementUsed,
       remainingFt: remainingMovement(state.require(combatantId)),
       opportunityAttacks,
     };
@@ -2018,6 +2045,7 @@ export function moveCombatant(
         parts: resolution.damageParts,
         isCritical: resolution.crit,
         isAttack: true,
+        isWeaponAttack: melee.kind !== "spell" && !melee.usesSpellAttack,
         attackerId: attacker.id,
         source: attacker.id,
       });
@@ -2233,19 +2261,22 @@ export function rollEffectSave(
   isSpell: boolean,
   label: string,
   /** Помеха на спасбросок от умения заклинателя (Магическая засада) */
-  disadvantage?: boolean
+  disadvantage?: boolean,
+  opts?: { condition?: string; isMagical?: boolean }
 ) {
   const roll = () =>
     rollSave(target, ability, dc, {
       isSpell,
+      isMagical: opts?.isMagical,
+      condition: opts?.condition,
       disadvantage,
       bonus: auraSaveBonus(state, target),
       bonusText: "Аура защиты",
       all: state.combatants,
     });
   let save = roll();
-  // Провал может перебросить умение класса (Фанатичная сосредоточенность)
-  if (!save.success && !save.autoFail) save = classHooks.saveFailed(state, target, ability, dc, roll) ?? save;
+  // Провал может перебросить или усилить умение (Фанатичная сосредоточенность, Сохранить лицо)
+  if (!save.success && !save.autoFail) save = classHooks.saveFailed(state, target, ability, dc, roll, save, opts?.condition) ?? save;
   if (!save.success && checkLegendaryResistance(target, state, label)) {
     return { ...save, success: true, text: `${save.text} → успех (Легендарное сопротивление)` };
   }
@@ -2504,6 +2535,7 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
       parts: resolution.damageParts,
       isCritical: resolution.crit,
       isAttack: true,
+      isWeaponAttack: true,
       attackerId: caster.id,
       source: caster.id,
     });
@@ -2594,6 +2626,7 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
       parts: resolution.damageParts,
       isCritical: resolution.crit,
       isAttack: true,
+      isWeaponAttack: true,
       attackerId: caster.id,
       source: caster.id,
     });
@@ -2706,6 +2739,7 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
         isMagicalAttack: true,
         isCritical: attackResolution.crit,
         isAttack: true,
+        isWeaponAttack: false,
         attackerId: caster.id,
         source: caster.id,
       });
@@ -2819,6 +2853,7 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
   }
   const concFlag = params.concentration ? { concentration: true } : {};
   const isSpellAction = params.type === "spell";
+  const isSpellLike = isSpellAction || params.spellSlotLevel !== undefined || Boolean(params.school);
 
   const targets = resolveTargets(state, caster, params, ctx.targetIds, ctx.center);
   const damage = prepareDamage(params, caster, slotLevel);
@@ -2851,7 +2886,7 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
       : 0;
   let healedOthers = false;
   // Умения заклинателя, дающие помеху на спасброски цели (Магическая засада скрытого плута)
-  const ambushReason = (t: Combatant) => (isSpellAction ? classHooks.castSaveDisadvantage(state, caster, t) : null);
+  const ambushReason = (t: Combatant) => (isSpellLike ? classHooks.castSaveDisadvantage(state, caster, t) : null);
 
   for (const target of targets) {
     // Формовка заклинаний: союзники в области воплощения автоматически спасаются и не получают урона
@@ -2884,9 +2919,16 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
         amount = 0;
       }
     } else if (params.saveType) {
-      const ambush = isSpellAction ? ambushReason(target) : null;
+      const ambush = isSpellLike ? ambushReason(target) : null;
       if (ambush) state.addLog(`${target.name}: помеха на спасбросок (${ambush})`, "save", target.name);
-      const save = rollEffectSave(state, target, params.saveType as AbilityKey, saveDC, isSpellAction, ctx.label, ambush !== null);
+      const saveTypeKey = params.saveType as AbilityKey;
+      const saveCondition =
+        params.effects?.find((e) =>
+          modSaveAdvantageForContext(target, saveTypeKey, { condition: e.condition, isSpell: isSpellLike }, state.combatants)
+        )?.condition ?? params.effects?.[0]?.condition;
+      const save = rollEffectSave(state, target, saveTypeKey, saveDC, isSpellLike, ctx.label, ambush !== null, {
+        condition: saveCondition,
+      });
       saved = save.success;
       state.addLog(`${target.name}: ${save.text}`, "save", target.name);
       if (damage.length > 0) {
@@ -2993,9 +3035,14 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
         dealDamage(state, target.id, amount, {
           damageType: targetDamage[0]?.type,
           parts: amountParts,
-          isMagicalAttack: isSpellAction,
+          isMagicalAttack: isSpellLike,
           isCritical: crit,
           isAttack: params.attackType !== undefined,
+          isWeaponAttack:
+            hit === undefined &&
+            !isSpellLike &&
+            params.attackType !== undefined &&
+            params.attackType !== "spell",
           attackerId: caster.id,
           source: caster.id,
         });
@@ -3011,8 +3058,10 @@ function applyActionParameters(state: CombatState, ctx: CastContext): CastResult
     // Эффекты накладываются при провале спасброска или при попадании
     const effectApplies = saved === undefined ? hit !== false : !saved;
     if (effectApplies) {
+      const isSleepSpell = isSpellLike && (actLower.includes("усыплен") || /\bsleep\b/i.test(actLower));
       for (const eff of params.effects ?? []) {
-        applyEffect(state, target.id, { ...eff, ...concFlag }, caster.id);
+        const sleepFlag = isSleepSpell && eff.condition === "unconscious" ? { isMagicalSleep: true } : {};
+        applyEffect(state, target.id, { ...eff, ...concFlag, ...sleepFlag }, caster.id);
       }
       
       // Специфические эффекты перемещения
@@ -3286,6 +3335,7 @@ function castSpellUnsafe(
   if (!canAct(caster)) throw new EngineError(`${caster.name} не может действовать`);
   if (caster.wildShape) throw new EngineError("Нельзя сотворять заклинания в облике зверя!");
   if (hasCondition(caster, "raging")) throw new EngineError("В Ярости нельзя сотворять заклинания");
+  if (hasPreventOffensiveActions(caster)) throw new EngineError(`${caster.name} не может сотворять заклинания в текущем состоянии`);
 
   let spell: SpellDefinitionLike;
   if (typeof spellOrId === "string") {
@@ -3772,8 +3822,14 @@ function useAbilityCore(
 
   const params = ability.parameters;
   if (!params) throw new EngineError(`«${ability.name}» без параметров — нечего применять`);
-  if (!canAct(c) && params.actionCost !== "free") {
+  if (!canAct(c)) {
     throw new EngineError(`${c.name} не может действовать`);
+  }
+  if (
+    hasPreventOffensiveActions(c) &&
+    !(params.exitsCondition && hasCondition(c, params.exitsCondition))
+  ) {
+    throw new EngineError(`${c.name} не может применять способности в текущем состоянии`);
   }
 
   if (params.isResource) {
@@ -3931,6 +3987,9 @@ export function transformWildShape(
   const c = state.require(combatantId);
 
   if (!canAct(c)) throw new EngineError(`${c.name} не может действовать`);
+  if (hasPreventOffensiveActions(c)) {
+    throw new EngineError(`${c.name} не может менять облик в текущем состоянии`);
+  }
   if (c.wildShape) throw new EngineError(`${c.name} уже находится в облике зверя`);
 
   const form = getBeastFormById(formId);
@@ -4365,10 +4424,17 @@ export function endTurn(state: CombatState, depth = 0): { nextId: string | null 
     if (current.hpCurrent > 0) {
       for (const cond of [...current.conditions]) {
         if (cond.saveType && cond.saveDC && cond.type !== "restrained") {
-          const save = rollSave(current, cond.saveType, cond.saveDC, {
-            bonus: auraSaveBonus(state, current),
-            bonusText: "Аура защиты",
-          });
+          const endRoll = () =>
+            rollSave(current, cond.saveType!, cond.saveDC!, {
+              condition: cond.type,
+              bonus: auraSaveBonus(state, current),
+              bonusText: "Аура защиты",
+              all: state.combatants,
+            });
+          let save = endRoll();
+          if (!save.success && !save.autoFail) {
+            save = classHooks.saveFailed(state, current, cond.saveType, cond.saveDC, endRoll, save, cond.type) ?? save;
+          }
           const label = CONDITION_EFFECTS[cond.type]?.name || cond.type;
           state.addLog(
             `${current.name}: спасбросок от «${label}» (${save.text})`,
@@ -4475,11 +4541,14 @@ export function checkCombatOver(state: CombatState): "players" | "enemies" | nul
 export function attemptHide(
   state: CombatState,
   combatantId: string,
-  opts: { skipTurnCheck?: boolean } = {}
+  opts: { skipTurnCheck?: boolean; skipCost?: boolean } = {}
 ): { success: boolean; text: string } {
   if (!opts.skipTurnCheck) assertTurn(state, combatantId);
   const c = state.require(combatantId);
   if (!canAct(c)) throw new EngineError(`${c.name} не может действовать`);
+  if (hasPreventOffensiveActions(c)) {
+    throw new EngineError(`${c.name} не может прятаться в текущем состоянии`);
+  }
   if (c.isHidden) {
     throw new EngineError("Персонаж уже находится в скрытности");
   }
@@ -4494,19 +4563,21 @@ export function attemptHide(
   const hasCunningAction = (c.level >= 2 && isRogue) || c.abilities.some((a) => a.name.includes("Хитрое действие"));
 
   let spentBonus = false;
-  if (hasCunningAction && !c.bonusActionUsed) {
-    c.bonusActionUsed = true;
-    spentBonus = true;
-  } else {
-    if (c.actionUsed && c.extraActions <= 0) {
-      throw new EngineError("Действие уже использовано");
-    }
-    if (c.actionUsed && c.extraActions > 0) {
-      c.extraActions -= 1;
+  if (!opts.skipCost) {
+    if (hasCunningAction && !c.bonusActionUsed) {
+      c.bonusActionUsed = true;
+      spentBonus = true;
     } else {
-      c.actionUsed = true;
+      if (c.actionUsed && c.extraActions <= 0) {
+        throw new EngineError("Действие уже использовано");
+      }
+      if (c.actionUsed && c.extraActions > 0) {
+        c.extraActions -= 1;
+      } else {
+        c.actionUsed = true;
+      }
+      c.attacksMadeThisAction = c.attacksPerAction;
     }
-    c.attacksMadeThisAction = c.attacksPerAction;
   }
 
   const actionSuffix = spentBonus ? " (Хитрое действие)" : "";
@@ -4724,6 +4795,7 @@ export function shoveCombatant(
   }
 
   if (target.hpCurrent <= 0) throw new EngineError(`${target.name} уже выведен из боя`);
+  if (hasPreventOffensiveActions(shover)) throw new EngineError(`${shover.name} не может атаковать в текущем состоянии`);
 
   // Толчок заменяет одну атаку действия «Атака» — проверяем, что она доступна
   const shoveAsAttack: Attack = {

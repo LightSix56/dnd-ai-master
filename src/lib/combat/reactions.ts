@@ -16,6 +16,7 @@
 //    потратил сам, обнаруживается по `reactionUsed`; если модулей несколько, игрок выбирает из списка.
 
 import type { CombatState } from "./engine";
+import { hasNoReactions } from "./rules";
 import type { Combatant } from "./types";
 
 /** Вариант в окне реакции (отказ — всегда отдельная кнопка, в список не входит) */
@@ -80,6 +81,7 @@ export function askReaction(
   reactor: Combatant,
   ask: { title: string; text: string; options: ReactionOption[] }
 ): string | null {
+  if (hasNoReactions(reactor)) return null;
   const ctx = context();
   if (!ctx || !isPlayerReactor(reactor) || reactor.reactionUsed) return ask.options[0]?.id ?? null;
   const key = keyOf(ctx.seq++, reactor.id);
@@ -124,7 +126,7 @@ export class ReactionScope {
     const blocked: Combatant[] = [];
     const watching: Combatant[] = [];
     for (const r of this.reactors) {
-      if (r.reactionUsed) continue;
+      if (r.reactionUsed || hasNoReactions(r)) continue;
       const decision = this.ctx.decisions[keyOf(this.seq, r.id)];
       if (decision === undefined) watching.push(r);
       else if (decision !== moduleId) {
@@ -178,7 +180,7 @@ export class ReactionScope {
 export function openScope(state: CombatState, describe: () => string): ReactionScope | null {
   const ctx = context();
   if (!ctx || !Array.isArray(state.combatants)) return null;
-  const reactors = state.combatants.filter((c) => isPlayerReactor(c) && !c.reactionUsed);
+  const reactors = state.combatants.filter((c) => isPlayerReactor(c) && !c.reactionUsed && !hasNoReactions(c));
   if (reactors.length === 0) return null;
   return new ReactionScope(state, ctx, ctx.seq++, reactors, describe);
 }

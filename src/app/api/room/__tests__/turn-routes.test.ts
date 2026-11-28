@@ -51,6 +51,10 @@ describe("Room Turn API Routes (Phase 4)", () => {
 
   describe("GET /api/room/[code]/turn", () => {
     it("returns 404 if room not found", async () => {
+      vi.mocked(getAuthUserFromRequest).mockResolvedValueOnce({
+        user: { id: "user-1" } as any,
+        error: null,
+      });
       const mockService = {
         getRoomByCode: vi.fn().mockResolvedValue(null),
       };
@@ -65,6 +69,10 @@ describe("Room Turn API Routes (Phase 4)", () => {
     });
 
     it("returns active turn for room", async () => {
+      vi.mocked(getAuthUserFromRequest).mockResolvedValueOnce({
+        user: { id: "user-1" } as any,
+        error: null,
+      });
       const mockTurn = {
         id: "turn-1",
         roomId: "room-1",
@@ -73,7 +81,12 @@ describe("Room Turn API Routes (Phase 4)", () => {
         playerInputs: {},
       };
       const mockService = {
-        getRoomByCode: vi.fn().mockResolvedValue({ id: "room-1", code: "DRAGON-1" }),
+        getRoomByCode: vi.fn().mockResolvedValue({
+          id: "room-1",
+          code: "DRAGON-1",
+          hostUserId: "user-1",
+          participants: [{ userId: "user-1" }],
+        }),
         pickRoomModel: vi.fn().mockResolvedValue(undefined),
         getActiveTurn: vi.fn().mockResolvedValue(mockTurn),
       };

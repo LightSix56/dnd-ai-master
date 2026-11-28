@@ -3,3 +3,4 @@
 import "../fighter-combat";
 import "./barbarian-combat";
 import "./rogue-combat";
+import "../races/combat-index";

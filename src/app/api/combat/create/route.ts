@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { hydrateCombat } from "@/lib/combat/serialize";
 import { createTacticalEncounter } from "@/lib/combat/generator";
 import type { Attack } from "@/lib/combat/types";
+import { safeErrorDetails } from "@/lib/security/errors";
 
 interface TestEnemy {
   name: string;
@@ -234,7 +235,7 @@ export async function POST(req: Request) {
     return Response.json(
       {
         error: "Не удалось создать бой",
-        details: error instanceof Error ? error.message : String(error),
+        details: safeErrorDetails(error),
       },
       { status: 500 }
     );
